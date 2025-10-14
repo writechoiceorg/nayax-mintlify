@@ -1,0 +1,70 @@
+---
+title: "abortTransaction"
+---
+
+The `abortTransaction `method cancels an ongoing transaction before it is registered in the database. This ensures that transactions in progress but not yet finalized can be safely terminated without affecting the merchant's records.
+
+This method is beneficial when a user initiates a transaction but cancels before completion or when an issue is detected during processing that requires stopping the transaction.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Integration ](doc:integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, ensure to configure the following:
+
+* The `method `field must be set to `abortTransaction` .
+* The service must be set to `ashrait `in the `params`.
+
+The request includes a list of parameters, with the first being the service name, which is currently fixed as `ashrait`, and the second being a dictionary containing all other transaction-specific details.
+
+```json
+{
+    "jsonrpc":"2.0",
+    "method":"abortTransaction",
+    "params":[
+        "ashrait",
+        {
+           "vuid":"cb740169-7758-4f55-b685-b90652b9aba6"
+        }
+    ],
+    "id":"123454352"
+}
+```
+
+### Request Parameters
+
+The table below describes the request parameters for this method.
+
+| Name   | Type   | Description                                    |
+| ------ | ------ | ---------------------------------------------- |
+| `vuid` | string | Vendor (client) unique transaction identifier. |
+
+## Response
+
+A successful request will return the following response:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "ok"
+    },
+    "id": "123454352"
+}
+```
+
+### Response Parameters
+
+The table below describes the response parameters for this method.
+
+| Name            | Type    | Description                          |
+| --------------- | ------- | ------------------------------------ |
+| `statusCode`    | integer | The operation status (`0` = success) |
+| `statusMessage` | string  | The operation message (e.g., `ok`)   |
+
+<br />

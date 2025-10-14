@@ -1,0 +1,282 @@
+---
+title: "Retrieve Hierarchy"
+---
+
+Nayax Core shows an operator's hierarchy in the **Operator** menu on the left sidebar. If you check its data, the **Company** section will detail its operator ID and Parent Operator.
+
+<Image align="center" width="800px" src="https://files.readme.io/b017c1dd398112c57a0eafa48918a9920266b65d671d77c07302a77bab5d7abc-image.png" />
+
+## Lynx API
+
+You can also use Lynx API to programmatically retrieve the hierarchy of an Operator and its details by using the following endpoint:
+
+<HTMLBlock>{`
+<style>
+  .endpoint_card_container {
+    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+
+    .card {
+      display: flex;
+      position: relative;
+      padding: 16px 18px;
+      align-items: flex-start;
+      justify-content: start;
+      gap: 12px;
+      border-radius: 6px;
+      border: 1px solid #DCDCDC;
+      background-color: #FFF;
+      text-decoration: none !important;
+      transition: all 0.3s ease, border 0.1s ease;
+
+      .card_content {
+        font-feature-settings: 'clig' off, 'liga' off;
+        font-family: Inter;
+        font-style: normal;
+        line-height: 18px;
+
+        h3 {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          flex-wrap: wrap;
+          color: #383838;
+          font-size: 17.5px;
+          font-weight: 700;
+          margin: 0 38px 0 0;
+
+          span {
+            position: absolute;
+            top: 10px;
+            right: -5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #FFF !important;
+            text-align: center;
+            font-size: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            width: 40px;
+            height: 16px;
+            flex-shrink: 0;
+            border-radius: var(--border-radius-lg);
+            margin: 0 15px 0 0;
+          }
+
+          .get {
+            background: #0e9b71;
+            text-shadow: 1px 1px 0 #0d8d67, 0 1px 0 #0d8d67, 1px 0 0 #0d8d67;
+          }
+
+          .post {
+            background: #0171c2;
+            text-shadow: 1px 1px 0 #0168b3, 0 1px 0 #0168b3, 1px 0 0 #0168b3;
+          }
+
+          .patch {
+            background: #df7d03;
+            text-shadow: 1px 1px 0 #d07503, 0 1px 0 #d07503, 1px 0 0 #d07503;
+          }
+        }
+
+        p {
+          color: #676767;
+          font-size: 14px;
+          font-weight: 400;
+          margin-bottom: 5px;
+        }
+
+        .link {
+          color: #d2a900;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 18px;
+          text-decoration: none;
+
+          svg {
+            fill: #d2a900;
+          }
+        }
+
+        .link:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .card:hover {
+      border: 1px solid #d2a900;
+      box-shadow: 0px 0px 9.7px 0px rgba(0, 0, 0, 0.21);
+
+      h3 {
+        color: #d2a900;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 400px) {
+    .endpoint_card_container {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+  }
+
+  @media only screen and (max-width: 350px) {
+    .endpoint_card_container {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    [data-color-mode="system"] .card {
+      border: 1px solid #556974;
+      background-color: #20292e;
+
+      .card_content {
+
+        h3,
+        p {
+          color: #FFF;
+        }
+
+        .link {
+          color: #d2a900;
+
+          svg {
+            fill: #d2a900;
+          }
+        }
+      }
+    }
+
+    [data-color-mode="system"] .card:hover {
+      h3 {
+        color: #d2a900 !important;
+      }
+    }
+  }
+
+  [data-color-mode="dark"] .card {
+    border: 1px solid #556974;
+    background-color: #20292e;
+
+    .card_content {
+
+      h3,
+      p {
+        color: #FFF;
+      }
+
+      .link {
+        color: #d2a900;
+
+        svg {
+          fill: #d2a900;
+        }
+      }
+    }
+  }
+
+  [data-color-mode="dark"] .card:hover {
+    h3 {
+      color: #d2a900 !important;
+    }
+  }
+</style>
+
+<body>
+  <div class="endpoint_card_container">
+    <a class="card" href="/v1.0/reference/get-actor-hierarchy">
+      <div class="card_content">
+        <h3><span class="get">get</span> Get Actor Hierarchy for Current User</h3>
+      </div>
+    </a>
+  </div>
+
+</body>
+`}</HTMLBlock>
+
+### Get Operator Hierarchy
+
+The [Get Actor Hierarchy for Current User](ref:get-actor-hierarchy) endpoint retrieves the hierarchy for the current user or a specified actor/operator and its child entities, such as areas, routes, and machines, by providing the `ActorID` in the query params of the request. See the example request in the code block below:
+
+```curl
+curl --request GET \
+     --url 'https://qa-lynx.nayax.com/operational/v1/actors/hierarchy?ActorID=<ID>' \
+     --header 'accept: application/json'
+```
+
+The available Query Params are:
+
+| Parameter             | Description                                                                                                                |
+| :-------------------- | :------------------------------------------------------------------------------------------------------------------------- |
+| `ActorID`             | The unique ID of the operator or actor whose hierarchy you want to retrieve.                                               |
+| `StatusID`            | Filter the hierarchy to include only actors with a specific status. Use this to retrieve only active or inactive entities. |
+| `HierarchyLevelLimit` | Specify the maximum depth of the hierarchy to be returned. For example, 1 for immediate children and 2 for grandchildren.  |
+
+<Note>
+**Lynx API Actors**
+
+In Nayax Core, the Operators and its types, such as "Area" and "Routes", are only nomenclatures that help you differentiate them. However, in Lynx API, they are all referred to as Actors, which are only differentiated by the `ActorTypeID`.
+</Note>
+
+### Response
+
+With a successful request, the endpoint will return an array of Operator objects. See an example in the code block below:
+
+```json
+{
+  "ParentActorID": 0,
+  "ActorID": 12345,
+  "ActorDescription": "Operator A",
+  "ActorTypeID": 2,
+  "ActorStatus": 1,
+  "ActorHierarchyLevel": 0,
+  "ActorChildren": [
+    {
+      "ParentActorID": 12345,
+      "ActorID": 23456,
+      "ActorDescription": "Area A",
+      "ActorTypeID": 3,
+      "ActorStatus": 1,
+      "ActorHierarchyLevel": 1,
+      "ActorChildren": [
+        {
+          "ParentActorID": 23456,
+          "ActorID": 34567,
+          "ActorDescription": "Route A",
+          "ActorTypeID": 4,
+          "ActorStatus": 1,
+          "ActorHierarchyLevel": 2,
+          "ActorChildren": [
+            {
+              "ParentActorID": 34567,
+              "ActorID": 45678,
+              "ActorDescription": "Machine 1",
+              "ActorTypeID": 5,
+              "ActorStatus": 1,
+              "ActorHierarchyLevel": 3,
+              "ActorChildren": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+As you can see above, this is the hierarchy for the Operator with the `ActorID: 12345` showing each of its children operators. The table below describes each of the response's body parameters:
+
+| Parameter             | Description                                                 |
+| :-------------------- | :---------------------------------------------------------- |
+| `ParentActorID`       | ID of the parent actor for the specified actor.             |
+| `ActorID`             | Unique ID of the current actor.                             |
+| `ActorDescription`    | Description or name of the actor.                           |
+| `ActorTypeID`         | Type of actor (e.g., Operator, Area, Route).                |
+| `ActorStatus`         | Status of the actor (e.g., active, inactive).               |
+| `ActorHierarchyLevel` | The level of the actor within the hierarchy.                |
+| `ActorChildren`       | A list of child actor IDs or details for the current actor. |
+

@@ -1,0 +1,460 @@
+---
+title: "C SDK Single Session"
+---
+
+<Warning>
+**C SDK Only**
+
+This guide is only relevant for the C SDK
+</Warning>
+
+The single-session payment in Nayax allows only one transaction to be processed. Unlike multi-session, where multiple transactions can run concurrently, the system handles a single-user payment session before resetting.
+
+This page will guide you through implementing a single session in C SDK in more detail. To better explain this process, the code implementation is divided into the following steps:
+
+1. Include libraries
+2. Setup macro and global variables
+3. Setup private functions
+4. Add initialization functions
+5. Implement the main function
+
+See the section below for more details on each step.
+
+## Step 1: Include libraries
+
+Start by including the necessary libraries for the SDK. See the code block below:
+
+```c
+#include <string.h>
+
+#include "types.h"
+#include "macros.h"
+#include "cli/cli.h"
+#include "msg_queue/msg_queue.h"
+#include "vsnprintf/printk.h"
+#include "cpu_platform.h"
+#include "board/board.h"
+#include "menu.h"
+
+#include "vpos/vmc_link.h"
+#include "vpos/vmc_vend.h"
+
+/* Drivers */
+#include "drv_usart.h"
+```
+
+## Step 2: Setup macro and global variables
+
+The code below defines a macro for the module name used in logging/debugging and sets up the global variables that store configuration and session-related data.
+
+```c
+#define __MODULE__ "marshall-c-sdk-demo"
+  
+static vmc_config_t   config;
+static vend_item_t    session_product;
+static vend_session_t session;
+static menu_t 		  menu;
+static int			  com_id = -1;
+```
+
+Where:
+
+* `config`: Stores vending machine configuration.
+* `session_product`: Represents a product in a vending session.
+* `session`: Represents an ongoing vending session.
+* `menu`: Stores menu-related settings.
+* `com_id`: Represents a communication ID (-1 as default).
+
+## Step 3: Setup private functions
+
+Implement helper functions for debugging, handling events, and processing transactions. The following sections provide more details.
+
+### Debug output function
+
+This function determines the output stream for debug information.
+
+```c
+static void terminal_tx_str(char *str)
+{
+	#if defined(__PLATFORM_X86) || defined(__PLATFORM_LINUX)
+		printf("%s", str);
+	#elif defined(__PLATFORM_STM32)
+		drv_usart_tx_data(&terminal_usart, (uint8_t*)str, strlen(str));
+	#endif
+}
+```
+
+Where:
+
+* `str`: String that contains the debug information.
+
+### CPU timer tick
+
+This function is called periodically (every 5-10ms) by the platform timer.
+
+```c
+static __bool cpu_timer_tick(void *p)
+{
+	vmc_link_background();
+
+	return __false;
+}
+```
+
+Where:
+
+* `p`: Pointer to optional parameter (unused in this function).
+
+### VMC link events handler
+
+This function handles link events and logs relevant information.
+
+```c
+static __bool vmc_link_event_handler_cb(int event_id, void *data)
+{
+	__bool result = __false;
+
+	__log("link event_id: %d", event_id);
+
+	switch (event_id)
+	{
+		case vmc_link_event_on_ready:
+			if (__true)
+			{
+				vpos_config_t *config = (vpos_config_t*)data;
+				__log("link ok! decimal places: %d", config->decimal_place);
+			}
+			break;
+		case vmc_link_event_on_comm_error:
+			if (__true)
+			{
+				__log("lost comm");
+			}
+			break;
+		default:
+			break;
+	}
+
+	return result;
+}
+```
+
+Where:
+
+* `event_id `: Type of link event.
+* `data`: Pointer to optional parameter (varies based on event type).
+
+The function will return a boolean value (`__false` always, as no success/failure is determined).
+
+### Vend request handler
+
+This function handles the session and the included items and sends a vending request to the VPOS.
+
+```c
+static void triggered_vend_request(void)
+{
+	if (config.reader_always_on)
+		current_session = 2;
+	
+	if (current_session != -1)
+	{
+		vend_session_t *session = &sessions[current_session];
+
+		/* a card has been detected. now we can ask the vpos to take money */
+		memset(session, 0, sizeof(vend_session_t));
+
+		session_products[0].code = 1;
+		session_products[0] .qty = 1;
+		session_products[0].price = 10;
+		session_products[0].unit = 1;
+
+		session_products[1].code = 2;
+		session_products[1].qty = 1;
+		session_products[1].price = 20;
+		session_products[1].unit = 1;
+
+		if (config.multi_vend_support)
+		{
+			session->products = session_products;
+			session->total_products = 2;
+		}
+		else
+		{
+			session->products = &session_products[current_session];
+			session->total_products = 1;
+		}
+
+		vmc_vend_vend_request(session);
+
+		if (config.mag_card_approved_by_vmc_support || config.mifare_approved_by_vmc_support || config.qr_approved_by_vmc_support)
+		{
+			vmc_vend_client_gateway_auth(__true);
+		}
+	}
+}
+```
+
+### VMC vend events handler
+
+Handles vend events and logs relevant information.
+
+```c
+static __bool vmc_vend_event_handler_cb(int event_id, void *data)
+{
+	__bool result = __false;
+	static __bool vend_sent = __false;
+
+	__log("vend event_id: %d", event_id);
+
+	switch (event_id)
+	{
+		case vmc_vend_event_on_ready:
+			break;
+		case vmc_vend_event_on_session_begin:
+			if (__true)
+			{
+				triggered_vend_request();
+			}
+			break;
+		case vmc_vend_event_on_vend_approved:
+			/* the vpos approved the payment */
+			result = __true;
+			break;
+		case vmc_vend_event_on_vend_denied:
+			/* the vpos declined the payment */
+			break;
+		case vmc_vend_event_on_settlement:
+			break;
+		case vmc_vend_event_on_session_canceled:
+			if (__true)
+			{
+				__log("received cancel session");
+			}
+			break;
+		case vmc_vend_event_on_transaction_info:
+			if (__true)
+			{
+				__log("received transaction info");
+
+				vmc_vend_transfer_data_t *info = (vmc_vend_transfer_data_t*)data;
+
+				if (info->encode_bitmap & transfer_data_encode_transaction_id)
+					__log("transaction id: %lu", __ptr2uint64_t(info->transaction_id));
+
+				if (info->encode_bitmap & transfer_data_encode_card_bin)
+					__log("card bin: %.6s", info->card_bin);
+
+				if (info->encode_bitmap & transfer_data_encode_prop_card_uid)
+					__log("prop card uid: %lu", __ptr2uint64_t(info->prop_card_uid));
+
+				if (info->encode_bitmap & transfer_data_encode_card_last_4_digits)
+					__log("cc last 4 digits: %.4s", info->cc_last_4_digits);
+			}
+			break;
+		case vmc_vend_event_on_status:
+			if (__true)
+			{
+				uint32_t status = (uint32_t)data;
+				__log("received status: %d", status);
+			}
+			break;
+		case vmc_vend_event_on_sessions_rsp:
+			if (__true)
+			{
+				mdb_msg_sessions_status_t *sessions = (mdb_msg_sessions_status_t*)data;
+				__log("open sessions: %d\n", sessions->num_opened_sessions);
+			}
+			break;
+		case vmc_vend_event_on_reader_state_rsp:
+			if (__true)
+			{
+				mdb_msg_reader_status_t *state = (mdb_msg_reader_status_t*)data;
+				__log("reader state: %d\n", state);
+			}
+			break;
+		case vmc_vend_event_on_qr_code:
+			if (__true)
+			{
+				ereceipt_t *receipt = (ereceipt_t*)data;
+				__log("received ereceipt: %s\n", receipt->qr_data);
+			}
+			break;
+		case vmc_vend_event_on_session_timeout:
+			if (__true)
+			{
+				uint32_t *session_id = (uint32_t*)data;
+				__log("session timeout: %d\n", session_id);
+			}
+			break;
+		default:
+			break;
+	}
+
+	return result;
+}
+```
+
+Where:
+
+* `event_id`: Type of vend event.
+* `data`: Pointer to optional parameter (varies based on event type).
+
+This function will return a boolean value:
+
+* `__false` in most cases.
+* `__true` for `vmc_vend_event_on_vend_approved` to indicate a successful vend approval.
+
+## Step 4: Setup initialization functions
+
+After adding the helper functions, you need to implement the functions to initialize the VMC configuration and the Menu Handler. See the sections below for more details.
+
+### Initialize VMC
+
+This function initializes the VMC configuration and registers the event handlers.
+
+```c
+static void vmc_init(void)
+{
+	/* Initialize SDK */
+	vmc_link_init();
+
+	/* Configuring the SDK */
+	memset(&config, 0, sizeof(config));
+
+	__strcpy(config.model, "marshall-c-sdk-demo");
+	__strcpy(config.serial, "01234567");
+	__strcpy(config.sw_ver, "vmc app version");
+	__strcpy(config.vmc_hw_ver, "01234567");
+	__strcpy(config.vmc_manuf_code, "manuf");
+
+	config.multi_vend_support = __false;
+	config.multi_session_support = __false;
+	config.price_not_final_support = __false;
+	config.reader_always_on = __false;
+	config.always_idle = __false;
+	config.explicit_vend_success = __false;
+	config.vend_denied_policy = vend_denied_policy_persist_e;
+
+	config.mifare_approved_by_vmc_support = __false;
+	config.mag_card_approved_by_vmc_support = __false;
+	config.qr_approved_by_vmc_support  = __false;
+
+	config.dump_packets_level = debug_level_dump_moderate;
+	config.debug = __true;
+
+	/* Register to the link and vend events */
+	vmc_link_register_callback((vmc_link_event_handler_cb_t)vmc_link_event_handler_cb);
+	vmc_vend_register_callback((vmc_vend_event_handler_cb_t)vmc_vend_event_handler_cb);
+}
+```
+
+### Initialize menu
+
+Before initializing the menu, add the necessary handler functions. See the code below:
+
+```c
+static void handler_start_session(void *aux_data)
+{
+	vmc_vend_session_start(vmc_vend_session_type_credit_e);
+}
+
+static void handler_cancel_session(void *aux_data)
+{
+	vmc_vend_session_cancel();
+}
+
+static void handler_quit(void *aux_data)
+{
+	menu_stop(&menu);
+
+	exit(0);
+}
+
+static void handler_link_stats(void *aux_data)
+{
+	vmc_stats_t* stats = vmc_link_get_link_stats();
+
+	char buffer[50];
+	sprintf(buffer, "\n ------ Stats ------ \n");
+	menu_output(buffer);
+
+	sprintf(buffer, "  crc error: %d\n", stats->crc_errors);
+	menu_output(buffer);
+
+	sprintf(buffer, "  re-trans: %d\n", stats->retrans);
+	menu_output(buffer);
+
+	sprintf(buffer, "  link loss: %d\n", stats->resets);
+	menu_output(buffer);
+
+	sprintf(buffer, " ------ Stats ------ \n");
+	menu_output(buffer);
+}
+
+static void handler_info_session(void *aux_data)
+{
+	vmc_vend_session_start(vmc_vend_session_type_info_e);
+}
+
+static void handler_query_sessions(void *aux_data)
+{
+	vmc_vend_get_session_status();
+}
+
+static void handler_reader_state(void *aux_data)
+{
+	vmc_vend_get_reader_state();
+}
+
+```
+
+## Step 5: Implement main function
+
+Once all other parts are implemented, you can add the program's main entry point, which initializes the link with the peripheral and menu, starting an infinite loop running the menu. See the code below:
+
+```c
+int mymain(int argc, char *argv[])
+{
+	printk_register_puts(terminal_tx_str);
+
+	/* Modules initialization */
+	vmc_init();
+
+	set_command_line_arguments(argc, argv, &config, &com_id);
+	
+	/* Board initialization */
+	board_init(com_id);
+
+	/* Register the timer tick handler */
+	cpu_platform_register_timer_tick_cb(2, (platform_timer_tick_cb_t)cpu_timer_tick);
+
+	/* Modules initialization */
+#if UTILITIES_CLI_MODE==1
+	cli_init();
+
+	cli_register_io(terminal_tx_str);
+
+	printk("welcome to %s, version: %s, build: %s\n\r", __stringify(APP_NAME), __stringify(APP_VER), __stringify(APP_BUILD));
+	printk("build data: "__DATE__ " "__TIME__"\n\r");
+
+	/* Start modules and application */
+	cli_start();
+#endif
+
+	vmc_link_start(&vmc_usart, &config);
+
+	menu_init();
+
+	while (1)
+	{
+#if UTILITIES_CLI_MODE==1
+		if (drv_usart_is_rx_pending(&terminal_usart))
+		{
+			cli_process_char(drv_usart_rx_byte(&terminal_usart));
+		}
+
+#endif
+		menu_run(&menu);
+	}
+}
+```

@@ -1,0 +1,371 @@
+---
+title: "Retrieve Device Information"
+---
+
+In Nayax Core, devices have various attributes, such as the device's operator, model or ID, and status. These can all be seen in the **Devices** menu, which you can access in the following way:
+
+1. In your Dashboard, go to **Administration >  Devices**.
+2. Use the search function to filter through the list of devices.
+3. Select the desired device from the list.
+4. Open the **General Information** tab.
+
+<Image align="center" width="800px" src="https://files.readme.io/c7fa0083b5564b6274b7f5490622c70f98073a62383266dbedbdb476420c2008-image.png" />
+
+<br />
+
+Here, you can see the General information about the selected device.
+
+## Lynx API Methods
+
+Lynx API allows you to retrieve all this information from one device or a group of devices programmatically using the following endpoints:
+
+<HTMLBlock>{`
+<style>
+  .endpoint_card_container {
+    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+
+    .card {
+      display: flex;
+      position: relative;
+      padding: 16px 18px;
+      align-items: flex-start;
+      justify-content: start;
+      gap: 12px;
+      border-radius: 6px;
+      border: 1px solid #DCDCDC;
+      background-color: #FFF;
+      text-decoration: none !important;
+      transition: all 0.3s ease, border 0.1s ease;
+
+      .card_content {
+        font-feature-settings: 'clig' off, 'liga' off;
+        font-family: Inter;
+        font-style: normal;
+        line-height: 18px;
+
+        h3 {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          flex-wrap: wrap;
+          color: #383838;
+          font-size: 17.5px;
+          font-weight: 700;
+          margin: 0 38px 0 0;
+
+          span {
+            position: absolute;
+            top: 10px;
+            right: -5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #FFF !important;
+            text-align: center;
+            font-size: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            width: 40px;
+            height: 16px;
+            flex-shrink: 0;
+            border-radius: var(--border-radius-lg);
+            margin: 0 15px 0 0;
+          }
+
+          .get {
+            background: #0e9b71;
+            text-shadow: 1px 1px 0 #0d8d67, 0 1px 0 #0d8d67, 1px 0 0 #0d8d67;
+          }
+
+          .post {
+            background: #0171c2;
+            text-shadow: 1px 1px 0 #0168b3, 0 1px 0 #0168b3, 1px 0 0 #0168b3;
+          }
+
+          .patch {
+            background: #df7d03;
+            text-shadow: 1px 1px 0 #d07503, 0 1px 0 #d07503, 1px 0 0 #d07503;
+          }
+
+          .put {
+            background: #674ead;
+            text-shadow: 1px 1px 0 #604aa2, 0 1px 0 #604aa2, 1px 0 0 #604aa2;
+          }
+        }
+
+        p {
+          color: #676767;
+          font-size: 14px;
+          font-weight: 400;
+          margin-bottom: 5px;
+        }
+
+        .link {
+          color: #d2a900;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 18px;
+          text-decoration: none;
+
+          svg {
+            fill: #d2a900;
+          }
+        }
+
+        .link:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .card:hover {
+      border: 1px solid #d2a900;
+      box-shadow: 0px 0px 9.7px 0px rgba(0, 0, 0, 0.21);
+
+      h3 {
+        color: #d2a900;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 400px) {
+    .endpoint_card_container {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+  }
+
+  @media only screen and (max-width: 350px) {
+    .endpoint_card_container {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    [data-color-mode="system"] .card {
+      border: 1px solid #556974;
+      background-color: #20292e;
+
+      .card_content {
+
+        h3,
+        p {
+          color: #FFF;
+        }
+
+        .link {
+          color: #d2a900;
+
+          svg {
+            fill: #d2a900;
+          }
+        }
+      }
+    }
+
+    [data-color-mode="system"] .card:hover {
+      h3 {
+        color: #d2a900 !important;
+      }
+    }
+  }
+
+  [data-color-mode="dark"] .card {
+    border: 1px solid #556974;
+    background-color: #20292e;
+
+    .card_content {
+
+      h3,
+      p {
+        color: #FFF;
+      }
+
+      .link {
+        color: #d2a900;
+
+        svg {
+          fill: #d2a900;
+        }
+      }
+    }
+  }
+
+  [data-color-mode="dark"] .card:hover {
+    h3 {
+      color: #d2a900 !important;
+    }
+  }
+</style>
+
+<body>
+  <div class="endpoint_card_container">
+    <a class="card" href="/v1.0/reference/get-devices">
+      <div class="card_content">
+        <h3><span class="get">get</span> Get All Devices</h3>
+      </div>
+    </a>
+    <a class="card" href="/v1.0/reference/get-device-by-deviceid">
+      <div class="card_content">
+        <h3><span class="get">get</span> Get Device by DeviceID</h3>
+      </div>
+    </a>
+  </div>
+</body>
+`}</HTMLBlock>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](doc:security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+</Warning>
+
+### Retrieve a Device by `deviceID`
+
+Using the [Get Device by DeviceID](ref:get-device-by-deviceid) endpoint, providing it with the `deviceID` as a path parameter, you can retrieve that device's details. See an example request and response  in the code block below:
+
+```curl Request
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/devices/{DeviceID} \
+     --header 'accept: application/json'
+```
+```json Response
+{
+  "VposChipId": "string",
+  "IsDeviceExists": true,
+  "FWVersionNumber": "string",
+  "VposVersionNumber": "string",
+  "DeviceID": 0,
+  "ActorID": 0,
+  "DeviceTypeLutID": 0,
+  "DeviceSerial": "string",
+  "IMEI": "string",
+  "DeviceDescription": "string",
+  "SimCardID": 0,
+  "FWVersionID": 0,
+  "RequestedFwID": 0,
+  "PollInterval": 0,
+  "StatusID": 0,
+  "LastUpdated": "2024-12-09T14:40:50.980Z",
+  "IsCollectMultipleParameters": true,
+  "IsLogged": true,
+  "FRequestedNewVersionDate": "2024-12-09T14:40:50.980Z",
+  "FTookNewVersionDate": "2024-12-09T14:40:50.980Z",
+  "HardwareVersion": "string",
+  "IsRental": true,
+  "RentalEndMonth": 0,
+  "RentalEndYear": 0,
+  "IsToBeReturned": true,
+  "FeeCommunicationThreshold": 0,
+  "BillingPlanID": 0,
+  "BillingPlanActivationDate": "2024-12-09T14:40:50.980Z",
+  "DeviceCreationDate": "2024-12-09T14:40:50.980Z",
+  "CreatedBy": 0,
+  "UpdatedBy": 0,
+  "DistributorBillingPlanID": 0,
+  "ChipID": "string",
+  "OrderID": 0,
+  "ExternalFlashSize": 0,
+  "BoardSerial": "string",
+  "FlashSize": 0,
+  "DeviceFamily": "string",
+  "ModemModel": "string",
+  "TrialEndDate": "2024-12-09T14:40:50.980Z",
+  "VerticalTypeID": 0,
+  "VerticalProductTypeID": 0,
+  "VerticalTypeLutID": 0,
+  "VerticalProductTypeLutID": 0,
+  "Refs": {
+    "additionalProp": "string"
+  }
+}
+```
+
+<Note>
+**Path Params**
+
+Replace `<DeviceID>` with the actual identifier of the device.
+</Note>
+
+### Retrieve all Devices
+
+Using the [Get All Devices]()  endpoint, you can retrieve a list of available devices. The code block below shows an example request and response.
+
+```curl Request
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/devices \
+     --header 'accept: application/json'
+```
+```json Response
+[
+  {
+    "VposChipId": "string",
+    "IsDeviceExists": true,
+    "FWVersionNumber": "string",
+    "VposVersionNumber": "string",
+    "DeviceID": 0,
+    "ActorID": 0,
+    "DeviceTypeLutID": 0,
+    "DeviceSerial": "string",
+    "IMEI": "string",
+    "DeviceDescription": "string",
+    "SimCardID": 0,
+    "FWVersionID": 0,
+    "RequestedFwID": 0,
+    "PollInterval": 0,
+    "StatusID": 0,
+    "LastUpdated": "2024-12-09T14:40:50.980Z",
+    "IsCollectMultipleParameters": true,
+    "IsLogged": true,
+    "FRequestedNewVersionDate": "2024-12-09T14:40:50.980Z",
+    "FTookNewVersionDate": "2024-12-09T14:40:50.980Z",
+    "HardwareVersion": "string",
+    "IsRental": true,
+    "RentalEndMonth": 0,
+    "RentalEndYear": 0,
+    "IsToBeReturned": true,
+    "FeeCommunicationThreshold": 0,
+    "BillingPlanID": 0,
+    "BillingPlanActivationDate": "2024-12-09T14:40:50.980Z",
+    "DeviceCreationDate": "2024-12-09T14:40:50.980Z",
+    "CreatedBy": 0,
+    "UpdatedBy": 0,
+    "DistributorBillingPlanID": 0,
+    "ChipID": "string",
+    "OrderID": 0,
+    "ExternalFlashSize": 0,
+    "BoardSerial": "string",
+    "FlashSize": 0,
+    "DeviceFamily": "string",
+    "ModemModel": "string",
+    "TrialEndDate": "2024-12-09T14:40:50.980Z",
+    "VerticalTypeID": 0,
+    "VerticalProductTypeID": 0,
+    "VerticalTypeLutID": 0,
+    "VerticalProductTypeLutID": 0,
+    "Refs": {
+      "additionalProp": "string"
+    }
+  }
+]
+```
+
+This endpoint allows you to use filters in the query parameters. See the table below for all the available query params:
+
+| **Query Parameter** | **Type**    | **Description**                                                   |
+| ------------------- | ----------- | ----------------------------------------------------------------- |
+| `ActorId`           | `int64`     | The unique identifier of the actor associated with the devices.   |
+| `isConnected`       | `boolean`   | Filter devices based on their connection status.                  |
+| `pageNumber`        | `int32`     | Defaults to 1. The page number for paginated results.             |
+| `pageSize`          | `int32`     | Defaults to 1000. The number of results per page.                 |
+| `nayaxDeviceSerial` | `string`    | The serial number of the Nayax device.                            |
+| `orderId`           | `int32`     | Filter devices based on the associated order ID.                  |
+| `statusId`          | `int32`     | Filter devices based on their status ID.                          |
+| `createdDt`         | `date-time` | Filter devices based on their creation date.                      |
+| `updatedDt`         | `date-time` | Filter devices based on the last updated date.                    |
+| `boardSerial`       | `string`    | The serial number of the device's mainboard.                      |
+| `imei`              | `string`    | The International Mobile Equipment Identity number of the device. |
+| `chipId`            | `string`    | The unique identifier for the chip in the device.                 |
+

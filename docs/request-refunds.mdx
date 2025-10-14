@@ -1,0 +1,271 @@
+---
+title: "Request Refunds"
+---
+
+The refund process begins by submitting a request with details such as the refund amount and reason. This notifies the customer that the refund is being processed. We will describe this process in more detail on this page.
+
+<Warning>
+**Credit Cards Only**
+
+Refunds can only be requested for transaction done through Credit Card. This option is not available for prepaid cards.
+</Warning>
+
+In Nayax Core, refunds can be requested through the **Dynamic Transactions Monitor**. Follow the steps below to do so.
+
+1. Access **Reports > Online Reports > Dynamic Transactions Monitor**.
+2. Search for the transaction to refund. You can use the filter feature to make this easier.
+3. Right-click the transaction you want to refund.
+4. Click **Request Refund**
+
+   <Image align="center" width="800px" src="https://files.readme.io/c5a4a799733b4048a8962f9d18345cd5dea5296f2150c976a2904a9ac8e58467-image.png" />
+5. A pop-up window will appear. In it, choose if the refund is complete or partial and write the reason for the refund.
+6. Click **Request Refund**.
+
+   <Image align="center" width="800px" src="https://files.readme.io/5ebb0c3319117b408ea57f8a5389f7431b7b0b3478c412a0affd33e662d8c69a-image.png" />
+
+## Lynx API
+
+This process can be performed programmatically through the Lynx API. The following endpoint is used to process the refund.
+
+<HTMLBlock>{`
+<style>
+  .endpoint_card_container {
+    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+
+    .card {
+      display: flex;
+      position: relative;
+      padding: 16px 18px;
+      align-items: flex-start;
+      justify-content: start;
+      gap: 12px;
+      border-radius: 6px;
+      border: 1px solid #DCDCDC;
+      background-color: #FFF;
+      text-decoration: none !important;
+      transition: all 0.3s ease, border 0.1s ease;
+
+      .card_content {
+        font-feature-settings: 'clig' off, 'liga' off;
+        font-family: Inter;
+        font-style: normal;
+        line-height: 18px;
+
+        h3 {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          flex-wrap: wrap;
+          color: #383838;
+          font-size: 17.5px;
+          font-weight: 700;
+          margin: 0 38px 0 0;
+
+          span {
+            position: absolute;
+            top: 10px;
+            right: -5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #FFF !important;
+            text-align: center;
+            font-size: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            width: 40px;
+            height: 16px;
+            flex-shrink: 0;
+            border-radius: var(--border-radius-lg);
+            margin: 0 15px 0 0;
+          }
+
+          .get {
+            background: #0e9b71;
+            text-shadow: 1px 1px 0 #0d8d67, 0 1px 0 #0d8d67, 1px 0 0 #0d8d67;
+          }
+
+          .post {
+            background: #0171c2;
+            text-shadow: 1px 1px 0 #0168b3, 0 1px 0 #0168b3, 1px 0 0 #0168b3;
+          }
+
+          .patch {
+            background: #df7d03;
+            text-shadow: 1px 1px 0 #d07503, 0 1px 0 #d07503, 1px 0 0 #d07503;
+          }
+
+          .put {
+            background: #674ead;
+            text-shadow: 1px 1px 0 #604aa2, 0 1px 0 #604aa2, 1px 0 0 #604aa2;
+          }
+        }
+
+        p {
+          color: #676767;
+          font-size: 14px;
+          font-weight: 400;
+          margin-bottom: 5px;
+        }
+
+        .link {
+          color: #d2a900;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 18px;
+          text-decoration: none;
+
+          svg {
+            fill: #d2a900;
+          }
+        }
+
+        .link:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .card:hover {
+      border: 1px solid #d2a900;
+      box-shadow: 0px 0px 9.7px 0px rgba(0, 0, 0, 0.21);
+
+      h3 {
+        color: #d2a900;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 400px) {
+    .endpoint_card_container {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+  }
+
+  @media only screen and (max-width: 350px) {
+    .endpoint_card_container {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    [data-color-mode="system"] .card {
+      border: 1px solid #556974;
+      background-color: #20292e;
+
+      .card_content {
+
+        h3,
+        p {
+          color: #FFF;
+        }
+
+        .link {
+          color: #d2a900;
+
+          svg {
+            fill: #d2a900;
+          }
+        }
+      }
+    }
+
+    [data-color-mode="system"] .card:hover {
+      h3 {
+        color: #d2a900 !important;
+      }
+    }
+  }
+
+  [data-color-mode="dark"] .card {
+    border: 1px solid #556974;
+    background-color: #20292e;
+
+    .card_content {
+
+      h3,
+      p {
+        color: #FFF;
+      }
+
+      .link {
+        color: #d2a900;
+
+        svg {
+          fill: #d2a900;
+        }
+      }
+    }
+  }
+
+  [data-color-mode="dark"] .card:hover {
+    h3 {
+      color: #d2a900 !important;
+    }
+  }
+</style>
+
+<body>
+  <div class="endpoint_card_container">
+
+    <a class="card" href="/v1.0/reference/request-payment-refund">
+      <div class="card_content">
+        <h3><span class="post">post</span> Request a Payment Refund</h3>
+      </div>
+    </a>
+
+  </div>
+</body>
+`}</HTMLBlock>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](doc:security) page of this documentation to learn how to access your tokens and how to properly use them to authenticate your API requests.
+</Warning>
+
+### Initiating the request
+
+To start the request, use the [Request a Payment Refund](ref:request-payment-refund)  endpoint to request a refund. Providing the attributes regarding the rebate in the body parameters of the request, as exemplified below:
+
+```curl Request
+curl --request POST \
+     --url https://qa-lynx.nayax.com/operational/v1/payment/refund-request \
+     --header 'accept: application/json' \
+     --header 'content-type: application/json' \
+     --data '
+{
+  "RefundAmount": 0,
+  "RefundEmailList": "string",
+  "RefundReason": "string",
+  "TransactionId": 0,
+  "SiteId": 0,
+  "MachineAuTime": "2024-10-10T16:30:37.179Z"
+}
+'
+```
+
+Below, you can see a description of each of the parameters:
+
+| **Name**            | **Type**    | **Description**                                                             |                                                                            |
+| :------------------ | :---------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------------------- |
+| **RefundAmount**    | `double \   | null`                                                                       | The amount to be refunded to the customer.                                 |
+| **RefundEmailList** | `string \   | null`                                                                       | A list of email addresses to notify about the refund, separated by commas. |
+| **RefundReason**    | `string \   | null`                                                                       | The reason for requesting the refund.                                      |
+| **TransactionId**   | `int64`     | The unique identifier of the transaction for which the refund is requested. |                                                                            |
+| **SiteId**          | `int32`     | The unique identifier of the site where the transaction occurred.           |                                                                            |
+| **MachineAuTime**   | `date-time` | The machine's authorization time is associated with the transaction.        |                                                                            |
+
+#### How to obtain TransactionID and SiteID
+
+The `TransactionId `and `SiteId ` can be retrieved in the Lynx API using the [ Get Last Sales for Machine ](ref:get-last-sales-for-machine) endpoint to retrieve the last sales using the `MachineID` and the response object should have the necessary data.
+
+## Request Status
+
+Once you send the request, a notification email will be sent to the email address entered in the request parameters.
+
+The refund is now in the `pending `status and will need to be approved or declined. See [Approve or Decline a Refund](doc:approve-or-decline-a-refund) for more details.
+

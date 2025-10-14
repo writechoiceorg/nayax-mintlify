@@ -1,0 +1,258 @@
+---
+title: "Add Credit to Card"
+---
+
+This guide will walk you through adding credit to a card using the Lynx API. At the end, you’ll learn how to verify these changes in Nayax Core.
+
+The following endpoint is used in this guide:
+
+<HTMLBlock>{`
+<style>
+  .endpoint_card_container {
+    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+
+    .card {
+      display: flex;
+      position: relative;
+      padding: 16px 18px;
+      align-items: flex-start;
+      justify-content: start;
+      gap: 12px;
+      border-radius: 6px;
+      border: 1px solid #DCDCDC;
+      background-color: #FFF;
+      text-decoration: none !important;
+      transition: all 0.3s ease, border 0.1s ease;
+
+      .card_content {
+        font-feature-settings: 'clig' off, 'liga' off;
+        font-family: Inter;
+        font-style: normal;
+        line-height: 18px;
+
+        h3 {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          flex-wrap: wrap;
+          color: #383838;
+          font-size: 17.5px;
+          font-weight: 700;
+          margin: 0 38px 0 0;
+
+          span {
+            position: absolute;
+            top: 10px;
+            right: -5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #FFF !important;
+            text-align: center;
+            font-size: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            width: 40px;
+            height: 16px;
+            flex-shrink: 0;
+            border-radius: var(--border-radius-lg);
+            margin: 0 15px 0 0;
+          }
+
+          .get {
+            background: #0e9b71;
+            text-shadow: 1px 1px 0 #0d8d67, 0 1px 0 #0d8d67, 1px 0 0 #0d8d67;
+          }
+
+          .post {
+            background: #0171c2;
+            text-shadow: 1px 1px 0 #0168b3, 0 1px 0 #0168b3, 1px 0 0 #0168b3;
+          }
+
+          .patch {
+            background: #df7d03;
+            text-shadow: 1px 1px 0 #d07503, 0 1px 0 #d07503, 1px 0 0 #d07503;
+          }
+
+          .put {
+            background: #674ead;
+            text-shadow: 1px 1px 0 #604aa2, 0 1px 0 #604aa2, 1px 0 0 #604aa2;
+          }
+        }
+
+        p {
+          color: #676767;
+          font-size: 14px;
+          font-weight: 400;
+          margin-bottom: 5px;
+        }
+
+        .link {
+          color: #d2a900;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 18px;
+          text-decoration: none;
+
+          svg {
+            fill: #d2a900;
+          }
+        }
+
+        .link:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .card:hover {
+      border: 1px solid #d2a900;
+      box-shadow: 0px 0px 9.7px 0px rgba(0, 0, 0, 0.21);
+
+      h3 {
+        color: #d2a900;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 400px) {
+    .endpoint_card_container {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+  }
+
+  @media only screen and (max-width: 350px) {
+    .endpoint_card_container {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    [data-color-mode="system"] .card {
+      border: 1px solid #556974;
+      background-color: #20292e;
+
+      .card_content {
+
+        h3,
+        p {
+          color: #FFF;
+        }
+
+        .link {
+          color: #d2a900;
+
+          svg {
+            fill: #d2a900;
+          }
+        }
+      }
+    }
+
+    [data-color-mode="system"] .card:hover {
+      h3 {
+        color: #d2a900 !important;
+      }
+    }
+  }
+
+  [data-color-mode="dark"] .card {
+    border: 1px solid #556974;
+    background-color: #20292e;
+
+    .card_content {
+
+      h3,
+      p {
+        color: #FFF;
+      }
+
+      .link {
+        color: #d2a900;
+
+        svg {
+          fill: #d2a900;
+        }
+      }
+    }
+  }
+
+  [data-color-mode="dark"] .card:hover {
+    h3 {
+      color: #d2a900 !important;
+    }
+  }
+</style>
+
+<body>
+  <div class="endpoint_card_container">
+    <a class="card" href="/v1.0/reference/add-card-credit">
+      <div class="card_content">
+        <h3><span class="post">post</span> Add Credit to a Card</h3>
+      </div>
+    </a>
+
+  </div>
+</body>
+`}</HTMLBlock>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](doc:security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+</Warning>
+
+## Methods to add credit to card
+
+Adding credit to a card increases its available balance, allowing the cardholder to perform transactions. Lynx API allow offers a couple of ways to do so:
+
+* **PUT Method**: With this option you can use the same endpoints for creating or retrieving a cards data, but using a **PUT** request with the new amount of credit. For example you can use the [Update Card by ID](ref:update-card-by-id) endpoint with the `CardID` in the URL and the updated credit amount in the body parameters.
+* **POST Method**: Lynx API also offers a specific endpoint to perform a **POST** request with the credit to be added to card. This is a much simpler option, since you will not have to deal with the bigger body objects the **PUT** Method has.
+
+In this guide we will explore the **POST** method to add credit to a card. But you can check the Updating Card Details page for more details on **PUT** requests.
+
+## Adding Credit
+
+To add credit to a card you can use the **POST** method on the [Add Credit to a Card](ref:add-card-credit) endpoint. Sending the card's Unique Identifier in the URL. See the example query below:
+
+```curl Request
+curl --request POST \
+     --url 'https://qa-lynx.nayax.com/operational/v1/cards/{CardUniqueIdentifier}/credit/add?CardCredit=50&CreditChangeRemarks=Adding%20credit' \
+     --header 'accept: application/json'
+```
+```Text Response
+{
+  "value": 50
+}
+```
+
+<Callout icon="📘" theme="info">
+  Replace `{CardUniqueIdentifier}` with the actual identifier of the card.
+</Callout>
+
+The amount to add is sent on the query parameters, see the availabe parameters on the list below:
+
+* `CardCredit`: The credit amount to be added.
+* `CreditChangeRemarks`: A note about the transaction for tracking purposes.
+
+## Verifying credit on Nayax Core
+
+Once the request to add the card credit is succesful, you can go to Nayax Core and check the card´s credit and history in the **Card Management** tab. Follow the steps below to do so.
+
+1. Access your Nayax Core Dashboard
+2. On the top menu, navigate to Consumers > Card Management
+
+   <Image align="center" width="800px" src="https://files.readme.io/a9c55c248de3a651cb8984f1a4d881dfa6dcff536f41c49f0a2cd12cd3a428a7-image.png" />
+3. Search for the card which the credit was added and select it.
+
+<Image align="center" width="800px" src="https://files.readme.io/448744d383bc1c0493e769febb99d9dc58a2561a43e45b00be7f2ea104019d14-image.png" />
+
+4. Open the **Change Credit** tab and check the **Credit History** section.
+
+   <Image align="center" width="800px" src="https://files.readme.io/dbaa8615ec31eca3fe885bc4a95148a65469c225a2ec35d419ca88fcd33502dd-image.png" />
+
+There you will be able to see Credit History of the card and find the credit added through the Lynx API, and match the amount or remark to the ones sent in the request.
+

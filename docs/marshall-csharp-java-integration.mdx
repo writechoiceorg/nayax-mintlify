@@ -1,0 +1,333 @@
+---
+title: "C# & Java SDK Integration"
+---
+
+This guide shows you how to integrate the **Marshall SDK** into your **C#** or **Java** application. You’ll learn how to:
+
+* Import the SDK package into your project
+* Create and configure a VMC settings object
+* Set up the serial (**COM**) port for communication
+* Register event listeners and start the SDK
+
+The instructions are presented side by side for both languages.
+
+## Pre-requisites
+
+Before you begin, make sure you have:
+
+* Downloaded the appropriate SDK files, `.jar` for **Java** or `.dll` for **C#**.
+* Identified the correct **COM** port for the Marshall cable.
+* For Java- ensure that you have Java 8 (also known as Java 1.8) and above. Note that for the newest version of Nayax's Java SDK (0.1.6.8) you'd need Java 11- but should you like us to, we can look into having it be compiled with    Java 8.
+
+## Integrate Marshall
+
+To perform the integration, follow the steps below:
+
+1. Import the provided.`.JAR` or SDK DLL file into your project.
+
+2. Import the necessary namespaces in your code.
+   ```java
+   import com.bitmick.marshall.models.*;
+   ```
+   ```csharp
+   using com.bitmick.marshall.models;
+   ```
+
+3. Instantiate a VMC configuration object:
+
+   ```java
+   public vmc_configuration vmc_config = new vmc_configuration();
+   ```
+   ```csharp
+   vmc_configuration vmc_config = new vmc_configuration();
+   ```
+
+4. Fill in the appropriate fields. The following code block presents a standard configuration:
+
+   ```java
+   public static void main(string[] args) {
+           vmc_config.multi_vend_support = false;
+           vmc_config.multi_session_support = false;
+           vmc_config.price_not_final_support = false;
+           vmc_config.reader_always_on = false;
+           vmc_config.always_idle = false;
+           vmc_config.vend_denied_policy = vmc_configuration.vend_denied_policy_cancel;
+           vmc_config.explicit_vend_success = false;
+           vmc_config.long_price = false;
+
+           vmc_config.mifare_approved_by_vmc_support = false;
+           vmc_config.mag_card_approved_by_vmc_support = false;
+           vmc_config.qr_approved_by_vmc_support = false;
+
+           vmc_config.dump_packets_level = vmc_configuration.debug_level_dump_moderate;
+           vmc_config.debug = true;
+   }
+   ```
+   ```csharp
+   public class vend_machine
+               vmc_config.multi_session_support = false;
+               vmc_config.multi_vend_support = false;
+               vmc_config.price_not_final_support = false;
+               vmc_config.reader_always_on = false;
+               vmc_config.always_idle = false;
+               vmc_config.explicit_vend_success = false;
+               vmc_config.vend_denied_policy = vmc_configuration.vend_denied_policy_cancel;
+               vmc_config.long_price = false;
+
+               vmc_config.mag_card_approved_by_vmc_support = false;
+               vmc_config.mifare_approved_by_vmc_support = false;
+
+               vmc_config.debug = true;
+               vmc_config.dump_packets_level = vmc_configuration.debug_level_dump_moderate;
+
+   ```
+
+<Warning>
+**Mandatory Fields**
+
+The customer machine information is mandatory for the VMC configuration. These are the `model`, `serial`, `hw_ver`, and the `manuf_code`. Read more about these fields in [VMC Configuration Object](doc:vmc-configuration-object).
+</Warning>
+
+5. Setup the **COM** port.
+   ```java
+   m_vmc.link.set_serial_port(new pc_port("COM18", 115200))
+   ```
+   ```csharp
+   m_vmc.link.set_serial_port(new pc_port("COM18", 115200))
+   ```
+<Warning>
+**COM Port**
+
+Make sure that you change the `COM` parameter to the one your Marshall cable is connected to.
+</Warning>
+
+* Note- in the near future we plan on having the possibility to use Marshall over ETH- in that case, the would be no COM port but rather an IP address which would be under the same local network as the Nayax device, and optionally the relevant IP port (which by default should remain untouched [has by default the value of "12345" which is meaningless])
+  ```java
+  m_vmc.link.set_serial_port(new eth_port("192.168.112.127", (short) 12345, false));
+  ```
+  ```csharp
+  vmc_instance = marshall_init(new eth_port("192.168.68.101", 12345));
+  ```
+
+1. Configure the SDK and register to link events.
+
+```java Java / C#
+m_vmc.link.configure(vmc_config);
+m_vmc.link.set_events(new vmc_link_events());
+```
+
+7. Start the SDK and wait for the `onReady()` event:
+
+```java
+vmc_instance .start();
+```
+```csharp
+m_vmc.link.start();
+```
+
+<Note>
+**Using Android**
+
+On android, you either need support from your provider or use a FTDI chip, which we provide
+port implementation for. (see the “android” folder in the JAVA SDK release)
+</Note>
+
+## See Also
+
+<HTMLBlock>{`
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+  .card_container {
+    display: flex;
+    gap: 10px;
+    margin: 0 auto;
+    max-width: var(--container-lg);
+    width: 100%;
+    flex-wrap: wrap;
+
+    .card {
+      display: flex;
+      padding: 20px 14px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      min-width: 190px;
+      flex-shrink: 0;
+      gap: 12px;
+      border-radius: 6px;
+      border: 1px solid #DCDCDC;
+      background: #FFF;
+      box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13);
+      text-decoration: none;
+      flex-grow: 1;
+      flex-basis: 0;
+      text-decoration: none !important;
+
+      svg {
+        fill: none;
+
+        rect {
+          fill: #FFF;
+          stroke: #C9C9C9;
+        }
+
+        path {
+          fill: #d2a900;
+        }
+      }
+
+      h3 {
+        color: #383838;
+        text-align: center;
+        font-family: Inter !important;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 700;
+        text-decoration: none;
+        margin: 0;
+        text-align: start;
+      }
+    }
+
+    .card:hover {
+      cursor: pointer;
+      border: 1px solid #d2a900 !important;
+      box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+      transform: translateY(-1px);
+
+      svg {
+        fill: none;
+
+        rect {
+          fill: #d2a900;
+          stroke: #C9C9C9;
+        }
+
+        path {
+          fill: #FFF;
+        }
+      }
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    [data-color-mode="system"] .card_container {
+      .card {
+        border: 1px solid #556974;
+        background: #20292e;
+
+        svg {
+          rect {
+            fill: #20292e;
+            stroke: #556974;
+          }
+        }
+
+        h3,
+        p {
+          color: #FFF;
+        }
+      }
+
+      .card:hover {
+        cursor: pointer;
+        border: 1px solid #d2a900 !important;
+        box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+        transform: translateY(-1px);
+
+        h3 {
+          color: #d2a900;
+        }
+
+        svg {
+          fill: none;
+
+          rect {
+            fill: #d2a900;
+            stroke: #556974;
+          }
+
+          path {
+            fill: #20292e;
+          }
+        }
+      }
+    }
+  }
+
+  [data-color-mode="dark"] .card_container {
+    .card {
+      border: 1px solid #556974;
+      background: #20292e;
+
+      svg {
+        rect {
+          fill: #20292e;
+          stroke: #556974;
+        }
+      }
+
+      h3,
+      p {
+        color: #FFF;
+      }
+    }
+
+    .card:hover {
+      cursor: pointer;
+      border: 1px solid #d2a900 !important;
+      box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+      transform: translateY(-1px);
+
+      h3 {
+        color: #d2a900;
+      }
+
+      svg {
+        fill: none;
+
+        rect {
+          fill: #d2a900;
+          stroke: #556974;
+        }
+
+        path {
+          fill: #20292e;
+        }
+      }
+    }
+  }
+
+  @media only screen and (max-width: 450px) {
+    .card_container {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+  }
+</style>
+
+<div class="card_container">
+
+  <a class="card" href="/v1.0/docs/c-sdk-integration">
+    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
+      <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M23.3736 24.9994C22.4754 24.9994 21.7472 24.2712 21.7472 23.373V11.2526L9.62638 11.2526C8.72816 11.2526 8 10.5245 8 9.62632C8 8.72813 8.72816 8 9.62639 8L23.3736 8C24.2718 8 25 8.72813 25 9.62632L25 23.373C25 24.2712 24.2718 24.9994 23.3736 24.9994Z" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
+    </svg>
+    <h3>C SDK Integration</h3>
+  </a>
+
+  <a class="card" href="/v1.0/docs/marshall-methods-and-functions">
+    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
+      <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M23.3736 24.9994C22.4754 24.9994 21.7472 24.2712 21.7472 23.373V11.2526L9.62638 11.2526C8.72816 11.2526 8 10.5245 8 9.62632C8 8.72813 8.72816 8 9.62639 8L23.3736 8C24.2718 8 25 8.72813 25 9.62632L25 23.373C25 24.2712 24.2718 24.9994 23.3736 24.9994Z" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
+    </svg>
+    <h3>Methods & Functions</h3>
+  </a>
+    </div>
+`}</HTMLBlock>

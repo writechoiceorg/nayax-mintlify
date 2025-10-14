@@ -1,0 +1,33 @@
+---
+title: "Response Codes"
+---
+
+Here's a comprehensive list of response codes, their descriptions, and the relevant API methods associated with Spark. This table will help you understand the various outcomes of your API calls, from successful transactions to different types of errors.
+
+| Response Code | Description                         | Relevant API Methods                                                                         |
+| ------------- | ----------------------------------- | -------------------------------------------------------------------------------------------- |
+| `20`          | Machine Has No Device               | [`/TriggerTransaction`](doc:triggertransaction)                                              |
+| `21`          | Device Not Connected to MQTT Server | [`/TriggerTransaction`](doc:triggertransaction)                                              |
+| `22`          | Missing Device IP                   | [`/TriggerTransaction`](doc:triggertransaction)                                              |
+| `23`          | IP Is Non-VPN                       | [`/TriggerTransaction`](doc:triggertransaction)                                              |
+| `24`          | Machine Not Responding              | [`/TriggerTransaction`](doc:triggertransaction)                                              |
+| `25`          | Unknown Machine ID                  | [`/TriggerTransaction`](doc:triggertransaction)                                              |
+| `26`          | Validation Error                    | [`/StartAuthentication`](doc:startauthentication)                                            |
+| `27`          | Unknown Transaction ID              | [`/Settlement`](doc:settlement), [`/CancelTransaction`](doc:canceltransaction)               |
+| `28`          | Already Cancelled                   | [`/CancelTransaction`](doc:canceltransaction)                                                |
+| `29`          | Not Allowed to Wake Device          | [`/TriggerTransaction`](doc:triggertransaction)                                              |
+| `30`          | Spark Integrator Not Active         | [`/StartAuthentication`](doc:startauthentication)                                            |
+| `31`          | Cancellation Failed                 | [`/CancelTransaction`](doc:canceltransaction)                                                |
+| `32`          | Transaction Not Found or Old        | [`/Settlement`](doc:settlement) ,  [`/CancelTransaction`](doc:canceltransaction)             |
+| `33`          | Fail To Authenticate                | [`/StartAuthentication`](doc:startauthentication)                                            |
+| `34`          | Missing Amount                      | [`/TriggerTransaction`](doc:triggertransaction) ,[`/Settlement`](doc:settlement)             |
+| `35`          | Settlement Failed                   | [`/Settlement`](doc:settlement)                                                              |
+| `36`          | Site ID Not Found                   | [`/Settlement`](doc:settlement) , [`/CancelTransaction`](doc:canceltransaction)              |
+| `37`          | Authorization Failed                | [`/TransactionCallback`](doc:transactioncallback)                                            |
+| `38`          | Transaction Callback Failed         | [`/TransactionCallback`](doc:transactioncallback)  [`/DeclineCallback`](doc:declinecallback) |
+| `40`          | Timeout Callback Failed             | [`/TimeoutCallback`](doc:timeoucallback)                                                     |
+| `44`          | Timeout on POS Device               | [`/DeclineCallback`](doc:declinecallback)                                                    |
+| `45`          | Cancelled on POS Device             | [`/DeclineCallback`](doc:declinecallback)                                                    |
+| `992`         | Nayax Time Out Error                | `All`                                                                                        |
+| `997`         | Nayax Validation Error              | `All`                                                                                        |
+| `999`         | Nayax General Error                 | `All`                                                                                        |

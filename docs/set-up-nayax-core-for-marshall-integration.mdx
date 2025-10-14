@@ -1,0 +1,228 @@
+---
+title: "Set Up Nayax Core for Marshall Integration"
+---
+
+Once you have completed the Marshall installation process, follow the steps below to
+configure the Nayax device to support the Marshall functionality.
+
+## Configure the Machine Model at the Machine Level
+
+This configuration lets your system interact properly with the selected devices, ensuring efficient and optimal operation.
+Note that during the integration your Nayax Integrator would be the one to set up virtual machines for you, but in case you'd like to learn how to do that yourself- below are the necessary steps to configure the machine model:
+
+1. Log in to [**Nayax Core**](https://my.nayax.com/core/LoginPage.aspx?ReturnUrl=%2fdcs%2fpublic%2fdefault.aspx&_ga=2.5742451.1172703238.1627224233-738608359.1611493235)  using your credentials.
+
+   <Image align="center" border={true} src="https://files.readme.io/ea28301b8b0c9467e9f435215380d4f1766fec5047e01ee689c6144f8544870e-image.png" className="border" />
+2. Go to **Operations > Machines**.
+
+   <Image align="center" border={true} src="https://files.readme.io/748223da92c63e7f7401df10e6e000df29d614e668014a0fb9442e9bded89c6d-image.png" className="border" />
+3. Create a machine. If you need help, see the [**Create New Machine**](https://developerhub.nayax.com/docs/create-new-machine-guides) guide.
+4. In the **Machine Model** field, select one of the following options from the dropdown:
+   * RS232 – PC Machine - Marshall (Amit device)
+   * RS232 – PC Machine - Marshall VPOS T/O/F (for Touch devices)
+5. Click **Save** to apply the configuration.
+
+   <Image align="center" border={true} src="https://files.readme.io/7d73bda21bf2ecde00a48f79dd97a569f736db2e6e0282dd4d715c90691a1019-image.png" className="border" />
+
+## Configure RS232 Connection
+
+Set the serial port parameters for your machine:
+
+1. For the machine you configured, click the **General** tab.
+2. Locate the **RS232 Control** section and configure the required settings.
+
+   <Image align="center" border={true} src="https://files.readme.io/7cdf44bb64fc3480797c32d142ec9f0472e4afbeba42fb0b490f899c100aa395-image.png" className="border" />
+
+## Configure Session Timeout Parameter
+
+The **Multi-Session Mode** operates only in pre-selection mode but functions similarly to pre-authorization. The transaction flow is akin to a single vending process, with the addition of a **Close Session** command.
+
+If your machine works in the **multi-session mode**, set the session timeout parameters as follows:
+
+1. For the configured machine, click the **General** tab.
+2. Go to the **VMC** section.
+3. Define the **Session Time Out** to specify the session’s duration:
+
+   * **Maximum for Credit Cards:** 23 hours
+   * **Maximum for Prepaid Cards:** 72 hours
+   * **Default:** 60 minutes
+   * **Minimum** 1 minute
+
+     <Image align="center" border={true} src="https://files.readme.io/3e51d683f2252ebcbba464c86c753e4830c33163511cd799f852f05042e92daf-image.png" className="border" />
+
+<Note>
+**Session Expiration and Settlement**
+
+Once the session timeout reaches the defined limit, the session expires. In such cases, the settlement amount will correspond to the price sent during the "vend request" command.
+Once a session has times out the device would settle the transaction on it's own and send a "Status" command to the peripheral to notify it about it taking place. This would let the peripheral know that it now longer needs to settle said transaction (as it has already been settled), and should he try to settle the already-settled transaction he would get "settlement error" (as the device couldn't find said session to settle it)
+</Note>
+
+## Configure Keep Alive Parameter
+
+The Keep Alive signal ensures consistent communication between the Nayax device and the machine by sending a signal every second. Adjust the parameters to enhance the system's tolerance as follows:
+
+1. For the configured machine, click the **General** tab.
+2. Go to the **VMC** section.
+3. Set the **Keep Alive Intervals** (in seconds) to define the communication timeframe between the device and the machine (maximum: 255 seconds).
+
+   <Image align="center" border={true} src="https://files.readme.io/9326ad431293f0b3be07925aecf49c954b2cf0ab3e87231b00c1bf0dc0525c86-image.png" className="border" />
+
+<Note>
+**Keep Alive Communication Failure**
+
+If the device doesn’t receive the Keep Alive command within the time defined, then communication is failed, and the device will launch a Pairing process and send the Reset command again.
+It is highly recommended to keep it set to 1, and at most not have it above the value of 10.
+Read more on that in the [Stability/ starvation issues](https://developerhub.nayax.com/docs/stablity-issues#/) section
+</Note>
+
+## Configure Cashless Address
+
+The Cashless Address configuration ensures seamless communication between the machine and the Nayax device for cashless transactions. Follow these steps to set the correct address:
+
+1. For the configured machine, click the **General** tab.
+2. Click the **MDB** section.
+3. Select the **Cashless MDB address** to **Marshall VMC**.
+
+   <Image align="center" border={true} src="https://files.readme.io/a203f76f21f4a3aea24ad2045af752d78a815fdedf743b33f176b10a5a54a510-image.png" className="border" />
+
+## Configure Pre-Selection and Pre-Authorization
+
+Pre-selection and Pre-Authorization settings allow flexible transaction flows tailored to different vending scenarios. Pre-selection enables multi-session operations, while Pre-Authorization focuses on card-based transactions with a defined credit limit. Configure these parameters as needed for your machine’s functionality.
+
+### Pre-Selection - Multi-Sessions
+
+Pre-selection supports multi-session operations where consumers can select products before completing the transaction. To configure this:
+
+1. For the configured machine, click the **General** tab.
+2. Click the **MDB** section.
+3. Select the **MDB Flags** to **PreSelection Enabled**.
+
+   <Image align="center" border={true} src="https://files.readme.io/a452bd0e091d6f6cc4d071497ca3545f1b1f9d7ed1fc7839a985256c98271716-image.png" className="border" />
+
+   This allows the system to offer product preselection before making a payment.
+
+The **Choose Product Timeout** option is the timeframe that the consumer is required
+to choose a product.
+When the transaction flow starts with the machine selection, then the **Choose Product Timeout** option must be defined as zero.
+
+4. Click the **Payment** section.
+5. Set the Choose Product Timeout to **0** seconds.
+
+   <Image align="center" border={true} src="https://files.readme.io/a7e9963625a8142138cc9b9f631a9b1e4c9f2bc1261b7562bd3642c1e3aebc8e-image.png" className="border" />
+
+   This ensures no time restrictions for product selection during payment.
+
+### Pre-Selection – Always Idle
+
+Pre-selection in Always Idle mode ensures the machine remains in a ready state for consumers. Use the following steps to configure:
+
+1. For the configured machine, click the **General** tab.
+2. Click the **Card Readers** section.
+
+   * Set the **Card Reader MDB Level** to **3**.
+
+     <Image align="center" border={true} src="https://files.readme.io/8eb7d8db47301a185bdad357f7732b2d8f7bf39e0d1687b23ceaa82c3daca5c3-image.png" className="border" />
+   * Set the Transaction Start Method to Product.
+
+     <Image align="center" border={true} src="https://files.readme.io/aa8525198fa829e55552b04d130586dc41dbb44bd77950c6a1f0c86844a8879a-image.png" className="border" />
+3. Click the **MDB** section.
+
+   * Set the **MDB flags** to **Preselection Enabled**.
+
+     <Image align="center" border={true} src="https://files.readme.io/0ac2aa34c2e8fed899535e40faac80758250e2dc399d111314d59d7f7eda8c25-image.png" className="border" />
+   * Set the **MDB Level 3 Optional Features** to **Enable “Always
+     Idle” state**.
+
+     <Image align="center" border={true} src="https://files.readme.io/4dcafa324d80d68b3850c6e8c428898d8fe0d5f5775ddf5be2141d4be03b54a5-image.png" className="border" />
+
+The **Choose Product Timeout** option is the timeframe that the consumer is required
+to choose a product.
+When the transaction flow is “Always Idle”, the **Choose Product Timeout** option
+must be defined with a value greater than zero.
+
+4. Click the **Payment** section.
+5. Set the **Choose Product Timeout** desired value.
+
+   <Image align="center" border={true} src="https://files.readme.io/d7ba3c06419f09545c438cff66a3f85efd922f34808d0cc87e98e039025056df-image.png" className="border" />
+
+### Pre-Authorization
+
+Pre-Authorization allows the system to secure funds before the vending process begins. Follow these steps to set it up:
+
+1. For the configured machine, click the **General** tab.
+2. Click the **MDB** section.
+3. Select the **MDB flags** to **Flags Disabled**.
+
+   <Image align="center" border={true} src="https://files.readme.io/f16dae18678eacb17a91ee202af18d549375e997d0c1cb5a9d47c93676786753-image.png" className="border" />
+4. The **Choose Product Timeout** option is the timeframe that the consumer is required
+   to choose a product.
+   When the transaction flow starts with card authorization, the **Choose Product Timeout** option must be defined with a value greater than zero.
+5. Click the **Payment** section.
+6. Set the desired **Choose Product Timeout** value.
+
+   <Image align="center" border={true} src="https://files.readme.io/4ef8481959ce466c6d0fe991c8f5ccd5b34d5b92f70b4079b24d05a8c36d9830-image.png" className="border" />
+
+The **Default Credit** option needs to be configured for Pre-authorization mode.
+This is the amount Nayax will go for pre-authorization of the card.
+
+7. Click the **Payment** section.
+8. Set the desired **Default Credit** value.
+
+   <Image align="center" border={true} src="https://files.readme.io/2f9f6289cbab96a412e98c5f987ce90e3cf5bfecba7e481098fc46ab42fd24bb-image.png" className="border" />
+
+<Note>
+**Decimal Alignment for Pre-Authorization Value**
+
+The pre-authorization amount must be consistent with the Decimal Place configuration in the system settings. Ensuring proper alignment prevents transaction errors and ensures smooth payment processing.
+</Note>
+
+The Payment Flags option needs to be configured for Pre-authorization mode.
+
+9. Click the **Payment** section.
+10. Set the **Payment Flags** to **no flags set**.
+
+    <Image align="center" border={true} src="https://files.readme.io/124acc1158729ece41214218b411c666959f5448fd448182c0e5f15e0dacf8fe-image.png" className="border" />
+
+## Configure LCD Parameters
+
+To optimize the user experience, configure the LCD messages displayed during idle or disabled states. This includes customizing or disabling the **"Cash Only"** or **"Welcome"** messages to suit your machine's requirements.
+
+<Image align="center" border={true} src="https://files.readme.io/ad08ec1e62397eb2a7d8b0c785779a8e963c9f21117f2f0eca49de5fe4ce8355-image.png" className="border" />
+
+### Cash Only Message for Amit and VPOS Devices
+
+By default, the VPOS device displays a **"Cash Only"** message when it is disabled or in idle mode. This occurs when the Transaction Start Method is set to start with the machine. In the case of Marshall devices, this is the normal state. However, to ensure better communication, the "Cash Only" message should be customized.
+
+Follow these steps to update the message:
+
+1. Verify that the VPOS device is in idle mode or disabled.
+2. Go to the **Machine page**.
+3. Click the **LCD** section.
+4. Enter an appropriate **Cash Only Message** that suits your needs.
+
+### Cash Only/Welcome Message for Touch Devices
+
+When the Nayax Reader is disabled, the idle screen features animations instructing the consumer to choose a product or service first. Additionally, a "Welcome" message can be customized or disabled as needed.
+
+Follow these steps to update the message:
+
+1. Verify that the Nayax Reader is disabled and the idle screen displays the default animations.
+2. To disable the Welcome message, send `@@` to the device in the **Welcome message attribute** using the LCD section on the **Machine page**.
+3. To customize the Welcome message, click on the **LCD section** and enter an appropriate message (for example, "Swipe card" to start the transaction).
+4. Click **Save** to store the customized Welcome message.
+
+## Define the Prepaid Card(s) in the System
+
+Define the Prepaid Test Card(s) sent to the customer under the **Operator/Machine** so the customer can immediately begin their proprietary integration tests.
+
+Follow these steps to define the Prepaid Card(s):
+
+1. Go to the **Operator/Machine** section in the system.
+2. Define the Prepaid Test Card(s) that were sent to the customer.
+3. Ensure the customer can begin their proprietary tests of the integration immediately.
+
+<Note>
+**Customer Support Assistance**
+
+Should specific help be needed in this matter, please turn to **Customer Support**.
+</Note>

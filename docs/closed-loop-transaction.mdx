@@ -1,0 +1,43 @@
+---
+title: "Closed Loop Transaction"
+---
+
+Closed-loop transactions refer to operations using MIFARE cards. In this case, the merchant usually needs to obtain the MIFARE card UID to process the operations in their application server, which does not involve bank transactions.
+
+Since no bank operations are required, closed-loop transactions do not use the Nayax servers. Instead, the host machine will use the Nayax EMV Reader to read the card and the EMV Core to interact with it.
+
+<Note>
+**Open loop or closed loop transactions**
+
+The host machine does not know if the client will use an open loop (credit or debit cards) or a closed loop (MIFARE cards) transaction. This information is only available after the Nayax EMV Reader actually reads the client card. Therefore, the host machine must be prepared to process both operations after the Nayax EVM Core identifies the operation type.
+</Note>
+
+## Transaction Flow
+
+The diagram below exemplifies a Closed Loop transaction.
+
+<Frame>![](images/docs/closed-loop-transaction/images1.png)</Frame>
+
+Where:
+
+1. The host machine calls the [`PreAuthorize`](doc:payment-1#preauthorize) method using the EMV Core API. This is the only action performed by the host machine.
+2. The EMV Core sends the amount to the Reader.
+3. The Host Application should instruct the Buyer or Shopper to tap the card.
+4. The shopper taps the card into the EMV reader.
+5. The Nayax EMV Reader pulls the Response with the encrypted card data to the Nayax EVM Core.
+6. Nayax EMV Core identifies it as a MIFARE card (closed-loop transaction) and informs the host application that the transaction is complete, returning the card UID and optional card data.
+
+<Note>
+**Use Nayax Server**
+
+Normally, the MIFARE card data is shared locally with the host machine. However, you also have the option to change this configuration and send the information to Nayax Servers and use Nayax Prepaid to process the transaction.
+</Note>
+
+7. The host application uses a UID card to authorize the transaction with their application server.
+8. Once approved, the transaction is complete.
+9. The product is then delivered to the buyer successfully.
+10. EMV Core allows transactions to be reported to the Nayax server, which sends the proprietary payment amount and UUID.
+
+
+
+<br />

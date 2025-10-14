@@ -1,0 +1,91 @@
+---
+title: "Settlement"
+---
+
+The `Settlement` endpoint is used to finalize an approved transaction. After the session ends and the total amount is known, the integrator sends the final amount along with optional e-receipt information.
+
+<Warning>
+**Pre-Authorization Only**
+
+This method is only relevant for transactions with Pre-Authorization.
+</Warning>
+
+## Request
+
+Send a POST request to Spark`/spark/Settlement` endpoint with the following body:
+
+```json
+{
+  "NayaxTransactionId": 2004545072,
+  "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+  "SiteId": 2,
+  "TerminalId": "0434334921100366",
+  "TerminalIdType": 1,
+  "Amount": 12.25,
+  "EReceiptData": "{\"General\":[{\"Company\":\"Your Payments - Our Solutions\",\"Station Name\":\"B12\"}],\"Service\":[{\"Product\":\"Something Yummy\",\"Price Per Unit\":\"$2.45\",\"Number of Units\":2}]}"
+}
+
+```
+
+### Request Parameters
+
+The table below describes the parameters of the request:
+
+| Field                | Type    | Required | Description                                                                                                                                                                                                                                                                                                                                                                                          |
+| -------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NayaxTransactionId` | Integer | Yes      | Unique transaction ID assigned by Nayax.                                                                                                                                                                                                                                                                                                                                                             |
+| `SparkTransactionId` | String  | Yes      | The session ID from the initial `StartAuthentication`.                                                                                                                                                                                                                                                                                                                                               |
+| `SiteId`             | Integer | Yes      | Identifier of the site where the transaction occurred.                                                                                                                                                                                                                                                                                                                                               |
+| `TerminalId`         | String  | Yes      | Serial or external ID of the terminal used.                                                                                                                                                                                                                                                                                                                                                          |
+| `TerminalIdType`     | Integer | Yes      | Defines the ID type used.  `1` for HW Serial, `2` for Nayax Machine ID                                                                                                                                                                                                                                                                                                                               |
+| `Amount`             | Float   | Yes      | Final transaction amount in major currency units (e.g., dollars or euros).                                                                                                                                                                                                                                                                                                                           |
+| `EReceiptData`       | String  | No       | JSON-formatted string representing e-receipt details. For machine operators who wish to provide digital receipts to their consumers via the Nayax eReceipt platform. It can hold additional information to be presented in the digital receipt, which cannot be obtained from Nayax Core. See [EReceiptData Format](doc:spark-ereceiptdata-format) for more details on how to format this parameter. |
+
+## Response
+
+A successful response will return the following body:
+
+```json
+{
+  "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+  "Status": {
+    "Verdict": "Approved",
+    "ErrorDescription": "No Errors"
+  },
+  "CardBrand": "Visa",
+  "CardLast4Digits": "1234",
+  "AuthCode": "333333",
+  "MachineAuTime": "20240205194122328",
+  "AuTime": "20240205174122328",
+  "SeTime": "20240205192215572",
+  "CurrencyCode": "EUR",
+  "CurrencyNumeric": "978",
+  "FiscalRrn": "1A2b3C4d5E6f7g8H9i",
+  "NayaxRRN": "111111",
+  "Amount": 12.25
+}
+
+```
+
+### Response Parameters
+
+The table below describes the parameters of the response:
+
+| Field                     | Type   | Description                                                                                                                             |
+| :------------------------ | :----- | :-------------------------------------------------------------------------------------------------------------------------------------- |
+| `SparkTransactionId`      | String | Unique ID used for this transaction session.                                                                                            |
+| `Status`                  | Object | Result of the settlement process.                                                                                                       |
+| `Status.Verdict`          | String | `"Approved"` or `"Declined"`.                                                                                                           |
+| `Status.ErrorDescription` | String | Describes error if `Declined`, or `"No Errors"` if success.                                                                             |
+| `Status.ErrorCode`        | Number | A numeric code indicating a specific type of error that occurred during the transaction. This field is present only in error responses. |
+| `CardBrand`               | String | Card brand used (e.g., Visa, MasterCard).                                                                                               |
+| `CardLast4Digits`         | String | The last four digits of the card.                                                                                                       |
+| `AuthCode`                | String | Authorisation code returned by the payment provider.                                                                                    |
+| `MachineAuTime`           | String | Device timestamp at the moment of authorization.                                                                                        |
+| `AuTime`                  | String | Authorization server timestamp.                                                                                                         |
+| `SeTime`                  | String | Settlement server timestamp.                                                                                                            |
+| `CurrencyCode`            | String | ISO currency code (e.g., "EUR").                                                                                                        |
+| `CurrencyNumeric`         | String | ISO 4217 numeric code (e.g., "978").                                                                                                    |
+| `FiscalRrn`               | String | Fiscal reference number for accounting/reporting.                                                                                       |
+| `NayaxRRN`                | String | Internal Nayax settlement reference number.                                                                                             |
+| `Amount`                  | Float  | The settled amount, approved by the Payment Provider.                                                                                   |

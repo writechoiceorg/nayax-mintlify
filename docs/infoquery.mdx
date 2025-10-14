@@ -1,0 +1,81 @@
+---
+title: "InfoQuery"
+---
+
+Nayax sends an `InfoQuery` API after a successful `StartSession` response. Its main purposes are:
+
+* To retrieve information to be shown on the POS device before payment begins.
+* To check the availability status of the requested service station.
+
+This ensures the consumer is informed and the device can proceed accordingly.
+
+## Request
+
+Spark sends a GET request to your configured`InfoQuery` endpoint. The request body is as in the example below:
+
+```json
+{
+ "HwSerial": "0434334921100366",
+ "MachineId": 71234996,
+ "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+ "ServiceStationNumber": "5",
+ "SiteId": 2
+}
+```
+
+### Request Parameters
+
+The table below describes the parameters of the request:
+
+| Field                  | Type    | Description                                 |
+| ---------------------- | ------- | ------------------------------------------- |
+| `HwSerial`             | string  | The serial number of the hardware terminal. |
+| `MachineId`            | integer | Unique ID of the machine.                   |
+| `SparkTransactionId`   | string  | Unique transaction ID assigned by Spark.    |
+| `ServiceStationNumber` | string  | Identifies the selected service station.    |
+| `SiteId`               | integer | Site ID where the terminal is operating     |
+
+## Response
+
+A successful response will return the following body:
+
+```json
+{
+ "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+ "HwSerial": "0434334921100366",
+ "MachineId": 71234996,
+ "ServiceStationNumber": "5",
+ "ServiceStationAvailability": 1,
+ "PosDisplay": ";Charging Station:5;Day:30.52p;Night:9p;Standing charge:52.18p/day; Offpeak:12:30-04:30;",
+ "Amount": 10.00,
+ "SiteId": 2,
+ "Status": {
+ "Verdict": "Approved",
+ "StatusMessage": "Charger is available for charging"
+ }
+```
+
+### Response Parameters
+
+The table below describes the parameters of the response:
+
+| Field                        | Type    | Description                                                                                                                                                             |
+| ---------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SparkTransactionId`         | string  | Transaction identifier from the original request.                                                                                                                       |
+| `HwSerial`                   | string  | Hardware serial number.                                                                                                                                                 |
+| `MachineId`                  | integer | Machine identifier.                                                                                                                                                     |
+| `ServiceStationNumber`       | string  | Selected service station.                                                                                                                                               |
+| `ServiceStationAvailability` | integer | Availability state (1 = Available, 2 = Busy, 3 = Out of Service). Refer to the section below for more information.                                                      |
+| `PosDisplay`                 | string  | Custom message to show on the terminal display (semicolon-delimited format). See [PosDisplay Format](doc:spark-posdisplay-format)  to learn how to format your message. |
+| `Amount`                     | number  | Estimated amount for the session.                                                                                                                                       |
+| `SiteId`                     | integer | Site where the device is located.                                                                                                                                       |
+| `Status.Verdict`             | string  | Set to `"Approved"`.                                                                                                                                                    |
+| `Status.StatusMessage`       | string  | Descriptive status message.                                                                                                                                             |
+
+#### `ServiceStationAvailability`
+
+Based on the `ServiceStationAvailability `field, the POS device will react in one of the following ways:
+
+* `1` (Available): The POS device proceeds to the payment stage.
+* `2` (Busy): The POS device will allow a Device Stop flow to be initiated.
+* `3` (Out of Service): The flow ends immediately with a Declined verdict.

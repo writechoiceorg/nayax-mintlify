@@ -1,0 +1,870 @@
+---
+title: "Display Control (Screen Display)"
+---
+
+Display Control is a feature is a Preselection feature which allows for a transaction process to begin by selecting a product from the (Nayax) device's end by having the consumer select the desired product via touching the relevant screen on the device's end.
+
+The configuration of said screens can be done in 2 ways:
+The first, more common one, is done via the "Display Control" command to the device, which can be sent from the peripheral at any point of the device being in idle (once "onReady()" has been triggered).
+The second is via sending a command via Nayax Core (Nayax's backoffice).
+
+* Note-
+  * Device’s limitation is up to 12 objects per Layout.
+  * Use %c in the beginning of the label value to show a clock icon.
+
+Once either configuration has been sent, said configuration would remain on the device (no need to re-send it after every transaction)
+
+## Display Control related commands
+
+<Image align="center" border={false} width="400px" src="https://files.readme.io/7cd449b15b50c7cf3bed97466a88eca92ad4ff79d867f7d62b75f3652094e102-Screenshot_2025-10-12_093830.png" />
+
+### Updating the screens:
+
+As can be seen in the PowerPoint above, once the Display Control command has been sent, the device would respond with a Display Status command, letting it know whether or not the device received said command and it's validity.
+
+### Starting a transaction
+
+Once a consumer has selected a product (screen) on the device, the device would respond with information the peripheral regarding which screen was selected, to which it should respond with a "Vend Request" with the relevant product code and price in order for the transaction process to begin.
+
+<br />
+
+## Possible layouts
+
+<Image align="center" border={false} width="500px" src="https://files.readme.io/fd2aaff5f795ee9b8f4078b0bc86783f0305df288605c5b81a342c69c562208f-Screenshot_2025-10-12_100914.png" />
+
+## Layout examples
+
+### Layout ID 1
+
+<Image align="center" border={false} src="https://files.readme.io/88337ab73f402cf4fd809171d14c658c7f813c9ab22835d46f7fbe658fadfdd4-2x3.png" />
+
+```java
+                // allocate layout
+                marshall_t.msg_display_control_t.layout_t ui_context = m_vmc.general.display_control_create_layout(1);
+
+                // add label
+                m_vmc.general.display_control_layout_add_label(ui_context, 0, 0, "Layout 2x3");
+
+                m_vmc.general.display_control_layout_add_label(ui_context, 1, 0, "Text 1");
+								m_vmc.general.display_control_layout_add_label(ui_context, 1, 1, "Text 2");
+								m_vmc.general.display_control_layout_add_label(ui_context, 1, 2, "%cText 3");
+
+                m_vmc.general.display_control_layout_add_label(ui_context, 2, 0, "Text 1");
+                m_vmc.general.display_control_layout_add_label(ui_context, 2, 1, "Text 2");
+								m_vmc.general.display_control_layout_add_label(ui_context, 2, 2, "%cText 3");
+
+                // apply layout on screen
+                m_vmc.general.display_control_apply_layout(ui_context);
+       
+```
+```csharp
+                // allocate layout
+                Object ui_context = vmc_instance.general.display_control_create_layout(1);
+
+                // add label
+                vmc_instance.general.display_control_layout_add_label(ui_context, 0, 0, "Layout 2x3");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 1, 0, "Text 1");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 1, 1, "Text 2");
+								vmc_instance.general.display_control_layout_add_label(ui_context, 1, 2, "%cText 3");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 2, 0, "Text 1");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 2, 1, "Text 2");
+								vmc_instance.general.display_control_layout_add_label(ui_context, 2, 2, "%cText 3");
+
+                // apply layout on screen
+                vmc_instance.general.display_control_apply_layout(ui_context);
+
+```
+```c
+static void handler_display_control(void *aux_data)
+{
+	display_t display;
+	layout_t layout;
+	label_t labels[30];
+
+
+	int index = 0;
+	__strcpy(labels[index].label, "Layout 2x3");
+	labels[index].object_id = index;
+  labels[index].label_num_in_layout = index;
+	index++;
+
+  for (; index < 2; index++)
+		{
+      label_t *lbl = &labels[index];
+      sprintf(lbl->label, "Text1");
+      lbl->object_id = index;
+      lbl->label_num_in_layout = 0;
+
+      label_t *lbl = &labels[index];
+      sprintf(lbl->label, "Text2");
+      lbl->object_id = index;
+      lbl->label_num_in_layout = 1;
+
+      label_t *lbl = &labels[index];
+      sprintf(lbl->label, "%cText3");
+      lbl->object_id = index;
+      lbl->label_num_in_layout = 2;
+		}
+
+
+	layout.layout_id = 1;     // 2x3
+	layout.labels_num = 7;
+	layout.buttons_num = 0;
+
+	vmc_general_apply_display_control(&display);
+}
+```
+
+<br />
+
+### Layout ID 2
+
+<Image align="center" border={false} width="200px" src="https://files.readme.io/6fca0a49bf1fc3750fcd011da0ccfcc0b133e59f3c2cbdc16d20fcecec720657-2x2.png" />
+
+```java
+                // allocate layout
+                marshall_t.msg_display_control_t.layout_t ui_context = m_vmc.general.display_control_create_layout(2);
+
+                // add label
+                m_vmc.general.display_control_layout_add_label(ui_context, 0, 0, "Layout 2x2");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 1, 0, "Text 2");
+								m_vmc.general.display_control_layout_add_label(ui_context, 1, 1, "%cText 3");
+
+                m_vmc.general.display_control_layout_add_label(ui_context, 2, 0, "Text 2");
+								m_vmc.general.display_control_layout_add_label(ui_context, 2, 1, "%cText 3");
+
+                // apply layout on screen
+                m_vmc.general.display_control_apply_layout(ui_context);
+       
+```
+```csharp
+                // allocate layout
+                Object ui_context = vmc_instance.general.display_control_create_layout(2);
+
+                // add label
+                vmc_instance.general.display_control_layout_add_label(ui_context, 0, 0, "Layout 2x2");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 1, 0, "Text 2");
+								vmc_instance.general.display_control_layout_add_label(ui_context, 1, 1, "%cText 3");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 2, 0, "Text 2");
+								vmc_instance.general.display_control_layout_add_label(ui_context, 2, 1, "%cText 3");
+
+                // apply layout on screen
+                vmc_instance.general.display_control_apply_layout(ui_context);
+
+```
+```c
+static void handler_display_control(void *aux_data)
+{
+	display_t display;
+	layout_t layout;
+	label_t labels[30];
+
+
+	int index = 0;
+	__strcpy(labels[index].label, "Layout 2x2");
+	labels[index].object_id = index;
+  labels[index].label_num_in_layout = index;
+	index++;
+
+  for (; index < 2; index++)
+		{
+      label_t *lbl = &labels[index];
+      sprintf(lbl->label, "Text2");
+      lbl->object_id = index;
+      lbl->label_num_in_layout = 0;
+
+      label_t *lbl = &labels[index];
+      sprintf(lbl->label, "%cText3");
+      lbl->object_id = index;
+      lbl->label_num_in_layout = 1;
+
+		}
+
+
+	layout.layout_id = 2;     // 2x2
+	layout.labels_num = 5;
+	layout.buttons_num = 0;
+
+	vmc_general_apply_display_control(&display);
+}
+```
+
+<br />
+
+### Layout ID 3
+
+<Image align="center" border={false} width="200px" src="https://files.readme.io/8bbd19f09d3ad54058479ea4c53b3da01a83d10af4d6c855f3ac9490d34adb9e-4x1.png" />
+
+```java
+                // allocate layout
+                marshall_t.msg_display_control_t.layout_t ui_context = m_vmc.general.display_control_create_layout(3);
+
+                // add label
+                m_vmc.general.display_control_layout_add_label(ui_context, 0, 0, "Layout 4x1");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 1, 0, "Text 1");
+
+                m_vmc.general.display_control_layout_add_label(ui_context, 2, 0, "Text 2");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 3, 0, "Text 3");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 4, 0, "Text 4");
+
+                // apply layout on screen
+                m_vmc.general.display_control_apply_layout(ui_context);
+       
+```
+```csharp
+                // allocate layout
+                Object ui_context = vmc_instance.general.display_control_create_layout(3);
+
+                // add label
+                vmc_instance.general.display_control_layout_add_label(ui_context, 0, 0, "Layout 4x1");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 1, 0, "Text 1");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 2, 0, "Text 2");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 3, 0, "Text 3");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 4, 0, "Text 4");
+
+                // apply layout on screen
+                vmc_instance.general.display_control_apply_layout(ui_context);
+
+```
+```c
+static void handler_display_control(void *aux_data)
+{
+	display_t display;
+	layout_t layout;
+	label_t labels[30];
+
+
+	int index = 0;
+	__strcpy(labels[index].label, "Layout 4x1");
+	labels[index].object_id = index;
+  labels[index].label_num_in_layout = index;
+	index++;
+
+  for (; index < 4; index++)
+		{
+      label_t *lbl = &labels[index];
+      sprintf(lbl->label, "Text%d", index);
+      lbl->object_id = index;
+      lbl->label_num_in_layout = 0;
+
+		}
+
+
+	layout.layout_id = 3;     // 4x1
+	layout.labels_num = 5;
+	layout.buttons_num = 0;
+
+	vmc_general_apply_display_control(&display);
+}
+```
+
+<br />
+
+### Layout ID 4
+
+<Image align="center" border={false} width="200px" src="https://files.readme.io/8f84b54a9861ebace5bb3203bf5e59ced4620746c2df77452b085b5a4006fe2b-4x2.png" />
+
+```java
+                // allocate layout
+                marshall_t.msg_display_control_t.layout_t ui_context = m_vmc.general.display_control_create_layout(4);
+
+                // add label
+                m_vmc.general.display_control_layout_add_label(ui_context, 0, 0, "Layout 4x2");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 1, 0, "Text");
+								m_vmc.general.display_control_layout_add_label(ui_context, 1, 1, "%cText");
+
+                m_vmc.general.display_control_layout_add_label(ui_context, 2, 0, "Text");
+                m_vmc.general.display_control_layout_add_label(ui_context, 2, 1, "%cText");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 3, 0, "Text");
+								m_vmc.general.display_control_layout_add_label(ui_context, 3, 1, "%cText");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 4, 0, "Text");
+								m_vmc.general.display_control_layout_add_label(ui_context, 4, 1, "%cText");
+
+                // apply layout on screen
+                m_vmc.general.display_control_apply_layout(ui_context);
+       
+```
+```csharp
+                // allocate layout
+                Object ui_context = vmc_instance.general.display_control_create_layout(4);
+
+                // add label
+                vmc_instance.general.display_control_layout_add_label(ui_context, 0, 0, "Layout 4x2");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 1, 0, "Text");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 1, 1, "%cText");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 2, 0, "Text");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 2, 1, "%cText");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 3, 0, "Text");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 3, 1, "%cText");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 4, 0, "Text");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 4, 1, "%cText");
+
+                // apply layout on screen
+                vmc_instance.general.display_control_apply_layout(ui_context);
+
+```
+```c
+static void handler_display_control(void *aux_data)
+{
+	display_t display;
+	layout_t layout;
+	label_t labels[30];
+
+
+	int index = 0;
+	__strcpy(labels[index].label, "Layout 4x2");
+	labels[index].object_id = index;
+  labels[index].label_num_in_layout = index;
+	index++;
+
+  for (; index < 4; index++)
+		{
+      label_t *lbl = &labels[index];
+      sprintf(lbl->label, "Text");
+      lbl->object_id = index;
+      lbl->label_num_in_layout = 0;
+    
+      label_t *lbl = &labels[index];
+      sprintf(lbl->label, "%cText");
+      lbl->object_id = index;
+      lbl->label_num_in_layout = 1;
+
+		}
+
+
+	layout.layout_id = 4;     // 4x2
+	layout.labels_num = 9;
+	layout.buttons_num = 0;
+
+	vmc_general_apply_display_control(&display);
+}
+```
+
+<br />
+
+### Layout ID 5
+
+<Image align="center" border={false} width="200px" src="https://files.readme.io/03e2317cc9342cdcbd0bb2d85a5c675841ccace226806985e288637abb73f0fb-6x1.png" />
+
+```java
+                // allocate layout
+                marshall_t.msg_display_control_t.layout_t ui_context = m_vmc.general.display_control_create_layout(5);
+
+                // add label
+                m_vmc.general.display_control_layout_add_label(ui_context, 0, 0, "Layout 6x1");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 1, 0, "13");
+
+                m_vmc.general.display_control_layout_add_label(ui_context, 2, 0, "14");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 3, 0, "15");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 4, 0, "16");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 5, 0, "17");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 6, 0, "18");
+
+                // apply layout on screen
+                m_vmc.general.display_control_apply_layout(ui_context);
+       
+```
+```csharp
+                // allocate layout
+                Object ui_context = vmc_instance.general.display_control_create_layout(5);
+
+                // add label
+                vmc_instance.general.display_control_layout_add_label(ui_context, 0, 0, "Layout 4x2");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 1, 0, "13");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 2, 0, "14");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 3, 0, "15");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 4, 0, "16");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 5, 0, "17");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 6, 0, "18");
+
+                // apply layout on screen
+                vmc_instance.general.display_control_apply_layout(ui_context);
+
+```
+```c
+static void handler_display_control(void *aux_data)
+{
+	display_t display;
+	layout_t layout;
+	label_t labels[30];
+
+
+	int index = 0;
+	__strcpy(labels[index].label, "Layout 6x1");
+	labels[index].object_id = index;
+  labels[index].label_num_in_layout = index;
+	index++;
+
+  for (; index < 6; index++)
+		{
+      label_t *lbl = &labels[index];
+      sprintf(lbl->label, "%d", index);
+      lbl->object_id = index;
+      lbl->label_num_in_layout = 0;
+
+		}
+
+
+	layout.layout_id = 5;     // 6x1
+	layout.labels_num = 7;
+	layout.buttons_num = 0;
+
+	vmc_general_apply_display_control(&display);
+}
+```
+
+<br />
+
+### Layout ID 6
+
+<Image align="center" border={false} width="200px" src="https://files.readme.io/e173066c2357b9efc5cced9dfa973206db60d6d4edb990662c592a8fc3a8d758-6x2.png" />
+
+```java
+                // allocate layout
+                marshall_t.msg_display_control_t.layout_t ui_context = m_vmc.general.display_control_create_layout(6);
+
+                // add label
+                m_vmc.general.display_control_layout_add_label(ui_context, 0, 0, "Layout 6x2");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 1, 0, "13");
+								m_vmc.general.display_control_layout_add_label(ui_context, 1, 1, "5");
+
+                m_vmc.general.display_control_layout_add_label(ui_context, 2, 0, "14");
+								m_vmc.general.display_control_layout_add_label(ui_context, 2, 1, "5");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 3, 0, "15");
+								m_vmc.general.display_control_layout_add_label(ui_context, 3, 1, "5");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 4, 0, "16");
+								m_vmc.general.display_control_layout_add_label(ui_context, 4, 1, "5");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 5, 0, "17");
+								m_vmc.general.display_control_layout_add_label(ui_context, 5, 1, "5");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 6, 0, "18");
+								m_vmc.general.display_control_layout_add_label(ui_context, 6, 1, "5");
+
+                // apply layout on screen
+                m_vmc.general.display_control_apply_layout(ui_context);
+       
+```
+```csharp
+                // allocate layout
+                Object ui_context = vmc_instance.general.display_control_create_layout(6);
+
+                // add label
+                vmc_instance.general.display_control_layout_add_label(ui_context, 0, 0, "Layout 6x2");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 1, 0, "13");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 1, 1, "5");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 2, 0, "14");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 2, 1, "5");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 3, 0, "15");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 3, 1, "5");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 4, 0, "16");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 4, 1, "5");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 5, 0, "17");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 5, 1, "5");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 6, 0, "18");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 6, 1, "5");
+
+                // apply layout on screen
+                vmc_instance.general.display_control_apply_layout(ui_context);
+
+```
+```c
+static void handler_display_control(void *aux_data)
+{
+	display_t display;
+	layout_t layout;
+	label_t labels[30];
+
+
+	int index = 0;
+	__strcpy(labels[index].label, "Layout 6x2");
+	labels[index].object_id = index;
+  labels[index].label_num_in_layout = index;
+	index++;
+
+  for (; index < 6; index++)
+		{
+      label_t *lbl = &labels[index];
+      sprintf(lbl->label, "%d", index);
+      lbl->object_id = index;
+      lbl->label_num_in_layout = 0;
+
+      label_t *lbl = &labels[index];
+      sprintf(lbl->label, "5");
+      lbl->object_id = index;
+      lbl->label_num_in_layout = 1;
+		}
+
+
+	layout.layout_id = 6;     // 6x2
+	layout.labels_num = 13;
+	layout.buttons_num = 0;
+
+	vmc_general_apply_display_control(&display);
+}
+```
+
+<br />
+
+### Layout ID 7
+
+<Image align="center" border={false} caption="Note- you can have up to 6 values: values 4-6 would appear once you scroll down" src="https://files.readme.io/f84eb97cbf9f3fec74d3280241c7eed298c24a4fb974ff233c5924a079a01529-7.png" width="200px" />
+
+```java
+                // allocate layout
+                marshall_t.msg_display_control_t.layout_t ui_context = m_vmc.general.display_control_create_layout(7);
+
+                // add label
+                m_vmc.general.display_control_layout_add_label(ui_context, 0, 0, "Layout H Scroll 1");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 1, 0, "Text value 1");
+
+                m_vmc.general.display_control_layout_add_label(ui_context, 2, 0, "Text value 2");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 3, 0, "Text value 3");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 4, 0, "Text value 4");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 5, 0, "Text value 5");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 6, 0, "Text value 6");
+
+
+                // apply layout on screen
+                m_vmc.general.display_control_apply_layout(ui_context);
+       
+```
+```csharp
+                // allocate layout
+                Object ui_context = vmc_instance.general.display_control_create_layout(7);
+
+                // add label
+                vmc_instance.general.display_control_layout_add_label(ui_context, 0, 0, "Layout H Scroll 1");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 1, 0, "Text value 1");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 2, 0, "Text value 2");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 3, 0, "Text value 3");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 4, 0, "Text value 4");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 5, 0, "Text value 5");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 6, 0, "Text value 6");
+
+                // apply layout on screen
+                vmc_instance.general.display_control_apply_layout(ui_context);
+
+```
+```c
+static void handler_display_control(void *aux_data)
+{
+	display_t display;
+	layout_t layout;
+	label_t labels[30];
+
+
+	int index = 0;
+	__strcpy(labels[index].label, "Layout H Scroll 1");
+	labels[index].object_id = index;
+  labels[index].label_num_in_layout = index;
+	index++;
+
+  for (; index < 6; index++)
+		{
+      label_t *lbl = &labels[index];
+      sprintf(lbl->label, "Text value %d", index);
+      lbl->object_id = index;
+      lbl->label_num_in_layout = 0;
+		}
+
+
+	layout.layout_id = 7;     // Layout H Scroll 1
+	layout.labels_num = 7;
+	layout.buttons_num = 0;
+
+	vmc_general_apply_display_control(&display);
+}
+```
+
+<br />
+
+### Layout ID 8
+
+<Image align="center" border={false} caption="Note- you can have up to 6 values: values 4-6 would appear once you scroll down" src="https://files.readme.io/96ab44b5402b0cf1d23e2e60dd98f47656035037162a63df0ba001b971e9f9d6-8.png" width="200px" />
+
+```java
+                // allocate layout
+                marshall_t.msg_display_control_t.layout_t ui_context = m_vmc.general.display_control_create_layout(8);
+
+                // add label
+                m_vmc.general.display_control_layout_add_label(ui_context, 0, 0, "Layout H Scroll 2");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 1, 0, "Text value 1");
+								m_vmc.general.display_control_layout_add_label(ui_context, 1, 1, "10");
+
+                m_vmc.general.display_control_layout_add_label(ui_context, 2, 0, "Text value 2");
+								m_vmc.general.display_control_layout_add_label(ui_context, 2, 1, "20");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 3, 0, "Text value 3");
+								m_vmc.general.display_control_layout_add_label(ui_context, 3, 1, "30");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 4, 0, "Text value 4");
+								m_vmc.general.display_control_layout_add_label(ui_context, 4, 1, "40");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 5, 0, "Text value 5");
+								m_vmc.general.display_control_layout_add_label(ui_context, 5, 1, "50");
+
+								m_vmc.general.display_control_layout_add_label(ui_context, 6, 0, "Text value 6");
+								m_vmc.general.display_control_layout_add_label(ui_context, 6, 1, "60");
+
+
+                // apply layout on screen
+                m_vmc.general.display_control_apply_layout(ui_context);
+       
+```
+```csharp
+                // allocate layout
+                Object ui_context = vmc_instance.general.display_control_create_layout(8);
+
+                // add label
+                vmc_instance.general.display_control_layout_add_label(ui_context, 0, 0, "Layout H Scroll 1");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 1, 0, "Text value 1");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 1, 1, "10");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 2, 0, "Text value 2");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 2, 1, "20");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 3, 0, "Text value 3");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 3, 1, "30");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 4, 0, "Text value 4");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 4, 1, "40");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 5, 0, "Text value 5");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 5, 1, "50");
+
+                vmc_instance.general.display_control_layout_add_label(ui_context, 6, 0, "Text value 6");
+                vmc_instance.general.display_control_layout_add_label(ui_context, 6, 1, "60");
+
+                // apply layout on screen
+                vmc_instance.general.display_control_apply_layout(ui_context);
+
+```
+```c
+static void handler_display_control(void *aux_data)
+{
+	display_t display;
+	layout_t layout;
+	label_t labels[30];
+
+
+	int index = 0;
+	__strcpy(labels[index].label, "Layout H Scroll 1");
+	labels[index].object_id = index;
+  labels[index].label_num_in_layout = index;
+	index++;
+
+  for (; index < 6; index++)
+		{
+      label_t *lbl = &labels[index];
+      sprintf(lbl->label, "Text value %d", index);
+      lbl->object_id = index;
+      lbl->label_num_in_layout = 0;
+
+      label_t *lbl = &labels[index];
+			label_price= index*10;
+      sprintf(lbl->label, "%d", label_price);
+      lbl->object_id = index;
+      lbl->label_num_in_layout = 1;
+		}
+
+
+	layout.layout_id = 8;     // Layout H Scroll 2
+	layout.labels_num = 13;
+	layout.buttons_num = 0;
+
+	vmc_general_apply_display_control(&display);
+}
+```
+
+## Nayax Core configurations
+
+<Note>
+**️ Important note**
+
+This feature is supported only in **“Always Idle”** mode. This means that you need to have "Always Idle" configuration set up _both on the device level (via Nayax Core) as well as have it be set to "true" on the peripheral level (via the SDK)_
+
+You can see the flag's location in the [SDK Flags](https://developerhub.nayax.com/docs/sdk-flags-descriptions#/)page, under "Configurations flags".
+</Note>
+
+<br />
+
+| Attribute Group  | Attribute Name                | Attribute Value                       |
+| :--------------- | :---------------------------- | :------------------------------------ |
+| **MDB**          | Cashless MDB address          | Marshall VMC                          |
+|                  | MDB flags                     | 02 Preselection Enabled               |
+|                  | MDB Level 3 Optional Features | Enable “Always Idle” state            |
+| **Card Readers** | Card Reader MDB Level         | 3                                     |
+|                  | Transaction start method      | Product                               |
+|                  | Transaction Start Ignore List | Ignore None                           |
+|                  | VPOS Read Source Enabled      | All Read Sources Enabled (Default)    |
+|                  | VPOS Button Function          | 01 External cancel                    |
+| **Payment**      | Choose Product Timeout        | > 0                                   |
+|                  | Default Credit                | > 0 (highest product's amount)        |
+|                  | EMV Price Table               | C%100                                 |
+|                  | Payment Flags                 | Allow Pre-Selection on Pre-Paid cards |
+| **VMC**          | Session Time Out (minutes)    | > 0                                   |
+
+## Updating the screens via Nayax Core
+
+A Nayax Core attribute has been introduced that allows operators to dynamically update text, prices, and configurations on selection screens- the screens that appear when the device is in idle mode, waiting for a consumer to select a product by selecting (touching) one of said screens.
+This attribute enables sending structured data from Nayax Core to the peripheral. This information is then processed and displayed on the Marshall selection screen.
+
+The attribute definition is as follows:
+
+| Attribute          | Value                 |
+| ------------------ | --------------------- |
+| **ID**             | 7700                  |
+| **Name**           | Marshall Screens Info |
+| **Group**          | VMC                   |
+| **Maximum Length** | 400 characters        |
+
+This sends a JSON-formatted string containing details about selection screens, including layout configurations, text labels, prices, and timing.
+
+## JSON Logic Recommendation
+
+The JSON string should include necessary instructions for each selection screen. The format is flexible, allowing operators to specify only the required parameters.
+
+See the structure in the code block below:
+
+```json
+{
+  "Screen Name 1": {
+    "layout_id": <ID>,
+    "content": {
+      "layout_title": "<title>",
+      "text_1": "<text>",
+      "text_2": "<text>",
+      "text_3": "<text>",
+      "text_4": "<text>"
+    },
+    "prices": {
+      "price_1": "<price>",
+      "price_2": "<price>"
+    },
+    "timing": {
+      "time_1": "<time>",
+      "time_2": "<time>"
+    },
+    "buttons": "<comma-separated list of button IDs>"
+  },
+  "Screen Name 2": {
+    "layout_id": <ID>,
+    "content": { ... },
+    "prices": { ... }
+  }
+}
+```
+
+<Warning>
+**Validate the JSON**
+
+**The JSON validity and defined prices are solely the operator's responsibility.**
+It is highly recommended to validate the JSON using a JSON validator before sending it to a remote machine since incorrectly formatted JSON may cause display errors or unexpected behavior.
+</Warning>
+
+## Example
+
+See the JSON below. It is sending the instructions to update the display of an Air Vac machine.
+
+```json
+{
+  "Select product from 2 options": {
+    "layout_id": 2,
+    "content": {
+      "layout_title": "Select Air/Vac",
+      "text_1": "Air",
+      "text_2": "$2",
+      "text_3": "%c 5 min",
+      "text_4": "Vac",
+      "text_5": "$3",
+      "text_6": "%c 10 min"
+    },
+    "prices": {
+      "price_1": "2",
+      "price_2": "3"
+    },
+    "buttons": "104"
+  }
+}
+```
+
+The packet built from this  JSON is the following:
+
+```
+Packet = 0x01 0x02 0x0100 
+0x02 0x0C 0x00 0x00 “Select Air/Vac”
+0x02 0x08 0x01 0x00 “Air” 
+0x02 0x08 0x01 0x01 “$2”
+0x02 0x08 0x01 0x02 “%c 5 min”
+0x02 0x08 0x02 0x00 “Vac”
+0x02 0x08 0x02 0x01 “$3” 
+0x02 0x08 0x02 0x02 “%c 10 min”
+0x03 0x01 0x68
+```
+
+<Note>
+**Packet Creation**
+
+Packets are created automatically by the SDK or Nayax Core.
+</Note>
+
+The image below would be the display result.
+
+<Image border={false} src="https://files.readme.io/7e07b4d2efceb0ee779877dde29586140ab929545f8fe9f9ae3ed32a806df257-image.png" />
+
+
+
+<br />

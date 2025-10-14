@@ -1,0 +1,33 @@
+---
+title: "Tokenization"
+---
+
+With eCom SDK, you can securely store payment details for your cardholders and offer the following:
+
+* Subscription payments.
+* Automatic top-ups to shopper accounts.
+* A faster checkout experience for your clients.
+
+With the client's consent, store their payment details using a secure process called tokenization. We create an encrypted token that contains the payment details. When the client chooses to pay with their stored payment details, you use the token to submit the payment.
+
+<Note>
+**PCI Compliance**
+
+If you are not fully PCI DSS compliant, we recommend using Nayax tokens to process payments and limit your PCI scope.
+</Note>
+
+## Tokenize Payments
+
+To tokenize payments with the eCom SDK, you can use an [Initialize Transaction](ref:post_initialize) request. Once the token is created, you can use it to perform recurring payments using the [Charge Token](ref:post_charge-token) endpoint.
+
+See [Nayax Tokens](doc:nayax-ecom-tokens) for more details on how to manage tokens.
+
+## See Also
+
+<Cards columns={3}>
+  <NayaxCard title="Get Started" href="/v1.0/docs/ecom-sdk-get-started" />
+
+  <NayaxCard title="Front-End Integration" href="/v1.0/docs/front-end-sdk" />
+
+  <NayaxCard title="Back-End Integration" href="/v1.0/docs/ecom-sdk-back-end-integration" />
+</Cards>

@@ -1,0 +1,607 @@
+---
+title: "doTransaction"
+---
+
+The `doTransaction` method initiates and processes payment transactions within the TweezerComm protocol. It enables client applications, such as point-of-sale (POS) systems or electronic cash registers (ECRs), to interact with the Agamento payment terminal for secure transaction execution.
+
+This method supports multiple transaction types, including:
+
+* Regular Transactions: Standard payments using credit cards or closed-loop payment methods.
+* Refunds: Partial or full refunds of previous transactions.
+* Pre-Authorizations: Reserve a specified amount on a customer’s card for later confirmation.
+* Deferred Payments: Approving transactions even in cases where there is no immediate network connectivity.
+* MOTO (Mail Order/Telephone Order) Transactions: Processing card-not-present transactions securely.
+* Pre-Authorization Completion and Cancellation: Completing or voiding previously authorized transactions.
+
+The sections below will describe the request parameters in more detail:
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Get Started](doc:integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, ensure to configure the following:
+
+* The `method` field needs to be set to.`doTransaction`. 
+* The service must be set to `ashrait` in the `params`. 
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "doTransaction",
+    "params": [
+        "ashrait",
+        {
+            "amount": 2000,
+            "vuid": "1234567890",
+            "currency": "376",
+            "creditTerms": 1,
+            "tranCode": 1,
+            "tranType": 1,
+            "cardNumber": "4580000000000000",
+            "expDate": "2308",
+            "cvv": "666"
+        }
+    ],
+    "id": 1
+}
+```
+
+### Request Parameters
+
+The table below describes the parameters of the request:
+
+<Warning>
+**Mandatory Fields**
+
+`vuid`, `amount `and `tranType `are mandatory for all requests. All others depend on the type of transaction made.
+</Warning>
+
+<Table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        Name
+      </th>
+
+      <th>
+        Type
+      </th>
+
+      <th>
+        Description
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `vuid`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Vendor (client) unique transaction identifier.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `amount`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Amount in cents.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `tranCode`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        The transaction type code. Below are the possible values for this parameter:
+        `1`: Single Step Transaction
+        `2`: Refund (Partial refund is supported)
+        `3`: Pre Authorization
+        `4`: Deferred
+        `5`: MOTO
+        `6`: Complete Pre Authorization
+        `7`: Cancel Pre Authorization
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `originalTransactionId`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        The original transaction ID, this parameter is used when refunding a transaction.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `pan`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Card number (PAN) for MOTO transactions.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `exp`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Card expiration date.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `cvv`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Card verification value (3 digits).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `apmCode`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Additional payment method (not EMV). Below are the possible values for this parameter:
+        `2`: Nayax Prepaid
+        `4`: 10BIS
+        `5`: Cibus
+        `9`: Multipass
+        `28`: Goodi
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `cardData`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        The card number is for the MOTO payment method (not EMV).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `productInfo`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Send product info to DCS.
+      </td>
+    </tr>
+  </tbody>
+</Table>
+
+## Response
+
+A successful request will return a response similar to the one in the code block below:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "TRANSACTION APPROVED",
+        "appVersion": "01.05.22",
+        "retailerId": "0883012013",
+        "ecrNo": "1",
+        "vuid": "ee5e7af5-7719-4726-992f-0eb2915b992a",
+        "tranCode": 1,
+        "currency": "376",
+        "amount": 100,
+        "mutag": 1,
+        "mutagName": "Mastercard",
+        "manpik": 2,
+        "solek": 2,
+        "cardNumber": "*********",
+        "expDate": "2305",
+        "cardName": "Mastercard",
+        "tokenizedCardNumber": "c8ae19356dd1d7e946165fab67a14516",
+        "tranType": 1,
+        "posEntryMode": 5,
+        "isClub": false,
+        "isPrepaid": false,
+        "creditTerms": 1,
+        "uid": "23031212432508830123729",
+        "rrn": "948767075   ",
+        "authCodeManpik": 1,
+        "issuerAuthNum": "0652073",
+        "acquirerMerchantID": "6543505",
+        "sysTraceNumber": "01001001",
+        "merchantReceipt": [
+            {
+                "fieldName": "סכום",
+                "fieldValue": "1000"
+            },
+            {
+                "fieldName": "ATC",
+                "fieldValue": "0289"
+            }
+        ],
+        "customerReceipt": [
+            {
+                "fieldName": "סכום",
+                "fieldValue": "1000"
+            },
+            {
+                "fieldName": "ATC",
+                "fieldValue": "0289"
+            }
+        ]
+    }
+}
+```
+
+### Response Parameters
+
+Below is a table with all the possible response parameters and their description:
+
+<Table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        Name
+      </th>
+
+      <th>
+        Type
+      </th>
+
+      <th>
+        Description
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `statusCode`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        The status of the operation. `0` indicates success.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `statusMessage`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        A message describing the status, such as "OK".
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `mutag`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        The card brand.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `solek`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        The acquirer.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `manpik`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        The card issuer.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `uid`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        The transaction unique identifier.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `posEntryMode`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        POS Entry Mode, type of card transaction. Values include: `0` (MSR), `5` (CTLS MSR), `40` (Contact EMV), `50` (Phone), `51` (Signature only), `80` (Fallback (err)), and `81` (Fallback (no AID)).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `cardNumber`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        The masked personal account number (PAN).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `rrn`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Transaction authorization number from the authorized entity.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `issuerAuthNum`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        The issuer authorization number.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `acquirerMerchantID`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        The merchant ID in the acquirer system.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `authCodeManpik`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Code of authorization. Values include: 
+        `0` (Unauthorized), 
+        `1` (Authorized by issuer), 
+        `2` (Declined by issuer),
+        `3` (Stip approved), 
+        `4` (Stip declined), 
+        `5` (Voice approval), 
+        `6` (Voice declined), 
+        `7` (Approved pre-auth), 
+        `8` (Approved by card).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `gatewayToken`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        The gateway token for the card.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `appVersion`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        The payment application version.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `retailerId`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        The terminal retailer ID.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `ecrNo`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        The POS identifier.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `vuid`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        The vendor unique identifier.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `tranCode`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        The transaction code.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `merchantReceipt`
+      </td>
+
+      <td>
+        array of key/value
+      </td>
+
+      <td>
+        The merchant receipt data to print or save.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `customerReceipt`
+      </td>
+
+      <td>
+        array of key/value
+      </td>
+
+      <td>
+        The customer receipt data to print.
+      </td>
+    </tr>
+  </tbody>
+</Table>

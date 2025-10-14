@@ -1,0 +1,66 @@
+---
+title: "getInternalStatus"
+---
+
+The `getInternalStatus` method checks the internal service state of the AEA (the payment application). It helps determine if the device is idle, busy, or in a specific stage of a transaction. You should call this method infrequently.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Get Started](doc:integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, ensure to configure the following:
+
+* The `method` field must be set to `getInternalStatus`.
+* The service must be set to `ashrait` in the `params`.
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getInternalStatus",
+    "params": [
+        "ashrait"
+    ],
+    "id": "123454352"
+}
+```
+
+### Request Parameters
+
+This method doesn't require any parameters beyond the standard service name.
+
+## Response
+
+A successful call returns an object containing the internal status string.
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "status": "idle"
+    }
+}
+```
+
+### Response Parameters
+
+The result `object` contains the following field:
+
+| Name     | Type   | Description                                             |
+| :------- | :----- | :------------------------------------------------------ |
+| `status` | string | A string representing the internal state of the device. |
+
+### Possible Status Values
+
+The status field will contain one of the following strings:
+
+| Value          | Description                                                            |
+| :------------- | :--------------------------------------------------------------------- |
+| `IDLE`         | The device is in idle mode and ready for a new request.                |
+| `BUSY`         | The device is busy and cannot handle new requests at this time.        |
+| `PHASE2_READY` | The device has completed transaction phase 1 and is ready for phase 2. |
+| `AUTH_READY`   | The device is ready for authorization.                                 |

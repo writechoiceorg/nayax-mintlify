@@ -1,0 +1,221 @@
+---
+title: "onTransferData"
+---
+
+onTransferData is the function for the "Transfer Data" Marshall command, which allows for information regarding the transaction to be sent both ways- usually from the device's (VPOS Touch / VPOS Media) end to the peripheral, but can also be sent from the peripheral to the device.
+
+In the `void onTransferData(byte[] data)` function the data follows the TLV (Tag-Length-Value) format, which consists of:
+
+* Tag (1 byte): Identifies the type of data.
+* Length (1 byte): Specifies the length of the value.
+* Value (N bytes): Contains the actual data.
+
+The transferred data can be one or more TLV structures, depending on the information being exchanged.
+
+## Example
+
+If `onTransferData(byte\[] data)` receives the following bytes:
+
+```java Java
+5 6 345678 
+```
+
+* 5 is the tag for Card BIN
+* 6 is the Length, in this case 6 bytes
+* 345678 is the value of the First 6 digits of the card number.
+
+The system extracts the Card BIN as "345678".
+
+## Tag Descriptions
+
+The table below describes different types of data that can be transferred using this function:
+
+| **Tag** | **Tag Name**                      | **Data Size**                                    | **Description**                                                                           |
+| ------- | --------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| `1`     | Transaction ID                    | 8 bytes                                          | Unique identifier for the transaction.                                                    |
+| `2`     | "Choose Product" Timeout          | 2 bytes                                          | Timeout for the "Choose Product" prompt.                                                  |
+| `3`     | Card Type                         | 1 byte                                           | Identifies the type of card used. More on that bellow.                                    |
+| `4`     | Card Entry Mode                   | 1 byte                                           | Identifies how the card was entered (swiped, tapped, inserted, etc.). More on that bellow |
+| `5`     | Card BIN                          | 6 bytes                                          | First 6 digits of the card number (ASCII).                                                |
+| `6`     | Card PAN Hash                     | 20 bytes                                         | SHA1 hash of the full card PAN (to protect card data).                                    |
+| `7`     | Proprietary Card UID              | 4, 7, or 10 bytes (MiFare), up to 40 bytes (Mag) | Unique identifier for proprietary cards.                                                  |
+| `8`     | VMC Authorization Status          | 1 byte                                           | Authorization result (0 = Approved, 1 = Declined).                                        |
+| `9`     | COM Status                        | 1 byte                                           | Communication status between the server and the device.                                   |
+| `10`    | FTL Data                          | Up to 500 bytes                                  | Raw data transferred at a lower level (MDB Level 3).                                      |
+| `11`    | Create Layout                     | 4 bytes                                          | Layout creation request.                                                                  |
+| `12`    | Update Layout                     | Up to 500 bytes                                  | Updates an existing layout using the ExtraData field.                                     |
+| `13`    | Credit Card Last Four Digits      | 4 bytes (ASCII)                                  | Last four digits of the credit card (in ASCII).                                           |
+| `14`    | Product Code                      | 2 bytes                                          | Code identifying the purchased product.                                                   |
+| `15`    | Product Price                     | 4 bytes                                          | Price of the product.                                                                     |
+| `16`    | Customized Data / General Purpose | Up to 500 bytes                                  | JSON-formatted custom data (specific details TBD).                                        |
+| `17`    | Consumer ID                       | Up to 500 bytes                                  | Unique consumer identifier (e.g., Passport, ID Number). ASCII string                      |
+| `18`    | Main Software Version             | 14 bytes                                         | Version of the device's Main software running on the device.                              |
+| `19`    | POS Software Version              | 10 bytes                                         | Version of the device's POS software running on the device.                               |
+| `20`    | Default Credit                    | 2 bytes                                          | Predefined credit amount as set in Nayax Core.                                            |
+| `21`    | Monyx ID                          | 9 bytes                                          | ID related to Monyx payment system as defined in Nayax Core.                              |
+| `22`    | Final Price                       | 4 bytes                                          | Final transaction price after discounts.                                                  |
+| `23`    | Card Sub-Type                     | 1 byte                                           | More detailed classification of the card type. More on that bellow                        |
+| `24`    | Card Balance                      | 4 bytes                                          | The remaining balance on the proprietary card.                                            |
+
+Transfer Data format by card types:
+
+<Table>
+  <thead>
+    <tr>
+      <th>
+        **Credit Card**
+      </th>
+
+      <th>
+        **Proprietary Card**
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        Tag 3: Card Type (value in range "2"-"6")
+        Tag 4: Entry Mode
+        Tag 5: Card BIN
+        Tag 6: Card PAN Hash
+        Tag 13: Credit card last four digits
+        Tag 1: Transaction ID
+        Tag 9: COM Status
+      </td>
+
+      <td>
+        Tag 3: Card Type (value of "1")
+        Tag 4: Entry Mode (value of"1" if Magstripe,
+        "4" if MiFare, "5" if HID)
+        Tag 7: Proprietary Card UID
+        Tag 1: Transaction ID
+        Tag 9: COM Status
+      </td>
+    </tr>
+  </tbody>
+</Table>
+
+Card type:
+
+```
+typedef enum E_MarshallApi_TDCardType_tag
+{
+    MARSHALLAPI_TRANSFER_DATA_UNKOWN_CARD_TYPE = 0,                 /* Unknown	            */
+    MARSHALLAPI_TRANSFER_DATA_PROPRIETARY_CARD_TYPE,                /* Proprietary	        */
+    MARSHALLAPI_TRANSFER_DATA_VISA_CARD_TYPE,                       /* Visa	                */
+    MARSHALLAPI_TRANSFER_DATA_MASTER_CARD_CARD_TYPE,                /* Master Card          */
+    MARSHALLAPI_TRANSFER_DATA_CHINA_UNION_PAY_CARD_TYPE,            /* China Union Pay	    */
+    MARSHALLAPI_TRANSFER_DATA_MAESTRO_CARD_TYPE = 5,                /* Maestro  	        */
+    MARSHALLAPI_TRANSFER_DATA_INTERAC_CARD_TYPE,                    /* Interac  	        */
+    MARSHALLAPI_TRANSFER_DATA_MONYX_CARD_TYPE,                      /* Monyx  	            */
+    MARSHALLAPI_TRANSFER_DATA_AMEX_CARD_TYPE,                   	/* American Express     */
+    MARSHALLAPI_TRANSFER_DATA_DINERS_CARD_TYPE,                 	/* Diners               */
+    MARSHALLAPI_TRANSFER_DATA_DISCOVER_CARD_TYPE = 10,              /* Discover             */
+    MARSHALLAPI_TRANSFER_DATA_EFTPOS_CARD_TYPE,                 	/* EFTPOS               */
+    MARSHALLAPI_TRANSFER_DATA_JCB_CARD_TYPE,                    	/* JCB                  */
+    MARSHALLAPI_TRANSFER_DATA_MAGSTRIPE_CARD_TYPE,              	/* swiped payment       */
+    MARSHALLAPI_TRANSFER_DATA_MONYX_APP_PREPAID_CARD_TYPE,			/* Monyx App Prepaid 	*/
+    MARSHALLAPI_TRANSFER_DATA_MONYX_APP_BALANCE_CARD_TYPE = 15,     /* Monyx App Balance 	*/
+    MARSHALLAPI_TRANSFER_DATA_EMONEY_CARD_TYPE,                     /* E-money              */
+    MARSHALLAPI_TRANSFER_DATA_PURE_CARD_TYPE,                       /* Pure	                */
+    MARSHALLAPI_TRANSFER_DATA_CARD_TYPE_MAX,
+
+}E_MarshallApi_TDCardType;
+```
+
+Card Entry Mode:
+
+```
+typedef enum E_MarshallApi_TDCardEntryType_tag
+{
+    MARSHALLAPI_TRANSFER_DATA_MSR_SWIPE_CARD_ENTRY_TYPE = 1,         /* Mag stripes	        */
+    MARSHALLAPI_TRANSFER_DATA_CONTACTLESS_CARD_ENTRY_TYPE,           /* Contactless	        */
+    MARSHALLAPI_TRANSFER_DATA_CONTACT_CARD_ENTRY_TYPE,               /* Contact	            */
+    MARSHALLAPI_TRANSFER_DATA_MIFARE_CARD_ENTRY_TYPE,                /* MiFare	            */
+    MARSHALLAPI_TRANSFER_DATA_HID_CARD_ENTRY_TYPE,                   /* HID	                */
+    MARSHALLAPI_TRANSFER_DATA_NFC_CARD_ENTRY_TYPE,                   /* NFC	                */
+    MARSHALLAPI_TRANSFER_DATA_CNOUS_CARD_ENTRY_TYPE,                 /* CNOUS	            */
+    MARSHALLAPI_TRANSFER_DATA_KEYPAD_ENTRY_TYPE,                     /* Keypad	            */
+    MARSHALLAPI_TRANSFER_DATA_MOBILE_ENTRY_TYPE,                     /* Mobile	            */
+    MARSHALLAPI_TRANSFER_DATA_QR_ENTRY_TYPE,                         /* QR	                */
+    MARSHALLAPI_TRANSFER_DATA_BLE_ENTRY_TYPE,                        /* BLE	                */
+    MARSHALLAPI_TRANSFER_DATA_LEGIC_CARD_ENTRY_TYPE,                 /* LEGIC               */
+    MARSHALLAPI_TRANSFER_DATA_CARD_ENTRY_TYPE_MAX,
+
+}E_MarshallApi_TDCardEntryType;
+```
+
+Card sub-type:
+
+```
+typedef enum E_MarshallApi_TDSelectCardBrand_tag
+{
+    MARSHALLAPI_BRAND_EMPTY                                 = 0x0000000000000000,              /* Unknown/Empty brand Sub-Type card */
+
+    /* 1st 2nd bytes: Japanese e-money brands */
+    MARSHALLAPI_BRAND_EMONEY_EDY                            = 0x0000000000000001,              /* Proprietary Japanese e-money */
+    MARSHALLAPI_BRAND_EMONEY_WAON                           = 0x0000000000000002,              /* Proprietary Japanese e-money */
+    MARSHALLAPI_BRAND_EMONEY_TRANSPORT_IC                   = 0x0000000000000004,              /* Proprietary Japanese Transportation e-money - see below */
+    MARSHALLAPI_BRAND_EMONEY_ID                             = 0x0000000000000008,              /* Proprietary Japanese e-money */
+    MARSHALLAPI_BRAND_EMONEY_QUICPAY                        = 0x0000000000000010,             /* Proprietary Japanese e-money */
+    MARSHALLAPI_BRAND_EMONEY_NANACO                         = 0x0000000000000020,             /* Proprietary Japanese e-money */
+    MARSHALLAPI_BRAND_EMONEY_PITAPA                         = 0x0000000000000040,             /* Proprietary Japanese e-money */
+                                                                        
+                                                                        
+    /* 3rd 4th bytes: Credit card brands */                                            
+    MARSHALLAPI_BRAND_EMV_VISA                              = 0x0000000000000100,              /* Visa */
+    MARSHALLAPI_BRAND_EMV_MASTERCARD                        = 0x0000000000000200,              /* Mastercard*/
+    MARSHALLAPI_BRAND_EMV_AMEX                              = 0x0000000000000400,              /* American express */
+    MARSHALLAPI_BRAND_EMV_JCB                               = 0x0000000000000800,              /* JCB */
+    MARSHALLAPI_BRAND_EMV_GENERAL                           = 0x0000000000001000,              /* Generic credit card (VEND_PAY_METHOD_CREDIT_CARD)*/
+    MARSHALLAPI_BRAND_EMV_DISCOVER                          = 0x0000000000002000,              /* Discover*/
+    MARSHALLAPI_BRAND_EMV_DINERS                            = 0x0000000000004000,              /* Diners*/
+    MARSHALLAPI_BRAND_EMV_VISA_MASTER                       = 0x0000000000008000,              /* VisaMaster combined brand*/
+
+    /* 5th 6th bytes: Free*/
+                
+    /* 7th-14th bytes: QR brands */
+    /* 7,8: Japan */
+    MARSHALLAPI_BRAND_QR_PAYPAY                             = 0x0000000001000000,              /* PayPay */
+    MARSHALLAPI_BRAND_QR_LINE_PAY                           = 0x0000000002000000,              /* LinePay*/
+    MARSHALLAPI_BRAND_QR_RAKUTEN_PAY                        = 0x0000000004000000,              /* RakutenPay*/
+    MARSHALLAPI_BRAND_QR_AU_PAY                             = 0x0000000008000000,              /* AUPay*/
+    MARSHALLAPI_BRAND_QR_AEON_PAY                           = 0x0000000010000000,              /* AEONPay */
+    MARSHALLAPI_BRAND_QR_D_BARAI                            = 0x0000000020000000,              /* D Barai*/
+    MARSHALLAPI_BRAND_QR_MERUPAY                            = 0x0000000040000000,             /*  MeruPay */
+    MARSHALLAPI_BRAND_QR_J_COIN                             = 0x0000000080000000,              /* J-Coin*/
+    
+
+    /*9-13: East asia*/
+    MARSHALLAPI_BRAND_QR_WECHAT_PLUS                        = 0x0000000010000000,              /* Monyx */
+    MARSHALLAPI_BRAND_QR_WECHAT                             = 0x0000000020000000,              /* EFTPOS */
+    MARSHALLAPI_BRAND_QR_ALIPAY                             = 0x0000000040000000,              /* INTERAC */
+    MARSHALLAPI_BRAND_QR_ALIPAY_PLUS                        = 0x0000000080000000,              /*  */
+    MARSHALLAPI_BRAND_QR_ALIPAY_HK                          = 0x0000000100000000,              /*  */
+    MARSHALLAPI_BRAND_QR_MAE_PAY                            = 0x0000000200000000,              /*  */
+    MARSHALLAPI_BRAND_QR_PROMPT_PAY                         = 0x0000000400000000,              /*  */
+    MARSHALLAPI_BRAND_QR_DUIT_PAY                           = 0x0000000800000000,              /*  */
+    MARSHALLAPI_BRAND_QR_TOUNCHNGO                          = 0x0000001000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_BOOST                              = 0x0000002000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_TRUE_MONEY                         = 0x0000004000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_ZALO_PAY                           = 0x0000008000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_SHOPEE_PAY                         = 0x0000010000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_VIET                               = 0x0000020000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_MOMO                               = 0x0000040000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_GRAB_PAY                           = 0x0000080000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_UNION_PAY                          = 0x0000100000000000,              /*  */
+                               
+    /*14: Other countries*/
+    MARSHALLAPI_BRAND_QR_SWISH                              = 0x0001000000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_SATISPAY                           = 0x0002000000000000,              /*  */
+
+    
+    /* 15th~ bytes: Other brands */
+    MARSHALLAPI_BRAND_OFFICE_PAY                            = 0x0100000000000000,              /* Office Pay */
+    MARSHALLAPI_BRAND_NAYAX_PAY                             = 0x0200000000000000,              /* Nayax Pay (VEND_PAY_METHOD_NAYAX_PREPAID)*/
+    MARSHALLAPI_BRAND_MONYX                                 = 0x0400000000000000,              /* Monyx */
+    MARSHALLAPI_BRAND_EFTPOS                                = 0x0800000000000000,              /* EFTPOS */
+    MARSHALLAPI_BRAND_INTERAC                               = 0x1000000000000000,              /* INTERAC */
+    MARSHALLAPI_BRAND_PURE                                  = 0x2000000000000000,              /* PURE */}E_MarshallApi_TDSelectCardBrand;
+```

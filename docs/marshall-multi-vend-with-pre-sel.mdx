@@ -1,0 +1,351 @@
+---
+title: "Multi-Vend with Pre-Selection"
+---
+
+With the Multi-Vend flow, your machine can dispense multiple (up to 20) products in a single transaction and have differentiation for each of said product in the SDK. Customers first select all of their desired products, then present their payment card. Upon authorization, the vending machine dispenses the selected products, and the session is settled and completed with an appropriate message.
+
+## Payment Flow
+
+The diagram below illustrates the complete sequence of events for a Multi-Vend transaction.
+
+<Image border={false} src="https://files.readme.io/7cb6781f1eeb41a9f55155e43d56f1a3c7f8af95009f4c409128b76366224e5d-image.png" />
+
+Here's a breakdown of the diagram:
+
+1. The Nayax Device sends a message to the consumer: "Please Select a Product."
+2. The consumer selects the desired product/s from the vending machine. Said products are being added to a list called "session":
+   ```c C
+   session_products[0].code = 1;
+   session_products[0] .qty = 1;
+   session_products[0].price = 10;
+   session_products[0].unit = 1;
+
+   session_products[1].code = 2;
+   session_products[1].qty = 1;
+   session_products[1].price = 20;
+   session_products[1].unit = 1;
+   if (config.multi_vend_support)
+   {
+   	session->products = session_products;
+     session->total_products = 2;
+   }
+   ```
+   ```csharp C#
+   List<vmc_vend_t.vend_item_t> list = new List<vmc_vend_t.vend_item_t>();
+
+   list.Add(new vmc_vend_t.vend_item_t((ushort)1, (ushort)10, (ushort)1, (byte)1));
+   list.Add(new vmc_vend_t.vend_item_t((ushort)2, (ushort)20, (ushort)2, (byte)1));
+   list.Add(new vmc_vend_t.vend_item_t((ushort)3, (ushort)30, (ushort)3, (byte)1));
+
+   // prepare single session object
+   session = new vmc_vend_t.vend_session_t(list);
+   ```
+   ```java
+   	ArrayList<vmc_vend_t.vend_item_t> list = new ArrayList<vmc_vend_t.vend_item_t>();
+
+     list.add(new vmc_vend_t.vend_item_t((short) 0, (short) 100, (short) 1, (byte) 1));
+     list.add(new vmc_vend_t.vend_item_t((short) 1, (short) 100, (short) 1, (byte) 1));
+     list.add(new vmc_vend_t.vend_item_t((short) 2, (short) 200, (short) 2, (byte) 1));
+     list.add(new vmc_vend_t.vend_item_t((short) 3, (short) 100, (short) 1, (byte) 1));
+     list.add(new vmc_vend_t.vend_item_t((short) 4, (short) 200, (short) 2, (byte) 1));
+
+     // in this sample we can have up to 2 sessions (in case of multi-session)
+     m_sessions = new vmc_vend_t.vend_session_t[1];
+
+     // prepare single session object
+     m_sessions[0] = new vmc_vend_t.vend_session_t(3, list);
+   ```
+3. The peripheral's SDK sends a vending request to the Nayax Device:
+   ```c
+   vmc_vend_vend_request(vend_session_t *session)
+   ```
+   ```csharp
+   vmc_instance.vend.vend_request(session);
+   ```
+   ```java
+   m_vmc.vend.vend_request(m_sessions[m_active_session]);
+   ```
+4. The Nayax Device sends a message to the consumer: "Please Present Card."
+5. The consumer presents their payment card.
+6. The Nayax Device sends an authorization request to the Nayax Server.
+7. The Nayax Server forwards the authorization request to the Billing Provider.
+8. The Billing Provider sends an authorization response (approved) to the Nayax Server.
+9. The Nayax Server sends the authorization response (approved) back to the Nayax Device.
+10. The peripheral's SDK handles transaction data received from the Nayax Device via Transfer Data (said data includes information about the Nayax transaction ID and the consumer's card details):
+    ```c
+    vmc_vend_event_handler_cb(vm_vend_event_on_transaction_info)
+    ```
+    ```csharp
+    vend_callbacks(onTransactionInfo(data))
+    ```
+    ```java
+    vmc_vend_events()
+    (via onTransactionInfo(data))
+    ```
+11. The SDK triggers "Vend Approved" events:
+    ```c
+    vmc_vend_event_handler_cb(vm_vend_event_on_vend_approved)
+    ```
+    ```csharp
+    vend_callbacks()
+    (via onVendApproved(session))
+    ```
+    ```java
+    vmc_vend_events()
+    (via onVendApproved(session))
+    ```
+12. The peripheral dispenses the product/s  to the consumer.
+13. The SDK reports "vend success":
+
+    ```c
+    vmc_vend_vend_status(&session, __true)
+    ```
+    ```csharp
+    vmc_vend_events()
+    (via onVendApproved(session) -which would return "true")
+    ```
+    ```java
+    vmc_vend_events()
+    (via onVendApproved(session) -which would return "true")
+    ```
+
+    * Note- in case of partial dispensing (meaning not all of the selected items were actually vended) you can create a new list with only the items which were actually vended prior to responding with "true":
+
+      <Image align="center" border={false} caption="example of partial vending- in this example only 2 items were vended" src="https://files.readme.io/908de4aa3ae8ca7e7b4c8d9fd652b7993f561aee7084cdefa47f3093325ea448-6.jpg" width="500px" />
+
+    and completes the vending session:
+
+    ```c
+    vmc_vend_vend_session_complete_lowlevel()
+    ```
+    ```csharp
+    no such function in C# or Java due to the nature of the languages
+    ```
+    ```java
+    no such function in C# or Java due to the nature of the languages
+    ```
+
+    <br />
+14. Message to the consumer: "Please Take Product."
+15. The Nayax Device sends a settlement request to the Nayax Server.
+16. The Nayax Server forwards the settlement request to the Billing Provider.
+17. The Billing Provider sends a settlement response (OK) to the Nayax Server.
+18. The Nayax Server returns the settlement response (OK) to the Nayax Device.
+19. The vending session **ends**.
+20. Message to Card Holder: "Thank you & Goodbye."
+
+## See Also
+
+<HTMLBlock>{`
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+  .card_container {
+    display: flex;
+    gap: 10px;
+    margin: 0 auto;
+    max-width: var(--container-lg);
+    width: 100%;
+    flex-wrap: wrap;
+
+    .card {
+      display: flex;
+      padding: 20px 14px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      min-width: 190px;
+      flex-shrink: 0;
+      gap: 12px;
+      border-radius: 6px;
+      border: 1px solid #DCDCDC;
+      background: #FFF;
+      box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13);
+      text-decoration: none;
+      flex-grow: 1;
+      flex-basis: 0;
+      text-decoration: none !important;
+
+      svg {
+        fill: none;
+
+        rect {
+          fill: #FFF;
+          stroke: #C9C9C9;
+        }
+
+        path {
+          fill: #d2a900;
+        }
+      }
+
+      h3 {
+        color: #383838;
+        text-align: center;
+        font-family: Inter !important;
+        font-size: 17.5px;
+        font-style: normal;
+        font-weight: 700;
+        text-decoration: none;
+        margin: 0;
+        text-align: start;
+      }
+    }
+
+    .card:hover {
+      cursor: pointer;
+      border: 1px solid #d2a900 !important;
+      box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+      transform: translateY(-1px);
+
+      svg {
+        fill: none;
+
+        rect {
+          fill: #d2a900;
+          stroke: #C9C9C9;
+        }
+
+        path {
+          fill: #FFF;
+        }
+      }
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    [data-color-mode="system"] .card_container {
+      .card {
+        border: 1px solid #556974;
+        background: #20292e;
+
+        svg {
+          rect {
+            fill: #20292e;
+            stroke: #556974;
+          }
+        }
+
+        h3,
+        p {
+          color: #FFF;
+        }
+      }
+
+      .card:hover {
+        cursor: pointer;
+        border: 1px solid #d2a900 !important;
+        box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+        transform: translateY(-1px);
+
+        h3 {
+          color: #d2a900;
+        }
+
+        svg {
+          fill: none;
+
+          rect {
+            fill: #d2a900;
+            stroke: #556974;
+          }
+
+          path {
+            fill: #20292e;
+          }
+        }
+      }
+    }
+  }
+
+  [data-color-mode="dark"] .card_container {
+    .card {
+      border: 1px solid #556974;
+      background: #20292e;
+
+      svg {
+        rect {
+          fill: #20292e;
+          stroke: #556974;
+        }
+      }
+
+      h3,
+      p {
+        color: #FFF;
+      }
+    }
+
+    .card:hover {
+      cursor: pointer;
+      border: 1px solid #d2a900 !important;
+      box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+      transform: translateY(-1px);
+
+      h3 {
+        color: #d2a900;
+      }
+
+      svg {
+        fill: none;
+
+        rect {
+          fill: #d2a900;
+          stroke: #556974;
+        }
+
+        path {
+          fill: #20292e;
+        }
+      }
+    }
+  }
+
+  @media only screen and (max-width: 450px) {
+    .card_container {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+  }
+</style>
+
+<div class="card_container">
+
+  <a class="card" href="/v1.0/docs/marshall-payment-flows">
+    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
+      <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M23.3736 24.9994C22.4754 24.9994 21.7472 24.2712 21.7472 23.373V11.2526L9.62638 11.2526C8.72816 11.2526 8 10.5245 8 9.62632C8 8.72813 8.72816 8 9.62639 8L23.3736 8C24.2718 8 25 8.72813 25 9.62632L25 23.373C25 24.2712 24.2718 24.9994 23.3736 24.9994Z" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
+    </svg>
+    <h3>Payment Flows</h3>
+  </a>
+
+  <a class="card" href="/v1.0/docs/marshall-get-started">
+    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
+      <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M23.3736 24.9994C22.4754 24.9994 21.7472 24.2712 21.7472 23.373V11.2526L9.62638 11.2526C8.72816 11.2526 8 10.5245 8 9.62632C8 8.72813 8.72816 8 9.62639 8L23.3736 8C24.2718 8 25 8.72813 25 9.62632L25 23.373C25 24.2712 24.2718 24.9994 23.3736 24.9994Z" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
+    </svg>
+    <h3>Get Started</h3>
+  </a>
+
+  <a class="card" href="/v1.0/docs/marshall-methods-and-functions">
+    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
+      <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M23.3736 24.9994C22.4754 24.9994 21.7472 24.2712 21.7472 23.373V11.2526L9.62638 11.2526C8.72816 11.2526 8 10.5245 8 9.62632C8 8.72813 8.72816 8 9.62639 8L23.3736 8C24.2718 8 25 8.72813 25 9.62632L25 23.373C25 24.2712 24.2718 24.9994 23.3736 24.9994Z" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
+    </svg>
+    <h3>Methods & Functions</h3>
+  </a>
+
+</div>
+`}</HTMLBlock>
+
+
+
+<br />

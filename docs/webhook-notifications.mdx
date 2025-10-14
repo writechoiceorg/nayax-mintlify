@@ -1,0 +1,143 @@
+---
+title: "Webhook Notifications"
+---
+
+Webhook notifications are automated messages sent by Nayax to your back-end to communicate the final status of a transaction, which can be:
+
+* Approved
+* Declined
+* Pending
+
+This ensures that you are always up-to-date with the latest transaction information.
+
+<Note>
+**Webhook URL**
+
+You will provide the URL to receive the webhooks during the onboarding phase.
+</Note>
+
+## Webhook Request
+
+Below you can see an example of a webhook of an approved transaction:
+
+```json
+{
+  "Status": {
+    "Verdict": "Approved",
+    "Code": 0,
+    "StatusMessage": "Transaction successfully completed."
+  },
+  "BasicInfo": {
+    "transactionId": 123456789,
+    "AuthCode": "AUTH12345",
+    "AuthAmount": 15.00,
+    "CaptureAmount": 15.00,
+    "RRN": "987654321012",
+    "AuthDateTime": "2025-08-28T12:00:00Z",
+    "Entry Mode": 1,
+    "currencyCode": 840,
+    "TransactionEcomMID": "ECOMTRX001",
+    "Currency": "USD",
+    "CardholderEmail": "customer@example.com",
+    "NayaxToken": "nayax_token_xyz123",
+    "IsAproved": true,
+    "Card holder Unique identifier": "guid-customer-12345"
+  },
+  "Products": [
+    {
+      "Code": 101,
+      "Value": 10,
+      "quantity": 1
+    },
+    {
+      "Code": 102,
+      "Value": 5,
+      "quantity": 1
+    }
+  ],
+  "CardData": {
+    "CardNumber": "411111xxxxxx1111",
+    "Card expiration": 2810
+  }
+}
+```
+
+The request includes detailed information about the transaction's final status, including the following objects:
+
+* `Status`
+* `BasicInfo`
+* `Products`
+* `CardData`
+
+<Warning>
+**Response**
+
+We expect to receive a 200 ACK response after every webhook.
+</Warning>
+
+## Webhook Request Parameters
+
+The table below describes all the parameters of the request:
+
+| Parameter                           | Type | Description                                                                     |
+| ----------------------------------- | ---- | ------------------------------------------------------------------------------- |
+| `refusalReasonRaw`                  |      | Raw response from the acquirer indicating the reason for refusal.               |
+| `eci`                               |      | Electronic Commerce Indicator, indicates the security level of the transaction. |
+| `metadata.actionType`               |      | Custom metadata indicating the type of action performed.                        |
+| `xid`                               |      | Transaction ID used in 3D Secure authentication.                                |
+| `threeDAuthenticated`               |      | Indicates whether 3D Secure authentication was completed.                       |
+| `paymentMethodVariant`              |      | Specific variant of the payment method used.                                    |
+| `issuerBin`                         |      | Bank Identification Number of the card issuer.                                  |
+| `deviceType`                        |      | Type of device used by the consumer.                                            |
+| `threeDOffered`                     |      | Indicates whether 3D Secure was offered.                                        |
+| `threeDOfferedResponse`             |      | Response to the 3D Secure offer.                                                |
+| `checkout.cardAddedBrand`           |      | Brand of the card added during checkout.                                        |
+| `cavv`                              |      | Cardholder Authentication Verification Value from 3D Secure.                    |
+| `authorisedAmountCurrency`          |      | Currency of the authorised amount.                                              |
+| `threeDAuthenticatedResponse`       |      | Response from the 3D Secure authentication.                                     |
+| `metadata.machineId `               |      | Custom metadata indicating the machine ID.                                      |
+| `threeds2.cardEnrolled`             |      | Indicates if the card is enrolled in 3DS2.                                      |
+| `avsResultRaw`                      |      | Raw result of the Address Verification System check.                            |
+| `retry.attempt1.rawResponse `       |      | Raw response from the first retry attempt.                                      |
+| `paymentMethod`                     |      | Payment method used.                                                            |
+| `shopperLocale`                     |      | Locale of the consumer.                                                         |
+| `metadata.decimalPlace`             |      | Custom metadata indicating decimal precision.                                   |
+| `captureDelayHours`                 |      | Delay in hours before capturing the payment.                                    |
+| `avsResult `                        |      | Human-readable AVS result.                                                      |
+| `cardSummary`                       |      | Last few digits of the card number.                                             |
+| `retry.attempt1.avsResultRaw`       |      | AVS result from the first retry attempt.                                        |
+| `shopperIP`                         |      | IP address of the consumer.                                                     |
+| `expiryDate`                        |      | Expiry date of the card.                                                        |
+| `cardBin`                           |      | Bank Identification Number of the card.                                         |
+| `shopperInteraction`                |      | Type of interaction (e.g., Ecommerce, ContAuth).                                |
+| `cvcResultRaw`                      |      | Raw result of the CVC check.                                                    |
+| `cardIssuingCountry`                |      | Country of the card issuer.                                                     |
+| `metadata.entryMode`                |      | Custom metadata indicating how the card was entered.                            |
+| `liabilityShift`                    |      | Indicates if liability shifted to the issuer.                                   |
+| `authCode`                          |      | Authorisation code from the acquirer.                                           |
+| `cardHolderName`                    |      | Name of the cardholder.                                                         |
+| `isCardCommercial`                  |      | Indicates if the card is a commercial card.                                     |
+| `PaymentAccountReference`           |      | Reference to the payment account.                                               |
+| `retry.attempt1.acquirerAccount`    |      | Acquirer account used in retry.                                                 |
+| `retry.attempt1.acquirer`           |      | Acquirer used in retry.                                                         |
+| `authorisedAmountValue `            |      | Value of the authorised amount.                                                 |
+| `issuerCountry`                     |      | Country of the card issuer.                                                     |
+| `cvcResult`                         |      | Human-readable result of the CVC check.                                         |
+| `retry.attempt1.responseCode`       |      | Response code from the retry attempt.                                           |
+| `aliasType`                         |      | Type of alias used for tokenisation.                                            |
+| `retry.attempt1.shopperInteraction` |      | Consumer interaction type in retry.                                             |
+| `cardPaymentMethod`                 |      | Card payment method used.                                                       |
+| `amount.currency`                   |      | Currency of the transaction amount.                                             |
+| `amount.value`                      |      | Value of the transaction amount.                                                |
+| `eventCode`                         |      | Type of event triggered.                                                        |
+| `eventDate`                         |      | Date and time of the event.                                                     |
+| `operations`                        |      | Possible operations for the transaction.                                        |
+| `success `                          |      | Indicates if the event was successful.                                          |
+
+## See Also
+
+<Cards columns={2}>
+  <NayaxCard title="Initialize Transactions" href="/v1.0/docs/start-a-transaction" />
+
+  <NayaxCard title="Nayax Tokens" href="/v1.0/docs/nayax-ecom-tokens" />
+</Cards>

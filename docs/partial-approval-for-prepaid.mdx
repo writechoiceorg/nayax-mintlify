@@ -1,0 +1,26 @@
+---
+title: "Partial Approval in Cortina Prepaid Authorization"
+---
+
+This feature allows a prepaid processor to approve a lower authorization amount if the cardholder does not have enough balance to cover the full requested amount, increasing the integration's approval rate.
+
+The partially approved amount can be used for purchase and will limit the settlement amount.
+
+## How to Implement
+
+In the [Authorization endpoint response]() set the attribute as following:
+
+* `Status.Verdict` = Approved
+* `Status .Code` = 0
+* `PaymentInfo. AuthAmount` = Approve amount for pre-authorization.
+
+See the example below:
+
+```json
+{"Status": {
+  "Verdict": "Approved",
+  "Code": 0,},
+  "PaymentInfo": {
+  "AuthAmount": 5}
+  }
+```

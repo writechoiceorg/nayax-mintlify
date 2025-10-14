@@ -1,0 +1,25 @@
+---
+title: "Partial Approval of Cortina Credit Cards Authorizations"
+---
+
+This feature allows Payment Gateway to approve a lower authorization amount if the cardholder does not have enough balance to cover the full requested amount, increasing the integration's approval rate.
+
+The partially approved amount is the amount that can be used for purchase and will limit the settlement amount.
+
+## How to implement
+
+In the [Authorization endpoint response](), set the attributes as follows:\
+    • `Status.Verdict` = Approved\
+    • `Status .Code` = 0\
+    •`PaymentInfo. AuthAmount` = Approve amount for pre-authorization.
+
+See the example below:
+
+```json
+{"Status": {
+	"Verdict": "Approved",
+	"Code": 0,},
+"PaymentInfo": {
+	"AuthAmount": 5}
+}
+```

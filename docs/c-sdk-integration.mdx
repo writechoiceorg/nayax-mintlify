@@ -1,0 +1,507 @@
+---
+title: "C SDK Integration"
+---
+
+<Warning>
+**C SDK Only**
+
+The functions and information on this page are relevant only for the **C SDK** .
+</Warning>
+
+This guide shows you how to integrate the **Marshall C SDK** into your platform. You will learn to configure essential serial port functions, implement required timer ticks, and set up the VMC configuration object to get the SDK running.
+
+The C SDK includes working implementations for Linux, Windows, or STM32 microcontrollers. If your platform differs, use these implementations as a reference to adapt the SDK accordingly onto your own platform.
+
+## Pre-requisites
+
+Before running the C SDK, ensure you configure the following platform-specific elements:
+
+* **Serial Port Communication:** Implement methods for reading and writing bytes from your platform's serial port, which connects to Nayax's device. The SDK interacts with the hardware through this serial interface. You must implement the following functions:
+  * `drv_usart_rx_byte()`: Reads a single byte from the serial port.
+  * `drv_usart_rx_chunk()`: Reads multiple bytes in one operation.
+  * `drv_usart_get_rx_pending()`: Returns the number of pending bytes in the serial buffer.
+  * `drv_usart_tx_data()`: Sends data bytes to the VPOS device.
+* **Periodic Timer Tick:** Implement a periodic timer tick to invoke the `vmc_link_background()` function. This function should be called with an interval of 5 ms to 10 ms. Additionally, ensure the `cpu_platform_get_time()` function returns a continuously incrementing millisecond counter since the system startup.
+* **UART Communication Validation:** Verify that the UART communication with Nayax's device is fully functional.
+  * Check for proper data transmission and reception.
+  * Validate that event callbacks are triggered correctly.
+
+## Integrate Marshall
+
+To get started with the C SDK, follow these steps. You can refer to the provided `mymain.c` file for a sample code and guidance on importing necessary namespaces into your project.
+
+1. Instantiate a VMC configuration object:
+
+   ```c
+   vmc_config_t   	config;
+   ```
+
+2. Fill in the appropriate fields. The following code block presents a standard configuration:
+
+   ```c
+   vmc_init()
+   	__strcpy(config.model, "marshall-c-sdk-demo");
+   	__strcpy(config.serial, "01234567");
+   	__strcpy(config.sw_ver, "vmc app version");
+   	__strcpy(config.vmc_hw_ver, “01234567”);
+   	__strcpy(config. vmc_manuf_code, “manuf”);
+
+   	config.multi_vend_support = __false;
+   	config.multi_session_support = __false;
+   	config.price_not_final_support = __false;
+   	config.reader_always_on = __false;
+   	config.always_idle = __false;
+   	config.explicit_vend_success = __false;
+   	config.vend_denied_policy = vend_denied_policy_persist_e;
+
+   	config.mifare_approved_by_vmc_support = __false;
+   	config.mag_card_approved_by_vmc_support = __false;
+   	config.qr_approved_by_vmc_support  = __false;
+
+   	config.dump_packets_level = debug_level_dump_moderate;
+   	config.debug = __true;
+
+   ```
+
+<Note>
+**Mandatory Fields**
+
+The customer machine information are mandatory fields for the VMC configuration, these are the `model`, `serial` , `hw_ver` and the `manuf_code`. Read more about these fields in [VMC Configuration Object](#doc:vmc-configuration-object).
+</Note>
+
+3. Configure the SDK and register to link events.
+   ```c
+   vmc_link_register_callback((vmc_link_event_handler_cb_t)vmc_link_event_handler_cb);
+   vmc_vend_register_callback((vmc_vend_event_handler_cb_t)vmc_vend_event_handler_cb);
+   vmc_general_register_callback((vmc_general_event_handler_cb_t)vmc_general_event_handler_cb);
+   ```
+
+4. Start the SDK and wait for the `onReady()` event:
+   ```c
+   vmc_link_start()
+   ```
+
+## Implement Payment Flows
+
+As explained in [Payment Flows](doc:payment-flows), the Marshall SDK supports various payment flows. The pages below explain how to implement each in your VMC using the **C SDK**.
+
+<HTMLBlock>{`
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+  .card_container {
+    display: flex;
+    gap: 10px;
+    margin: 0 auto;
+    max-width: var(--container-lg);
+    width: 100%;
+    flex-wrap: wrap;
+
+    .card {
+      display: flex;
+      padding: 20px 14px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      min-width: 190px;
+      flex-shrink: 0;
+      gap: 12px;
+      border-radius: 6px;
+      border: 1px solid #DCDCDC;
+      background: #FFF;
+      box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13);
+      text-decoration: none;
+      flex-grow: 1;
+      flex-basis: 0;
+      text-decoration: none !important;
+
+      svg {
+        fill: none;
+
+        rect {
+          fill: #FFF;
+          stroke: #C9C9C9;
+        }
+
+        path {
+          fill: #d2a900;
+        }
+      }
+
+      h3 {
+        color: #383838;
+        text-align: center;
+        font-family: Inter !important;
+        font-size: 17.5px;
+        font-style: normal;
+        font-weight: 700;
+        text-decoration: none;
+        margin: 0;
+        text-align: start;
+      }
+    }
+
+    .card:hover {
+      cursor: pointer;
+      border: 1px solid #d2a900 !important;
+      box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+      transform: translateY(-1px);
+
+      svg {
+        fill: none;
+
+        rect {
+          fill: #d2a900;
+          stroke: #C9C9C9;
+        }
+
+        path {
+          fill: #FFF;
+        }
+      }
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    [data-color-mode="system"] .card_container {
+      .card {
+        border: 1px solid #556974;
+        background: #20292e;
+
+        svg {
+          rect {
+            fill: #20292e;
+            stroke: #556974;
+          }
+        }
+
+        h3,
+        p {
+          color: #FFF;
+        }
+      }
+
+      .card:hover {
+        cursor: pointer;
+        border: 1px solid #d2a900 !important;
+        box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+        transform: translateY(-1px);
+
+        h3 {
+          color: #d2a900;
+        }
+
+        svg {
+          fill: none;
+
+          rect {
+            fill: #d2a900;
+            stroke: #556974;
+          }
+
+          path {
+            fill: #20292e;
+          }
+        }
+      }
+    }
+  }
+
+  [data-color-mode="dark"] .card_container {
+    .card {
+      border: 1px solid #556974;
+      background: #20292e;
+
+      svg {
+        rect {
+          fill: #20292e;
+          stroke: #556974;
+        }
+      }
+
+      h3,
+      p {
+        color: #FFF;
+      }
+    }
+
+    .card:hover {
+      cursor: pointer;
+      border: 1px solid #d2a900 !important;
+      box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+      transform: translateY(-1px);
+
+      h3 {
+        color: #d2a900;
+      }
+
+      svg {
+        fill: none;
+
+        rect {
+          fill: #d2a900;
+          stroke: #556974;
+        }
+
+        path {
+          fill: #20292e;
+        }
+      }
+    }
+  }
+
+  @media only screen and (max-width: 450px) {
+    .card_container {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+  }
+</style>
+
+<div class="card_container">
+
+  <a class="card" href="/v1.0/docs/single-session">
+    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
+      <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M23.3736 24.9994C22.4754 24.9994 21.7472 24.2712 21.7472 23.373V11.2526L9.62638 11.2526C8.72816 11.2526 8 10.5245 8 9.62632C8 8.72813 8.72816 8 9.62639 8L23.3736 8C24.2718 8 25 8.72813 25 9.62632L25 23.373C25 24.2712 24.2718 24.9994 23.3736 24.9994Z" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
+    </svg>
+    <h3>Single Session</h3>
+  </a>
+  
+    <a class="card" href="/v1.0/docs/multi-session">
+    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
+      <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M23.3736 24.9994C22.4754 24.9994 21.7472 24.2712 21.7472 23.373V11.2526L9.62638 11.2526C8.72816 11.2526 8 10.5245 8 9.62632C8 8.72813 8.72816 8 9.62639 8L23.3736 8C24.2718 8 25 8.72813 25 9.62632L25 23.373C25 24.2712 24.2718 24.9994 23.3736 24.9994Z" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
+    </svg>
+    <h3>Multi-Session</h3>
+  </a>
+  
+      <a class="card" href="/v1.0/docs/multi-vend">
+    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
+      <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M23.3736 24.9994C22.4754 24.9994 21.7472 24.2712 21.7472 23.373V11.2526L9.62638 11.2526C8.72816 11.2526 8 10.5245 8 9.62632C8 8.72813 8.72816 8 9.62639 8L23.3736 8C24.2718 8 25 8.72813 25 9.62632L25 23.373C25 24.2712 24.2718 24.9994 23.3736 24.9994Z" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
+    </svg>
+    <h3>Multi-Vend</h3>
+  </a>
+  
+        <a class="card" href="/v1.0/docs/always-idle">
+    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
+      <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M23.3736 24.9994C22.4754 24.9994 21.7472 24.2712 21.7472 23.373V11.2526L9.62638 11.2526C8.72816 11.2526 8 10.5245 8 9.62632C8 8.72813 8.72816 8 9.62639 8L23.3736 8C24.2718 8 25 8.72813 25 9.62632L25 23.373C25 24.2712 24.2718 24.9994 23.3736 24.9994Z" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
+    </svg>
+    <h3>Always-Idle</h3>
+  </a>
+
+</div>
+`}</HTMLBlock>
+
+## See Also
+
+<HTMLBlock>{`
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+  .card_container {
+    display: flex;
+    gap: 10px;
+    margin: 0 auto;
+    max-width: var(--container-lg);
+    width: 100%;
+    flex-wrap: wrap;
+
+    .card {
+      display: flex;
+      padding: 20px 14px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      min-width: 190px;
+      flex-shrink: 0;
+      gap: 12px;
+      border-radius: 6px;
+      border: 1px solid #DCDCDC;
+      background: #FFF;
+      box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13);
+      text-decoration: none;
+      flex-grow: 1;
+      flex-basis: 0;
+      text-decoration: none !important;
+
+      svg {
+        fill: none;
+
+        rect {
+          fill: #FFF;
+          stroke: #C9C9C9;
+        }
+
+        path {
+          fill: #d2a900;
+        }
+      }
+
+      h3 {
+        color: #383838;
+        text-align: center;
+        font-family: Inter !important;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 700;
+        text-decoration: none;
+        margin: 0;
+        text-align: start;
+      }
+    }
+
+    .card:hover {
+      cursor: pointer;
+      border: 1px solid #d2a900 !important;
+      box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+      transform: translateY(-1px);
+
+      svg {
+        fill: none;
+
+        rect {
+          fill: #d2a900;
+          stroke: #C9C9C9;
+        }
+
+        path {
+          fill: #FFF;
+        }
+      }
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    [data-color-mode="system"] .card_container {
+      .card {
+        border: 1px solid #556974;
+        background: #20292e;
+
+        svg {
+          rect {
+            fill: #20292e;
+            stroke: #556974;
+          }
+        }
+
+        h3,
+        p {
+          color: #FFF;
+        }
+      }
+
+      .card:hover {
+        cursor: pointer;
+        border: 1px solid #d2a900 !important;
+        box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+        transform: translateY(-1px);
+
+        h3 {
+          color: #d2a900;
+        }
+
+        svg {
+          fill: none;
+
+          rect {
+            fill: #d2a900;
+            stroke: #556974;
+          }
+
+          path {
+            fill: #20292e;
+          }
+        }
+      }
+    }
+  }
+
+  [data-color-mode="dark"] .card_container {
+    .card {
+      border: 1px solid #556974;
+      background: #20292e;
+
+      svg {
+        rect {
+          fill: #20292e;
+          stroke: #556974;
+        }
+      }
+
+      h3,
+      p {
+        color: #FFF;
+      }
+    }
+
+    .card:hover {
+      cursor: pointer;
+      border: 1px solid #d2a900 !important;
+      box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+      transform: translateY(-1px);
+
+      h3 {
+        color: #d2a900;
+      }
+
+      svg {
+        fill: none;
+
+        rect {
+          fill: #d2a900;
+          stroke: #556974;
+        }
+
+        path {
+          fill: #20292e;
+        }
+      }
+    }
+  }
+
+  @media only screen and (max-width: 450px) {
+    .card_container {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+  }
+</style>
+
+<div class="card_container">
+
+  <a class="card" href="/v1.0/docs/spark-security-authentication">
+    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
+      <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M23.3736 24.9994C22.4754 24.9994 21.7472 24.2712 21.7472 23.373V11.2526L9.62638 11.2526C8.72816 11.2526 8 10.5245 8 9.62632C8 8.72813 8.72816 8 9.62639 8L23.3736 8C24.2718 8 25 8.72813 25 9.62632L25 23.373C25 24.2712 24.2718 24.9994 23.3736 24.9994Z" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
+    </svg>
+    <h3>C SDK Integration</h3>
+  </a>
+
+  <a class="card" href="/v1.0/docs/transaction-flows-spark">
+    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
+      <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M23.3736 24.9994C22.4754 24.9994 21.7472 24.2712 21.7472 23.373V11.2526L9.62638 11.2526C8.72816 11.2526 8 10.5245 8 9.62632C8 8.72813 8.72816 8 9.62639 8L23.3736 8C24.2718 8 25 8.72813 25 9.62632L25 23.373C25 24.2712 24.2718 24.9994 23.3736 24.9994Z" />
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
+    </svg>
+    <h3>Methods & Functions</h3>
+  </a>
+    </div>
+`}</HTMLBlock>

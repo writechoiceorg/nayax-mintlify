@@ -1,0 +1,63 @@
+---
+title: "setConfig"
+---
+
+The `setConfig `method applies configuration settings to the terminal. These can include settings such as deposit server preferences, enabling the manual interface, or forcing a reset. It is recommended that you call `setConfig `on each device initialization to ensure consistent configuration.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](doc:integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, the `method `field needs to be set to `setConfig` and the params must include the service name and a dictionary of configuration fields, as shown in the example request below:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "setConfig",
+    "id": "1234567890",
+    "params": [
+        "device",
+        {
+            "ashraitServer": "NAYAX",
+            "manualInterface": true,
+            "reset": true
+        }
+    ]
+}
+```
+
+### Request Parameters
+
+See the table below for a description of the available request parameters for this method.
+
+| Name              | Type   | Description                                    |
+| ----------------- | ------ | ---------------------------------------------- |
+| `ashraitServer`   | string | The deposit server to use (e.g., "NAYAX").     |
+| `manualInterface` | bool   | Enable or disable manual card entry.           |
+| `reset`           | bool   | Whether to apply the configuration with reset. |
+
+## Response
+
+A successful request will return a response similar to the one in the code block below:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "1234567890",
+    "result": {
+        "statusCode": 0
+    }
+}
+```
+
+### Response Parameters
+
+Below is a table with all the possible response parameters and their description:
+
+| Name         | Type    | Description                    |
+| ------------ | ------- | ------------------------------ |
+| `statusCode` | integer | Operation status (0 = success) |

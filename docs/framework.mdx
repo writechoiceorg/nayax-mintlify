@@ -1,0 +1,39 @@
+---
+title: "Framework"
+---
+
+The `vmc_framework` is the core component of the Marshall SDK, acting as the primary interface between your application and the vending machine controller (VMC). It handles all the essential operations, from initiating and managing sessions to processing transactions and communicating with various peripherals.
+
+## Function
+
+To begin using the `vmc_framework`, you need to obtain its singleton instance. This ensures that only one instance of the framework is active, providing a consistent and controlled interaction point for all SDK operations.
+
+To initiate the framework instance, you can use the following command:
+
+```java
+vmc_framework m_vmc = vmc_framework.getInstance();
+```
+```csharp
+vmc_framework vmc_instance = vmc_framework.getInstance();
+```
+
+### Parameters
+
+The table below provides a detailed description of the command.
+
+| Parameter                 | Description                                                                                                                                                       |
+| :------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `vmc_framework`           | Main class of the Marshall SDK that manages the interaction with the vending machine controller (VMC).                                                            |
+| `m_vmc` or `vmc_instance` | Variable that holds the instance of the `vmc_framework`.                                                                                                          |
+| `getInstance()`           | This method returns the singleton instance of the `vmc_framework`. The Singleton pattern ensures that only one instance of the framework runs in the application. |
+
+## Lifecycle Methods
+
+The primary methods to control the lifecycle of the SDK are:
+
+| Parameter | Description                                                                                                          |
+| :-------- | :------------------------------------------------------------------------------------------------------------------- |
+| `start()` | Initializes and starts the SDK thread, enabling the framework to handle vending operations and device communication. |
+| `stop()`  | Terminates the SDK thread, halting all operations and safely shutting down the framework.                            |
+
+Refer to [SDK Flags Descriptions](doc:sdk-flags-descriptions) to learn about other flags that can be initiated to control specific configurations.

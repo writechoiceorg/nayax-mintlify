@@ -1,0 +1,51 @@
+---
+title: "FAQ- device (VPOST/ VPOSM) issues"
+---
+
+## Device being stuck on "Nayax" screen during powerup- communication issue:
+
+This could happen due to multiple reasons:
+
+1. Modem connection issues/bad cellular reception/ connected to ETH and the connection is poor. Do you happen to use ETH? Or have the devices near something that would block cellular reception?
+2. Wrong modem type (for example European modem in the US) or a modem that is not too strong. Which modem type are you using?
+3. SIM card not installed/supported (for example a SIM card that you bought outside of Nayax)/all used up. Which SIM are you using?
+4. Antenna is not connected properly/ wrapped up around itself/pointing downwards/ around a metal box. Can you have a look at it?
+5. If the device gets to the Nayax logo, then crashes- Do you have 24V power source with minimum 1.5A?
+
+Device is connected to the Marshall cable but the device is in Cash Only
+
+Which COM have you connected to your board? Is it COM2 as mentioned in the "Installation Guide"?
+If you're using a Chipi-X (specific USB to COM adaptor. The only one which grants support privileges!)- does the Chipi-X seems to be connected to a hub- try connecting it directly to the PC.
+
+## Everything is connected as expected but things still doesn't work- what now?
+
+1. Check the parameters in Nayax Core
+2. Check that the physical connection fits the instructions as in the [Installation Steps](https://developerhub.nayax.com/docs/installation-steps#/)
+3. If OK – please reboot the device:
+
+* disconnect from power,
+* wait for the screen to go black
+* power the device back
+
+4. Check that in the code of the SDK you changed the COM port to the relevant one
+5. Compile and Run the SDK:
+   a.	Do you see the peripheral simulator's menu and pairing process displayed in the prompt window?
+   b.	Do you see in the log file that the Pairing process ended successfully?
+
+## Changing Idle screen/customization of screens/ UI control
+
+At the moment, only the following modifications are available:
+
+* At IDLE state, you can select the pictures/animations to be displayed over our DCS back office.
+  You can also add some customized image e.g. displaying the logo of your company.
+
+  <Image align="center" border={false} src="https://files.readme.io/d7b250bfb4f8f2a0cccee6e68c930285fdf88e1df2a00c138bede6d1638c40ab-Screenshot_4.jpg" />
+* Or change the title at idle mode:
+
+  <Image align="center" border={false} src="https://files.readme.io/a00f296b0c46cc322f8c496fdb898b9ffdbc0e75d7f28cd2005b1502d2425479-Screenshot_4.jpg" />
+* At end of transaction, you can remove the "Thank you and good bye" message: both picture and voice message will not be displayed/played.
+
+  <Image align="center" border={false} src="https://files.readme.io/b9784f6955f1f0c852e9f1bf8decc3c4f63ba04307f281fbbc7907dabcb1f9fe-Screenshot_4.jpg" />
+
+For VPOS Touch- During the transaction process, there is not much to do in terms of UI and both messages and images/animations cannot be customized.
+Regarding VPOS Media- this is a new product that is at the final stages of development, there is a possibility of editing the screens and animations- but this section would be updated once it would be released.

@@ -1,0 +1,62 @@
+---
+title: "Create New Queue"
+---
+
+Creating an Amazon SQS queue is the first step in setting up your integration with Nayax.
+
+## Select AWS Region
+
+Once the prerequisites are complete, you can proceed to select the AWS region where your queue will be created.
+
+1. Go to the top-right corner of the AWS console.
+2. Select the region where you will create the queue.
+<Warning>
+**Region pricing and latency**
+
+It's important to note that the region you select will affect the pricing and latency.
+</Warning>
+
+<Image align="center" className="border" border={true} src="https://files.readme.io/418601dfb4a8ff377cb16482cc1846bc606f6596dc14c023c03df40cbea90530-image.png" />
+
+## Create a Queue
+
+Now that you’ve selected a region, the next step is to create a new queue.
+
+1. Click the **three lines** icon located in the upper left corner of the AWS console.
+2. Select the **All services** option.
+
+   <Image align="center" className="border" border={true} src="https://files.readme.io/cc5f15b767aab0348093e572ac356021c708460fdbfc5684504f39a876c8607a-image.png" />
+3. Search the **Application Integration** category and select **Simple Queue Services** (SQS).
+
+   <Image align="center" className="border" border={true} src="https://files.readme.io/7e654525b54c0a351069b1478dec00187f45e1498318f5ade1502be00c4ba526-image.png" />
+4. Then, click **Create Queue**.
+
+   <Image align="center" className="border" border={true} src="https://files.readme.io/4d3ff00030283781a57ade09837a49d6b769c5233a1ab251bc7abf8f7c60ec0f-image.png" />
+5. In the **Details** section:
+   a.  Select **Standard** as the queue type.
+   b. Enter a unique name for your queue.
+
+   <Image align="center" className="border" border={true} src="https://files.readme.io/6035be26710c4487688de14d15fbc5377b7d8a7cf4db690f549882b4869b7ec4-image.png" />
+6. Configure the additional sections based on your needs:
+   * **Configuration:** Define basic settings for the queue.
+   * **Encryptio:** Secure your queue messages with encryption.
+   * **Access policy:** Set permissions for accessing the queue.
+   * **Redrive allow policy (Optional):** Enable or disable policies for message redriving.
+   * **Dead-letter queue (Optional):** Configure a queue for undeliverable messages.
+   * **Tags (Optional):** Add tags to categorize and manage your queue.
+<Note>
+**Optional Sections**
+
+Optional sections such as Redrive allow policy, Dead-letter queue, and Tags should be filled in based on your specific requirements. They help customize your queue's functionality and management.
+</Note>
+7. Click the **Create Queue** button.
+
+   <Image align="center" className="border" border={true} src="https://files.readme.io/a93f6aef12d3ced234033c94b78dc02c01aaa62421ec643fa7c470a72530b6c2-image.png" />
+
+Once the queue is successfully created, a confirmation message will appear on the screen along with the **Queue URL** and **ARN (Amazon Resource Name)**. Copy these values, which will be needed for integration and permissions setup in subsequent steps.
+
+<Image align="center" className="border" border={true} src="https://files.readme.io/8cbc2a181a1bacfb6324d6df4007e721b815014f3cb1ab8946be8620e3f138e6-image.png" />
+
+
+
+<br />

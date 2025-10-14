@@ -1,0 +1,61 @@
+---
+title: "StopCallback"
+---
+
+<Warning>
+**Enable `StopCallback`**
+
+This feature must be enabled in Nayax Core during the integration.
+</Warning>
+
+The `StopCallback ` endpoint It is used to notify the integrator that a consumer has presented their payment card at the terminal in an attempt to stop an ongoing session. This process allows the Spark integrator to validate and match the card against an active session that was originally authorized on the same terminal. This is primarily used in the Pre-Authorization transaction flow, if you choose to implement it.
+
+While the payment terminal is in Idle mode, it can accept a card presentation. If Nayax recognizes the card as belonging to an active transaction, it sends the `StopCallback `with the transaction details. If a session match is found, you need to send a `Settlement` request to complete the session termination.
+
+<Warning>
+**Timeout**
+
+If no ACK is received within 5 seconds, the consumer experience is considered failed.
+</Warning>
+
+## Request
+
+Spark sends a POST request to your configured `StopCallback` endpoint. The body parameters are as in the example below:
+
+```json
+{
+  "StopSiteId": 4,
+  "MachineId": 71234996,
+  "HwSerial": "0434334921100366",
+  "CardLast4Digits": "1234",
+  "CardHash": "7f2082ba5dbccf706b6987e75b62083f65b5695bc2d8c827c3e46769d007a9e6",
+  "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+  "NayaxTransactionId": 2004545072,
+  "CardUid": "1288528281124927",
+  "MachineAuTime": "20240205194122328",
+  "ServiceStationNumber": "5"
+}
+```
+
+### Request Parameters
+
+The table below describes the parameters of the request:
+
+| Field                  | Type    | Required | Description                                                                                                               |
+| ---------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `StopSiteId`           | Integer | Yes      | ID of the site where the session stop was triggered.                                                                      |
+| `MachineId`            | Integer | Yes      | Unique ID of the vending machine or device.                                                                               |
+| `HwSerial`             | String  | Yes      | Hardware serial number of the terminal.                                                                                   |
+| `CardLast4Digits`      | String  | Yes      | Last 4 digits of the card used for the transaction.                                                                       |
+| `CardHash`             | String  | Yes      | Hashed value of the payment card.                                                                                         |
+| `SparkTransactionId`   | String  | Yes      | Spark transaction identifier of the original initiated session.                                                           |
+| `NayaxTransactionId`   | Integer | Yes      | Unique Nayax transaction ID.                                                                                              |
+| `CardUid`              | String  | No       | Unique identifier of the card, if available. See a more detailed explanation on the [SMC Support](doc:smc-support)  page. |
+| `MachineAuTime`        | String  | Yes      | Terminal's local timestamp in format `yyyyMMddHHmmssSSS`.                                                                 |
+| `ServiceStationNumber` | String  | No       | Identifier of the charging point or station used.                                                                         |
+
+<Note>
+**Nayax Callback**
+
+This is a callback from Nayax, no response body is required. A simple 200 OK server acknowledgment is sufficient.
+</Note>

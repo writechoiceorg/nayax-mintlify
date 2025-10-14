@@ -1,0 +1,60 @@
+---
+title: "abortReadCard"
+---
+
+The `abortReadCard `method is used to cancel an ongoing readCard operation. This is helpful when the user wants to stop card reading before it completes, such as during a timeout, user cancellation, or application logic control.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](doc:integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, the method field should be set to `abortReadCard`, and the params must include the fixed value device:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "abortReadCard",
+    "id": "123454352",
+    "params": [
+        "device"
+    ]
+}
+```
+
+### Request Parameters
+
+See the table below for a description of the available request parameters for this method.
+
+| Name     | Type  | Description                     |
+| -------- | ----- | ------------------------------- |
+| `params` | array | Must contain the value `device` |
+
+## Response
+
+A successful request will return a response similar to the one in the code block below:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "ok"
+    }
+}
+```
+
+<br />
+
+### Response Parameters
+
+Below is a table with all the possible response parameters and their description:
+
+| Name            | Type    | Description                    |
+| --------------- | ------- | ------------------------------ |
+| `statusCode`    | integer | Operation status (0 = success) |
+| `statusMessage` | string  | Operation result message       |

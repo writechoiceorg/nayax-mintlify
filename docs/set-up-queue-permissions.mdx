@@ -1,0 +1,82 @@
+---
+title: "Set up Queue Permissions"
+---
+
+Having created the queue in the previous step, the next task is configuring permissions to manage access. This involves creating a policy, setting up user access, and assigning the policy to the created user. Policies define the actions allowed on the queue and are crucial for controlling access to your AWS resources.
+
+## Manage Access to AWS Resources
+
+To begin configuring access to your queue, you first need:
+
+1. Click the **three lines** icon located in the upper left corner of the AWS console.
+2. Select the **All services** option.
+3. Search the **Security, Identify, & Compliance** category and select **IAM** (Identity and Access Management).
+
+   <Image align="center" className="border" border={true} src="https://files.readme.io/c3a7c7f8d64ec432c6d0949554f6210a2f01f91fea664a8b2bd93882bc451e7f-image.png" />
+4. Click **Policies** on the left side menu.
+
+   <Image align="center" className="border" border={true} src="https://files.readme.io/7f8ae8f2332142fe12d98523b231db9ad8a24e2e60c62eba4ca2d0f2397a73bb-image.png" />
+
+## Create Policy
+
+Policies are created to define what actions users can perform on your queue. Follow these steps to create a new policy:
+
+1. Click the **Create Policy** button.
+
+   <Image align="center" className="border" border={true} src="https://files.readme.io/6940d8ec0fc826edefc300b3abde720d89909d9f29a4ee0b594c9c95827f9992-image.png" />
+2. In the **Service  Choose a service** field, search and select **SQS**.
+
+   <Image align="center" className="border" border={true} src="https://files.readme.io/0162db418459017ec8611bef33bdf26f6081b98db9176fa1b572ef970c67ebfd-image.png" />
+
+## Set Permissions for SQS
+
+Now that you’ve selected SQS as the service define the permissions needed for the queue:
+
+1. Under **Actions** , select the permissions you need for the queue.
+
+   <Image align="center" className="border" border={true} src="https://files.readme.io/e7d997fd058880f5e400679ce085bfeac8a9573a41401800ae3fd6032940635c-image.png" />
+
+## Set Policy to Specific ARN
+
+The Policy you are creating can be assigned to any Queue. In this case, you’ll assign it to the specific queue created earlier.
+
+<Note>
+**Resources**
+
+Ensure that the **Specific** resource that is selected.
+</Note>
+
+To Add the ARN of the previously created queue, follow these steps:
+
+1. Click **Add ARNs**.
+
+   <Image align="center" className="border" border={true} src="https://files.readme.io/5bdb65f615e8aeca27823c1678fc32a88bf2aef2cf3c16417bc03b0d49c2ff59-image.png" />
+2. Enter the copied ARN in the **Resource ARN** field. You can find this value from the confirmation screen displayed at the end of the [**Create New Queue**](https://developerhub.nayax.com/docs/create-new-queue) process.
+3. Click the **Add ARNs** button.
+
+   <Image align="center" className="border" border={true} src="https://files.readme.io/260d7ad566b67935e1d472e37e6704f97ae68f75752ef9a4b1b6f9b25516438b-image.png" />
+4. Click the **Next** button.
+
+   <Image align="center" className="border" border={true} src="https://files.readme.io/d941b30802ee0ec1f1d25a8e05436b6f6342e4ca42791a106b488286369b1dce-image.png" />
+
+## Review and Create the Policy
+
+Before finalizing the policy, review its details to ensure all configurations are correct. This step is essential to avoid potential issues with permissions.
+
+In the **Policy details** section:
+
+1. Enter a unique **name** to identify this policy.
+2. Add a description for this policy **(Optional)**.
+
+   <Image align="center" className="border" border={true} src="https://files.readme.io/a697a48f17c7813f1e6539930dfd75fabe4a2c898a9f73451260ed3bedb53d3a-image.png" />
+3. Finally, click the **Create Policy** button.
+
+   <Image align="center" className="border" border={true} src="https://files.readme.io/93d6f813cd9282f048b5f810ad53847b549330104193e6bb684bb3f9550e935f-image.png" />
+
+Once the policy is created, you will receive a confirmation that it has been successfully set up.
+
+<Image align="center" className="border" border={true} src="https://files.readme.io/51cd7e5712959ff05cf68528c627dc665bcab0607db7d2010453dba88c084ac1-image.png" />
+
+
+
+<br />

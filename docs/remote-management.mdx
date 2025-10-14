@@ -1,0 +1,154 @@
+---
+title: "Management"
+---
+
+The EMV Core SDK includes features for management that streamline device configuration, firmware updates, and diagnostics. These capabilities reduce maintenance overhead and enhance reliability by allowing centralized control through Nayax’s Terminal Management System (TMS) or local updates when necessary.
+
+These are the methods regarding the management of the SDK:
+
+* [Initialize](#initialize)
+* [Destroy](#destroy)
+* [isEMVCoreConnected](#isEMVCoreConnected)
+* [SetPaymentCallbacks](#SetPaymentCallbacks)
+* [GetStatus](#getstatus)
+* [ShowMessage](#showmessage)
+* [Getversion](#getversion)
+* [GetKioskID](#getkioskid)
+* [GetAttribute](#getattribute)
+
+See the sections below for more details on each of them.
+
+## `Initialize`
+
+Initializes the EMV Core SDK to prepare it for operation by establishing initial settings and connections. It should be called during application startup to establish a session with the reader. Setting up the environment before performing any transactions or management tasks is essential.
+
+See the `Initialize `API signature in the code below:
+
+```java
+void Initialize() throws EmvCoreException;
+```
+
+## `Destroy`
+
+Terminates the session with the reader and releases any associated resources. Use it during application shutdown or when the reader is no longer needed to prevent resource leaks and ensure proper cleanup of SDK-related processes.
+
+See the `Destroy`API signature in the code below:
+
+```java
+void Destroy();
+```
+
+## `isEMVCoreConnected`
+
+Retrieves the current status of the reader, including readiness for transactions and connectivity state.
+
+See the `isEMVCoreConnected` API signature in the code below:
+
+```java
+boolean isEmvCoreConnected();
+```
+
+## `SetPaymentCallbacks`
+
+Registers callbacks for transaction-related events, such as transaction completion or errors, enabling the application to respond dynamically to events triggered during payment flows and provide real-time updates to the application about transaction progress.
+
+See the `SetPaymentCallbacks` API signature in the code below:
+
+```java
+void SetPaymentCallbacks(IPaymentCallbacks iPaymentCallbacks);
+```
+
+Parameters:
+
+* `iPaymentCallbacks`: Payment transaction Details
+
+<Note>
+**Event Callbacks**
+
+To learn more about callbacks, see [Event Callbacks](docs:event-callbacks).
+</Note>
+
+## `GetStatus`
+
+It retrieves the reader's current status, including readiness for transactions and connectivity state, and helps monitor its state during integration or deployment.
+
+See the `GetStatus` API signature in the code below:
+
+```java
+EmvCoreStatus GetStatus() throws EmvCoreException;
+```
+
+The possible result values are: `NotReady`, `Ready`, `PaymentTransaction`, `Update`,  `NoReader `and `NoTerminalId`.
+
+<Note>
+**`Update` and `NoTerminalId`**
+
+* `Update `status means EMV-Core is busy with TMS updates (e.g. new firmware or configuration)
+* `NoTerminalId `status means Emv-Core doesn't know the Terminal ID.
+</Note>
+
+<Warning>
+**Timeout**
+
+If the `GetStatus` request times out, the host application should retry three times with a five-second interval between attempts. If no response is received after these retries, the application should assume the EMVCore service is unresponsive and restart the process.
+</Warning>
+
+## `ShowMessage`
+
+Displays a custom message on the reader’s screen if the reader has a display.
+
+See the `ShowMessage` API signature in the code below:
+
+```java
+void ShowMessage(String line1, String line2) throws EmvCoreException;
+```
+
+Parameters:
+
+| Parameter | Description                                                                   |
+| :-------- | :---------------------------------------------------------------------------- |
+| `line1`   | Text to show in the 1st line of the reader display (limited to 16 characters) |
+| `line2`   | Text to show in the 2nd line of the reader display (limited to 16 characters. |
+
+<Warning>
+**UNO-PLUS Exclusive**
+
+This method is available only for UNO-PLUS reader.
+</Warning>
+
+## `Getversion` (for EMV-Core and the reader)
+
+Fetches the firmware version of the reader and the EMV Core SDK version. Use it to verify that the latest updates are applied.
+
+```java
+String GetEmvCoreVersion() throws EmvCoreException;
+String GetReaderVersion() throws EmvCoreException;
+```
+
+## `GetKioskID`
+
+Called by the POS application to get the Device identification number. This ID is critical for identifying the device in the Nayax server and linking it to transactions, configurations, and monitoring systems.
+
+See the `GetKiosID` API signature in the code below:
+
+```java
+String GetKioskID() throws EmvCoreException;
+```
+
+## `Get Attribute`
+
+Called by the POS application to get the attribute value from the EMV Core configuration file.
+
+See the `GetAttribute` API signature in the code below:
+
+```java
+String GetAttribute(String key) throws  EmvCoreException;
+```
+
+Parameters:
+
+| Parameter | Description                                                                                                                                                                               |
+| :-------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `key`     | Attribute `key` in the configuration file. For example, if the config file includes this line: `PRE_AUTH_AMOUNT=100` The key may be `PRE_AUTH_AMOUNT` and the returned value will be 100. |
+
+<br />

@@ -1,0 +1,85 @@
+---
+title: "getSubRetailer"
+---
+
+The `getSubRetailer` method retrieves a list of all sub-retailers loaded on the terminal and shows their current status.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Integration ](doc:integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, ensure to configure the following:
+
+* The `method` field must be set to `getSubRetailer` .
+* The service must be set to `ashrait` in the `params`.
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getSubRetailer",
+    "params": [
+        "ashrait"
+    ],
+    "id": "123454352"
+}
+```
+
+### Request Parameters
+
+This method doesn't require any parameters beyond the standard service name.
+
+## Response
+
+A successful call returns the list of sub-retailers and their status.
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "OK",
+        "subRetailers": [
+            {
+                "retailerId": "0883806",
+                "retailerName": "",
+                "isActivated": true,
+                "isStartWork": false
+            },
+            {
+                "retailerId": "0884806",
+                "retailerName": "",
+                "isActivated": true,
+                "isStartWork": false
+            }
+        ]
+    }
+}
+```
+
+### Response Parameters
+
+The `result object` contains the following fields:
+
+| Name            | Type             | Description                                              |
+| :-------------- | :--------------- | :------------------------------------------------------- |
+| `statusCode`    | integer          | The status of the operation. `0` indicates success.      |
+| `statusMessage` | string           | A message describing the status, such as "OK".           |
+| `subRetailers`  | array of objects | A list containing sub-retailer objects. See table below. |
+
+### Sub-Retailer Object Structure
+
+Each object in the `subRetailers` array has the following structure:
+
+| Name           | Type    | Description                                                        |
+| :------------- | :------ | :----------------------------------------------------------------- |
+| `retailerId`   | string  | The unique identifier for the sub-retailer.                        |
+| `retailerName` | string  | The name of the sub-retailer (may be empty).                       |
+| `isActivated`  | boolean | `true` if the sub-retailer was added to the terminal successfully. |
+| `isStartWork`  | boolean | `true` only after a `doPeriodic` call has been successfully run.   |
+
+<br />

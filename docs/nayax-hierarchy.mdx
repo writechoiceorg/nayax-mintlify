@@ -1,0 +1,52 @@
+---
+title: "Nayax Hierarchy"
+---
+
+Nayax uses a structured system to organize and manage entities, reflecting real-world business operations. This hierarchy is foundational for managing operators, machines, and other entities within the system. These entities are:
+
+* **Distributor**: The topmost entity in the hierarchy, representing a regional or country-level organization that manages multiple operators. Distributors oversee operations but cannot have a parent entity or be created via Lynx API.
+* **Operator**: A business or organization directly under a distributor. Operators manage their sub-hierarchies (areas, routes, machines) and handle inventory, machines, and user permissions. Operators cannot exist under another operator.
+* **Machine**: The physical vending machine containing inventory and sales data. Machines are assigned to specific routes or areas within the operator's hierarchy and are integral for tracking transactions and alerts.
+
+See an example of a hierarchy containing these entities in the following section.
+
+## Hierarchy Example
+
+The diagram below illustrates the hierarchy within Nayax, showing how entities are organized from the top level (Distributor) down to the lowest level (Machines).
+
+<Frame>![](images/docs/nayax-hierarchy/images1.png)</Frame>
+
+Where:
+
+* **Distributor**: The highest-level entity overseeing the entire structure. In this case, it manages two operators, Operator A and Operator B.
+  * **Operator A** manages Areas A and B. Each contains routes that group machines for easier servicing.
+    * Area A includes Route A with Machines 1 and 2 and Route B with Machines 3 and 4.
+    * Area B includes Route C, managing Machine 5 and Machine 6.
+  * **Operator B** manages Area C, which contains Route D with Machines 7 and 8.
+
+As you can see, machines are tied to specific routes, and routes are grouped under areas. Operators organize their hierarchy independently but remain under the Distributor’s oversight.
+
+<Note>
+**Lynx API Actors**
+
+In Nayax Core, the Operators and its types, such as "Area" and "Routes", are only nomenclatures that help you differentiate them. However, in Lynx API, they are all referred to as Actors, which are only differentiated by the `ActorTypeID`.
+</Note>
+
+## Institutes
+
+Institutes in  Nayax are unique entities parallel to operators, created directly under a distributor. They facilitate shared operations between multiple operators for specific locations or use cases, such as implementing unified prepaid card systems across multiple operators' machines.
+
+See the diagram below:
+
+<Frame>![](images/docs/nayax-hierarchy/images2.png)</Frame>
+
+Where:
+
+* At the top of the hierarchy, the Distributor oversees both institutes and operators. In this case, the distributor manages Operator A and a single Institute.
+* Institutes directly connect to the distributor and are not part of an operator's hierarchy. They are linked to locations, such as Location 1 (green) and Location 2 (red), which may contain machines serviced by one or more operators.
+
+Institutes enable machines from multiple operators to share a single prepaid card or payment system. For example, machines in Location 1 and another operator could use the same employee card system. This structure makes institutes valuable for collaborative operations between multiple operators, allowing flexibility and integration across locations.
+
+
+
+<br />
