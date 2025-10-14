@@ -185,7 +185,7 @@ def download_image(url, output_path):
         return False, str(e)
 
 
-def process_images(markdown_content, slug, base_output_dir="image/docs"):
+def process_images(markdown_content, slug, base_output_dir="images/docs"):
     """Find images in markdown, download them, and update their paths"""
 
     # Pattern to match markdown images: ![alt text](url)
@@ -226,7 +226,7 @@ def process_images(markdown_content, slug, base_output_dir="image/docs"):
             extension = "png"
 
         # Create new filename
-        new_filename = f"image{image_counter}.{extension}"
+        new_filename = f"images{image_counter}.{extension}"
         image_counter += 1
 
         # Create full path for saving
@@ -237,7 +237,7 @@ def process_images(markdown_content, slug, base_output_dir="image/docs"):
 
         if success:
             # Create the new markdown path (relative to docs/)
-            new_image_url = f"image/docs/{slug}/{new_filename}"
+            new_image_url = f"/images/docs/{slug}/{new_filename}"
 
             # Create the new markdown with Frame wrapper
             old_markdown = match.group(0)
@@ -363,7 +363,7 @@ def main():
                 print(f"  ✗ Failed to fetch content: {error}")
 
             # Add a small delay to avoid overwhelming the server
-            time.sleep(0.5)
+            time.sleep(0.1)
         else:
             skipped_urls.append(url)
             print(f"Skipped (no valid slug): {url}")
