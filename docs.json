@@ -1,0 +1,25 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Anvil2",
+  "colors": {
+    "primary": "#0165DC",
+    "light": "#0165DC",
+    "dark": "#FFFFFF"
+  },
+  "logo": {
+    "light": "/images/home/logo_light.svg",
+    "dark": "/images/home/logo_dark.svg"
+  },
+  "favicon": "/favicon.svg",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Home",
+        "pages": [
+          "index"
+        ]
+      }
+    ]
+  }
+}
