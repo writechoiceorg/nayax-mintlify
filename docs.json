@@ -13,13 +13,139 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
-    "tabs": [
+    "products": [
       {
-        "tab": "Home",
-        "pages": [
-          "index"
+        "product": "Marshall",
+        "description": "Connect any unattended machine with Nayax's payment devices (VPOS Touch, Onyx), utilizing physical connectivity",
+        "groups": [
+          {
+            "group": "Introduction",
+            "pages": [
+              "/docs/marshall-sdk",
+              {
+              "group": "Payment Flows",
+              "expanded": false,
+              "pages": [
+                "/docs/marshall-payment-flows",
+                "/docs/marshall-single-session-with-pre-sel",
+                "/docs/marshall-single-session-with-pre-auth",
+                "/docs/marshall-multi-session",
+                "/docs/marshall-multi-vend-with-pre-sel",
+                "/docs/marshall-multi-vend-with-pre-auth",
+                "/docs/sub-flows-features"
+              ]
+            }
+            ]
+          },
+          {
+            "group": "Get Started",
+            "pages": [
+              "/docs/marshall-get-started",
+              {
+              "group": "Integrations",
+              "expanded": false,
+              "pages": [
+              "/docs/marshall-csharp-java-integration",
+              "/docs/c-sdk-integration"
+              ]
+            },
+            "/docs/vmc-configuration-object",
+            "/docs/sdk-flags-descriptions",
+            "/docs/marshall-create-payments"
+            ]
+          },
+          {
+            "group": "Methods & Functions",
+            "expanded": false,
+            "pages": [
+              "/docs/framework",
+              "/docs/link-and-events-configuration",
+              "/docs/vending-events",
+              "/docs/data-structures",
+              "/docs/general-marshall-events"
+            ]
+          },
+          {
+            "group": "Additional Resources",
+            "pages": [
+              "/docs/marshall-display",
+              "/docs/log-generation",
+              "/docs/marshall-ontransferdata",
+              "/docs/stablity-issues",
+              "/docs/general-marshall-events"
+            ]
+          }
         ]
+      },
+      {
+        "product": "EMV Core",
+        "description": "Connect any unattended machine with embedded Nayax payment devices (Uno line).",
+        "groups": [
+          {
+            "group": "Introduction",
+            "pages": [
+              "/docs/overview-2",
+              "/docs/integration",
+              {
+              "group": "Payment Flows",
+              "expanded": false,
+              "pages": [
+                "/docs/transaction-flow",
+                "/docs/payment-with-authorization",
+                "/docs/closed-loop-transaction",
+                "/docs/single-step-payment"
+              ]
+             }
+            ]
+          },
+          {
+              "group": "SDK",
+              "pages": [
+                "/docs/payment-1",
+                "/docs/remote-management",
+                "/docs/event-callbacks",
+                "/docs/reader-messages"
+              ]
+            }
+        ]
+      },
+      {
+      "product": "Spark",
+      "pages":[
+        {
+            "group": "Introduction",
+            "pages": [
+              "/docs/spark",
+              "/docs/spark-integration",
+              "/docs/spark-security-authentication",
+              {
+              "group": "Payment Flows",
+              "expanded": false,
+              "pages": [
+                "/docs/transaction-flows-spark",
+                "/docs/spark-device-start",
+                "/docs/spark-remote-start",
+                "/docs/spark-device-stop"
+              ]
+            },
+              {
+              "group": "Payment Flows",
+              "expanded": false,
+              "pages": [
+                "/docs/marshall-payment-flows",
+                "/docs/marshall-single-session-with-pre-sel",
+                "/docs/marshall-single-session-with-pre-auth",
+                "/docs/marshall-multi-session",
+                "/docs/marshall-multi-vend-with-pre-sel",
+                "/docs/marshall-multi-vend-with-pre-auth",
+                "/docs/sub-flows-features"
+              ]
+            }
+            ]
+          }
+      ]
       }
     ]
   }
+  
 }

@@ -220,7 +220,7 @@ export const IntegratePOS = () => {
       arrow: "Marshall",
       description:
         "Connect any unattended machine with Nayax's payment devices (VPOS Touch, Onyx), utilizing physical connectivity.",
-      link: "#marshall",
+      link: "/docs/marshall-sdk",
       comingSoon: false,
     },
     {
@@ -228,7 +228,7 @@ export const IntegratePOS = () => {
       title: "Embedded Devices",
       arrow: "EMV Core",
       description: "Connect any unattended machine with embedded Nayax payment devices (Uno line).",
-      link: "#emv-core",
+      link: "/docs/overview-2",
       comingSoon: false,
     },
     {
@@ -237,7 +237,7 @@ export const IntegratePOS = () => {
       arrow: "Spark",
       description:
         "Remotely integrate your platform with Nayax devices (server-to-server integration). Ideal for POS and platform integrations.",
-      link: "#spark",
+      link: "/docs/spark",
       comingSoon: false,
     },
     {
