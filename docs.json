@@ -15,15 +15,15 @@
   "navbar": {
     "links": [
       {
-          "label": "Nayax U",
-          "href": "https://nayax-u.nayax.com/",
-          "icon": "question"
-        },
-        {
-          "label": "Status",
-          "href": "https://status.nayax.com/",
-          "icon": "lightbulb"
-        }
+        "label": "Nayax U",
+        "href": "https://nayax-u.nayax.com/",
+        "icon": "question"
+      },
+      {
+        "label": "Status",
+        "href": "https://status.nayax.com/",
+        "icon": "lightbulb"
+      }
     ]
   },
   "navigation": {
@@ -34,6 +34,7 @@
         "dropdowns": [
           {
             "dropdown": "Marshall",
+            "icon": "m",
             "anchors": [
               {
                 "anchor": "Guides",
@@ -114,6 +115,7 @@
           },
           {
             "dropdown": "EMV Core",
+            "icon": "c",
             "anchors": [
               {
                 "anchor": "Guides",
@@ -150,6 +152,7 @@
           },
           {
             "dropdown": "Spark",
+            "icon": "s",
             "pages": [
               {
                 "group": "Introduction",
@@ -217,6 +220,7 @@
           },
           {
             "dropdown": "Amazon SQS",
+            "icon": "amazon",
             "anchors": [
               {
                 "anchor": "Guides",
@@ -235,7 +239,7 @@
                     "pages": [
                       "/docs/set-up-transaction-delivery",
                       "/docs/set-up-eva-dts-dexddcmp-audit-file-delivery",
-                      "/update/docs/set-up-encryption-on-amazon-sqs-delivery"
+                      "/docs/set-up-encryption-on-amazon-sqs-delivery"
                     ]
                   }
                 ]
