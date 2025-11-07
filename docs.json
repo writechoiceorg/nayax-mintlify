@@ -12,6 +12,20 @@
     "dark": "/images/home/logo_dark.svg"
   },
   "favicon": "/favicon.svg",
+  "navbar": {
+    "links": [
+      {
+          "label": "Nayax U",
+          "href": "https://nayax-u.nayax.com/",
+          "icon": "question"
+        },
+        {
+          "label": "Status",
+          "href": "https://status.nayax.com/",
+          "icon": "lightbulb"
+        }
+    ]
+  },
   "navigation": {
     "tabs": [
       {
@@ -175,25 +189,37 @@
       {
         "tab": "Manage Data & Operations",
         "icon": "link",
-        "menu": [
+        "dropdowns": [
           {
-            "item": "Lynx API",
+            "dropdown": "Lynx API",
             "icon": "link",
-            "description": "Connect to the Nayax Core management platform and manage your machines.",
-            "dropdown": [
+            "anchors": [
               {
-                "group": "Lynx API",
+                "anchor": "Guides",
                 "pages": [
                   "/docs/lynx-overview"
+                ]
+              },
+              {
+                "anchor": "API Reference",
+                "icon": "code",
+                "groups": [
+                  {
+                    "group": "API Reference",
+                    "openapi": {
+                      "directory": "reference",
+                      "source": "openapi/spark.yaml"
+                    }
+                  }
                 ]
               }
             ]
           },
           {
-            "item": "Amazon SQS",
-            "groups": [
+            "dropdown": "Amazon SQS",
+            "anchors": [
               {
-                "group": "Amazon SQS",
+                "anchor": "Guides",
                 "pages": [
                   "/docs/overview-1",
                   {
