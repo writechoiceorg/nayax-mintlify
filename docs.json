@@ -13,39 +13,14 @@
   },
   "favicon": "/favicon.svg",
   "navigation": {
-    "global": {
-      "anchors": [
-        {
-          "anchor": "API Reference",
-          "href": "https://mintlify.com/docs",
-          "icon": "code"
-        },
-        {
-          "anchor": "Release Notes",
-          "href": "https://www.nayax.com/product-updates/integrated-pos/",
-          "icon": "list"
-        },
-        {
-          "anchor": "Nayax U",
-          "href": "https://nayax-u.nayax.com/",
-          "icon": "question"
-        },
-        {
-          "anchor": "Status",
-          "href": "https://status.nayax.com/",
-          "icon": "lightbulb"
-        }
-      ]
-    },
-    "tabs": [
+    "dropdowns": [
       {
-        "tab": "Integrate POS Devices",
+        "dropdown": "Marshall",
         "icon": "laptop-code",
-        "dropdowns": [
+        "tabs": [
           {
-            "dropdown": "Marshall",
-            "expanded": false,
-            "pages": [
+            "tab": "Guides",
+            "groups": [
               {
                 "group": "Introduction",
                 "pages": [
@@ -106,9 +81,24 @@
             ]
           },
           {
-            "dropdown": "EMV Core",
-            "expanded": false,
-            "pages": [
+            "tab": "API Reference",
+            "groups": [
+              {
+                "group": "Introduction",
+                "pages": [
+                  "/docs/c-sdk-simulator"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "dropdown": "EMV Core",
+        "tabs": [
+          {
+            "tab": "Guides",
+            "groups": [
               {
                 "group": "Introduction",
                 "pages": [
@@ -133,89 +123,6 @@
                   "/docs/remote-management",
                   "/docs/event-callbacks",
                   "/docs/reader-messages"
-                ]
-              }
-            ]
-          },
-          {
-            "dropdown": "Spark",
-            "expanded": false,
-            "pages": [
-              {
-                "group": "Introduction",
-                "pages": [
-                  "/docs/spark",
-                  "/docs/spark-integration",
-                  "/docs/spark-security-authentication",
-                  {
-                    "group": "Payment Flows",
-                    "expanded": false,
-                    "pages": [
-                      "/docs/transaction-flows-spark",
-                      "/docs/spark-device-start",
-                      "/docs/spark-remote-start",
-                      "/docs/spark-device-stop"
-                    ]
-                  },
-                  {
-                    "group": "Payment Flows",
-                    "expanded": false,
-                    "pages": [
-                      "/docs/marshall-payment-flows",
-                      "/docs/marshall-single-session-with-pre-sel",
-                      "/docs/marshall-single-session-with-pre-auth",
-                      "/docs/marshall-multi-session",
-                      "/docs/marshall-multi-vend-with-pre-sel",
-                      "/docs/marshall-multi-vend-with-pre-auth",
-                      "/docs/sub-flows-features"
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Manage Data & Operations",
-        "icon": "link",
-        "menu": [
-          {
-            "item": "Lynx API",
-            "icon": "link",
-            "description": "Connect to the Nayax Core management platform and manage your machines.",
-            "dropdown": [
-              {
-                "group": "Lynx API",
-                "pages": [
-                  "/docs/lynx-overview"
-                ]
-              }
-            ]
-          },
-          {
-            "item": "Amazon SQS",
-            "groups": [
-              {
-                "group": "Amazon SQS",
-                "pages": [
-                  "/docs/overview-1",
-                  {
-                    "group": "Amazon Queue Setup",
-                    "pages": [
-                      "/docs/create-new-queue",
-                      "/docs/set-up-queue-permissions",
-                      "/docs/create-user-for-queue-access"
-                    ]
-                  },
-                  {
-                    "group": "Setup Nayax Core",
-                    "pages": [
-                      "/docs/set-up-transaction-delivery",
-                      "/docs/set-up-eva-dts-dexddcmp-audit-file-delivery",
-                      "/update/docs/set-up-encryption-on-amazon-sqs-delivery"
-                    ]
-                  }
                 ]
               }
             ]
