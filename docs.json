@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Anvil2",
+  "name": "Nayax Developers",
   "colors": {
     "primary": "#FCC705",
     "light": "#FCC705",
@@ -28,6 +28,11 @@
   },
   "navigation": {
     "tabs": [
+      {
+        "tab": "Home",
+        "icon": "home",
+        "pages": ["/"]
+      },
       {
         "tab": "Integrate POS Devices",
         "icon": "laptop-code",
@@ -211,7 +216,7 @@
                     "group": "API Reference",
                     "openapi": {
                       "directory": "reference",
-                      "source": "openapi/spark.yaml"
+                      "source": "/openapi/spark.yaml"
                     }
                   }
                 ]
