@@ -12,7 +12,7 @@ To understand the pre-authorization flow, see the diagram below:
 
 Here's a breakdown of each step:
 
-1. After the cardholder selects the product or service, the Machine sends a [`doTransaction()`](https://developerhub.nayax.com/docs/dotransaction) Request to the Agamento Application through TweezerComm.
+1. After the cardholder selects the product or service, the Machine sends a [`doTransaction()`](/docs/dotransaction) Request to the Agamento Application through TweezerComm.
 2. The device then displays a prompt for the cardholder, requesting him to insert or swipe a card.
 3. The cardholder inserts, swipes, or taps their card on the Host Machine.
 4. The Agamento Application communicates with the Nayax Server for payment authorization.
@@ -24,7 +24,7 @@ Here's a breakdown of each step:
 <Warning>
 **Resilience Mechanis**
 
-If the `statusCode != 0` (indicating an issue) is returned, the system refers to the [Resilience Mechanism](https://developerhub.nayax.com/docs/resilience-flow) to understand how TweezerComm handles errors or retry mechanisms.
+If the `statusCode != 0` (indicating an issue) is returned, the system refers to the [Resilience Mechanism](/docs/resilience-flow) to understand how TweezerComm handles errors or retry mechanisms.
 </Warning>
 
 ## See Also

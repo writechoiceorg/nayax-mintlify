@@ -9,12 +9,12 @@ Tokens offer a secure method to store a card for future use, such as for subscri
 <Note>
 **Token Type Behaviour**
 
-A token's type (subscription/COF/top-up) is set during its initial creation and stored in our system. If a subsequent [Charge Token](https://developerhub.nayax.com/reference/post_charge-token) request includes a different token type parameter, it is ignored. The system always uses the original token type from the initialization request, regardless of what is provided in later charge requests.
+A token's type (subscription/COF/top-up) is set during its initial creation and stored in our system. If a subsequent [Charge Token](/reference/post_charge-token) request includes a different token type parameter, it is ignored. The system always uses the original token type from the initialization request, regardless of what is provided in later charge requests.
 </Note>
 
 ## Charge a Token
 
-The [ `/charge-token` ](https://developerhub.nayax.com/reference/post_charge-token) endpoint is used for recurring payments. It should be used for recurring payment calls and requires a card token to be added to the request. These calls are performed only on the server.
+The [ `/charge-token`](/reference/post_charge-token) endpoint is used for recurring payments. It should be used for recurring payment calls and requires a card token to be added to the request. These calls are performed only on the server.
 
 See an example request in the code block below:
 

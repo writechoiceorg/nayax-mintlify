@@ -6,28 +6,28 @@ Here's a comprehensive list of response codes, their descriptions, and the relev
 
 | Response Code | Description                               | Relevant API Methods                                                                         |
 | ------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `20`          | Machine Has No Device                     | [`/TriggerTransaction`](https://developerhub.nayax.com/docs/triggertransaction)                                              |
-| `21`          | Device Not Connected to MQTT Server       | [`/TriggerTransaction`](https://developerhub.nayax.com/docs/triggertransaction)                                              |
-| `22`          | Missing Device IP                         | [`/TriggerTransaction`](https://developerhub.nayax.com/docs/triggertransaction)                                              |
-| `23`          | IP Is Non-VPN                             | [`/TriggerTransaction`](https://developerhub.nayax.com/docs/triggertransaction)                                              |
-| `24`          | Machine Not Responding                    | [`/TriggerTransaction`](https://developerhub.nayax.com/docs/triggertransaction)                                              |
-| `25`          | Unknown Machine ID                        | [`/TriggerTransaction`](https://developerhub.nayax.com/docs/triggertransaction)                                              |
-| `26`          | Validation Error                          | [`/StartAuthentication`](https://developerhub.nayax.com/docs/startauthentication)                                            |
-| `27`          | Unknown Transaction ID                    | [`/Settlement`](https://developerhub.nayax.com/docs/settlement), [`/CancelTransaction`](https://developerhub.nayax.com/docs/canceltransaction)               |
-| `28`          | Already Cancelled                         | [`/CancelTransaction`](https://developerhub.nayax.com/docs/canceltransaction)                                                |
-| `29`          | Not Allowed to Wake Device                | [`/TriggerTransaction`](https://developerhub.nayax.com/docs/triggertransaction)                                              |
-| `30`          | Spark Integrator Not Active               | [`/StartAuthentication`](https://developerhub.nayax.com/docs/startauthentication)                                            |
-| `31`          | Cancellation Failed                       | [`/CancelTransaction`](https://developerhub.nayax.com/docs/canceltransaction)                                                |
-| `32`          | Transaction Not Found or Old              | [`/Settlement`](https://developerhub.nayax.com/docs/settlement) ,  [`/CancelTransaction`](https://developerhub.nayax.com/docs/canceltransaction)             |
-| `33`          | Fail To Authenticate                      | [`/StartAuthentication`](https://developerhub.nayax.com/docs/startauthentication)                                            |
-| `34`          | Missing Amount                            | [`/TriggerTransaction`](https://developerhub.nayax.com/docs/triggertransaction) ,[`/Settlement`](https://developerhub.nayax.com/docs/settlement)             |
-| `35`          | Settlement Failed                         | [`/Settlement`](https://developerhub.nayax.com/docs/settlement)                                                              |
-| `36`          | Site ID Not Found                         | [`/Settlement`](https://developerhub.nayax.com/docs/settlement) , [`/CancelTransaction`](https://developerhub.nayax.com/docs/canceltransaction)              |
-| `37`          | Authorization Failed                      | [`/TransactionCallback`](https://developerhub.nayax.com/docs/transactioncallback)                                            |
-| `38`          | Transaction Callback Failed               | [`/TransactionCallback`](https://developerhub.nayax.com/docs/transactioncallback)  [`/DeclineCallback`](https://developerhub.nayax.com/docs/declinecallback) |
-| `40`          | Timeout Callback Failed                   | [`/TimeoutCallback`](https://developerhub.nayax.com/reference/post_timeoutcallback)                                               |
-| `44`          | Timeout on POS Device                     | [`/DeclineCallback`](https://developerhub.nayax.com/docs/declinecallback)                                                    |
-| `45`          | Cancelled on POS Device                   | [`/DeclineCallback`](https://developerhub.nayax.com/docs/declinecallback)                                                    |
+| `20`          | Machine Has No Device                     | [`/TriggerTransaction`](/docs/triggertransaction)                                              |
+| `21`          | Device Not Connected to MQTT Server       | [`/TriggerTransaction`](/docs/triggertransaction)                                              |
+| `22`          | Missing Device IP                         | [`/TriggerTransaction`](/docs/triggertransaction)                                              |
+| `23`          | IP Is Non-VPN                             | [`/TriggerTransaction`](/docs/triggertransaction)                                              |
+| `24`          | Machine Not Responding                    | [`/TriggerTransaction`](/docs/triggertransaction)                                              |
+| `25`          | Unknown Machine ID                        | [`/TriggerTransaction`](/docs/triggertransaction)                                              |
+| `26`          | Validation Error                          | [`/StartAuthentication`](/docs/startauthentication)                                            |
+| `27`          | Unknown Transaction ID                    | [`/Settlement`](/docs/settlement), [`/CancelTransaction`](/docs/canceltransaction)               |
+| `28`          | Already Cancelled                         | [`/CancelTransaction`](/docs/canceltransaction)                                                |
+| `29`          | Not Allowed to Wake Device                | [`/TriggerTransaction`](/docs/triggertransaction)                                              |
+| `30`          | Spark Integrator Not Active               | [`/StartAuthentication`](/docs/startauthentication)                                            |
+| `31`          | Cancellation Failed                       | [`/CancelTransaction`](/docs/canceltransaction)                                                |
+| `32`          | Transaction Not Found or Old              | [`/Settlement`](/docs/settlement) ,  [`/CancelTransaction`](/docs/canceltransaction)             |
+| `33`          | Fail To Authenticate                      | [`/StartAuthentication`](/docs/startauthentication)                                            |
+| `34`          | Missing Amount                            | [`/TriggerTransaction`](/docs/triggertransaction) ,[`/Settlement`](/docs/settlement)             |
+| `35`          | Settlement Failed                         | [`/Settlement`](/docs/settlement)                                                              |
+| `36`          | Site ID Not Found                         | [`/Settlement`](/docs/settlement) , [`/CancelTransaction`](/docs/canceltransaction)              |
+| `37`          | Authorization Failed                      | [`/TransactionCallback`](/docs/transactioncallback)                                            |
+| `38`          | Transaction Callback Failed               | [`/TransactionCallback`](/docs/transactioncallback)  [`/DeclineCallback`](/docs/declinecallback) |
+| `40`          | Timeout Callback Failed                   | [`/TimeoutCallback`](/reference/post_timeoutcallback)                                               |
+| `44`          | Timeout on POS Device                     | [`/DeclineCallback`](/docs/declinecallback)                                                    |
+| `45`          | Cancelled on POS Device                   | [`/DeclineCallback`](/docs/declinecallback)                                                    |
 | `50`          | Deferred Settlement Failed                | /ExternalSettlement                                                                          |
 | `51`          | Deferred Cancel Failed                    | /ExternalCancel                                                                              |
 | `52`          | No Support for Deferred Settlement/Cancel | /ExternalSettlement, /ExternalCancel                                                         |

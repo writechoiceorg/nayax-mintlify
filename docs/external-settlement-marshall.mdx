@@ -2,14 +2,14 @@
 title: "Single Session Pre-Authorization with External Settlement"
 ---
 
-The Marshall implementation of [ExternalSettlement](https://developerhub.nayax.com/reference/post_externalsettlement) separates the authorization and settlement phases of a transaction.
+The Marshall implementation of [ExternalSettlement](/reference/post_externalsettlement) separates the authorization and settlement phases of a transaction.
 
 While the Marshall peripheral and Nayax device manage the initial interaction with the consumer and the payment card, the final financial settlement is performed by a 3rd Party Server that sends the settlement request to Nayax's servers.
 
 <Note>
 ****Prerequisite****
 
-For this flow to function, the [ExternalSettlement](https://developerhub.nayax.com/reference/post_externalsettlement) setting must be enabled by Nayax.
+For this flow to function, the [ExternalSettlement](/reference/post_externalsettlement) setting must be enabled by Nayax.
 </Note>
 
 ## Configuration & Device Behavior
@@ -18,8 +18,8 @@ Once enabled, the Nayax Engine changes how the physical device handles transacti
 
 * The device will not send its own settlement command after a successful authorization.
 * The transaction remains unsettled until an external request is received.
-* The only way to settle a transaction is via the [ExternalSettlement](https://developerhub.nayax.com/reference/post_externalsettlement) command.
-* For Multi-session flows, the "Close Session" command is no longer relevant; use [ExternalSettlement](https://developerhub.nayax.com/reference/post_externalsettlement) instead.
+* The only way to settle a transaction is via the [ExternalSettlement](/reference/post_externalsettlement) command.
+* For Multi-session flows, the "Close Session" command is no longer relevant; use [ExternalSettlement](/reference/post_externalsettlement) instead.
 
 This provides integrators the flexibility to trigger the settlement stage externally according to their own business logic, supporting all flow types (Pre-Selection/Pre-Authorization).
 
@@ -35,7 +35,7 @@ The following table has the technical requirements based on the feature:
 <Note>
 ****Incremental Authorization****
 
-External Settlement supports Incremental Authorization. Ensure your logic adheres to the Maximum Default Credit limits to avoid settlement failure. More on this in the [Incremental Authorization documentation](https://developerhub.nayax.com/docs/sub-flows-features#incremental-authorization).
+External Settlement supports Incremental Authorization. Ensure your logic adheres to the Maximum Default Credit limits to avoid settlement failure. More on this in the [Incremental Authorization documentation](/docs/sub-flows-features#incremental-authorization).
 </Note>
 
 ## Managing Unsettled Transactions
@@ -175,11 +175,11 @@ If the service was provided:
 
 <Frame>![](/images/docs/external-settlement-marshall/image3.png)</Frame>
 
-21. The 3rd Party Server sends an [ExternalSettlement](https://developerhub.nayax.com/reference/post_externalsettlement) request. It must contain: `NayaxTransactionId`, `SiteId` (information retrieved from the transaction's Transfer Data's command) and be sent within 48 hours of the authorization of the consumer's card.
+21. The 3rd Party Server sends an [ExternalSettlement](/reference/post_externalsettlement) request. It must contain: `NayaxTransactionId`, `SiteId` (information retrieved from the transaction's Transfer Data's command) and be sent within 48 hours of the authorization of the consumer's card.
 22. The peripheral notifies the server of the transaction's completion.
 23. The 3rd party server starts the authentication process.
 24. Nayax server sends a response.
-25. Nayax's servers send an [ExternalSettlement](https://developerhub.nayax.com/reference/post_externalsettlement) response to the 3rd-party server.
+25. Nayax's servers send an [ExternalSettlement](/reference/post_externalsettlement) response to the 3rd-party server.
 26. Nayax's servers notify the device of the settlement.
 27. Nayax's device notifies the consumer that the transaction has been settled for the final amount he was charged.
 28. Nayax Server sends an external settlement response.
@@ -192,10 +192,10 @@ If the service was not provided:
 
 24. The 3rd Party Server starts the authentication process.
 25. Nayax server sends a response.
-26. The 3rd Party Server sends an [ExternalCancel](https://developerhub.nayax.com/reference/post_externalcancel) request. It must contain: `NayaxTransactionId`, `SiteId` (information retrieved from the transaction's Transfer Data's command) and be sent within 48 hours of the authorization of the consumer's card.
+26. The 3rd Party Server sends an [ExternalCancel](/reference/post_externalcancel) request. It must contain: `NayaxTransactionId`, `SiteId` (information retrieved from the transaction's Transfer Data's command) and be sent within 48 hours of the authorization of the consumer's card.
 27. Nayax Server's initiate the cancellation process with the payment provider.
 28. Nayax's servers receive the response from the payment provider.
-29. Nayax's servers send an [ExternalCancel](https://developerhub.nayax.com/reference/post_externalcancel) response to the 3rd Party Server.
+29. Nayax's servers send an [ExternalCancel](/reference/post_externalcancel) response to the 3rd Party Server.
 
 <br />
 

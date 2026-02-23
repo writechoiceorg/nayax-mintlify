@@ -41,7 +41,7 @@ This version includes the following improvements, fixes, and known issues for th
 <Accordion title="Fixes" icon="fa-wrench">
   ### **Event Delivery and Reader Stability (#7443, #7497)**
 
-  Fixed an intermittent issue where [`ReaderMessageEvent`](https://developerhub.nayax.com/docs/reader-messages) would stop arriving at the host application. Additionally, we resolved a connectivity bug where the EMV Core was unable to reconnect to a serial reader following a POS firmware update.
+  Fixed an intermittent issue where [`ReaderMessageEvent`](/docs/reader-messages) would stop arriving at the host application. Additionally, we resolved a connectivity bug where the EMV Core was unable to reconnect to a serial reader following a POS firmware update.
 
   ### **Sample Application Token Reporting (Linux Only)**
 
@@ -67,7 +67,7 @@ This version includes the following improvements, fixes, and known issues for th
 
   ### **Authorizing Status Event (#7510)**
 
-  There is a known intermittent issue where the EMV Core may fail to send the [`ReaderMessageEvent`](https://developerhub.nayax.com/docs/reader-messages) with index 36 (“Authorizing”). Applications should handle the transaction flow even if this specific status update is missing.
+  There is a known intermittent issue where the EMV Core may fail to send the [`ReaderMessageEvent`](/docs/reader-messages) with index 36 (“Authorizing”). Applications should handle the transaction flow even if this specific status update is missing.
 </Accordion>
 
 ### SDK Version 1.2
@@ -77,13 +77,13 @@ This version includes the following improvements and known issues for the SDK:
 <Accordion title="Improvements" icon="fa-rocket">
   ### **e-Receipt and Remote Settlement Support (#6782, #7411)**
 
-  The SDK now supports e-Receipts and Remote (Deferred) Settlement. The [`TransactionComplete`](https://developerhub.nayax.com/docs/event-callbacks) API has been updated to return `additional_parameters`, allowing for a decoupled settlement flow where capture and final settlement occur independently across systems via a server-to-server API.
+  The SDK now supports e-Receipts and Remote (Deferred) Settlement. The [`TransactionComplete`](/docs/event-callbacks) API has been updated to return `additional_parameters`, allowing for a decoupled settlement flow where capture and final settlement occur independently across systems via a server-to-server API.
 
   ***
 
   ### **Nayax Core Attribute and Limit Management (#7139, #7346, #7269)**
 
-  We have introduced the [`UpdateMachineAttributes`](https://developerhub.nayax.com/docs/remote-management) API to transmit machine parameters to the Nayax Core. Additionally, EMV Contactless limits (`R_CL_TRANS_LIMIT`) and CDCVM transaction limits (`R_CDCVM_TRANS_LIMIT`) are now manageable directly from the Nayax Core.
+  We have introduced the [`UpdateMachineAttributes`](/docs/remote-management) API to transmit machine parameters to the Nayax Core. Additionally, EMV Contactless limits (`R_CL_TRANS_LIMIT`) and CDCVM transaction limits (`R_CDCVM_TRANS_LIMIT`) are now manageable directly from the Nayax Core.
 
   The SDK also provides expanded remote reset options (Restart Application, Reboot, or Restart Reader) triggered from the Nayax Core or OTI TMS.
 
@@ -191,7 +191,7 @@ This version includes the following improvements and known issues for the SDK:
 
   ### **Sample Test Application Enhancements (Linux Only)**
 
-  The Linux Sample application now includes full keyboard command support for all APIs and an optional ‘auto’ flow mode for continuous transaction loops. It also includes dedicated sample code for [`GetCardToken`](https://developerhub.nayax.com/docs/payment-1) and [`CardTokenReceived`](https://developerhub.nayax.com/docs/event-callbacks) functions.
+  The Linux Sample application now includes full keyboard command support for all APIs and an optional ‘auto’ flow mode for continuous transaction loops. It also includes dedicated sample code for [`GetCardToken`](/docs/payment-1) and [`CardTokenReceived`](/docs/event-callbacks) functions.
 
   ***
 
@@ -217,11 +217,11 @@ This version includes the following improvements and known issues for the SDK:
 
   ### **System Timing and Synchronization (#6658, #7200, #7204)**
 
-  Resolved logic issues in `PRE_AUTH_AMOUNT` and fixed a hang where [`TransactionComplete`](https://developerhub.nayax.com/docs/event-callbacks) would wait for a timeout if the reader was in boot. We also corrected a mutex timing bug that caused false-positive `SAT_Mutex_Acquire` timeout errors on some systems.
+  Resolved logic issues in `PRE_AUTH_AMOUNT` and fixed a hang where [`TransactionComplete`](/docs/event-callbacks) would wait for a timeout if the reader was in boot. We also corrected a mutex timing bug that caused false-positive `SAT_Mutex_Acquire` timeout errors on some systems.
 
   ### **Connectivity and Firmware Fixes (#7157, #7165, #6813)**
 
-  Fixed connectivity issues for the UNO-mini TTL after a reset and resolved recognition errors for Mifare PLUS ISO 14443-4 as closed loop. We also addressed a failure in [`GetCardToken`](https://developerhub.nayax.com/docs/payment-1) for specific Visa and Amex cards.
+  Fixed connectivity issues for the UNO-mini TTL after a reset and resolved recognition errors for Mifare PLUS ISO 14443-4 as closed loop. We also addressed a failure in [`GetCardToken`](/docs/payment-1) for specific Visa and Amex cards.
 
   > **Note:** These fixes require specific firmware versions: UNO-mini FW EMVS\_v071457, UNO-8 FW 54222, and UNO-8 FW 54216.
 
@@ -245,13 +245,13 @@ This version includes the following improvements and known issues for the SDK:
 
   ### **System Status and Messaging (#7199, #7196, #7205, #7182)**
 
-  The SDK does not currently trigger [`SystemStatusChanged`](https://developerhub.nayax.com/docs/event-callbacks) for network changes and may report a `Ready` status while the reader is still booting. Furthermore, [`CancelTransaction`](https://developerhub.nayax.com/docs/payment-1) will return "Cannot Cancel" if a transaction is already Authorizing or Completed.
+  The SDK does not currently trigger [`SystemStatusChanged`](/docs/event-callbacks) for network changes and may report a `Ready` status while the reader is still booting. Furthermore, [`CancelTransaction`](/docs/payment-1) will return "Cannot Cancel" if a transaction is already Authorizing or Completed.
 
   ***
 
   ### **Hardware and Resource Usage**
 
-  On UNO-mini hardware, the Left LED may stay illuminated after a poll timeout. Additionally, when a reader is unavailable, [`GetStatus`](https://developerhub.nayax.com/docs/remote-management) calls occur at a high frequency (every 1ms), which may increase resource usage.
+  On UNO-mini hardware, the Left LED may stay illuminated after a poll timeout. Additionally, when a reader is unavailable, [`GetStatus`](/docs/remote-management) calls occur at a high frequency (every 1ms), which may increase resource usage.
 
   ***
 
@@ -267,7 +267,7 @@ This version includes the following improvements and known issues for the SDK:
 <Accordion title="Improvements" icon="fa-rocket">
   ### **Mifare UID Support in GetCardToken (#6550)**
 
-  The [`GetCardToken`](https://developerhub.nayax.com/docs/payment-1) command has been updated to return the Mifare UID. This improvement allows for more precise identification of Mifare-based cards during the tokenization process, providing consistent card data across different card types.
+  The [`GetCardToken`](/docs/payment-1) command has been updated to return the Mifare UID. This improvement allows for more precise identification of Mifare-based cards during the tokenization process, providing consistent card data across different card types.
 
   ***
 
@@ -287,7 +287,7 @@ This version includes the following improvements and known issues for the SDK:
 <Accordion title="Fixes" icon="fa-wrench">
   ### **Closed Loop UID Reporting (#6980)**
 
-  Fixed an issue where the UID for closed loop cards was missing from the [`TransactionComplete`](https://developerhub.nayax.com/docs/event-callbacks) event. The SDK now correctly and consistently returns the UID upon transaction completion.
+  Fixed an issue where the UID for closed loop cards was missing from the [`TransactionComplete`](/docs/event-callbacks) event. The SDK now correctly and consistently returns the UID upon transaction completion.
 
   ### **UI and Input Stability (#6987, #7001)**
 
@@ -371,7 +371,7 @@ This version includes the following improvements and known issues for the SDK:
 <Accordion title="Fixes" icon="fa-wrench">
   ### **Offline Stability and Logic (#6919, #6938)**
 
-  Fixed a critical issue where the EMV Core would crash when no internet connection was detected. We also updated the [`Void`](https://developerhub.nayax.com/docs/payment-1) command logic: calling [`Void`](https://developerhub.nayax.com/docs/payment-1) after a [`Pre-Authorize`](https://developerhub.nayax.com/docs/payment-1) or `Pay` no longer incorrectly triggers a [`Cancel Transaction`](https://developerhub.nayax.com/docs/payment-1), allowing a new transaction to start independently.
+  Fixed a critical issue where the EMV Core would crash when no internet connection was detected. We also updated the [`Void`](/docs/payment-1) command logic: calling [`Void`](/docs/payment-1) after a [`Pre-Authorize`](/docs/payment-1) or `Pay` no longer incorrectly triggers a [`Cancel Transaction`](/docs/payment-1), allowing a new transaction to start independently.
 
   ### **TMS and Reader Connectivity (#6862)**
 
@@ -391,13 +391,13 @@ This version includes the following improvements and known issues for the SDK:
 
   ### **UNO-mini and Event Support (#6961)**
 
-  The current UNO-mini firmware does not support [`ReaderMessageEvent`](https://developerhub.nayax.com/docs/reader-messages), which may limit real-time visual or text feedback during certain operations on this hardware.
+  The current UNO-mini firmware does not support [`ReaderMessageEvent`](/docs/reader-messages), which may limit real-time visual or text feedback during certain operations on this hardware.
 
   ***
 
   ### **GetCardToken and Polling Limitations (#6978)**
 
-  The newly added [`GetCardToken`](https://developerhub.nayax.com/docs/payment-1) command does not yet support Continuous polling mode. The process will terminate after a single attempt or timeout.
+  The newly added [`GetCardToken`](/docs/payment-1) command does not yet support Continuous polling mode. The process will terminate after a single attempt or timeout.
 
   ***
 
@@ -425,7 +425,7 @@ This version includes the following improvements and known issues for the SDK:
 
   ### **Configuration Retrieval via GetAttribute() (Linux Only)**
 
-  We have added the [`GetAttribute()`](https://developerhub.nayax.com/docs/remote-management) command to the API, allowing host applications to retrieve configuration attributes directly from the SDK. This ensures the host can always verify the active configuration state in real-time.
+  We have added the [`GetAttribute()`](/docs/remote-management) command to the API, allowing host applications to retrieve configuration attributes directly from the SDK. This ensures the host can always verify the active configuration state in real-time.
 </Accordion>
 
 <Accordion title="Fixes" icon="fa-wrench">
@@ -447,13 +447,13 @@ This version includes the following improvements and known issues for the SDK:
 
   ### **Network Status Notifications**
 
-  The EMV Core does not currently trigger the [`SystemStatusChanged`](https://developerhub.nayax.com/docs/event-callbacks) callback for network connectivity changes. Developers should implement independent monitoring logic if the application needs to react to network state changes.
+  The EMV Core does not currently trigger the [`SystemStatusChanged`](/docs/event-callbacks) callback for network connectivity changes. Developers should implement independent monitoring logic if the application needs to react to network state changes.
 
   ***
 
   ### **Transaction Completion Event Delivery (#6582) (Linux Only)**
 
-  There is an intermittent issue where the [`TransactionComplete`](https://developerhub.nayax.com/docs/event-callbacks) event is not always successfully transmitted to the host application.
+  There is an intermittent issue where the [`TransactionComplete`](/docs/event-callbacks) event is not always successfully transmitted to the host application.
 
   ***
 
@@ -461,7 +461,7 @@ This version includes the following improvements and known issues for the SDK:
 
   Initiating a `PreAuthorize` command immediately after a previous one (without a card interaction) may fail.
 
-  **Workaround:** Wait for the [`TransactionComplete`](https://developerhub.nayax.com/docs/event-callbacks) event or use `GetStatus()` to verify terminal readiness; it will return `PaymentTransaction` if the reader is still polling.
+  **Workaround:** Wait for the [`TransactionComplete`](/docs/event-callbacks) event or use `GetStatus()` to verify terminal readiness; it will return `PaymentTransaction` if the reader is still polling.
 </Accordion>
 
 ### SDK Version 0.6.03 (Linux Only)
@@ -483,15 +483,15 @@ This version includes the following improvements, fixes, and known issues for th
 
   ### **Sequential Transaction Logic (#6576)**
 
-  Confirmed that calling [`PreAuthorize`](https://developerhub.nayax.com/docs/payment-1) while a previous [`PreAuthorize`](https://developerhub.nayax.com/docs/payment-1) command is still active (polling) is intentionally rejected.
+  Confirmed that calling [`PreAuthorize`](/docs/payment-1) while a previous [`PreAuthorize`](/docs/payment-1) command is still active (polling) is intentionally rejected.
 
-  **Guidance:** Developers should use the [`GetStatus()`](https://developerhub.nayax.com/docs/remote-management) command to verify if the terminal is ready. If the device is currently polling for a card, [`GetStatus()`](https://developerhub.nayax.com/docs/remote-management) will return the `PaymentTransaction` status.
+  **Guidance:** Developers should use the [`GetStatus()`](/docs/remote-management) command to verify if the terminal is ready. If the device is currently polling for a card, [`GetStatus()`](/docs/remote-management) will return the `PaymentTransaction` status.
 </Accordion>
 
 <Accordion title="Known Issues" icon="fa-exclamation-triangle">
   ### **Transaction Completion Event Delivery (#6582)**
 
-  There remains an intermittent issue where the [`TransactionComplete`](https://developerhub.nayax.com/docs/event-callbacks) event is not always successfully sent to the host application.
+  There remains an intermittent issue where the [`TransactionComplete`](/docs/event-callbacks) event is not always successfully sent to the host application.
 </Accordion>
 
 ### SDK Version 0.6.00 (Linux Only)
@@ -515,13 +515,13 @@ This version includes the following improvements and known issues for the SDK:
 
   ### **Sequential Pre-Authorization Failure (#6576)**
 
-  Initiating a [`PreAuthorize`](https://developerhub.nayax.com/docs/payment-1) command while a previous one is still active (and no card has been presented) will cause the command to fail. Users should ensure the current transaction is finalized or timed out before starting a new one.
+  Initiating a [`PreAuthorize`](/docs/payment-1) command while a previous one is still active (and no card has been presented) will cause the command to fail. Users should ensure the current transaction is finalized or timed out before starting a new one.
 
   ***
 
   ### **Transaction Event Delivery (#6582)**
 
-  The [`TransactionComplete`](https://developerhub.nayax.com/docs/event-callbacks) event is not always successfully transmitted to the host application, which may require the application to poll for status updates to confirm transaction outcomes.
+  The [`TransactionComplete`](/docs/event-callbacks) event is not always successfully transmitted to the host application, which may require the application to poll for status updates to confirm transaction outcomes.
 </Accordion>
 
 ### SDK Version 0.1 (Linux Only)

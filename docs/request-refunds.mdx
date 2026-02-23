@@ -38,12 +38,12 @@ This process can be performed programmatically through the Lynx API. The followi
 <Warning>
 **Authentication**
 
-Refer to the [Security & Token](https://developerhub.nayax.com/docs/security) page of this documentation to learn how to access your tokens and how to properly use them to authenticate your API requests.
+Refer to the [Security & Token](/docs/security) page of this documentation to learn how to access your tokens and how to properly use them to authenticate your API requests.
 </Warning>
 
 ### Initiating the request
 
-To start the request, use the [Request a Payment Refund](https://developerhub.nayax.com/reference/request-payment-refund)  endpoint to request a refund. Providing the attributes regarding the rebate in the body parameters of the request, as exemplified below:
+To start the request, use the [Request a Payment Refund](/reference/request-payment-refund)  endpoint to request a refund. Providing the attributes regarding the rebate in the body parameters of the request, as exemplified below:
 
 ```curl Request
 curl --request POST \
@@ -75,11 +75,11 @@ Below, you can see a description of each of the parameters:
 
 #### How to obtain TransactionID and SiteID
 
-The `TransactionId `and `SiteId ` can be retrieved in the Lynx API using the [ Get Last Sales for Machine ](https://developerhub.nayax.com/reference/get-last-sales-for-machine) endpoint to retrieve the last sales using the `MachineID` and the response object should have the necessary data.
+The `TransactionId `and `SiteId ` can be retrieved in the Lynx API using the [ Get Last Sales for Machine ](/reference/get-last-sales-for-machine) endpoint to retrieve the last sales using the `MachineID` and the response object should have the necessary data.
 
 ## Request Status
 
 Once you send the request, a notification email will be sent to the email address entered in the request parameters.
 
-The refund is now in the `pending `status and will need to be approved or declined. See [Approve or Decline a Refund](https://developerhub.nayax.com/docs/approve-or-decline-a-refund) for more details.
+The refund is now in the `pending `status and will need to be approved or declined. See [Approve or Decline a Refund](/docs/approve-or-decline-a-refund) for more details.
 

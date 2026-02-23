@@ -17,12 +17,12 @@ This page presents how to move a device from one operator to another using the L
 <Warning>
 **Authentication**
 
-Refer to the [Security & Token](https://developerhub.nayax.com/docs/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+Refer to the [Security & Token](/docs/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
 </Warning>
 
 ## Moving Devices
 
-Use the [Move Devices](https://developerhub.nayax.com/reference/move-devices-to-actor-id) endpoint to assign or move devices to the specified `actorId`. The request body should include an array of device identifiers, such as serial numbers. See the example request in nthe code block below:
+Use the [Move Devices](/reference/move-devices-to-actor-id) endpoint to assign or move devices to the specified `actorId`. The request body should include an array of device identifiers, such as serial numbers. See the example request in nthe code block below:
 
 ```curl Request
 curl -X PUT "https://lynx.nayax.com/operational/api/v1/devices/move/<ACTOR_ID>" \

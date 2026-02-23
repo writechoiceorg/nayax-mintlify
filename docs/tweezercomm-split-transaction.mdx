@@ -12,8 +12,8 @@ To understand the Split transaction flow, consider the following sequence of eve
 
 Here's a breakdown of each step:
 
-1. The Milgam System sends one or more [`addSubRetailer()` ](https://developerhub.nayax.com/docs/addsubretailer) requests to the Nayax Device. In the example, three such requests are made.
-2. The Milgam System performs its [`doPeriodic()`](https://developerhub.nayax.com/docs/doperiodic) call and then initiates a transaction with a [`doTransaction()`](https://developerhub.nayax.com/docs/dotransaction-ashrait) request.
+1. The Milgam System sends one or more [`addSubRetailer()`](/docs/addsubretailer) requests to the Nayax Device. In the example, three such requests are made.
+2. The Milgam System performs its [`doPeriodic()`](/docs/doperiodic) call and then initiates a transaction with a [`doTransaction()`](/docs/dotransaction-ashrait) request.
 3. The CardHolder presents their card.
 4. The Nayax Device communicates with the payment server to perform the Authorization and Settlement of the transaction.
 5. The payment server sends the transaction result back to the Nayax Device.

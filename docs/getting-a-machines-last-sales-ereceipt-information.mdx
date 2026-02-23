@@ -28,12 +28,12 @@ This page presents how to retrieve a Machine's Last Sales using its Machine ID w
 <Warning>
 **Authentication**
 
-Refer to the [Security & Token](https://developerhub.nayax.com/docs/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+Refer to the [Security & Token](/docs/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
 </Warning>
 
 ## Retrieving a Machine's Last Sales
 
-To retrieve a machine's Last Sales using its Machine ID, you need to use the [Get Last Sales for Machine](https://developerhub.nayax.com/reference/get-last-sales-for-machine) endpoint. By providing the machine's Machine ID in the request you can retrieve the corresponding machine's unique identifier.
+To retrieve a machine's Last Sales using its Machine ID, you need to use the [Get Last Sales for Machine](/reference/get-last-sales-for-machine) endpoint. By providing the machine's Machine ID in the request you can retrieve the corresponding machine's unique identifier.
 
 The code block below exemplifies the request, using the `MachineID` as a query parameter to filter the result:
 
@@ -353,7 +353,7 @@ You can also find the Machine's Last Sales in Nayax Core in the machine's detail
 
 ## Generating eReceipt
 
-To generate a transaction's eReceipt, you need to use the [Generate eReceipt](https://developerhub.nayax.com/reference/generate-ereceipt) endpoint. By providing the following information in the request:
+To generate a transaction's eReceipt, you need to use the [Generate eReceipt](/reference/generate-ereceipt) endpoint. By providing the following information in the request:
 
 * TransactionID, MachineAuthorizationTime, SiteID - all 3 fields' values are retrieved via the Last Sales method mentioned above
 * Machine ID

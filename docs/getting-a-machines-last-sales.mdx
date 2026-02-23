@@ -26,12 +26,12 @@ Lynx API allows you to do this process programmatically through a GET request. T
 <Warning>
 **Authentication**
 
-Refer to the [Security & Token](https://developerhub.nayax.com/docs/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+Refer to the [Security & Token](/docs/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
 </Warning>
 
 ### Retrieving the Last Sales
 
-You'll use the [Get Last Sales for Machine](https://developerhub.nayax.com/reference/get-last-sales-for-machine) endpoint, adding the machine's unique identifier as a path parameter to retrieve details about the respective machine. This lets you view the latest sales activity associated with the searched machine. See the example request in the code block below:
+You'll use the [Get Last Sales for Machine](/reference/get-last-sales-for-machine) endpoint, adding the machine's unique identifier as a path parameter to retrieve details about the respective machine. This lets you view the latest sales activity associated with the searched machine. See the example request in the code block below:
 
 ```curl Request
 curl -X GET "https://lynx.nayax.com/operational/api/v1/machines/<MachineID>/lastSales" \

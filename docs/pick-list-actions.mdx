@@ -38,12 +38,12 @@ These actions can also be performed through Lynx API using the following endpoin
 <Warning>
 **Authentication**
 
-Refer to the [Security & Token](https://developerhub.nayax.com/docs/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+Refer to the [Security & Token](/docs/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
 </Warning>
 
 ## Get Pick List from Machine
 
-You can retrieve the pick list associated with a specific machine using the [Get Pick List](https://developerhub.nayax.com/reference/get-pick-list) endpoint. See the example request below:
+You can retrieve the pick list associated with a specific machine using the [Get Pick List](/reference/get-pick-list) endpoint. See the example request below:
 
 ```curl Request
 curl --request GET \
@@ -62,7 +62,7 @@ A successful response will return the pick list with all the products available 
 
 ## Update Pick List
 
-You can modify the pick list for a specific machine using the [Update Pick List](https://developerhub.nayax.com/reference/update-pick-list) endpoint. This endpoint allows you to update the quantities of products to be restocked or adjust other details in the pick list. See the example request below:
+You can modify the pick list for a specific machine using the [Update Pick List](/reference/update-pick-list) endpoint. This endpoint allows you to update the quantities of products to be restocked or adjust other details in the pick list. See the example request below:
 
 ```curl Request
 curl --request PUT \
@@ -141,7 +141,7 @@ A successful response will return the pick list with the updated pick quantities
 
 ## Delete Pick List
 
-Using the [Delete Pick List](https://developerhub.nayax.com/reference/delete-pick-list) endpoint, you can remove the existing pick list associated with a specific machine. This endpoint helps operators clear outdated or incorrect pick lists to ensure accurate restocking processes.
+Using the [Delete Pick List](/reference/delete-pick-list) endpoint, you can remove the existing pick list associated with a specific machine. This endpoint helps operators clear outdated or incorrect pick lists to ensure accurate restocking processes.
 
 ```curl Request
 curl --request DELETE \

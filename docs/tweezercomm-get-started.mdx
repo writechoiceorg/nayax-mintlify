@@ -47,12 +47,12 @@ To request TweezerComm via the SPICy server, the client application must send an
 In this request, you need to configure the following parameters:
 
 * `jsonrpc`: Defines the JSON-RPC version. In this case, always set it to `2.0`.
-* `method`: Specifies the method to be used. See [Global Payment Methods](https://developerhub.nayax.com/docs/transaction-methods), [Israel Payment Methods](https://developerhub.nayax.com/docs/tweezercomm-israel-payment-methods), and [Device Methods](https://developerhub.nayax.com/docs/device-methods) for a list and description of available methods.
+* `method`: Specifies the method to be used. See [Global Payment Methods](/docs/transaction-methods), [Israel Payment Methods](/docs/tweezercomm-israel-payment-methods), and [Device Methods](/docs/device-methods) for a list and description of available methods.
 * `id`: A unique identifier for tracking the request.
 * `params`:  This is an array divided into two parts.
   * The first specifies the payment service to be used:
-    * `engine` for global transactions. See [Global Payment Flows](https://developerhub.nayax.com/docs/payment-flows-copy-1) for more details.
-    * `ashrait` for Israel transactions. See [Israel Payment Flows](https://developerhub.nayax.com/docs/tweezercomm-israel-payment-flows) for more details.
+    * `engine` for global transactions. See [Global Payment Flows](/docs/payment-flows-copy-1) for more details.
+    * `ashrait` for Israel transactions. See [Israel Payment Flows](/docs/tweezercomm-israel-payment-flows) for more details.
   * The second part contains the parameters specific to the requested method.
 
 By following this structure, client applications can reliably interact with TweezerComm for secure and efficient payment processing.

@@ -6,17 +6,17 @@ The Device Start flow initiates directly at the Nayax terminal, allowing consume
 
 The Device Start flow makes use of the following Spark methods:
 
-* [`StartSession`](https://developerhub.nayax.com/reference/post_startsession)
-* [`InfoQuery` ](https://developerhub.nayax.com/reference/post_infoquery)
-* [`TransactionNotify`](https://developerhub.nayax.com/reference/post_transactionnotify)
-* [`Settlement`](https://developerhub.nayax.com/reference/post_settlement)
-* [`CancelTransaction`](https://developerhub.nayax.com/reference/post_canceltransaction)
-* [`TimeoutCallback`](https://developerhub.nayax.com/reference/post_timeoutcallback)
+* [`StartSession`](/reference/post_startsession)
+* [`InfoQuery`](/reference/post_infoquery)
+* [`TransactionNotify`](/reference/post_transactionnotify)
+* [`Settlement`](/reference/post_settlement)
+* [`CancelTransaction`](/reference/post_canceltransaction)
+* [`TimeoutCallback`](/reference/post_timeoutcallback)
 
 <Note>
 **Pre-Authorization Only**
 
-Device Start currently only supports pre-authorization, for an option with Pre-Selection see [Remote Start](https://developerhub.nayax.com/docs/spark-remote-start).
+Device Start currently only supports pre-authorization, for an option with Pre-Selection see [Remote Start](/docs/spark-remote-start).
 </Note>
 
 ## Pre-Authorization Flow
@@ -27,18 +27,18 @@ To understand the device start pre-authorization flow, see the diagram below:
 
 Below is a breakdown of the diagram:
 
-1. A consumer selects a service station (and/or presents a card) on the Nayax Device, which sends an [`InfoQuery` ](https://developerhub.nayax.com/reference/post_infoquery) request to the Nayax Server.
-2. The Nayax Server sends a [`StartSession`](https://developerhub.nayax.com/reference/post_startsession) to the 3rd Party Server.
+1. A consumer selects a service station (and/or presents a card) on the Nayax Device, which sends an [`InfoQuery`](/reference/post_infoquery) request to the Nayax Server.
+2. The Nayax Server sends a [`StartSession`](/reference/post_startsession) to the 3rd Party Server.
 3. The 3rd Party Server responds to the Nayax Server with a `StartSession Response`.
 4. The Nayax Server sends a `InfoQuery` to the 3rd Party Server.
 5. The 3rd Party Server responds to the Nayax Server with a `InfoQuery`.
 6. The Nayax Server sends an `InfoQuery` command back to the Nayax Device.
 7. The consumer presents their card (if they haven't already done so). An `AuthorizationRequest` is sent from the Nayax Device to the Nayax Server.
-8. The Nayax Server performs authorization with a Payment Provider and then sends a [`TransactionNotify`](https://developerhub.nayax.com/reference/post_transactionnotify)  to the 3rd Party Server.
-9. The 3rd Party Server responds to the Nayax Server with a [`TransactionNotify`](https://developerhub.nayax.com/reference/post_transactionnotify)Response.
+8. The Nayax Server performs authorization with a Payment Provider and then sends a [`TransactionNotify`](/reference/post_transactionnotify)  to the 3rd Party Server.
+9. The 3rd Party Server responds to the Nayax Server with a [`TransactionNotify`](/reference/post_transactionnotify)Response.
 10. The Nayax Server sends an `AuthorizationResponse `Back to the Nayax Device. At this point, the service can be provided on the Service Station, and the Nayax Device is back to idle.
-11. The 3rd Party Server sends a [`Settlement`](https://developerhub.nayax.com/reference/post_settlement)  command to the Nayax Server.
-12. The Nayax Server performs the settlement with the Payment Provider and then sends a [`Settlement`](https://developerhub.nayax.com/reference/post_settlement)  back to the 3rd Party Server.
+11. The 3rd Party Server sends a [`Settlement`](/reference/post_settlement)  command to the Nayax Server.
+12. The Nayax Server performs the settlement with the Payment Provider and then sends a [`Settlement`](/reference/post_settlement)  back to the 3rd Party Server.
 
 ## See Also
 

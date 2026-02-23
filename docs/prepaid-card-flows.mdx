@@ -22,11 +22,11 @@ See the diagram below:
 The steps in this process are as follows:
 
 1. The process begins when the customer inserts or taps their prepaid card on the Nayax Device. This action triggers the Device to send an Authorization Command Nayax Engine, including details about the selected product or service. This allows the system to request authorization from the integrator for the prepaid card payment.
-2. The Cortina API then initiates a service session using the [Start Session](https://developerhub.nayax.com/reference/post_cortina-startsession) endpoint and sends a [Prepaid Sale](https://developerhub.nayax.com/reference/post_cortina-prepaid-sale) request to the Integrator. This request includes all the necessary details to authorize the payment for the product or service.
+2. The Cortina API then initiates a service session using the [Start Session](/reference/post_cortina-startsession) endpoint and sends a [Prepaid Sale](/reference/post_cortina-prepaid-sale) request to the Integrator. This request includes all the necessary details to authorize the payment for the product or service.
 3. The Integrator processes the request and sends an approval or decline message to the Cortina API. If the prepaid card has enough balance, the request is approved.
 4. Upon approval from the integrator, the Naya Engine sends an Authorization Response indicating that the transaction has been successfully authorized. This confirms that the customer’s prepaid card has sufficient funds to proceed.
 5. After receiving the authorization response, the Nayax Device acknowledges that the service or product has been approved and sends a Settlement Request to the Nayax engine.
-6. Once the service is completed or the product has been dispensed, the Nayax Device sends a[ Sale End](https://developerhub.nayax.com/reference/post_cortina-saleendnotification) request in the Cortina API. This indicates the completion of the transaction and that the customer has received the service or product.
+6. Once the service is completed or the product has been dispensed, the Nayax Device sends a[ Sale End](/reference/post_cortina-saleendnotification) request in the Cortina API. This indicates the completion of the transaction and that the customer has received the service or product.
 7. The Integrator confirms receipt of the Sale End Notification by responding and marking the transaction as fully completed.
 8. The Nayax Device receives the Settlement Command Response, confirming that the transaction has been successfully processed and the sale is complete.
 
@@ -35,13 +35,13 @@ This response is typically always approved in this flow, as the authorization ha
 <Warning>
 **Void**
 
-In case the product fails to be dispensed to client, the Nayax Engine uses the[ Prepaid Void](https://developerhub.nayax.com/reference/post_cortina-prepaid-void) endpoind to void the payment request.
+In case the product fails to be dispensed to client, the Nayax Engine uses the[ Prepaid Void](/reference/post_cortina-prepaid-void) endpoind to void the payment request.
 </Warning>
 
 <Warning>
 **Timeout Void**
 
-In case that no Sale response will be recived within the timeout period, or that a `992` response code is be received,  the Nayax Engine uses the [Prepaid Void](https://developerhub.nayax.com/reference/post_cortina-prepaid-void) endpoind to void the request.
+In case that no Sale response will be recived within the timeout period, or that a `992` response code is be received,  the Nayax Engine uses the [Prepaid Void](/reference/post_cortina-prepaid-void) endpoind to void the request.
 
 To indicate that the Void is sent due to timeout, the flag `isGatewayTimeout` is sent as `True`.
 </Warning>
@@ -57,26 +57,26 @@ See the diagram below:
 Where:
 
 1. The process begins when the Device sends an Authorization Command Request to the Nayax Engine.
-2. The Nayax Engine performs a [Start Session Request](https://developerhub.nayax.com/reference/post_cortina-startsession) using Cortina API to establish a session for the transaction. The request is directed to the Integrator (the payment processor or gateway).
+2. The Nayax Engine performs a [Start Session Request](/reference/post_cortina-startsession) using Cortina API to establish a session for the transaction. The request is directed to the Integrator (the payment processor or gateway).
 3. The Integrator processes the request and sends a response to the Nayax Engine.
-4. The Nayax Engine performs an [Authorization Request](https://developerhub.nayax.com/reference/post_cortina-prepaid-authorization) to the Integrator using Cortina APÌ. This request checks if the prepaid card has sufficient funds for the transaction.
+4. The Nayax Engine performs an [Authorization Request](/reference/post_cortina-prepaid-authorization) to the Integrator using Cortina APÌ. This request checks if the prepaid card has sufficient funds for the transaction.
 5. The Cortina API returns an Authorization Response indicating whether the transaction has been approved or declined based on the availability of funds on the prepaid card.
 6. The Nayax Engine receives the Authorization Response from the Cortina API and returns it to the Device. If approved, the device proceeds with the transaction and prepares to dispense the product.
 7. After the transaction is authorized, the Device sends a Settlement Command to the Nayax Engine to finalize the transaction and confirm the payment amount.
-8. The Nayax Engine forwards the Settlement Request to the integrator using Cortina's API [Prepaid Card Settlement](https://developerhub.nayax.com/reference/post_cortina-prepaid-settlement) endpoint, which includes the final transaction amount to be settled.
+8. The Nayax Engine forwards the Settlement Request to the integrator using Cortina's API [Prepaid Card Settlement](/reference/post_cortina-prepaid-settlement) endpoint, which includes the final transaction amount to be settled.
 9. The Cortina API sends the Settlement Response to the Integrator, confirming that the transaction has been successfully settled and the funds have been transferred.
 10. Finally, the Device receives the Settlement Command Response, which indicates that the transaction has been completed successfully and that the product has been dispensed to the customer.
 
 <Warning>
 **Cancellation**
 
-In case the product fails to be dispensed to client, the Nayax Engine uses the [ Prepaid Cancel](https://developerhub.nayax.com/reference/post_cortina-prepaid-cancel) endpoint to cancel the Pre Authorization and the transaction.
+In case the product fails to be dispensed to client, the Nayax Engine uses the [ Prepaid Cancel](/reference/post_cortina-prepaid-cancel) endpoint to cancel the Pre Authorization and the transaction.
 </Warning>
 
 <Warning>
 **Timeout Void**
 
-In case that no Sale response will be recived within the timeout period, or that a 992 response code will be recived,   the Nayax Engine uses the [Prepaid Void](https://developerhub.nayax.com/reference/post_cortina-prepaid-void) endpoind to void the payment request. To indicate that the Void is sent due to timeout, the flag `isGatewayTimeout` will be sent as `True`.
+In case that no Sale response will be recived within the timeout period, or that a 992 response code will be recived,   the Nayax Engine uses the [Prepaid Void](/reference/post_cortina-prepaid-void) endpoind to void the payment request. To indicate that the Void is sent due to timeout, the flag `isGatewayTimeout` will be sent as `True`.
 </Warning>
 
 

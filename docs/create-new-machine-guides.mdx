@@ -24,12 +24,12 @@ Lynx API allows you to do this process programatically trough a POST request. Th
 <Warning>
 **Authentication**
 
-Refer to the [Security & Token](https://developerhub.nayax.com/docs/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+Refer to the [Security & Token](/docs/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
 </Warning>
 
 ## Request to Create New Machine
 
-Use the [Create New Machine](https://developerhub.nayax.com/reference/create-new-machine) endpoint to create a new machine. The following code block exemplifies the request to create a new machine:
+Use the [Create New Machine](/reference/create-new-machine) endpoint to create a new machine. The following code block exemplifies the request to create a new machine:
 
 ```curl Request
 curl -X POST "https://lynx.nayax.com/operational/api/v1/machines" \
@@ -138,10 +138,10 @@ You need to provide various mandatory fields in the body parameters, such as:
 | **Field Name**     | **Description**                                                                                                                                                                                                                     |
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ActorID`          | The operator's ID under which the machine is being created.                                                                                                                                                                         |
-| `CountryID`        | ID representing the machine's country. Use the [Get Countries](https://developerhub.nayax.com/reference/get-countries) endpoint for a list of available country codes.                                                                                                   |
-| `CurrencyID`       | ID for the machine's currency. Use the [Get Currencies](https://developerhub.nayax.com/reference/get-currencies)  endpoint for a list of available currency codes.                                                                                                       |
-| `MachineGroupID`   | ID of the group to which the machine belongs. You can view existing groups with the [List All Machine Groups for Actor](https://developerhub.nayax.com/reference/get-all-machine-groups-for-actor) endpoint.                                                             |
-| `MachineModelID`   | ID for the machine's model. To obtain the machine model of an existing machine, you can copy and paste the `MachineModelId` from the [Get Specific Machine Basic Info](https://developerhub.nayax.com/reference/get-machine-basic-info) endpoint for a specific machine. |
+| `CountryID`        | ID representing the machine's country. Use the [Get Countries](/reference/get-countries) endpoint for a list of available country codes.                                                                                                   |
+| `CurrencyID`       | ID for the machine's currency. Use the [Get Currencies](/reference/get-currencies)  endpoint for a list of available currency codes.                                                                                                       |
+| `MachineGroupID`   | ID of the group to which the machine belongs. You can view existing groups with the [List All Machine Groups for Actor](/reference/get-all-machine-groups-for-actor) endpoint.                                                             |
+| `MachineModelID`   | ID for the machine's model. To obtain the machine model of an existing machine, you can copy and paste the `MachineModelId` from the [Get Specific Machine Basic Info](/reference/get-machine-basic-info) endpoint for a specific machine. |
 | `MachineName`      | The name of the virtual machine.                                                                                                                                                                                                    |
 | `MachineStatusBit` | Status of the machine: `1` for active, `2` for inactive.                                                                                                                                                                            |
 | `LanguageID`       | ID represents the language used by the machine.                                                                                                                                                                                     |

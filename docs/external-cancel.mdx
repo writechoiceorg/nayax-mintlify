@@ -10,8 +10,8 @@ If no service is provided, you must send a cancellation request immediately. Fai
 
 The External Cancel flow makes use of the following Spark methods:
 
-* [StartAuthentication](https://developerhub.nayax.com/reference/post_startauthentication)
-* [ExternalCancel](https://developerhub.nayax.com/reference/post_externalcancel)
+* [StartAuthentication](/reference/post_startauthentication)
+* [ExternalCancel](/reference/post_externalcancel)
 
 ### External Cancel Flow
 
@@ -28,9 +28,9 @@ Below is a breakdown of the diagram:
 1. **Authorization Request**: The process begins when a transaction is initiated on the Nayax Device, which sends an authorization request to the Nayax Server.
 2. **Authorization Response**: The Nayax Server authorizes the amount with the payment provider and sends the response to the device. The device then returns to an **IDLE** state.
 3. **Service Failure**: A failure occurs, and no service or product is delivered to the consumer.
-4. **/StartAuthentication**: To resolve the failed transaction, the **Third-Party Server** initiates communication by calling the [StartAuthentication](https://developerhub.nayax.com/reference/post_startauthentication) method.
+4. **/StartAuthentication**: To resolve the failed transaction, the **Third-Party Server** initiates communication by calling the [StartAuthentication](/reference/post_startauthentication) method.
 5. **Authentication Response**: The Nayax Server validates the credentials and responds with a success message.
-6. **/ExternalCancel**: The **Third-Party Server** sends the [ExternalCancel](https://developerhub.nayax.com/reference/post_externalcancel) request. This must include the original `NayaxTransactionId`and `SiteId`.
+6. **/ExternalCancel**: The **Third-Party Server** sends the [ExternalCancel](/reference/post_externalcancel) request. This must include the original `NayaxTransactionId`and `SiteId`.
 7. **Financial Reversal**: Upon receiving the request, the Nayax Server performs the cancellation with the payment provider to release the funds.
 8. **External Cancel Response**: The Nayax Server confirms the cancellation outcome to the Third-Party Server.
 
@@ -40,8 +40,8 @@ If a request fails, the follow-up action depends on which stage of the process f
 
 | Failure Type                | Description                                                                     | Recommended Action                                                                                                                                                |
 | :-------------------------- | :------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Authentication Failure**  | The [StartAuthentication](https://developerhub.nayax.com/reference/post_startauthentication) call failed.            | The Third-Party Server should retry the authentication request immediately.                                                                                       |
-| **External Cancel Failure** | The [ExternalCancel](https://developerhub.nayax.com/reference/post_externalcancel) call failed or returned an error. | **No manual action required.** If the initial request fails, the Nayax Server provides a safeguard by automatically retrying the cancellation later (AutoCancel). |
+| **Authentication Failure**  | The [StartAuthentication](/reference/post_startauthentication) call failed.            | The Third-Party Server should retry the authentication request immediately.                                                                                       |
+| **External Cancel Failure** | The [ExternalCancel](/reference/post_externalcancel) call failed or returned an error. | **No manual action required.** If the initial request fails, the Nayax Server provides a safeguard by automatically retrying the cancellation later (AutoCancel). |
 
 <Danger>
 **Important Terminologies:**
