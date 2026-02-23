@@ -1,0 +1,261 @@
+---
+title: "Pick Lists"
+---
+
+A Pick List in Nayax is a generated list of products that need to be restocked or replenished in a specific vending machine or inventory location. It is designed to simplify restocking by identifying the required products and their quantities, ensuring that vending machines are always fully stocked and operational.
+
+In Nayax Core, you can create pick lists following the steps below:
+
+1. In your Dashboard, go to **Operations > Inventory Dashboard**.
+2. Use the search filter to look for your desired machine.
+3. Right-click the machine and select **Pick List > Generate Pick List**.
+
+<Frame>![](/images/docs/pick-lists/image1.png)</Frame>
+
+This will generate the list of the machines you choose.
+
+<Note>
+**Pick List for Multiple Machines**
+
+Nayax Core allows you to generate the pick list for more than one machine, for example if you want to generate the pick list for all the machines under a specific Route, follow the steps below:
+
+1. Add the filter to the search feature.
+2. Select all the machines in the list (you can also individually select the machines you want).
+3. Click **Actions > Generate Pick List**
+
+<Frame><img src="/images/docs/pick-lists/image2.png" /></Frame>
+</Note>
+
+<br />
+
+## Lynx API
+
+Lynx API allows you to programmatically create a pick list for a specific machine using the endpoint below:
+
+<HTMLBlock>
+  {`
+  <style>
+    .endpoint_card_container {
+      gap: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+
+      .card {
+        display: flex;
+        position: relative;
+        padding: 16px 18px;
+        align-items: flex-start;
+        justify-content: start;
+        gap: 12px;
+        border-radius: 6px;
+        border: 1px solid #DCDCDC;
+        background-color: #FFF;
+        text-decoration: none !important;
+        transition: all 0.3s ease, border 0.1s ease;
+
+        .card_content {
+          font-feature-settings: 'clig' off, 'liga' off;
+          font-family: Inter;
+          font-style: normal;
+          line-height: 18px;
+
+          h3 {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex-wrap: wrap;
+            color: #383838;
+            font-size: 17.5px;
+            font-weight: 700;
+            margin: 0 38px 0 0;
+
+            span {
+              position: absolute;
+              top: 10px;
+              right: -5px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              flex-shrink: 0;
+              color: #FFF !important;
+              text-align: center;
+              font-size: 8px;
+              font-weight: 700;
+              text-transform: uppercase;
+              width: 40px;
+              height: 16px;
+              flex-shrink: 0;
+              border-radius: var(--border-radius-lg);
+              margin: 0 15px 0 0;
+            }
+
+            .get {
+              background: #0e9b71;
+              text-shadow: 1px 1px 0 #0d8d67, 0 1px 0 #0d8d67, 1px 0 0 #0d8d67;
+            }
+
+            .post {
+              background: #0171c2;
+              text-shadow: 1px 1px 0 #0168b3, 0 1px 0 #0168b3, 1px 0 0 #0168b3;
+            }
+
+            .patch {
+              background: #df7d03;
+              text-shadow: 1px 1px 0 #d07503, 0 1px 0 #d07503, 1px 0 0 #d07503;
+            }
+
+            .put {
+              background: #674ead;
+              text-shadow: 1px 1px 0 #604aa2, 0 1px 0 #604aa2, 1px 0 0 #604aa2;
+            }
+          }
+
+          p {
+            color: #676767;
+            font-size: 14px;
+            font-weight: 400;
+            margin-bottom: 5px;
+          }
+
+          .link {
+            color: #d2a900;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 18px;
+            text-decoration: none;
+
+            svg {
+              fill: #d2a900;
+            }
+          }
+
+          .link:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .card:hover {
+        border: 1px solid #d2a900;
+        box-shadow: 0px 0px 9.7px 0px rgba(0, 0, 0, 0.21);
+
+        h3 {
+          color: #d2a900;
+        }
+      }
+    }
+
+    @media only screen and (max-width: 400px) {
+      .endpoint_card_container {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+    }
+
+    @media only screen and (max-width: 350px) {
+      .endpoint_card_container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      [data-color-mode="system"] .card {
+        border: 1px solid #556974;
+        background-color: #20292e;
+
+        .card_content {
+
+          h3,
+          p {
+            color: #FFF;
+          }
+
+          .link {
+            color: #d2a900;
+
+            svg {
+              fill: #d2a900;
+            }
+          }
+        }
+      }
+
+      [data-color-mode="system"] .card:hover {
+        h3 {
+          color: #d2a900 !important;
+        }
+      }
+    }
+
+    [data-color-mode="dark"] .card {
+      border: 1px solid #556974;
+      background-color: #20292e;
+
+      .card_content {
+
+        h3,
+        p {
+          color: #FFF;
+        }
+
+        .link {
+          color: #d2a900;
+
+          svg {
+            fill: #d2a900;
+          }
+        }
+      }
+    }
+
+    [data-color-mode="dark"] .card:hover {
+      h3 {
+        color: #d2a900 !important;
+      }
+    }
+  </style>
+
+  <body>
+    <div class="endpoint_card_container">
+      <a class="card" href="/v1.0/reference/generate-pick-list">
+        <div class="card_content">
+          <h3><span class="post">post</span> Create Pick List</h3>
+        </div>
+      </a>
+
+    </div>
+  </body>
+  `}
+</HTMLBlock>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](https://developerhub.nayax.com/docs/security) page of this documentation to learn how to access your tokens and how to properly use them to authenticate your API requests.
+</Warning>
+
+### Generate a New Pick List Request
+
+Use the [Create Pick List](https://developerhub.nayax.com/reference/generate-pick-list) endpoint to create a list for a specified machine based on its current stock levels and sales data.
+
+```bash
+curl -X POST "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/pickLists" \
+-H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+-H "Content-Type: application/json" 
+```
+
+<Note>
+**Path Params**
+
+Replace `<MACHINE_ID>` with the actual identifier of the machine for which you want to generate the pick list.
+</Note>
+
+<HTMLBlock>
+  {`
+  <style>
+  img:not(.rm-Logo-img) {
+      border-radius: 12px;
+      box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13)
+  }
+  </style>
+  `}
+</HTMLBlock>

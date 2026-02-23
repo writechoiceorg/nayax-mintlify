@@ -1,0 +1,58 @@
+---
+title: "DynamicQR"
+---
+
+DynamicQR codes enable customers to complete payments by scanning the code with their mobile device, but with an added layer of security generating a unique code for each transaction, ensuring the QR code cannot be reused, making it ideal for high-value or secure transactions.
+
+## How it works
+
+The image below describes the typical usage flow of DynamicQR.
+
+<Frame><img src="/images/docs/cortina-dynamicqr/image1.png" /></Frame>
+
+Where:
+
+1. The customer starts by selecting a product.
+2. The customer chooses the QR payment option.
+3. The device presents the generated QR code.
+4. The customer scans this code to initiate the payment.
+5. The payment is processed and approved.
+
+<Warning>
+**Pre-Selection Only**
+
+Cortina Dynamic QR currently only supports Pre-Selection transaction types.
+</Warning>
+
+## Pre-selection Flow
+
+The Pre-selection flow simplifies the payment process by merging the steps of product/service selection and authorization into a single transaction. This flow is typically used for low-value or quick transactions, where the customer’s selection and payment authorization are handled together in one step.
+
+See the diagram below:
+
+<Frame><img src="/images/docs/cortina-dynamicqr/image2.png" /></Frame>
+
+The steps in this process are as follows:
+
+1. The process begins with selecting a product or service on the machine. This action triggers the Machine to send a QR command request to the Nayax Server, informing it of the incoming transaction.
+2. The Server sends the request to the integrator using the [DynamicQR GenerateQR](https://developerhub.nayax.com/reference/post_cortina-dynamicqr-generateqr) endpoint.
+3. The Device approves the request and sends a Payment Request to the Nayax Server, which begins the payment authorization process.
+4. The Server sends the request to the integrator using the [DynamicQR Inquiry](https://developerhub.nayax.com/reference/post_cortina-dynamicqr-inquiry) endpoint.
+5. The Nayax Server receives the Response from the Integrator and returns it to the Device.
+6. If authorized, the Device begins the Vending Session, and the machine dispenses the product or service. The device sends the settlement command to the Nayax Server.
+7. The Nayax server forwards the Settlement Request to the integrator using Cortina's API [Sale End Notification](https://developerhub.nayax.com/reference/post_cortina-saleendnotification) endpoint, with the final transaction amount to be settled.
+
+This response is typically always approved in this flow, as the authorization has already been granted.
+
+<HTMLBlock>
+  {`
+  <style>
+  img:not(.rm-Logo-img) {
+      border-radius: 12px;
+      box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13)
+  }
+  </style>
+  `}
+</HTMLBlock>
+
+<br />

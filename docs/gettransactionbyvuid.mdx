@@ -1,0 +1,91 @@
+---
+title: "getTransactionByVuid"
+---
+
+The `getTransactionByVuid `method retrieves a transaction using its vendor-unique identifier (vuid). This allows client applications to fetch transaction details, including status, amount, and processing details.
+
+This method helps track transactions, confirm their status, and retrieve essential metadata, such as entry mode, timestamps, and deposit status.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](https://developerhub.nayax.com/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, the `method `field needs to be set to `getTransactionByVuid`, as shown in the example request below:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getTransactionByVuid",
+    "id": "123454352",
+    "params": [
+        "engine",
+        {
+            "vuid": "48a70a44-a919-4587-901e-bafb073aef0e"
+        }
+    ]
+}
+```
+
+### Request Parameters
+
+See the table below for a description of the available request parameters for this method.
+
+| Name   | Type   | Description                                    |
+| ------ | ------ | ---------------------------------------------- |
+| `vuid` | string | Vendor (client) unique transaction identifier. |
+
+## Response
+
+A successful request will return a response similar to the one in the code block below:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "TRANSACTION APPROVED",
+        "appVersion": "01.06.62",
+        "vuid": "48a70a44-a919-4587-901e-bafb073aef0e",
+        "amount": 100,
+        "transactionId": "2038587830",
+        "entryMode": 4,
+        "transactionOriginalRequestId": "fa19cf10-2294-441e-9739-9c8521801cff",
+        "transactionOriginalTime": "2025-03-05 23:41:32.963",
+        "transactionOriginalAmount": 100,
+        "isFinalAmount": 1,
+        "transactionDeposited": 1,
+        "tranType": 1,
+        "currencyCode": "840",
+        "originalSiteId": 1,
+        "mainBoardSerial": "000177234933444",
+        "hwSerial": "0900044624102737"
+    }
+}
+```
+
+### Response Parameters
+
+Below is a table with all the possible response parameters and their description:
+
+| Name                           | Type    | Description                                         |
+| ------------------------------ | ------- | --------------------------------------------------- |
+| `id`                           | string  | Request identifier                                  |
+| `statusCode`                   | integer | Status code of the transaction                      |
+| `statusMessage`                | string  | Status message of the transaction                   |
+| `appVersion`                   | string  | Application version                                 |
+| `vuid`                         | string  | Vendor-unique transaction identifier                |
+| `amount`                       | integer | Transaction amount                                  |
+| `transactionId`                | string  | Transaction identifier                              |
+| `entryMode`                    | integer | Entry mode of the transaction (Swipe, Contact, NFC) |
+| `transactionOriginalRequestId` | string  | Original transaction request ID                     |
+| `transactionOriginalTime`      | string  | Original transaction timestamp                      |
+| `transactionOriginalAmount`    | integer | Original transaction amount                         |
+| `isFinalAmount`                | integer | Indicator if the amount is final                    |
+| `transactionDeposited`         | integer | Deposit status of the transaction                   |
+| `mainBoardSerial`              | string  | Main board serial of the device                     |
+| `hwSerial`                     | string  | Hardware serial of the device                       |

@@ -1,0 +1,82 @@
+---
+title: "Overview"
+---
+
+The Nayax eCom SDK is a tool designed to streamline e-commerce payment processing for merchants. It acts as an intermediary, simplifying the interaction between your front-end application and various billing providers, allowing you to:
+
+* Accept global and local payment methods.
+
+* Support online payments for web, iOS, and Android.
+
+* Offer payment links.
+
+The SDK abstracts away the complexities of integrating directly with multiple payment gateways. Instead of building custom integrations for each payment provider, merchants integrate once with the Nayax eCom SDK.
+
+## Payment Methods
+
+eCom SDK supports the following payment methods:
+
+* Visa
+* Discover
+* Mastercard
+* Diners
+* Maestro
+* Apple Pay
+* Google Pay
+
+## Seamless Checkout
+
+Our platform supports seamless checkout experiences for various use cases and allows you to offer unique checkout experiences with additional features.
+
+### Transaction Types
+
+Our online payments solution supports diverse use cases and business models. Use our range of functionalities and payment flows to meet the specific needs of your consumers and your business.
+
+<Columns cols={2}>
+  <Card title="One-off payments" icon="fa-solid fa-credit-card" iconColor="indigo-600">
+    Take one-time payments.
+  </Card>
+
+  <Card title="Token payments" icon="fa-solid fa-coins" iconColor="indigo-600">
+    Perform payments using Nayax tokens.
+  </Card>
+</Columns>
+
+### Features
+
+Our online payments solution provides access to various functionalities. With these, you can create exclusive checkout experiences for your consumers while processing payments easily and securely.
+
+<Columns cols={3}>
+  <Card title="Authentication" icon="fa-solid fa-lock" iconColor="emerald-400">
+    Integrate with 3D Secure 2 to securely process card payments.
+  </Card>
+
+  <Card title="Risk management" icon="fa-solid fa-shield-halved" iconColor="emerald-400">
+    Use our risk management solution to prevent and respond to fraud.
+  </Card>
+
+  <Card title="Recurring payments" icon="fa-solid fa-money-bill-transfer" iconColor="emerald-400">
+    Securely store your shopper's payment details to offer faster checkout.
+  </Card>
+</Columns>
+
+## Integration Architecture
+
+A complete online payments integration with eCom consists of the following parts:
+
+1. **Payments server**
+   : Makes API requests to the eCom API endpoints and receives responses.
+2. **Client website or app**
+   : Our [Drop-in UI](docs:drop-in-ui) collects payment details from the consumer and passes payment information to your server.
+3. **Webhook server**
+   : Receives [webhooks](https://developerhub.nayax.com/docs/webhook-notifications) from eCom about payment statuses and other payment-related activity.
+
+## Get Started
+
+<Columns cols={3}>
+  <Card title="Get Started" href="/v1.0/docs/ecom-sdk-get-started" />
+
+  <Card title="Front-End Integration" href="/v1.0/docs/front-end-sdk" />
+
+  <Card title="Back-End Integration" href="/v1.0/docs/ecom-sdk-back-end-integration" />
+</Columns>

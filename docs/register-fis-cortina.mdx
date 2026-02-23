@@ -1,0 +1,27 @@
+---
+title: "Register"
+---
+
+The **Register** flow is a critical compliance step in the transaction lifecycle, ensuring that a sale is formally recorded with the relevant governmental body for tax purposes. This process is generally initiated by the system's Engine (or backend server) immediately after a payment method has been successfully authorized.
+
+## Register Flow
+
+This diagram illustrates the end-to-end flow for a transaction, from the initial payment authorization through to the final settlement and required fiscal/tax registration:
+
+<Frame><img src="/images/docs/register-fis-cortina/image1.png" /></Frame>
+
+Where:
+
+1. Nayax Engine initiates a Start Session with the Fiscal Integrator.
+2. Nayax Device sends a payment authorization request to the Nayax Engine.
+3. Nayax Engine sends the transaction details to the Payment Provider for processing.
+4. The Payment Provider sends the authorization approval back to the Nayax Engine.
+5. Nayax Engine initiates fiscal registration by sending a request to the Fiscal Integrator.
+6. Fiscal Integrator registers the sale with the Fiscal Provider/Tax Authority.
+7. Fiscal Provider/Tax Authority confirms successful registration back to the Fiscal Integrator.
+8. Fiscal Integrator sends final fiscal approval back to the Nayax Engine.
+9. Nayax Engine sends the final authorization approval to the Nayax Device (allowing the device to complete the sale).
+10. Nayax Device sends a command to the Nayax Engine to finalize the transaction.
+11. Nayax Engine confirms the settlement and provides the transaction receipt back to the Nayax Device.
+
+This process successfully integrates payment authorization with fiscal registration, completing the sales lifecycle from approval to final device confirmation.

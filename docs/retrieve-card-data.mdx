@@ -1,0 +1,153 @@
+---
+title: "Retrieve Card Data"
+---
+
+The Lynx API provides several GET methods to retrieve detailed information about cards. These allow you to query card details, check credit balances, access revalue history, and more. Below is a list of the endpoints that can be used for this purpose.
+
+<Columns cols={2}>
+  <Card title="Get Cards" href="/v1.0/reference/get-cards" />
+
+  <Card title="Get Card by the Card's Display Number" href="https://developerhub.nayax.com/reference/get-cards-by-display-number" />
+
+  <Card title="Get Prepaid Card" href="/v1.0/reference/get-prepaid-card" />
+
+  <Card title="Get the Credit from a Card" href="/v1.0/reference/get-card-credit" />
+
+  <Card title="Get Card's Revalue" href="/v1.0/reference/get-card-revalue" />
+</Columns>
+
+The following sections will explain in more detail the usage of each of these endpoints.
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](https://developerhub.nayax.com/docs/security) page of this documentation to learn how to access your tokens, and how to use it to authenticate your API requests properly.
+</Warning>
+
+## Verifying card details in Nayax Core
+
+To see the details of card in Nayax Core, Access the **Card Management** tab and use the search bar to look for the card you want to check, and select it.
+
+<Frame><img src="/images/docs/retrieve-card-data/image1.png" /></Frame>
+
+You will seee all the details of the card presented to you, this is the same data retrieved by the Lynx API Endpoints mentioned before.
+
+## Get Cards
+
+This general endpoint will retrieve an overview of all cards, including essential details like Card ID, Card Holder Name, and Card Status. See the example query:
+
+```curl Request
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/cards \
+     --header 'accept: application/json' \
+     --header 'Authorization: Bearer <token>'
+```
+
+This endpoint can also retrieve details of a specific card instead of all cards by adding query parameters to the request. For example, to get the details of a card with the Card Unique Identifier "1409315030\` you can use the query in the code block below.
+
+```curl Request
+curl --request GET \
+     --url 'https://qa-lynx.nayax.com/operational/v1/cards?CardUniqueIdentifier=1409315030%20' \
+     --header 'accept: application/json'
+     --header 'Authorization: Bearer <token>'
+```
+
+Any of the following details of a card can be used as a query parameter:
+
+* `CardID`
+* `CardUniqueIdentifier`
+* `CardDisplayNumber`
+* `CardMobileNumber`
+* `ExternalApplicationUserID`
+* `CardEmail`
+* `CardHolderName`
+
+## Get Card by the Card's Display Number
+
+It fetches card details based on its display number, which is the physical card number. This is ideal for cases where only the display number is available for reference.
+
+See the code block below for an example query:
+
+```curl
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/cards/displayNumber/{CardDisplayNumber} \
+     --header 'Authorization: Bearer <token>' \
+     --header 'accept: application/json'
+```
+
+<Callout icon="📘" theme="info">
+  Replace `{CardDisplayNumber}` with the actual number of the card.
+</Callout>
+
+## Get Prepaid Card
+
+It retrieves details of a prepaid card associated with a specific card ID. Use this to manage prepaid cards or verify their status and attributes.
+
+See the code block below for an example query:
+
+```curl Request
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/cards/CardID/prepaid \
+     --header 'accept: application/json' \
+     --header 'Authorization: Bearer <token>'
+
+```
+
+<Callout icon="📘" theme="info">
+  Replace `{CardID}` with the actual `CardID` of the card.
+</Callout>
+
+The response will have the details of the requested card.
+
+## Get the Credit from a Card
+
+This option fetches the current credit balance for a specific card, identified by its unique identifier. Use it to monitor card balances, such as those of prepaid or technician cards.
+
+See the code block below for an example query:
+
+```curl Request
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/cards/{CardUniqueIdentifier}/credit \
+     --header 'Authorization: Bearer <token>' \
+     --header 'accept: application/json'
+```
+
+```Text Response
+{
+  "value": 5320
+}
+```
+
+<Callout icon="📘" theme="info">
+  Replace `{CardUniqueIdentifier}` with the actual identifier of the card.
+</Callout>
+
+The response will include the creditr balance of the card.
+
+## Get Card's Revalue
+
+Retrieves the revalue amount associated with a specific card, identified by the card's unique identifier. See the query example below:
+
+```curl Request
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/cards/{CardUniqueIdentifier}/revalue \
+     --header 'Authorization: Bearer <token>' \
+     --header 'accept: application/json'
+```
+
+<Callout icon="📘" theme="info">
+  Replace `{CardUniqueIdentifier}` with the actual identifier of the card.
+</Callout>
+
+The response will include the revalue amount of the card.
+
+<HTMLBlock>
+  {`
+  <style>
+  img:not(.rm-Logo-img) {
+      border-radius: 12px;
+      box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13)
+  }
+  </style>
+  `}
+</HTMLBlock>

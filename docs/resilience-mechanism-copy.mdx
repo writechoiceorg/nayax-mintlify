@@ -1,0 +1,234 @@
+---
+title: "Resilience Mechanism"
+---
+
+TweezerComm has a resilience mechanism for handling transaction completion or cancellation in case of errors or failures. Whenever an error occurs, such as a `statusCode != 0`  TweezerComm will automatically fall back to this mechanism, ensuring that transactions are completed successfully or through retries and verification steps to prevent inconsistencies.
+
+## How it Works
+
+The flow chart describes the flow of the mechanism.
+
+<Frame>![](/images/docs/resilience-mechanism-copy/image1.png)</Frame>
+
+When a transaction requires completion (settlement) or cancellation, and the system verifies whether a response has been received, the flow can vary depending on the reaction.
+
+* If a response was received,  the system proceeds to check the `StatusCode`. If it  is equal to `0`, it will finish the completion process, else it will trigger the retry mechanism.
+* If no response is received, the system retrieves transaction details using the `getTransactionByVuid()` method.
+  * To check if the transaction is finalized, the system evaluates  if `IsFinalAmount=1 ` and `TransactionDeposited=1/2`.
+  * If they are not equal to those values, the system triggers the retry mechanism.
+
+The process continuously loops back to the start of the Completion/Cancel flow, ensuring that it continues until a definitive success or failure condition is reached.
+
+## See Also
+
+<HTMLBlock>
+  {`
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+    .card_container {
+      display: flex;
+      gap: 10px;
+      margin: 0 auto;
+      max-width: var(--container-lg);
+      width: 100%;
+      flex-wrap: wrap;
+
+      .card {
+        display: flex;
+        padding: 20px 14px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        min-width: 190px;
+        flex-shrink: 0;
+        gap: 12px;
+        border-radius: 6px;
+        border: 1px solid #DCDCDC;
+        background: #FFF;
+        box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13);
+        text-decoration: none;
+        flex-grow: 1;
+        flex-basis: 0;
+        text-decoration: none !important;
+
+        svg {
+          fill: none;
+
+          rect {
+            fill: #FFF;
+            stroke: #C9C9C9;
+          }
+
+          path {
+            fill: #d2a900;
+          }
+        }
+
+        h3 {
+          color: #383838;
+          text-align: center;
+          font-family: Inter !important;
+          font-size: 15px;
+          font-style: normal;
+          font-weight: 700;
+          text-decoration: none;
+          margin: 0;
+          text-align: start;
+        }
+      }
+
+      .card:hover {
+        cursor: pointer;
+        border: 1px solid #d2a900 !important;
+        box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+        transform: translateY(-1px);
+
+        svg {
+          fill: none;
+
+          rect {
+            fill: #d2a900;
+            stroke: #C9C9C9;
+          }
+
+          path {
+            fill: #FFF;
+          }
+        }
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      [data-color-mode="system"] .card_container {
+        .card {
+          border: 1px solid #556974;
+          background: #20292e;
+
+          svg {
+            rect {
+              fill: #20292e;
+              stroke: #556974;
+            }
+          }
+
+          h3,
+          p {
+            color: #FFF;
+          }
+        }
+
+        .card:hover {
+          cursor: pointer;
+          border: 1px solid #d2a900 !important;
+          box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+          transform: translateY(-1px);
+
+          h3 {
+            color: #d2a900;
+          }
+
+          svg {
+            fill: none;
+
+            rect {
+              fill: #d2a900;
+              stroke: #556974;
+            }
+
+            path {
+              fill: #20292e;
+            }
+          }
+        }
+      }
+    }
+
+    [data-color-mode="dark"] .card_container {
+      .card {
+        border: 1px solid #556974;
+        background: #20292e;
+
+        svg {
+          rect {
+            fill: #20292e;
+            stroke: #556974;
+          }
+        }
+
+        h3,
+        p {
+          color: #FFF;
+        }
+      }
+
+      .card:hover {
+        cursor: pointer;
+        border: 1px solid #d2a900 !important;
+        box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+        transform: translateY(-1px);
+
+        h3 {
+          color: #d2a900;
+        }
+
+        svg {
+          fill: none;
+
+          rect {
+            fill: #d2a900;
+            stroke: #556974;
+          }
+
+          path {
+            fill: #20292e;
+          }
+        }
+      }
+    }
+
+    @media only screen and (max-width: 450px) {
+      .card_container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+    }
+  </style>
+
+  <div class="card_container">
+
+    <a class="card" href="/v1.0/docs/tweezercomm-payment-flows">
+      <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
+        <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
+        <path fill-rule="evenodd" clip-rule="evenodd"
+          d="M23.3736 24.9994C22.4754 24.9994 21.7472 24.2712 21.7472 23.373V11.2526L9.62638 11.2526C8.72816 11.2526 8 10.5245 8 9.62632C8 8.72813 8.72816 8 9.62639 8L23.3736 8C24.2718 8 25 8.72813 25 9.62632L25 23.373C25 24.2712 24.2718 24.9994 23.3736 24.9994Z" />
+        <path fill-rule="evenodd" clip-rule="evenodd"
+          d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
+      </svg>
+      <h3>Payment Flows</h3>
+    </a>
+
+    <a class="card" href="/v1.0/docs/gettransactionbyvuid">
+      <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
+        <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
+        <path fill-rule="evenodd" clip-rule="evenodd"
+          d="M23.3736 24.9994C22.4754 24.9994 21.7472 24.2712 21.7472 23.373V11.2526L9.62638 11.2526C8.72816 11.2526 8 10.5245 8 9.62632C8 8.72813 8.72816 8 9.62639 8L23.3736 8C24.2718 8 25 8.72813 25 9.62632L25 23.373C25 24.2712 24.2718 24.9994 23.3736 24.9994Z" />
+        <path fill-rule="evenodd" clip-rule="evenodd"
+          d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
+      </svg>
+      <h3>GetTransactionByVuid</h3>
+    </a>
+   
+      </div>
+  `}
+</HTMLBlock>
+
+<HTMLBlock>
+  {`
+  <style>
+  img:not(.rm-Logo-img) {
+      border-radius: 12px;
+      box-shadow: 0 0 0 0 rgba(40, 42, 47, .05), 0 3px 6px 0 rgba(40, 42, 47, .05), 0 11px 11px 0 rgba(40, 42, 47, .04), 0 25px 15px 0 rgba(40, 42, 47, .02), 0 44px 18px 0 rgba(40, 42, 47, .01), 0 69px 19px 0 rgba(40, 42, 47, 0);
+  }
+  </style>
+  `}
+</HTMLBlock>

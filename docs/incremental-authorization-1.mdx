@@ -1,0 +1,17 @@
+---
+title: "Incremental Authorization"
+---
+
+Incremental authorization is a payment feature that allows a merchant to request additional funds on a previously authorized transaction without requiring the customer to re-enter their payment credentials.
+
+<Note>
+**Enable Incremental Authorization**
+
+Incremental Authorization requires additional configuration on the Nayax side. If you wish to support it, please contact your assigned Nayax integration engineer.
+</Note>
+
+## How to implement
+
+After a successful Authorization, if the merchant asks for Incremental, your endpoint will receive one or more [Cortina Credit Card Incremental Auth](https://developerhub.nayax.com/reference/post_cortina-creditcard-incrementalauth) request, the `BasicInfo.Amount` in this request will be the incremental amount. The `PaymentInfo` object will include the details for the linked authorization.
+
+The Response for this request is similar to a regular Authorization response. The final settlement amount will be sent in the Cortina Credit Card Settlement request in the `BasicInfo.Amount` field.

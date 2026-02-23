@@ -1,0 +1,429 @@
+---
+title: "doTransaction"
+---
+
+The `doTransaction` method initiates and processes payment transactions within the TweezerComm protocol. It enables client applications, such as point-of-sale (POS) systems or electronic cash registers (ECRs), to interact with the Agamento payment terminal for secure transaction execution.
+
+This method supports multiple transaction types, including:
+
+* **Regular Transactions (PreSelection)**: Standard payments using credit cards or closed-loop payment methods.
+* **Pre-Authorization (initiation)**: Reserve a specified amount on a customer’s card for later confirmation.
+* **Pre-Authorization Completion and Cancellation**: Completing or voiding previously authorized transactions.
+* **MOTO (Mail Order/Telephone Order) Transactions**: Processing card-not-present transactions securely.
+* [Refunds](https://developerhub.nayax.com/docs/refunds-dotransaction): Partial or full refunds of previous transactions.
+* **Deferred Payments**: Approving transactions even in cases where there is no immediate network connectivity.
+
+The sections below will describe the request parameters in more detail:
+
+## Requests
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](https://developerhub.nayax.com/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, the `method` field needs to be set to `doTransaction`,  the transaction is defined by the `tranCode` parameter. Check the example request for each transaction type on the tabs below:
+
+<Warning>
+**Mandatory Fields**
+
+`vuid`, `amount `and `tranType `are mandatory for all requests. All others depend on the type of transaction made.
+</Warning>
+
+<Tabs>
+  <Tab title="Regular Transaction">
+    For a regular transaction, set the `tranType` parameter to `1`. The code block shows a request example for a regular transaction:
+
+    ```json
+    {
+        "jsonrpc": "2.0",
+        "method": "doTransaction",
+        "id": "123454352",
+        "params": [
+            "engine",
+            {
+                "vuid": "44d96006",
+                "amount": 100,
+                "tranType": 1
+            }
+        ]
+    }
+    ```
+
+    ### Parameter Definitions
+
+    The table below describes all parameters available in this request:
+
+    | Name       | Type    | Description                                                |   |
+    | :--------- | :------ | :--------------------------------------------------------- | - |
+    | `vuid`     | string  | Vendor (client) unique transaction identifier.             |   |
+    | `amount`   | integer | Amount in cents.                                           |   |
+    | `tranType` | integer | The transaction type code. **1**: Single Step Transaction. |   |
+  </Tab>
+
+  <Tab title="Pre-Authorization">
+    For a initiating a Pre-Authorization transaction, set the `tanType` parameter to `3`. The code block shows a request example for initiating a Pre-Authorization transaction:
+
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "method": "doTransaction",
+    "id": "1696161997899",
+    "params": [
+    "engine",
+    {
+        "vuid": "80b458684",
+        "tranType": 3,
+        "amount": 100,
+        }
+    ]
+    }
+    ```
+
+    ### Parameter Definitions
+
+    The table below describes all parameters available in this request:
+
+    | Name       | Type    | Description                                    |
+    | :--------- | :------ | :--------------------------------------------- |
+    | `vuid`     | string  | Vendor (client) unique transaction identifier. |
+    | `tranType` | integer | Transaction type. **3**: Pre-Authorization.    |
+    | `amount`   | integer | Amount in cents.                               |
+  </Tab>
+
+  <Tab title="Complete Pre-Authorization">
+    For a completing a Pre-Authorization transaction, set the `tranType` parameter to `6`. The code block shows a request example for completing a Pre-Authorization transaction:
+
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "method": "doTransaction",
+    "id": "1696161997899",
+    "params": [
+    "engine",
+    {
+        "vuid": "80b458654",
+        "tranType": 6,
+        "amount": 100,
+        "originalTransactionId":"2022052432"
+        }
+    ]
+    }
+    ```
+
+    ### Parameter Definitions
+
+    The table below describes all parameters available in this request:
+
+    | Name                    | Type    | Description                                           |
+    | :---------------------- | :------ | :---------------------------------------------------- |
+    | `vuid`                  | string  | Vendor (client) unique transaction identifier.        |
+    | `tranType`              | integer | Transaction type. **6**: Complete Pre-Authorization.  |
+    | `amount`                | integer | Amount in cents.                                      |
+    | `originalTransactionId` | string  | The ID of the original pre-authorization transaction. |
+  </Tab>
+
+  <Tab title="Cancel Pre-Authorization">
+    For canceling a Pre-Authorization transaction which has been initiated, set the `tranType` parameter to `7`. The code block shows a request example for such cancellation:
+
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "method": "doTransaction",
+    "id": "1696161997899",
+    "params": [
+    "engine",
+    {
+        "vuid": "80b458654",
+        "tranType": 7,
+        "amount": 100,
+        "originalTransactionId":"2022052432"
+        }
+    ]
+    }
+    ```
+
+    ### Parameter Definitions
+
+    The table below describes all parameters available in this request:
+
+    | Name                    | Type    | Description                                           |
+    | :---------------------- | :------ | :---------------------------------------------------- |
+    | `vuid`                  | string  | Vendor (client) unique transaction identifier.        |
+    | `tranType`              | integer | Transaction type. **7**: Cancel Pre-Authorization.    |
+    | `amount`                | integer | Amount in cents.                                      |
+    | `originalTransactionId` | string  | The ID of the original pre-authorization transaction. |
+  </Tab>
+
+  <Tab title="MOTO">
+    For a MOTO transaction, set the `tranCode` parameter to `5`. The code block shows a request example for a MOTO transaction:
+
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "method": "doTransaction",
+    "id": "1696161997899",
+    "params": [
+    "engine",
+    {
+        "vuid": "80b458654",
+        "tranType": 5,
+        "amount": 100,
+        "pan": "1234567812345678",
+        "exp": "0927",
+        "cvv": "987"
+        }
+    ]
+    }
+    ```
+
+    ### Parameter Definitions
+
+    The table below describes all parameters available in this request:
+
+    | Name       | Type    | Description                                    |
+    | :--------- | :------ | :--------------------------------------------- |
+    | `vuid`     | string  | Vendor (client) unique transaction identifier. |
+    | `tranType` | integer | Transaction type. **5**: MOTO.                 |
+    | `amount`   | integer | Amount in cents.                               |
+    | `pan`      | string  | **Required**: The 16-digit card number.        |
+    | `exp`      | string  | **Required**: Card expiration date (MMYY).     |
+    | `cvv`      | string  | **Required**: 3-digit security code.           |
+  </Tab>
+</Tabs>
+
+## Responses
+
+The service will return a response structured similarly to the examples provided in the code blocks below:
+
+<Tabs>
+  <Tab title="Regular Transaction">
+    ```json
+    {
+      "jsonrpc": "2.0",
+      "id": "123454352",
+      "result": {
+          "statusCode": 0,
+          "statusMessage": "TRANSACTION APPROVED",
+          "appVersion": "01.06.62",
+          "vuid": "12354",
+          "amount": 100,
+          "transactionId": "2038584332",
+          "entryMode": 4,
+          "transactionOriginalRequestId": "6439809e-619f-414b-8c3e-f1a9f3c3bc49",
+          "transactionOriginalTime": "2025-03-05 23:08:06.597",
+          "transactionOriginalAmount": 100,
+          "serverResultMessage": "Sale is Approved",
+          "tranType": 1,
+          "dtId": "1741244869236399011",
+          "rrn": "250306070806",
+          "maskedPan": "541333******4111",
+          "currencyCode": "USD",
+          "currencyISOCode": "840",
+          "originalSiteId": 1,
+          "mainBoardSerial": "000177234933444",
+          "hwSerial": "0900044624102737"
+      }
+    }
+    ```
+
+    ### Response Parameters
+
+    Below is a table with all the possible response parameters and their description:
+
+    | Name                           | Type    | Description                                             |
+    | :----------------------------- | :------ | :------------------------------------------------------ |
+    | `statusCode`                   | integer | Result of the request (**0** for success).              |
+    | `statusMessage`                | string  | Text description of the status.                         |
+    | `appVersion`                   | string  | Version of the payment application.                     |
+    | `vuid`                         | string  | Vendor unique transaction identifier.                   |
+    | `amount`                       | integer | Final transaction amount in cents.                      |
+    | `transactionId`                | string  | Unique gateway transaction ID.                          |
+    | `entryMode`                    | integer | Method used to read the card (e.g., Chip, Contactless). |
+    | `transactionOriginalRequestId` | string  | ID of the original request.                             |
+    | `transactionOriginalTime`      | string  | Timestamp of the original transaction.                  |
+    | `transactionOriginalAmount`    | integer | Original amount requested.                              |
+    | `serverResultMessage`          | string  | Detailed message from the processing server.            |
+    | `tranType`                     | integer | Transaction type code (**1** for Regular).              |
+    | `dtId`                         | string  | Device Transaction Identifier.                          |
+    | `rrn`                          | string  | Retrieval Reference Number.                             |
+    | `maskedPan`                    | string  | The masked card number used for the transaction.        |
+    | `currencyCode`                 | string  | Alphanumeric currency code (e.g., USD).                 |
+    | `currencyISOCode`              | string  | Numeric ISO currency code (e.g., 840).                  |
+    | `originalSiteId`               | integer | Identifier of the originating site.                     |
+    | `mainBoardSerial`              | string  | Serial number of the device main board.                 |
+    | `hwSerial`                     | string  | Hardware serial number.                                 |
+  </Tab>
+
+  <Tab title="Pre-Authorization">
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "TRANSACTION APPROVED",
+        "appVersion": "01.06.38",
+        "vuid": "80b45894",
+        "tranType": 3,
+        "amount": 100,
+        "currencyCode": "GBP",
+        "currencyISOCode": "826",
+        "transactionId": "2022052432",
+        "dtId": "1721134022667243531",
+        "rrn": "240716123742",
+        "maskedPan": "374245*****1007"
+    }
+    }
+    ```
+
+    ### Response Parameters
+
+    Below is a table with all the possible response parameters and their description:
+
+    | Name              | Type    | Description                                 |
+    | :---------------- | :------ | :------------------------------------------ |
+    | `statusCode`      | integer | Result of the request (**0** for success).  |
+    | `statusMessage`   | string  | Text description of the status.             |
+    | `appVersion`      | string  | Version of the payment application.         |
+    | `vuid`            | string  | Vendor unique transaction identifier.       |
+    | `tranType`        | integer | Transaction type code (**3** for Pre-Auth). |
+    | `amount`          | integer | Reserved amount in cents.                   |
+    | `currencyCode`    | string  | Alphanumeric currency code.                 |
+    | `currencyISOCode` | string  | Numeric ISO currency code.                  |
+    | `transactionId`   | string  | Unique gateway transaction ID.              |
+    | `dtId`            | string  | Device Transaction Identifier.              |
+    | `rrn`             | string  | Retrieval Reference Number.                 |
+    | `maskedPan`       | string  | Masked card number used for reservation.    |
+  </Tab>
+
+  <Tab title="Complete Pre-Authorization">
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "id": "1696161997899",
+    "result": {
+         "statusCode": 0,
+         "statusMessage": "TRANSACTION APPROVED",
+         "appVersion": "01.06.64",
+          "vuid": "80b458654",
+          "amount": 100,
+         "transactionId": "2022052432",
+         "entryMode": 4096,
+          "transactionOriginalAmount": 128,
+          "tranType": 6,
+          "dtId": "1743763936600399011",
+         "currencyCode": "USD",
+          "currencyISOCode": "840"
+    }
+    }
+
+    ```
+
+    ### Response Parameters
+
+    Below is a table with all the possible response parameters and their description:
+
+    | Name                        | Type    | Description                                   |
+    | :-------------------------- | :------ | :-------------------------------------------- |
+    | `statusCode`                | integer | Result of the request.                        |
+    | `statusMessage`             | string  | Text description of the status.               |
+    | `appVersion`                | string  | Version of the payment application.           |
+    | `vuid`                      | string  | Vendor unique transaction identifier.         |
+    | `amount`                    | integer | Final captured amount in cents.               |
+    | `transactionId`             | string  | Unique gateway transaction ID.                |
+    | `entryMode`                 | integer | Method used for the capture.                  |
+    | `transactionOriginalAmount` | integer | Amount reserved in the initial pre-auth.      |
+    | `tranType`                  | integer | Transaction type code (**6** for Completion). |
+    | `dtId`                      | string  | Device Transaction Identifier.                |
+    | `currencyCode`              | string  | Alphanumeric currency code.                   |
+    | `currencyISOCode`           | string  | Numeric ISO currency code.                    |
+  </Tab>
+
+  <Tab title="Cancel Pre-Authorization">
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "TRANSACTION APPROVED",
+        "appVersion": "01.06.38",
+        "vuid": "80b45894",
+        "tranType": 7,
+        "amount": 100,
+        "currencyCode": "GBP",
+        "currencyISOCode": "826",
+        "transactionId": "2022052432",
+        "dtId": "1721134022667243531",
+        "rrn": "240716123742",
+        "maskedPan": "374245*****1007"
+    }
+    }
+    ```
+
+    ### Response Parameters
+
+    Below is a table with all the possible response parameters and their description:
+
+    | Name              | Type    | Description                                     |
+    | :---------------- | :------ | :---------------------------------------------- |
+    | `statusCode`      | integer | Result of the request.                          |
+    | `statusMessage`   | string  | Text description of the status.                 |
+    | `appVersion`      | string  | Version of the payment application.             |
+    | `vuid`            | string  | Vendor unique transaction identifier.           |
+    | `tranType`        | integer | Transaction type code (**7** for Cancellation). |
+    | `amount`          | integer | Amount released in cents.                       |
+    | `currencyCode`    | string  | Alphanumeric currency code.                     |
+    | `currencyISOCode` | string  | Numeric ISO currency code.                      |
+    | `transactionId`   | string  | Unique gateway transaction ID.                  |
+    | `dtId`            | string  | Device Transaction Identifier.                  |
+    | `rrn`             | string  | Retrieval Reference Number.                     |
+    | `maskedPan`       | string  | Masked card number associated with the void.    |
+  </Tab>
+
+  <Tab title="MOTO">
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "TRANSACTION APPROVED",
+        "appVersion": "01.06.38",
+        "vuid": "80b45894",
+        "tranType": 5,
+        "amount": 100,
+        "currencyCode": "GBP",
+        "currencyISOCode": "826",
+        "transactionId": "2022052432",
+        "dtId": "1721134022667243531",
+        "rrn": "240716123742",
+        "maskedPan": "374245*****1007"
+    }
+    }
+    ```
+
+    ### Response Parameters
+
+    Below is a table with all the possible response parameters and their description:
+
+    | Name              | Type    | Description                                |
+    | :---------------- | :------ | :----------------------------------------- |
+    | `statusCode`      | integer | Result of the request (**0** for success). |
+    | `statusMessage`   | string  | Text description of the status.            |
+    | `appVersion`      | string  | Version of the payment application.        |
+    | `vuid`            | string  | Vendor unique transaction identifier.      |
+    | `tranType`        | integer | Transaction type code (**5** for MOTO).    |
+    | `amount`          | integer | Transaction amount in cents.               |
+    | `currencyCode`    | string  | Alphanumeric currency code (e.g., GBP).    |
+    | `currencyISOCode` | string  | Numeric ISO currency code (e.g., 826).     |
+    | `transactionId`   | string  | Unique gateway transaction ID.             |
+    | `dtId`            | string  | Device Transaction Identifier.             |
+    | `rrn`             | string  | Retrieval Reference Number.                |
+    | `maskedPan`       | string  | The masked card number entered manually.   |
+  </Tab>
+</Tabs>
+
+<br />

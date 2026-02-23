@@ -1,0 +1,367 @@
+---
+title: "Retrieve Machine Information"
+---
+
+In Nayax Core, machines have various attributes, such as the Operator of the machine, the machine's model or ID, and its status. These can all be seen in the **Machines** menu, which you can access in the following way:
+
+1. In your Dashboard, go to **Operations > Machines**.
+2. Use the search function to filter through the list of machines.
+3. Select the desired machine from the list.
+4. Open the **General Information** tab.
+
+<Frame><img src="/images/docs/retrieve-machine-information/image1.png" /></Frame>
+
+You can see all the key information about the machine you may need for other requests there.
+
+## Lynx API Methods
+
+The Lynx API provides various methods to retrieve all this information, allowing you to programmatically access specific machine details, groups, statuses, and configurations.
+
+These are the available methods discussed on this page:
+
+<Columns cols={2}>
+  <Card title="Get Specific Machine Basic Info by MachineID" href="/v1.0/reference/get-machine-basic-info">
+    GET
+  </Card>
+
+  <Card title="Get Specific Machine Basic Info by Device" href="https://developerhub.nayax.com/reference/get-machine-info-by-device">
+    GET
+  </Card>
+
+  <Card title="Get Specific Machine Basic Info by VPOS" href="https://developerhub.nayax.com/reference/get-machine-info-by-vpos">
+    GET
+  </Card>
+
+  <Card title="Get All Machine Basic Info" href="https://developerhub.nayax.com/reference/get-all-machine-basic-info">
+    GET
+  </Card>
+</Columns>
+
+See the following sections for more details on each method.
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](https://developerhub.nayax.com/docs/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+</Warning>
+
+### Retrieve a Machine by `MachineID`
+
+Using the [Get Specific Machine Basic Info](https://developerhub.nayax.com/reference/get-machine-basic-info) you can get the details of a machine with a specific `MachineID`. See an example request in the code block below:
+
+```curl Request
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/machines/{MachineID} \
+     --header 'Authorization: BEARER-TOKEN' \
+     --header 'accept: application/json'
+```
+
+```json Response
+{
+  "MachineID": 0,
+  "ActorID": 0,
+  "CountryID": 0,
+  "CurrencyID": 0,
+  "InstituteID": 0,
+  "LocationID": 0,
+  "MachineGroupID": 0,
+  "MachineModelID": 0,
+  "MachineName": "string",
+  "MachineNumber": "string",
+  "MachineStatusBit": 0,
+  "LanguageID": 2,
+  "OperatorActorID": 0,
+  "DistributorActorID": 0,
+  "AreaActorID": 0,
+  "SalesSourceID": 0,
+  "MachineTypeID": 555001,
+  "SerialNumber": "string",
+  "VPOSSerialNumber": "string",
+  "DeviceSerialNumber": "string",
+  "VPOSID": 0,
+  "DeviceID": 0,
+  "UseLocationFrom": 0,
+  "GeoCountry": 0,
+  "GeoState": "string",
+  "GeoCity": "string",
+  "GeoAddress": "string",
+  "GeoStreetNumber": "string",
+  "GeoLongitude": 0,
+  "GeoLatitude": 0,
+  "GeoZoom": 0,
+  "GeoZipCode": "string",
+  "SearchAddress": "string",
+  "Remarks": "string",
+  "DexType": 0,
+  "DexMidnightReadsEnableBit": true,
+  "DexG85CheckEnableBit": true,
+  "DexDivideBillsBy": 0,
+  "DexG85CheckParsingFilterEnableBit": true,
+  "UseCardPriceCorrectCashPriceBit": true,
+  "MachineTimeZoneOffset": 0,
+  "DexReadInterval": 0,
+  "LocationType": 0,
+  "ApplyDisplayPickListSelectionsToReportsBit": true,
+  "DisplayPickListSelectionsAs": 0,
+  "LastUpdated": "2024-11-25T14:04:50.909Z",
+  "MachineProfile": 0,
+  "CityID": 0,
+  "RegionID": 0,
+  "CountryDialingCode": 0,
+  "DexIgnoreCRCCheckBit": true,
+  "DexParseLABit": true,
+  "ProductMapID": 0,
+  "Longitude": 0,
+  "Latitude": 0,
+  "DexTotalSalesMinusCardSalesBit": true,
+  "RouteActorID": 0,
+  "MachineLogicAlertEnableBit": true,
+  "AlertRuleSetId": 0,
+  "MachineMemberTypePricingEnableBit": true,
+  "DexMultiplyCoinsBy": 0,
+  "DexMultiplyTubesBy": 0,
+  "CustomerID": 0,
+  "CommissionType": 0,
+  "CommissionDefaultValue": 0,
+  "CreatedBy": 0,
+  "CreatedOn": "2024-11-25T14:04:50.909Z",
+  "UpdateBy": 0,
+  "TubeSource": 0,
+  "BillSource": 0,
+  "SmartStickerId": 0,
+  "EnableRemoveVendBit": true,
+  "EnableEreceiptBit": true,
+  "ProductMapAutomaticCreationBit": true,
+  "Refs": {
+    "additionalProp": "string"
+  }
+}
+```
+
+Insert the `MachineID` in the path param of the request.
+
+### Retrieve a Machine by `DeviceSerialNumber`
+
+Using the [Get Specific Machine Basic Info by Device](https://developerhub.nayax.com/reference/get-machine-info-by-device) endpoint, you can retrieve the details of a machine associated with a specific DeviceSerialNumber. See an example request in the code block below:
+
+```curl Request
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/devices/{DeviceSerialNumber}/machine \
+     --header 'Authorization: BEARER-TOKEN' \
+     --header 'accept: application/json'
+```
+
+```json Response
+{
+  "MachineID": 0,
+  "ActorID": 0,
+  "CountryID": 0,
+  "CurrencyID": 0,
+  "InstituteID": 0,
+  "LocationID": 0,
+  "MachineGroupID": 0,
+  "MachineModelID": 0,
+  "MachineName": "string",
+  "MachineNumber": "string",
+  "MachineStatusBit": 0,
+  "LanguageID": 2,
+  "OperatorActorID": 0,
+  "DistributorActorID": 0,
+  "AreaActorID": 0,
+  "SalesSourceID": 0,
+  "MachineTypeID": 555001,
+  "SerialNumber": "string",
+  "VPOSSerialNumber": "string",
+  "DeviceSerialNumber": "string",
+  "VPOSID": 0,
+  "DeviceID": 0,
+  "UseLocationFrom": 0,
+  "GeoCountry": 0,
+  "GeoState": "string",
+  "GeoCity": "string",
+  "GeoAddress": "string",
+  "GeoStreetNumber": "string",
+  "GeoLongitude": 0,
+  "GeoLatitude": 0,
+  "GeoZoom": 0,
+  "GeoZipCode": "string",
+  "SearchAddress": "string",
+  "Remarks": "string",
+  "DexType": 0,
+  "DexMidnightReadsEnableBit": true,
+  "DexG85CheckEnableBit": true,
+  "DexDivideBillsBy": 0,
+  "DexG85CheckParsingFilterEnableBit": true,
+  "UseCardPriceCorrectCashPriceBit": true,
+  "MachineTimeZoneOffset": 0,
+  "DexReadInterval": 0,
+  "LocationType": 0,
+  "ApplyDisplayPickListSelectionsToReportsBit": true,
+  "DisplayPickListSelectionsAs": 0,
+  "LastUpdated": "2024-11-25T14:04:50.909Z",
+  "MachineProfile": 0,
+  "CityID": 0,
+  "RegionID": 0,
+  "CountryDialingCode": 0,
+  "DexIgnoreCRCCheckBit": true,
+  "DexParseLABit": true,
+  "ProductMapID": 0,
+  "Longitude": 0,
+  "Latitude": 0,
+  "DexTotalSalesMinusCardSalesBit": true,
+  "RouteActorID": 0,
+  "MachineLogicAlertEnableBit": true,
+  "AlertRuleSetId": 0,
+  "MachineMemberTypePricingEnableBit": true,
+  "DexMultiplyCoinsBy": 0,
+  "DexMultiplyTubesBy": 0,
+  "CustomerID": 0,
+  "CommissionType": 0,
+  "CommissionDefaultValue": 0,
+  "CreatedBy": 0,
+  "CreatedOn": "2024-11-25T14:04:50.909Z",
+  "UpdateBy": 0,
+  "TubeSource": 0,
+  "BillSource": 0,
+  "SmartStickerId": 0,
+  "EnableRemoveVendBit": true,
+  "EnableEreceiptBit": true,
+  "ProductMapAutomaticCreationBit": true,
+  "Refs": {
+    "additionalProp": "string"
+  }
+}
+```
+
+Insert the DeviceSerialNumber in the request path parameter to fetch the machine details associated with that device.
+
+### Retrieve a Machine by `VPOSSerial`
+
+Using the [Get Specific Machine Basic Info by VPOS](https://developerhub.nayax.com/reference/get-machine-basic-info-by-vpos) endpoint, you can retrieve the details of a machine associated with a specific `VPOSSerial`. See an example request in the code block below:
+
+```curl Request
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/vpos/{VPOSSerial}/machine \
+     --header 'Authorization: BEARER-TOKEN' \
+     --header 'accept: application/json'
+```
+
+```json Response
+{
+  "MachineID": 0,
+  "ActorID": 0,
+  "CountryID": 0,
+  "CurrencyID": 0,
+  "InstituteID": 0,
+  "LocationID": 0,
+  "MachineGroupID": 0,
+  "MachineModelID": 0,
+  "MachineName": "string",
+  "MachineNumber": "string",
+  "MachineStatusBit": 0,
+  "LanguageID": 2,
+  "OperatorActorID": 0,
+  "DistributorActorID": 0,
+  "AreaActorID": 0,
+  "SalesSourceID": 0,
+  "MachineTypeID": 555001,
+  "SerialNumber": "string",
+  "VPOSSerialNumber": "string",
+  "DeviceSerialNumber": "string",
+  "VPOSID": 0,
+  "DeviceID": 0,
+  "UseLocationFrom": 0,
+  "GeoCountry": 0,
+  "GeoState": "string",
+  "GeoCity": "string",
+  "GeoAddress": "string",
+  "GeoStreetNumber": "string",
+  "GeoLongitude": 0,
+  "GeoLatitude": 0,
+  "GeoZoom": 0,
+  "GeoZipCode": "string",
+  "SearchAddress": "string",
+  "Remarks": "string",
+  "DexType": 0,
+  "DexMidnightReadsEnableBit": true,
+  "DexG85CheckEnableBit": true,
+  "DexDivideBillsBy": 0,
+  "DexG85CheckParsingFilterEnableBit": true,
+  "UseCardPriceCorrectCashPriceBit": true,
+  "MachineTimeZoneOffset": 0,
+  "DexReadInterval": 0,
+  "LocationType": 0,
+  "ApplyDisplayPickListSelectionsToReportsBit": true,
+  "DisplayPickListSelectionsAs": 0,
+  "LastUpdated": "2024-11-25T14:04:50.909Z",
+  "MachineProfile": 0,
+  "CityID": 0,
+  "RegionID": 0,
+  "CountryDialingCode": 0,
+  "DexIgnoreCRCCheckBit": true,
+  "DexParseLABit": true,
+  "ProductMapID": 0,
+  "Longitude": 0,
+  "Latitude": 0,
+  "DexTotalSalesMinusCardSalesBit": true,
+  "RouteActorID": 0,
+  "MachineLogicAlertEnableBit": true,
+  "AlertRuleSetId": 0,
+  "MachineMemberTypePricingEnableBit": true,
+  "DexMultiplyCoinsBy": 0,
+  "DexMultiplyTubesBy": 0,
+  "CustomerID": 0,
+  "CommissionType": 0,
+  "CommissionDefaultValue": 0,
+  "CreatedBy": 0,
+  "CreatedOn": "2024-11-25T14:04:50.909Z",
+  "UpdateBy": 0,
+  "TubeSource": 0,
+  "BillSource": 0,
+  "SmartStickerId": 0,
+  "EnableRemoveVendBit": true,
+  "EnableEreceiptBit": true,
+  "ProductMapAutomaticCreationBit": true,
+  "Refs": {
+    "additionalProp": "string"
+  }
+}
+```
+
+Insert the `VPOSSerial` in the path parameter of the request to fetch the machine details associated with that VPOS device.
+
+### Retrieve All Machine Basic Info
+
+Using the [Get All Machine Basic Info](https://developerhub.nayax.com/reference/get-all-machine-basic-info) endpoint, you can retrieve basic information for all machines, with optional filtering by various parameters. See an example request in the code block below:
+
+```curl Request
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/machines \
+     --header 'Authorization: BEARER-TOKEN' \
+     --header 'accept: application/json'
+```
+
+You can use any of the query parameters in the table below to filter out the machines:
+
+| **Parameter**           | `Type`   | Description                                                                           |
+| ----------------------- | -------- | ------------------------------------------------------------------------------------- |
+| **ResultsLimit**        | `int32`  | The maximum number of results to return; it is set to 100 by default.                 |
+| **ResultsOffset**       | `int32`  | The number of results to skip before starting to return results; set to 0 by default. |
+| **ActorID**             | `int64`  | Filter results by the actor ID associated with the machine.                           |
+| **OperatorIdentifier**  | `string` | Filter results by the operator identifier.                                            |
+| **MachineID**           | `int64`  | Filter results by the machine ID.                                                     |
+| **MachineSerialNumber** | `string` | Filter results by the machine's serial number.                                        |
+| **MachineName**         | `string` | Filter results by the machine's name.                                                 |
+| **DeviceID**            | `int32`  | Filter results by the device ID associated with the machine.                          |
+| **VposID**              | `int64`  | Filter results by the VPOS ID associated with the machine.                            |
+
+<HTMLBlock>
+  {`
+  <style>
+  img:not(.rm-Logo-img) {
+      border-radius: 12px;
+      box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13)
+  }
+  </style>
+  `}
+</HTMLBlock>

@@ -1,0 +1,257 @@
+---
+title: "Get Started"
+---
+
+TweezerComm follows the [JSON-RPC 2.0](http://www.jsonrpc.org/specification) specification to standardize transaction processing between the POS/ECR and Agamento payment application (that runs on Nayax attended devices). JSON-RPC is a lightweight, remote procedure call (RPC) protocol encoded in JSON. It allows client and server communication using structured requests and responses.
+
+Refer to the sections below to learn how to submit requests on TweezerComm.
+
+## Server Endpoint
+
+TweezerComm operates over HTTPS using a standard REST API convention. The SPICy Server acts as the entry point for processing JSON-RPC messages. The server endpoint is structured as follows:
+
+```
+https://device_ip:8080/SPICy
+```
+
+All requests are processed at this endpoint using a **POST** method. Remember to replace `device_ip` with the actual IP address of your device.
+
+<Note>
+**Agamento Port**
+
+Agamento listens on port **8080** for TC Lan integration and **9090** for Bonjour integration, allowing communication between the client application and the payment device.
+</Note>
+
+## Perform a Request
+
+To request TweezerComm via the SPICy server, the client application must send an adequately formatted JSON-RPC request to the specified endpoint. Below is an example of how to initiate a basic transaction:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "doTransaction",
+    "id": "123454352",
+    "params": [
+        "engine",
+        {
+            "vuid": "44d96006",
+            "amount": 100,
+            "tranType": 1
+        }
+    ]
+}
+```
+
+In this request, you need to configure the following parameters:
+
+* `jsonrpc`: Defines the JSON-RPC version. In this case, always set it to `2.0`.
+* `method`: Specifies the method to be used. See [Payment Services Methods](https://developerhub.nayax.com/docs/transaction-methods) and [Device Methods](https://developerhub.nayax.com/docs/device-methods) for a list and description of available methods.
+* `id`: A unique identifier for tracking the request.
+* `params`:  This is an array divided into two parts.
+  * The first specifies the payment service in this example it is `engine`.
+  * The second part contains the parameters specific to the requested method.
+
+By following this structure, client applications can reliably interact with TweezerComm for secure and efficient payment processing.
+
+## See Also
+
+<HTMLBlock>
+  {`
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+    .card_container {
+      display: flex;
+      gap: 10px;
+      margin: 0 auto;
+      max-width: var(--container-lg);
+      width: 100%;
+      flex-wrap: wrap;
+
+      .card {
+        display: flex;
+        padding: 20px 14px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        min-width: 190px;
+        flex-shrink: 0;
+        gap: 12px;
+        border-radius: 6px;
+        border: 1px solid #DCDCDC;
+        background: #FFF;
+        box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13);
+        text-decoration: none;
+        flex-grow: 1;
+        flex-basis: 0;
+        text-decoration: none !important;
+
+        svg {
+          fill: none;
+
+          rect {
+            fill: #FFF;
+            stroke: #C9C9C9;
+          }
+
+          path {
+            fill: #d2a900;
+          }
+        }
+
+        h3 {
+          color: #383838;
+          text-align: center;
+          font-family: Inter !important;
+          font-size: 17.5px;
+          font-style: normal;
+          font-weight: 700;
+          text-decoration: none;
+          margin: 0;
+          text-align: start;
+        }
+      }
+
+      .card:hover {
+        cursor: pointer;
+        border: 1px solid #d2a900 !important;
+        box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+        transform: translateY(-1px);
+
+        svg {
+          fill: none;
+
+          rect {
+            fill: #d2a900;
+            stroke: #C9C9C9;
+          }
+
+          path {
+            fill: #FFF;
+          }
+        }
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      [data-color-mode="system"] .card_container {
+        .card {
+          border: 1px solid #556974;
+          background: #20292e;
+
+          svg {
+            rect {
+              fill: #20292e;
+              stroke: #556974;
+            }
+          }
+
+          h3,
+          p {
+            color: #FFF;
+          }
+        }
+
+        .card:hover {
+          cursor: pointer;
+          border: 1px solid #d2a900 !important;
+          box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+          transform: translateY(-1px);
+
+          h3 {
+            color: #d2a900;
+          }
+
+          svg {
+            fill: none;
+
+            rect {
+              fill: #d2a900;
+              stroke: #556974;
+            }
+
+            path {
+              fill: #20292e;
+            }
+          }
+        }
+      }
+    }
+
+    [data-color-mode="dark"] .card_container {
+      .card {
+        border: 1px solid #556974;
+        background: #20292e;
+
+        svg {
+          rect {
+            fill: #20292e;
+            stroke: #556974;
+          }
+        }
+
+        h3,
+        p {
+          color: #FFF;
+        }
+      }
+
+      .card:hover {
+        cursor: pointer;
+        border: 1px solid #d2a900 !important;
+        box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+        transform: translateY(-1px);
+
+        h3 {
+          color: #d2a900;
+        }
+
+        svg {
+          fill: none;
+
+          rect {
+            fill: #d2a900;
+            stroke: #556974;
+          }
+
+          path {
+            fill: #20292e;
+          }
+        }
+      }
+    }
+
+    @media only screen and (max-width: 450px) {
+      .card_container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+    }
+  </style>
+
+  <div class="card_container">
+    
+      <a class="card" href="/v1.0/docs/tweezercomm-payment-flows">
+      <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
+        <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
+        <path fill-rule="evenodd" clip-rule="evenodd"
+          d="M23.3736 24.9994C22.4754 24.9994 21.7472 24.2712 21.7472 23.373V11.2526L9.62638 11.2526C8.72816 11.2526 8 10.5245 8 9.62632C8 8.72813 8.72816 8 9.62639 8L23.3736 8C24.2718 8 25 8.72813 25 9.62632L25 23.373C25 24.2712 24.2718 24.9994 23.3736 24.9994Z" />
+        <path fill-rule="evenodd" clip-rule="evenodd"
+          d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
+      </svg>
+      <h3>Payment Flows</h3>
+    </a>
+  <a class="card" href="/v1.0/docs/tweezercomm-create-payments">
+      <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
+        <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
+        <path fill-rule="evenodd" clip-rule="evenodd"
+          d="M23.3736 24.9994C22.4754 24.9994 21.7472 24.2712 21.7472 23.373V11.2526L9.62638 11.2526C8.72816 11.2526 8 10.5245 8 9.62632C8 8.72813 8.72816 8 9.62639 8L23.3736 8C24.2718 8 25 8.72813 25 9.62632L25 23.373C25 24.2712 24.2718 24.9994 23.3736 24.9994Z" />
+        <path fill-rule="evenodd" clip-rule="evenodd"
+          d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
+      </svg>
+      <h3>Create Payments</h3>
+    </a>
+   
+
+  </div>
+  `}
+</HTMLBlock>

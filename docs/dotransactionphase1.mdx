@@ -1,0 +1,674 @@
+---
+title: "doTransactionPhase1"
+---
+
+The `doTransactionPhase1 ` method begins a new transaction and retrieves its properties. Upon successful completion of this phase, the client can then proceed to the next stage of the process by calling the `doTransactionPhase2 `method to finalize the transaction.
+
+This method is essential for initiating a transaction, validating key information, and preparing the system for the final processing step.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Integration ](https://developerhub.nayax.com/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, ensure to configure the following:
+
+* The `method `field must be set to `doTransactionPhase1` .
+* The service must be set to `ashrait `in the `params`.
+
+The request includes a list of parameters, with the first being the service name, which is currently fixed as ashrait, and the second being a dictionary containing all other transaction-specific details.
+
+```json
+{  
+   "jsonrpc":"2.0",
+   "method":"doTransactionPhase1",
+   "params":[  
+      "ashrait",
+      {  
+         "amount":2000,
+         "vuid":"1234567890",
+         "currency":"376",
+         "creditTerms":1,
+         "tranCode":1,
+         "tranType":1,
+         "cardNumber":"4580000000000000",
+         "expDate":"2308",
+         "cvv":"666"
+      }
+   ],
+   "id":1
+}
+```
+
+### Request Parameters
+
+The table below describes the request parameters for this method.
+
+<Table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        Name
+      </th>
+
+      <th>
+        Type
+      </th>
+
+      <th>
+        Description
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `tranCode`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Transaction Code. Values include:
+        `1` (Normal),
+        `2` (Pre Auth),
+        `3` (Pre Auth Completion),
+        `4` (Pre Auth Cancelation),
+        `5` (Cancel),
+        `6` (Authorized transaction).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `amount`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Amount of the transaction in cents.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `currency`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Currency code in ISO 4217 format.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `ecrID`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        ECR/POS unique ID. Mandatory only if multiple clients use the same Merchant ID.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `vuid`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Vendor (client) unique transaction identifier.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `tranType`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Transaction type. Values include:
+        `1` (Regular),
+        `3` (Forced Transaction),
+        `6` (Cash Back),
+        `7` (Cash),
+        `30` (Balance),
+        `53` (Refund).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `creditTerms`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Credit card payment options. Values include:
+        `1` (Regular),
+        `2` (Special Credit),
+        `3` (Immediate),
+        `6` (Credit),
+        `8` (Settlements).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `creditPayments`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        The number of credit payments.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `payments`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        The number of payments.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `firstPaymentAmount`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Amount in cents of the first payment.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `otherPaymentAmount`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Amount in cents of the rest of the payments.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `paymentIndex`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        The index to which the payments are linked. Values include:
+        `1` (Linked to Madad),
+        `2` (Linked to Dollar).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `cashBackAmount`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Cash back amount in cents.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `tipAmount`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Tip amount in cents.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `ipayCode`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Type of benefit. Values include:
+        `0` (currency),
+        `1` (stars),
+        `2` (points),
+        `3` (club),
+        `99` (no benefit).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `ipayAmount`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Amount of benefit in cents.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `ipayPercent`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Percent of benefit (0-100).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `ipayUnits`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Number of benefit units.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `posEntryMode`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        POS Entry Mode, type of card transaction. Mandatory if card data is supplied. Values include:
+        `1` (MSR),
+        `5` (CTLS MSR),
+        `40` (Contact EMV),
+        `50` (Phone),
+        `51` (Signature only),
+        `80` (Fallback (err)),
+        `81` (Fallback (no AID))
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `cardTrack2`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Card track2 data.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `cardNumber`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Card number (PAN) for card-not-present (CNP) transactions.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `expDate`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Card expiration date in `YYMM` format.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `cvv`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Card verification value (3 digits).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `cardHolderID`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Personal ID of the card holder.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `zipCode`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        ZIP code.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `city`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        City.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `address`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Address.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `authNum`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Authorization Number (7 digits).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `originalUID`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Original transaction unique identifier.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `language`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        UI Language. Values include `Hebrew` and `English`.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `conversionAmount`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        The amount in ILS after conversion from the foreign currency. Mandatory if the `currency` field is not 376 or 840.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `changeRate`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        The foreign currency exchange rate in precision of 4 digits after the decimal point. For example, 4.210 = 42100. Mandatory if the `currency` field is not 376 or 840.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `retailer`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        SHVA retailer number, compared with the SHVA retailer number of the payment terminal.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `additionalInfo`
+      </td>
+
+      <td>
+        json of strings
+      </td>
+
+      <td>
+        Private vendor data sent to the payment gateway (up to 300 characters).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `cardless`
+      </td>
+
+      <td>
+        bool
+      </td>
+
+      <td>
+        Complete the transaction without showing the card.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `petrol`
+      </td>
+
+      <td>
+        bool
+      </td>
+
+      <td>
+        Do a petrol transaction.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `hideAnimation`
+      </td>
+
+      <td>
+        bool
+      </td>
+
+      <td>
+        Don't show animation at the end of the transaction.
+      </td>
+    </tr>
+  </tbody>
+</Table>
+
+## Response
+
+A successful request will return the following response:
+
+```json
+{  
+   "jsonrpc":"2.0",
+   "result":{  
+      "statusCode":0,
+      "statusMessage":"ok",
+      "mutag":2,
+      "solek":6,
+      "manpik":6,
+      "cardNumber":"458003***7640",
+      "posEntryMode":40,
+      "creditType":0,      
+      "isClub":false,
+      "isPrePaid":false,
+      "isImmediate":false,
+      "isIpayAllowed":false,
+      "maxPayments":18,
+      "maxCreditPayments":18,
+      "minCreditPayments":3,
+      "minCreditAmount":2500,
+      "uid":"18071016383608830129318"
+   },
+   "id":1
+}
+```
+
+### Response Parameters
+
+The table below describes the response parameters for this method.
+
+| Name                  | Type              | Description                                                                          |
+| :-------------------- | :---------------- | :----------------------------------------------------------------------------------- |
+| `statusCode`          | integer           | The transaction status. A value of `0`indicates a successful (approved) transaction. |
+| `statusMessage`       | string            | The transaction message (e.g., `ok`).                                                |
+| `mutag`               | integer           | The card brand.                                                                      |
+| `solek`               | integer           | The acquirer.                                                                        |
+| `manpik`              | integer           | The card issuer.                                                                     |
+| `cardNumber`          | string            | The masked personal account number (PAN).                                            |
+| `posEntryMode`        | integer           | The POS Entry Mode. The values are the same as those in the request.                 |
+| `creditTerms`         | integer           | The credit card payment options. The values are the same as those in the request.    |
+| `cardName`            | string            | The name of the credit card.                                                         |
+| `isClub`              | boolean           | A flag indicating if the card belongs to a club.                                     |
+| `isPrePaid`           | boolean           | A flag for prepaid transactions.                                                     |
+| `isImmediate`         | boolean           | A flag for immediate transactions.                                                   |
+| `allowedCreditTerms`  | array of integers | An array of allowed credit terms for this transaction.                               |
+| `isIpayAllowed`       | boolean           | A flag indicating if a benefit is allowed for this transaction.                      |
+| `maxPayments`         | integer           | The maximum number of payments allowed.                                              |
+| `maxCreditPayments`   | integer           | The maximum number of credit payments allowed.                                       |
+| `minCreditPayments`   | integer           | The minimum number of credit payments allowed.                                       |
+| `minCreditAmount`     | integer           | The minimum allowed credit amount in cents.                                          |
+| `uid`                 | string            | The transaction unique identifier.                                                   |
+| `tokenizedCardNumber` | string            | The tokenized PAN.                                                                   |

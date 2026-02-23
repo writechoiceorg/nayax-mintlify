@@ -1,0 +1,416 @@
+---
+title: "Operator Actions"
+---
+
+In Nayax core there are various actions that can be taken regarding Operators, such as updating or  retrieving information of an operator, all of these are performed in the **Administration > Operators** menu.
+
+<Frame><img src="/images/docs/operator-actions/image1.png" /></Frame>
+
+These action can also be done through Lynx API programaticallly using the following endpoints:
+
+<HTMLBlock>
+  {`
+  <style>
+    .endpoint_card_container {
+      gap: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+
+      .card {
+        display: flex;
+        position: relative;
+        padding: 16px 18px;
+        align-items: flex-start;
+        justify-content: start;
+        gap: 12px;
+        border-radius: 6px;
+        border: 1px solid #DCDCDC;
+        background-color: #FFF;
+        text-decoration: none !important;
+        transition: all 0.3s ease, border 0.1s ease;
+
+        .card_content {
+          font-feature-settings: 'clig' off, 'liga' off;
+          font-family: Inter;
+          font-style: normal;
+          line-height: 18px;
+
+          h3 {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex-wrap: wrap;
+            color: #383838;
+            font-size: 17.5px;
+            font-weight: 700;
+            margin: 0 38px 0 0;
+
+            span {
+              position: absolute;
+              top: 10px;
+              right: -5px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              flex-shrink: 0;
+              color: #FFF !important;
+              text-align: center;
+              font-size: 8px;
+              font-weight: 700;
+              text-transform: uppercase;
+              width: 40px;
+              height: 16px;
+              flex-shrink: 0;
+              border-radius: var(--border-radius-lg);
+              margin: 0 15px 0 0;
+            }
+
+            .get {
+              background: #0e9b71;
+              text-shadow: 1px 1px 0 #0d8d67, 0 1px 0 #0d8d67, 1px 0 0 #0d8d67;
+            }
+
+            .post {
+              background: #0171c2;
+              text-shadow: 1px 1px 0 #0168b3, 0 1px 0 #0168b3, 1px 0 0 #0168b3;
+            }
+            
+            .put {
+              background: #674ead;
+              text-shadow: 1px 1px 0 #604aa2, 0 1px 0 #604aa2, 1px 0 0 #604aa2;
+            }
+
+            .patch {
+              background: #df7d03;
+              text-shadow: 1px 1px 0 #d07503, 0 1px 0 #d07503, 1px 0 0 #d07503;
+            }
+          }
+
+          p {
+            color: #676767;
+            font-size: 14px;
+            font-weight: 400;
+            margin-bottom: 5px;
+          }
+
+          .link {
+            color: #d2a900;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 18px;
+            text-decoration: none;
+
+            svg {
+              fill: #d2a900;
+            }
+          }
+
+          .link:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .card:hover {
+        border: 1px solid #d2a900;
+        box-shadow: 0px 0px 9.7px 0px rgba(0, 0, 0, 0.21);
+
+        h3 {
+          color: #d2a900;
+        }
+      }
+    }
+
+    @media only screen and (max-width: 400px) {
+      .endpoint_card_container {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+    }
+
+    @media only screen and (max-width: 350px) {
+      .endpoint_card_container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      [data-color-mode="system"] .card {
+        border: 1px solid #556974;
+        background-color: #20292e;
+
+        .card_content {
+
+          h3,
+          p {
+            color: #FFF;
+          }
+
+          .link {
+            color: #d2a900;
+
+            svg {
+              fill: #d2a900;
+            }
+          }
+        }
+      }
+
+      [data-color-mode="system"] .card:hover {
+        h3 {
+          color: #d2a900 !important;
+        }
+      }
+    }
+
+    [data-color-mode="dark"] .card {
+      border: 1px solid #556974;
+      background-color: #20292e;
+
+      .card_content {
+
+        h3,
+        p {
+          color: #FFF;
+        }
+
+        .link {
+          color: #d2a900;
+
+          svg {
+            fill: #d2a900;
+          }
+        }
+      }
+    }
+
+    [data-color-mode="dark"] .card:hover {
+      h3 {
+        color: #d2a900 !important;
+      }
+    }
+  </style>
+
+  <body>
+
+    <div class="endpoint_card_container">
+
+      <a class="card" href="/v1.0/reference/get-actor-by-actorid">
+        <div class="card_content">
+          <h3><span class="get">get</span> Get Actor Details by ActorID </h3>
+        </div>
+      </a>
+
+      <a class="card" href="/v1.0/reference/update-actor">
+        <div class="card_content">
+          <h3><span class="put">put</span> Update Operator/Sub-Operator</h3>
+        </div>
+      </a>
+
+
+    </div>
+
+  </body>
+  `}
+</HTMLBlock>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](https://developerhub.nayax.com/docs/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+</Warning>
+
+## Retrieve Operator Details
+
+[Get Actor Details by ActorID ](https://developerhub.nayax.com/reference/get-actor-by-actorid)retrieves comprehensive information about a specific actor. This endpoint provides detailed attributes, including profile information and associated configurations, for the actor identified by the provided ActorID.
+
+```curl Request
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/actors/{ActorID} \
+     --header 'Authorization: BEARER-TOKEN' \
+     --header 'accept: application/json'
+```
+
+```json Response
+{
+  "ParentActorID": 0,
+  "ActorID": 0,
+  "ActorDescription": "string",
+  "ActorCode": 0,
+  "ActorAddress": "string",
+  "ActorContact": "string",
+  "ActorTypeID": 0,
+  "ActorStatus": 0,
+  "ActorHierarchyLevel": 0,
+  "CurrencyID": 0,
+  "LastUpdated": "2024-11-25T20:58:19.906Z",
+  "RouteManagerName": "string",
+  "RouteManagerMobile": "string",
+  "TimeZoneKey": 0,
+  "DayLightSavingsBit": true,
+  "CountryID": 0,
+  "DailyCCTransLimitPerCard": 0,
+  "DailyPPTransLimitPerCard": 0,
+  "DailyExternalPPTransLimitPerCard": 0,
+  "DailyCCTransLimitPerCardPerOperator": 0,
+  "OperatorActorID": 0,
+  "DistributorActorID": 0,
+  "AreaActorID": 0,
+  "RouteActorID": 0,
+  "ActorHierarchy": "string",
+  "ActorHasChildrenBit": true,
+  "ActorHasMachinesBit": true,
+  "ActorImageURL": "string",
+  "ActorContractInfo": "string",
+  "ActorSQSID": 0,
+  "UseProductGroupVATBit": true,
+  "EreceiptTransactionEndEnableBit": true,
+  "MaximumRevalueAmountLimit": 0,
+  "ActorCreatedBy": 0,
+  "ActorCreationDate": "2024-11-25T20:58:19.906Z",
+  "UpdateBy": 0,
+  "CultureID": 0,
+  "RevaluePayoutByDistributor": true,
+  "FiscalizationBit": true,
+  "GeoCountryID": 0,
+  "GeoState": "string",
+  "GeoCity": "string",
+  "GeoAddress": "string",
+  "GeoStreetNumber": "string",
+  "GeoLongitude": 0,
+  "GeoLatitude": 0,
+  "GeoZipCode": "string",
+  "GeoZoom": 0,
+  "ActorLanguageID": 2,
+  "ActorMerchantBit": "string",
+  "ActorMerchantNameForDescriptor": "string",
+  "OverrideGeoInherritcanceBit": true,
+  "AirportID": 0,
+  "VerticalCustomJSON": "string",
+  "FiscalizationActorID": 0,
+  "SupportIncrementalAuth": true,
+  "MaximumDefaultCredit": 0,
+  "Refs": {
+    "additionalProp": "string"
+  }
+}
+```
+
+<Note>
+**path Params**
+
+Change `{ActorID}`with the actual Operator ID to retrieve the details from.
+</Note>
+
+The response will have the details of the requested operator.
+
+## Update Operator
+
+The [Update Operator/Sub-Operator](https://developerhub.nayax.com/reference/update-actor) endpoint allows to edit the inforamtion of the specified operator.
+
+```curl Request
+curl --request PUT \
+     --url https://qa-lynx.nayax.com/operational/v1/actors/{ActorID} \
+     --header 'Authorization: BEARER-TOKEN' \
+     --header 'accept: application/json' \
+     --header 'Content-Type: application/json' \
+     --data '{
+       "ActorDescription": "Updated Main Branch",
+       "ActorCode": 1002,
+       "ActorAddress": "456 New Street, Metropolis",
+       "ActorContact": "updated-contact@branch.com",
+       "ActorTypeID": 16,
+       "ActorStatus": 1,
+       "CurrencyID": 840,
+       "CountryID": 840,
+       "GeoCity": "Metropolis",
+       "GeoLongitude": -77.0364,
+       "GeoLatitude": 38.8951
+     }'
+
+```
+
+```json Response
+{
+  "ParentActorID": 0,
+  "ActorID": 0,
+  "ActorDescription": "string",
+  "ActorCode": 0,
+  "ActorAddress": "string",
+  "ActorContact": "string",
+  "ActorTypeID": 0,
+  "ActorStatus": 0,
+  "ActorHierarchyLevel": 0,
+  "CurrencyID": 0,
+  "LastUpdated": "2024-11-25T20:58:19.906Z",
+  "RouteManagerName": "string",
+  "RouteManagerMobile": "string",
+  "TimeZoneKey": 0,
+  "DayLightSavingsBit": true,
+  "CountryID": 0,
+  "DailyCCTransLimitPerCard": 0,
+  "DailyPPTransLimitPerCard": 0,
+  "DailyExternalPPTransLimitPerCard": 0,
+  "DailyCCTransLimitPerCardPerOperator": 0,
+  "OperatorActorID": 0,
+  "DistributorActorID": 0,
+  "AreaActorID": 0,
+  "RouteActorID": 0,
+  "ActorHierarchy": "string",
+  "ActorHasChildrenBit": true,
+  "ActorHasMachinesBit": true,
+  "ActorImageURL": "string",
+  "ActorContractInfo": "string",
+  "ActorSQSID": 0,
+  "UseProductGroupVATBit": true,
+  "EreceiptTransactionEndEnableBit": true,
+  "MaximumRevalueAmountLimit": 0,
+  "ActorCreatedBy": 0,
+  "ActorCreationDate": "2024-11-25T20:58:19.906Z",
+  "UpdateBy": 0,
+  "CultureID": 0,
+  "RevaluePayoutByDistributor": true,
+  "FiscalizationBit": true,
+  "GeoCountryID": 0,
+  "GeoState": "string",
+  "GeoCity": "string",
+  "GeoAddress": "string",
+  "GeoStreetNumber": "string",
+  "GeoLongitude": 0,
+  "GeoLatitude": 0,
+  "GeoZipCode": "string",
+  "GeoZoom": 0,
+  "ActorLanguageID": 2,
+  "ActorMerchantBit": "string",
+  "ActorMerchantNameForDescriptor": "string",
+  "OverrideGeoInherritcanceBit": true,
+  "AirportID": 0,
+  "VerticalCustomJSON": "string",
+  "FiscalizationActorID": 0,
+  "SupportIncrementalAuth": true,
+  "MaximumDefaultCredit": 0,
+  "Refs": {
+    "additionalProp": "string"
+  }
+}
+```
+
+The body parameters are the same as used when [Creating an operator](https://developerhub.nayax.com/docs/create-operator).
+
+<Note>
+**path Params**
+
+Change `{ActorID}` with the actual Operator ID to update.
+</Note>
+
+The response will have the updated details of the requested operator.
+
+<HTMLBlock>
+  {`
+  <style>
+  img:not(.rm-Logo-img) {
+      border-radius: 12px;
+      box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13)
+  }
+  </style>
+  `}
+</HTMLBlock>

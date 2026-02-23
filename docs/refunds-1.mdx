@@ -1,0 +1,106 @@
+---
+title: "Refunds"
+---
+
+This request initiates the refund process by referencing the unique identifiers of the original, captured transaction. The API confirms the original transaction exists, calculates the amount available for refund, and instructs the payment processor to disburse the funds back to the cardholder.
+
+<Warning>
+**Only for Settled Transactions**
+
+A Refund Request can only be performed on transactions that have been captured (Settled).
+</Warning>
+
+## Request
+
+The Refund request uses the same endpoint as the initial [ `/charge-token` ](https://developerhub.nayax.com/reference/post_charge-token) request. The API determines it's a settlement based on the `RequestType` value within the `BasicInfo` object.
+
+See the example below:
+
+```json
+{
+  "basicInfo": {
+    "requestType": 3,          // Example: 3 for Refund
+    "entryMode": 1,
+    "amount": 25.00,           // The amount to be refunded (can be partial)
+    "currency": "EUR",
+    "countryCode": "DE",
+    "tokenModel": 1,
+    "cvc": null,
+    "token": null,
+    "merchantRequestId": "NEW_REFUND_ID_002", // New unique ID for the refund request
+    "transactionId": "ORIGINAL_NAYAX_TRX_98765", // ID of the original CAPTURED transaction
+    "transactionTimeUtc": "2025-08-28T10:30:00Z", // Time of the original CAPTURED transaction
+    "isSaveTokenWithoutConsent": false
+  },
+  "machineInfo": {
+    "machineId": "0434334921100366"
+  },
+  "cardHolderInfo": {}, // Minimal data needed
+  "paymentInfo": {},    // Minimal data needed
+  "additionalInfo": {},
+  "validationKey": "AUTH_VALID_KEY_XYZ_REFUND"
+}
+```
+
+Note that the `RequestType `is set to the value corresponding to a Refund (e.g., 3). The `Amount `specifies the refund amount (which can be less than the original capture amount for a partial refund).
+
+### Request Parameters
+
+The following table highlights the critical fields used to define a Refund request:
+
+| Parameter            | Location  | Type     | Description                                                                                                               | Required for Refund |
+| :------------------- | :-------- | :------- | :------------------------------------------------------------------------------------------------------------------------ | :------------------ |
+| `RequestType`        | basicInfo | Int32    | **Must be the value for 'Refund'**. (e.g., 3)                                                                             | Yes                 |
+| `Amount`             | basicInfo | Decimal  | The amount being refunded. **Must be less than or equal to the amount available for refund on the original transaction.** | Yes                 |
+| `MerchantRequestId`  | basicInfo | String   | A **new, unique ID** for this specific refund attempt.                                                                    | Yes                 |
+| `TransactionId`      | basicInfo | String   | The unique Nayax ID returned in the **original CAPTURE/SALE response**.                                                   | Yes                 |
+| `TransactionTimeUtc` | basicInfo | DateTime | The UTC timestamp returned in the **original CAPTURE/SALE response**.                                                     | Yes                 |
+| `ValidationKey`      | Root      | String   | Cryptographic key (HMAC) to authenticate this specific refund request.                                                    | Yes                 |
+
+## Response
+
+A successful validation returns a `200 OK` status and a body containing the validated merchant details:
+
+```json
+{
+  "status": {
+    "verdict": "Approved",
+    "code": 0,
+    "statusMessage": "Payment processed successfully."
+  },
+  "basicInfo": {
+    "amount": 25.5,
+    "currency": "EUR",
+    "merchantRequestId": "MERCHANT_MIT_001",
+    "transactionId": "NAYAXTRANS98765",
+    "transactionTimeUtc": "2025-08-28T10:30:00Z"
+  },
+  "paymentInfo": {
+    "amount": 25.5,
+    "currency": "EUR",
+    "nayaxTokenId": "NAYAXTOK12345",
+    "siteId": 1,
+    "providerTransactionId": "PSP_TRANS_ABC",
+    "decimalPlace": 2
+  }
+}
+```
+
+### Response Parameters
+
+The table below describes the parameters of the response:
+
+| Parameter               | Location    | Type     | Description                                                             |
+| :---------------------- | :---------- | :------- | :---------------------------------------------------------------------- |
+| `verdict`               | status      | String   | **'Approved'** or **'Declined'**. The final decision.                   |
+| `code`                  | status      | Int32    | Response code: **0 for Approved**, otherwise the relevant decline code. |
+| `statusMessage`         | status      | String   | A descriptive message about the transaction outcome.                    |
+| `amount`                | basicInfo   | Decimal  | The transaction amount processed.                                       |
+| `currency`              | basicInfo   | String   | The currency of the transaction.                                        |
+| `merchantRequestId`     | basicInfo   | String   | The unique ID from the original request.                                |
+| `transactionId`         | basicInfo   | String   | The unique transaction ID assigned by the Nayax system.                 |
+| `transactionTimeUtc`    | basicInfo   | DateTime | The UTC timestamp when the transaction was completed.                   |
+| `nayaxTokenId`          | paymentInfo | String   | The token ID used for the charge.                                       |
+| `siteId`                | paymentInfo | Int32    | The site ID associated with the payment.                                |
+| `providerTransactionId` | paymentInfo | String   | The unique ID assigned by the Payment Service Provider (PSP).           |
+| `decimalPlace`          | paymentInfo | Int32    | The number of decimal places used for the currency/amount.              |

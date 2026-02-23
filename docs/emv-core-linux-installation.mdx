@@ -1,0 +1,83 @@
+---
+title: "Linux SDK Installation"
+---
+
+The Nayax EMV Core SDK supports a wide range of Linux-based platforms. Each delivery includes optimized binaries for specific CPU architectures and library versions.
+
+<Accordion title="Supported Platforms" icon="fa-info-circle">
+  The following table has all supported Linux platforms:
+
+  | Target Name          | Description            | Bits | PIE | CPU ABI     | Min Kernel | GLIBC | libCurl |
+  | :------------------- | :--------------------- | :--- | :-- | :---------- | :--------- | :---- | :------ |
+  | **x86\_64**          | Ubuntu 64-bit          | 64   | Yes | AMD64       | 3.2.0      | 2.34  | 7.81.0  |
+  | **armhf**            | ARM32 GCC "hard float" | 32   | Yes | ARM v7-A    | 3.2.0      | 2.34  | 7.81.0  |
+  | **armhf\_7.5**       | Linaro 7.5 toolchain   | 32   | No  | ARM v7-A    | 3.2.0      | 2.17  | 7.86.0  |
+  | **armv8a**           | Poky Linux (Yocto)     | 64   | Yes | ARM AArch64 | 5.15.0     | 2.38  | 8.4.0   |
+  | **aarch64-nuvoton**  | Nuvoton (Buildroot)    | 64   | No  | ARM AArch64 | 5.10.0     | 2.28  | 7.79.1  |
+  | **arm-inj**          | Buildroot              | 32   | Yes | ARM v7-A VE | -          | -     | 7.83.1  |
+  | **ql\_oe\_mdm9607**  | Quectel MDM9607        | 32   | No  | ARM v7-A    | 2.6.32     | 2.17  | 7.44.0  |
+  | **cortexa53-poky**   | Poky Linux             | 64   | Yes | ARM AArch64 | 3.14.0     | 2.34  | 7.82.0  |
+  | **openwrt**          | Open-source firmware   | 32   | No  | MIPS        | -          | -     | 8.0.1   |
+  | **aarch64-gnu-13.2** | GNU toolchain 13.2     | 64   | -   | ARM AArch64 | 3.7.0      | 2.34  | 8.9.0   |
+</Accordion>
+
+### Package Contents
+
+Each platform folder contains four primary components:
+
+* **`otiKiosk`**: The primary EMV-Core service executable.
+* **`otiKioskDemo`**: The client Test Application executable.
+* **`kiosk-client-library-xxx.zip`**: Eclipse project containing the C source code and sample app.
+* **`otikiosk-xxx.zip`**: Package for remote updates via TMS (using the `CON_PROG` command).
+
+You can see a folder structure sample below:
+
+```
+Linux/
+└── x86_64/
+    ├── otiKiosk/            # EMV-Core Service
+    ├── otiKioskDemo/        # Test App
+    ├── Sources/             # Client library & source code
+    └── TMS Update/          # Remote update package
+```
+
+## Installation
+
+The EMV Core SDK for Linux provides a set of APIs to control payment processes over Unix domain sockets or TCP. It supports multiple architectures, including x86\_64 and various ARM platforms.
+
+### Prerequisites and Environment
+
+* **System Dependencies**: Requires `libcurl` for secured internet access with TLS 1.2 or higher.
+* **Permissions**: The user running the service must have read/write access to the executable folder and the reader device (e.g., `/dev/hidrawX` for USB or `/dev/ttyXXX` for Serial).
+* **Architecture**: Ensure you are using the correct binary for your target platform (e.g., Ubuntu x86\_64, armhf, or armv8a).
+
+### Installation Steps
+
+Follow these steps to install the SDK on Linux:
+
+1. Copy the EMV-Core binary (`otiKiosk`) to the target device. Note that the file must not be renamed.
+2. Build the sample application:
+   * Install build essentials: `sudo apt-get install build-essential automake`.
+   * Extract the source code zip file (e.g., `Emv-Core-client-x86_64-1.4-97.zip`).
+   * Run the following commands in the source folder:
+     ````bash
+     autoreconf -fi
+     ./configure
+     make
+     [cite_start]```[cite: 1871, 1872, 1873].
+     ````
+3. Run the applications:
+   * **Terminal 1**: Start the EMV Core service with `sudo ./otiKiosk`.
+   * **Terminal 2**: Start the test application with `sudo ./otiKioskDemo`.
+
+<Note>
+**Communication Configuration**
+
+By default, the SDK uses Internal (Unix domain) sockets, creating `socket_cmd` and `socket_events` in the application’s `/var` folder.
+
+If you prefer TCP communication, set the configuration option `KIOSK_USE_TCP_SOCKETS=1`. This will use ports **10000** for commands and **10001** for events.
+</Note>
+
+<br />
+
+<br />

@@ -1,0 +1,421 @@
+---
+title: "cancelTransaction"
+---
+
+The `cancelTransaction` method is used to cancel a transaction that has already been approved and is registered in the database.
+
+<Callout icon="🚧" theme="warn">
+  Such a transaction can be canceled as long as it is stored in the AEA database, which is cleared after the end-of-day batch when `doPeriodic` is called.
+</Callout>
+
+The client can also implement this action by calling `doTransactionPhase1` with the appropriate tranCode.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Integration ](https://developerhub.nayax.com/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, ensure to configure the following:
+
+* The `method `field must be set to `cancelTransaction` .
+* The service must be set to `ashrait` in the params.
+
+The request includes a list of parameters, with the first being the service name, which is currently fixed as `ashrait`, and the second being a dictionary containing all other transaction-specific details.
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "cancelTransaction",
+    "params": [
+        "ashrait",
+        {
+            "originalUID": "24071711552508830122539",
+            "vuid": "1234567"
+        }
+    ],
+    "id": "123454352"
+}
+```
+
+### Request Parameters
+
+The table below describes the request parameters for this method.
+
+| Name          | Type   | Description                                         |
+| :------------ | :----- | :-------------------------------------------------- |
+| `originalUID` | string | The original UID of the transaction to be canceled. |
+| `vuid`        | string | Vendor (client) unique transaction identifier.      |
+
+## Response
+
+A successful request will return the following response:
+
+```json
+{  
+   "jsonrpc":"2.0",
+   "result":{  
+    "statusCode": 0,
+    "statusMessage": "׳”׳¢׳¡׳§׳” ׳׳•׳©׳¨׳”",
+    "appVersion": "01.05.22",
+    "retailerId": "0883012013",
+    "ecrNo": "1",
+    "vuid": "ee5e7af5-7719-4726-992f-0eb2915b992a",
+    "tranCode": 1,
+    "currency": "376",
+    "amount": 100,
+    "mutag": 1,
+    "mutagName": "Mastercard",
+    "manpik": 2,
+    "solek": 2,
+    "cardNumber": "*********",
+    "cardNumberOriginalLength": "************************",
+    "expDate": "2305",
+    "cardName": "Mastercard",
+    "tokenizedCardNumber": "c8ae19356dd1d7e946165fab67a14516",
+    "tranType": 1,
+    "posEntryMode": 5,
+    "isClub": false,
+    "isPrepaid": false,
+    "creditTerms": 1,
+    "uid": "23031212432508830123729",
+    "rrn": "948767075   ",
+    "authCodeManpik": 1,
+    "issuerAuthNum": "0652073",
+    "acquirerMerchantID": "6543505",
+    "sysTraceNumber": "01001001",
+    "authorizationCommStat": "{\"connectRetries\":0,\"connectTotalTime\":555,\"authorizationTotalTime\":744,\"smallBlockedTotalTime\":0}",
+    "merchantReceipt":[  
+         {"fieldName":"׳¡׳›׳•׳","fieldValue":"1000"},
+         {"fieldName":"ATC","fieldValue":"0289"}
+      ],
+      "customerReceipt":[  
+         {"fieldName":"׳¡׳›׳•׳","fieldValue":"1000"},
+         {"fieldName":"ATC","fieldValue":"0289"}
+      ]
+   },
+   "id":1
+}
+```
+
+### Response Parameters
+
+The table below describes the response parameters for this method.
+
+<Table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        Name
+      </th>
+
+      <th>
+        Type
+      </th>
+
+      <th>
+        Description
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `statusCode`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Transaction status. A value of `0` indicates a successful (approved) transaction.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `statusMessage`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Transaction message (e.g., `ok`)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `mutag`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Card brand
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `solek`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Acquirer
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `manpik`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Card Issuer
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `uid`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Transaction unique identifier
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `posEntryMode`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        POS Entry Mode, type of card transaction. Values are:
+        `0` (MSR),
+        `5` (CTLS MSR),
+        `40` (Contact EMV),
+        `50` (Phone),
+        `51` (Signature only),
+        `80` (Fallback (err)),
+        `81` (Fallback (no AID))
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `cardNumber`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Masked personal account number (PAN)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `rrn`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Transaction authorization number from the authorized entity
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `issuerAuthNum`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Issuer authorization number
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `acquirerMerchantID`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Merchant ID in the acquirer system
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `authCodeManpik`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Code of authorization. Values are:
+        `0` (Unauthorized transaction),
+        `1` (Authorized by issuer),
+        `2` (Declined by issuer),
+        `3` (Stip approved ABS),
+        `4` (Stip declined ABS),
+        `5` (Voice approval),
+        `6` (Voice declined),
+        `7` (Approved by issuer pre-auth),
+        `8` (Approved by card)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `gatewayToken`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Gateway token of the card
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `appVersion`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Payment application version
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `retailerId`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Terminal retailer Id
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `ecrNo`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        POS identifier
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `vuid`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Vendor unique identifier
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `tranCode`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Transaction Code
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `merchantReceipt`
+      </td>
+
+      <td>
+        array of key/value
+      </td>
+
+      <td>
+        Merchant receipt to print or save
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `customerReceipt`
+      </td>
+
+      <td>
+        array of key/value
+      </td>
+
+      <td>
+        Customer receipt to print
+      </td>
+    </tr>
+  </tbody>
+</Table>

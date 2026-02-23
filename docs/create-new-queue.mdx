@@ -1,0 +1,71 @@
+---
+title: "Create New Queue"
+---
+
+Creating an Amazon SQS queue is the first step in setting up your integration with Nayax.
+
+## Select AWS Region
+
+Once the prerequisites are complete, you can proceed to select the AWS region where your queue will be created.
+
+1. Go to the top-right corner of the AWS console.
+2. Select the region where you will create the queue.
+<Warning>
+**Region pricing and latency**
+
+It's important to note that the region you select will affect the pricing and latency.
+</Warning>
+
+<Frame><img src="/images/docs/create-new-queue/image1.png" /></Frame>
+
+## Create a Queue
+
+Now that you’ve selected a region, the next step is to create a new queue.
+
+1. Click the **three lines** icon located in the upper left corner of the AWS console.
+2. Select the **All services** option.
+
+   <Frame><img src="/images/docs/create-new-queue/image2.png" /></Frame>
+3. Search the **Application Integration** category and select **Simple Queue Services** (SQS).
+
+   <Frame><img src="/images/docs/create-new-queue/image3.png" /></Frame>
+4. Then, click **Create Queue**.
+
+   <Frame><img src="/images/docs/create-new-queue/image4.png" /></Frame>
+5. In the **Details** section:
+   a.  Select **Standard** as the queue type.
+   b. Enter a unique name for your queue.
+
+   <Frame><img src="/images/docs/create-new-queue/image5.png" /></Frame>
+6. Configure the additional sections based on your needs:
+   * **Configuration:** Define basic settings for the queue.
+   * **Encryptio:** Secure your queue messages with encryption.
+   * **Access policy:** Set permissions for accessing the queue.
+   * **Redrive allow policy (Optional):** Enable or disable policies for message redriving.
+   * **Dead-letter queue (Optional):** Configure a queue for undeliverable messages.
+   * **Tags (Optional):** Add tags to categorize and manage your queue.
+<Note>
+**Optional Sections**
+
+Optional sections such as Redrive allow policy, Dead-letter queue, and Tags should be filled in based on your specific requirements. They help customize your queue's functionality and management.
+</Note>
+7. Click the **Create Queue** button.
+
+   <Frame><img src="/images/docs/create-new-queue/image6.png" /></Frame>
+
+Once the queue is successfully created, a confirmation message will appear on the screen along with the **Queue URL** and **ARN (Amazon Resource Name)**. Copy these values, which will be needed for integration and permissions setup in subsequent steps.
+
+<Frame><img src="/images/docs/create-new-queue/image7.png" /></Frame>
+
+<HTMLBlock>
+  {`
+  <style>
+  img:not(.rm-Logo-img) {
+      border-radius: 12px;
+      box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13)
+  }
+  </style>
+  `}
+</HTMLBlock>
+
+<br />

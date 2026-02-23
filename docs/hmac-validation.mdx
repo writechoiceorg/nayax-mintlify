@@ -1,0 +1,28 @@
+---
+title: "HMAC Validation"
+---
+
+To ensure the integrity and authenticity of webhook notifications, Nayax uses Hash-based Message Authentication Code (HMAC). This mechanism allows you to verify that incoming data was sent by Nayax and has not been altered in transit.
+
+Before you can begin validating requests, you must coordinate a one-time setup with your Nayax Professional Services Solution Architect.
+
+The HMAC key creation follows these steps:
+
+1. Create a unique HMAC secret key. with a hexadecimal string of at least 32 characters.
+2. Provide this key to your Nayax Architect.
+3. Confirm the following technical specifications with your Architect:
+   * **Field Order:** The exact sequence of payload fields used for the hash.
+   * **Encoding:** The string encoding format (standard is **UTF-8**).
+   * **Delimiters:** The specific characters used to separate fields in the payload.
+4. Store your secret key securely (e.g., in an environment variable). Never hardcode it in your source code.
+
+Once the setup is complete, the verification process follows these steps:
+
+1. Nayax generates a hash by combining the notification data with your secret key.
+2. Nayax sends the webhook with the signature included in the headers or payload.
+3. Your application receives the webhook and recalculates the hash using your local secret key.
+4. If your calculated hash matches the one sent by Nayax, the request is authentic.
+
+<Callout icon="❗️" theme="error">
+  **Important:** If the hashes do not match, the request should be treated as unauthorized and discarded. Always validate the HMAC before processing any notification.
+</Callout>

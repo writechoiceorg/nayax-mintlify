@@ -1,0 +1,44 @@
+---
+title: "Spark"
+---
+
+Spark is Nayax’s server-to-server API, enabling third-party systems to initiate and manage payment transactions on Nayax terminals remotely. It is designed for use cases where direct communication with the terminal, such as through Marshall, is not possible or desired, or as remote-controlled electric vehicle (EV) chargers, intelligent vending machines, or connected kiosks.
+
+Spark enables developers to initiate a session, handle authentication, authorize payments, and trigger settlements, all from their backend system. At the same time, Nayax manages the actual card interactions through its POS devices, such as VPOS Touch.
+
+Spark allows you to:
+
+* Control terminals remotely over the internet.
+* Offer flexible user experiences: remote commands, self-managed loyalty cards, and dynamic pricing.
+* Retain control over the business logic while Nayax handles the payment processing and compliance.
+
+## Remote and Device Start
+
+As an integrator, you'll utilize the Spark API to manage distinct transaction flows, initiating sessions either remotely or directly from the device.
+
+* With Remote Start, your server initiates the transaction by requesting that Nayax would activate a specific device, a flow beneficial for app/ computer-driven transactions.
+* With Device Start the transaction process begins directly from Nayax's terminal when a consumer interacts with it, allowing you to display crucial information, such as tariffs or service station availability, to the user via Nayax's `InfoQuery` API method before the session even formally commences on the machine.
+
+This distinction in initiation points is crucial for tailoring your integration to the specific user experience you aim to provide.
+
+## Guides
+
+This section provides guides to assist you in using the Spark API, outlining the integration process, authentication methods, available API methods, and other relevant information. See the pages below to learn more:
+
+<Columns cols={3}>
+  <Card title="Integration" href="https://developerhub.nayax.com/docs/spark-integration" />
+
+  <Card title="Network Requirements" href="https://developerhub.nayax.com/docs/spark-network-requirement" />
+
+  <Card title="Security & Authentication" href="https://developerhub.nayax.com/docs/security-authentication" />
+
+  <Card title="Payment Flows" href="https://developerhub.nayax.com/docs/transaction-flows-spark" />
+
+  <Card title="Spark API Reference" href="https://developerhub.nayax.com/reference/overview-spark-api#" />
+
+  <Card title="Webhook Callbacks" href="https://developerhub.nayax.com/docs/webhook-callbacks" />
+
+  <Card title="Additional Resources" href="https://developerhub.nayax.com/docs/additional-resources" />
+
+  <Card title="Sample Codes" href="https://developerhub.nayax.com/docs/spark-authentication-code-sample" />
+</Columns>

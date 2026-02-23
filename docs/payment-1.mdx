@@ -1,0 +1,375 @@
+---
+title: "Payment"
+---
+
+# EMV Core SDK Payment Management
+
+The EMV Core SDK provides robust APIs for managing payment transactions. These APIs enable seamless integration of cashless payment functionality into applications, supporting both open- and closed-loop systems. The SDK ensures secure, efficient, and flexible payment handling while offloading complexities to the Nayax backend.
+
+The methods available for payment management are:
+
+* [CancelTransaction](#canceltransaction)
+* [ConfirmTransaction](#confirmtransaction)
+* [GetCardToken](#getcardtoken)
+* [PreAuthorize](#preauthorize)
+* [VoidTransaction](#voidtransaction)
+
+The sections below describe them in more detail.
+
+***
+
+## `CancelTransaction`
+
+The `CancelTransaction` method stops the execution of an ongoing `PayTransaction` or `PreAuthorize` call. The system blocks further requests until the cancellation is accepted and confirmed.
+
+**Implementation Notes:**
+
+* **Before Card Presentation:** If a card has not been presented yet, the Reader poll sequence stops. The display will show **"Cancelling"**; the host application must then update the UI using the `ShowMessage` command.
+* **During Processing:** If the card was already presented but processing is not finished, the system returns `CannotCancel`. It may take a few seconds to receive the `TransactionComplete` event while the EMV Core waits for the online result.
+* **After Completion:** If the transaction is already finished, it returns `NoTransaction`.
+* **Undoing Success:** To undo a completed transaction, use `VoidTransaction`.
+* **Declined Transactions:** If `TransactionComplete` returns a `Decline` status, there is no need to send a `VoidTransaction` command.
+* **Events:** In all scenarios, EMV Core will eventually send a `TransactionComplete` event to finalize the state.
+
+See the API Signature for the `CancelTransaction` method:
+
+<Tabs>
+  <Tab title="JSON">
+    Request:
+
+    ```json
+     {"jsonrpc": "2.0", "method": "CancelTransaction", "id": 802}
+    ```
+
+    Response:
+
+    ```json
+      {"jsonrpc": "2.0", "result": true, "id": 802}
+    ```
+  </Tab>
+
+  <Tab title="Android">
+    ```java
+    void CancelTransaction();
+    ```
+  </Tab>
+
+  <Tab title="Linux">
+    ```c
+    KIOSK_RET LibOtiKiosk_CancelTransaction(void);
+    ```
+  </Tab>
+</Tabs>
+
+<Callout icon="🚧" theme="warn">
+  If the card has already been presented and processed, the system will return a `CannotCancel` error.
+</Callout>
+
+***
+
+## `ConfirmTransaction`
+
+A confirmation request is the second stage of an authorization request. It is used to confirm the authorization obtained so that settlement can proceed.
+
+### API Signature
+
+<Tabs>
+  <Tab title="JSON">
+    Response:
+
+    ```json JSON
+    {
+      "jsonrpc": "2.0",
+      "method": "TransactionComplete",
+      "params": {
+        "status": "OK",
+        "errorCode": 0,
+        "errorDescription": "",
+        "transactionId": "6103587330",
+        "authorizationDetails": {
+          "AmountAuthorized": 4.5,
+          "AmountRequested": 4.5,
+          "AuthorizationCode": "AuthOK",
+          "PartialPan": "541333******4111",
+          "CardType": "MasterCard",
+          "IsTransactionApproved": true,
+          "eReceipt": "",
+          "Card_ID": "2025-11-25 14:35:39.140|6|3",
+          "Card_Balance": 0.0,
+          "RRN": "251125123539",
+          "TransactionDbID": "6103587330",
+          "Transaction_Referance": "6103587330",
+          "CardToken": "5VXkNqtUDJBxQj9p/qTGt74jWaPHlRs7xxWa1Yu0gDI=",
+          "Additional_Parameters": {
+            "SiteId": "6",
+            "EntryMode": "4",
+            "MachineAuTime": "2025-11-25T14:35:38.885",
+            "NayaxTransactionId": "6103587330"
+          }
+        }
+      },
+      "id": 701
+    }
+    ```
+
+    Request:
+
+    ```json JSON
+    {"jsonrpc":"2.0","method":"ConfirmTransaction", "params": {"amount":450,
+    "fee":0, "productID":42, "transaction_Reference":"6103587330"}, "id":8}
+    ```
+
+    Response:
+
+    ```json JSON
+        {"jsonrpc":"2.0", "result":true, "id":8}
+    ```
+
+    **Parameters:**
+
+    | Parameter                | Description                                                                                                                        |
+    | :----------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
+    | **id**                   | Command ID.                                                                                                                        |
+    | **amount**               | The actual amount to charge – in minor units (cents).                                                                              |
+    | **transactionReference** | Transaction reference from the PSP. Use the `TransactionDbID` field from the `TransactionComplete` event.                          |
+    | **productID**            | Optional parameter: ID of the product selected by the consumer. This number will be saved on the server and available for reports. |
+    | **terminal\_data**       | Optional parameter: `terminal_data=(key1=value1,key2=value2)`.                                                                     |
+  </Tab>
+
+  <Tab title="Android">
+    ```java Java
+    void ConfirmTransaction(String transactionReference, int actualAmountMinorUnits, int productID) throws EmvCoreException;
+    ```
+
+    **Parameters:**
+
+    | Parameter                | Description                              |
+    | ------------------------ | ---------------------------------------- |
+    | `transactionReference`   | Unique reference from pre-authorization. |
+    | `actualAmountMinorUnits` | The final amount for settlement.         |
+    | `productID`              | Product identifier.                      |
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    KIOSK_RET LibOtiKiosk_ConfirmTransaction(uint32_t amount_cents, uint32_t fee_cents, uint32_t product_id, char* transaction_reference);
+    ```
+
+    **Parameters:**
+
+    | Parameter               | Description                                           |
+    | ----------------------- | ----------------------------------------------------- |
+    | `amount_cents`          | Amount to charge in minor units (cents, not dollars). |
+    | `fee_cents`             | Optional fee amount in minor units.                   |
+    | `transaction_reference` | Unique reference from pre-authorization.              |
+    | `product_id`            | Product identifier.                                   |
+  </Tab>
+</Tabs>
+
+***
+
+## `GetCardToken`
+
+The `GetCardToken` method initiates the card tokenization process, returning a card token without performing a financial transaction.
+
+EMV Core waits for a card to be presented, reads the data, and triggers a `CardTokenReceived` event:
+
+* **Payment Cards:** Returns a Base64 string containing the card token.
+* **CLP Cards (e.g., Mifare):** Returns the card UID.
+
+### API Signature
+
+<Tabs>
+  <Tab title="JSON">
+    Resquest:
+
+    ```
+    {
+    "method": "GetCardToken",
+    "params": {
+    "continuous": false,
+    "timeout": 60
+    },
+    "id": 5820
+    }
+
+    ```
+
+    Response:
+
+    ```json JSON
+       {"jsonrpc": "2.0", "result": true, "id": 5820}
+    ```
+
+    **Parameters:**
+
+    | Parameter          | Description                                                                                                                    |
+    | :----------------- | :----------------------------------------------------------------------------------------------------------------------------- |
+    | **timeoutSeconds** | Maximum number of seconds to wait. If no card arrives within this time – return `Timeout` status. Maximum value is 60 seconds. |
+  </Tab>
+
+  <Tab title="Android">
+    ```java
+    void GetCardToken(int timeoutSeconds, boolean continuous) throws EmvCoreException;
+    ```
+
+    **Parameters:**
+
+    | Parameter        | Description                                                                                                                |
+    | ---------------- | -------------------------------------------------------------------------------------------------------------------------- |
+    | `timeoutSeconds` | Maximum seconds to wait (max 60). If no card arrives, a `Timeout` status is returned.                                      |
+    | `continuous`     | If true, polling restarts immediately after a timeout. A `TransactionComplete` event is sent with status `PollContinuous`. |
+  </Tab>
+
+  <Tab title="Linux">
+    ```c
+    KIOSK_RET LibOtiKiosk_GetCardToken(otiKioskPaymentParameters *params);
+    ```
+  </Tab>
+</Tabs>
+
+***
+
+## `PreAuthorize`
+
+This method initiates a pre-authorization transaction with a specified amount. It helps reserve funds without immediate settlement, for example, EV chargers reserve a maximum amount before actual usage. EMV Core will wait for a card to be presented to the reader, read it, and, if needed, process it with the payment service. It will then send the `TransactionComplete` event.
+
+### API Signature
+
+<Tabs>
+  <Tab title="JSON">
+    Request:
+
+    ```json JSON
+    {"jsonrpc":"2.0","method":"PreAuthorize", "params": {"amount":450,
+    "timeout":10, "fee":0, "productID":0, "continuous":false}, "id":801}
+
+    ```
+
+    Response:
+
+    ```json JSON
+       {"jsonrpc": "2.0", "result": true, "id": 801}
+
+    ```
+
+    **Parameters:**
+
+    | Parameter      | Description                                                                                                                                                                |
+    | :------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | **amount**     | Amount to charge – in full units (Dollars, not cents).                                                                                                                     |
+    | **fee**        | Deprecated – Not used.                                                                                                                                                     |
+    | **currency**   | Taken from configuration since SDK v1.4.                                                                                                                                   |
+    | **productID**  | Optional parameter: ID of the product selected by the consumer. This number will be saved in the server and available for reports.                                         |
+    | **continuous** | If continuous is true, then poll for card will start immediately after card transaction timeout and `TransactionComplete` event will be sent with status ‘PollContinuous’. |
+    | **timeout**    | Maximum number of seconds to wait. If no card arrives within this time...                                                                                                  |
+  </Tab>
+
+  <Tab title="Android">
+    ```java Java
+    void PreAuthorize(int amountMinorUnits, int productID, int timeoutSeconds, boolean continuous) throws EmvCoreException;
+    ```
+
+    **Parameters:**
+
+    | Parameter          | Description                                                                                                    |
+    | ------------------ | -------------------------------------------------------------------------------------------------------------- |
+    | `amountMinorUnits` | Amount to charge in minor units (e.g., cents, not dollars).                                                    |
+    | `productID`        | ID of the product selected by the consumer. This number will be saved on the server and available for reports. |
+    | `timeoutSeconds`   | Maximum wait time for card presentation.                                                                       |
+    | `continuous`       | Whether to enable continuous polling.                                                                          |
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    otiKioskPaymentParameters params = {
+        .amount_cents = 1500, // $15.00
+        .fee_cents = 0,
+        .product_id = 12345,
+        .timeout_sec = 60,
+        .continuous = false
+    };
+
+    KIOSK_RET result = LibOtiKiosk_PreAuthorize(&params);
+    if (result == KIOSK_RET_OK) {
+        printf("Payment initiated successfully\n");
+    }
+    ```
+
+    **Parameters:**
+
+    | Parameter      | Description                                                                                                    |
+    | -------------- | -------------------------------------------------------------------------------------------------------------- |
+    | `amount_cents` | Amount to charge in minor units (e.g., cents, not dollars).                                                    |
+    | `fee_cents`    | Optional fee amount in minor units.                                                                            |
+    | `product_id`   | ID of the product selected by the consumer. This number will be saved on the server and available for reports. |
+    | `timeout_sec`  | Maximum wait time for card presentation.                                                                       |
+    | `continuous`   | Whether to enable continuous polling.                                                                          |
+  </Tab>
+</Tabs>
+
+<Callout icon="🚧" theme="warn">
+  Setting `productID ≠ 0` indicates that the amount set in `PreAuthorize` is final and will not change in `ConfirmTransaction`. If the final amount is unknown at this stage, use `productID = 0` in `PreAuthorize` and set the actual product ID during `ConfirmTransaction`.
+</Callout>
+
+If the transaction is approved (the `TransactionComplete` event returns with status `OK`), the application must call the `ConfirmTransaction` or `VoidTransaction` methods to complete the workflow.
+
+***
+
+## `VoidTransaction`
+
+This request is used to void a transaction in two specific cases:
+
+1. **Release Funds:** The transaction was **Pre-Authorized** but not **Confirmed**. Voiding releases the reserved funds when the transaction will no longer occur.
+2. **Reversal:** The transaction was completed using `PayTransaction` but needs to be canceled.
+
+### API Signature
+
+<Tabs>
+  <Tab title="JSON">
+    Request:
+
+    ```json JSON
+     {"jsonrpc": "2.0", "method": "VoidTransaction", "params": {"transaction_Reference": "8453F02DFD33413EBA77334B696D5991"}, "id": 803}
+    ```
+
+    Response:
+
+    ```json JSON
+     {"jsonrpc": "2.0", "result": true, "id": 803}
+    ```
+
+    **Parameters:**
+
+    | Parameter                | Description                                                               |
+    | :----------------------- | :------------------------------------------------------------------------ |
+    | **id**                   | Command ID.                                                               |
+    | **transactionReference** | Transaction reference came from PSP with the `TransactionComplete` event. |
+  </Tab>
+
+  <Tab title="Android">
+    ```java
+    void VoidTransaction(String transactionReference) throws EmvCoreException;
+    ```
+
+    **Parameters:**
+
+    | Parameter              | Description                              |
+    | ---------------------- | ---------------------------------------- |
+    | `transactionReference` | Unique reference from pre-authorization. |
+  </Tab>
+
+  <Tab title="Linux">
+    ```c
+    KIOSK_RET LibOtiKiosk_VoidTransaction(char* transaction_reference);
+    ```
+
+    **Parameters:**
+
+    | Parameter               | Description                              |
+    | ----------------------- | ---------------------------------------- |
+    | `transaction_reference` | Unique reference from pre-authorization. |
+  </Tab>
+</Tabs>
+
+<br />

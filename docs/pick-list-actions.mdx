@@ -1,0 +1,369 @@
+---
+title: "Pick List Actions"
+---
+
+In Nayax core, various actions can be taken regarding pick lists, such as updating, deleting, or retrieving a pick list from a machine. All of these are performed in the **Operations > Machine Inventory** menu.
+
+<Frame><img src="/images/docs/pick-list-actions/image1.png" /></Frame>
+
+These actions can also be performed through Lynx API using the following endpoints:
+
+<HTMLBlock>
+  {`
+  <style>
+    .endpoint_card_container {
+      gap: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+
+      .card {
+        display: flex;
+        position: relative;
+        padding: 16px 18px;
+        align-items: flex-start;
+        justify-content: start;
+        gap: 12px;
+        border-radius: 6px;
+        border: 1px solid #DCDCDC;
+        background-color: #FFF;
+        text-decoration: none !important;
+        transition: all 0.3s ease, border 0.1s ease;
+
+        .card_content {
+          font-feature-settings: 'clig' off, 'liga' off;
+          font-family: Inter;
+          font-style: normal;
+          line-height: 18px;
+
+          h3 {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex-wrap: wrap;
+            color: #383838;
+            font-size: 17.5px;
+            font-weight: 700;
+            margin: 0 38px 0 0;
+
+            span {
+              position: absolute;
+              top: 10px;
+              right: -5px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              flex-shrink: 0;
+              color: #FFF !important;
+              text-align: center;
+              font-size: 8px;
+              font-weight: 700;
+              text-transform: uppercase;
+              width: 40px;
+              height: 16px;
+              flex-shrink: 0;
+              border-radius: var(--border-radius-lg);
+              margin: 0 15px 0 0;
+            }
+
+            .get {
+              background: #0e9b71;
+              text-shadow: 1px 1px 0 #0d8d67, 0 1px 0 #0d8d67, 1px 0 0 #0d8d67;
+            }
+
+            .post {
+              background: #0171c2;
+              text-shadow: 1px 1px 0 #0168b3, 0 1px 0 #0168b3, 1px 0 0 #0168b3;
+            }
+
+            .patch {
+              background: #df7d03;
+              text-shadow: 1px 1px 0 #d07503, 0 1px 0 #d07503, 1px 0 0 #d07503;
+            }
+            
+            .put {
+              background: #674ead;
+              text-shadow: 1px 1px 0 #604aa2, 0 1px 0 #604aa2, 1px 0 0 #604aa2;
+            }
+            
+            .del {
+              background: #c71b29;
+              text-shadow: 1px 1px 0 #b91926, 0 1px 0 #b91926, 1px 0 0 #b91926;
+            }
+          }
+
+          p {
+            color: #676767;
+            font-size: 14px;
+            font-weight: 400;
+            margin-bottom: 5px;
+          }
+
+          .link {
+            color: #d2a900;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 18px;
+            text-decoration: none;
+
+            svg {
+              fill: #d2a900;
+            }
+          }
+
+          .link:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .card:hover {
+        border: 1px solid #d2a900;
+        box-shadow: 0px 0px 9.7px 0px rgba(0, 0, 0, 0.21);
+
+        h3 {
+          color: #d2a900;
+        }
+      }
+    }
+
+    @media only screen and (max-width: 400px) {
+      .endpoint_card_container {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+    }
+
+    @media only screen and (max-width: 350px) {
+      .endpoint_card_container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      [data-color-mode="system"] .card {
+        border: 1px solid #556974;
+        background-color: #20292e;
+
+        .card_content {
+
+          h3,
+          p {
+            color: #FFF;
+          }
+
+          .link {
+            color: #d2a900;
+
+            svg {
+              fill: #d2a900;
+            }
+          }
+        }
+      }
+
+      [data-color-mode="system"] .card:hover {
+        h3 {
+          color: #d2a900 !important;
+        }
+      }
+    }
+
+    [data-color-mode="dark"] .card {
+      border: 1px solid #556974;
+      background-color: #20292e;
+
+      .card_content {
+
+        h3,
+        p {
+          color: #FFF;
+        }
+
+        .link {
+          color: #d2a900;
+
+          svg {
+            fill: #d2a900;
+          }
+        }
+      }
+    }
+
+    [data-color-mode="dark"] .card:hover {
+      h3 {
+        color: #d2a900 !important;
+      }
+    }
+  </style>
+
+  <body>
+
+    <div class="endpoint_card_container">
+
+      <a class="card" href="/v1.0/reference/generate-pick-list">
+        <div class="card_content">
+          <h3><span class="post">post</span> Generate Pick List</h3>
+        </div>
+      </a>
+
+      <a class="card" href="/v1.0/reference/get-pick-list">
+        <div class="card_content">
+          <h3><span class="get">get</span> Get Pick List</h3>
+        </div>
+      </a>
+
+      <a class="card" href="/v1.0/reference/update-pick-list">
+        <div class="card_content">
+          <h3><span class="put">put</span> Update Pick List</h3>
+        </div>
+      </a>
+
+      <a class="card" href="/v1.0/reference/delete-pick-list">
+        <div class="card_content">
+          <h3><span class="del">delete</span> Delete Pick List</h3>
+        </div>
+      </a>
+
+    </div>
+
+  </body>
+  `}
+</HTMLBlock>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](https://developerhub.nayax.com/docs/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+</Warning>
+
+## Get Pick List from Machine
+
+You can retrieve the pick list associated with a specific machine using the [Get Pick List](https://developerhub.nayax.com/reference/get-pick-list) endpoint. See the example request below:
+
+```curl Request
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/machines/{MachineID}/pickList \
+     --header 'Authorization: BEARER-TOKEN' \
+     --header 'accept: application/json'
+```
+
+<Note>
+**Path Param**
+
+Change `MachineID` with the actual ID of the machine to retrieve the pick list from.
+</Note>
+
+A successful response will return the pick list with all the products available on the machine.
+
+## Update Pick List
+
+You can modify the pick list for a specific machine using the [Update Pick List](https://developerhub.nayax.com/reference/update-pick-list) endpoint. This endpoint allows you to update the quantities of products to be restocked or adjust other details in the pick list. See the example request below:
+
+```curl Request
+curl --request PUT \
+     --url https://qa-lynx.nayax.com/operational/v1/machines/inventory/picklists/update \
+     --header 'Authorization: BEARER-TOKEN' \
+     --header 'accept: application/json' \
+     --header 'Content-Type: application/json' \
+     --data '{
+       "MachineId": 12345,
+       "Products": [
+         {
+           "MachineProductId": 67890,
+           "PickQty": 10
+         },
+         {
+           "MachineProductId": 54321,
+           "PickQty": 5
+         }
+       ]
+     }'
+```
+
+Where:
+
+<Table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        Parameter
+      </th>
+
+      <th>
+        Type
+      </th>
+
+      <th>
+        Description
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        **MachineId**
+      </td>
+
+      <td>
+        `int64`
+      </td>
+
+      <td>
+        The unique identifier of the machine whose pick list is being updated.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        **Products**
+      </td>
+
+      <td>
+        `array of objects`
+      </td>
+
+      <td>
+        A list of products to be updated in the pick list:
+        `MachineProductId`: The unique identifier of the product in the machine.
+        `PickQty`The updated quantity of the product to be picked.
+      </td>
+    </tr>
+  </tbody>
+</Table>
+
+A successful response will return the pick list with the updated pick quantities.
+
+## Delete Pick List
+
+Using the [Delete Pick List](https://developerhub.nayax.com/reference/delete-pick-list) endpoint, you can remove the existing pick list associated with a specific machine. This endpoint helps operators clear outdated or incorrect pick lists to ensure accurate restocking processes.
+
+```curl Request
+curl --request DELETE \
+     --url https://qa-lynx.nayax.com/operational/v1/machines/{MachineID}/pickList \
+     --header 'Authorization: BEARER-TOKEN' \
+     --header 'accept: application/json'
+```
+
+A successful request will return the confirmation of the deletion of the pick list.
+
+<HTMLBlock>
+  {`
+  <style>
+  	img:not(.rm-Logo-img) {
+      border-radius: 6px !important;
+      box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.15);
+    }
+  </style>
+  `}
+</HTMLBlock>
+
+<HTMLBlock>
+  {`
+  <style>
+  img:not(.rm-Logo-img) {
+      border-radius: 12px;
+      box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13)
+  }
+  </style>
+  `}
+</HTMLBlock>

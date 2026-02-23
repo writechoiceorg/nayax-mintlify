@@ -1,0 +1,91 @@
+---
+title: "Credit Card"
+---
+
+Cortina supports credit card payment processing. The process involves standard card verification steps, including pre-authorization, sale, cancellation (reversal), and void for card-present (swipe and chip) and card-not-present transactions.
+
+Cortina supports two types of Credit Card transaction flows:
+
+* Pre-selection
+* Pre-authorization
+
+Both flows involve interactions between components, including the Nayax Device, Nayax Engine, and Integrator. See the sections below for more details on each flow.
+
+## Pre-selection
+
+The Pre-selection flow simplifies the payment process by merging the steps of product/service selection and authorization into a single transaction. This flow is typically used for low-value or quick transactions, where the customer’s selection and payment authorization are handled in a single step.
+
+See the diagram below:
+
+<Frame><img src="/images/docs/cortina-credit-card-flows/image1.png" /></Frame>
+
+The steps in this process are as follows:
+
+1. The process begins when the customer inserts or taps their prepaid card on the Nayax Device. This action triggers the Device to send an Authorization Command Nayax Engine, including details about the selected product or service. This allows the system to request authorization from the integrator for the prepaid card payment.
+2. The Cortina API then initiates a service session using the [Start Session](https://developerhub.nayax.com/reference/post_cortina-startsession) endpoint and sends a [Credit Card Sale](https://developerhub.nayax.com/reference/post_cortina-creditcard-sale) request to the Integrator. This request includes all the necessary details to authorize the payment for the product or service.
+3. The Integrator processes the request and sends an approval or decline message to the Cortina API. If the prepaid card has enough balance, the request is approved.
+4. Upon the integrator's approval, the Naya Engine sends an Authorization Response indicating that the transaction has been successfully authorized. This confirms that the customer’s prepaid card has sufficient funds to proceed.
+5. After receiving the authorization response, the Nayax Device acknowledges that the service or product has been approved and sends a Settlement Request to the Nayax engine.
+6. Once the service is completed or the product has been dispensed, the Nayax Device sends a [Sale End](https://developerhub.nayax.com/reference/post_cortina-saleendnotification) request in the Cortina API. This indicates that the transaction is complete and that the customer has received the service or product.
+7. The Integrator confirms receipt of the Sale End Notification by responding and marking the transaction as fully completed.
+8. The Nayax Device receives the Settlement Command Response, confirming that the transaction has been successfully processed and the sale is complete.
+
+This response is typically always approved in this flow, as the authorization has already been granted.
+
+<Warning>
+**Void**
+
+In case the product fails to be dispensed to client, the Nayax Engine uses the [Credit Card Void](https://developerhub.nayax.com/reference/post_cortina-creditcard-void) endpoind to void the payment request.
+</Warning>
+
+<Warning>
+**Timeout Void**
+
+In case that no Sale response will be recived within the timeout period, or that a 992 response code will be recived,   the Nayax Engine uses the [Credit Card Void](https://developerhub.nayax.com/reference/post_cortina-creditcard-void) endpoind to void the payment request. To indicate that the Void is sent due to timeout, the flag `isGatewayTimeout `will be sent as `True`.
+</Warning>
+
+## Pre-Authorization
+
+The Pre-authorization flow is used for transactions that require a two-step process. First, a session is initiated, followed by an authorization check. This flow ensures the transaction is valid and the customer has sufficient funds on the prepaid card before settlement.
+
+See the diagram below:
+
+<Frame><img src="/images/docs/cortina-credit-card-flows/image2.png" /></Frame>
+
+Where:
+
+1. The process begins when the Device sends an Authorization Command Request to the Nayax Engine.
+2. The Nayax Engine performs a [Start Session Request](https://developerhub.nayax.com/reference/post_cortina-startsession) using Cortina API to establish a session for the transaction. The request is directed to the Integrator (the payment processor or gateway).
+3. The Integrator processes the request and sends a response to the Nayax Engine.
+4. The Nayax Engine sends an [Authorization Request]()  to the Integrator via Cortina API. This request checks if the prepaid card has sufficient funds for the transaction.
+5. The Cortina API returns an Authorization Response indicating whether the transaction has been approved or declined, based on the prepaid card's available funds.
+6. The Nayax Engine receives the Authorization Response from the Cortina API and returns it to the Device. If approved, the device proceeds with the transaction and prepares to dispense the product.
+7. After the transaction is authorized, the Device sends a Settlement Command to the Nayax Engine to finalize the transaction and confirm the payment amount.
+8. The Nayax Engine forwards the Settlement Request to the integrator using Cortina's API [Credit Card Settlement](https://developerhub.nayax.com/reference/post_cortina-creditcard-settlement) endpoint, which includes the final transaction amount to be settled.
+9. The Cortina API sends the Settlement Response to the Integrator, confirming that the transaction has been successfully settled and the funds have been transferred.
+10. Finally, the Device receives the Settlement Command Response, which indicates that the transaction has been completed successfully and that the product has been dispensed to the customer.
+
+<Warning>
+**Cancellation**
+
+In case the product fails to be dispensed to client, the Nayax Engine uses the [Credit Card Cancel](https://developerhub.nayax.com/reference/post_cortina-creditcard-cancel) endpoint to cancel the Pre Authorization and the transaction.
+</Warning>
+
+<Warning>
+**Timeout Cancellation**
+
+In case that no Sale response will be recived within the timeout period, or that a 992 response code will be recived, the Nayax Engine uses the [Credit Card Cancel](https://developerhub.nayax.com/reference/post_cortina-creditcard-cancel) endpoint to cancel the Pre Authorization and the transaction. To indicate that the cancellation is sent due to timeout, the flag `isGatewayTimeout `will be sent as `True`.
+</Warning>
+
+<HTMLBlock>
+  {`
+  <style>
+  img:not(.rm-Logo-img) {
+      border-radius: 12px;
+      box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13)
+  }
+  </style>
+  `}
+</HTMLBlock>
+
+<br />

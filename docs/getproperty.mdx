@@ -1,0 +1,87 @@
+---
+title: "getProperty"
+---
+
+The `getProperty` method retrieves specific terminal details, such as the terminal serial number (S/N), the DCS hardware serial number, or the Agamento application version. If no property type is specified, it returns a broader dictionary of terminal-related properties.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Integration ](https://developerhub.nayax.com/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+To call this method, set the method field to `getProperty`, and include the params array:
+
+```json
+{
+    "jsonrpc":"2.0",
+    "method":"getProperty",
+    "id":"123454352",
+    "params": [
+        "device", 1
+    ]
+}
+```
+
+### Request Parameters
+
+The request must include the params array with the following parameters.:
+
+* The first parameter is the service name: `device`.
+* The second parameter (optional) is a numeric property type:
+  * `1` for Terminal Serial Number (S/N)
+  * `2` for DCS Hardware Serial Number
+  * `3` for Agamento Version
+
+## Response
+
+The response varies depending on the input:
+
+* If a property type is specified, the result is a single string value.
+  ```json
+  {
+      "jsonrpc": "2.0",
+      "id": "123454352",
+      "result": "209QCA8T4597"
+  }
+  ```
+* If no property type is specified, the result is a dictionary containing multiple device properties.
+  ```json
+  {
+      "jsonrpc": "2.0",
+      "id": "123454352",
+      "result": {
+          "retailerNumber": "0883232",
+          "nayaxSN": "0907042423158538",
+          "isActiveDes": "Active",
+          "emvConfigFileId": 0,
+          "emvProvider": 1,
+          "paymentMethods": "1;2;4;5;9;22;72;",
+          "cibusEnabled": "",
+          "cibusRestaurantId": 0,
+          "cibusPosId": 0,
+          "multipassEnabled": "",
+          "multipassPosId": 0
+      }
+  }
+  ```
+
+### Response Parameters
+
+The table below describes the response parameters for this method:
+
+| Name                | Type   | Description                  |
+| ------------------- | ------ | ---------------------------- |
+| `retailerNumber`    | string | Retailer identifier          |
+| `nayaxSN`           | string | Nayax serial number          |
+| `isActiveDes`       | string | Activation status            |
+| `emvConfigFileId`   | int    | EMV configuration file ID    |
+| `emvProvider`       | int    | EMV provider ID              |
+| `paymentMethods`    | string | Enabled payment method codes |
+| `cibusEnabled`      | string | Cibus support status         |
+| `cibusRestaurantId` | int    | Cibus restaurant ID          |
+| `cibusPosId`        | int    | Cibus POS ID                 |
+| `multipassEnabled`  | string | Multipass support status     |
+| `multipassPosId`    | int    | Multipass POS ID             |

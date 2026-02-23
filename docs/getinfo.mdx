@@ -1,0 +1,65 @@
+---
+title: "getInfo"
+---
+
+The `getInfo` method retrieves basic metadata about the payment device, including hardware and manufacturer information, serial numbers, and the current timestamp. This can be useful for device diagnostics, remote inventory, and configuration validation.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](https://developerhub.nayax.com/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, the `method` field needs to be set to `getInfo`, as shown in the example below:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getInfo",
+    "params": [
+        "device"
+    ],
+    "id": "4309656"
+}
+```
+
+### Request Parameters
+
+The table below describes the request parameters for this method:
+
+| Name     | Type  | Description                     |
+| -------- | ----- | ------------------------------- |
+| `params` | array | Must contain the value `device` |
+
+## Response
+
+A successful request will return the following response:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "4309656",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "ok",
+        "manufacturer": "LANDI",
+        "model": "APOS A8OVS",
+        "serialNumber": "215RCA893253",
+        "nayaxSerialNumber": "0904041822134284",
+        "timeStampEpoch": 1721214919337,
+        "timeStampString": "17/07/2024 14:15:19"
+    }
+}
+```
+
+### Response Parameters
+
+The table below describes the response parameters for this method:
+
+| Name            | Type    | Description                                    |
+| --------------- | ------- | ---------------------------------------------- |
+| `statusCode`    | integer | Operation status (0 = OK, others = errors TBD) |
+| `statusMessage` | string  | Status description (e.g., "ok")                |
+| `data`          | string  | User-provided input data                       |

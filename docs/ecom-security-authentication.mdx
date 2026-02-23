@@ -1,0 +1,84 @@
+---
+title: "Security & Authentication"
+---
+
+Nayax eCom SDK employs a robust system of unique security keys and hashed signatures to authenticate integrators and prevent unauthorized access. Each Integrator receives a minimum of two sets of keys:
+
+* **Secret Token**: A unique, pre-shared token (typically 66 characters long) used for the `/validate-merchant` method. Nayax can, at the integrator's request, provide additional authentication keys to distinguish between Nayax Merchants.
+* **Sign Key**: Used for signing requests by generating a hash. Integrators receive one Sign Key and one Sign Key ID.
+
+This page guides you through securely authenticating eCom SDK requests. This involves signing each request body with a shared `Sign Key` and attaching two mandatory headers: `Signature `and `IntegratorId`.
+
+## Pre-requisites
+
+Before you begin, make sure you have the following resources:
+
+* A valid Sign Key (shared by Nayax, typically 16 characters)
+* The associated Sign Key ID
+
+## Authenticate Requests
+
+Once you have the required resources, you can start authenticating your request to eCom SDK by following the steps below:
+
+1. Prepare the JSON body with all the necessary fields (e.g., `actorId`, `Cipher`, etc.). Here’s a simplified example for the [`/validateMerchant`](https://developerhub.nayax.com/reference/post_validate-merchant) endpoint:
+
+   ```json
+   { 
+     "TokenId": 116383, 
+     "actorId ": "0434334921100366", 
+     "MachineId": 1, 
+     "Random": "123456789qwertyui", 
+     "Cipher": "X305dITNTAw2vHsxE+taVcn6UvgBC3fdI6QbqeABgHbo8CKsoZhqISJfslehCiA+L7XYrqvKFci7C6BNj/trzBuNJ wBEjgBzKhhgpJ5ggnw=" 
+   } 
+   ```
+2. Prepare the `IntegratorId` header using your Sign Key ID.
+
+   ```json
+   {
+     IntegratorId:927
+   }
+   ```
+3. Serialize the JSON request content, removing whitespace and line breaks. Do not alter values or add escape characters unless they are part of the actual payload.
+
+   ```json
+   {"TokenId":116383,"actorId":"0434334921100366","MachineId":1,"Random":"123 456789qwertyui","Cipher":"X305dITNTAw2vHsxE+taVcn6UvgBC3fdI6QbqeABgHbo8CKsoZh qISJfslehCiA+L7XYrqvKFci7C6BNj/trzBuNJwBEjgBzKhhgpJ5ggnw="}
+   ```
+4. Generate the `Signature` header following the steps below:
+   1. Concatenate the serialized request and the Sign Key, separated by ";".
+      ```json
+      {"TokenlId":116383,...,"Cipher":"..."};RbtdDsiVNjkAeRty
+      ```
+   2. Hash the result using SHA-256 (UTF-8 encoded) and use the output as your `Signature `header:
+      ```json
+      536a5813206bcb663d98715d10a6b2612364245c865cdd5f781ff4428c4a6137
+      ```
+5. Add the `IntegratorId `and `Signature `headers to your request.
+   ```json
+   curl -X POST https://api-sandbox.nayax.com/ecom/validate-merchant \
+   --header 'IntegratorId: 927' \
+   --header 'Signature: 536a5813206bcb663d98715d10a6b2612364245c865cdd5f781ff4428c4a6137' \
+   --header 'Content-Type: application/json' \
+   --data '{
+     "TokenId": 116383,	
+     "actorId": "0434334921100366",
+     "MachineId": 1,
+     "Random": "123456789qwertyui",
+     "Cipher": "X305dITNTAw2vHsxE+taVcn6UvgBC3fdI6QbqeABgHbo8CKsoZhqISJfslehCiA+L7XYrqvKFci7C6BNj/trzBuNJwBEjgBzKhhgpJ5ggnw="
+   }'
+   ```
+
+For this example, the [`/validateMerchant`](https://developerhub.nayax.com/docs/validateMerchant) method was used, but the process is relevant for any eCom SDK method request and response.
+
+<Warning>
+**UTF-8 Encoding**
+
+Ensure the Signature is correctly generated from the minified JSON and UTF-8 hash.
+</Warning>
+
+## See Also
+
+<Columns cols={2}>
+  <Card title="Get Started" href="/v1.0/docs/ecom-sdk-get-started" />
+
+  <Card title="Tokenization" href="/v1.0/docs/tokenization" />
+</Columns>

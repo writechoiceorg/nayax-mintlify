@@ -1,0 +1,129 @@
+---
+title: "Stablity & Starvation Issues"
+---
+
+# Introduction
+
+## What can cause stability issues in the Marshall link?
+
+These stability issues usually happen due to not using proper hardware:
+
+1. 24V/1.5A power source
+2. If using a USB-to-COM adaptor, it must be a Chipi-X, the only type approved by Nayax's technical team. It has also been shown in the past that other types of adaptors may (and tend to) cause stability issues.
+3. Issues with your machine's COM port (physical connection/ COM port management).
+4. If using Marshall over LAN, it could be due to issues with your Ethernet connector, LAN communication, etc.
+
+Or due to "starving" the Marshall task- explained further below.
+
+## You've mentioned that the Marshall task is being "starved". What does it mean?
+
+Once the Marshall task doesn't get enough priority to run, it's "starved" and may not behave properly.
+In that case, your machine would stop sending the "Keep Alive" signals. The device (VPOST/VPOSM) will detect that the machine is disconnected due to a missing "Keep Alive" and launch a new pairing process.
+Starvation is the worst problem you can have, and it can cause unexpected behavior depending on when it occurs (which I think you've seen), so it's very important to solve it. Those issues can cause weird behavior from the consumer's POV and even break the Marshall link, which shouldn't happen (and when it does, you won't be able to make or complete transactions).
+
+**Possible causes for the starvation of the Marshall task: not giving the Marshall a high enough priority to run, having your machine do other things which will cause it to not respond to Marshall (keepalives or other commands) in time, extensive file-writing other than the SDK's, etc.**
+
+## What does it look like?
+
+Once the Marshall task is starved you'd see the following:
+
+```
+-	In the log file of the SDK will be printed:
+"vmc_link: warning! sdk is not getting enough cpu! (starved for Xms)"
+or:
+" vmc_link: *** error: retransmitting... last_rx"
+Or:
+" lowlevel_serial: bytes available: 0 bytes "
+
+
+-	And at the same laps of time, in the GTrace will be printed something along the lines of:
+
+Marshall: Sys,Err: No keep alive,Handle = 1           
+Marshall: Com error,Event = 1
+Marshall: No keep alive message from the POS. retry number: 2      
+Marshall: Sys,Err: No keep alive,Handle = 1           
+Marshall: Com error,Event = 1    
+
+```
+
+Should your peripheral continue to not respond (each packet would be sent once and would have another possible 2 retries which would try and get a response from your machine- would go into details about it bellow I the section about keepalives)- the Marshall link would be deemed broken.
+Then, the device will repeatedly send the "Reset()" command to launch the Pairing process.
+This means the pairing process has been initiated, indicating that the VPOST/VPOSM is looking for a peripheral to communicate with. Once the machine responds to it (with the Firmware Info command)- it would complete the process by sending the Config command.
+
+Until the connection is established, you'd see resets on the Marshall log and "Marshall: peripheral not connected" in the Gtrace log.
+Once the Marshall pairing process is completed, a link is established between the VPOST/VPOSM and the peripheral. The following would appear in the Marshall log:
+
+```
+> [1661418016846+(       432ms)]      marshall_t: received reset
+[1661418016847+(         1ms)]                : rx: 	09:00:00:6a:ff:ff:ff:ff:01:77:d6:
+[1661418016853+(         6ms)]                : tx:
+	87:00:00:00:00:30:00:00:05:00:02:0b:01:40:01:6d:
+	61:72:73:68:61:6c:6c:2d:6a:61:76:61:2d:73:64:6b:
+	00:00:00:30:31:32:33:34:35:36:37:00:00:00:00:00:
+	00:00:00:00:00:00:00:30:2e:31:2e:35:2e:31:33:00:
+	00:00:00:00:00:00:00:00:00:00:00:30:31:32:33:34:
+	35:36:37:00:00:00:00:00:00:00:00:00:00:00:00:6d:
+	61:6e:75:66:00:00:00:00:00:00:00:00:00:00:00:00:
+	00:00:00:30:2e:31:2e:35:2e:31:33:00:00:00:00:00:
+	00:00:00:00:00:00:00:9d:4a:
+[1661418016874+(        21ms)]      marshall_t: received config
+[1661418016875+(         1ms)]                : rx:
+	2a:00:00:00:00:35:01:30:06:02:01:01:e8:03:00:00:
+	00:24:00:00:24:00:00:02:35:35:30:36:30:30:31:32:
+	38:31:32:33:34:33:34:30:00:02:01:68:
+[1661418017084+(       209ms)]      marshall_t: received transfer_data
+[1661418017084+(         0ms)]      marshall_t: default credit: 1000
+[1661418017084+(         0ms)]      marshall_t: main fw ver: 4.0.8.23-RC03
+[1661418017084+(         0ms)]      marshall_t: pos fw ver: 2203-rc09
+[1661418017084+(         0ms)]      marshall_t: monyx id: 06911447
+[1661418017085+(         1ms)]                : rx:
+	34:00:05:01:00:35:01:30:0a:14:02:e8:03:12:0e:34:
+	2e:30:2e:38:2e:32:33:2d:52:43:30:33:00:13:0a:32:
+	32:30:33:2d:72:63:30:39:00:15:09:30:36:39:31:31:
+	34:34:37:00:4b:89:
+[1661418017085+(         0ms)]                : tx:	0a:00:00:01:01:30:00:35:00:00:bb:4b:
+[1661418017096+(        11ms)]        vmc_link: vmc is online. time: Thu Aug 25 12:00:17 IDT 2022
+[1661418017097+(         1ms)]    vmc_socket_t: received event: [init_done], state: [init]
+[1661418017097+(         1ms)]            Main: link with vpos serial: 0434321821006055
+[1661418017097+(         0ms)]    vmc_socket_t: changed state, from [init] to [idle]
+[1661418017097+(         0ms)]            Main: 	main fw version: 4.0.8.23-RC03
+[1661418017097+(         0ms)]            Main: 	pos fw version: 2203-rc09
+[1661418017097+(         0ms)]            Main: 	monyx id: 06911447
+[1661418017097+(         0ms)]            Main: 	default credit: 1000
+[1661418017098+(         1ms)]                : tx:
+	16:00:01:01:01:30:00:35:31:01:00:68:65:6c:6c:6f:
+	20:74:68:65:72:65:76:09:
+[1661418017099+(         1ms)]                : tx:	0a:00:00:02:01:30:00:35:00:00:39:93:
+[1661418017099+(         0ms)]      vmc_vend_t: received status: 20
+[1661418017099+(         0ms)]            Main: device available
+[1661418017099+(         0ms)]    vmc_socket_t: received status: 20
+[1661418017115+(        16ms)]                : rx:	0a:00:00:01:00:35:01:30:00:00:08:b0:
+
+And in Gtrace it would show:
+"Marshall sys: RCV - Firmware info - type - 0 subtype - 1
+Marshall sys: RCV - Firmware info - Capabilities – 0"
+```
+
+## How the "keepalive" mechanism works/what is the reason for the starvation
+
+The "no keep alive" means that your peripheral did not respond to the keep alive, which occurs every second (unless configured otherwise), and in that case, it would try to resend the packet. If there is no response, it would try again (1 original attempt 2 retried), and if this attempt fails, the Marshall link would be deemed broken. The pairing process (the establishment of communication between the VPOST/VPOSM and your charger) would be re-initiated.
+
+In some cases, starvation is caused by poor task handling or by extensive file writing (unrelated to the Marshall log writing). While a file is being written, all tasks are halted to prevent corruption of the flash.
+
+In addition, the starvation could be due to your peripheral doing tasks unrelated to Marshall, causing it not to respond to the Marshall task in time.
+
+### Can I increase the time between keepalives? Would that solve the starvation issue?
+
+The SDK is made to work best with a keepalive of 1 second, and increasing the keepalive to a higher amount won't solve the issue of starvation- it would just take much longer to realize there's some issue with the communication. We don't recommend having it set to more than 5 seconds.
+For example, if you had it configured to 30 seconds, it would take 3\*30=90 seconds for the SDK to realize there's an issue, and in that time, the VPOST may appear "frozen"/unresponsive, confusing consumers. Having keepalives occur every second is not what's overloading the processor; the issue is that the task doesn't get enough priority to start with.
+
+<Callout icon="📘" theme="info">
+  **Note:** For VPOSM, in case of Marshall over ETH, there's a need to set the keepalive to 10 seconds due to LAN requirements/limitations.
+</Callout>
+
+## Should I have the keepalives logged? Would you be aware of any issues with them if they do not appear?
+
+You can have them written to the logs, but they would make it really hard to read, since you get a keepalive (and a response to it) every second. In an hour-long log, you'd have at least 3,600 records. The "debug level dump moderate" means that only the critical information would be logged, such as the pairing process, transactions, statuses, starvation warning etc., so if you'd have an issue with keepalives/packets going missing- you'd get the same warning/information in the "debug level dump moderate " logging versus " debug level dump all".
+Bottom line, I would highly recommend using "debug level dump moderate" instead of "debug level dump all".
+
+<br />

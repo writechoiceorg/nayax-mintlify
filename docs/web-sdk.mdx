@@ -1,0 +1,190 @@
+---
+title: "Web SDK"
+---
+
+Nayax provides a Web version of the eCom SDK. This guide shows you how to integrate it into your application. You will learn how to install, initialize, and prepare the SDK to facilitate payment creation.
+
+## Pre-requisites
+
+To ensure compatibility and optimal performance, your Android project must meet the following minimum requirements:
+
+* ES2017+ JavaScript support required.
+* TypeScript: 4.5+ (optional, but recommended for type safety and better IDE support).
+
+The SDK requires browsers with support for:
+
+* ES2017 features (async/await, Object.entries, Object.values, etc.).
+* DOM and Web APIs (localStorage, fetch).
+* The bundled dependencies use modern JavaScript features.
+
+The SDK supports multiple module formats:
+
+* ES Modules (ESM): For modern bundlers (Webpack, Vite, Rollup)
+* CommonJS (CJS): For Node.js and older bundlers
+* UMD: For direct browser usage via `<script>` tag
+
+## Integrate eCom SDK
+
+Integrating the eCom Web SDK consists of four steps:
+
+1. Install the SDK
+2. Initialize the SDK
+3. Add Configuration Class
+
+The sections below provide a detailed description of each step.
+
+### Step 1: Install the SDK
+
+The NayaxEcomSDK is hosted on Nayax's private GitLab package registry. You'll need to configure access before installation.
+
+1. The Nayax eCOM Team will provide you with a read-only access token. Create or update your `.npmrc` file in your project root:
+
+```shell Shell
+@nayax:registry=https://gitlab.nayax-sdk.nayax.com/api/v4/projects/9/packages/npm/ 
+//gitlab.nayax-sdk.nayax.com/api/v4/projects/9/packages/npm/:_authToken=YOUR-PROVIDED-TOKEN
+```
+
+<Callout icon="🚧" theme="warn">
+  **Important**
+
+  Don't commit the `.npmrc` file with the access token to your source control. Add it to your `.gitignore` file.
+</Callout>
+
+2. To install the SDK, use the following command:
+
+```shell npm
+npm install @nayax/ecom-sdk
+```
+
+```shell Yarn
+yarn add @nayax/ecom-sdk
+```
+
+```powershell pnpm
+pnpm add @nayax/ecom-sdk
+```
+
+<Callout icon="📘" theme="info">
+  For UMD builds or alternative distribution methods, contact the Nayax Ecom Team.
+</Callout>
+
+### Step 2: Initialize the SDK
+
+To use the eCOM Web SDK, you have to initialize the SDK instance:
+
+1. The Web SDK uses a constructor-based pattern (non-singleton). Create a new instance with your configuration:
+
+```typescript
+import { NayaxEcomSDK, NayaxEcomConfig } from '@nayax/ecom-sdk';
+
+// Configure the SDK
+const config: NayaxEcomConfig = {
+	environment: string,
+	signId: integer,
+	signKey: string,
+	securityTokenId: integer,
+	securityTokenValue: string,
+	enableLog: boolean
+};
+
+// Create SDK instance
+const ecomSDK = new NayaxEcomSDK(config);
+```
+
+```javascript
+const { NayaxEcomSDK } = require('@nayax/ecom-sdk');
+
+// Configure the SDK
+	const config = {
+	environment: string,
+	signId: integer,
+	signKey: string,
+	securityTokenId: integer,
+	securityTokenValue: string,
+	enableLog: boolean
+1};
+
+// Create SDK instance
+const ecomSDK = new NayaxEcomSDK(config);
+```
+
+<Callout icon="📘" theme="info">
+  The `signId`, `signKey`, `securityTokenId`, and `securityTokenValue` values will be provided by the Nayax eCOM Team. Ensure you handle these values securely.
+</Callout>
+
+3. The `NayaxEcomConfig` interface encapsulates the essential properties for SDK configuration:
+
+```javascript
+interface NayaxEcomConfig {
+  /** The environment to be used by the SDK */
+  environment: NayaxEcomEnvironment;
+
+  /** The ID used for signing requests */
+  signId: number;
+
+  /** The key used for signing requests */
+  signKey: string;
+
+  /** The security token ID for merchant validation */
+  securityTokenId: number;
+
+  /** The security token value for merchant validation */
+  securityTokenValue: string;
+
+  /** Flag to enable or disable console logging */
+  enableLog: boolean;
+}
+```
+
+### Step 3: Configure the SDK
+
+To configure the eCOM web SDK, follow these steps:
+
+1. Import the SDK (ES modules):
+
+```typescript
+import { NayaxEcomSDK, NayaxEcomConfig, PaymentData } from '@nayax/ecom-sdk';
+```
+
+2. Import the SDK (CommonJS)
+
+```javascript
+const { NayaxEcomSDK } = require('@nayax/ecom-sdk');
+```
+
+<Callout icon="📘" theme="info">
+  The SDK automatically includes all required CSS styles (including Drop-in styles) bundled within the JavaScript. No separate CSS imports are needed
+</Callout>
+
+## Environment Configuration
+
+The SDK supports four environments:
+
+| Environment  | Description                    | Use Case                            |
+| :----------- | :----------------------------- | :---------------------------------- |
+| `develop`    | Development environment.       | Internal development and testing.   |
+| `qa`         | Quality Assurance environment. | QA testing and integration testing. |
+| `stable`     | Staging environment            | Pre-production testing.             |
+| `production` | Production environment.        | Live transactions.                  |
+
+Example for different environments:
+
+```typescript
+const devConfig: NayaxEcomConfig = {
+  environment: 'develop',
+  signId: 123,
+  signKey: 'dev-sign-key',
+  securityTokenId: 456,
+  securityTokenValue: 'dev-token-value',
+  enableLog: true, // Enable logging in development
+};
+
+const prodConfig: NayaxEcomConfig = {
+  environment: 'production',
+  signId: 789,
+  signKey: 'prod-sign-key',
+  securityTokenId: 012,
+  securityTokenValue: 'prod-token-value',
+  enableLog: false, // Disable logging in production
+};
+```

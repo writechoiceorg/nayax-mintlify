@@ -1,0 +1,268 @@
+---
+title: "Set Up Nayax Core for Marshall Integration"
+---
+
+Once you have completed the Marshall installation process, follow the steps below to configure the Nayax device to support the Marshall functionality.
+
+## Configure the Machine Model at the Machine Level
+
+This configuration enables your system to interact appropriately with the selected devices, ensuring efficient, optimal operation.
+Note that during the integration, your Nayax Integrator would be the one to set up virtual machines for you, but in case you'd like to learn how to do that yourself, below are the necessary steps to configure the machine model:
+
+1. Log in to [**Nayax Core**](https://my.nayax.com/core/LoginPage.aspx?ReturnUrl=%2fdcs%2fpublic%2fdefault.aspx&_ga=2.5742451.1172703238.1627224233-738608359.1611493235)  using your credentials.
+
+   <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image1.png" /></Frame>
+2. Go to **Operations > Machines**.
+
+   <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image2.png" /></Frame>
+3. Create a machine. If you need help, see the [**Create New Machine**](https://developerhub.nayax.com/docs/create-new-machine-guides) guide.
+4. In the **Machine Model** field, select one of the following options from the dropdown:
+
+<ins>For Amit:</ins>
+
+* RS232 – PC Machine - Marshall (Amit device)
+
+<ins>For VPOST/Onyx/VPOSM:</ins>
+
+For PreSelection (Single-Session / Multi-Session)/ if uncertain about the flow:
+
+* Marshall - Generic - Marshall - Basic PreSelection
+
+  Video and manual regarding the configurations relevant to Single Session:
+
+  [How to for Marshall Configurations | Single Session](https://nayax-u.nayax.com/scenario/how-to-for-marshall-configurations-single-session-54374)
+
+  Video and manual regarding the configurations relevant to Multi-Session:
+
+  [How to for Marshall Configurations | Multi-session with Pre-Selection](https://nayax-u.nayax.com/scenario/how-to-for-marshall-configurations-multi-session-with-53447)
+
+For Always Idle (PreSelection sub-flow):
+
+* Marshall - Generic - Marshall - Always Idle
+
+  Video and manual regarding the configurations relevant to Always Idle:
+
+  [How to for Marshall Configurations | Always Idle Pre-Selection](https://nayax-u.nayax.com/scenario/how-to-for-marshall-configurations-always-idle-pre-54427)
+
+For PreAuthorization:
+
+* Marshall - Generic - Marshall - PreAuthorization
+
+  Video and manual regarding the configurations relevant to PreAuthorization
+
+  [How to for Marshall Configurations | Pre-Authorization](https://nayax-u.nayax.com/scenario/how-to-for-marshall-configurations-pre-authorization-54263)
+
+5. Click **Save** to apply the configuration.
+
+<Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image3.png" /></Frame>
+
+## Configure Session Timeout Parameter
+
+The **Multi-Session Mode** operates only in pre-selection mode but functions similarly to pre-authorization. The transaction flow is akin to a single vending process, with the addition of a **Close Session** command.
+
+If your machine works in the **multi-session mode**, set the session timeout parameters as follows:
+
+1. For the configured machine, click the **General** tab.
+2. Go to the **VMC** section.
+3. Define the **Session Time Out** to specify the session’s duration:
+
+   * **Maximum for Credit Cards:** 23 hours
+     \*Update: as of 2025- ***71** hours*
+   * **Maximum for Prepaid Cards:** 72 hours
+   * **Default:** 60 minutes
+   * **Minimum** 1 minute
+
+     <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image4.png" /></Frame>
+
+<Note>
+**Session Expiration and Settlement**
+
+Once the session timeout reaches the defined limit, the session expires. In such cases, the settlement amount will correspond to the price sent during the "vend request" command.
+Once a session has timed out, the device would settle the transaction on it's own and send a "Status" command to the peripheral in order to notify it about the settlement taking place. This would let the peripheral know that it now longer needs to settle said transaction (as it has already been settled), and should he try to settle the already-settled transaction he would get "settlement error" (as the device couldn't find said session to settle it).
+</Note>
+
+## Configure Keep Alive Parameter
+
+The Keep Alive signal ensures consistent communication between the Nayax device and the machine by sending a signal every second. Adjust the parameters to enhance the system's tolerance as follows:
+
+1. For the configured machine, click the **General** tab.
+2. Go to the **VMC** section.
+3. Set the **Keep Alive Intervals** (in seconds) to define the communication timeframe between the device and the machine (maximum: 255 seconds).
+
+   <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image5.png" /></Frame>
+
+<Note>
+**Keep Alive Communication Failure**
+
+If the device doesn’t receive the Keep Alive command within the time defined, then communication is failed, and the device will launch a Pairing process and send the Reset command again.
+It is highly recommended to keep it set to 1, and at most not have it above the value of 10- unless you're using VPOSM with Marshall over ETH, and in that case you can use 10 due to LAN limitations.
+Read more on that in the [Stability/ starvation issues](https://developerhub.nayax.com/docs/stablity-issues#/) section.
+</Note>
+
+## Configure Cashless Address
+
+The Cashless Address configuration ensures seamless communication between the machine and the Nayax device for cashless transactions. Follow these steps to set the correct address:
+
+1. For the configured machine, click the **General** tab.
+2. Click the **MDB** section.
+3. Select the **Cashless MDB address** to **Marshall VMC**.
+
+   <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image6.png" /></Frame>
+
+## Configure Pre-Selection and Pre-Authorization
+
+Pre-selection and Pre-Authorization settings allow flexible transaction flows tailored to different vending scenarios. Pre-selection enables multi-session operations, while Pre-Authorization focuses on card-based transactions with a defined credit limit. Configure these parameters as needed for your machine’s functionality.
+
+### Pre-Selection - Multi-Sessions
+
+Pre-selection supports Multi-Session operations, where one device can manage multiple transactions in parallel, each comprising two parts: product selection and authorization, and settlement. To configure this:
+
+1. For the configured machine, click the **General** tab.
+2. Click the **MDB** section.
+3. Select **MDB Flags** and set **PreSelection Enabled **to** Yes**.
+
+   <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image7.png" /></Frame>
+
+   This allows the system to offer product preselection before making a payment.
+
+The **Choose Product Timeout** option is the timeframe that the consumer is required
+to choose a product.
+When the transaction flow starts with the machine selection (PreSelection), then the **Choose Product Timeout** option <ins>must be defined as zero</ins>.
+
+4. Click the **Payment** section.
+5. Set the Choose Product Timeout to **0** seconds.
+
+   <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image8.png" /></Frame>
+
+   This ensures there are no time restrictions on product selection during payment.
+
+### Pre-Selection – Always Idle
+
+Pre-selection in Always Idle mode ensures the machine remains ready for consumers. Use the following steps to configure:
+
+1. For the configured machine, click the **General** tab.
+2. Click the **Card Readers** section.
+
+   * Set the Transaction Start Method to Product.
+
+     <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image9.png" /></Frame>
+3. Click the **MDB** section.
+
+   * Set the **MDB flags** to **Preselection Enabled**.
+
+     <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image10.png" /></Frame>
+   * Set the **MDB Level 3 Optional Features** to **Enable “Always
+     Idle” state**.
+
+     <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image11.png" /></Frame>
+
+The **Choose Product Timeout** option is the timeframe that the consumer is required
+to choose a product.
+When the transaction flow is “Always Idle”, the **Choose Product Timeout** option
+<ins>must be defined with a value **greater** than zero</ins>.
+
+4. Click the **Payment** section.
+5. Set the **Choose Product Timeout** desired value.
+
+   <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image12.png" /></Frame>
+
+### Pre-Authorization
+
+Pre-Authorization allows the system to secure funds before the vending process begins. Follow these steps to set it up:
+
+1. For the configured machine, click the **General** tab.
+2. Click the **MDB** section.
+3. Select the **MDB flags** to **Flags Disabled**.
+
+   <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image13.png" /></Frame>
+4. The **Choose Product Timeout** option is the timeframe that the consumer is required
+   to choose a product.
+   When the transaction flow starts with card authorization, the **Choose Product Timeout** option must be defined with a value greater than zero.
+5. Click the **Payment** section.
+6. Set the desired **Choose Product Timeout** value.
+
+   <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image14.png" /></Frame>
+
+The **Default Credit** option needs to be configured for Pre-authorization mode.
+This is the amount Nayax will charge for card pre-authorization.
+
+7. Click the **Payment** section.
+8. Set the desired **Default Credit** value.
+
+   <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image15.png" /></Frame>
+
+<Note>
+**Decimal Alignment for Pre-Authorization Value**
+
+The pre-authorization amount must be consistent with the Decimal Place configuration in the system settings. Ensuring proper alignment prevents transaction errors and ensures smooth payment processing.
+</Note>
+
+The Payment Flags option needs to be configured for Pre-authorization mode.
+
+9. Click the **Payment** section.
+10. Set the **Payment Flags** to **no flags set**.
+
+    <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image16.png" /></Frame>
+
+## Configure LCD Parameters
+
+To optimize the user experience, configure the LCD messages displayed during idle or disabled states. This includes customizing or disabling the **"Cash Only"** or **"Welcome"** messages to suit your machine's requirements.
+
+<Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image17.png" /></Frame>
+
+### Cash Only Message for Amit and VPOS Devices
+
+By default, the VPOS device displays a **"Cash Only"** message when it is disabled or in idle mode. This occurs when the Transaction Start Method is set to start with the machine. For Marshall devices, this is the normal state. However, to ensure better communication, the "Cash Only" message should be customized.
+
+Follow these steps to update the message:
+
+1. Verify that the VPOS device is in idle mode or disabled.
+2. Go to the **Machine page**.
+3. Click the **LCD** section.
+4. Enter an appropriate **Cash Only Message** that suits your needs.
+
+### Cash Only/Welcome Message for Touch Devices
+
+When the Nayax Reader is disabled, the idle screen features animations instructing the consumer to choose a product or service first. Additionally, a "Welcome" message can be customized or disabled as needed.
+
+Follow these steps to update the message:
+
+1. Verify that the Nayax Reader is disabled and the idle screen displays the default animations.
+2. To disable the Welcome message, send `@@` to the device in the **Welcome message attribute** using the LCD section on the **Machine page**.
+3. To customize the Welcome message, click on the **LCD section** and enter an appropriate message (for example, "Swipe card" to start the transaction).
+4. Click **Save** to store the customized Welcome message.
+
+## Define the Prepaid Card(s) in the System
+
+Define the Prepaid Test Card(s) sent to the customer under the **Operator/Machine** so the customer can immediately begin their proprietary integration tests.
+
+Follow these steps to define the Prepaid Card(s):
+
+1. Go to the **Operator/Machine** section in the system.
+2. Define the Prepaid Test Card(s) that were sent to the customer.
+3. Ensure the customer can begin their proprietary integration tests immediately.
+
+## Additional configurations relevant for VPOSM5
+
+* Marshall over ETH-\
+  If working with the ETH port instead of the serial port, you need to have the following configurations:
+
+<Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image18.png" /></Frame>
+
+Ensure that you have the matching configuration in the SDK. Meaning commented out the serial port line, and uncommented the ETH port line, and set the port in the same line to be 2025:
+
+```csharp
+            //vmc_instance = marshall_init(new pc_port("COM8", 115200));
+            vmc_instance = marshall_init(new eth_port("192.168.1.117", 2025)); //ensure to set the IP to be the VPOSM5's IP
+```
+
+* Supporting the VPOSM5's QR barcode reader:
+  Should you like to use the device's QR barcode reader, you should set the following Transaction Start Method (include QR in it):
+
+  <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image19.png" /></Frame>
+
+<Note>
+**Customer Support Assistance**
+
+Should specific help be needed in this matter, please turn to **Customer Support**.
+</Note>

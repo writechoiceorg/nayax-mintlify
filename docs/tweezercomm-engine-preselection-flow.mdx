@@ -1,0 +1,38 @@
+---
+title: "Pre-Selection"
+---
+
+The Pre-Selection transaction flow processes, authorizes, and settles a payment request before completing the transaction. This streamlined approach ensures that all payment stages are finalized in a single, continuous sequence.
+
+## Transaction Flow
+
+To understand the Pre-selection transaction flow, consider the following sequence of events:
+
+<Frame><img src="/images/docs/tweezercomm-engine-preselection-flow/image1.png" /></Frame>
+
+Here's a breakdown of each step:
+
+1. After the cardholder selects the product or service, the Machine sends a [`doTransaction`](https://developerhub.nayax.com/docs/dotransaction) Request to the Agamento Application.
+2. The application then displays a prompt for the cardholder, requesting him to insert or swipe a card.
+3. The cardholder inserts, swipes, or taps their card on the Host Machine.
+4. The Agamento Device communicates with the Nayax Server to request payment authorization and settlement.
+5. The Nayax Server responds with the transaction status (approved or declined). The Agamento Application then relays this status back to the Host Machine, completing the process.
+
+## See Also
+
+<Columns cols={2}>
+  <Card title="DoTransaction" href="/v1.0/docs/dotransaction" />
+
+  <Card title="Pre-Authorization" href="https://developerhub.nayax.com/docs/tweezercomm-engine-preauth-flow" />
+</Columns>
+
+<HTMLBlock>
+  {`
+  <style>
+  img:not(.rm-Logo-img) {
+      border-radius: 12px;
+      box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13)
+  }
+  </style>
+  `}
+</HTMLBlock>

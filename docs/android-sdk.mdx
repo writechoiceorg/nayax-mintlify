@@ -1,0 +1,143 @@
+---
+title: "Android SDK"
+---
+
+Nayax provides an Android version of the eCom SDK. This guide shows you how to integrate it into your application. You will learn how to install, initialize, and prepare the SDK to facilitate the creation of payments.
+
+## Pre-requisites
+
+To ensure compatibility and optimal performance, your Android project must meet the following minimum requirements:
+
+* Android 5.0 (API level 21).
+* The Nayax eCom SDK is compiled with Android API level 34. The SDK has been tested and approved with Android versions up to Android 14
+* A valid Sign Key (shared by Nayax, typically 16 characters).
+* The associated Sign Key ID.
+* The `securityTokenId` and `securityTokenValue`.
+
+## Integrate eCom SDK
+
+Integrating the eCom Android SDK consists of four steps:
+
+1. Install the SDK
+2. Initialize the SDK
+3. Add Configuration Class
+4. Register for Payment Result
+
+The sections below provide a detailed description of each step.
+
+### Step 1: Install the SDK
+
+The first step consists of installing the SDK. To do so:
+
+<Warning>
+**Sensitive Information**
+
+This file should **NOT** be committed to your source control, as it contains sensitive credentials. Nayax eCom Team will provide a read-only access token.
+</Warning>
+
+1. Following the credentials received from Nayax, create an `ecomsdk.properties` file in the root folder of your project and add the following lines:
+   ```
+   repositoryUrl=https://your-nayax-sdk-nexus.nayax.com/api/v1/projects/6/packages/maven
+   readOnlyToken=<your-private-access-token>
+   ```
+2. Add the Maven repository to your `settings.gradle` (or `build.gradle` for older Gradle).
+3. In your project-level `build.gradle.kts`, add the following Maven configuration:
+
+```kotlin
+allprojects {
+  repositories {
+							...
+        maven {
+            val sdkProperties = Properties().apply {
+                load(File(rootDir, "ecomsdk.properties").inputStream())
+            }
+
+            name = sdkProperties["repositoryName"] as String
+            url = uri(sdkProperties["repositoryUrl"] as String)
+
+            credentials(HttpHeaderCredentials::class) {
+                name = "Private-Token"
+                value = sdkProperties["readOnlyToken"] as String
+            }
+
+            authentication {
+                create("header", HttpHeaderAuthentication::class)
+            }
+        }
+    }
+}
+```
+
+4. Add the SDK dependency to your module-level `build.gradle.kts`:
+   ```kotlin
+   dependencies {
+       implementation("com.nayax.ecom:android-ecom-sdk:x.y.z")
+   }
+   ```
+
+### Step 2: Initialize the SDK
+
+Initialize the SDK in your application, using the `initialize` method.
+
+<Note>
+**Sign Key and ID**
+
+Nayax provides the `signId `, `signKey`, `securityTokenId` and `securityTokenValue` values during your onboarding. Ensure you handle these values securely.
+</Note>
+
+```kotlin
+class App : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        ...        
+        val config = NayaxEcomConfig(	
+            environment = NayaxEcomEnvironment.stable,
+            signId = <sign_id>,
+            signKey = <sign_key>,
+            securityTokenId = <security_token_id>,
+						securityTokenValue = <security_token_value>,
+						enableLog = true
+        )
+        NayaxEcomSDK.initialize(this, config, object : InitializationResultCallback {
+            override fun onInitialized() {}
+            override fun onError(error: EcomError) {}
+        })
+    }
+}
+```
+
+### Step 3: Add the Configuration Class
+
+The configuration class defines the SDK's essential properties. The following table provides a description of each available configuration option:
+
+| Parameter            | Type                   | Description                                                                     |
+| :------------------- | :--------------------- | :------------------------------------------------------------------------------ |
+| `environment`        | `NayaxEcomEnvironment` | The target server environment. Possible values are `.stable`, or `.production`. |
+| `signId`             | `Int`                  | The ID used for signing API requests.                                           |
+| `signKey`            | `String`               | The key used for signing API requests.                                          |
+| `securityTokenId`    | `Int`                  | The security token ID used for merchant validation.                             |
+| `securityTokenValue` | `String`               | The security token value used for merchant validation.                          |
+| `enableLog`          | `Bool`                 | A flag to enable or disable SDK logging. Defaults to `false`.                   |
+
+### Step 4: Register for Payment Result
+
+Prepare the SDK to handle payment transaction results. Add the following setup in your `MainActivity`:
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+		override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		NayaxEcomSDK.registerForPaymentResult(this)
+    }
+}
+```
+
+Now that the eCom SDK is integrated into your Android application, you can start processing payments through it. See the [Front-End Integration](https://developerhub.nayax.com/docs/front-end-sdk) guide for more details on how this works.
+
+## See Also
+
+<Columns cols={2}>
+  <Card title="iOS SDK" href="/v1.0/docs/ios-sdk" />
+
+  <Card title="Front-End Integration" href="/v1.0/docs/front-end-sdk" />
+</Columns>

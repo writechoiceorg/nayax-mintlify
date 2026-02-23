@@ -15,7 +15,7 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Select a product",
+        "tab": "Integrate POS Device",
         "icon": "box-open",
         "menu": [
           {
@@ -87,59 +87,190 @@
             "item": "Marshall",
             "icon": "microchip",
             "description": "Connect any unattended machine via physical connectivity",
-            "groups": [
+            "pages": [
+              "docs/marshall-sdk",
               {
-                "group": "Introduction",
+                "group": "Payment Flows",
                 "pages": [
-                  "/docs/marshall-sdk",
-                  {
-                    "group": "Payment Flows",
-                    "pages": [
-                      "/docs/marshall-payment-flows",
-                      "/docs/marshall-single-session-with-pre-sel",
-                      "/docs/marshall-single-session-with-pre-auth",
-                      "/docs/marshall-multi-session",
-                      "/docs/marshall-multi-vend-with-pre-sel",
-                      "/docs/marshall-multi-vend-with-pre-auth",
-                      "/docs/sub-flows-features"
-                    ]
-                  }
+                  "docs/marshall-payment-flows",
+                  "docs/marshall-single-session-with-pre-sel",
+                  "docs/marshall-single-session-with-pre-auth",
+                  "docs/marshall-multi-session",
+                  "docs/marshall-multi-vend-with-pre-sel",
+                  "docs/marshall-multi-vend-with-pre-auth",
+                  "docs/sub-flows-features",
+                  "docs/external-settlement-marshall",
+                  "docs/multi-session-pre-authorization-with-external-settlement"
                 ]
               },
               {
                 "group": "Get Started",
                 "pages": [
-                  "/docs/marshall-get-started",
-                  {
-                    "group": "Integrations",
-                    "pages": [
-                      "/docs/marshall-csharp-java-integration",
-                      "/docs/c-sdk-integration"
-                    ]
-                  },
-                  "/docs/vmc-configuration-object",
-                  "/docs/sdk-flags-descriptions",
-                  "/docs/marshall-create-payments"
+                  "docs/marshall-get-started",
+                  "docs/marshall-csharp-java-integration",
+                  "docs/c-sdk-integration",
+                  "docs/vmc-configuration-object",
+                  "docs/sdk-flags-descriptions",
+                  "docs/certification-proccess"
                 ]
               },
               {
+                "group": "Simulators & Sample Codes",
+                "pages": [
+                  "docs/marshall-sdk-simulators",
+                  "docs/java-sdk-simulator",
+                  "docs/csharp-sdk-simulator",
+                  "docs/c-sdk-simulator",
+                  "docs/single-session",
+                  "docs/multi-session",
+                  "docs/multi-vend",
+                  "docs/marshall-c-always-idle"
+                ]
+              },
+              "docs/marshall-create-payments",
+              {
                 "group": "Methods & Functions",
                 "pages": [
-                  "/docs/framework",
-                  "/docs/link-and-events-configuration",
-                  "/docs/vending-events",
-                  "/docs/data-structures",
-                  "/docs/general-marshall-events"
+                  "docs/marshall-methods-and-functions",
+                  "docs/framework",
+                  "docs/link-and-events-configuration",
+                  "docs/vending-events",
+                  "docs/data-structures",
+                  "docs/general-marshall-events"
+                ]
+              },
+              {
+                "group": "HW Integration Kit and Setup",
+                "pages": [
+                  "docs/vpos-touch-installation",
+                  "docs/sales-kit",
+                  "docs/installation-steps",
+                  "docs/set-up-nayax-core-for-marshall-integration"
                 ]
               },
               {
                 "group": "Additional Resources",
                 "pages": [
-                  "/docs/marshall-display",
-                  "/docs/log-generation",
-                  "/docs/marshall-ontransferdata",
-                  "/docs/stablity-issues",
-                  "/docs/general-marshall-events"
+                  "docs/marshall-additional-resources",
+                  "docs/marshall-display",
+                  "docs/log-generation",
+                  "docs/marshall-ontransferdata",
+                  "docs/stablity-issues",
+                  "docs/capabilities"
+                ]
+              },
+              {
+                "group": "Marshall FAQs",
+                "pages": [
+                  "docs/marshall-faqs",
+                  "docs/faq-general",
+                  "docs/faq",
+                  "docs/faq-marshall-flowconfigurations"
+                ]
+              }
+            ]
+          },
+          {
+            "item": "TweezerComm",
+            "icon": "microchip",
+            "description": "Integrate Nayax's attended payment device (Nova line) with your Point of Sale, utilizing physical connectivity.",
+            "pages": [
+              "docs/overview-tweezer",
+              "docs/tweezercomm-get-started",
+              {
+                "group": "🌐 Global Payment Flows",
+                "pages": [
+                  "docs/payment-flows-copy-1",
+                  "docs/tweezercomm-engine-preselection-flow",
+                  "docs/tweezercomm-engine-preauth-flow"
+                ]
+              },
+              {
+                "group": "Global Payment Methods",
+                "pages": [
+                  "docs/payment-services-methods-copy-1",
+                  "docs/dotransaction",
+                  "docs/refunds-dotransaction",
+                  "docs/abort-transaction",
+                  "docs/gettransactionbyvuid",
+                  "docs/getreport",
+                  "docs/getstatus",
+                  "docs/getinternalstatus",
+                  "docs/getretailerinfo",
+                  "docs/startpinpadtransaction",
+                  "docs/dopinpadtransaction",
+                  "docs/endpinpadtransaction"
+                ]
+              },
+              {
+                "group": "🟦 Israel Payment Flows",
+                "pages": [
+                  "docs/tweezercomm-israel-payment-flows",
+                  "docs/single-phase-transaction",
+                  "docs/2-phase-transaction",
+                  "docs/tweezercomm-pre-authorization-israel",
+                  "docs/tweezercomm-deferred-payment",
+                  "docs/tweezercomm-split-transaction"
+                ]
+              },
+              {
+                "group": "Israel Payment Methods",
+                "pages": [
+                  "docs/tweezercomm-israel-payment-methods",
+                  "docs/dotransaction-ashrait",
+                  "docs/dotransactionphase1",
+                  "docs/dotransactionphase2",
+                  "docs/doperiodic",
+                  "docs/dominisettlement",
+                  "docs/addsubretailer",
+                  "docs/aborttransaction-copy",
+                  "docs/canceltransaction-1",
+                  "docs/gettransactionbyvuid-copy",
+                  "docs/gettransactionbyvuid-copy-1",
+                  "docs/getreport-1",
+                  "docs/getreport-copy-1",
+                  "docs/getreport-copy",
+                  "docs/getstatus-copy",
+                  "docs/addsubretailer-copy",
+                  "docs/dotransactionphase2-copy-1",
+                  "docs/authorizependingtransactions"
+                ]
+              },
+              {
+                "group": "Device Methods",
+                "pages": [
+                  "docs/device-methods",
+                  "docs/getinfo",
+                  "docs/readcard",
+                  "docs/abortreadcard",
+                  "docs/getconfig",
+                  "docs/setconfig",
+                  "docs/getversion",
+                  "docs/uploadlogs",
+                  "docs/getproperty",
+                  "docs/getuserinput",
+                  "docs/abortgetuserinput",
+                  "docs/getuserselection",
+                  "docs/abortgetuserselection",
+                  "docs/showanimation",
+                  "docs/hideanimation",
+                  "docs/displayswipecard",
+                  "docs/abortswipe",
+                  "docs/displayqr",
+                  "docs/abortdisplayqr",
+                  "docs/abortdisplay",
+                  "docs/sendgeneralevent"
+                ]
+              },
+              "docs/pinpad-mode",
+              "docs/resilience-mechanism-copy",
+              "docs/tc-service",
+              {
+                "group": "Additional Resources",
+                "pages": [
+                  "docs/tweezercomm-additional-resources",
+                  "docs/certification-files",
+                  "docs/response-codes"
                 ]
               }
             ]
@@ -149,64 +280,99 @@
             "icon": "credit-card",
             "description": "Connect with embedded Nayax payment devices (Uno line)",
             "groups": [
+              "docs/overview-2",
               {
-                "group": "Introduction",
+                "group": "Payment Flows",
                 "pages": [
-                  "/docs/overview-2",
-                  "/docs/integration",
-                  {
-                    "group": "Payment Flows",
-                    "pages": [
-                      "/docs/transaction-flow",
-                      "/docs/payment-with-authorization",
-                      "/docs/closed-loop-transaction",
-                      "/docs/single-step-payment"
-                    ]
-                  }
+                  "docs/transaction-flow",
+                  "docs/payment-with-authorization",
+                  "docs/closed-loop-transaction",
+                  "docs/single-step-payment"
                 ]
               },
               {
-                "group": "SDK",
+                "group": "Get Started",
                 "pages": [
-                  "/docs/payment-1",
-                  "/docs/remote-management",
-                  "/docs/event-callbacks",
-                  "/docs/reader-messages"
+                  "docs/emv-core-get-started-1",
+                  "docs/emv-core-android-installation",
+                  "docs/emv-core-linux-installation",
+                  "docs/emv-core-device-id"
                 ]
-              }
+              },
+              {
+                "group": "SDK Methods & Functions",
+                "pages": [
+                  "docs/emv-core-apis",
+                  "docs/payment-1",
+                  "docs/remote-management",
+                  "docs/event-callbacks",
+                  "docs/reader-messages"
+                ]
+              },
+              {
+                "group": "Demo Applications",
+                "pages": [
+                  "docs/emv-core-demo-applications",
+                  "docs/android-demo-application",
+                  "docs/linux-demo-application"
+                ]
+              },
+              "docs/emv-core-configuration",
+              "docs/emv-core-release-notes"
             ]
           },
           {
             "item": "Spark",
             "icon": "bolt",
             "groups": [
+              "docs/spark",
+              "docs/spark-integration",
+              "docs/spark-network-requirement",
               {
-                "group": "Introduction",
+                "group": "Security & Authentication",
                 "pages": [
-                  "/docs/spark",
-                  "/docs/spark-integration",
-                  "/docs/spark-security-authentication",
-                  {
-                    "group": "Payment Flows",
-                    "pages": [
-                      "/docs/transaction-flows-spark",
-                      "/docs/spark-device-start",
-                      "/docs/spark-remote-start",
-                      "/docs/spark-device-stop"
-                    ]
-                  },
-                  {
-                    "group": "Additional Payment Flows",
-                    "pages": [
-                      "/docs/marshall-payment-flows",
-                      "/docs/marshall-single-session-with-pre-sel",
-                      "/docs/marshall-single-session-with-pre-auth",
-                      "/docs/marshall-multi-session",
-                      "/docs/marshall-multi-vend-with-pre-sel",
-                      "/docs/marshall-multi-vend-with-pre-auth",
-                      "/docs/sub-flows-features"
-                    ]
-                  }
+                  "docs/security-authentication",
+                  "docs/spark-authentication",
+                  "docs/spark-legacy-authentication"
+                ]
+              },
+              {
+                "group": "Payment Flows",
+                "pages": [
+                  "docs/transaction-flows-spark",
+                  "docs/spark-device-start",
+                  "docs/spark-remote-start",
+                  "docs/spark-device-stop",
+                  "docs/external-settlement",
+                  "docs/external-cancel"
+                ]
+              },
+              "docs/spark-api-link",
+              {
+                "group": "Webhook Callbacks",
+                "pages": [
+                  "docs/webhook-callbacks",
+                  "docs/transactioncallback",
+                  "docs/stopcallback",
+                  "docs/timeoutcallback",
+                  "docs/declinecallback"
+                ]
+              },
+              {
+                "group": "Additional Resources",
+                "pages": [
+                  "docs/additional-resources",
+                  "docs/smc-support",
+                  "docs/spark-posdisplay-format",
+                  "docs/spark-ereceiptdata-format",
+                  "docs/spark-response-codes"
+                ]
+              },
+              {
+                "group": "Sample Codes",
+                "pages": [
+                  "docs/spark-authentication-code-sample",
+                  "docs/spark-authentication-code-sample"
                 ]
               }
             ]

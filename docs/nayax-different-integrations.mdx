@@ -1,0 +1,166 @@
+---
+title: "Nayax Different Integrations"
+---
+
+Nayax provides three versatile integration methods tailored to meet various operational needs, allowing seamless integration with its ecosystem:
+
+<HTMLBlock>
+  {`
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+    .card_container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 0 auto;
+      max-width: var(--container-lg);
+      width: 100%;
+      
+      .card {
+        display: flex;
+        padding: 20px 14px;
+        flex-direction: column;
+        justify-content: start;
+        align-items: flex-start;
+        min-width: 210px;
+        flex-shrink: 0;
+        gap: 12px;
+        border-radius: 6px;
+        border: 1px solid #DCDCDC;
+        background: #FFF;
+        box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13);
+        text-decoration: none;
+        flex-grow: 1;
+        flex-basis: 0;
+        text-decoration: none !important;
+
+        svg {
+          fill: none;
+
+          rect {
+            fill: #FFF;
+            stroke: #C9C9C9;
+          }
+
+          path {
+            fill: #d2a900;
+          }
+        }
+
+        h3 {
+          color: #383838;
+          text-align: center;
+          font-family: Inter !important;
+          font-size: 17.5px;
+          font-style: normal;
+          font-weight: 700;
+          text-decoration: none;
+          margin: 0;
+          text-align: start;
+        }
+
+        p {
+          color: #383838;
+        }
+      }
+
+      .card:hover {
+        cursor: pointer;
+        border: 1px solid #d2a900 !important;
+        box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.13);
+        transform: translateY(-1px);
+
+        h3 {
+          color: #d2a900;
+        }
+
+        svg {
+          fill: none;
+
+          rect {
+            fill: #d2a900;
+            stroke: #C9C9C9;
+          }
+
+          path {
+            fill: #FFF;
+          }
+        }
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      [data-color-mode="system"] .card_container {
+        .card {
+          border: 1px solid #556974;
+          background: #20292e;
+
+          h3,
+          p {
+            color: #FFF;
+          }
+        }
+      }
+    }
+
+    [data-color-mode="dark"] .card_container {
+      .card {
+        border: 1px solid #556974;
+        background: #20292e;
+
+        h3,
+        p {
+          color: #FFF;
+        }
+      }
+    }
+    
+    @media only screen and (max-width: 768px) {
+      .card_container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media only screen and (max-width: 450px) {
+      .card_container {
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
+  </style>
+
+  <div class="card_container">
+
+    <a class="card" href="/docs/lynx-overview">
+      <h3>Lynx</h3>
+      <p>Connect to the Nayax Core management platform and manage your machines, devices, inventory, and prepaid cards from your own environment.</p>
+    </a>
+
+    <a class="card" href="/docs/marshall-sdk">
+      <h3>Marshall</h3>
+      <p>Connect any unattended machine with Nayax's payment devices (VPOS Touch, Onyx), utilizing physical connectivity.</p>
+    </a>
+
+    <a class="card" target="_blank" href="/docs/overview-cortina">
+      <h3>Cortina</h3>
+      <p>If your organization has its own customer app, loyalty card, or closed-loop payment method, you can easily accept it on any Nayax POS with a quick Cortina integration.</p>
+    </a>
+    <a class="card" target="_blank" href="/docs/overview-1">
+      <h3>Amazon SQS Setup</h3>
+      <p>Retrieve real-time information on your sales and operations, including transactions, machine telemetry, and alerts via Amazon SQS services.</p>
+    </a>
+    <a class="card" target="_blank" href="/docs/overview-2">
+      <h3>EMV Core</h3>
+      <p>Connect any unattended machine with embedded Nayax payment devices (Uno line).</p>
+    </a>
+    <a class="card" target="_blank" href="/docs/overview-tweezer">
+      <h3>TweezerComm</h3>
+      <p>Integrate Nayax's attended payment device (Nova line) with your Point of Sale, utilizing physical connectivity.</p>
+    </a>
+    <a class="card" target="_blank" href="/docs/spark">
+      <h3>Spark</h3>
+      <p>Remotely integrate your platform with Nayax devices (server-to-server integration). Ideal for POS and platform integrations.</p>
+    </a>
+  </div>
+  `}
+</HTMLBlock>

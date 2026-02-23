@@ -1,0 +1,50 @@
+---
+title: "abortGetUserInput"
+---
+
+The `abortGetUserInput `method cancels an ongoing user input request initiated by the [`getUserInput `](https://developerhub.nayax.com/docs/getuserinput)method. This is used when a transaction is canceled or when input is no longer needed.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](https://developerhub.nayax.com/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+To invoke this method, set the `method `field to `abortGetUserInput`.
+
+```json
+{
+    "jsonrpc":"2.0",
+    "method":"abortGetUserInput",
+    "id":"123",
+    "params": [
+        "device",{}
+    ]
+}
+```
+
+## Response
+
+A successful request will return the following response:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "canceled"
+    }
+}
+```
+
+### Response Parameters
+
+The table below describes the response parameters for this method:
+
+| Name            | Type    | Description                       |
+| --------------- | ------- | --------------------------------- |
+| `statusCode`    | integer | Operation status (0 = OK)         |
+| `statusMessage` | string  | Status message (e.g., "canceled") |

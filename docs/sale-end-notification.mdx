@@ -1,0 +1,1169 @@
+---
+title: "Sale End Notification"
+---
+
+Cortina uses the `SaleEndNotification`command to notify the integrator about the completion of the transaction request with the Cortina payment provider.
+
+## Request
+
+Nayax's servers send a POST request to your configured `SaleEndNotification`endpoint, which would be of the following format:
+
+`(customer's URL)/Cortina/SaleEndNotification`
+
+The payload includes the following details:
+
+```json
+{
+  "BasicInfo": {
+    "TransactionId": "N99O4XURDQYJZIK4OTCAWF1RHHA40TZWVCRB",
+    "NayaxTransactionId": 3584697384,
+    "Amount": 5,
+    "CurrencyCode": "ILS",
+    "CurrencyNumeric": "376",
+    "SiteId": 1,
+    "MachineAuTime": "071221132914",
+    "TimeoutMS": 15000,
+    "IsProductSelected": true,
+    "PaymentMethodID": 1,
+    "BillingProviderId": 1,
+    "AuditNumber": 342,
+    "NayaxRRN": "111111",
+    "IsDeferredAuthorization": true,
+    "AgeLimitation": 18,
+    "IsSoftDeclineCompletion": true,
+    "TransitElement": {
+      "TransitTransactionType": 1,
+      "DenyListIndication": 0
+    }
+  },
+  "PaymentInfo": {
+    "SrvTranId": "3584697388",
+    "AuthCode": "333333",
+    "AuthAmount": 5.5,
+    "SettAmount": 5.5,
+    "RRN": "111111",
+    "Token": "string",
+    "AuthDateTime": "071221133300",
+    "SettDateTime": "071221133330",
+    "TraceNumber": "4444",
+    "AuthSource": "string",
+    "AdditionalData": "string",
+    "IsGatewayTimeout": false,
+    "ProviderExternalData": "string",
+    "InitiateTranReference": 11223344,
+    "IsRevalueCard": false
+  },
+  "DynamicURL": "string",
+  "CustomData": {
+    "DirectActor": "String",
+    "Operator": "String",
+    "Distributor": "String",
+    "Actor": "String",
+    "Machine": "String",
+    "SoftDecline": "String"
+  }
+}
+```
+
+### Request Parameters
+
+The table below describes all the parameters of the request:
+
+<Table align={["left","left","left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        Field
+      </th>
+
+      <th>
+        Type
+      </th>
+
+      <th>
+        Required
+      </th>
+
+      <th>
+        Description
+      </th>
+
+      <th />
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `BasicInfo`
+      </td>
+
+      <td>
+        `TransactionId`
+      </td>
+
+      <td>
+        String(36)
+      </td>
+
+      <td>
+        Yes
+      </td>
+
+      <td>
+        The unique identifier for this transaction.
+
+        If /StartSession has been used then this will echo the transaction Id encrypted in 'TranIDCipher'.\
+        If /StartSession was not Used - Nayax Engine shall generate this Value.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `NayaxTransactionId`
+      </td>
+
+      <td>
+        Int(64)
+      </td>
+
+      <td>
+        Yes
+      </td>
+
+      <td>
+        Nayax Internal Unique identifier for the transaction which will be echoed in further requests.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `Amount`
+      </td>
+
+      <td>
+        Double
+      </td>
+
+      <td>
+        Yes
+      </td>
+
+      <td>
+        Decimal (max 3 digits for cents)\
+        The amount of the payment Example: 1 cent = 0.01, 20 cents = 0.20
+
+        * Note: Currencies with no Decimal Place shall be represented as double as well.\
+          Example: 234 JYN = 234.0.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `CurrencyCode`
+      </td>
+
+      <td>
+        String(3)
+      </td>
+
+      <td>
+        Yes
+      </td>
+
+      <td>
+        Currency according to ISO4217 Attribute format: Alpha-3.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `CurrencyNumeric`
+      </td>
+
+      <td>
+        String(3)
+      </td>
+
+      <td>
+        Yes
+      </td>
+
+      <td>
+        Currency according to ISO4217 Attribute format: Numeric-3.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `SiteId`
+      </td>
+
+      <td>
+        Int(16)
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Region of the Nayax server.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `MachineAuTime`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Machine Authorization Timestamp
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `TimeoutMS`
+      </td>
+
+      <td>
+        Int(32)
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Nayax Server T/O configuration, in milliseconds
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `IsProductSelected`
+      </td>
+
+      <td>
+        Bool
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        indication if the product was pre-selected
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `PaymentMethodID`
+      </td>
+
+      <td>
+        Int(32)
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Nayax identifier of the payment provider
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `BillingProviderId`
+      </td>
+
+      <td>
+        Int(32)
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Nayax identifier of the billing provider
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `AuditNumber`
+      </td>
+
+      <td>
+        Int(64)
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        For Nayax internal use only.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `NayaxRRN`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Reference to generate Nayax Number, Used as External Transaction Identification for external parties (Usually Card schemes, or App service providers).\
+        From support perspective - It is highly recommended that this ID shall be the one visible to the end consumer/Card holder and the card's Issuer (e.g. Bank) or Application service provider (e.g. Alipay, WeChat).\
+        If none of the above is applicable, the Integrator shall generate an additional String.
+
+        * This Value shall be echoed in the /Inquiry request.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `IsDeferredAuthorization`
+      </td>
+
+      <td>
+        Bool
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Further information is unavailable.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `AgeLimitation`
+      </td>
+
+      <td>
+        Int(16)
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Minimum age required to allow the transaction.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `IsSoftDeclineCompletion`
+      </td>
+
+      <td>
+        Bool
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Further information is unavailable.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TransitElement` inside `BasicInfo`
+      </td>
+
+      <td>
+        `TransitTransactionType`
+      </td>
+
+      <td>
+        Int(32)
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Enum: 1 2 3 7
+
+        1 - Prefunded
+
+        2 - Realtime Authorization
+
+        3 - Post-Authorization\
+        Aggregated Transaction
+
+        7 - Debt Recovery
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TransitElement` inside `BasicInfo`
+      </td>
+
+      <td>
+        `DenyListIndication`
+      </td>
+
+      <td>
+        Int(32)
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Enum: 0 1 2
+
+        0 - unknown/ no effect
+
+        1 - Decline will cause consumer\
+        to be added to the deny list
+
+        2 - Approval shall cause the consumer to be removed from deny list.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `PaymentInfo	`
+      </td>
+
+      <td>
+        `SrvTranId`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        The Integrator's internal transaction id.
+
+        Conditional, only if /StartSession was not Used.
+
+        If /StartSession was used, this should be either empty or Echo the Transaction ID sent in the request.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `AuthCode`
+      </td>
+
+      <td>
+        String(40)
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        External (usually Card issuer's) Authorization Code
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `AuthAmount`
+      </td>
+
+      <td>
+        Double
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        The original amount requested in /Authorization requested.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `SettAmount`
+      </td>
+
+      <td>
+        Double
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        The original amount requested in /Settlement or /Sale process.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `RRN`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Reference Retrieval Number, Used as External Transaction Identification for external parties (Usually Card schemes)\
+        From support perspective - It is highly recommended that this ID shall be the one visible to the end consumer/Card holder.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `Token`
+      </td>
+
+      <td>
+        String(256)
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        A unique token for the transaction. For Internal Nayax use only
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `AuthDateTime`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        The date time string of when the /Authorization took place
+        Format: ddMMyyHHmmss
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `SettDateTime`
+      </td>
+
+      <td>
+        Double
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Irrelevant for the Authorization command.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `TraceNumber`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Trace number. For Internal Nayax use only
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `AuthSource`
+      </td>
+
+      <td>
+        String(5)
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        For Internal Nayax use only
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `AdditionalData`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        String in JSON format.\
+        Contact Nayax TPOC on order define.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `IsGatewayTimeout`
+      </td>
+
+      <td>
+        Bool
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Was there was a gateway timeout (valid in response)
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `ProviderExternalData`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        String in JSON format.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `InitiateTranReference`
+      </td>
+
+      <td>
+        Int(64)
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Conditional, in case of re-attempt of using a prepaid loyalty card on a terminal in a given transaction,
+        this field will reflect which transaction (Nayax Transaction ID) this attempt originally belongs to.
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `IsRevalueCard`
+      </td>
+
+      <td>
+        Bool
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Indication if card is allowed revalue
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `BasicInfo`
+      </td>
+
+      <td>
+        `DynamicURL`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Actor level URL configuration
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `CustomData`
+      </td>
+
+      <td>
+        `DirectActor`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Direct actor custom data (String in json format)
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `Operator`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Operator custom data (String in json format)
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `Distributor`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Distributor custom data (String in json format)
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `Actor`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Actor custom data (String in json format)
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `Machine`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Machine custom data (String in json format)
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `SoftDecline`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Soft Decline custom data (String in json format)
+      </td>
+    </tr>
+  </tbody>
+</Table>
+
+## Response
+
+The `SaleEndNotification` Response that the customer's payment method would send to Nayax's servers.\
+The payload should look as follows:
+
+```json
+{
+  "Status": {
+    "Verdict": "string",
+    "Code": 0,
+    "StatusMessage": "string",
+    "CustomDeclineCode": "string"
+  }
+}
+```
+
+### Request Parameters
+
+The table below describes all the parameters of the request:
+
+<Table align={["left","left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        Field
+      </th>
+
+      <th>
+        Type
+      </th>
+
+      <th>
+        Required
+      </th>
+
+      <th>
+        Description
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TranIDCipher`
+      </td>
+
+      <td>
+        String(36)
+      </td>
+
+      <td>
+        Yes
+      </td>
+
+      <td>
+        The Integrator Generates transaction ID of 36 Chars (or 288 bits).
+        The Integrator then appends the char = and RandomNumber to create the ciphertext of 64 chars
+        Format TransactionId=RandomNumber
+        The integrator encrypts the ciphertexts with the Secret Token in AES ECB.
+        The AES key will be the last (right most) 256 bits (or 32 chars) of the Secret Token the matches the TokenID provided in the request.
+        Nayax will AES ECB decrypt and extract transaction id
+        The transaction Id value will then be used for all further requests.
+
+        Information regarding how to generate the TranIDCipher (via encrypting the token alongside the Random Number and the customer's Transaction ID can be reviewed under [Start Session authentication process](https://developerhub.nayax.com/docs/cortina-auth#/)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `Verdict` inside `Status`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        Yes
+      </td>
+
+      <td>
+        Const string.\
+        Status of the request ('Approved'/'Declined')
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `Code` inside `Status`
+      </td>
+
+      <td>
+        Int(32)
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Conditional - Only if verdict value is declined.
+
+        Valid decline codes (must be a code from this list):
+
+        <br />
+
+        1 - Insufficient funds
+
+        <br />
+
+        2 - Transaction ID unknown
+
+        <br />
+
+        3 - Cardholder exceeded daily / weekly / monthly transaction count limit
+
+        <br />
+
+        4 - Cardholder exceeded transaction amount limit
+
+        <br />
+
+        5 - Suspected Fraud
+
+        <br />
+
+        6 - General system failure
+
+        <br />
+
+        7 - Invalid amount
+
+        <br />
+
+        8 - Request cannot be parsed (format error)
+
+        <br />
+
+        9 - Transaction not allowed to cardholder
+
+        <br />
+
+        40 - For Nayax internal use only.
+
+        <br />
+
+        990 - CertificateFileName not found
+
+        <br />
+
+        991 - Failed to decipher message body
+
+        <br />
+
+        992 - Timeout exception
+
+        <br />
+
+        994 - Card Brand not supported
+
+        <br />
+
+        996 - Transaction ID Unknown / Duplicate Transaction ID (Start Session Error)
+
+        <br />
+
+        997 - Missing mandatory parameters
+
+        <br />
+
+        998 - Validation / request cannot be parsed
+
+        <br />
+
+        999 - General exception
+
+        <br />
+
+        1010 - Public Key Certificate not found
+
+        <br />
+
+        1011 - Method not Implemented
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `StatusMessage` inside `Status`
+      </td>
+
+      <td>
+        String(255)
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        Transaction status message free text field / additional varying data
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `CustomDeclineCode` inside `Status`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        No
+      </td>
+
+      <td>
+        This field is used for specifying a custom decline code (i.e. Soft Decline or Switch Interface).
+        The value might be the same as the acquirer's response code or composed by other data.
+      </td>
+    </tr>
+  </tbody>
+</Table>

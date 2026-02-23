@@ -1,0 +1,195 @@
+---
+title: "DeclineCallback"
+---
+
+The `DeclineCallback `API call is used to notify you of a failure in the Spark transaction process. It is typically triggered after a successful `/TriggerTransaction` response with a verdict of `Approved `, but when the flow subsequently fails for any reason before payment authorization.
+
+This callback is essential for integrators to detect and gracefully handle cases where a session cannot proceed, such as when:
+
+* The consumer did not present a payment card, and the terminal timed out.
+* The consumer canceled the transaction on the Nayax Device.
+* A failure occurred on the device during the card presentation.
+* Other terminal-side errors that disrupt the flow.
+
+In such cases, no payment authorization is granted, and the transaction flow is terminated. If appropriate, the integrator may choose to re-attempt the `/TriggerTransaction` method.
+
+## Request
+
+Spark sends a POST request to the `/spark/DeclineCallback` endpoint:
+
+```json
+{
+  "MachineId": 71234996,
+  "HwSerial": "0434334921100366",
+  "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+  "Status": {
+    "Verdict": "Declined",
+    "ErrorCode": 44,
+    "ErrorDescription": "Timeout on POS Device"
+  }
+}
+```
+
+### Request Parameters
+
+The table below describes the parameters of the request:
+
+<Table>
+  <thead>
+    <tr>
+      <th>
+        Field
+      </th>
+
+      <th>
+        Type
+      </th>
+
+      <th>
+        Required
+      </th>
+
+      <th>
+        Description
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `MachineId`
+      </td>
+
+      <td>
+        Integer
+      </td>
+
+      <td>
+        Yes
+      </td>
+
+      <td>
+        The ID of the vending machine or terminal
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `HwSerial`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        Yes
+      </td>
+
+      <td>
+        Serial number of the hardware terminal
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `SparkTransactionId`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        Yes
+      </td>
+
+      <td>
+        The unique identifier of the failed Spark transaction
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `Status`
+      </td>
+
+      <td>
+        Object
+      </td>
+
+      <td>
+        Yes
+      </td>
+
+      <td>
+        An object indicating decline details
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `Status.Verdict`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        Yes
+      </td>
+
+      <td>
+        Always "Declined"
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `Status.ErrorCode`
+      </td>
+
+      <td>
+        Integer
+      </td>
+
+      <td>
+        Yes
+      </td>
+
+      <td>
+        Decline reason code
+
+        * `44`: Timeout on POS Device
+        * `45`: Cancelled on POS Device
+        * `38`: Transaction Callback Failed
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `Status.ErrorDescription`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        Yes
+      </td>
+
+      <td>
+        Description of the decline reason
+      </td>
+    </tr>
+  </tbody>
+</Table>
+
+<Note>
+**Nayax Callback**
+
+This is a callback from Nayax, no response body is required. A simple 200 OK server acknowledgment is sufficient.
+</Note>

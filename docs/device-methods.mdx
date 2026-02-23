@@ -1,0 +1,62 @@
+---
+title: "Device Methods"
+---
+
+This section covers the API methods for managing payment terminals. You can:
+
+* Get device information (like model, serial number, and software versions)
+* Read card data (from magnetic stripes or NFC Mifare cards)
+* Configure terminal settings (such as printer use or transaction types)
+* Send diagnostic logs for troubleshooting
+
+These tools help you integrate and control payment devices for various purposes, including loyalty programs, identification, and system maintenance. You can also stop a card reading operation if needed.
+
+## Available Methods
+
+<Columns cols={3}>
+  <Card title="getInfo" href="/v1.0/docs/getinfo" />
+
+  <Card title="readCard" href="/v1.0/docs/readCard" />
+
+  <Card title="abortReadCard" href="/v1.0/docs/abortreadcard" />
+
+  <Card title="getConfig" href="/v1.0/docs/getconfig" />
+
+  <Card title="setConfig" href="/v1.0/docs/setconfig" />
+
+  <Card title="getVersion" href="/v1.0/docs/getversion" />
+
+  <Card title="uploadLogs" href="/v1.0/docs/uploadlogs" />
+
+  <Card title="getProperty" href="/v1.0/docs/getproperty" />
+
+  <Card title="getUserInput" href="/v1.0/docs/getuserinput" />
+
+  <Card title="abortGetUserInput" href="/v1.0/docs/abortgetuserinput" />
+
+  <Card title="getUserSelection" href="https://developerhub.nayax.com/update/docs/getuserselection" />
+
+  <Card title="abortGetUserSelection" href="https://developerhub.nayax.com/update/docs/abortgetuserselection" />
+
+  <Card title="showAnimation" href="/v1.0/docs/showanimation" />
+
+  <Card title="hideAnimation" href="/v1.0/docs/hideanimation" />
+
+  <Card title="displaySwipeCard" href="/v1.0/docs/displayswipecard" />
+
+  <Card title="abortSwipe" href="/v1.0/docs/abortswipe" />
+
+  <Card title="displayQR" href="/v1.0/docs/displayqr" />
+
+  <Card title="abortDisplayQR" href="/v1.0/docs/abortdisplayqr" />
+
+  <Card title="abortDisplay" href="/v1.0/docs/abortdisplay" />
+
+  <Card title="sendGeneralEvent" href="https://developerhub.nayax.com/update/docs/sendgeneralevent" />
+</Columns>
+
+<Note>
+**Send Requests**
+
+See [Get Started](https://developerhub.nayax.com/update/docs/tweezercomm-get-started) for more details on how the requests are structured and sent.
+</Note>

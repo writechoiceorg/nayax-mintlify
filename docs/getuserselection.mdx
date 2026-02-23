@@ -1,0 +1,67 @@
+---
+title: "getUserSelection"
+---
+
+The `getUserSelection` method prompts the user to choose an option from a predefined list. This is useful for gathering user input where multiple choices are available.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](https://developerhub.nayax.com/docs/tweezercomm-get-started) for more details on how the requests are structured and sent.
+</Note>
+
+To invoke this method, set the `method `field to `getUserSelection`, and include the service name and parameters as shown below.
+
+```json
+{
+    "jsonrpc":"2.0",
+    "method":"getUserSelection",
+    "id":"1234567890",
+    "params": [
+            "device",{
+                "title": "Choose item:",
+                "itemsKeys": ["1","2","3","4"],
+                "itemsValues": ["Option1","Option2","Option3","Option4"],
+                "timeout": 60
+            }
+        ]
+}
+```
+
+### Request Parameters
+
+The table below describes the parameters of the request:
+
+| Name          | Type            | Description                               |
+| ------------- | --------------- | ----------------------------------------- |
+| `title`       | string          | Main title to display.                    |
+| `itemsKeys`   | array of string | Values used as the return keys.           |
+| `itemsValues` | array of string | Visible values are presented to the user. |
+| `timeout`     | int             | Timeout duration in seconds.              |
+
+## Response
+
+A successful request will return the following response:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "1234567890",
+    "result": {
+        "statusCode": 0,
+        "selection": "1"
+    }
+}
+```
+
+### Response Parameters
+
+The table below describes the response parameters for this method:
+
+| Name            | Type    | Description                     |
+| --------------- | ------- | ------------------------------- |
+| `statusCode`    | integer | Operation status (0 = success). |
+| `statusMessage` | string  | Operation message (optional).   |
+| `selection`     | string  | The selected key from the user. |

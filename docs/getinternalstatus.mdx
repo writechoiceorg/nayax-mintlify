@@ -1,0 +1,60 @@
+---
+title: "getInternalStatus"
+---
+
+The `getInternalStatus `method returns the internal status of the AEA (Agamento Engine Application).\
+This method is typically called infrequently to determine the internal state of the engine's service logic, particularly during transaction flows.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](https://developerhub.nayax.com/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, the `method `field needs to be set to `getInternalStatus`, as shown in the example request below:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getInternalStatus",
+    "id": "123454352",
+    "params": [
+        "engine"
+    ]
+}
+```
+
+### Request Parameters
+
+See the table below for a description of the available request parameters for this method.
+
+| Name     | Type   | Description            |
+| :------- | :----- | :--------------------- |
+| `engine` | string | The fixed service name |
+
+## Response
+
+A successful request will return a response similar to the one in the code block below:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "status": "idle"
+    }
+}
+```
+
+### Response Parameters
+
+The table below lists the possible values of the `status` field:
+
+| Value          | Description                                                 |
+| -------------- | ----------------------------------------------------------- |
+| `IDLE`         | The engine is in idle mode and ready                        |
+| `BUSY`         | The engine is currently busy and cannot handle new requests |
+| `PHASE2_READY` | The engine is ready for phase 2 of a transaction            |
+| `AUTH_READY`   | The engine is ready to perform an authorization             |

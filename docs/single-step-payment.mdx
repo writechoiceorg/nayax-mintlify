@@ -1,0 +1,41 @@
+---
+title: "Single Step Payment"
+---
+
+The single-step payment flow enables immediate authorization and settlement in a single operation, streamlining the payment process for use cases that require fast, straightforward transactions. While less robust than the two-step process (`PreAuthorize `and `ConfirmTransaction`), it is suitable for low-risk environments such as vending machines or self-service kiosks.
+
+<Callout icon="🚧" theme="warn">
+  Nayax encourages merchants to choose the [Payment with Pre-Authorization](https://developerhub.nayax.com/docs/payment-with-authorization) approach since it's safer in cases of communication problem.
+</Callout>
+
+## Transaction Flow
+
+The following diagram shows the transaction flow for a single-step payment:
+
+<Frame><img src="/images/docs/single-step-payment/image1.png" /></Frame>
+
+Where:
+
+1. The host application initiates a payment transaction by calling the [`PayTransaction`](https://developerhub.nayax.com/docs/payment-1#paytransaction) method. The total transaction amount, currency, and other parameters are specified to EMV Core upfront.
+2. EMV Core polls the card reader to determine whether a card is present.
+3. The user taps or inserts their card.
+4. EMV Core captures the card's encrypted data.
+5. The encrypted card data is sent to the EMV Core.
+6. EMV Core confirms the transaction and sends the details to the Nayax Server.
+7. The server receives the transaction data and performs the settlement, confirming it to EMV Core.
+8. EMV Core receives the transaction result from the server and triggers the [`TransactionComplete`](https://developerhub.nayax.com/docs/event-callbacks#transactioncomplete) event, sending the transaction's data.
+9. The vending is finalized, and the product is delivered to the user.
+10. The transaction report is sent to the Kiosk Application server.
+
+<HTMLBlock>
+  {`
+  <style>
+  img:not(.rm-Logo-img) {
+      border-radius: 12px;
+      box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13)
+  }
+  </style>
+  `}
+</HTMLBlock>
+
+<br />

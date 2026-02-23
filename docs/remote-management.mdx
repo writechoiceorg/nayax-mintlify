@@ -1,0 +1,469 @@
+---
+title: "Remote Management"
+---
+
+The EMV Core SDK includes management features that streamline device configuration, firmware updates, and diagnostics. These capabilities reduce maintenance overhead and enhance reliability by allowing centralized control through Nayax’s Terminal Management System (TMS) or local updates when necessary.
+
+The following methods are used for managing the SDK:
+
+* [Destroy](#destroy)
+* [GetAttribute](#getattribute)
+* [GetKioskID](#getkioskid)
+* [GetStatus](#getstatus)
+* [GetVersion](#getversion)
+* [Initialize](#initialize)
+* [isEMVCoreConnected](#isemvcoreconnected)
+* [SetManagementCallbacks](#setmanagementcallbacks)
+* [SetPaymentCallbacks](#setpaymentcallbacks)
+* [ShowMessage](#showmessage)
+* [UpdateMachineAttributes](#updatemachineattributes)
+
+See the sections below for more details on each method.
+
+***
+
+## `Destroy`
+
+<Callout icon="🚧" theme="warn">
+  This method is only available for the Android SDK.
+</Callout>
+
+Terminates the session with the reader and releases any associated resources. Use this during application shutdown or when the reader is no longer needed to prevent resource leaks and ensure the proper cleanup of SDK-related processes.
+
+See the `Destroy` API signature in the code below:
+
+```java Android
+void Destroy();
+```
+
+***
+
+## `GetAttribute`
+
+Called by the POS application to retrieve a specific attribute value from the EMV Core configuration file.
+
+See the `GetAttribute` API signature in the code below:
+
+<Tabs>
+  <Tab title="JSON">
+    Request:
+
+    ```json
+    {"jsonrpc":"2.0","method":"GetAttribute", "params": {"Key":"PRE_AUTH_AMOUNT"}, "id":12}
+    ```
+
+    Response when the requested attribute exists in the configuration file:
+
+    ```json
+       {"jsonrpc":"2.0", "result":"150", "id":12}
+    ```
+
+    Response when the requested attribute doesn’t exist in the configuration file:
+
+    ```json
+     {"jsonrpc":"2.0", "error":{"code": -1, "message": "Get attribute key not found"}, "id":12}
+    ```
+
+    **Parameters:**
+
+    | Parameter | Description                                                               |
+    | :-------- | :------------------------------------------------------------------------ |
+    | **id**    | Command ID.                                                               |
+    | **key**   | Label of the requested configuration attribute (e.g., `PRE_AUTH_AMOUNT`). |
+  </Tab>
+
+  <Tab title="Android">
+    ```java
+    String GetAttribute(String key) throws EmvCoreException;
+    ```
+
+    **Parameters:**
+
+    | Parameter | Description                                                                                                                                                         |
+    | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+    | `key`     | The attribute key in the configuration file. For example, if the config file includes `PRE_AUTH_AMOUNT=100`, providing the key `PRE_AUTH_AMOUNT` will return `100`. |
+  </Tab>
+
+  <Tab title="Linux">
+    ```c
+    KIOSK_RET LibOtiKiosk_GetAttribute(char* attribute_name, char* out_value,
+    int max_out_size);
+    ```
+
+    **Parameters:**
+
+    | Parameter        | Description                                                                                                                             |
+    | :--------------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
+    | `attribute_name` | A null-terminated string representing the attribute key in the configuration file (e.g., `"PRE_AUTH_AMOUNT"`).                          |
+    | `out_value`      | A pointer to a caller-allocated buffer where the attribute value will be stored as a null-terminated string.                            |
+    | `max_out_size`   | The maximum capacity of the `out_value` buffer in bytes. This prevents buffer overflows if the retrieved value is longer than expected. |
+  </Tab>
+</Tabs>
+
+***
+
+## `GetKioskID`
+
+Called by the POS application to retrieve the device identification number. This ID is critical for identifying the device on the Nayax server and linking it to transactions, configurations, and monitoring systems.
+
+See the `GetKioskID` API signature in the code below:
+
+<Tabs>
+  <Tab title="JSON">
+    Resquest:
+
+    ```json
+    {"jsonrpc": "2.0", "method": "GetKioskID", "params": {}, "id": 902}
+    ```
+
+    Response:
+
+    ```json
+       {"jsonrpc":"2.0", "result":"00130226001C9C69", "id":902}
+    ```
+  </Tab>
+
+  <Tab title="Android">
+    ```java
+    String GetKioskID() throws EmvCoreException;
+    ```
+  </Tab>
+
+  <Tab title="Linux">
+    ```c
+    KIOSK_RET LibOtiKiosk_GetKioskId(char* out_id, int max_out_size);
+    ```
+  </Tab>
+</Tabs>
+
+***
+
+## `GetStatus`
+
+Retrieves the reader's current status, including its transaction readiness and connectivity state. This is useful for monitoring the device state during integration or deployment.
+
+See the `GetStatus` API signature in the code below:
+
+<Tabs>
+  <Tab title="JSON">
+    Request:
+
+    ```json
+    {"jsonrpc": "2.0", "method": "GetStatus", "id": 805}
+    ```
+
+    Response:
+
+    ```json
+     {"jsonrpc": "2.0", "result": "Ready", "id": 805}
+    ```
+  </Tab>
+
+  <Tab title="Android">
+    ```java
+    EmvCoreStatus GetStatus() throws EmvCoreException;
+    ```
+  </Tab>
+
+  <Tab title="Linux">
+    ```c
+    KIOSK_STATUS status;
+    KIOSK_RET result = LibOtiKiosk_GetStatus(&status);
+    if (result == KIOSK_RET_OK) {
+    switch (status) {
+    case OK_READY:
+    printf("Kiosk is ready for transactions\n");
+    break;
+    case OK_NOT_READY:
+    printf("Kiosk is not ready\n");
+    break;
+    // Handle other status values...
+    }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+The possible result values are: `NotReady`, `Ready`, `PaymentTransaction`, `Update`, `NoReader`, and `NoTerminalId`.
+
+<Callout icon="📘" theme="info">
+  * **`Update`**: Indicates the EMV Core is busy with TMS updates (e.g., new firmware or configuration).
+  * **`NoTerminalId`**: Indicates the EMV Core does not have a configured Terminal ID.
+</Callout>
+
+<Callout icon="🚧" theme="warn">
+  If the `GetStatus` request times out, the host application should retry three times with a five-second interval between attempts. If no response is received after these retries, assume the EMV Core service is unresponsive and restart the process.
+</Callout>
+
+***
+
+## `GetVersion`
+
+Fetches the reader's firmware version and the EMV Core SDK version. This is used to verify that the latest updates have been applied.
+
+<Tabs>
+  <Tab title="JSON">
+    Resquest:
+
+    ```json
+    {"jsonrpc": "2.0", "method": "GetVersion", "params":{"component":
+    "Reader"}, "id": 902}
+
+    ```
+
+    Response:
+
+    ```json
+       {"jsonrpc": "2.0", "result": "S8_v054105", "id": 902}
+
+    ```
+
+    | Parameter     | Description                                                           |
+    | :------------ | :-------------------------------------------------------------------- |
+    | **id**        | Command ID.                                                           |
+    | **component** | Software component. **Note:** Use `otiKiosk` for "EMV-Core" versions. |
+  </Tab>
+
+  <Tab title="Android">
+    ```java
+    String GetEmvCoreVersion() throws EmvCoreException;
+    String GetReaderVersion() throws EmvCoreException;
+    ```
+  </Tab>
+
+  <Tab title="Linux">
+    ```c
+    KIOSK_RET LibOtiKiosk_GetKioskVersion(char* out_version, int max_out_size);
+    ```
+  </Tab>
+</Tabs>
+
+***
+
+## `Initialize`
+
+Initializes the EMV Core SDK and prepares it for operation by establishing initial settings and connections. This should be called during application startup to establish a session with the reader. It is essential to set up the environment before performing any transactions or management tasks.
+
+See the `Initialize` API signature in the code below:
+
+<Tabs>
+  <Tab title="Android">
+    ```java
+    void Initialize(Context context);
+    ```
+  </Tab>
+
+  <Tab title="Linux">
+    ```c
+    // TCP connection to localhost
+    bool success = LibOtiKiosk_Init(NULL, false);
+    // TCP connection to specific server
+    bool success = LibOtiKiosk_Init("192.168.1.100", false);
+    // Unix domain socket
+    bool success = LibOtiKiosk_Init("/tmp/kiosk_sockets", true);
+    ```
+
+    #### Parameters
+
+    | Parameter        | Description                                                                                                                                    |
+    | :--------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- |
+    | `server_address` | **Unix Domain Sockets:** Path to the folder containing sockets (can be NULL). **TCP Sockets:** IP address or hostname (defaults to localhost). |
+    | `is_local`       | Set to `true` for Unix domain sockets, or `false` for TCP sockets.                                                                             |
+
+    #### Returns
+
+    * **`true`**: Initialization was successful.
+    * **`false`**: Initialization failed.
+
+    #### Example Usage
+
+    ```c
+    // TCP connection to localhost
+    bool success = LibOtiKiosk_Init(NULL, false);
+
+    // TCP connection to a specific server
+    bool success = LibOtiKiosk_Init("192.168.1.100", false);
+
+    // Unix domain socket connection
+    bool success = LibOtiKiosk_Init("/tmp/kiosk_sockets", true);
+    ```
+  </Tab>
+</Tabs>
+
+***
+
+## `isEMVCoreConnected`
+
+<Callout icon="🚧" theme="warn">
+  This method is only available for the Android SDK.
+</Callout>
+
+Retrieves the current status of the reader, including its transaction readiness and connectivity state.
+
+See the `isEMVCoreConnected` API signature in the code below:
+
+```java Android
+boolean isEmvCoreConnected();
+```
+
+***
+
+## `SetManagementCallbacks`
+
+<Callout icon="🚧" theme="warn">
+  This method is only available for the Android SDK.
+</Callout>
+
+Registers callbacks called by the EMV Core regarding the operation of the EMV Core service itself. This includes the `SystemStatusChanged` event, allowing the application to monitor the health and maintenance status of the SDK.
+
+See the `SetManagementCallbacks` API signature in the code below:
+
+```java Android
+void SetManagementCallbacks(IManagementCallbacks iMaintenanceCallbacks);
+```
+
+**Parameters:**
+
+`iMaintenanceCallbacks`: Maintenance details and system event handlers.
+
+<Callout icon="📘" theme="info">
+  To learn more about implementation, see the [Event Callbacks](https://developerhub.nayax.com/docs/event-callbacks) documentation.
+</Callout>
+
+***
+
+## `SetPaymentCallbacks`
+
+Registers callbacks called by the EMV Core and implemented by the sales application regarding payment functionality. This includes handling events such as `TransactionComplete` and `ReaderMessage`.
+
+See the `SetPaymentCallbacks` API signature in the code below:
+
+<Tabs>
+  <Tab title="Android">
+    ```java
+    void SetPaymentCallbacks(IPaymentCallbacks iPaymentCallbacks);
+    ```
+
+    **Parameters:**
+
+    * `iPaymentCallbacks`: Payment transaction details and event handlers.
+  </Tab>
+
+  <Tab title="Linux">
+    ```c
+    void LibOtiKiosk_Register_TransactionComplete_Callback(TransactionCompleteCb_t
+    cb);
+
+    ```
+  </Tab>
+</Tabs>
+
+***
+
+## `ShowMessage`
+
+Displays a custom message on the reader’s screen (available only if the reader has a display).
+
+See the `ShowMessage` API signature in the code below:
+
+<Tabs>
+  <Tab title="JSON">
+    Resquest:
+
+    ```json
+    {"jsonrpc": "2.0", "method": "ShowMessage", "params":
+    {"line1": "Please Select", "line2": "Your Product"}, "id": 901}
+    ```
+
+    Response:
+
+    ```json
+       {"jsonrpc": "2.0", "result": true, "id": 901}
+    ```
+
+    | Parameter | Description                                                                    |
+    | :-------- | :----------------------------------------------------------------------------- |
+    | **id**    | Command ID.                                                                    |
+    | **line1** | Text to show in the 1st line of the reader display (limited to 16 characters). |
+    | **line2** | Text to show in the 2nd line of the reader display (limited to 16 characters). |
+  </Tab>
+
+  <Tab title="Android">
+    ```java
+    void ShowMessage(String line1, String line2) throws EmvCoreException;
+    ```
+  </Tab>
+
+  <Tab title="Linux">
+    ```c
+    KIOSK_RET result = LibOtiKiosk_ShowMessage("Welcome!", "Tap Card");
+    ```
+  </Tab>
+</Tabs>
+
+See the list of parameters below:
+
+| Parameter | Description                                                      |
+| :-------- | :--------------------------------------------------------------- |
+| `line1`   | Text for the 1st line of the reader display (max 16 characters). |
+| `line2`   | Text for the 2nd line of the reader display (max 16 characters). |
+
+<Callout icon="🚧" theme="warn">
+  This method is exclusive to the **UNO-PLUS** reader.
+</Callout>
+
+***
+
+## `UpdateMachineAttributes`
+
+<Callout icon="🚧" theme="warn">
+  This method is only available for the Android SDK.
+</Callout>
+
+Called by the POS application to set the host machine attributes values in Nayax Core. These
+values are for information only and would not affect the Nayax machine operation. It may help to get
+reports or diagnostics based on these host machine parameters.
+
+<Tabs>
+  <Tab title="JSON">
+    **Request:**
+
+    ```json
+    {
+      "jsonrpc": "2.0",
+      "method": "UpdateMachineAttributes",
+      "params": [
+        {"id": 542, "value": "AC Charger 1"},
+        {"id": 543, "value": "ACC1-1234567"},
+        {"id": 544, "value": "1.0.35-A"},
+        {"id": 593, "value": "1.2-G3"},
+        {"id": 541, "value": "manuf-123"}
+      ],
+      "id": 801
+    }
+    ```
+
+    **Response:**
+
+    ```json
+    {"jsonrpc": "2.0", "result": true, "id": 801}
+    ```
+  </Tab>
+
+  <Tab title="Android">
+    ```java
+    String UpdateMachineAttributes(List<NayaxMachineAttribute> attributes) throws EmvCoreException;
+    ```
+  </Tab>
+</Tabs>
+
+**Parameters:**
+
+**`key`**: A list of machine attributes to be updated on Nayax Core. Relevant attribute IDs include:
+
+* 541 Manufacturer Code
+* 542 Machine Model
+* 543 Serial Number
+* 544 Machine SW Version
+* 551 Type
+* 593 VMC HW Version

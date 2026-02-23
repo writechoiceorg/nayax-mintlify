@@ -1,0 +1,187 @@
+---
+title: "iOS SDK"
+---
+
+Nayax provides an iOS version of the eCom SDK. This guide shows you how to integrate it into your application. You will learn how to install, initialize, and prepare the SDK to facilitate payment creation.
+
+## Pre-requisites
+
+To ensure compatibility and optimal performance, your iOS project must meet the following minimum requirements:
+
+* iOS 14 or a later version
+* Swift 5.0
+* Xcode Version 14.0 or a later version
+* A valid Sign Key (shared by Nayax, typically 16 characters).
+* The associated Sign Key ID.
+* The `securityTokenId` and `securityTokenValue`.
+
+## Integrate eCom SDK
+
+The integration of eCom SDK consists of three steps:
+
+1. Install the SDK.
+2. Handle URL callbacks
+3. Initialize the SDK.
+4. Add Configuration Class.
+
+The sections below provide a detailed description of each step.
+
+### Step 1: Install the SDK
+
+To begin integrating the Nayax E-commerce functionality into your application, you'll first need to set up access to the GitLab repository and then install the SDK as shown below.
+
+<Warning>
+**Sensitive Information**
+
+Do **NOT** commit the access token to your source control. The token should be treated as a sensitive credential.
+</Warning>
+
+1. The Nayax eCom SDK for iOS is hosted on Nayax's private GitLab repository. The Nayax Team will provide you with a read-only access token. Configure git to use this token for authentication:
+   ```powershell
+   git config --global credential.helper store
+   echo "https://gitlab-ci-token:<YOUR-PROVIDED-TOKEN>@gitlab.nayax-sdk.nayax.com" > ~/.git-credentials
+   chmod 600 ~/.git-credentials # (Optional) Secure the credentials file
+   ```
+2. Set up your Podfile with the following code:
+
+```swift Podfile
+# Specify iOS platform version
+platform :ios, '13.4'
+
+# Add both the Nayax private Specs repo and the standard CocoaPods spec repo
+source 'https://gitlab.nayax-sdk.nayax.com/nayax/ecom/ios/pods.git'
+source 'https://github.com/CocoaPods/Specs.git'
+
+target 'YourAppName' do
+  # Use dynamic frameworks
+  use_frameworks!
+
+  # Add the NayaxEcomSDK
+  pod 'NayaxEcomSDK', 'x.y.z'
+
+  # Add any other dependencies your app needs
+  ...
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+    end
+  end
+end
+
+```
+
+3. Before installing, remove any previous integrations:
+
+```powershell Terminal
+pod deintegrate
+```
+
+4. Now, install the pods.
+   ```powershell Terminal
+   pod install --repo-update
+   ```
+
+### Step 2: Handle URL callbacks
+
+Add the following URL Types entry to your application's `Info.plist` file. This configuration allows the SDK to handle callback URLs:
+
+```Text info.plist
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleTypeRole</key>
+    <string>Editor</string>
+    <key>CFBundleURLName</key>
+    <string>YourAppName</string>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>ecom-sdk</string>
+    </array>
+  </dict>
+</array>
+```
+
+Depending on your project setup whether you use scenes, modify either your  or  to handle URL callbacks.
+
+* If you are using a `SceneDelegate`, add the following method:
+  ```swift
+  func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+      guard let url = URLContexts.first?.url else { return }
+      NayaxEcomSdk.shared.applicationDidOpen(from: url)
+  }
+  ```
+* If you are using an `AppDelegate` (without scenes), implement this method:
+  ```swift
+  class AppDelegate: UIResponder, UIApplicationDelegate {
+      func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = 
+  [:]) -> Bool {
+          return NayaxEcomSdk.shared.applicationDidOpen(from: url)
+      }
+  }
+  ```
+
+### Step 3: Initialize the SDK
+
+Now initialize the SDK in your application, using the `initialize` method. Add the following code in your `AppDelegate` (or your main application entry point):
+
+<Note>
+**Sign Key and ID**
+
+Nayax provides the `signId `, `signKey`, `securityTokenId` and `securityTokenValue` values during your onboarding. Ensure you handle these values securely.
+</Note>
+
+```swift Swift
+import NayaxEcomSDK
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate { 
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> 
+Bool {              ...
+        // Configure the SDK
+        let config = NayaxEcomConfig(
+            environment: NayaxEcomEnvironment.qa,
+            signId: <sign_id>,
+            signKey: <sign_key>,
+            securityTokenId: <security_token_id>,
+            securityTokenValue: <security_token_value>,
+            enableLog: true
+        )       
+        // Initialize the SDK and handle the result
+        NayaxEcomSdk.shared.initialize(config: config) { result in
+            switch result {
+            case .success:
+                // NayaxEcomSDK initialized
+            case .failure(let error):
+                // NayaxEcomSDK Initialization failed
+            }
+        }        
+        // Additional customization after application launch.
+        return true
+    }
+}
+```
+
+### Step 3: Add Configuration Class
+
+Add the `NayaxEcomConfig` struct to set the essential properties of the SDK. This table describes the parameters required to initialize the `NayaxEcomConfig` object.
+
+| Parameter            | Type                   | Description                                                                     |
+| :------------------- | :--------------------- | :------------------------------------------------------------------------------ |
+| `environment`        | `NayaxEcomEnvironment` | The target server environment. Possible values are `.stable`, or `.production`. |
+| `signId`             | `Int`                  | The ID used for signing API requests.                                           |
+| `signKey`            | `String`               | The key used for signing API requests.                                          |
+| `securityTokenId`    | `Int`                  | The security token ID used for merchant validation.                             |
+| `securityTokenValue` | `String`               | The security token value used for merchant validation.                          |
+| `enableLog`          | `Bool`                 | A flag to enable or disable SDK logging. Defaults to `false`.                   |
+
+Now the eCom SDK is integrated into your iOS application, and you can start creating payments through it. Refer to the [Front-End Integration](https://developerhub.nayax.com/docs/front-end-sdk) guide for more information on how this works.
+
+## See Also
+
+<Columns cols={2}>
+  <Card title="Android SDK" href="/v1.0/docs/android-sdk" />
+
+  <Card title="Front-End Integration" href="/v1.0/docs/front-end-sdk" />
+</Columns>

@@ -1,0 +1,47 @@
+---
+title: "Front-End Integration"
+---
+
+The front-end SDK enables you to integrate a payment page into your applications without directly handling complex payment processing or security. It simplifies the front-end payment experience by providing a few key methods for securely displaying and interacting with the payment page. At the same time, Nayax manages the complex interactions with the billing provider in the background.
+
+## Payment Flow
+
+The diagram below describes the typical payment flow for a front-end integration.
+
+<Frame><img src="/images/docs/front-end-sdk/image1.png" /></Frame>
+
+Here's the breakdown of the diagram:
+
+1. The process begins with a [startPayment](https://developerhub.nayax.com/docs/ecom-sdk-create-payments) request from your front-end to the eCom SDK.
+2. The eCom SDK sends this request to the Nayax Server.
+3. The server responds with the Session Data.
+4. The eCom SDK will then present the Drop-In UI to the Front-end
+5. The Consumer enters payment data, which triggers a [`startPayment`](docs:ecom-sdk-create-payments) request to the eCom SDK.
+6. An "Auth" request is sent from the eCom SDK to the Nayax Server.
+7. Nayax Server responds with 'Approved' back to the eCom SDK.
+8. Once approved, your Back-end receives an Approved (HTTP 200) webhook message.
+
+## Available Guides
+
+<HTMLBlock>
+  {`
+  <style>
+  img:not(.rm-Logo-img) {
+      border-radius: 12px;
+      box-shadow: 0px 3.656px 27.422px 0px rgba(0, 0, 0, 0.13)
+  }
+  </style>
+  `}
+</HTMLBlock>
+
+<br />
+
+<Columns cols={3}>
+  <Card title="Create Payments" href="/v1.0/docs/ecom-sdk-create-payments" />
+
+  <Card title="Handle Payment Results" href="/v1.0/docs/handling-payment-results" />
+
+  <Card title="Drop-In UI" href="/v1.0/docs/drop-in-ui" />
+</Columns>
+
+<br />

@@ -1,0 +1,126 @@
+---
+title: "getConfig"
+---
+
+The `getConfig `method is used to retrieve the current terminal configuration. It returns a complete configuration object with various system settings, such as printer usage, supported transaction types, and UI behavior.
+
+This method is often used with `setConfig` to read and update the terminal configuration.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](https://developerhub.nayax.com/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, the `method `field needs to be set to `getConfig`,  and the params must include the fixed value device as shown in the example request below:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getConfig",
+    "id": "123454352",
+    "params": [
+        "device"
+    ]
+}
+```
+
+### Request Parameters
+
+The table below describes the request parameters for this method:
+
+| Name     | Type  | Description                     |
+| -------- | ----- | ------------------------------- |
+| `params` | array | Must contain the value `device` |
+
+## Response
+
+A successful request will return a response similar to the one in the code block below:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "configApplied": true,
+        "autoPeriodic": true,
+        "usePrinter": true,
+        "wakeOnTransaction": false,
+        "amountDialog": false,
+        "ashraitServer": "SHVA",
+        "posType": "TC_HTTP",
+        "ecr": "1",
+        "allowCreditCardTrack2": false,
+        "ackTransaction": false,
+        "balanceAtLoyalty": false,
+        "tmsRetailer": "0883012",
+        "manualInterface": true,
+        "fullPANonReceipt": true,
+        "code3": "HANDLE_ON_PINPAD",
+        "slaveMode": false,
+        "startOnBoot": true,
+        "customDataScreen": false,
+        "keypadAlwaysOn": false,
+        "transactionTypesAllowed": [1, 8, 6, 4, 5, 7, 3, 2],
+        "creditTermsAllowed": [1, 8, 3, 6, 2],
+        "limitedAccessReports": false,
+        "limitedAccessSpecialTransactions": false,
+        "moduSMS": false,
+        "ravMutav": false,
+        "ravMutavMain": "",
+        "ravMutavAmex": "",
+        "ravMutavDiners": "",
+        "paymentAggregator": "NONE",
+        "paUser": "",
+        "configVersion": "manual",
+        "remoteAppPackageName": "",
+        "remoteAppActivityName": "",
+        "bonjourReusableSocket": false,
+        "protectInfoPopup": false,
+        "fastCredit": false,
+        "visaSensoryBranding": false,
+        "tcSecondaryPort": false,
+        "processorIP": "",
+        "autoRebootTime": "",
+        "agamentoModel": "EMV",
+        "enforceCardEjection": false,
+        "printTransactionMode": "DEFAULT",
+        "printPreAuthTransactionMode": "DEFAULT",
+        "connectionEnhancement": false,
+        "forcePeriodicBatch": false,
+        "receiptHeaderTitle": "",
+        "receiptHeaderSubtitle1": "",
+        "receiptHeaderSubtitle2": ""
+    }
+}
+```
+
+### Response Parameters
+
+Below is a table with all the possible response parameters and their description:
+
+| Name                      | Type   | Description                                    |
+| ------------------------- | ------ | ---------------------------------------------- |
+| `configApplied`           | bool   | Indicates whether the configuration is applied |
+| `autoPeriodic`            | bool   | Enables automatic end-of-day batch             |
+| `usePrinter`              | bool   | Enables internal printer usage                 |
+| `wakeOnTransaction`       | bool   | Wake terminal from screen saver                |
+| `amountDialog`            | bool   | Show amount dialog before transaction          |
+| `ashraitServer`           | string | Deposit gateway provider (e.g., SHVA)          |
+| `posType`                 | string | Integration method (e.g., TC\_HTTP)            |
+| `ecr`                     | string | POS identifier                                 |
+| `allowCreditCardTrack2`   | bool   | Enable track2 data collection on swipe         |
+| `ackTransaction`          | bool   | Enable transaction acknowledgment mechanism    |
+| `balanceAtLoyalty`        | bool   | Use merchant ID for loyalty lookup             |
+| `tmsRetailer`             | string | TMS retailer ID                                |
+| `manualInterface`         | bool   | Enable manual entry interface                  |
+| `fullPANonReceipt`        | bool   | Print full PAN on merchant receipt             |
+| `code3`                   | string | Code 3 handling method                         |
+| `slaveMode`               | bool   | Set terminal as slave mode                     |
+| `startOnBoot`             | bool   | Start Agamento on device boot                  |
+| `customDataScreen`        | bool   | Show custom data screen before transaction     |
+| `keypadAlwaysOn`          | bool   | Keep keypad active on screen                   |
+| `transactionTypesAllowed` | array  | List of allowed transaction types              |
+| `creditTermsAllowed`      | array  | List of allowed credit terms                   |

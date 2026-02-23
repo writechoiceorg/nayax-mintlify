@@ -1,0 +1,34 @@
+---
+title: "Obtain Your Device ID"
+---
+
+The Device ID is required to register your hardware with the Nayax Core system. This unique identifier is derived from the reader's Serial Number (SN) and is necessary to enable payment clearing and remote management.
+
+The most direct way to find the ID is to look at the hardware and locate the Serial Number (SN) label on the back of the EMV reader.
+
+<Callout icon="🚧" theme="warn">
+  It is highly recommended to scan the barcode on this label to prevent manual entry errors.
+</Callout>
+
+If the reader is already connected to your host system, you can retrieve the ID programmatically using the provided test applications:
+
+<Tabs>
+  <Tab title="Linux">
+    1. Navigate to your SDK directory and start the demo application.
+    2. From the main menu, select the option for Kiosk ID or EMV-Core ID (typically menu option 9 on Linux or 8 on RTOS).
+    3. The application will query the reader and display a 16-digit numeric string (e.g., 4207012624000149).
+
+    <Frame>![](/images/docs/emv-core-device-id/image1.png)</Frame>
+  </Tab>
+
+  <Tab title="Android">
+    1. Open the SDK Sample Application.
+    2. Navigate to the **Maintenance**page.
+    3. Press the **Get Data** button.
+    4. The **Kiosk ID** field will populate with the reader's unique identifier.
+
+    <Frame><img src="/images/docs/emv-core-device-id/image2.png" /></Frame>
+  </Tab>
+</Tabs>
+
+Once you have retrieved the 16-digit Device ID, provide it to your Nayax Account Manager. They will register the terminal in the Nayax Core system, which is a prerequisite for completing any payment transactions.

@@ -1,0 +1,149 @@
+---
+title: "Refunds"
+---
+
+The `doTransaction` method allows you to process refunds. There are two primary scenarios for this operation:
+
+* **Standard Refund**: Done on the same terminal where the original sale occurred.
+* **External Refund**: Done on a different terminal, requiring additional metadata for server-side validation.
+
+<Callout icon="📘" theme="info">
+  To perform a Refund transaction, save the `originalTransactionId` from the original transaction.
+</Callout>
+
+## Standard Refund
+
+A Standard Refund is utilized when a transaction needs to be reversed or partially returned using the same terminal that processed the original sale.
+
+### Request
+
+The following example shows a typical request body for a standard refund:
+
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "method": "doTransaction",
+  "id": "123454352",
+  "params": [
+    "engine",
+    {
+      "vuid": "80b45894",
+      "amount": 100,
+      "originalTransactionId": "2022052432",
+      "tranType": 2
+    }
+  ]
+}
+```
+
+## External Refund \[from other device]
+
+To refund a transaction initiated on a different terminal, the system requires the following metadata from the original transaction to ensure security and validity:
+
+* `transactionOriginalTime`
+* `transactionOriginalAmount`
+* `transactionOriginalRequestId`
+* `mainBoardSerial`
+* `hwSerial`
+
+### Request
+
+The following example shows a typical request body for an external refund:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "doTransaction",
+  "id": "123454352",
+  "params": [
+    "engine",
+    {
+      "vuid": "$guid",
+      "amount": 13,
+      "originalTransactionId": "2037037300",
+      "originalSiteId": 1,
+      "transactionOriginalTime": "2025-02-17 03:04:40.760",
+      "transactionOriginalAmount": 13,
+      "transactionOriginalRequestId": "afbae618-678f-45a9-ad87-5073c36419a2",
+      "mainBoardSerial": "543654645",
+      "hwSerial": "1231412",
+      "tranType": 2
+    }
+  ]
+}
+```
+
+### Response
+
+A successful request will return a response similar to the one in the code block below:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "123454352",
+  "result": {
+    "statusCode": 0,
+    "statusMessage": "TRANSACTION APPROVED",
+    "appVersion": "01.06.62",
+    "vuid": "123454",
+    "amount": 100,
+    "transactionId": "2022052432",
+    "entryMode": 1,
+    "transactionOriginalRequestId": "6439809e-619f-414b-8c3e-f1a9f3c3bc49",
+    "transactionOriginalTime": "0001-01-01 00:00:00.000",
+    "transactionOriginalAmount": 100,
+    "serverResultMessage": "Refund is Approved",
+    "tranType": 2,
+    "dtId": "1741246498022399011",
+    "currencyCode": "USD",
+    "currencyISOCode": "840",
+    "mainBoardSerial": "000177234933444",
+    "hwSerial": "0900044624102737"
+  }
+}
+```
+
+### Refund Request Parameters
+
+To perform a refund, you must include the following parameters within the `params` object of the `doTransaction` method.
+
+| Name                           | Type    | Description                                                                 |
+| :----------------------------- | :------ | :-------------------------------------------------------------------------- |
+| `jsonrpc`                      | string  | JSON-RPC protocol version (e.g., "2.0").                                    |
+| `method`                       | string  | The API method to call: `doTransaction`.                                    |
+| `vuid`                         | string  | Vendor unique identifier.                                                   |
+| `amount`                       | integer | The refund amount (in the smallest currency unit, e.g., cents).             |
+| `originalTransactionId`        | string  | **Mandatory.** The ID of the transaction to be refunded.                    |
+| `tranType`                     | integer | **Mandatory.** Set to `2` for Refund transactions.                          |
+| `originalSiteId`               | integer | **Conditional.** Required for external refunds to identify the source site. |
+| `transactionOriginalTime`      | string  | **Conditional.** Original timestamp in `YYYY-MM-DD HH:MM:SS.mmm` format.    |
+| `transactionOriginalAmount`    | integer | **Conditional.** The original amount of the initial transaction.            |
+| `transactionOriginalRequestId` | string  | **Conditional.** The original request GUID/ID.                              |
+| `mainBoardSerial`              | string  | **Conditional.** Mainboard serial of the original device.                   |
+| `hwSerial`                     | string  | **Conditional.** Hardware serial of the original device.                    |
+
+### Refund Response Parameters
+
+Below are the parameters returned in the `result` object following a refund request:
+
+| Name                           | Type    | Description                                                       |
+| :----------------------------- | :------ | :---------------------------------------------------------------- |
+| `statusCode`                   | integer | `0` for success; non-zero for errors or declines.                 |
+| `statusMessage`                | string  | High-level status text (e.g., "TRANSACTION APPROVED").            |
+| `appVersion`                   | string  | The current version of the application.                           |
+| `vuid`                         | string  | Vendor unique identifier for the transaction.                     |
+| `amount`                       | integer | The amount processed for the refund.                              |
+| `transactionId`                | string  | The unique ID assigned to this refund attempt.                    |
+| `entryMode`                    | integer | Method used to enter the card data.                               |
+| `transactionOriginalRequestId` | string  | Matches the request ID of the original transaction.               |
+| `transactionOriginalTime`      | string  | The timestamp recorded for the original transaction.              |
+| `transactionOriginalAmount`    | integer | The total amount of the original transaction.                     |
+| `serverResultMessage`          | string  | Detailed message from the processor (e.g., "Refund is Approved"). |
+| `tranType`                     | integer | Transaction type identifier (e.g., `2`).                          |
+| `dtId`                         | string  | Device-specific transaction identifier.                           |
+| `currencyCode`                 | string  | Alphanumeric currency code (e.g., "USD").                         |
+| `currencyISOCode`              | string  | Numeric ISO currency code (e.g., "840").                          |
+| `mainBoardSerial`              | string  | Serial number of the processing device's main board.              |
+| `hwSerial`                     | string  | Hardware serial number of the processing device.                  |
+
+<br />
