@@ -1,42 +1,10 @@
 ---
-title: "Deferred Payment"
+title: "ECOM API Overview"
 ---
 
-The Deferred transaction flow processes a payment request in two distinct phases:
+The Nayax Ecom SDK API is designed to enable secure and efficient e-commerce transactions. It serves as a server-side interface for the Nayax SDK, handling core financial processes such as transaction initialization, payment processing, and card token management. The API supports various transaction types, including Card-on-File (COF), Customer-Initiated Transactions (CIT), and Merchant-Initiated Transactions (MIT).
 
-1. A Pre-Authorization phase
-2. A final Authorization and Settlement phase
-
-This two-step approach is particularly useful for transactions where the final amount or details may change after the initial card interaction.
-
-## Transaction Flow
-
-To understand the Deferred transaction flow, consider the following sequence of events:
-
-<Callout icon="📘" theme="info">
-  Steps insisde the green area are performed online, and the ones inside the red area are performed offline.
-</Callout>
-
-<Frame><img src="/images/docs/tweezercomm-deferred-payment/image1.png" /></Frame>
-
-Here's a breakdown of each step:
-
-1. After the client application (POS) performs its [`doPeriodic()` ](https://developerhub.nayax.com/docs/doperiodic) to settle the stored card transactions.
-2. `setConfig()` Will switch the device to work in deferred mode, using offline mode.
-3. The pos send a [`doTransaction()`](https://developerhub.nayax.com/docs/dotransaction-ashrait) request to the Nayax Device, triggering a new transaction.
-4. The CardHolder taps their contactless card.
-5. The Nayax Device checks for "Deferred pre-conditions" and, upon approval, returns the transaction result as `Approved->Pending` This means the transaction is approved.
-   <Callout icon="📘" theme="info">
-     Once the deferred mode is finished working, continue to step 6.
-   </Callout>
-6. The client application calls `setConfig()` Setting off-line mode to false.
-7. The client application calls the `authorizePendingTransactions()` , sending the pending transactions to Nayax's device asking to settling them (but no settlement is performed yet).
-8. The Nayax Device communicates with SHVA to initiate the pending transaction authorization.
-9. The transaction results are returned to the Device.
-10. The transaction results are returned to the client application.
-11. The flow concludes with a final [`doPeriodic()`](https://developerhub.nayax.com/docs/doperiodic) call from the client application, to settle all authorized transactions.
-
-## See Also
+## API Modules
 
 <HTMLBlock>
   {`
@@ -213,7 +181,7 @@ Here's a breakdown of each step:
 
   <div class="card_container">
 
-    <a class="card" href="/v1.0/docs/single-phase-transaction">
+    <a class="card" href="/v1.0/reference/payments">
       <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
         <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -221,21 +189,10 @@ Here's a breakdown of each step:
         <path fill-rule="evenodd" clip-rule="evenodd"
           d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
       </svg>
-      <h3>Regular Transaction</h3>
-    </a>
-    
-      <a class="card" href="/v1.0/docs/2-phase-transaction">
-      <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
-        <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
-        <path fill-rule="evenodd" clip-rule="evenodd"
-          d="M23.3736 24.9994C22.4754 24.9994 21.7472 24.2712 21.7472 23.373V11.2526L9.62638 11.2526C8.72816 11.2526 8 10.5245 8 9.62632C8 8.72813 8.72816 8 9.62639 8L23.3736 8C24.2718 8 25 8.72813 25 9.62632L25 23.373C25 24.2712 24.2718 24.9994 23.3736 24.9994Z" />
-        <path fill-rule="evenodd" clip-rule="evenodd"
-          d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
-      </svg>
-      <h3>Two Phases Transaction</h3>
+      <h3>Payments</h3>
     </a>
 
-    <a class="card" href="/v1.0/docs/tweezercomm-pre-authorization-israel">
+    <a class="card" href="/v1.0/reference/management">
       <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
         <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -243,10 +200,10 @@ Here's a breakdown of each step:
         <path fill-rule="evenodd" clip-rule="evenodd"
           d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
       </svg>
-      <h3>Pre-Authorization (Israel)</h3>
+      <h3>Management</h3>
     </a>
 
-    <a class="card" href="/v1.0/docs/tweezercomm-split-transaction">
+     <a class="card" href="/v1.0/reference/token-management">
       <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33">
         <rect x="0.5" y="0.5" width="31.8205" height="31.8205" rx="3.70776" />
         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -254,13 +211,13 @@ Here's a breakdown of each step:
         <path fill-rule="evenodd" clip-rule="evenodd"
           d="M22.8056 10.1953C23.4408 10.8304 23.4408 11.8602 22.8056 12.4953L10.7768 24.5237C10.1416 25.1588 9.11188 25.1588 8.47674 24.5237C7.84159 23.8885 7.84159 22.8588 8.47673 22.2237L20.5056 10.1953C21.1407 9.56019 22.1705 9.56019 22.8056 10.1953Z" />
       </svg>
-      <h3>Split Transaction</h3>
+      <h3>Token Management</h3>
     </a>
 
   </div>
   `}
 </HTMLBlock>
 
-
+<br />
 
 <br />

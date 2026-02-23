@@ -1,0 +1,107 @@
+---
+title: "Overview"
+---
+
+The Nayax Lynx API documentation provides comprehensive information about the various available endpoints. The API enables integration with Nayax's services for managing payments, transactions, and related operations. This guide will help you understand the structure, endpoints, and usage of the API.
+
+## API Services
+
+Nayax Lynx API offers a wide range of functionalities through its endpoints, allowing you to integrate payment management and other services seamlessly.
+
+### API Modules
+
+<Columns cols={3}>
+  <Card title="Actors" href="https://developerhub.nayax.com/reference/get-actor-by-actorid" />
+
+  <Card title="Cards" href="https://developerhub.nayax.com/reference/get-cards" />
+
+  <Card title="Devices" href="https://developerhub.nayax.com/reference/get-device-by-deviceid" />
+
+  <Card title="Cards" href="/reference/get-cards" />
+
+  <Card title="EReceipt" href="https://developerhub.nayax.com/reference/generate-ereceipt" />
+
+  <Card title="Lookups" href="https://developerhub.nayax.com/reference/get-actor-types" />
+
+  <Card title="Machine Attribute" href="https://developerhub.nayax.com/reference/update-machine-attributes-to-defaults" />
+
+  <Card title="Machine Inventory" href="https://developerhub.nayax.com/reference/get-pick-list" />
+
+  <Card title="Machine Products" href="https://developerhub.nayax.com/reference/get-machine-products" />
+
+  <Card title="Machine Attribute" href="/reference/update-machine-attributes-to-defaults" />
+
+  <Card title="Machines" href="https://developerhub.nayax.com/reference/get-machine-basic-info" />
+
+  <Card title="Metadata" href="https://developerhub.nayax.com/reference/upload-picture" />
+
+  <Card title="Payments" href="https://developerhub.nayax.com/reference/request-payment-refund" />
+
+  <Card title="Product Groups" href="https://developerhub.nayax.com/reference/get-product-group" />
+
+  <Card title="Products" href="https://developerhub.nayax.com/reference/get-operator-products" />
+
+  <Card title="Scheduling" href="https://developerhub.nayax.com/reference/get-drivers" />
+
+  <Card title="Sign In" href="https://developerhub.nayax.com/reference/user-sign-in" />
+</Columns>
+
+## HTTP Response Codes
+
+Nayax Lynx API uses standard HTTP response codes to indicate the success or failure of API requests.
+
+* Codes in the `2xx` range indicate success.
+* Codes in the `4xx` range indicate an error occurred based on the request.
+* Codes in the `5xx` range indicate an internal server error.
+
+## More Resources
+
+<HTMLBlock>
+  {`
+  <style>
+    .card_container2 {
+      gap: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+  </style>
+  <body>
+
+    <div class="card_container card_container2">
+
+      <a class="card" href="/reference/actor-types">
+        <div class="card_content">
+          <h3>Actor Types</h3>
+          <p>Details about the different types of sub-operators.</p>
+        </div>
+      </a>
+
+      <a class="card" href="/reference/cards">
+        <div class="card_content">
+          <h3>Cards</h3>
+          <p>Information about different card types and physical forms.</p>
+        </div>
+      </a>
+
+      <a class="card" href="/reference/languages">
+        <div class="card_content">
+          <h3>Languages</h3>
+          <p>Supported languages and their corresponding IDs.</p>
+        </div>
+      </a>
+
+      <a class="card" href="/reference/machine-types">
+        <div class="card_content">
+          <h3>Machine Types</h3>
+          <p>Icons and descriptions for various machine types.</p>
+        </div>
+      </a>
+
+    </div>
+
+  </body>
+  `}
+</HTMLBlock>
+
+<br />
+
