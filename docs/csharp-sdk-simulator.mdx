@@ -2,26 +2,15 @@
 title: "C# SDK Simulator"
 ---
 
+import {TerminalBlock} from "/snippets/TerminalBlock.jsx";
+
 The Nayax Marshall SDK includes a simulator to help developers test and debug their device integration with the Nayax payment system. The simulator replicates the behaviour of the actual hardware and software interactions, allowing you to validate the vending process without needing physical hardware.
 
 ## Simulator
 
 When the C# SDK simulator is started on a terminal, its menu will look like this:
 
-<HTMLBlock>
-  {`
-  <style>
-  pre.bash {
-    background-color: black;
-    color: white;
-    font-size: medium ; 
-    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
-    width: 100%;
-    display: inline-block;
-  }
-  </style>
-
-  <pre class="bash">
+<TerminalBlock>
   [0]: start session 0
   [1]: close session 0
   [2]: info session
@@ -36,13 +25,11 @@ When the C# SDK simulator is started on a terminal, its menu will look like this
   [11]: screen control
   [12]: link stats
   [13]: quit
-  </pre>
-  `}
-</HTMLBlock>
+</TerminalBlock>
 
 Where:
 
-<Table align={["left","left"]}>
+<table align={["left","left"]}>
   <thead>
     <tr>
       <th>
@@ -197,7 +184,7 @@ Where:
       </td>
     </tr>
   </tbody>
-</Table>
+</table>
 
 ## Transaction Flow Examples
 
@@ -213,7 +200,7 @@ Below are examples of the flow for each transaction type:
 
 ## See Also
 
-<Columns cols={3}>
+<Columns cols={2}>
 <Card
   title="Java SDK Simulator"
   href="/v1.0/docs/java-sdk-simulator"
