@@ -1,0 +1,71 @@
+---
+title: "query"
+description: "Retrieve the current status or details of a specific transaction."
+---
+
+The `query` method allows the client application to poll the terminal for the current status of a specific transaction using its `requestId` or `transactionId`. This serves as a critical safety mechanism for handling network timeouts or application crashes, ensuring the POS and the terminal remain in sync regarding the payment outcome.
+
+Use this method to:
+* Recover transaction states by checking the final outcome if the original response was lost due to a connection drop.
+* Verify the current status of a transaction—such as pending, authorized, or declined—without re-triggering the payment logic.
+* Retrieve transaction metadata for local logging, auditing, and reconciliation support.
+
+## Requests
+
+To query a transaction, you must provide the identifier associated with the original request.
+
+The following example shows a typical request:
+```json
+{
+"command": "query",
+"requestId": "req-006",
+"data": {
+"filter": "OPEN"
+}
+}
+
+```
+
+### Parameter Definitions
+
+The table below describes the parameters available for this request:
+
+| Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| **command** | string | Yes | Set to `"query"`. |
+| **requestId** | string | Yes | The unique ID used in the original command you wish to check. |
+| **transactionId** | string | No | (Optional) The gateway transaction ID, if available. |
+
+## Responses
+
+The terminal returns the current known state of the transaction. If the transaction is still in progress, the response will reflect its current phase.
+
+The following example shows a typical response:
+```json
+{
+"requestId": "req-006",
+"data": {
+"transactions": [
+{
+"transactionId": "TXN-20260113-003000",
+"state": "AUTHORIZED",
+"amount": 50000,
+"timeStamp": "2026-01-13T15:00:30Z"
+}
+]
+}
+}
+```
+
+### Response Parameters
+
+The `data` object will contain the most recent information available for that specific request:
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| **state** | string | The current lifecycle state (e.g., `AUTHORIZED`, `SETTLED`, `DECLINED`, or `IN_PROGRESS`). |
+| **transactionId** | string | The unique identifier assigned by the gateway. |
+| **amount** | integer | The amount associated with the transaction (refer to `decimalPlace`). |
+| **cardBrand** | string | The brand of the card used (e.g., VISA). |
+| **maskedPan** | string | The masked card number. |
+| **errorCode** | integer | If the transaction failed, this returns the specific error code. |

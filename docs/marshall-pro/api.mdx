@@ -1,0 +1,31 @@
+---
+title: "API Introduction"
+---
+
+The Marshall Pro (Fuel) protocol is a high-performance, command-based interface designed for fuel retail environments. It allows your Point-of-Sale (POS) or Forecourt Controller (FCC) to manage the full lifecycle of a transaction—from card detection to final settlement.
+
+Unlike cloud APIs, the Marshall Pro (Fuel) protocol runs locally on your station's network. The VPOS terminal acts as a persistent TCP/IP server waiting for your application to connect.
+
+The API is categorized into four functional areas to help you build a complete customer journey:
+<CardGroup cols={2}>
+  <Card title="Payment Processing" icon="credit-card">
+   Supports single-phase (`pay`) and two-phase (`authorize` + `settle`) fuel transactions.
+  </Card>
+  <Card title="Card Detection" icon="magnifying-glass">
+   Read card data without an immediate charge—perfect for Loyalty and Customer ID.
+  </Card>
+  <Card title="User Interface" icon="desktop">
+   Take control of the terminal screen to show custom menus, fuel types, or prompts.
+  </Card>
+  <Card title="Peripheral Support" icon="print">
+   Directly trigger the integrated thermal printer for customer receipts.
+  </Card>
+</CardGroup>
+
+See [Request and Response Format](/docs/request-response-format) for more information.
+
+<Note>
+  **Socket Management:** The VPOS server maintains a single active session. If your application opens a new socket, the server automatically terminates the previous connection to ensure data integrity.
+</Note>
+
+

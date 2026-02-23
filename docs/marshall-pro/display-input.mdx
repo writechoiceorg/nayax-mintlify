@@ -1,0 +1,83 @@
+---
+title: "displayInput"
+description: "Request specific alphanumeric input from the customer via the terminal interface."
+---
+
+The `displayInput` method allows the client application to prompt the customer for specific information using the terminal's keypad or touchscreen. This serves as an essential tool for workflows that require additional data points beyond standard card details.
+
+Use this method to:
+* Prompt for identification and security details like a PIN, Zip Code, or custom "Employee ID" for fleet cards.
+* Request operational metadata such as Odometer readings, Unit Numbers, or Hubometer values.
+* Ask for specific customer inputs like "Enter Pump Number" or "Enter Phone Number" for loyalty programs.
+
+Example of the display prompt on a Nayax device:
+![displayInput](/images/display-input.jpg)
+
+## Requests
+
+When calling this method, you must define the type of input requested and any constraints, such as character limits or masking requirements.
+
+The following example shows a typical request:
+```json
+{
+"command": "displayInput",
+"requestId": "req-008",
+"data": {
+"title": "Loyalty",
+"prompt": "Enter Phone Number",
+"signature": "MIIEowIBAAKCAQEA4...",
+"inputType": "NUMERIC",
+"minLength": 6,
+"maxLength": 10,
+"mask": false,
+"skipButton": true,
+"skipButtonText": "Skip"
+}
+}
+```
+
+### Parameter Definitions
+
+The table below describes the parameters available for this request:
+
+| Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| **command** | string | Yes | Set to `"displayInput"`. |
+| **requestId** | string | Yes | A unique identifier for tracking the response. |
+| **title** | string | Yes | The heading text displayed at the top of the input screen. |
+| **inputType** | string | No | Defines the allowed characters: `NUMERIC`, `ALPHANUMERIC`, or `PASSWORD` (masked). |
+| **minLength** | integer | No | The minimum number of characters required to submit. |
+| **maxLength** | integer | No | The maximum number of characters allowed. |
+
+## Responses
+
+The terminal returns the data entered by the customer once they press the confirmation (Enter) key.
+
+The following example shows a typical response:
+```json
+{
+"requestId": "req-008",
+"data": {
+"value": "0501234567"
+}
+}
+```
+
+The following example shows a canceled/skipped response:
+```json
+{
+"requestId": "req-008",
+"data": {
+"key": "SKIP/CANCEL"
+}
+}
+```
+
+### Response Parameters
+
+The `data` object contains the customer's input:
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| **value** | string | The actual string entered by the user. |
+| **state** | string | Returns `COMPLETED` if the user confirmed the input, or `CANCELLED` if they exited the screen. |

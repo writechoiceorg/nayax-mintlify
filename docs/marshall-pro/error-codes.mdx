@@ -1,0 +1,28 @@
+---
+title: "Error Codes"
+---
+
+This page provides a reference of error codes. Errors are universal across all API methods. They are returned by the terminal's JSON parser before the requested command is even executed.
+
+| Code | Meaning | Description |
+| :--- | :--- | :--- |
+| **1001** | **Invalid JSON** | The system could not parse the message payload because it has an invalid JSON structure. |
+| **1002** | **Unknown Command** | The terminal doesn't recognize the `command` name. |
+| **1003** | **Required Parameter Missing** | The request is missing a mandatory field (such as `requestId`). |
+
+### Error Handling Best Practices
+
+To ensure a high-quality integration, follow these guidelines:
+
+* **Logging**: Always log both the `errorCode` and the descriptive `errorMessage` to facilitate debugging.
+* **Retries**: Implement client-side retry logic if the terminal does not respond within the expected window.
+* **Safety**: Never automatically retry a declined transaction without a direct user action.
+* **Typical Timeouts**: Use the following time windows for client-side monitoring:
+  * **Card Detection:** 30–60 seconds.
+  * **User Input:** 60–120 seconds.
+  * **Authorization:** 10–30 seconds.
+
+<Note>
+**User Feedback**
+Always provide clear visual feedback on the POS screen during wait times or when an error occurs to keep the customer informed.
+</Note>

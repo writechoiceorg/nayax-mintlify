@@ -1,0 +1,70 @@
+---
+title: "authorize"
+description: "Initiate a financial pre-authorization on a previously detected payment method."
+---
+
+The `authorize` method places a financial hold (pre-authorization) on a previously identified card. This represents the second phase of a two-step transaction, occurring after a successful `cardDetect` call.
+
+Use this method to:
+* Guarantee payment by reserving a maximum dollar amount before the fueling session begins.
+* Verify card validity and fund availability before the pump is activated.
+* Capture a final amount that is less than or equal to the initial hold.
+
+Example of the authorization prompt on a Nayax device:
+![Authorize](/images/authorize.jpg)
+
+## Requests
+
+This command relies on the card data stored in the terminal's session buffer from the preceding detection phase. Consequently, a `data` object is not required in the request.
+
+The following example shows a typical request:
+```json
+{
+"command": "authorize",
+"requestId": "req-002"
+}
+```
+
+### Parameter Definitions
+
+The table below describes the required fields for the authorization request:
+
+| Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| **command** | string | Yes | Set to `"authorize"`. |
+| **requestId** | string | Yes | A unique identifier for tracking the response. |
+
+## Responses
+
+The terminal returns a response after communicating with the financial gateway. A successful response contains the `transactionId`, which is mandatory for the subsequent settlement.
+
+The following example shows a typical response:
+```json
+{
+"requestId": "req-002",
+"data": {
+"transactionId": "TXN-20260113-003000",
+"authorizedAmount": 50000,
+"state": "AUTHORIZED",
+"cardBrand": "MASTERCARD",
+"cardEntryMode": "CHIP",
+"maskedPan": "************5678",
+"aid": "A0000000031010"
+}
+}
+```
+
+### Response Parameters
+
+Below are the parameters returned in the `data` object upon a successful authorization:
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| **transactionId** | string | The unique ID for this authorized hold. **Save this value** for the `settle` command. |
+| **authorizedAmount** | integer | The exact amount approved and held by the bank (refer to `decimalPlace`). |
+| **state** | string | Returns `AUTHORIZED` upon success. |
+| **cardBrand** | string | The brand of the card used (e.g., MASTERCARD). |
+| **cardEntryMode** | string | The method used to read the card (e.g., CHIP). |
+| **maskedPan** | string | The masked card number for logging and receipt printing. |
+| **aid** | string | The Application Identifier for the EMV transaction. |
+

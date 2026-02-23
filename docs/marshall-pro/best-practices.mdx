@@ -1,0 +1,26 @@
+---
+title: "Best Practices"
+description: "Optimizing your VPOS integration for reliability and user experience."
+---
+
+### Request IDs
+Every request must have a unique identifier.
+* **Format**: Alphanumeric with hyphens (e.g., `refuel-12345`).
+* **Context**: Include business logic in the ID to make logs easier to read.
+
+### Amount Handling
+VPOS uses **minor units** to avoid floating-point errors.
+* If `decimalPlace` is 2, **$1.00** is sent as `100`.
+* If `decimalPlace` is 3, **$1.00** is sent as `1000`.
+
+### Conventional Timeouts
+The client system should manage timeouts to ensure the terminal doesn't hang indefinitely:
+| Phase | Suggested Timeout |
+| :--- | :--- |
+| **Card Detection** | 30–60 Seconds |
+| **User Input** | 60–120 Seconds |
+| **Authorization** | 10–30 Seconds |
+
+### Error Handling
+* **Logging**: Always store the `errorCode` and `errorMessage`.
+* **Retries**: Do not retry **DECLINED** transactions. A decline is a final response from the bank; the user must provide a different payment method.

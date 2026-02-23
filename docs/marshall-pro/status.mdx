@@ -1,0 +1,57 @@
+---
+title: "status"
+description: "Retrieve the current operational state of the VPOS terminal."
+---
+
+The `status` method retrieves the current operational state of the VPOS payment terminal. This endpoint is essential for monitoring hardware readiness before initiating a transaction or checking the progress of a long-running user interaction.
+
+Use this method to:
+* Verify the reader is idle and ready before sending a payment command.
+* Determine if the terminal is currently waiting for card interaction or processing data.
+* Identify if the terminal is offline or in a "not ready" state to track hardware health.
+
+## Requests
+
+Requests for this endpoint are straightforward and do not require a `data` object. You must only provide the standard `command` and a unique `requestId`.
+
+``` json
+{
+"command": "status",
+"requestId": "req-021"
+}
+```
+
+### Parameter Definitions
+
+The table below describes the common fields required for this request:
+
+| Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| **command** | string | Yes | Set to `"status"`. |
+| **requestId** | string | Yes | A unique identifier for tracking the response. |
+
+
+## Responses
+
+The VPOS terminal returns the current state of the card reader as an integer value.
+
+``` json
+{
+"requestId": "req-021",
+"data": {
+"reader": 1
+}
+}
+```
+
+### Reader Values
+
+The `reader` integer shows the current state code of the payment reader hardware.
+Use the following table to map its operational meaning:
+
+| Value | State | Description |
+| :--- | :--- | :--- |
+| **0** | Not Ready | The terminal is offline, disconnected, or initializing. |
+| **1** | Ready | The terminal is idle and ready to accept new commands. |
+| **2** | Waiting for Card | The reader is active and prompted for a user's payment method. |
+| **3** | Processing | A transaction or command is currently being executed. |

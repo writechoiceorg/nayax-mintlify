@@ -1,0 +1,37 @@
+---
+title: "Forecourt Architecture"
+---
+
+The Marshall Protocol integrates into a complex ecosystem involving local hardware, forecourt controllers, and multiple backend authorization engines.
+
+![Forecourt Architecture](documentation/images/forecourt.png)
+
+### The Forecourt (On-Site)
+The forecourt consists of the physical hardware interacting with customers and fuel dispensers.
+
+<CardGroup cols={2}>
+  <Card title="Pay-at-the-Pump Terminal" icon="gas-pump">
+    The Nayax terminal where the **Cardholder** initiates the transaction. It communicates via Cellular, Ethernet, or Wi-Fi.
+    To ensure interoperability, the system supports industry-standard protocols:
+    * **Marshall Protocol:** For direct device-to-app communication.
+    * **IFSF / Conexxus:** Standardized communication for international fuel retail environments.
+  </Card>
+  <Card title="Forecourt Controller (FCC)" icon="network-wired">
+    The "brain" of the site. It manages the **Dispensers** via a Pump Comms Protocol and links them to the POS and Nayax terminal.
+  </Card>
+  <Card title="Point of Sale (POS)" icon="cash-register">
+    The local terminal used for back-office reporting and manual transaction management.
+  </Card>
+  <Card title="Back-office" icon="gears">
+    Local servers managing inventory, pricing, and site configuration.
+  </Card>
+</CardGroup>
+
+## Nayax Payment Server
+Beyond the physical site, the **Nayax Payment Server** acts as a central hub, using **Amazon SQS** for reliable message queuing to ensure no transaction data is lost.
+The transactions are routed to different engines depending on the card type or customer profile:
+
+* **Fleet Transactions:** Specialized processing for commercial vehicle cards.
+* **3rd Party Auth Engine:** Connection to external banking or payment processors.
+* **Loyalty Servers:** Validates rewards, discounts, and member-specific pricing.
+* **Payment Gateway/Acquirer:** Final settlement for standard consumer credit/debit cards.

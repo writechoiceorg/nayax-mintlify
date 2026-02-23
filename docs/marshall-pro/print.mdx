@@ -1,0 +1,66 @@
+---
+title: "print"
+description: "Trigger the integrated thermal printer to generate custom receipts or documents."
+---
+
+The `print` method provides direct access to the VPOS terminal's integrated thermal printer. This allows the client application to generate physical records for the customer, such as transaction receipts, loyalty vouchers, or fueling summaries.
+
+Use this method to:
+* Print finalized sale details, including merchant info, masked card data, and totals for transaction receipts.
+* Generate a physical record of the volume, grade, and price per unit after the nozzle is holstered.
+* Provide customers with discount codes or reward vouchers based on their current purchase.
+* Print diagnostic or status reports directly at the station for maintenance logs.
+
+Example of the print display screen on a Nayax device:
+![print](/images/print.jpg)
+
+## Requests
+
+The request includes the raw text content or structured data you wish to print. You can use standard escape characters for basic formatting like new lines.
+
+The following example shows a typical request:
+```json
+{
+"command": "print",
+"requestId": "req-012",
+"data": {
+"printData": "Transaction Receipt\n-------------------\nAmount: $20.00\nDate: 2026-01-
+13\nApproved"
+}
+}
+```
+
+### Parameter Definitions
+
+The table below describes the parameters available for this request:
+
+| Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| **command** | string | Yes | Set to `"print"`. |
+| **requestId** | string | Yes | A unique identifier for tracking the response. |
+| **content** | string | Yes | The text data to be printed. Use `\n` for line breaks. |
+| **cutPaper** | boolean | No | If `true`, the printer will perform a full cut after the content is printed (if hardware supports it). |
+
+## Responses
+
+The terminal returns an acknowledgment once the print job has been successfully queued or completed by the hardware.
+
+The following example shows a typical response:
+```json
+{
+"requestId": "req-012",
+"data": {
+"printed": true,
+"characterCount": 71
+}
+}
+```
+
+### Response Parameters
+
+The response confirms the status of the peripheral action:
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| **requestId** | string | Echoes the unique identifier of the original request. |
+| **status** | string | Returns `SUCCESS` if the print job was accepted, or `ERROR` if the printer is out of paper or disconnected. |

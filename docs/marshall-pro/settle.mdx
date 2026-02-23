@@ -1,0 +1,70 @@
+---
+title: "settle"
+description: "Finalize a pre-authorized transaction with the actual fueling amount."
+---
+
+The `settle` method is the final step in the fuel transaction lifecycle. It "captures" or finalizes a previously authorized transaction once the dispensing process is complete, ensuring the customer is only charged for the exact amount of fuel delivered.
+
+Use this method to:
+* Convert a temporary pre-authorization hold into a final financial charge.
+* Finalize the transaction with an amount that is typically less than or equal to the original authorized hold.
+* Complete the transaction sequence to generate final logs and release the session.
+
+## Requests
+
+To call this method, you must provide the `transactionId` received during the `authorize` or `detectAndAuth` phase, along with the final `amount`.
+
+The following example shows a typical request:
+```json
+{
+"command": "settle",
+"requestId": "req-003",
+"data": {
+"transactionId": "TXN-20260113-003000",
+"amount": 42000,
+"volume": 30000,
+"product": "Diesel"
+}
+}
+
+```
+
+### Parameter Definitions
+
+The table below describes the required fields for the settlement request:
+
+| Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| **amount** | integer | Yes | The final actual amount to be charged (refer to `decimalPlace`). |
+| **transactionId** | string | Yes | The unique identifier returned by the previous authorization response. |
+
+---
+
+## Responses
+
+The terminal returns a response confirming that the transaction has been successfully settled and the financial record has been updated.
+
+The following example shows a typical response:
+```json
+{
+"requestId": "req-003",
+"data": {
+"transactionId": "TXN-20260113-003000",
+"state": "SETTLED",
+"settledAmount": 42000,
+"timeStamp": "2026-01-13T11:00:00Z"
+}
+}
+```
+
+### Response Parameters
+
+Below are the parameters returned in the `data` object upon a successful settlement:
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| **transactionId** | string | The unique identifier of the settled transaction. |
+| **amount** | integer | The final amount that was captured. |
+| **state** | string | Returns `SETTLED` (or `COMPLETED`) upon success. |
+| **approvalCode** | string | The authorization code provided by the banking network. |
+| **responseMessage** | string | A text description of the settlement result (e.g., "Transaction Approved"). |

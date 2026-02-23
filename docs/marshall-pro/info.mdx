@@ -1,0 +1,72 @@
+---
+title: "info"
+description: "Exchange system metadata and retrieve terminal configuration settings."
+---
+
+The `info` method exchanges version information and device metadata between the client application (POS/FCC) and the VPOS terminal. This typically serves as the first command sent after establishing a TCP connection to ensure compatibility between both systems.
+
+Use this method to:
+* Exchange vendor, model, and serial number details for system identification.
+* Synchronize software and hardware versions to ensure protocol feature alignment.
+* Retrieve critical terminal settings, such as the defined decimal place for transaction amounts.
+
+## Requests
+
+All requests must include the `command` and a unique `requestId`. The `data` object should contain the details of the client system making the request.
+
+The following example shows a typical request:
+
+```json
+{
+"command": "info",
+"requestId": "req-020",
+"data": {
+"vendor": "Nayax Fuel",
+"model": "FCC-3000",
+"serialNumber": "FCC-12345678",
+"swVersion": "1.2.3.4",
+"hwVersion": "4.3.2.1"
+}
+}
+```
+
+### Parameter Definitions
+
+The table below describes the parameters provided by your system in this request[cite: 100]:
+
+| Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| **vendor** | string | Yes | The vendor name of the client system (e.g., "Nayax Fuel"). |
+| **model** | string | Yes | The model identifier of the POS or FCC hardware. |
+| **serialNumber** | string | Yes | The unique serial number of the client system. |
+| **swVersion** | string | Yes | The current software version of the client application. |
+| **hwVersion** | string | Yes | The hardware version of the client device. |
+
+## Responses
+
+The VPOS terminal returns its own hardware and software specifications, along with regional settings required for payment processing.
+The following example shows a typical response:
+
+```json
+{
+"requestId": "req-020",
+"data": {
+"serialNumber": "P129901X251AD",
+"osVersion": "16.0",
+"appVersion": "2.3.4.5",
+"paymentVersion": "0.0.2.68",
+"decimalPlace": 2
+}
+}
+```
+
+### Response Parameters
+Below are the parameters returned by the VPOS terminal:
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| **serialNumber** | string | The unique serial number of the VPOS terminal. |
+| **osVersion** | string | The operating system version running on the device. |
+| **appVersion** | string | The version of the primary terminal application. |
+| **paymentVersion** | string | The specific version of the payment processing module. |
+| **decimalPlace** | integer | The number of decimal places to be used for all transaction amounts (e.g., `2` means an amount of `5000` represents `$50.00`). |

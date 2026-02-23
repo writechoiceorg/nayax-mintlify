@@ -1,0 +1,91 @@
+---
+title: "cardDetect"
+description: "Enable the reader to detect and read payment methods without immediate authorization."
+---
+
+The `cardDetect` method activates the terminal's reader to identify and capture data from a payment method (Card or QR) without initiating a financial hold or charge. It serves as a versatile tool for workflows where customer identification must precede the payment phase.
+
+Use this method to:
+* Recognize customers via loyalty cards or mobile QR codes to apply personalized discounts.
+* Retrieve masked card data to welcome returning users or verify membership status.
+* Use card data to determine eligible fuel types or promotions before requesting authorization.
+* Accept Contactless (CTLS), Chip (EMV), Magnetic Stripe (Swipe), and QR code scanning.
+
+Example of the card detection prompt on a Nayax device:
+![cardDetect](/images/card-detect.jpg)
+
+## Requests
+
+All requests must include the `command` and a unique `requestId`. While this method does not authorize funds, an `amount` must be provided for display purposes on the terminal screen.
+
+The following example shows a typical request:
+```json
+{
+"command": "cardDetect",
+"requestId": "req-005",
+"data": {
+"amount": 50000,
+"tranType": 1,
+"channels": ["CTLS", "CHIP", "SWIPE"]
+}
+}
+```
+
+This is how this request appears on a Nayax device: 
+
+
+### Parameter Definitions
+
+The table below describes the parameters available for the detection request:
+
+| Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| **amount** | integer | Yes | The amount to display on the screen during detection (refer to `decimalPlace`). |
+| **tranType** | integer | No | `1`: Pre-authorization, `2`: Pre-selection (Default is `1`). |
+| **channels** | array | No | Defines allowed payment methods: `CTLS`, `CHIP`, `SWIPE`, or `QR`. Defaults to all if omitted. |
+
+## Responses
+
+The VPOS terminal returns a response once the user interacts with the reader or a QR code is successfully scanned.
+
+The following example shows a typical **credit card** response:
+```json
+{
+"requestId": "req-005",
+"data": {
+"state": "CARD_READ",
+"cardBrand": "VISA",
+"cardEntryMode": "CTLS",
+"maskedPan": "************1234",
+"aid": "A0000000031010"
+}
+}
+```
+
+The following example shows a typical **QR code** response:
+```json
+{
+"requestId": "req-005",
+"data": {
+"state": "CARD_READ",
+"cardEntryMode": "QR",
+"qrCode": "1168743871706458"
+}
+}
+```
+<Info>
+  **Note:** When using `cardDetect` for non-credit card methods (such as proprietary QR codes), the client system is responsible for any subsequent authorization or settlement logic.
+</Info>
+
+### Response Parameters
+
+The response data is categorized by the entry mode used by the customer:
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| **state** | string | Returns `CARD_READ` upon a successful detection event. |
+| **cardEntryMode** | string | The method used to capture the data: `CTLS`, `CHIP`, `SWIPE`, or `QR`. |
+| **cardBrand** | string | The brand of the detected card (e.g., VISA, MASTERCARD). |
+| **maskedPan** | string | The masked Primary Account Number for identification purposes. |
+| **aid** | string | The Application Identifier for EMV-based transactions. |
+| **qrCode** | string | The raw data string captured from a scanned QR code. |

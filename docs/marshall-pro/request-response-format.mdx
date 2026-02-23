@@ -1,0 +1,55 @@
+---
+title: "Request and Response Format"
+---
+
+The Marshall Pro protocol uses a unified JSON structure for every message. This consistency allows you to build a single "wrapper" in your code to handle all terminal communications.
+
+## Request Object
+
+Every command sent from your system to the VPOS must follow this structure:
+
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| command | `string` | Yes | The name of the API method (e.g., `"status"`, `"pay"`). |
+| requestId | `string` | Yes | A unique ID used to track the response. |
+| data | `object` | No | A container for the specific parameters of the command. |
+
+### Request Example
+
+```json
+{
+  "command": "<command_name>",
+  "requestId": "<unique_request_id>",
+  "data": {
+    "param1": "value1",
+    "param2": "value2"
+  }
+}
+```
+
+## Response Object
+The terminal's response always mirrors your `requestId` so your system knows exactly which command is being answered.
+
+Success Response
+If the command is processed successfully, the terminal returns the requested information inside the `data` object.
+
+```json
+{
+  "requestId": "<request_id_echo>",
+  "data": {
+    "status": "success",
+    "details": "..."
+  }
+}
+```
+
+## Error Response
+If an issue occurs, the response will include an error code and a descriptive message.
+
+```json
+{
+  "requestId": "<request_id_echo>",
+  "errorCode": 400,
+  "errorMessage": "Invalid command parameters"
+}
+```

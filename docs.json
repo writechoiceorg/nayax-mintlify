@@ -15,6 +15,70 @@
   "navigation": {
     "products": [
       {
+        "product": "Marshall Pro (Fuel)",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "docs/marshall-pro/index",
+              "docs/marshall-pro/integration-overview",
+              "docs/marshall-pro/best-practices",
+              "docs/marshall-pro/forecourt-architecture",
+              "docs/marshall-pro/security-digital-signatures"
+            ]
+          },
+          {
+            "group": "Messaging Protocol",
+            "pages": [
+              "docs/marshall-pro/tcp-communication",
+              "docs/marshall-pro/request-response-format",
+              "docs/marshall-pro/error-codes",
+              "docs/marshall-pro/example-fuel-station-flow"
+            ]
+          },
+          {
+            "group": "Methods",
+            "pages": [
+              "docs/marshall-pro/api",
+              {
+                "group": "General",
+                "pages": [
+                  "docs/marshall-pro/info",
+                  "docs/marshall-pro/status"
+                ]
+              },
+              {
+                "group": "Payment",
+                "pages": [
+                  "docs/marshall-pro/card-detect",
+                  "docs/marshall-pro/stop-card-detect",
+                  "docs/marshall-pro/authorize",
+                  "docs/marshall-pro/detect-and-auth",
+                  "docs/marshall-pro/settle",
+                  "docs/marshall-pro/pay",
+                  "docs/marshall-pro/query"
+                ]
+              },
+              {
+                "group": "Display",
+                "pages": [
+                  "docs/marshall-pro/display-screen",
+                  "docs/marshall-pro/display-input",
+                  "docs/marshall-pro/display-select",
+                  "docs/marshall-pro/display-confirm"
+                ]
+              },
+              {
+                "group": "Utility",
+                "pages": [
+                  "docs/marshall-pro/print"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
         "product": "Marshall",
         "description": "Connect any unattended machine with Nayax's payment devices (VPOS Touch, Onyx), utilizing physical connectivity",
         "groups": [
@@ -23,18 +87,18 @@
             "pages": [
               "/docs/marshall-sdk",
               {
-              "group": "Payment Flows",
-              "expanded": false,
-              "pages": [
-                "/docs/marshall-payment-flows",
-                "/docs/marshall-single-session-with-pre-sel",
-                "/docs/marshall-single-session-with-pre-auth",
-                "/docs/marshall-multi-session",
-                "/docs/marshall-multi-vend-with-pre-sel",
-                "/docs/marshall-multi-vend-with-pre-auth",
-                "/docs/sub-flows-features"
-              ]
-            }
+                "group": "Payment Flows",
+                "expanded": false,
+                "pages": [
+                  "/docs/marshall-payment-flows",
+                  "/docs/marshall-single-session-with-pre-sel",
+                  "/docs/marshall-single-session-with-pre-auth",
+                  "/docs/marshall-multi-session",
+                  "/docs/marshall-multi-vend-with-pre-sel",
+                  "/docs/marshall-multi-vend-with-pre-auth",
+                  "/docs/sub-flows-features"
+                ]
+              }
             ]
           },
           {
@@ -42,16 +106,16 @@
             "pages": [
               "/docs/marshall-get-started",
               {
-              "group": "Integrations",
-              "expanded": false,
-              "pages": [
-              "/docs/marshall-csharp-java-integration",
-              "/docs/c-sdk-integration"
-              ]
-            },
-            "/docs/vmc-configuration-object",
-            "/docs/sdk-flags-descriptions",
-            "/docs/marshall-create-payments"
+                "group": "Integrations",
+                "expanded": false,
+                "pages": [
+                  "/docs/marshall-csharp-java-integration",
+                  "/docs/c-sdk-integration"
+                ]
+              },
+              "/docs/vmc-configuration-object",
+              "/docs/sdk-flags-descriptions",
+              "/docs/marshall-create-payments"
             ]
           },
           {
@@ -87,65 +151,64 @@
               "/docs/overview-2",
               "/docs/integration",
               {
-              "group": "Payment Flows",
-              "expanded": false,
-              "pages": [
-                "/docs/transaction-flow",
-                "/docs/payment-with-authorization",
-                "/docs/closed-loop-transaction",
-                "/docs/single-step-payment"
-              ]
-             }
+                "group": "Payment Flows",
+                "expanded": false,
+                "pages": [
+                  "/docs/transaction-flow",
+                  "/docs/payment-with-authorization",
+                  "/docs/closed-loop-transaction",
+                  "/docs/single-step-payment"
+                ]
+              }
             ]
           },
           {
-              "group": "SDK",
-              "pages": [
-                "/docs/payment-1",
-                "/docs/remote-management",
-                "/docs/event-callbacks",
-                "/docs/reader-messages"
-              ]
-            }
+            "group": "SDK",
+            "pages": [
+              "/docs/payment-1",
+              "/docs/remote-management",
+              "/docs/event-callbacks",
+              "/docs/reader-messages"
+            ]
+          }
         ]
       },
       {
-      "product": "Spark",
-      "pages":[
-        {
+        "product": "Spark",
+        "groups": [
+          {
             "group": "Introduction",
             "pages": [
               "/docs/spark",
               "/docs/spark-integration",
               "/docs/spark-security-authentication",
               {
-              "group": "Payment Flows",
-              "expanded": false,
-              "pages": [
-                "/docs/transaction-flows-spark",
-                "/docs/spark-device-start",
-                "/docs/spark-remote-start",
-                "/docs/spark-device-stop"
-              ]
-            },
+                "group": "Payment Flows",
+                "expanded": false,
+                "pages": [
+                  "/docs/transaction-flows-spark",
+                  "/docs/spark-device-start",
+                  "/docs/spark-remote-start",
+                  "/docs/spark-device-stop"
+                ]
+              },
               {
-              "group": "Payment Flows",
-              "expanded": false,
-              "pages": [
-                "/docs/marshall-payment-flows",
-                "/docs/marshall-single-session-with-pre-sel",
-                "/docs/marshall-single-session-with-pre-auth",
-                "/docs/marshall-multi-session",
-                "/docs/marshall-multi-vend-with-pre-sel",
-                "/docs/marshall-multi-vend-with-pre-auth",
-                "/docs/sub-flows-features"
-              ]
-            }
+                "group": "Additional Payment Flows",
+                "expanded": false,
+                "pages": [
+                  "/docs/marshall-payment-flows",
+                  "/docs/marshall-single-session-with-pre-sel",
+                  "/docs/marshall-single-session-with-pre-auth",
+                  "/docs/marshall-multi-session",
+                  "/docs/marshall-multi-vend-with-pre-sel",
+                  "/docs/marshall-multi-vend-with-pre-auth",
+                  "/docs/sub-flows-features"
+                ]
+              }
             ]
           }
-      ]
+        ]
       }
     ]
   }
-  
 }
