@@ -1,6 +1,6 @@
 ---
 title: "Example: Fuel Station Flow"
-description: "A step-by-step guide through a standard 2-phase fueling transaction."
+description: "A step-by-step guide through a standard fueling transaction."
 ---
 
 The following sequence illustrates a typical Pay-at-the-Pump workflow, combining payment detection, user interaction, and final settlement.
@@ -54,7 +54,7 @@ Prompt the user to select their desired fuel grade.
 ```
 
 ### Step 4: Finalize
-**Authorize:** Call `authorize` to hold the $500.00 max limit.
+**Authorize:** Call `authorize` to hold the \$500.00 max limit.
 **Fueling:** Use `displayScreen` to show a "Fueling in progress" animation.
 **Settle:** When the nozzle is holstered, call `settle` with the actual amount (e.g., $78.50).
 
