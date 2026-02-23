@@ -15,6 +15,13 @@
   "navigation": {
     "tabs": [
       {
+        "tab": "Home",
+        "icon": "house",
+        "pages": [
+          "index"
+        ]
+      },
+      {
         "tab": "Integrate POS Device",
         "icon": "box-open",
         "menu": [
@@ -172,7 +179,7 @@
           },
           {
             "item": "TweezerComm",
-            "icon": "microchip",
+            "icon": "mobile",
             "description": "Integrate Nayax's attended payment device (Nova line) with your Point of Sale, utilizing physical connectivity.",
             "pages": [
               "docs/overview-tweezer",
