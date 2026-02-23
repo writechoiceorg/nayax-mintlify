@@ -332,54 +332,65 @@
             "item": "Spark",
             "icon": "bolt",
             "groups": [
-              "docs/spark",
-              "docs/spark-integration",
-              "docs/spark-network-requirement",
               {
-                "group": "Security & Authentication",
+                "group": "Guides",
                 "pages": [
-                  "docs/security-authentication",
-                  "docs/spark-authentication",
-                  "docs/spark-legacy-authentication"
+                  "docs/spark",
+                  "docs/spark-integration",
+                  "docs/spark-network-requirement",
+                  {
+                    "group": "Security & Authentication",
+                    "pages": [
+                      "docs/security-authentication",
+                      "docs/spark-authentication",
+                      "docs/spark-legacy-authentication"
+                    ]
+                  },
+                  {
+                    "group": "Payment Flows",
+                    "pages": [
+                      "docs/transaction-flows-spark",
+                      "docs/spark-device-start",
+                      "docs/spark-remote-start",
+                      "docs/spark-device-stop",
+                      "docs/external-settlement",
+                      "docs/external-cancel"
+                    ]
+                  },
+                  "docs/spark-api-link",
+                  {
+                    "group": "Webhook Callbacks",
+                    "pages": [
+                      "docs/webhook-callbacks",
+                      "docs/transactioncallback",
+                      "docs/stopcallback",
+                      "docs/timeoutcallback",
+                      "docs/declinecallback"
+                    ]
+                  },
+                  {
+                    "group": "Additional Resources",
+                    "pages": [
+                      "docs/additional-resources",
+                      "docs/smc-support",
+                      "docs/spark-posdisplay-format",
+                      "docs/spark-ereceiptdata-format",
+                      "docs/spark-response-codes"
+                    ]
+                  },
+                  {
+                    "group": "Sample Codes",
+                    "pages": [
+                      "docs/spark-authentication-code-sample",
+                      "docs/spark-authentication-code-sample"
+                    ]
+                  }
                 ]
               },
               {
-                "group": "Payment Flows",
+                "group": "API Reference",
                 "pages": [
-                  "docs/transaction-flows-spark",
-                  "docs/spark-device-start",
-                  "docs/spark-remote-start",
-                  "docs/spark-device-stop",
-                  "docs/external-settlement",
-                  "docs/external-cancel"
-                ]
-              },
-              "docs/spark-api-link",
-              {
-                "group": "Webhook Callbacks",
-                "pages": [
-                  "docs/webhook-callbacks",
-                  "docs/transactioncallback",
-                  "docs/stopcallback",
-                  "docs/timeoutcallback",
-                  "docs/declinecallback"
-                ]
-              },
-              {
-                "group": "Additional Resources",
-                "pages": [
-                  "docs/additional-resources",
-                  "docs/smc-support",
-                  "docs/spark-posdisplay-format",
-                  "docs/spark-ereceiptdata-format",
-                  "docs/spark-response-codes"
-                ]
-              },
-              {
-                "group": "Sample Codes",
-                "pages": [
-                  "docs/spark-authentication-code-sample",
-                  "docs/spark-authentication-code-sample"
+                  "reference/overview-spark-api"
                 ]
               }
             ]
@@ -419,79 +430,94 @@
           {
             "item": "Lynx API",
             "icon": "link",
-            "pages": [
-              "docs/lynx-overview",
-              "docs/security",
+            "groups": [
               {
-                "group": "Cards",
+                "group": "Guides",
                 "pages": [
-                  "docs/managing-cards",
-                  "docs/create-cards",
-                  "docs/retrieve-card-data",
-                  "docs/add-credit-to-card"
+                  "docs/lynx-overview",
+                  "docs/security",
+                  {
+                    "group": "Cards",
+                    "pages": [
+                      "docs/managing-cards",
+                      "docs/create-cards",
+                      "docs/retrieve-card-data",
+                      "docs/add-credit-to-card"
+                    ]
+                  },
+                  {
+                    "group": "Refunds",
+                    "pages": [
+                      "docs/payments",
+                      "docs/request-refunds",
+                      "docs/approve-or-decline-a-refund",
+                      "docs/upload-refund-document"
+                    ]
+                  },
+                  {
+                    "group": "Operator",
+                    "pages": [
+                      "docs/operator",
+                      "docs/nayax-hierarchy",
+                      "docs/retrieve-hierarchy",
+                      "docs/create-operator",
+                      "docs/operator-actions"
+                    ]
+                  },
+                  {
+                    "group": "Machines",
+                    "pages": [
+                      "docs/machines-devices",
+                      "docs/create-new-machine-guides",
+                      "docs/retrieve-machine-information",
+                      "docs/getting-a-machines-last-sales",
+                      "docs/get-monyx-id",
+                      "docs/updating-a-machines-attribute",
+                      "docs/getting-a-machines-id-by-the-devices-serial-number",
+                      "docs/getting-a-machines-last-sales-ereceipt-information"
+                    ]
+                  },
+                  {
+                    "group": "Devices",
+                    "pages": [
+                      "docs/devices-1",
+                      "docs/getting-all-devices-under-an-operator",
+                      "docs/disabling-a-device",
+                      "docs/moving-device-between-operators"
+                    ]
+                  },
+                  {
+                    "group": "Inventory Management",
+                    "pages": [
+                      "docs/inventory-management",
+                      "docs/inventory-workflow",
+                      "docs/create-product-group",
+                      "docs/create-products",
+                      "docs/machine-products-1",
+                      "docs/pick-lists",
+                      "docs/pick-list-actions"
+                    ]
+                  },
+                  "docs/product-faqs",
+                  {
+                    "group": "Reports",
+                    "pages": [
+                      "docs/reports",
+                      "docs/retrieve-machine-widget-data",
+                      "docs/widgets-lynx",
+                      "docs/available-widgets"
+                    ]
+                  }
                 ]
               },
               {
-                "group": "Refunds",
+                "group": "API Reference",
                 "pages": [
-                  "docs/payments",
-                  "docs/request-refunds",
-                  "docs/approve-or-decline-a-refund",
-                  "docs/upload-refund-document"
-                ]
-              },
-              {
-                "group": "Operator",
-                "pages": [
-                  "docs/operator",
-                  "docs/nayax-hierarchy",
-                  "docs/retrieve-hierarchy",
-                  "docs/create-operator",
-                  "docs/operator-actions"
-                ]
-              },
-              {
-                "group": "Machines",
-                "pages": [
-                  "docs/machines-devices",
-                  "docs/create-new-machine-guides",
-                  "docs/retrieve-machine-information",
-                  "docs/getting-a-machines-last-sales",
-                  "docs/get-monyx-id",
-                  "docs/updating-a-machines-attribute",
-                  "docs/getting-a-machines-id-by-the-devices-serial-number",
-                  "docs/getting-a-machines-last-sales-ereceipt-information"
-                ]
-              },
-              {
-                "group": "Devices",
-                "pages": [
-                  "docs/devices-1",
-                  "docs/getting-all-devices-under-an-operator",
-                  "docs/disabling-a-device",
-                  "docs/moving-device-between-operators"
-                ]
-              },
-              {
-                "group": "Inventory Management",
-                "pages": [
-                  "docs/inventory-management",
-                  "docs/inventory-workflow",
-                  "docs/create-product-group",
-                  "docs/create-products",
-                  "docs/machine-products-1",
-                  "docs/pick-lists",
-                  "docs/pick-list-actions"
-                ]
-              },
-              "docs/product-faqs",
-              {
-                "group": "Reports",
-                "pages": [
-                  "docs/reports",
-                  "docs/retrieve-machine-widget-data",
-                  "docs/widgets-lynx",
-                  "docs/available-widgets"
+                  "reference/overview",
+                  "reference/cards-1",
+                  "reference/actor-types",
+                  "reference/machine-types",
+                  "reference/languages"
                 ]
               }
             ]
@@ -503,7 +529,7 @@
         "icon": "box-open",
         "groups": [
           {
-            "group": "Cortina",
+            "group": "Guides",
             "pages": [
               "docs/overview-cortina",
               "docs/cortina-integration",
@@ -588,6 +614,99 @@
                   "docs/faq-3"
                 ]
               }
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "reference/cortina-api-overview"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "eCom SDK",
+        "icon": "box-open",
+        "pages": [
+          {
+            "group": "Guides",
+            "pages": [
+              "docs/ecom-sdk-overview",
+              {
+                "group": "Security & Authentication",
+                "pages": [
+                  "docs/ecom-security-authentication",
+                  "docs/ip-whitelist"
+                ]
+              },
+              {
+                "group": "Get Started",
+                "pages": [
+                  "docs/ecom-sdk-get-started",
+                  "docs/android-sdk",
+                  "docs/ios-sdk",
+                  "docs/web-sdk"
+                ]
+              },
+              "docs/tokenization",
+              {
+                "group": "Front-End Integration",
+                "pages": [
+                  "docs/front-end-sdk",
+                  "docs/ecom-sdk-create-payments",
+                  "docs/handling-payment-results",
+                  {
+                    "group": "Drop-in UI",
+                    "pages": [
+                      "docs/drop-in-ui",
+                      "docs/ui-theme-customization"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Back-End Integration",
+                "pages": [
+                  "docs/ecom-sdk-back-end-integration",
+                  "docs/nayax-ecom-tokens",
+                  "docs/webhook-notifications",
+                  {
+                    "group": "Request Samples",
+                    "pages": [
+                      "docs/validate-merchant",
+                      "docs/validate-merchant",
+                      "docs/charge-token",
+                      "docs/settlement-1",
+                      "docs/refunds-1",
+                      "docs/void-or-cancel",
+                      "docs/get-transaction-status"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Payment Methods",
+                "pages": [
+                  "docs/payment-methods",
+                  "docs/apple-pay-integration-setup",
+                  "docs/google-pay-integration-setup"
+                ]
+              },
+              "docs/ecom-decline-reason-codes",
+              {
+                "group": "HMAC Validation",
+                "pages": [
+                  "docs/hmac-validation",
+                  "docs/implementation-options",
+                  "docs/testing-troubleshooting"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "reference/ecom-api-overview"
             ]
           }
         ]
