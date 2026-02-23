@@ -385,6 +385,212 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "Manage Data & Operations",
+        "icon": "box-open",
+        "menu": [
+          {
+            "item": "Amazon SQS",
+            "icon": "envelope",
+            "pages": [
+              "docs/overview-1",
+              {
+                "group": "Amazon Queue Setup",
+                "pages": [
+                  "docs/amazon-queue-setup",
+                  "docs/create-new-queue",
+                  "docs/set-up-queue-permissions",
+                  "docs/create-user-for-queue-access"
+                ]
+              },
+              {
+                "group": "Set Up Nayax Core",
+                "pages": [
+                  "docs/nayax-back-office-setup",
+                  "docs/set-up-transaction-delivery",
+                  "docs/set-up-eva-dts-dexddcmp-audit-file-delivery",
+                  "docs/set-up-events-delivery",
+                  "docs/set-up-encryption-on-amazon-sqs-delivery"
+                ]
+              }
+            ]
+          },
+          {
+            "item": "Lynx API",
+            "icon": "link",
+            "pages": [
+              "docs/lynx-overview",
+              "docs/security",
+              {
+                "group": "Cards",
+                "pages": [
+                  "docs/managing-cards",
+                  "docs/create-cards",
+                  "docs/retrieve-card-data",
+                  "docs/add-credit-to-card"
+                ]
+              },
+              {
+                "group": "Refunds",
+                "pages": [
+                  "docs/payments",
+                  "docs/request-refunds",
+                  "docs/approve-or-decline-a-refund",
+                  "docs/upload-refund-document"
+                ]
+              },
+              {
+                "group": "Operator",
+                "pages": [
+                  "docs/operator",
+                  "docs/nayax-hierarchy",
+                  "docs/retrieve-hierarchy",
+                  "docs/create-operator",
+                  "docs/operator-actions"
+                ]
+              },
+              {
+                "group": "Machines",
+                "pages": [
+                  "docs/machines-devices",
+                  "docs/create-new-machine-guides",
+                  "docs/retrieve-machine-information",
+                  "docs/getting-a-machines-last-sales",
+                  "docs/get-monyx-id",
+                  "docs/updating-a-machines-attribute",
+                  "docs/getting-a-machines-id-by-the-devices-serial-number",
+                  "docs/getting-a-machines-last-sales-ereceipt-information"
+                ]
+              },
+              {
+                "group": "Devices",
+                "pages": [
+                  "docs/devices-1",
+                  "docs/getting-all-devices-under-an-operator",
+                  "docs/disabling-a-device",
+                  "docs/moving-device-between-operators"
+                ]
+              },
+              {
+                "group": "Inventory Management",
+                "pages": [
+                  "docs/inventory-management",
+                  "docs/inventory-workflow",
+                  "docs/create-product-group",
+                  "docs/create-products",
+                  "docs/machine-products-1",
+                  "docs/pick-lists",
+                  "docs/pick-list-actions"
+                ]
+              },
+              "docs/product-faqs",
+              {
+                "group": "Reports",
+                "pages": [
+                  "docs/reports",
+                  "docs/retrieve-machine-widget-data",
+                  "docs/widgets-lynx",
+                  "docs/available-widgets"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Cortina",
+        "icon": "box-open",
+        "groups": [
+          {
+            "group": "Cortina",
+            "pages": [
+              "docs/overview-cortina",
+              "docs/cortina-integration",
+              "docs/network-requirements",
+              {
+                "group": "Start Session",
+                "pages": [
+                  "docs/start-session",
+                  "docs/cortina-auth"
+                ]
+              },
+              "docs/sale-end-notification",
+              {
+                "group": "Prepaid Card",
+                "pages": [
+                  "docs/prepaid-card-flows",
+                  "docs/copy-of-prepaid-card-authorization",
+                  "docs/prepaid-card-settlement",
+                  "docs/prepaid-card-cancel",
+                  "docs/prepaid-card-sale",
+                  "docs/prepaid-card-void",
+                  "docs/prepaid-card-refund",
+                  "docs/prepaid-card-decline-reasons",
+                  "docs/check-balance",
+                  "docs/partial-approval-for-prepaid",
+                  "docs/discount"
+                ]
+              },
+              {
+                "group": "StaticQR",
+                "pages": [
+                  "docs/staticqr-flows",
+                  "docs/static-qr-start",
+                  "docs/static-qr-authorization",
+                  "docs/static-qr-settlement",
+                  "docs/static-qr-cancel",
+                  "docs/static-qr-sale",
+                  "docs/static-qr-void",
+                  "docs/static-qr-refund",
+                  "docs/staticqr-decline-reasons",
+                  "docs/on-screen-qr-display",
+                  "docs/remote-vend"
+                ]
+              },
+              {
+                "group": "DynamicQR",
+                "pages": [
+                  "docs/cortina-dynamicqr",
+                  "docs/dynamicqr-decline-reasons",
+                  "docs/dynamicqr-generateqr",
+                  "docs/dynamicqr-inquiry",
+                  "docs/dynamicqr-void",
+                  "docs/dynamicqr-refund"
+                ]
+              },
+              {
+                "group": "Credit Card",
+                "pages": [
+                  "docs/cortina-credit-card-flows",
+                  "docs/credit-card-decline-reasons",
+                  "docs/partial-approval",
+                  "docs/incremental-authorization-1",
+                  "docs/emv-response-tags",
+                  {
+                    "group": "PIN Processing",
+                    "pages": [
+                      "docs/pin-processing",
+                      "docs/receiving-the-pin-block",
+                      "docs/dynamic-key-exchange",
+                      "docs/strong-customer-authentication-sca"
+                    ]
+                  }
+                ]
+              },
+              "docs/refunds",
+              {
+                "group": "Cortina FAQs",
+                "pages": [
+                  "docs/cortina-faqs",
+                  "docs/cortina-prepaid-faq",
+                  "docs/faq-2",
+                  "docs/faq-3"
+                ]
+              }
+            ]
+          }
+        ]
       }
     ]
   }
