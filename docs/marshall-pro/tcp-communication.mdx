@@ -7,7 +7,7 @@ title: "TCP Communication"
 The VPOS acts as a **TCP/IP server** on **Port 5050**. Your system (POS/FCC) acts as the client and must initiate the connection. Communication is bidirectional over a persistent socket.
 
 <Note>
-### Single-Connection Rule
+**Single-Connection Rule**
 
 The terminal supports only one active connection; a new socket attempt will automatically close the previous one.
 
@@ -33,7 +33,7 @@ For a JSON command like `{"command":"pay","amount":5000}` (30 bytes total):
 ```
 
 <Note>
-### Big Endian (Network Order)
+**Big Endian (Network Order)**
 
 The length prefix is sent with the Most Significant Byte (MSB) first.
 

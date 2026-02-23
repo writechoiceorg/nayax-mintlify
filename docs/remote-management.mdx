@@ -24,9 +24,9 @@ See the sections below for more details on each method.
 
 ## `Destroy`
 
-<Callout icon="🚧" theme="warn">
+<Warning>
   This method is only available for the Android SDK.
-</Callout>
+</Warning>
 
 Terminates the session with the reader and releases any associated resources. Use this during application shutdown or when the reader is no longer needed to prevent resource leaks and ensure the proper cleanup of SDK-related processes.
 
@@ -186,14 +186,14 @@ See the `GetStatus` API signature in the code below:
 
 The possible result values are: `NotReady`, `Ready`, `PaymentTransaction`, `Update`, `NoReader`, and `NoTerminalId`.
 
-<Callout icon="📘" theme="info">
+<Note>
   * **`Update`**: Indicates the EMV Core is busy with TMS updates (e.g., new firmware or configuration).
   * **`NoTerminalId`**: Indicates the EMV Core does not have a configured Terminal ID.
-</Callout>
+</Note>
 
-<Callout icon="🚧" theme="warn">
+<Warning>
   If the `GetStatus` request times out, the host application should retry three times with a five-second interval between attempts. If no response is received after these retries, assume the EMV Core service is unresponsive and restart the process.
-</Callout>
+</Warning>
 
 ***
 
@@ -294,9 +294,9 @@ See the `Initialize` API signature in the code below:
 
 ## `isEMVCoreConnected`
 
-<Callout icon="🚧" theme="warn">
+<Warning>
   This method is only available for the Android SDK.
-</Callout>
+</Warning>
 
 Retrieves the current status of the reader, including its transaction readiness and connectivity state.
 
@@ -310,9 +310,9 @@ boolean isEmvCoreConnected();
 
 ## `SetManagementCallbacks`
 
-<Callout icon="🚧" theme="warn">
+<Warning>
   This method is only available for the Android SDK.
-</Callout>
+</Warning>
 
 Registers callbacks called by the EMV Core regarding the operation of the EMV Core service itself. This includes the `SystemStatusChanged` event, allowing the application to monitor the health and maintenance status of the SDK.
 
@@ -326,9 +326,9 @@ void SetManagementCallbacks(IManagementCallbacks iMaintenanceCallbacks);
 
 `iMaintenanceCallbacks`: Maintenance details and system event handlers.
 
-<Callout icon="📘" theme="info">
+<Note>
   To learn more about implementation, see the [Event Callbacks](https://developerhub.nayax.com/docs/event-callbacks) documentation.
-</Callout>
+</Note>
 
 ***
 
@@ -408,17 +408,17 @@ See the list of parameters below:
 | `line1`   | Text for the 1st line of the reader display (max 16 characters). |
 | `line2`   | Text for the 2nd line of the reader display (max 16 characters). |
 
-<Callout icon="🚧" theme="warn">
+<Warning>
   This method is exclusive to the **UNO-PLUS** reader.
-</Callout>
+</Warning>
 
 ***
 
 ## `UpdateMachineAttributes`
 
-<Callout icon="🚧" theme="warn">
+<Warning>
   This method is only available for the Android SDK.
-</Callout>
+</Warning>
 
 Called by the POS application to set the host machine attributes values in Nayax Core. These
 values are for information only and would not affect the Nayax machine operation. It may help to get

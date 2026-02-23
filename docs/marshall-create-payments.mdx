@@ -72,7 +72,7 @@ You can review an example of it in the demo apps.
 
 Then, inside the onSessionBegin() callback you would send the "Vend Request" for said session (transaction):
 
-<Callout icon="📘" theme="info">
+<Note>
   ```java
   m_vmc.vend.vend_request(m_sessions[m_active_session]);
   ```
@@ -84,7 +84,7 @@ Then, inside the onSessionBegin() callback you would send the "Vend Request" for
   ```c
   vmc_vend_vend_request(session);
   ```
-</Callout>
+</Note>
 
 3. After the VPOS approves the vending request, the peripheral must notify the SDK that the product has been successfully delivered to the consumer. This is done by implementing the `onVendApproved(...)`API and returning one of the following:
 

@@ -4,11 +4,11 @@ title: "endPinpadTransaction"
 
 The `endPinpadTransaction` The method is used to terminate the PinPad mode session on the payment terminal. This is the final step in the card/PIN capture process and should be called regardless of whether the transaction was successful, cancelled, or failed the PinPad steps. Successfully ending the session ensures the terminal is reset and ready for the next operation.
 
-<Callout icon="🚧">
-  ## Contact Transactions Only
+<Warning>
+**Contact Transactions Only**
 
   This method is relevant to contact transactions (inserted cards), which require a controlled multi-step EMV dialogue involving the terminal and the PIN pad.
-</Callout>
+</Warning>
 
 ## Request
 

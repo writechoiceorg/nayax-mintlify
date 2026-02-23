@@ -4,9 +4,9 @@ title: "Linux App"
 
 The SDK provides a demo application with source code that enables you to test the integration from day one. This demo provides a fully functional application that uses the Nayax SDK APIs to communicate with the EMV Core. You can use the source application as a foundation for developing your own Linux-based system.
 
-<Callout icon="📘" theme="info">
+<Note>
   Before starting, ensure your Reader is registered with the Nayax Core system. Without registration, payment transactions cannot be completed. To register your device, provide its Serial Number (SN) to your Nayax account manager.
-</Callout>
+</Note>
 
 ## Installation
 
@@ -23,9 +23,9 @@ To install the SDK, follow these steps:
 
 1. Copy the `otiKiosk` binary file to the target device using your preferred transfer method.
 
-<Callout icon="🚧" theme="warn">
+<Warning>
   The file must remain named `otiKiosk`. Do not rename the binary.
-</Callout>
+</Warning>
 
 2. Configure the target system to automatically start the EMV Core binary upon boot or as a managed service.
 3. Grant the application read and write access to the reader hardware. This typically involves configuring the device management system, such as adding udev rules for:
@@ -150,8 +150,8 @@ You should execute the applications using these commands:
   </Tab>
 </Tabs>
 
-<Callout icon="📘" theme="info">
+<Note>
   The Reader must be registered to the Nayax Core system to complete payment transactions. To register your device, provide the Device ID (Reader serial number) to your Nayax account manager.
-</Callout>
+</Note>
 
 <br />

@@ -38,9 +38,9 @@ curl -X PUT "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/att
 
 ```
 
-<Callout icon="📘" theme="info">
+<Note>
   Replace `<MACHINE_ID>` with the actual machine's unique identifier, you want to update the attributes.
-</Callout>
+</Note>
 
 This table outlines the key attributes available for update:
 
@@ -75,9 +75,9 @@ Where:
   * `id`: The identifier of the failed item (e.g., attribute ID).
   * `error`: A description of the error encountered during the update.
 
-<Callout icon="📘" theme="info">
+<Note>
   If `isFullySuccess` is `true` and `failureItems` is empty. The update was completed successfully without any errors.
-</Callout>
+</Note>
 
 <br />
 

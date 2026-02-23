@@ -23,6 +23,6 @@ Once the setup is complete, the verification process follows these steps:
 3. Your application receives the webhook and recalculates the hash using your local secret key.
 4. If your calculated hash matches the one sent by Nayax, the request is authentic.
 
-<Callout icon="❗️" theme="error">
+<Danger>
   **Important:** If the hashes do not match, the request should be treated as unauthorized and discarded. Always validate the HMAC before processing any notification.
-</Callout>
+</Danger>

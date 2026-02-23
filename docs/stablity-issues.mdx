@@ -117,9 +117,9 @@ In addition, the starvation could be due to your peripheral doing tasks unrelate
 The SDK is made to work best with a keepalive of 1 second, and increasing the keepalive to a higher amount won't solve the issue of starvation- it would just take much longer to realize there's some issue with the communication. We don't recommend having it set to more than 5 seconds.
 For example, if you had it configured to 30 seconds, it would take 3\*30=90 seconds for the SDK to realize there's an issue, and in that time, the VPOST may appear "frozen"/unresponsive, confusing consumers. Having keepalives occur every second is not what's overloading the processor; the issue is that the task doesn't get enough priority to start with.
 
-<Callout icon="📘" theme="info">
+<Note>
   **Note:** For VPOSM, in case of Marshall over ETH, there's a need to set the keepalive to 10 seconds due to LAN requirements/limitations.
-</Callout>
+</Note>
 
 ## Should I have the keepalives logged? Would you be aware of any issues with them if they do not appear?
 

@@ -4,9 +4,9 @@ title: "cancelTransaction"
 
 The `cancelTransaction` method is used to cancel a transaction that has already been approved and is registered in the database.
 
-<Callout icon="🚧" theme="warn">
+<Warning>
   Such a transaction can be canceled as long as it is stored in the AEA database, which is cleared after the end-of-day batch when `doPeriodic` is called.
-</Callout>
+</Warning>
 
 The client can also implement this action by calling `doTransactionPhase1` with the appropriate tranCode.
 

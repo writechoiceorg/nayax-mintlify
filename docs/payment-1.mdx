@@ -61,9 +61,9 @@ See the API Signature for the `CancelTransaction` method:
   </Tab>
 </Tabs>
 
-<Callout icon="🚧" theme="warn">
+<Warning>
   If the card has already been presented and processed, the system will return a `CannotCancel` error.
-</Callout>
+</Warning>
 
 ***
 
@@ -308,9 +308,9 @@ This method initiates a pre-authorization transaction with a specified amount. I
   </Tab>
 </Tabs>
 
-<Callout icon="🚧" theme="warn">
+<Warning>
   Setting `productID ≠ 0` indicates that the amount set in `PreAuthorize` is final and will not change in `ConfirmTransaction`. If the final amount is unknown at this stage, use `productID = 0` in `PreAuthorize` and set the actual product ID during `ConfirmTransaction`.
-</Callout>
+</Warning>
 
 If the transaction is approved (the `TransactionComplete` event returns with status `OK`), the application must call the `ConfirmTransaction` or `VoidTransaction` methods to complete the workflow.
 

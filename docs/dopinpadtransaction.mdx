@@ -4,11 +4,11 @@ title: "doPinpadTransaction"
 
 The `doPinpadTransaction` method is used in the PinPad flow to continue an ongoing EMV transaction after the initial card capture. This is primarily done to prompt the cardholder to enter a PIN or to exchange additional EMV data (tags) with the payment terminal, advancing the EMV state machine.
 
-<Callout icon="🚧" theme="warn">
-  ## Contact Transactions Only
+<Warning>
+**Contact Transactions Only**
 
   This method is relevant to contact transactions (inserted cards), which require a controlled multi-step EMV dialogue involving the terminal and the PIN pad.
-</Callout>
+</Warning>
 
 ## Request
 

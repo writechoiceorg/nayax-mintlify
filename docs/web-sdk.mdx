@@ -44,11 +44,11 @@ The NayaxEcomSDK is hosted on Nayax's private GitLab package registry. You'll ne
 //gitlab.nayax-sdk.nayax.com/api/v4/projects/9/packages/npm/:_authToken=YOUR-PROVIDED-TOKEN
 ```
 
-<Callout icon="🚧" theme="warn">
+<Warning>
   **Important**
 
   Don't commit the `.npmrc` file with the access token to your source control. Add it to your `.gitignore` file.
-</Callout>
+</Warning>
 
 2. To install the SDK, use the following command:
 
@@ -64,9 +64,9 @@ yarn add @nayax/ecom-sdk
 pnpm add @nayax/ecom-sdk
 ```
 
-<Callout icon="📘" theme="info">
+<Note>
   For UMD builds or alternative distribution methods, contact the Nayax Ecom Team.
-</Callout>
+</Note>
 
 ### Step 2: Initialize the SDK
 
@@ -108,9 +108,9 @@ const { NayaxEcomSDK } = require('@nayax/ecom-sdk');
 const ecomSDK = new NayaxEcomSDK(config);
 ```
 
-<Callout icon="📘" theme="info">
+<Note>
   The `signId`, `signKey`, `securityTokenId`, and `securityTokenValue` values will be provided by the Nayax eCOM Team. Ensure you handle these values securely.
-</Callout>
+</Note>
 
 3. The `NayaxEcomConfig` interface encapsulates the essential properties for SDK configuration:
 
@@ -152,9 +152,9 @@ import { NayaxEcomSDK, NayaxEcomConfig, PaymentData } from '@nayax/ecom-sdk';
 const { NayaxEcomSDK } = require('@nayax/ecom-sdk');
 ```
 
-<Callout icon="📘" theme="info">
+<Note>
   The SDK automatically includes all required CSS styles (including Drop-in styles) bundled within the JavaScript. No separate CSS imports are needed
-</Callout>
+</Note>
 
 ## Environment Configuration
 

@@ -4,9 +4,9 @@ title: "Android App"
 
 The SDK provides a demo application with source code that enables you to test the integration from day one. This demo provides a fully functional application that uses the Nayax SDK APIs to communicate with the EMV Core. You can use the source application as a foundation for developing your own system.
 
-<Callout icon="🚧" theme="warn">
+<Warning>
   Before starting, ensure your Reader is registered with the Nayax Core system. Without registration, payment transactions cannot be completed.
-</Callout>
+</Warning>
 
 ## Installation
 
@@ -23,9 +23,9 @@ To install the demo application, follow the steps below:
 1. Install the EMV-Core Service` com.nayax.emvCore-release-x.x-xxx.apk` on your Android device.
 2. Install the Test application.`com.nayax.emv_core_android_test-release -x.x.x.apk`.
 
-<Callout icon="📘" theme="info">
+<Note>
   If you experience communication issues between the EMV Core service and the application or Reader, restart the EMV Core service.
-</Callout>
+</Note>
 
 ## Using the Demo Application
 
@@ -35,13 +35,13 @@ To start using the test application, you can follow the steps below:
 
    <Frame><img src="/images/docs/android-demo-application/image1.png" /></Frame>
 
-   <Callout icon="🚧" theme="warn">
+   <Warning>
      If this message appears frequently, you can configure your device to reduce prompts:
 
      * Whitelist the Nayax Reader in your Android OS settings.
      * On your mobile device, check the **Always open EmvCore service when Saturn 8700 is connected** option and press **OK**.
      * It’s also recommended to allow the **Stop optimizing battery usage** option when prompted.
-   </Callout>
+   </Warning>
 2. The application will automatically attempt to connect to the EMV Core service and the UNO Reader. Once the connection is successful, the status line at the top of the screen will display **Ready**.
 
 ### Navigating the Application

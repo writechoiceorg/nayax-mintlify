@@ -13,9 +13,9 @@ This two-step approach is particularly useful for transactions where the final a
 
 To understand the Deferred transaction flow, consider the following sequence of events:
 
-<Callout icon="📘" theme="info">
+<Note>
   Steps insisde the green area are performed online, and the ones inside the red area are performed offline.
-</Callout>
+</Note>
 
 <Frame><img src="/images/docs/tweezercomm-deferred-payment/image1.png" /></Frame>
 
@@ -26,9 +26,9 @@ Here's a breakdown of each step:
 3. The pos send a [`doTransaction()`](https://developerhub.nayax.com/docs/dotransaction-ashrait) request to the Nayax Device, triggering a new transaction.
 4. The CardHolder taps their contactless card.
 5. The Nayax Device checks for "Deferred pre-conditions" and, upon approval, returns the transaction result as `Approved->Pending` This means the transaction is approved.
-   <Callout icon="📘" theme="info">
+   <Note>
      Once the deferred mode is finished working, continue to step 6.
-   </Callout>
+   </Note>
 6. The client application calls `setConfig()` Setting off-line mode to false.
 7. The client application calls the `authorizePendingTransactions()` , sending the pending transactions to Nayax's device asking to settling them (but no settlement is performed yet).
 8. The Nayax Device communicates with SHVA to initiate the pending transaction authorization.

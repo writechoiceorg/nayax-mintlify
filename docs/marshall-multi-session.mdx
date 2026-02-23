@@ -11,18 +11,18 @@ This differs from the Single-Session flow, in which settlement is performed imme
 
 ## Settlement timeout
 
-<Callout icon="📘" theme="info">
+<Note>
   Settlement should occur anywhere between **1 minute and 71 hours** (the exact value depends on a parameter called **"Session timeout"** in Nayax Core) after authorization process was completed.
 
   Note that in case of the machine not sending a settlement command within a timeframe set in **"Session timeout"** parameter in Nayax Core- the device would settle the transaction on it's own and notify the peripheral about it via "Status" command.
 
   For VPOSM- it's possible to have the transaction be cancelled instead of settled in case of timeout- but that would be possible via additional configuration on Nayax Core (unrelated to the Marshall flow- meaning from Marshall's POV, the device would always try and settle the transaction at session timeout).
-</Callout>
+</Note>
 
-<Callout icon="❗️" theme="error">
+<Danger>
   It's important that peripherals do not count on the Session Timeout mechanism as it's strictly a fallback mechanism from the device's end.\
   Meaning the peripheral should always send a settlement command, and in case of not wanting to charge the consumer he can change one of the settlements fields, called "status" (unrelated to the "Status" command) to a status of "Vend failure" for example- more on that in [Multisession- not charging a consumer at settlement stage](https://developerhub.nayax.com/docs/faq-marshall-flowconfigurations#not-charging-consumers-close-session-with-price-of-0--what-is-the-issue)
-</Callout>
+</Danger>
 
 ## Why Use Multi-Session
 
@@ -48,9 +48,9 @@ If you use Single-Session with Pre-Authorization, the authorized credit amount m
 
 The diagrams below illustrate the sequence of events within the Multi-Session payment flow.
 
-<Callout icon="📘" theme="info">
+<Note>
   In this flow there are two parts to the transaction process, therefore the are two separate diagrams, one for each step.
-</Callout>
+</Note>
 
 <Frame><img src="/images/docs/marshall-multi-session/image1.jpg" /></Frame>
 

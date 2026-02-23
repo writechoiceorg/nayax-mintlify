@@ -6,9 +6,9 @@ Closed-loop transactions refer to operations using MIFARE cards. In this case, t
 
 Since no bank operations are required, closed-loop transactions do not use the Nayax servers. Instead, the host machine will use the Nayax EMV Reader to read the card and the EMV Core to interact with it.
 
-<Callout icon="🚧" theme="warn">
+<Warning>
   The host machine does not know if the client will use an open loop (credit or debit cards) or a closed loop (MIFARE cards) transaction. This information is only available after the Nayax EMV Reader actually reads the client card. Therefore, the host machine must be prepared to process both operations after the Nayax EVM Core identifies the operation type.
-</Callout>
+</Warning>
 
 ## Transaction Flow
 
@@ -25,9 +25,9 @@ Where:
 5. The Nayax EMV Reader pulls the Response with the encrypted card data to the Nayax EMV Core.
 6. Nayax EMV Core identifies it as a MIFARE card (closed-loop transaction) and informs the host application that the transaction is complete, returning the card UID and optional card data.
 
-<Callout icon="📘" theme="info">
+<Note>
   Normally, the MIFARE card data is shared locally with the host machine. However, you also have the option to change this configuration and send the information to Nayax Servers and use Nayax Prepaid to process the transaction.
-</Callout>
+</Note>
 
 7. The host application uses a UID card to authorize the transaction with its application server.
 8. Once approved, the transaction is complete.
