@@ -56,52 +56,32 @@ Nayax Lynx API uses standard HTTP response codes to indicate the success or fail
 
 ## More Resources
 
-<HTMLBlock>
-  {`
-  <style>
-    .card_container2 {
-      gap: 10px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    }
-  </style>
-  <body>
-
-    <div class="card_container card_container2">
-
-      <a class="card" href="/reference/actor-types">
-        <div class="card_content">
-          <h3>Actor Types</h3>
-          <p>Details about the different types of sub-operators.</p>
-        </div>
-      </a>
-
-      <a class="card" href="/reference/cards">
-        <div class="card_content">
-          <h3>Cards</h3>
-          <p>Information about different card types and physical forms.</p>
-        </div>
-      </a>
-
-      <a class="card" href="/reference/languages">
-        <div class="card_content">
-          <h3>Languages</h3>
-          <p>Supported languages and their corresponding IDs.</p>
-        </div>
-      </a>
-
-      <a class="card" href="/reference/machine-types">
-        <div class="card_content">
-          <h3>Machine Types</h3>
-          <p>Icons and descriptions for various machine types.</p>
-        </div>
-      </a>
-
-    </div>
-
-  </body>
-  `}
-</HTMLBlock>
+<Columns cols={3}>
+<Card
+  title="Actor Types"
+  href="/reference/actor-types"
+>
+  Details about the different types of sub-operators.
+</Card>
+<Card
+  title="Cards"
+  href="/reference/cards"
+>
+  Information about different card types and physical forms.
+</Card>
+<Card
+  title="Languages"
+  href="/reference/languages"
+>
+  Supported languages and their corresponding IDs.
+</Card>
+<Card
+  title="Machine Types"
+  href="/reference/machine-types"
+>
+  Icons and descriptions for various machine types.
+</Card>
+</Columns>
 
 <br />
 
