@@ -1,29 +1,29 @@
-export const EndpointCard = ({ method = "GET", title, children, href, arrow = true }) => {
+export const EndpointCard = ({ method = "API", title, children, href, arrow = true }) => {
   const METHOD_STYLES = {
     GET: {
-      bg: "bg-green-100 dark:bg-green-900/30",
-      text: "text-green-700 dark:text-green-400",
-      border: "border-green-300 dark:border-green-700",
+      bg: "mint-bg-green-400/20 dark:mint-bg-green-400/20",
+      text: "mint-text-green-700 dark:mint-text-green-400",
+      border: "mint-border-green-300 dark:mint-border-green-700",
     },
     POST: {
-      bg: "bg-blue-100 dark:bg-blue-900/30",
-      text: "text-blue-700 dark:text-blue-400",
-      border: "border-blue-300 dark:border-blue-700",
+      bg: "mint-bg-blue-400/20 dark:mint-bg-blue-400/20",
+      text: "mint-text-blue-700 dark:mint-text-blue-400",
     },
     PUT: {
-      bg: "bg-yellow-100 dark:bg-yellow-900/30",
-      text: "text-yellow-700 dark:text-yellow-400",
-      border: "border-yellow-300 dark:border-yellow-700",
+      bg: "mint-bg-yellow-400/20 dark:mint-bg-yellow-400/20",
+      text: "mint-text-yellow-700 dark:mint-text-yellow-400",
     },
     PATCH: {
-      bg: "bg-orange-100 dark:bg-orange-900/30",
-      text: "text-orange-700 dark:text-orange-400",
-      border: "border-orange-300 dark:border-orange-700",
+      bg: "mint-bg-orange-400/20 dark:mint-bg-orange-400/20",
+      text: "mint-text-orange-700 dark:mint-text-orange-400",
     },
     DELETE: {
-      bg: "bg-red-100 dark:bg-red-900/30",
-      text: "text-red-700 dark:text-red-400",
-      border: "border-red-300 dark:border-red-700",
+      bg: "mint-bg-red-400/20 dark:mint-bg-red-400/20",
+      text: "mint-text-red-700 dark:mint-text-red-400",
+    },
+    API: {
+      bg: "mint-bg-black",
+      text: "mint-text-white",
     },
   };
 
@@ -31,7 +31,8 @@ export const EndpointCard = ({ method = "GET", title, children, href, arrow = tr
     const style = METHOD_STYLES[method?.toUpperCase()] ?? METHOD_STYLES.GET;
     return (
       <span
-        className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-bold font-mono border ${style.bg} ${style.text} ${style.border}`}
+        className={`
+          method-pill rounded-lg font-bold px-1.5 py-0.5 text-xs leading-5 ${style.bg} ${style.text}`}
       >
         {method?.toUpperCase()}
       </span>
@@ -58,7 +59,7 @@ export const EndpointCard = ({ method = "GET", title, children, href, arrow = tr
   if (!href) return content;
 
   return (
-    <a href={href} className="block no-underline border-b-0">
+    <a href={href} className="block no-underline border-b-0 mb-2">
       {content}
     </a>
   );
