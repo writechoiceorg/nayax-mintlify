@@ -336,10 +336,10 @@ paths:
 
             When performing your integration to the API use the stable URL, such as:
             
-            * `https://stable-sdk-api.nayax.com/initialize`
+            * `https://stable-sdk-api.nayax.com/get-card-token`
           </Note>
       tags:
-        - Payments
+        - Token Management
       summary: Retrieve Card Token Data
       requestBody:
         description: Request to get details for a specific card token.
@@ -415,10 +415,10 @@ paths:
 
             When performing your integration to the API use the stable URL, such as:
             
-            * `https://stable-sdk-api.nayax.com/initialize`
+            * `https://stable-sdk-api.nayax.com/delete-token`
           </Note>
       tags:
-        - Payments
+        - Token Management
       summary: Delete a Card Token
       requestBody:
         description: Request to delete a card token.
@@ -490,7 +490,7 @@ paths:
             * `https://stable-sdk-api.nayax.com/get-transaction-by-session`
           </Note>
       tags:
-        - Payments
+        - Management
       summary: Retrieve Transaction Status by Session ID
       description: >-
         Retrieves the transaction status and other relevant details, including
@@ -553,7 +553,7 @@ paths:
   /validate-merchant:
     post:
       tags:
-        - Payments
+        - Management
       summary: Validate Merchant (Start Authentication)
       x-mint:
         content: |
@@ -671,7 +671,7 @@ paths:
   /test/connection:
     get:
       tags:
-        - Testing
+        - Management
       summary: Test API Connection
       x-mint:
         content: A simple endpoint to test if the API is reachable.
