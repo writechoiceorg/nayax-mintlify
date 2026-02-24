@@ -10,9 +10,10 @@ paths:
     post:
       tags:
         - Operations
-      description: >-
-        Generates a new digital receipt using transaction, machine, and product
-        data.
+      summary: Generate Digital Receipt
+      x-mint:
+        content: |
+          Generates a new digital receipt using transaction, machine, and product data.
       requestBody:
         content:
           application/json-patch+json:
@@ -44,9 +45,11 @@ paths:
     post:
       tags:
         - Operations
-      description: >-
-        Processes a refund for a transaction and generates an updated or
-        specific refund receipt.
+      summary: Refund Transaction
+      x-mint:
+        content: |
+          Processes a refund for a transaction and generates an updated or
+          specific refund receipt.
       requestBody:
         content:
           application/json-patch+json:
@@ -78,7 +81,9 @@ paths:
     post:
       tags:
         - Operations
-      description: Voids a transaction and its associated digital receipt.
+      summary: Void Transaction
+      x-mint:
+        content: Voids a transaction and its associated digital receipt.
       requestBody:
         content:
           application/json-patch+json:
@@ -110,9 +115,11 @@ paths:
     post:
       tags:
         - Operations
-      description: >-
-        Initiates a session between the device and the platform to prepare for
-        receipt generation.
+      summary: Start Session
+      x-mint:
+        content: |
+          Initiates a session between the device and the platform to prepare for
+          receipt generation.
       requestBody:
         content:
           application/json-patch+json:
@@ -144,9 +151,11 @@ paths:
     post:
       tags:
         - Queries
-      description: >-
-        Retrieves receipt information via the gateway using payment and machine
-        details.
+      summary: Get Receipt Details via Gateway
+      x-mint:
+        content: |
+          Retrieves receipt information via the gateway using payment and machine
+          details.
       requestBody:
         content:
           application/json-patch+json:
@@ -178,7 +187,9 @@ paths:
     post:
       tags:
         - Operations
-      description: Attempts to re-generate or re-send a receipt for a specific payment.
+      summary: Retry Receipt
+      x-mint:
+        content: Attempts to re-generate or re-send a receipt for a specific payment.
       requestBody:
         content:
           application/json-patch+json:
@@ -208,11 +219,13 @@ paths:
                 $ref: '#/components/schemas/GenerateResponse'
   /v1/GetReceipt:
     post:
+      summary: Get Receipt Details
       tags:
         - Queries
-      description: >-
-        Standard endpoint to retrieve receipt details based on payment success
-        criteria.
+      x-mint:
+        content: |
+          Standard endpoint to retrieve receipt details based on payment success
+          criteria.
       requestBody:
         content:
           application/json-patch+json:

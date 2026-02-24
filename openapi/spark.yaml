@@ -17,7 +17,8 @@ paths:
       tags:
         - Transactions
       summary: Get Version
-      description: Returns the SparkApi assembly version and build
+      x-mint:
+        content: Returns the SparkApi assembly version and build
       responses:
         '200':
           description: Success
@@ -33,8 +34,44 @@ paths:
                 $ref: '#/components/schemas/VersionResponse'
   /ExternalCancel:
     post:
+      summary: ExternalCancel
       tags:
         - Transactions
+      x-mint:
+        content: |
+          The `/ExternalCancel` method is used by the third-party server to cancel a transaction that has been authorized but not yet settled. Cancellation is necessary if a failure occurs during the interaction or on the third-party server. This process is vital for releasing any funds captured on the consumer's payment card.
+
+          While the API method is always `/ExternalCancel`, the financial terminology depends on the machine flow type:
+
+          *   **Pre-Authorization Flow**: This method is called to as a **"Cancel"**.
+          *   **Pre-Selection Flow**: This the method is referred a **"Void"**.
+
+          The request must specify the required cancellation type.
+
+          ## Identifying the Transaction
+
+          To successfully cancel a transaction, your request must include the three required identifiers that exactly match the original transaction data.
+
+          *   **NayaxTransactionID**: The unique ID generated during authorization.
+          *   **SiteID**: The identifier for the machine's location.
+          *   **MachineAuTime**: The exact authorization timestamp. Optional field but recommended
+              *   MachineAUTime is currently not available for Marshall machines due to Transfer Data not providing this information to the machine (hence the 3rd party servers would not have this information when trying to send the ExternalCancel)
+
+          If any of these fields are missing or mismatched, the system will return a "Transaction not found" error.
+
+          <Note>
+          **Automatic Retries (AutoCancel):**
+          
+          In case the request fails, Nayax provides an **AutoCancel** feature, which means Nayax will automatically attempt to retry the cancellation later. The prerequisite is that the **AutoCancel** feature must be enabled for the specific operator.
+          </Note>
+
+          ## Troubleshooting Declined Cancellations
+
+          If a cancellation request is declined, the response will return **ErrorCode 51**: "External Cancel Failed".
+
+          *   **Mandatory Use**: You must send an `ExternalCancel` immediately if you know no product or service will be provided.
+          *   **Consumer Impact**: If not canceled, consumer funds will remain captured, leading to a poor user experience and potential disputes.
+          *   **Audit Trail**: It is recommended to include a `ReasonCode` and `ReasonText` (e.g., "75 - Service not provided") to document why the transaction was voided.
       requestBody:
         content:
           application/json:
@@ -61,6 +98,68 @@ paths:
                 $ref: '#/components/schemas/ExternalCancelResponse'
   /ExternalSettlement:
     post:
+      summary: ExternalSettlement
+      x-mint:
+        content: |
+          The `/ExternalSettlement` method is called by the 3rd-party server to finalize a transaction after the payment provider has authorized the initial amount and the service or products have been provided to the consumer. This request must contain the final amount to be charged.
+
+          To successfully settle a transaction, you must provide three mandatory identifiers that match the original authorization data exactly:
+
+          *   **NayaxTransactionID**: The unique identifier for the transaction in the Nayax system.
+          *   **SiteID**: The ID of the site where the machine is located.
+          *   **MachineAUTime**: The authorization timestamp from the terminal. Optional field but recommended
+              *   MachineAUTime is currently not available for Marshall machines due to Transfer Data not providing this information to the machine (hence the 3rd party servers would not have this information when trying to send the ExternalSettlement)
+
+          ## Where to Find this Information
+
+          Depending on your hardware, these identifiers are retrieved through different channels:
+
+          *   **OTI Devices**: Information is sent via the **CommerceAPI**.
+          *   **Marshall Devices**: Information is sent via **Transfer Data**
+
+          <Note>
+          **Note**: `MachineAuTime` retrieval for Marshall is currently a work-in-progress.
+          </Note>
+
+          *   **Alternative**: All integrators can retrieve this data via **Amazon SQS**.
+
+          ## Adding Digital Receipts (`EReceiptData`)
+
+          If you use the Nayax eReceipt platform, you can use the `EReceiptData` field to add custom information to the digital receipt that isn't stored in the Nayax Backoffice.
+
+          <Danger>
+          Any information shared in this field will be visible to the consumer on their receipt. Avoid sharing sensitive data that is not relevant to the transaction.
+          </Danger>
+
+          The data must be sent as a JSON string containing:
+
+          *   **Section Naming**: To display fields without a section header, use a blank space for the section name: `{" ":[...]}`.
+          *   **Order**: Fields appear on the receipt in the exact order they are listed in the string.
+          *   **Characters**: Use escape characters (e.g., `\"`) for internal quotes within the JSON string.
+
+          ## Reporting Products (`ProductInfo`)
+
+          For operators who manage a **Products Map** in Nayax Core, the `ProductInfo` object allows you to report exactly which items were sold.
+
+          This is an array of objects where each item requires:
+
+          | Field | Type | Description |
+          | --- | --- | --- |
+          | **Value** | Decimal | The price of a single unit of the product.<br><br>*   The value is taken as is (Decimal place of 0), meaning if you send value of 6.50 the value that the consumer would be charged for is 6.50, and if you send 65 the value would be 65.00) |
+          | **Code** | Integer | The Product Code as defined in your Nayax Products Map.<br><br>*   The value is taken as is (Decimal place of 0) |
+          | **Quantity** | Integer | The number of units of this product provided.<br><br>*   The value is taken as is (Decimal place of 0) |
+
+          **Example Format**: `[{"Value": 6.50, "Code": 12, "Quantity": 3}]`
+
+          ## Troubleshooting Declined Settlements
+
+          If a settlement request is declined, the response will include an **ErrorCode 50**: "External Settlement Failed".
+
+          Common reasons for failure include:
+
+          *   **Missing Identifiers**: Mandatory fields like `SiteId` were missing from the request.
+          *   **Data Mismatch**: The IDs provided do not match the original authorization record.
+          *   **Time Limit**: The request was sent more than 48 hours after the transaction started.
       tags:
         - Transactions
       requestBody:
@@ -91,10 +190,59 @@ paths:
     post:
       tags:
         - Transactions
-      description: >
-        The `StartAuthentication` endpoint is the first step in any Spark
-        transaction. It authenticates the transaction request using a pre-shared
-        token and a cryptographically signed payload.
+      summary: StartAuthentication
+      x-mint:
+        content: |
+          The `StartAuthentication` endpoint is the first step for any External Settlement. Use this to verify your server’s identity with Nayax and create a secure link for the transaction.
+
+          ## How to Build the Cipher
+
+          You must send an encrypted string called a `cipher`. This string tells Nayax which transaction you are working on and proves the request is current.
+
+          ### Step 1: Create the 64-character Plaintext
+
+          Combine these four parts in the exact order and character positions shown below to make one long string:
+
+          | Section | Type | Position | Description |
+          | --- | --- | --- | --- |
+          | **Spark Transaction ID** | String | 1-36 | Your unique GUID (with hyphens). |
+          | **Separator** | Special | 37  | Must be the `=` symbol. |
+          | **Random String** | String | 38-54 | A 17-character random alphanumeric string. |
+          | **Timestamp** | Numeric | 55-64 | Current UTC time in `YYMMDDhhmm` format. |
+
+          **Example:** `12c7cec2-c690-4425-9a1f-db0db60e2d8c=123456789qwertyui2602041044`
+
+          ### Step 2: Get Your Encryption Key
+
+          Nayax provides you with a **Secret Token** (usually 66 characters). To create your key, take only the **32 characters on the far right** of that token to create a 256-bit key.
+
+          **Example:**
+
+          * **Full token example:** `...wRvTVTkungMIKThTVbj_fiXdfoGclhn0`
+          * **What your key will look like:** `wRvTVTkungMIKThTVbj_fiXdfoGclhn0`
+
+          ### Step 3: Encrypt and Encode
+
+          Encrypt the 64-character string from Step 1 using **AES (ECB mode)** with your key from Step 2. Then, encode the result into **Base64**.
+
+          <Note>
+          **Important Rules for Success:**
+          
+          *   **5-Minute Window**: Nayax will reject any request if the timestamp in your cipher is more than 5 minutes old. This limit is controlled by the `CipherExpMinutes` variable.
+          *   **Double-Check Randomness**: The `Random` field in your JSON request must be exactly the same as the random string you put inside the cipher.
+          *   **Verify Nayax**: When the response arrives, it contains a `HashedSparkTransactionId`. You **must** hash your original Transaction ID using **SHA-256** and ensure it matches Nayax’s version to verify the response is authentic.
+          </Note>
+
+          ### Error Codes
+
+          If your request is declined, look for these specific codes:
+
+          | Error Code | Meaning | What to Check |
+          | --- | --- | --- |
+          | **28** | Invalid Token | Check if your Token ID is correct, active, and associated with your account. |
+          | **30** | Validation Failed | Your JSON `Random` field doesn't match the one in your cipher. |
+          | **31** | Expired Request | Your timestamp is too old (longer than 5 minutes). Sync your server clock to UTC. |
+          | **34** | Decryption Failure | Your cipher format is wrong or the `=` is missing from the 37th character. |
       requestBody:
         description: The request payload for transaction authentication.
         required: true
@@ -111,6 +259,10 @@ paths:
                 $ref: '#/components/schemas/StartAuthenticationResponse'
   /StartSession:
     post:
+      summary: StartSession
+      x-mint:
+        content: |
+          This is the initial API call sent by Nayax. It initiates the transaction session by authenticating both parties and generating a `SparkTransactionId`, which will be echoed in all subsequent calls throughout the transaction's lifecycle.
       tags:
         - Transactions
       description: >
@@ -134,11 +286,12 @@ paths:
                 $ref: '#/components/schemas/StartSessionResponse'
   /TriggerTransaction:
     post:
+      summary: TriggerTransaction
       tags:
         - Transactions
-      description: >
-        The `TriggerTransaction` endpoint initiates user interaction with the
-        physical terminal by sending a wake-up signal to the specified device.
+      x-mint:
+        content: |
+          The `TriggerTransaction` endpoint initiates user interaction with the physical terminal by sending a wake-up signal to the specified device.
       requestBody:
         description: The request payload containing the details to trigger a transaction.
         required: true
@@ -155,13 +308,15 @@ paths:
                 $ref: '#/components/schemas/TriggerTransactionResponse'
   /TransactionCallback:
     post:
+      summary: TransactionCallback
       tags:
         - Transactions
-      description: >
-        The terminal uses the `TransactionCallback` endpoint to notify the
-        integrator about the result of a card tap. It is triggered automatically
-        when a user presents a card, and an authorization flow is initiated with
-        the payment provider.
+      x-mint:
+        content: |
+          The terminal uses the `TransactionCallback` endpoint to notify the
+          integrator about the result of a card tap. It is triggered automatically
+          when a user presents a card, and an authorization flow is initiated with
+          the payment provider.
       requestBody:
         description: The request payload including the result of the card scan operation.
         required: true
@@ -178,12 +333,14 @@ paths:
                 $ref: '#/components/schemas/TransactionCallbackOutcome'
   /TransactionNotify:
     post:
+      summary: TransactionNotify
       tags:
         - Transactions
-      description: >
-        The `TransactionNotify` endpoint is used to notify the integrator about
-        the final details of a charging session, including charger availability,
-        amount, and display information.
+      x-mint:
+        content: |
+          The `TransactionNotify` endpoint is used to notify the integrator about
+          the final details of a charging session, including charger availability,
+          amount, and display information.
       requestBody:
         description: The request payload containing final session details.
         required: true
@@ -200,13 +357,15 @@ paths:
                 $ref: '#/components/schemas/TransactionNotifyResponse'
   /Settlement:
     post:
+      summary: Settlement
       tags:
         - Transactions
-      description: >
-        The `Settlement` endpoint is used to finalize an approved transaction.
-        After the session ends and the total amount is known, the integrator
-        sends the final amount along with optional e-receipt information. This
-        method is only relevant for transactions with Pre-Authorization.
+      x-mint:
+        content: |
+          The `Settlement` endpoint is used to finalize an approved transaction.
+          After the session ends and the total amount is known, the integrator
+          sends the final amount along with optional e-receipt information. This
+          method is only relevant for transactions with Pre-Authorization.
       requestBody:
         description: >-
           The request payload containing the final transaction amount and
@@ -225,12 +384,14 @@ paths:
                 $ref: '#/components/schemas/SettlementResponse'
   /TimeoutCallback:
     post:
+      summary: TimeoutCallback
       tags:
         - Transactions
-      description: >
-        The `TimeoutCallback` API call notifies that the payment session has
-        timed out due to inactivity or a failure to complete the expected flow
-        within a defined period.
+      x-mint:
+        content: |
+          The `TimeoutCallback` API call notifies that the payment session has
+          timed out due to inactivity or a failure to complete the expected flow
+          within a defined period.
       requestBody:
         description: The request payload containing details of the timed-out session.
         required: true
@@ -247,13 +408,15 @@ paths:
                 $ref: '#/components/schemas/TimeoutCallbackOutcome'
   /CancelTransaction:
     post:
+      summary: CancelTransaction
       tags:
         - Transactions
-      description: >-
-        The /CancelTransaction endpoint is a POST request that allows you to
-        cancel a transaction currently in progress. This method is referred to
-        as "Cancel" in the Pre-Authorization flow and "Void" in the
-        Pre-Selection flow.
+      x-mint:
+        content: |
+          The /CancelTransaction endpoint is a POST request that allows you to
+          cancel a transaction currently in progress. This method is referred to
+          as "Cancel" in the Pre-Authorization flow and "Void" in the
+          Pre-Selection flow.
       requestBody:
         description: The request to cancel a transaction.
         required: true
@@ -270,14 +433,18 @@ paths:
                 $ref: '#/components/schemas/CancelTransactionResponse'
   /StopNotify:
     post:
+      summary: StopNotify
       tags:
         - Transactions
-      description: >
-        The `StopNotify` endpoint enables Spark to determine whether a card
-        presented at the payment terminal while idle is authorized to stop an
-        ongoing session. A matching card should result in an `Approved`
-        response; otherwise, the Spark integrator should return a `Declined`
-        verdict.
+      x-mint:
+        content: |
+          The `StopNotify` endpoint enables Spark to determine whether a card
+          presented at the payment terminal while idle is authorized to stop an
+          ongoing session. 
+          
+          A matching card should result in an `Approved`
+          response; otherwise, the Spark integrator should return a `Declined`
+          verdict.
       requestBody:
         description: >-
           The request payload containing card and terminal identifiers to
@@ -296,6 +463,7 @@ paths:
                 $ref: '#/components/schemas/StopNotifyResponse'
   /AvailabilityCheck:
     post:
+      summary: AvailabilityCheck
       tags:
         - Transactions
       requestBody:
@@ -324,11 +492,13 @@ paths:
                 $ref: '#/components/schemas/AvailabilityCheckResponse'
   /StopCallback:
     post:
+      summary: StopCallback
       tags:
         - Transactions
-      description: >
-        The `StopCallback` endpoint notifies the integrator that a consumer has
-        presented a payment card to stop an ongoing session.
+      x-mint:
+        content: |
+          The `StopCallback` endpoint notifies the integrator that a consumer has
+          presented a payment card to stop an ongoing session.
       requestBody:
         description: >-
           The request payload containing details of the card and session to be
@@ -347,13 +517,15 @@ paths:
                 $ref: '#/components/schemas/StopCallbackOutcome'
   /DeclineCallback:
     post:
+      summary: DeclineCallback
       tags:
         - Transactions
-      description: >
-        The `DeclineCallback` API call is used to notify you of a failure in the
-        Spark transaction process. It is typically triggered after a successful
-        `/TriggerTransaction` response with a verdict of `Approved`, but when
-        the flow subsequently fails for any reason before payment authorization.
+      x-mint:
+        content: |
+          The `DeclineCallback` API call is used to notify you of a failure in the
+          Spark transaction process. It is typically triggered after a successful
+          `/TriggerTransaction` response with a verdict of `Approved`, but when
+          the flow subsequently fails for any reason before payment authorization.
       requestBody:
         description: The request payload containing details of the failed transaction.
         required: true
@@ -370,13 +542,15 @@ paths:
                 $ref: '#/components/schemas/DeclineCallbackOutcome'
   /InfoQuery:
     post:
+      summary: InfoQuery
       tags:
         - Transactions
-      description: >
-        Nayax sends an `InfoQuery` API after a successful `StartSession`
-        response. Its main purposes are to retrieve information to be shown on
-        the POS device before payment begins and to check the availability
-        status of the requested service station.
+      x-mint:
+        content: |
+          Nayax sends an `InfoQuery` API after a successful `StartSession`
+          response. Its main purposes are to retrieve information to be shown on
+          the POS device before payment begins and to check the availability
+          status of the requested service station.
       requestBody:
         description: The request payload containing details to query for.
         required: true
