@@ -8,7 +8,8 @@ This page outlines the general facilities provided by the Marshall SDK. It inclu
 
 The `GeneralEvents` interface defines various events related to the general operations of the Marshall SDK. Implementing this interface allows your application to respond to specific events triggered during the SDK's operation. The following code block presents all available event methods:
 
-```java
+<CodeGroup>
+```java Java
 public interface GeneralEvents
     void onDCSParamChange(int dcs_param, byte[] data);
     void onDisplayEventButtonPressed(byte button_id);
@@ -23,7 +24,7 @@ public interface GeneralEvents
             byte seconds);
 ```
 
-```csharp
+```csharp C#
 public interface GeneralEvents
     void onDCSParamChange(int dcs_param, byte[] data);
     void onTransferData(byte[] data);
@@ -35,6 +36,7 @@ public interface GeneralEvents
             byte minutes,
             byte seconds);
 ```
+</CodeGroup>
 
 ### Events Methods
 

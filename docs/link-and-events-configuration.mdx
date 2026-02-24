@@ -15,17 +15,19 @@ The `vmc_link_events_t`Interface defines the events related to the communication
 
 The following code block presents how to add the interface:
 
-```java
+<CodeGroup>
+```java Java
 public interface vmc_link_events_t
 void onReady(vmc_link.vpos_config_t config);
 void onCommError();
 ```
 
-```csharp
+```csharp C#
 public interface vmc_link_events_t
 void onReady(vpos_config_t config);
 void onCommError();
 ```
+</CodeGroup>
 
 ### Interface Methods
 
@@ -40,7 +42,22 @@ The table below describes the available methods of the interface.
 
 The `vpos_config_t` class encapsulates the configuration settings for the VPOS, which are communicated between the VMC and the device.  The following code block lists all available configurations:
 
-```java Java / C#
+<CodeGroup>
+```java Java
+public static class vpos_config_t 
+      public byte   prot_ver_major;
+      public byte   prot_ver_minor;
+      public byte   language;
+      public byte[] country_code;
+      public byte[] currency_code;
+      public byte   decimal_place;
+      public byte[] vpos_serial;
+      public int    machine_type;
+      public byte[] merchant_id;
+      public byte[] acquirer_terminal_id;
+      public byte[] machine_location;
+```
+```csharp C#
 public static class vpos_config_t 
       public byte   prot_ver_major;
       public byte   prot_ver_minor;
@@ -55,7 +72,7 @@ public static class vpos_config_t
       public byte[] machine_location;
 ```
 
-```c
+```c C
 vpos_config_t
 	uint8_t 	 language;
 	uint8_t[] country_code;
@@ -66,6 +83,7 @@ vpos_config_t
 	uint8_t[] acquirer_terminal_id;
 	uint8_t[] machine_location;
 ```
+</CodeGroup>
 
 ### Class Parameters
 
@@ -89,12 +107,18 @@ The table below provides a detailed description of the parameters.
 
 To register the callback events for link operations, use the following method:
 
-```java Java / C#
+<CodeGroup>
+```java Java
 public vmc_link set_events(vmc_link_events_t events);
 ```
 
-```c
+```csharp C#
+public vmc_link set_events(vmc_link_events_t events);
+```
+
+```c C
 void vmc_link_register_callback(vmc_vend_event_handler_cb_t cb)
 ```
+</CodeGroup>
 
 By understanding and implementing these configurations and methods, you can effectively manage the communication link and event handling for Nayax payment devices, ensuring reliable and efficient vending operations.

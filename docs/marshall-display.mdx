@@ -7,18 +7,20 @@ Display Control is a Preselection feature that allows a transaction process to b
 The configuration of said screens can be done in 2 ways:
 The first, more common one, is done via the "Display Control" command to the device, which can be sent from the peripheral at any point of the device being in idle- meaning once "onReady()" has been triggered:
 
-```c
+<CodeGroup>
+```c C
 "vmc_vend_event_on_ready" event 
 in vmc_vend_event_handler_cb
 ```
 
-```csharp
+```csharp C#
 onReady(config);
 ```
 
-```java
+```java Java
 onReady(config);
 ```
+</CodeGroup>
 
 This event means that:
 
@@ -30,7 +32,8 @@ This event means that:
 
 For the C SDK, you can see this pattern in the provided example code in mymain\_always\_idle.c:
 
-```c
+<CodeGroup>
+```c C
 static __bool vmc_vend_event_handler_cb(int event_id, void *data)
 {
     switch (event_id)
@@ -45,7 +48,7 @@ static __bool vmc_vend_event_handler_cb(int event_id, void *data)
 }
 ```
 
-```csharp
+```csharp C#
 public override void onReady(vmc_vend_t.vend_session_t session)
 {
         // vmc is ready for new session
@@ -53,6 +56,7 @@ public override void onReady(vmc_vend_t.vend_session_t session)
 				// This is the correct place to send display control
 }
 ```
+</CodeGroup>
 
 <Danger>
 **Important Notes - C SDK**
@@ -112,7 +116,8 @@ Once a consumer has selected a product (screen) on the device, the device would 
 
 <Frame><img src="/images/docs/marshall-display/image7.png" /></Frame>
 
-```java
+<CodeGroup>
+```java Java
                 // allocate layout
                 marshall_t.msg_display_control_t.layout_t ui_context = m_vmc.general.display_control_create_layout(1);
 
@@ -132,7 +137,7 @@ Once a consumer has selected a product (screen) on the device, the device would 
        
 ```
 
-```csharp
+```csharp C#
                 // allocate layout
                 Object ui_context = vmc_instance.general.display_control_create_layout(1);
 
@@ -152,7 +157,7 @@ Once a consumer has selected a product (screen) on the device, the device would 
 
 ```
 
-```c
+```c C
 static void handler_display_control(void *aux_data)
 {
 	display_t display;
@@ -192,14 +197,14 @@ static void handler_display_control(void *aux_data)
 	vmc_general_apply_display_control(&display);
 }
 ```
-
-<br />
+</CodeGroup>
 
 ### Layout ID 2
 
 <Frame><img src="/images/docs/marshall-display/image8.png" /></Frame>
 
-```java
+<CodeGroup>
+```java Java
                 // allocate layout
                 marshall_t.msg_display_control_t.layout_t ui_context = m_vmc.general.display_control_create_layout(2);
 
@@ -217,7 +222,7 @@ static void handler_display_control(void *aux_data)
        
 ```
 
-```csharp
+```csharp C#
                 // allocate layout
                 Object ui_context = vmc_instance.general.display_control_create_layout(2);
 
@@ -235,7 +240,7 @@ static void handler_display_control(void *aux_data)
 
 ```
 
-```c
+```c C
 static void handler_display_control(void *aux_data)
 {
 	display_t display;
@@ -271,14 +276,14 @@ static void handler_display_control(void *aux_data)
 	vmc_general_apply_display_control(&display);
 }
 ```
-
-<br />
+</CodeGroup>
 
 ### Layout ID 3
 
 <Frame><img src="/images/docs/marshall-display/image9.png" /></Frame>
 
-```java
+<CodeGroup>
+```java Java
                 // allocate layout
                 marshall_t.msg_display_control_t.layout_t ui_context = m_vmc.general.display_control_create_layout(3);
 
@@ -298,7 +303,7 @@ static void handler_display_control(void *aux_data)
        
 ```
 
-```csharp
+```csharp C#
                 // allocate layout
                 Object ui_context = vmc_instance.general.display_control_create_layout(3);
 
@@ -318,7 +323,7 @@ static void handler_display_control(void *aux_data)
 
 ```
 
-```c
+```c C
 static void handler_display_control(void *aux_data)
 {
 	display_t display;
@@ -349,14 +354,15 @@ static void handler_display_control(void *aux_data)
 	vmc_general_apply_display_control(&display);
 }
 ```
+</CodeGroup>
 
-<br />
 
 ### Layout ID 4
 
 <Frame><img src="/images/docs/marshall-display/image10.png" /></Frame>
 
-```java
+<CodeGroup>
+```java Java
                 // allocate layout
                 marshall_t.msg_display_control_t.layout_t ui_context = m_vmc.general.display_control_create_layout(4);
 
@@ -380,7 +386,7 @@ static void handler_display_control(void *aux_data)
        
 ```
 
-```csharp
+```csharp C#
                 // allocate layout
                 Object ui_context = vmc_instance.general.display_control_create_layout(4);
 
@@ -404,7 +410,7 @@ static void handler_display_control(void *aux_data)
 
 ```
 
-```c
+```c C
 static void handler_display_control(void *aux_data)
 {
 	display_t display;
@@ -440,14 +446,14 @@ static void handler_display_control(void *aux_data)
 	vmc_general_apply_display_control(&display);
 }
 ```
+</CodeGroup>
 
-<br />
 
 ### Layout ID 5
 
 <Frame><img src="/images/docs/marshall-display/image11.png" /></Frame>
-
-```java
+<CodeGroup>
+```java Java
                 // allocate layout
                 marshall_t.msg_display_control_t.layout_t ui_context = m_vmc.general.display_control_create_layout(5);
 
@@ -471,7 +477,7 @@ static void handler_display_control(void *aux_data)
        
 ```
 
-```csharp
+```csharp C#
                 // allocate layout
                 Object ui_context = vmc_instance.general.display_control_create_layout(5);
 
@@ -495,7 +501,7 @@ static void handler_display_control(void *aux_data)
 
 ```
 
-```c
+```c C
 static void handler_display_control(void *aux_data)
 {
 	display_t display;
@@ -526,14 +532,16 @@ static void handler_display_control(void *aux_data)
 	vmc_general_apply_display_control(&display);
 }
 ```
+</CodeGroup>
 
-<br />
 
 ### Layout ID 6
 
 <Frame><img src="/images/docs/marshall-display/image12.png" /></Frame>
 
-```java
+
+<CodeGroup>
+```java Java
                 // allocate layout
                 marshall_t.msg_display_control_t.layout_t ui_context = m_vmc.general.display_control_create_layout(6);
 
@@ -563,7 +571,7 @@ static void handler_display_control(void *aux_data)
        
 ```
 
-```csharp
+```csharp C#
                 // allocate layout
                 Object ui_context = vmc_instance.general.display_control_create_layout(6);
 
@@ -593,7 +601,7 @@ static void handler_display_control(void *aux_data)
 
 ```
 
-```c
+```c C
 static void handler_display_control(void *aux_data)
 {
 	display_t display;
@@ -628,8 +636,8 @@ static void handler_display_control(void *aux_data)
 	vmc_general_apply_display_control(&display);
 }
 ```
+</CodeGroup>
 
-<br />
 
 ### Layout ID 7
 
@@ -640,7 +648,8 @@ static void handler_display_control(void *aux_data)
 </Note>
 
 
-```java
+<CodeGroup>
+```java Java
                 // allocate layout
                 marshall_t.msg_display_control_t.layout_t ui_context = m_vmc.general.display_control_create_layout(7);
 
@@ -665,7 +674,7 @@ static void handler_display_control(void *aux_data)
        
 ```
 
-```csharp
+```csharp C#
                 // allocate layout
                 Object ui_context = vmc_instance.general.display_control_create_layout(7);
 
@@ -689,7 +698,7 @@ static void handler_display_control(void *aux_data)
 
 ```
 
-```c
+```c C
 static void handler_display_control(void *aux_data)
 {
 	display_t display;
@@ -719,8 +728,8 @@ static void handler_display_control(void *aux_data)
 	vmc_general_apply_display_control(&display);
 }
 ```
+</CodeGroup>
 
-<br />
 
 ### Layout ID 8
 
@@ -730,7 +739,8 @@ static void handler_display_control(void *aux_data)
 **Note: **You can have up to 6 values: values 4-6 would appear once you scroll down.
 </Note>
 
-```java
+<CodeGroup>
+```java Java
                 // allocate layout
                 marshall_t.msg_display_control_t.layout_t ui_context = m_vmc.general.display_control_create_layout(8);
 
@@ -761,7 +771,7 @@ static void handler_display_control(void *aux_data)
        
 ```
 
-```csharp
+```csharp C#
                 // allocate layout
                 Object ui_context = vmc_instance.general.display_control_create_layout(8);
 
@@ -791,7 +801,7 @@ static void handler_display_control(void *aux_data)
 
 ```
 
-```c
+```c C
 static void handler_display_control(void *aux_data)
 {
 	display_t display;
@@ -827,14 +837,16 @@ static void handler_display_control(void *aux_data)
 	vmc_general_apply_display_control(&display);
 }
 ```
+</CodeGroup>
 
-<br />
 
 ### Layout ID 9- VPOSM only!
 
 <Frame><img src="/images/docs/marshall-display/image13.png" /></Frame>
 
-```java
+<CodeGroup>
+
+```java Java
 m_vmc.general.display_control_layout_add_label(ui_context, 0, 0, "Do You Want A Receipt?");
 
 m_vmc.general.display_control_layout_add_label(ui_context, 1, 0, "Yes");
@@ -844,7 +856,7 @@ m_vmc.general.display_control_layout_add_label(ui_context, 2, 0, "No");
 m_vmc.general.display_control_layout_add_label(ui_context, 2, 1, "@shapes/square");
 ```
 
-```csharp
+```csharp C#
 vmc_instance.general.display_control_layout_add_label(ui_context, 0, 0, "Do You Want A Receipt?");
 
 vmc_instance.general.display_control_layout_add_label(ui_context, 1, 0, "Yes");
@@ -854,9 +866,10 @@ vmc_instance.general.display_control_layout_add_label(ui_context, 2, 0, "No");
 vmc_instance.general.display_control_layout_add_label(ui_context, 2, 1, "@shapes/square");
 ```
 
-```c
+```c C
 WIP
 ```
+</CodeGroup>
 
 One or two big buttons will appear in the middle. The first is in yellow and text in black, and the other (if it exists) is in black with text in white.
 
@@ -864,23 +877,25 @@ One or two big buttons will appear in the middle. The first is in yellow and tex
 
 <Frame><img src="/images/docs/marshall-display/image14.png" /></Frame>
 
-```java
+<CodeGroup>
+```java Java
 m_vmc.general.display_control_layout_add_label(ui_context, 0, 0, "Ready To refuel");
 
 // add label
 m_vmc.general.display_control_layout_add_media(ui_context, 1, "@assets/x_red.png");
 ```
 
-```csharp
+```csharp C#
 vmc_instance.general.display_control_layout_add_label(ui_context, 0, 0, "Ready To refuel");
 
 // add label
 vmc_instance.general.display_control_layout_add_media(ui_context, 1, "@assets/x_red.png");
 ```
 
-```c
+```c C
 WIP
 ```
+</CodeGroup>
 
 Including title (optional, can be Null), and the element to be presented (Image/Animation).
 
@@ -888,23 +903,25 @@ Including title (optional, can be Null), and the element to be presented (Image/
 
 <Frame><img src="/images/docs/marshall-display/image15.png" /></Frame>
 
-```java
+<CodeGroup>
+```java Java
 m_vmc.general.display_control_layout_add_label(ui_context, 0, 0, "Loyalty");
 m_vmc.general.display_control_layout_add_input(ui_context, 1, 1, 15, "Phone Number");
 //for the optional button:
 m_vmc.general.display_control_layout_add_label(ui_context, 2, 0, "Optional Button");
 ```
 
-```csharp
+```csharp C#
 vmc_instance.general.display_control_layout_add_label(ui_context, 0, 0, "Loyalty");
 vmc_instance.general.display_control_layout_add_input(ui_context, 1, 1, 15, "Phone Number");
 //for the optional button:
 vmc_instance.display_control_layout_add_label(ui_context, 2, 0, "Optional Button");
 ```
 
-```c
+```c C
 WIP
 ```
+</CodeGroup>
 
 Including: Title, Subtitle, and Input Field
 
@@ -1041,7 +1058,3 @@ Packets are created automatically by the SDK or Nayax Core.
 The image below would be the display result.
 
 <Frame>![](/images/docs/marshall-display/image1.png)</Frame>
-
-
-
-<br />

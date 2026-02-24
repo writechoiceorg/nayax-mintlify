@@ -14,7 +14,8 @@ These structures define the classes and fields necessary to manage product detai
 
 The `vend_item_t` class represents an individual product request within a vending session. This class includes the product code, price, quantity, and unit of measure. The following code block lists all class parameters:
 
-```java Java / C#
+<CodeGroup>
+```java Java
 public static class vend_item_t {
     public short code;
     public int price;
@@ -23,13 +24,23 @@ public static class vend_item_t {
 }
 ```
 
-```c
+```csharp C#
+public static class vend_item_t {
+    public short code;
+    public int price;
+    public int qty;
+    public byte unit;
+}
+```
+
+```c C
 struct vend_item_t
 	uint16_t code;
 	uint16_t/uint32_t price;
 	uint32_t qty;
 	uint32_t unit;
 ```
+</CodeGroup>
 
 ### Product Parameters
 
@@ -46,7 +57,8 @@ The table below provides a more detailed description of the parameters.
 
 The `vend_session_data_t `class holds detailed information about a vending session, including transaction details and card information. The following code block lists all class parameters:
 
-```java Java /  C#
+<CodeGroup>
+```java Java
 public static class vend_session_data_t {  
     public long transaction_id;  
     public short choose_product_timeout;  
@@ -61,8 +73,22 @@ public static class vend_session_data_t {
     public String cc_last_4_digits;  
 }
 ```
-
-```c
+```csharp C#
+public static class vend_session_data_t {  
+    public long transaction_id;  
+    public short choose_product_timeout;  
+    public int card_type;  
+    public int card_entry_mode;  
+    public String card_bin;  
+    public String card_bin_hash;  
+    public String prop_card_uid;  
+    public int vmc_auth_status;  
+    public int com_status;  
+    public String excel_data;  
+    public String cc_last_4_digits;  
+}
+```
+```c C
 struct vmc_vend_transfer_data_t
   int 	 encode_bitmap;
   int       transaction_id_len;
@@ -91,6 +117,7 @@ struct vmc_vend_transfer_data_t
   uint32_t  final_price;
   sint32_t  card_balance;
 ```
+</CodeGroup>
 
 ### Class Parameters
 
@@ -114,7 +141,7 @@ The table below provides a more detailed description of the parameters.
 
 The `vend_session_t `class represents a vending session, encapsulating session-specific data, product lists, and session status. The following code block lists all class parameters:
 
-```java Java / C#
+```java Java
 public static class vend_session_t {
     public int funds_avail;
     public int session_status;
@@ -123,7 +150,16 @@ public static class vend_session_t {
 }
 ```
 
-```c
+```csharp C#
+public static class vend_session_t {
+    public int funds_avail;
+    public int session_status;
+    public vend_session_data_t data;
+    public ArrayList<vend_item_t> products_list;
+}
+```
+
+```c C
 struct vend_session_t
   int funds_avail;
 	int total_amount;

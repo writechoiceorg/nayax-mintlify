@@ -38,7 +38,7 @@ This event is triggered after a card token is successfully retrieved.
   </Tab>
 
   <Tab title="Android">
-    ```java
+    ```java Java
     void CardTokenReceived(TokenDetails tokenDetails);
     ```
 
@@ -75,7 +75,7 @@ This callback provides updates on user interface messages from the card reader.
   </Tab>
 
   <Tab title="Android">
-    ```java
+    ```java Java
     public ReaderMessage(int index, String line1, String line2)
     ```
 
@@ -114,7 +114,7 @@ For this feature to work, the reader must be configured to send External Display
 
 The `SystemStatusChanged `event indicates changes in the SDKs or connected devices' operational state.
 
-```java
+```java Java
 void onTransactionComplete(TransactionResult result);
 ```
 
@@ -192,7 +192,7 @@ The `TransactionComplete ` is called by EMV Core when the transaction is complet
   </Tab>
 
   <Tab title="Android">
-    ```java
+    ```java Java
     void TransactionComplete(AuthorizationDetails authorizationDetails);
     ```
 

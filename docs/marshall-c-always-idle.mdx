@@ -18,7 +18,7 @@ See the sections below for more details on each step.
 
 Start by including the necessary libraries for the SDK. See the code block below:
 
-```c
+```c C
 #include <string.h>
 
 #include "types.h"
@@ -41,7 +41,7 @@ Start by including the necessary libraries for the SDK. See the code block below
 
 The code below defines a macro for the module name used in logging/debugging and sets up the global variables that store configuration and session-related data.
 
-```c
+```c C
 #define __MODULE__ "marshall-c-sdk-demo"
   
 static vmc_config_t   config;
@@ -73,7 +73,7 @@ This function determines the output stream for debug information, supporting dif
 
 See the code below.
 
-```c
+```c C
 static void terminal_tx_str(char *str)
 {
 	#if defined(__PLATFORM_X86) || defined(__PLATFORM_LINUX)
@@ -92,7 +92,7 @@ Where:
 
 This function is called periodically (every 5-10ms) by the platform timer.
 
-```c
+```c C
 static __bool cpu_timer_tick(void *p)
 {
 	vmc_link_background();
@@ -108,7 +108,7 @@ Where:
 
 This function handles link events and logs relevant information.
 
-```c
+```c C
 static __bool vmc_link_event_handler_cb(int event_id, void *data)
 {
 	__bool result = __false;
@@ -149,7 +149,7 @@ The function will always return the boolean value `__false`  as no success/failu
 
 This function handles the session and the included items. See the code block below:
 
-```c
+```c C
 static void triggered_vend_request(void)
 {
 	if (config.reader_always_on)
@@ -197,7 +197,7 @@ static void triggered_vend_request(void)
 
 This function handles vend events and logs relevant information.
 
-```c
+```c C
 static __bool vmc_vend_event_handler_cb(int event_id, void *data)
 {
 	__bool result = __false;
@@ -305,7 +305,7 @@ After adding the helper functions, you need to implement the functions to initia
 
 This function initializes the VMC configuration and registers the event handlers. See the code below:
 
-```c
+```c C
 static void vmc_init(void)
 {
 	/* initialize sdk */
@@ -347,7 +347,7 @@ Since you want to leave the status in the always idle, set `config.always_idle` 
 
 Before initializing the menu, add the necessary handler functions. See the code below:
 
-```c
+```c C
 static void handler_start_session(void *aux_data)
 {
 	vmc_vend_session_start(vmc_vend_session_type_credit_e);
@@ -407,7 +407,7 @@ static void handler_reader_state(void *aux_data)
 
 Now, you can initialize the menu, calling the handlers created before. See the code below.
 
-```c
+```c C
 static void menu_init(void)
 {
 	menu.total_items = 0;
@@ -436,7 +436,7 @@ static void menu_init(void)
 
 Once all other parts are implemented, you can add the program's main entry point, which initializes the link to the peripheral and the menu, then starts an infinite loop that runs the menu. See the code below:
 
-```c
+```c C
 int mymain(int argc, char *argv[])
 {
 	printk_register_puts(terminal_tx_str);

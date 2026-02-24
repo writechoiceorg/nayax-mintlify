@@ -15,15 +15,17 @@ Below is a breakdown of the diagram:
 1. The Nayax Device sends a message to the consumer: "Please Select a Product."
 2. The consumer selects a product from the vending machine.
 3. The peripheral's SDK sends a vending request to the Nayax Device.
-   ```c C
-   vmc_vend_vend_request(vend_session_t *session)
-   ```
-   ```csharp
-   vmc_instance.vend.vend_request(session);
-   ```
-   ```java
-   m_vmc.vend.vend_request(m_sessions[m_active_session]);
-   ```
+    <CodeGroup>
+    ```c C
+    vmc_vend_vend_request(vend_session_t *session)
+    ```
+    ```csharp C#
+    vmc_instance.vend.vend_request(session);
+    ```
+    ```java Java
+    m_vmc.vend.vend_request(m_sessions[m_active_session]);
+    ```
+    </CodeGroup>
 4. The Nayax Device sends a message to the consumer: "Please Present Card."
 5. The consumer presents their payment card.
 6. The Nayax Device sends an authorization request to the Nayax Server.
@@ -31,51 +33,59 @@ Below is a breakdown of the diagram:
 8. The Billing Provider sends an authorization response (approved) to the Nayax Server.
 9. The Nayax Server sends the authorization response (approved) back to the Nayax Device.
 10. The peripheral's SDK handles transaction data received from the Nayax Device via the Transfer Data command (said data includes information about the Nayax transaction ID and the consumer's card details):
-    ```c
+    <CodeGroup>
+    ```c C
     vmc_vend_event_handler_cb(vm_vend_event_on_transaction_info)
     ```
-    ```csharp
+    ```csharp C#
     vend_callbacks(onTransactionInfo(data))
     ```
-    ```java
+    ```java Java
     vmc_vend_events()
     (via onTransactionInfo(data))
     ```
+    </CodeGroup>
 11. The SDK triggers "Vend Approved" events:
-    ```c
+    <CodeGroup>
+    ```c C
     vmc_vend_event_handler_cb(vm_vend_event_on_vend_approved)
     ```
-    ```csharp
+    ```csharp C#
     vend_callbacks()
     (via onVendApproved(session))
     ```
-    ```java
+    ```java Java
     vmc_vend_events()
     (via onVendApproved(session))
     ```
+    </CodeGroup>
 12. The peripheral dispenses the product/ provides the service to the consumer.
 13. The SDK reports "vend success":
-    ```c
+    <CodeGroup>
+    ```c C
     vmc_vend_vend_status(&session, __true)
     ```
-    ```csharp
+    ```csharp C#
     vmc_vend_events()
     (via onVendApproved(session) -which would return "true")
     ```
-    ```java
+    ```java Java
     vmc_vend_events()
     (via onVendApproved(session) -which would return "true")
     ```
+    </CodeGroup>
     And completes the vend session:
-    ```c
+    <CodeGroup>
+    ```c C
     vmc_vend_vend_session_complete_lowlevel()
     ```
-    ```csharp
+    ```csharp C#
     no such function in C# or Java due to the nature of the languages
     ```
-    ```java
+    ```java Java
     no such function in C# or Java due to the nature of the languages
     ```
+    </CodeGroup>
 14. Message to the consumer: "Please Take Product."
 15. The Nayax Device sends a settlement request to the Nayax Server.
 16. The Nayax Server forwards the settlement request to the Billing Provider.

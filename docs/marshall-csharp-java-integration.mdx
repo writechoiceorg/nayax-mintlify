@@ -26,26 +26,30 @@ To perform the integration, follow the steps below:
 1. Import the provided.`.JAR` or SDK DLL file into your project.
 
 2. Import the necessary namespaces in your code.
-   ```java
+   <CodeGroup>
+   ```java Java
    import com.bitmick.marshall.models.*;
    ```
-   ```csharp
+   ```csharp C#
    using com.bitmick.marshall.models;
    ```
+   </CodeGroup>
 
 3. Instantiate a VMC configuration object:
 
-   ```java
+   <CodeGroup>
+   ```java Java
    public vmc_configuration vmc_config = new vmc_configuration();
    ```
 
-   ```csharp
+   ```csharp C#
    vmc_configuration vmc_config = new vmc_configuration();
    ```
+   </CodeGroup>
 
 4. Fill in the appropriate fields. The following code block presents a standard configuration:
-
-   ```java
+   <CodeGroup>
+   ```java Java
    public static void main(string[] args) {
            vmc_config.multi_vend_support = false;
            vmc_config.multi_session_support = false;
@@ -65,7 +69,7 @@ To perform the integration, follow the steps below:
    }
    ```
 
-   ```csharp
+   ```csharp C#
    public class vend_machine
                vmc_config.multi_session_support = false;
                vmc_config.multi_vend_support = false;
@@ -83,6 +87,7 @@ To perform the integration, follow the steps below:
                vmc_config.dump_packets_level = vmc_configuration.debug_level_dump_moderate;
 
    ```
+   </CodeGroup>
 
 <Warning>
 **Mandatory Fields**
@@ -91,12 +96,14 @@ The customer machine information is mandatory for the VMC configuration. These a
 </Warning>
 
 5. Setup the **COM** port.
-   ```java
+   <CodeGroup>
+   ```java Java
    m_vmc.link.set_serial_port(new pc_port("COM18", 115200))
    ```
-   ```csharp
+   ```csharp C#
    m_vmc.link.set_serial_port(new pc_port("COM18", 115200))
    ```
+   </CodeGroup>
 <Warning>
 **COM Port**
 
@@ -104,29 +111,40 @@ Make sure that you change the `COM` parameter to the one your Marshall cable is 
 </Warning>
 
 * Note- in the near future we plan on having the possibility to use Marshall over ETH (supported only for VPOSM)- in that case, the would be no COM port but rather an IP address which would be under the same local network as the Nayax device, and optionally the relevant IP port (which by default should remain untouched \[has by default the value of "12345" which is meaningless])
-  ```java
+  <CodeGroup>
+  ```java Java
   m_vmc.link.set_serial_port(new eth_port("192.168.112.127", (short) 12345, false));
   ```
-  ```csharp
+  ```csharp C#
   vmc_instance = marshall_init(new eth_port("192.168.68.101", 12345));
   ```
+  </CodeGroup>
 
 1. Configure the SDK and register to link events.
 
-```java Java / C#
+<CodeGroup>
+```java Java
 m_vmc.link.configure(vmc_config);
 m_vmc.link.set_events(new vmc_link_events());
 ```
 
+```csharp C#
+m_vmc.link.configure(vmc_config);
+m_vmc.link.set_events(new vmc_link_events());
+```
+</CodeGroup>
+
 7. Start the SDK and wait for the `onReady()` event:
 
-```java
+<CodeGroup>
+```java Java
 vmc_instance .start();
 ```
 
-```csharp
+```csharp C#
 m_vmc.link.start();
 ```
+</CodeGroup>
 
 <Note>
 **Using Android**
@@ -137,7 +155,7 @@ port implementation for. (see the “android” folder in the JAVA SDK release)
 
 ## See Also
 
-<Columns cols={3}>
+<Columns cols={2}>
 <Card
   icon="link"
   title="C SDK Integration"

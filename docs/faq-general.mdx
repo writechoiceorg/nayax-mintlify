@@ -38,19 +38,21 @@ For example, you can use ID number 2, which is a "Door event" (you can change th
 
 •	Alert ID of 200 or 810 does nothing. Best practice is to use alert ID 2.
 
-```java
+<CodeGroup>
+```java Java
 m_vmc.general.alert((short) 2, "Back door opened");
 ```
 
-```csharp
+```csharp C#
 vmc_instance.general.alert(2, "alert test");
 ```
 
-```c
+```c C
 uint8_t alert_str[32];
 sprintf((char*)&alert_str,"Back door opened");
 vmc_general_alert((short)2, (char*)&alert_str, strlen((char*)&alert_str));
 ```
+</CodeGroup>
 
 ## Product Map
 

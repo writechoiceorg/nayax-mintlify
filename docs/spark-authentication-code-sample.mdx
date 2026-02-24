@@ -16,7 +16,7 @@ The Cipher field is a securely encrypted payload that must be included in the re
 
 This function creates the final, encrypted Cipher string to be included in the request body.
 
-```csharp
+```csharp C#
 private string CreateCipher(string sparkTransactionId, string tokenSecretString, string random, bool needTimeStampInRandom = true)
 {
     string timeStamp = needTimeStampInRandom ? $"{DateTime.UtcNow:yyMMddHHmm}" : string.Empty;
@@ -42,7 +42,7 @@ The signature authenticates each request by combining the serialized request bod
 
 This function calculates the signature string and packages it into the required HTTP headers.
 
-```csharp
+```csharp C#
 public Dictionary<string, string> CreateSignature<T>(T request, int integratorId) where T : class
 {
 		// 1. Serialize the entire request body to a JSON string
@@ -83,7 +83,7 @@ The output will be a dictionary containing the two mandatory HTTP request header
 
 The request model defines the structure of data sent to initiate authentication with Spark. Each authentication request must include your token ID, terminal identification details, and the encrypted cipher (created using the `CreateCipher()` method), and the random 17-digit number used in cipher generation.
 
-```csharp
+```csharp C#
 public class StartAuthenticationRequest3rdParty
 {
     public int TokenId { get; set; }
@@ -98,7 +98,7 @@ public class StartAuthenticationRequest3rdParty
 
 The response model defines the structure of data returned after initiating authentication with Spark. It includes the hashed transaction ID and status information.
 
-```csharp
+```csharp C#
 public class StartAuthenticationResponse3rdParty
 {
     [JsonProperty("HashedSparkTransactionId", Required = Required.Always)]

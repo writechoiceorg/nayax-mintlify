@@ -32,13 +32,13 @@ To get started with the C SDK, follow these steps. You can refer to the provided
 
 1. Instantiate a VMC configuration object:
 
-   ```c
+   ```c C
    vmc_config_t   	config;
    ```
 
 2. Fill in the appropriate fields. The following code block presents a standard configuration:
 
-   ```c
+   ```c C
    vmc_init()
    	__strcpy(config.model, "marshall-c-sdk-demo");
    	__strcpy(config.serial, "01234567");
@@ -70,14 +70,14 @@ The customer machine information are mandatory fields for the VMC configuration,
 </Note>
 
 3. Configure the SDK and register to link events.
-   ```c
+   ```c C
    vmc_link_register_callback((vmc_link_event_handler_cb_t)vmc_link_event_handler_cb);
    vmc_vend_register_callback((vmc_vend_event_handler_cb_t)vmc_vend_event_handler_cb);
    vmc_general_register_callback((vmc_general_event_handler_cb_t)vmc_general_event_handler_cb);
    ```
 
 4. Start the SDK and wait for the `onReady()` event:
-   ```c
+   ```c C
    vmc_link_start()
    ```
 
@@ -108,7 +108,7 @@ As explained in [Payment Flows](/docs/marshall-payment-flows), the Marshall SDK 
 
 ## See Also
 
-<Columns cols={3}>
+<Columns cols={2}>
 <Card
   icon="link"
   title="C SDK Integration"

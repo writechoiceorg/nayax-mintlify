@@ -13,7 +13,7 @@ The client system is responsible for generating an **RSA SHA-256** private-publi
 ### C# Implementation
 Below is an example of how to sign a message and verify the signature using PKCS#1 padding.
 
-```csharp
+```csharp C#
 static string SignMessage(string message, string privateKeyBase64)
 {
     using (RSA rsa = ImportPrivateKey(privateKeyBase64))

@@ -49,13 +49,13 @@ See the API Signature for the `CancelTransaction` method:
   </Tab>
 
   <Tab title="Android">
-    ```java
+    ```java Java
     void CancelTransaction();
     ```
   </Tab>
 
   <Tab title="Linux">
-    ```c
+    ```c C
     KIOSK_RET LibOtiKiosk_CancelTransaction(void);
     ```
   </Tab>
@@ -209,7 +209,7 @@ EMV Core waits for a card to be presented, reads the data, and triggers a `CardT
   </Tab>
 
   <Tab title="Android">
-    ```java
+    ```java Java
     void GetCardToken(int timeoutSeconds, boolean continuous) throws EmvCoreException;
     ```
 
@@ -222,7 +222,7 @@ EMV Core waits for a card to be presented, reads the data, and triggers a `CardT
   </Tab>
 
   <Tab title="Linux">
-    ```c
+    ```c C
     KIOSK_RET LibOtiKiosk_GetCardToken(otiKioskPaymentParameters *params);
     ```
   </Tab>
@@ -348,7 +348,7 @@ This request is used to void a transaction in two specific cases:
   </Tab>
 
   <Tab title="Android">
-    ```java
+    ```java Java
     void VoidTransaction(String transactionReference) throws EmvCoreException;
     ```
 
@@ -360,7 +360,7 @@ This request is used to void a transaction in two specific cases:
   </Tab>
 
   <Tab title="Linux">
-    ```c
+    ```c C
     KIOSK_RET LibOtiKiosk_VoidTransaction(char* transaction_reference);
     ```
 

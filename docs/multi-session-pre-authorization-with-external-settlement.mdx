@@ -56,44 +56,53 @@ The following sequence illustrates the complete journey for a multi-session sess
 3. Nayax's device displays "Present Card" animations to the Cardholder.
 4. Cardholder presents payment.
 5. Nayax's device sends  `Begin Session` to the peripheral and the peripheral's SDK triggers the "session begin" event:
-   ```java
-   vmc_vend_events() (via onBeginSession(funds_avail))
-   ```
-   ```csharp
-   vend_callbacks(onBeginSession(funds_avail))
-   ```
-   ```c
-   vmc_vend_event_handler_cb(vm_vend_event_on_session_begin)
-   ```
+    <CodeGroup>
+    ```java Java
+    vmc_vend_events() (via onBeginSession(funds_avail))
+    ```
+    ```csharp C#
+    vend_callbacks(onBeginSession(funds_avail))
+    ```
+    ```c C
+    vmc_vend_event_handler_cb(vm_vend_event_on_session_begin)
+    ```
+    </CodeGroup>
+
    This is the signal for the peripheral, such as the vending machine, to prepare for payment approval.
-   ```java
-   m_sessions[0] = new vmc_vend_t.vend_session_t((short) 0, 1, (byte) 0, 10);
-   //the fields are (from left to right): produce code (2 bytes long,meaning value up to 65535), quantity (2 byte), unit of measure (1 byte), price (2 bytes, meaning value up to 65535)
-   ```
-   ```csharp
-   List<vmc_vend_t.vend_item_t> list = new List<vmc_vend_t.vend_item_t> ();
-   list.Add(new vmc_vend_t.vend_item_t(0, 10, 1, 1));
-   //the fields are (from left to right): produce code (2 bytes long,meaning value up to 65535), price (2 bytes, meaning value up to 65535), quantity (2 bytes), unit of measure (1 byte), .
-   session = new vmc_vend_t.vend_session_t(list);
-   ```
-   ```c
-   session_product.code = 1;
-   session_product .qty = 1;
-   session_product.price = 10;
-   session_product.unit = 1;
-   session->products = &session_product;
-   session->total_products = 1;
-   ```
+    <CodeGroup>
+    ```java Java
+    m_sessions[0] = new vmc_vend_t.vend_session_t((short) 0, 1, (byte) 0, 10);
+    //the fields are (from left to right): produce code (2 bytes long,meaning value up to 65535), quantity (2 byte), unit of measure (1 byte), price (2 bytes, meaning value up to 65535)
+    ```
+    ```csharp C#
+    List<vmc_vend_t.vend_item_t> list = new List<vmc_vend_t.vend_item_t> ();
+    list.Add(new vmc_vend_t.vend_item_t(0, 10, 1, 1));
+    //the fields are (from left to right): produce code (2 bytes long,meaning value up to 65535), price (2 bytes, meaning value up to 65535), quantity (2 bytes), unit of measure (1 byte), .
+    session = new vmc_vend_t.vend_session_t(list);
+    ```
+    ```c C
+    session_product.code = 1;
+    session_product .qty = 1;
+    session_product.price = 10;
+    session_product.unit = 1;
+    session->products = &session_product;
+    session->total_products = 1;
+    ```
+    </CodeGroup>
+
 6. The machine display shows: "Please Select a Product." and the customer selects a product- prompting the peripheral's SDK to send a `Vend Request` to the Nayax Device.
-   ```java
-   m_vmc.vend.vend_request(m_sessions[m_active_session]);
-   ```
-   ```csharp
-   vmc_instance.vend.vend_request(session);
-   ```
-   ```c
-   vmc_vend_vend_request(session);
-   ```
+    <CodeGroup>
+    ```java Java
+    m_vmc.vend.vend_request(m_sessions[m_active_session]);
+    ```
+    ```csharp C#
+    vmc_instance.vend.vend_request(session);
+    ```
+    ```c C
+    vmc_vend_vend_request(session);
+    ```
+    </CodeGroup>
+
 7. The device displays "Please Wait For Authorization".
 8. The device contacts Nayax’ Server.
 9. Nayax’ Server forwards request to the Bank/Gateway.
@@ -104,41 +113,49 @@ The following sequence illustrates the complete journey for a multi-session sess
 
 12. The peripheral's SDK handles transaction data received via `Transfer Data` command (includes Nayax Transaction ID and card details):
 
-```java
+<CodeGroup>
+```java Java
 vmc_vend_events() (via onTransactionInfo(data))
 ```
 
-```csharp
+```csharp C#
 vend_callbacks(onTransactionInfo(data))
 ```
 
-```c
+```c C
 vmc_vend_event_handler_cb(vm_vend_event_on_transaction_info)
 ```
+</CodeGroup>
 
 At this point, the peripheral must retain the (Nayax's) Transaction ID and Site ID received for later use in the External Settlement/External Cancel.
 
 12. **Optional:** The peripheral's SDK can respond to Nayax's device with its own Transaction number (this information won't be used anywhere, just in case the peripheral would like to have its own Transaction ID appearing in the SDK's logs).
 13. Nayax's device sends `Vend Approved`, triggering the peripheral's SDK "vend approved" event:
-    ```java
+    <CodeGroup>
+    ```java Java
     vmc_vend_events() (via onVendApproved(session))
     ```
-    ```csharp
+    ```csharp C#
     vend_callbacks(via onVendApproved(session))
     ```
-    ```c
+    ```c C
     vmc_vend_event_handler_cb(vm_vend_event_on_vend_approved)
     ```
+    </CodeGroup>
+
 14. The peripheral dispenses the product or provides the service to the consumer, and the SDK reports `Vend Success` and completes the local session:
-    ```java
+    <CodeGroup>
+    ```java Java
     onVendApproved(session)
     ```
-    ```csharp
+    ```csharp C#
     onVendApproved(session)
     ```
     ```c C
     vmc_vend_vend_status(&session, __true)` and `vmc_vend_vend_session_complete_lowlevel()
     ```
+    </CodeGroup>
+
 15. The peripheral sends `Session Complete` to indicate completion of the ongoing transaction process (not yet settling it).
 16. Nayax's device sends `End Session` to the peripheral.
 17. The peripheral sends `Reader Disable` to put the reader in standby.

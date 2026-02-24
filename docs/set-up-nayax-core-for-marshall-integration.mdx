@@ -251,7 +251,7 @@ Follow these steps to define the Prepaid Card(s):
 
 Ensure that you have the matching configuration in the SDK. Meaning commented out the serial port line, and uncommented the ETH port line, and set the port in the same line to be 2025:
 
-```csharp
+```csharp C#
             //vmc_instance = marshall_init(new pc_port("COM8", 115200));
             vmc_instance = marshall_init(new eth_port("192.168.1.117", 2025)); //ensure to set the IP to be the VPOSM5's IP
 ```

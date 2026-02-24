@@ -8,7 +8,8 @@ The `vmc_configuration` object allows you to set various configuration flags. Wh
 
 You can initiate these flags in the `main` method, as in the following code:
 
-```java
+<CodeGroup>
+```java Java
 public static void main(string[] args) {
         vmc_config.multi_vend_support = false;
         vmc_config.multi_session_support = false;
@@ -28,7 +29,7 @@ public static void main(string[] args) {
 }
 ```
 
-```csharp
+```csharp C#
 public class vend_machine
             vmc_config.multi_session_support = false;
             vmc_config.multi_vend_support = false;
@@ -43,7 +44,7 @@ public class vend_machine
             vmc_config.mifare_approved_by_vmc_support = false;
 ```
 
-```c
+```c C
 static void vmc_init(void)
 {
 	config.multi_vend_support = __false;
@@ -62,6 +63,7 @@ static void vmc_init(void)
   config.debug = __true;
 }
 ```
+</CodeGroup>
 
 ### Flag Descriptions
 

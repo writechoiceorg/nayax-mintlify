@@ -16,24 +16,26 @@ To have logs of the SDK, you need to configure the following flags in the `main`
 
 You can add these flags to the main method, as in the example below.
 
-```java
+<CodeGroup>
+```java Java
 public static void main(string[] args) {
     vmc_config.dump_packets_level = vmc_configuration.debug_level_dump_moderate;
     vmc_config.debug = true;
 }
 ```
 
-```csharp
+```csharp C#
 public class vend_machine
     vmc_config.debug = true;
     vmc_config.dump_packets_level = vmc_configuration.debug_level_dump_moderate;
 
 ```
 
-```c
+```c C
 vmc_init()
 	config.dump_packets_level = debug_level_dump_none;
 ```
+</CodeGroup>
 
 ## Log File Location
 
@@ -44,7 +46,7 @@ The SDK logs are written to a specific file location.
 
   <Frame><img src="/images/docs/log-generation/image1.jpg" /></Frame>
 * On the **C SDK**, the log location is determined by invoking the function below.
-  ```c
+  ```c C
   printk_register_puts(terminal_tx_str);
   ```
 
@@ -69,7 +71,7 @@ static void terminal_tx_str(char *str)
 
 * On the **Java SDK**, the default log file path is specified in the `FileWriter `initialization. See the following example.
 
-  ```java
+  ```java Java
   if (vmc_config.debug) {
     BufferedWriter out = null;
     try {

@@ -73,7 +73,7 @@ See the `GetAttribute` API signature in the code below:
   </Tab>
 
   <Tab title="Android">
-    ```java
+    ```java Java
     String GetAttribute(String key) throws EmvCoreException;
     ```
 
@@ -85,7 +85,7 @@ See the `GetAttribute` API signature in the code below:
   </Tab>
 
   <Tab title="Linux">
-    ```c
+    ```c C
     KIOSK_RET LibOtiKiosk_GetAttribute(char* attribute_name, char* out_value,
     int max_out_size);
     ```
@@ -124,13 +124,13 @@ See the `GetKioskID` API signature in the code below:
   </Tab>
 
   <Tab title="Android">
-    ```java
+    ```java Java
     String GetKioskID() throws EmvCoreException;
     ```
   </Tab>
 
   <Tab title="Linux">
-    ```c
+    ```c C
     KIOSK_RET LibOtiKiosk_GetKioskId(char* out_id, int max_out_size);
     ```
   </Tab>
@@ -160,13 +160,13 @@ See the `GetStatus` API signature in the code below:
   </Tab>
 
   <Tab title="Android">
-    ```java
+    ```java Java
     EmvCoreStatus GetStatus() throws EmvCoreException;
     ```
   </Tab>
 
   <Tab title="Linux">
-    ```c
+    ```c C
     KIOSK_STATUS status;
     KIOSK_RET result = LibOtiKiosk_GetStatus(&status);
     if (result == KIOSK_RET_OK) {
@@ -225,14 +225,14 @@ Fetches the reader's firmware version and the EMV Core SDK version. This is used
   </Tab>
 
   <Tab title="Android">
-    ```java
+    ```java Java
     String GetEmvCoreVersion() throws EmvCoreException;
     String GetReaderVersion() throws EmvCoreException;
     ```
   </Tab>
 
   <Tab title="Linux">
-    ```c
+    ```c C
     KIOSK_RET LibOtiKiosk_GetKioskVersion(char* out_version, int max_out_size);
     ```
   </Tab>
@@ -248,13 +248,13 @@ See the `Initialize` API signature in the code below:
 
 <Tabs>
   <Tab title="Android">
-    ```java
+    ```java Java
     void Initialize(Context context);
     ```
   </Tab>
 
   <Tab title="Linux">
-    ```c
+    ```c C
     // TCP connection to localhost
     bool success = LibOtiKiosk_Init(NULL, false);
     // TCP connection to specific server
@@ -277,7 +277,7 @@ See the `Initialize` API signature in the code below:
 
     #### Example Usage
 
-    ```c
+    ```c C
     // TCP connection to localhost
     bool success = LibOtiKiosk_Init(NULL, false);
 
@@ -340,7 +340,7 @@ See the `SetPaymentCallbacks` API signature in the code below:
 
 <Tabs>
   <Tab title="Android">
-    ```java
+    ```java Java
     void SetPaymentCallbacks(IPaymentCallbacks iPaymentCallbacks);
     ```
 
@@ -350,7 +350,7 @@ See the `SetPaymentCallbacks` API signature in the code below:
   </Tab>
 
   <Tab title="Linux">
-    ```c
+    ```c C
     void LibOtiKiosk_Register_TransactionComplete_Callback(TransactionCompleteCb_t
     cb);
 
@@ -389,13 +389,13 @@ See the `ShowMessage` API signature in the code below:
   </Tab>
 
   <Tab title="Android">
-    ```java
+    ```java Java
     void ShowMessage(String line1, String line2) throws EmvCoreException;
     ```
   </Tab>
 
   <Tab title="Linux">
-    ```c
+    ```c C
     KIOSK_RET result = LibOtiKiosk_ShowMessage("Welcome!", "Tap Card");
     ```
   </Tab>
@@ -451,7 +451,7 @@ reports or diagnostics based on these host machine parameters.
   </Tab>
 
   <Tab title="Android">
-    ```java
+    ```java Java
     String UpdateMachineAttributes(List<NayaxMachineAttribute> attributes) throws EmvCoreException;
     ```
   </Tab>

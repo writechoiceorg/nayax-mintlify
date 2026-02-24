@@ -8,7 +8,8 @@ The `vmc_configuration` class is used to set up various parameters and flags tha
 
 The code block below displays the  `vmc_configuration` class for the available SDK languages.
 
-```java
+<CodeGroup>
+```java Java
 public class vmc_configuration 
       public Object port_vpos;
       public int port_vpos_baud;
@@ -32,7 +33,7 @@ public class vmc_configuration
       public 
 ```
 
-```csharp
+```csharp C#
 public class vmc_configuration 
       public string  port_vpos;
       public int port_vpos_baud;
@@ -54,6 +55,7 @@ public class vmc_configuration
       public bool debug;
       public int dump_packets_level;
 ```
+</CodeGroup>
 
 ### Object Parameters
 
@@ -310,25 +312,34 @@ When configuring a VMC (Vending Machine Controller), there are specific mandator
 
 Refer to the code block below for an example of the configuration for these mandatory fields.
 
-```java Java/C#
+<CodeGroup>
+```java Java
 vmc_config = new vmc_configuration();
 
 vmc_config.model = "marshall-java-sdk";
 vmc_config.serial = "01234567";
 vmc_config.hw_ver = "01234567";
 vmc_config.manuf_code = "manuf";
-
 ```
 
-```c
+```csharp C#
+vmc_config = new vmc_configuration();
+
+vmc_config.model = "marshall-java-sdk";
+vmc_config.serial = "01234567";
+vmc_config.hw_ver = "01234567";
+vmc_config.manuf_code = "manuf";
+```
+
+```c C
 vmc_init()
 	__strcpy(config.model, "marshall-c-sdk-demo");
 	__strcpy(config.serial, "01234567");
 	__strcpy(config.sw_ver, "vmc app version");
 	__strcpy(config.vmc_hw_ver, “01234567”);
   __strcpy(config. vmc_manuf_code, “manuf”);
-
 ```
+</CodeGroup>
 
 The table below describes the parameters:
 
@@ -347,7 +358,7 @@ These parameters will be saved in Nayax Core. You can find them in **Operations 
 
 ## See Also
 
-<Columns cols={3}>
+<Columns cols={2}>
 <Card
   icon="link"
   title="C# & Java SDK Integration"

@@ -50,11 +50,11 @@ To enable said feature, you should set the following configurations in Nayax Cor
 •	Receipt QR Display Duration - 40
 •	Vend Flow Options - Dynamic Receipt
 
-In older SDK versions, the URL was stored in hex, so to parse it, you should <Anchor label="convert it to ASCII" target="_blank" href="https://www.rapidtables.com/convert/number/hex-to-ascii.html">convert it to ASCII</Anchor>.
+In older SDK versions, the URL was stored in hex, so to parse it, you should [convert it to ASCII](https://www.rapidtables.com/convert/number/hex-to-ascii.html).
 
 On newer ones, it would appear something as follows:
 
-```c
+```c C
 marshall-c-sdk-demo: received ereceipt: https://ereceipt.nayax.com/qr/2470412964/0123456478901234/2
 ```
 
@@ -94,18 +94,16 @@ Should the consumer take items worth less than the Default Credit amount, the co
 
 #### An example of using Incremental Authorization:
 
-Default Credit of 10.00$, Maximum Default Credit of 50.00$:
-Should the consumer take items worth more than the Default Credit amount but less than the Maximum Default Credit amount (for example, items worth 17.00$), the device would go through a 2nd authorization process for the difference between the "final price" and the Default Credit amount (7.00$):
+Default Credit of 10.00\$, Maximum Default Credit of 50.00\$:
+Should the consumer take items worth more than the Default Credit amount but less than the Maximum Default Credit amount (for example, items worth 17.00\$), the device would go through a 2nd authorization process for the difference between the "final price" and the Default Credit amount (7.00\$):
 
-* Should the 2nd authorization be approved, the consumer would be charged for the desired amount (17.00$).
+* Should the 2nd authorization be approved, the consumer would be charged for the desired amount (17.00\$).
   It would look something like this in Last Sales (one line record, in which the settlement amount is higher than the authorization amount):
 
   <Frame><img src="/images/docs/sub-flows-features/image1.png" /></Frame>
 
-* Should the 2nd authorization fail- the consumer would only be charged for the amount of the first authorization, meaning of the Default Credit (10.00$).
+* Should the 2nd authorization fail- the consumer would only be charged for the amount of the first authorization, meaning of the Default Credit (10.00\$).
   In such a case, the risk is on the machine's operator, meaning the loss of the 2nd authorization being failed would be on his end.
 
-Should the consumer have taken items worth more than the Maximum Default Credit (for example- items worth 60.00$)- it's up for the machine to send the final price to be the Maximum Default Credit, as otherwise the transaction would be cancelled.
+Should the consumer have taken items worth more than the Maximum Default Credit (for example- items worth 60.00\$)- it's up for the machine to send the final price to be the Maximum Default Credit, as otherwise the transaction would be cancelled.
 In such a case, once again, the risk is on the machine's operator should the 2nd authorization not be successful, as well as if the machine cannot charge the consumer for more than the Maximum Default Credit (meaning there's at least a $10.00 loss).
-
-<br />

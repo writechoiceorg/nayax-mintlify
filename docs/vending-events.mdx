@@ -19,9 +19,14 @@ The interface described on this section is relevant for the **Java** and **C#** 
 
 The `vend_callbacks_t` interface is designed to handle events related to vending operations.
 
-```java Java / C#
+<CodeGroup>
+```java Java
 public abstract static interface vend_callbacks_t
 ```
+```csharp C#
+public abstract static interface vend_callbacks_t
+```
+</CodeGroup>
 
 Implementing this interface allows your application to manage the lifecycle of a vending session, from initiation to settlement, and handle various statuses and commands received from Nayax's devices. Below is a list of methods available when using the `vend_callbacks_t` interface:
 
@@ -53,7 +58,7 @@ The enumeraion described on this section is relevant for the **C** SDK only.
 
 The `vmc_vend_event_e` enumeration is designed to handle events related to vending operations in the C SDK.
 
-```c
+```c C
 Enum vmc_vend_event_e
 ```
 
