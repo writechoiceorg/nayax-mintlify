@@ -24,22 +24,22 @@ paths:
   /initialize:
     post:
       x-mint:
-      content: |
-        Initiates an e-commerce transaction by sending a request to the Nayax Ecom SDK. This call is the beginning of a transaction and requests a payment page or prepares for a token-based charge. It supports various entry modes like ECOM, COF, or MOTO.
+        content: |
+          Initiates an e-commerce transaction by sending a request to the Nayax Ecom SDK. This call is the beginning of a transaction and requests a payment page or prepares for a token-based charge. It supports various entry modes like ECOM, COF, or MOTO.
 
-        **Authentication:** The request requires a JWT RSA token in the header for authentication of both VAS integrator and VAS ECOM provider. 
-        
-        **Timeout Recommendation:** It is highly recommended to implement a timeout of 60 seconds on the client side. If no callback or response is received, retry the same `/InitializeTransaction` request. The `EcomTransactionId` is valid for 5 minutes from the `/StartAuthentication` response.
-
-        Initiates an e-commerce transaction by sending a request to the Nayax Ecom SDK. This call initiates a transaction and either displays a payment page or prepares for a token-based charge.
-
-        <Note>
-          **Integration URL**
-
-          When performing your integration to the API use the stable URL, such as:
+          **Authentication:** The request requires a JWT RSA token in the header for authentication of both VAS integrator and VAS ECOM provider. 
           
-          * `https://stable-sdk-api.nayax.com/initialize`
-        </Note>
+          **Timeout Recommendation:** It is highly recommended to implement a timeout of 60 seconds on the client side. If no callback or response is received, retry the same `/InitializeTransaction` request. The `EcomTransactionId` is valid for 5 minutes from the `/StartAuthentication` response.
+
+          Initiates an e-commerce transaction by sending a request to the Nayax Ecom SDK. This call initiates a transaction and either displays a payment page or prepares for a token-based charge.
+
+          <Note>
+            **Integration URL**
+
+            When performing your integration to the API use the stable URL, such as:
+            
+            * `https://stable-sdk-api.nayax.com/initialize`
+          </Note>
       tags:
         - Payments
       summary: Initialize an E-commerce Transaction

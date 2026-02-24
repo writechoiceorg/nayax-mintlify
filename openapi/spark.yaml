@@ -145,9 +145,9 @@ paths:
 
           | Field | Type | Description |
           | --- | --- | --- |
-          | **Value** | Decimal | The price of a single unit of the product.<br><br>*   The value is taken as is (Decimal place of 0), meaning if you send value of 6.50 the value that the consumer would be charged for is 6.50, and if you send 65 the value would be 65.00) |
-          | **Code** | Integer | The Product Code as defined in your Nayax Products Map.<br><br>*   The value is taken as is (Decimal place of 0) |
-          | **Quantity** | Integer | The number of units of this product provided.<br><br>*   The value is taken as is (Decimal place of 0) |
+          | **Value** | Decimal | The price of a single unit of the product.<br/><br/>*   The value is taken as is (Decimal place of 0), meaning if you send value of 6.50 the value that the consumer would be charged for is 6.50, and if you send 65 the value would be 65.00) |
+          | **Code** | Integer | The Product Code as defined in your Nayax Products Map.<br/><br/>*   The value is taken as is (Decimal place of 0) |
+          | **Quantity** | Integer | The number of units of this product provided.<br/><br/>*   The value is taken as is (Decimal place of 0) |
 
           **Example Format**: `[{"Value": 6.50, "Code": 12, "Quantity": 3}]`
 
