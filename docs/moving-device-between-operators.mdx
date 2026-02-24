@@ -24,7 +24,7 @@ Refer to the [Security & Token](/docs/security) page of this documentation to le
 
 Use the [Move Devices](/reference/lynx/devices/move-devices-to-actor-id) endpoint to assign or move devices to the specified `actorId`. The request body should include an array of device identifiers, such as serial numbers. See the example request in nthe code block below:
 
-```curl Request
+```sh Request
 curl -X PUT "https://lynx.nayax.com/operational/api/v1/devices/move/<ACTOR_ID>" \
 -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
 -H "Content-Type: application/json" \

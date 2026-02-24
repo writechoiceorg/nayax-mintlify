@@ -14,16 +14,12 @@ This page presents how to retrieve a Machine's Last Sales using its Machine ID w
   method="get"
 />
 
-<br />
-
 <EndpointCard
   title="Generate eReceipt"
   href="/reference/lynx/ereceipt/generate-ereceipt-for-your-transaction"
   method="get"
 />
 </Columns>
-
-<br />
 
 <Warning>
 **Authentication**
@@ -37,7 +33,7 @@ To retrieve a machine's Last Sales using its Machine ID, you need to use the [Ge
 
 The code block below exemplifies the request, using the `MachineID` as a query parameter to filter the result:
 
-```curl
+```sh
 curl -X 'GET' \
   'https://lynx.nayax.com/Operational/v1/machines/<MACHINE_ID>/lastSales' \
   -H 'accept: text/plain' \
@@ -364,7 +360,7 @@ You can retrieve the corresponding machine's unique identifier.
 
 The code block below exemplifies the request, using the `DeviceSerial` as a query parameter to filter the result:
 
-```curl
+```sh
 curl -X 'POST' \
   'https://lynx.nayax.com/Operational/v1/ereceipt/generate' \
   -H 'accept: text/plain' \

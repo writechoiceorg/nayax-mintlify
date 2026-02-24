@@ -36,7 +36,7 @@ You will seee all the details of the card presented to you, this is the same dat
 
 This general endpoint will retrieve an overview of all cards, including essential details like Card ID, Card Holder Name, and Card Status. See the example query:
 
-```curl Request
+```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/cards \
      --header 'accept: application/json' \
@@ -45,7 +45,7 @@ curl --request GET \
 
 This endpoint can also retrieve details of a specific card instead of all cards by adding query parameters to the request. For example, to get the details of a card with the Card Unique Identifier "1409315030\` you can use the query in the code block below.
 
-```curl Request
+```sh Request
 curl --request GET \
      --url 'https://qa-lynx.nayax.com/operational/v1/cards?CardUniqueIdentifier=1409315030%20' \
      --header 'accept: application/json'
@@ -68,7 +68,7 @@ It fetches card details based on its display number, which is the physical card 
 
 See the code block below for an example query:
 
-```curl
+```sh
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/cards/displayNumber/{CardDisplayNumber} \
      --header 'Authorization: Bearer <token>' \
@@ -85,7 +85,7 @@ It retrieves details of a prepaid card associated with a specific card ID. Use t
 
 See the code block below for an example query:
 
-```curl Request
+```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/cards/CardID/prepaid \
      --header 'accept: application/json' \
@@ -105,18 +105,21 @@ This option fetches the current credit balance for a specific card, identified b
 
 See the code block below for an example query:
 
-```curl Request
+<CodeGroup>
+  
+```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/cards/{CardUniqueIdentifier}/credit \
      --header 'Authorization: Bearer <token>' \
      --header 'accept: application/json'
 ```
 
-```Text Response
+```json Response
 {
   "value": 5320
 }
 ```
+</CodeGroup>
 
 <Note>
   Replace `{CardUniqueIdentifier}` with the actual identifier of the card.
@@ -128,7 +131,7 @@ The response will include the creditr balance of the card.
 
 Retrieves the revalue amount associated with a specific card, identified by the card's unique identifier. See the query example below:
 
-```curl Request
+```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/cards/{CardUniqueIdentifier}/revalue \
      --header 'Authorization: Bearer <token>' \

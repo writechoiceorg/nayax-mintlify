@@ -20,7 +20,7 @@ Refer to the [Security & Token](/docs/security) page of this documentation to le
 
 Use the [Update Specific Machine Attribute](/reference/lynx/machine-attribute/update-specific-machine-attribute) endpoint to send a DEX file to a machine to update the prices and other product information.
 
-```curl Request
+```sh Request
 curl -X PUT "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/attributes/<DEVICE_ATTRIBUTE_ID>" \
 -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
 -H "Content-Type: application/json" \
@@ -31,9 +31,9 @@ curl -X PUT "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/att
 }'
 ```
 
-> 📘
->
-> Replace `<MACHINE_ID>` with the actual identifier of the machine, `<DEVICE_ATTRIBUTE_ID>` with the attribute you want to update (in this example, "900" for DEX updates), and `<NEW_VALUE>` with the updated value. Use a valid access token for `<YOUR_ACCESS_TOKEN>`.
+<Note>
+Replace `<MACHINE_ID>` with the actual identifier of the machine, `<DEVICE_ATTRIBUTE_ID>` with the attribute you want to update (in this example, "900" for DEX updates), and `<NEW_VALUE>` with the updated value. Use a valid access token for `<YOUR_ACCESS_TOKEN>`.
+</Note>
 
 * **DeviceAttributeID**: In this example, the attribute ID "900" might correspond to a DEX-related update, such as sending new price data.
 * **MachineID**: Specifies the machine that is receiving the DEX data update.
@@ -66,6 +66,3 @@ Where:
 * **DeviceAttributeReadOnlyBit**: Indicates whether the attribute is read-only (`false` in this case).
 * **MachineAttributeRef**: A reference identifier for the machine attribute.
 * **MachineRef**: The reference identifier for the machine.
-
-<br />
-

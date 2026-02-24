@@ -31,7 +31,8 @@ Refer to the [Security & Token](/docs/security) page of this documentation to le
 
 Use the [Create New Machine](/reference/lynx/machines/create-new-machine) endpoint to create a new machine. The following code block exemplifies the request to create a new machine:
 
-```curl Request
+<CodeGroup>
+```sh Request
 curl -X POST "https://lynx.nayax.com/operational/api/v1/machines" \
 -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
 -H "Content-Type: application/json" \
@@ -50,7 +51,7 @@ curl -X POST "https://lynx.nayax.com/operational/api/v1/machines" \
 }'
 ```
 
-```Text Response
+```json Response
  {
     "MachineID": 942488501,
     "ActorID": 2001492652,
@@ -132,6 +133,7 @@ curl -X POST "https://lynx.nayax.com/operational/api/v1/machines" \
   }
 ]
 ```
+</CodeGroup>
 
 You need to provide various mandatory fields in the body parameters, such as:
 

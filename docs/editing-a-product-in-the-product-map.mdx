@@ -34,7 +34,7 @@ Refer to the [Security & Token](/docs/security) page of this documentation to le
 
 Use the [Update a Machine Product](/reference/lynx/machine-products/update-a-machine-product) endpoint to update the product details, such as changing the `CashPrice`. Keep other values unchanged, including the `MDBCode`.
 
-```curl Request
+```sh Request
 curl -X PUT "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/machineProducts/<PRODUCT_ID>" \
 -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
 -H "Content-Type: application/json" \

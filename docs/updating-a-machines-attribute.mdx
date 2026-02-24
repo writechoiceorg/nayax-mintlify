@@ -6,11 +6,19 @@ import {EndpointCard} from "/snippets/EndpointCard.jsx";
 
 This page uses the Lynx API to update an attribute of a machine. In the step-by-step guide below, you'll use the following endpoint:
 
+<Columns cols={2}>
 <EndpointCard
   title="Bulk Update Machine Attributes"
   href="/reference/lynx/machine-attribute/bulk-update-machine-attributes"
   method="put"
 />
+
+<EndpointCard
+  title="Update Specific Machine Attribute"
+  href="/reference/lynx/machine-attribute/update-specific-machine-attribute"
+  method="put"
+/>
+</Columns>
 
 <Warning>
 **Authentication**
@@ -22,7 +30,7 @@ Refer to the [Security & Token](/docs/security) page of this documentation to le
 
 Use the [Bulk Update Machine Attributes](/reference/lynx/machine-attribute/bulk-update-machine-attributes) endpoint to update specific machine attributes. Provide the `MachineID` as a path parameter, along with the attributes you want to change as body parameters, as exemplified below:
 
-```curl Request
+```sh Request
 curl -X PUT "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/attributes" \
 -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
 -H "Content-Type: application/json" \
@@ -35,7 +43,6 @@ curl -X PUT "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/att
   "DeviceAttributeGroup": "General",
   "DeviceAttributeReadOnlyBit": false
 }'
-
 ```
 
 <Note>

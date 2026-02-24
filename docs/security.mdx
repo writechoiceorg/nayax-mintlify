@@ -19,32 +19,28 @@ Access tokens can be found through the Nayax Back Office (Nayax Core). Follow th
 1. **Log in to Nayax Core** using your username and password.
 2. **Navigate to Account Settings** by clicking on your username at the top right corner, and selecting the **Account Settings** option.
 
-<Frame><img src="/images/docs/security/image1.png" /></Frame>
+    <Frame><img src="/images/docs/security/image1.png" /></Frame>
 
 3. Access the **Security and Login** Tab.
 
-<Frame><img src="/images/docs/security/image2.png" /></Frame>
+    <Frame><img src="/images/docs/security/image2.png" /></Frame>
 
 4. Navigate down to the **User Tokens** section.
 
-<Frame><img src="/images/docs/security/image3.png" /></Frame>
+    <Frame><img src="/images/docs/security/image3.png" /></Frame>
 
 4. Click the **Show Token** button next to an existing token to show it, and copy the token for use in API calls.
 
-<Frame><img src="/images/docs/security/image4.png" /></Frame>
+    <Frame><img src="/images/docs/security/image4.png" /></Frame>
 
 ## Using the Token in API Requests
 
 Include the access token in the `Authorization` header for each API request. Here’s an example `curl` command:
 
-```curl
+```sh
 curl -X GET "https://lynx.nayax.com/operational/api/v1/devices" \
 -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
 -H "Content-Type: application/json"
 ```
 
 * Replace `<YOUR_ACCESS_TOKEN>` with your actual token retrieved from Nayax Core.
-
-
-
-<br />

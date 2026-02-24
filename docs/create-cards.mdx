@@ -46,7 +46,7 @@ The sections below will guide you through creating a card using any of these opt
 
 The V1 option is more straightforward, with only the essential fields for basic card creation and minimal optional fields. To create the card, send a **POST** request to the [Create Virtual Card](/reference/lynx/cards/create-virtual-card) endpoint, filling in the card details in the body parameters. See the example in the code block below:
 
-```curl
+```sh
 curl --request POST \
      --url https://qa-lynx.nayax.com/operational/v1/cards \
      --header 'accept: application/json' \
@@ -107,7 +107,7 @@ A successful request will return a JSON object containing the details of the new
 The V2 option provides extended functionality, including additional fields for detailed customization. This version lets you specify card type, physical type, membership level, activation and expiration dates, and group limits.
 To create the card, send a **POST** request to the[ Create New Card](/reference/lynx/cards/create-new-card) endpoint, filling in the card details in the body parameters. See the example in the code block below:
 
-```curl
+```sh
 curl --request POST \
      --url https://qa-lynx.nayax.com/operational/v2/cards \
      --header 'accept: application/json' \

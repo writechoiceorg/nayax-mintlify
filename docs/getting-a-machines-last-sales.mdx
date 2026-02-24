@@ -33,7 +33,7 @@ Refer to the [Security & Token](/docs/security) page of this documentation to le
 
 You'll use the [Get Last Sales for Machine](/reference/lynx/machines/get-last-sales-for-machine-by-machineid) endpoint, adding the machine's unique identifier as a path parameter to retrieve details about the respective machine. This lets you view the latest sales activity associated with the searched machine. See the example request in the code block below:
 
-```curl Request
+```sh Request
 curl -X GET "https://lynx.nayax.com/operational/api/v1/machines/<MachineID>/lastSales" \
 -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
 -H "Content-Type: application/json"

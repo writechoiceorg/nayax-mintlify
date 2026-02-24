@@ -24,7 +24,7 @@ To retrieve a machine's ID using its serial number, you need to use the [Get All
 
 The code block below exemplifies the request, using the `DeviceSerial` as a query parameter to filter the result:
 
-```curl
+```sh
 curl -X GET "https://lynx.nayax.com/operational/api/v1/machines?DeviceSerial=<DEVICE_SERIAL_NUMBER>" \
 -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
 -H "Content-Type: application/json"

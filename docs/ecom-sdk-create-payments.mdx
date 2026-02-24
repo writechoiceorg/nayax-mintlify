@@ -14,6 +14,7 @@ This allows you to focus on providing the `PaymentData` and handling the payment
 
 The `startPayment` method  requires a `PaymentData `object that encapsulates all the necessary details for the transaction.
 
+<CodeGroup>
 ```kotlin Kotlin
 data class TransactionData(
     val merchantTranId: String,
@@ -92,6 +93,7 @@ public struct CardHolderInfo {
     }
 }
 ```
+</CodeGroup>
 
 Key parameters include:
 
@@ -110,7 +112,6 @@ Key parameters include:
 | `showSaveCardConsent` | Boolean (Conditional)                                                 | If `entryMode` is `COF`, determines whether the "Ask for Consent" question appears on the payment page for saving card details.                                                                                                **Important**: Cardholder approval is mandatory for a valid Nayax token. This parameter is strictly for credit card-only flows; if other payment methods are available, the transaction will be automatically declined.                                                 |
 | `cardHolderInfo`      | Object containing `cardHolderUniqId`and `cardholderEmail`  (Optional) | Provides cardholder details, especially relevant for tokenized transactions.                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
-<br />
 
 ## See Also
 

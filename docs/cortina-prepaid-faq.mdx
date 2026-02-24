@@ -6,7 +6,7 @@ Find quick answers and step-by-step guides for the most common questions about *
 
 ### Are all of the calls directed to the same TCP port?
 
-<Accordion title="Answer" icon="fa-info-circle">
+<Accordion title="Answer" icon="info-circle">
   Yes, that is the most common and standard setup for this type of integration.
 
   All communication calls discussed (e.g., StartSession, Sale, Authorization, etc.) are typically directed to the same TCP port on your server, as specified in the base URL provided to Nayax.
@@ -14,7 +14,7 @@ Find quick answers and step-by-step guides for the most common questions about *
 
 ### How can we direct the calls to a particular port?
 
-<Accordion title="Answer" icon="fa-info-circle">
+<Accordion title="Answer" icon="info-circle">
   You direct the calls to a specific port by appending the port number, preceded by a colon (`:`), to the customer's base URL.
 
   | Component          | Example            |
@@ -28,7 +28,7 @@ Find quick answers and step-by-step guides for the most common questions about *
 
 ### How can we track a transaction?
 
-<Accordion title="Answer" icon="fa-info-circle">
+<Accordion title="Answer" icon="info-circle">
   Your primary identifier for tracking a transaction on your system is the **Transaction ID** field.
 
   You can send us any Transaction ID you desire, provided it meets the following criteria:
@@ -48,7 +48,7 @@ Find quick answers and step-by-step guides for the most common questions about *
 
 ### How do I identify which of my machines the transaction is coming from?
 
-<Accordion title="Answer" icon="fa-info-circle">
+<Accordion title="Answer" icon="info-circle">
   You can identify the machine from which the transaction originated by checking the **`Sale`request** data.
 
   ### 1. Recommended Method: `MachineInfo`
@@ -71,7 +71,7 @@ Find quick answers and step-by-step guides for the most common questions about *
 
 ### What are the endpoints for each of the commands?
 
-<Accordion title="Answer" icon="fa-info-circle">
+<Accordion title="Answer" icon="info-circle">
   Each method has its own endpoint, as specified in the URL provided to Nayax.
   The structure is: `(customer's URL)/Cortina/ followed by the command/integration path`.
 
@@ -101,7 +101,7 @@ Find quick answers and step-by-step guides for the most common questions about *
 
 ### Where do I get the consumer's card details?
 
-<Accordion title="Answer" icon="fa-info-circle">
+<Accordion title="Answer" icon="info-circle">
   The consumer's card details are found within the **`CardData`** object, which is included in the **`Sale`request**.
 
   <Frame><img src="/images/docs/cortina-prepaid-faq/image4.png" /></Frame>

@@ -49,7 +49,8 @@ Refer to the [Security & Token](/docs/security) page of this documentation to le
 
 Using the [Get Specific Machine Basic Info](/reference/lynx/machines/get-specific-machine-basic-info) you can get the details of a machine with a specific `MachineID`. See an example request in the code block below:
 
-```curl Request
+<CodeGroup>
+```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/machines/{MachineID} \
      --header 'Authorization: BEARER-TOKEN' \
@@ -137,6 +138,7 @@ curl --request GET \
   }
 }
 ```
+</CodeGroup>
 
 Insert the `MachineID` in the path param of the request.
 
@@ -144,7 +146,8 @@ Insert the `MachineID` in the path param of the request.
 
 Using the [Get Specific Machine Basic Info by Device](/reference/lynx/machines/get-specific-machine-basic-info-by-device) endpoint, you can retrieve the details of a machine associated with a specific DeviceSerialNumber. See an example request in the code block below:
 
-```curl Request
+<CodeGroup>
+```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/devices/{DeviceSerialNumber}/machine \
      --header 'Authorization: BEARER-TOKEN' \
@@ -232,6 +235,7 @@ curl --request GET \
   }
 }
 ```
+</CodeGroup>
 
 Insert the DeviceSerialNumber in the request path parameter to fetch the machine details associated with that device.
 
@@ -239,7 +243,8 @@ Insert the DeviceSerialNumber in the request path parameter to fetch the machine
 
 Using the [Get Specific Machine Basic Info by VPOS](/reference/lynx/machines/get-specific-machine-basic-info-by-vpos) endpoint, you can retrieve the details of a machine associated with a specific `VPOSSerial`. See an example request in the code block below:
 
-```curl Request
+<CodeGroup>
+```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/vpos/{VPOSSerial}/machine \
      --header 'Authorization: BEARER-TOKEN' \
@@ -327,6 +332,7 @@ curl --request GET \
   }
 }
 ```
+</CodeGroup>
 
 Insert the `VPOSSerial` in the path parameter of the request to fetch the machine details associated with that VPOS device.
 
@@ -334,7 +340,7 @@ Insert the `VPOSSerial` in the path parameter of the request to fetch the machin
 
 Using the [Get All Machine Basic Info](/reference/lynx/machines/get-all-machine-basic-info) endpoint, you can retrieve basic information for all machines, with optional filtering by various parameters. See an example request in the code block below:
 
-```curl Request
+```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/machines \
      --header 'Authorization: BEARER-TOKEN' \

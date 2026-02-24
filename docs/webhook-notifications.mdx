@@ -30,7 +30,7 @@ See the examples for each type of request below:
     This webhook communicates whether a transaction was authorized or declined by the card issuer.
 
     The following example shows the structure of a standard Sale or Authorization webhook request:
-
+    <CodeGroup>
     ```json Approved (Authorized)
     {
       "CardInfo": {
@@ -134,13 +134,15 @@ See the examples for each type of request below:
       "EReceiptUrl": null
     }
     ```
+    </CodeGroup>
+
   </Tab>
 
   <Tab title="Refund">
     This webhook confirms a successful refund or alerts you to a `RefundFailed` status, ensuring your ledger remains in sync with the actual movement of funds.
 
     The following example shows the structure of a Refund webhook request:
-
+    <CodeGroup>
     ```json Approved (Refunded)
     {
       "CardInfo": {
@@ -244,13 +246,15 @@ See the examples for each type of request below:
       "EReceiptUrl": null
     }
     ```
+    </CodeGroup>
+
   </Tab>
 
   <Tab title="Void/Cancel">
     This webhook cancels a transaction before settlement occurs. This notification confirms whether the void was successful or if the request failed.
 
     The following example shows the structure of a Void or Cancellation webhook request:
-
+    <CodeGroup>
     ```json Approved (Cancelled)
     {
       "CardInfo": {
@@ -354,13 +358,15 @@ See the examples for each type of request below:
       "EReceiptUrl": null
     }
     ```
+    </CodeGroup>
+
   </Tab>
 
   <Tab title="Incremental Authorization">
     This webhook confirms whether an additional amount requested against an existing authorization was approved or declined, allowing you to manage risk in real time.
 
     The following example shows the structure of an Incremental Authorization webhook request:
-
+    <CodeGroup>
     ```json Approved (Authorized)
     {
       "CardInfo": {
@@ -464,6 +470,8 @@ See the examples for each type of request below:
       "EReceiptUrl": null
     }
     ```
+    </CodeGroup>
+
   </Tab>
 </Tabs>
 

@@ -40,19 +40,16 @@ export const EndpointCard = ({ method = "API", title, children, href, arrow = tr
   };
   const content = (
     <div className="group flex items-center gap-4 border border-gray-200 dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-[#1e1e1e] hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-md transition-all cursor-pointer">
-      {/* Method badge */}
-      <div className="shrink-0">
-        <MethodBadge method={method} />
-      </div>
-
       {/* Text content */}
       <div className="flex-1 min-w-0">
         <p className="font-semibold text-gray-900 dark:text-white text-sm leading-snug">{title}</p>
         {children && <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 line-clamp-2">{children}</p>}
       </div>
 
-      {/* Arrow */}
-      {arrow && <Icon icon="arrow-up-right" />}
+      {/* Method badge */}
+      <div className="shrink-0">
+        <MethodBadge method={method} />
+      </div>
     </div>
   );
 

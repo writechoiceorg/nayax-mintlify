@@ -45,7 +45,7 @@ Refer to the [Security & Token](/docs/security) page of this documentation to le
 
 Use the Approve Payment Refund endpoint to approve the refund. The code block below shows the request object and its body parameters:
 
-```curl Request
+```sh Request
 curl --request POST \
      --url https://qa-lynx.nayax.com/operational/v1/payment/refund-approve \
      --header 'accept: application/json' \
@@ -166,7 +166,7 @@ See the table below for more details on each parameter:
 
 To decline a refund, use the [Decline a Payment Refund]()  endpoint. The code block below displays the request object and its body parameters.
 
-```curl Request
+```sh Request
 curl --request POST \
      --url https://qa-lynx.nayax.com/operational/v1/payment/refund-decline \
      --header 'accept: application/json' \

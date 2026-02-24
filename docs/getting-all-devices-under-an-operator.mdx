@@ -2,6 +2,8 @@
 title: "Retrieve Device Information"
 ---
 
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
 In Nayax Core, devices have various attributes, such as the device's operator, model or ID, and status. These can all be seen in the **Devices** menu, which you can access in the following way:
 
 1. In your Dashboard, go to **Administration >  Devices**.
@@ -10,8 +12,6 @@ In Nayax Core, devices have various attributes, such as the device's operator, m
 4. Open the **General Information** tab.
 
 <Frame><img src="/images/docs/getting-all-devices-under-an-operator/image1.png" /></Frame>
-
-<br />
 
 Here, you can see the General information about the selected device.
 
@@ -42,7 +42,8 @@ Refer to the [Security & Token](/docs/security) page of this documentation to le
 
 Using the [Get Device by DeviceID](/reference/lynx/devices/get-device-by-deviceid) endpoint, providing it with the `deviceID` as a path parameter, you can retrieve that device's details. See an example request and response  in the code block below:
 
-```curl Request
+<CodeGroup>
+```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/devices/{DeviceID} \
      --header 'accept: application/json'
@@ -99,6 +100,7 @@ curl --request GET \
   }
 }
 ```
+</CodeGroup>
 
 <Note>
 **Path Params**
@@ -110,7 +112,8 @@ Replace `<DeviceID>` with the actual identifier of the device.
 
 Using the [Get All Devices]()  endpoint, you can retrieve a list of available devices. The code block below shows an example request and response.
 
-```curl Request
+<CodeGroup>
+```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/devices \
      --header 'accept: application/json'
@@ -169,6 +172,7 @@ curl --request GET \
   }
 ]
 ```
+</CodeGroup>
 
 This endpoint allows you to use filters in the query parameters. See the table below for all the available query params:
 

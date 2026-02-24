@@ -33,17 +33,19 @@ In this guide we will explore the **POST** method to add credit to a card. But y
 
 To add credit to a card you can use the **POST** method on the [Add Credit to a Card](/reference/lynx/cards/add-credit-to-a-card) endpoint. Sending the card's Unique Identifier in the URL. See the example query below:
 
-```curl Request
+<CodeGroup>
+```sh Request
 curl --request POST \
      --url 'https://qa-lynx.nayax.com/operational/v1/cards/{CardUniqueIdentifier}/credit/add?CardCredit=50&CreditChangeRemarks=Adding%20credit' \
      --header 'accept: application/json'
 ```
 
-```Text Response
+```json Response
 {
   "value": 50
 }
 ```
+  </CodeGroup>
 
 <Note>
   Replace `{CardUniqueIdentifier}` with the actual identifier of the card.
@@ -61,14 +63,14 @@ Once the request to add the card credit is succesful, you can go to Nayax Core a
 1. Access your Nayax Core Dashboard
 2. On the top menu, navigate to Consumers > Card Management
 
-   <Frame><img src="/images/docs/add-credit-to-card/image1.png" /></Frame>
+    <Frame><img src="/images/docs/add-credit-to-card/image1.png" /></Frame>
 3. Search for the card which the credit was added and select it.
 
-<Frame><img src="/images/docs/add-credit-to-card/image2.png" /></Frame>
+    <Frame><img src="/images/docs/add-credit-to-card/image2.png" /></Frame>
 
 4. Open the **Change Credit** tab and check the **Credit History** section.
 
-   <Frame><img src="/images/docs/add-credit-to-card/image3.png" /></Frame>
+    <Frame><img src="/images/docs/add-credit-to-card/image3.png" /></Frame>
 
 There you will be able to see Credit History of the card and find the credit added through the Lynx API, and match the amount or remark to the ones sent in the request.
 

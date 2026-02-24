@@ -22,7 +22,7 @@ Refer to the [Security & Token](/docs/security) page of this documentation to le
 
 Use the [Update Device](ref:/update-device-by-deviceid) endpoint to update the device's status. You need to provide the `DeviceID`, `ActorID` (operator ID), and the new status flag. See an example request in the code block below:
 
-```curl
+```sh
 curl -X PUT "https://lynx.nayax.com/operational/api/v1/devices/<DEVICE_ID>" \
 -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
 -H "Content-Type: application/json" \

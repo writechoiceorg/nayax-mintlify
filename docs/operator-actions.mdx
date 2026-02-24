@@ -33,7 +33,8 @@ Refer to the [Security & Token](/docs/security) page of this documentation to le
 
 [Get Actor Details by ActorID ](/reference/lynx/actors/get-actor-details-by-actorid)retrieves comprehensive information about a specific actor. This endpoint provides detailed attributes, including profile information and associated configurations, for the actor identified by the provided ActorID.
 
-```curl Request
+<CodeGroup>
+```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/actors/{ActorID} \
      --header 'Authorization: BEARER-TOKEN' \
@@ -104,6 +105,7 @@ curl --request GET \
   }
 }
 ```
+</CodeGroup>
 
 <Note>
 **path Params**
@@ -117,7 +119,8 @@ The response will have the details of the requested operator.
 
 The [Update Operator/Sub-Operator](/reference/lynx/actors/update-operatorsub-operator) endpoint allows to edit the inforamtion of the specified operator.
 
-```curl Request
+<CodeGroup>
+```sh Request
 curl --request PUT \
      --url https://qa-lynx.nayax.com/operational/v1/actors/{ActorID} \
      --header 'Authorization: BEARER-TOKEN' \
@@ -203,6 +206,7 @@ curl --request PUT \
   }
 }
 ```
+</CodeGroup>
 
 The body parameters are the same as used when [Creating an operator](/docs/create-operator).
 

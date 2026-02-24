@@ -39,7 +39,7 @@ Refer to the [Security & Token](/docs/security) page of this documentation to le
 
 You can add a new product to an operator's catalog using the [Create New Operator Product ](/reference/lynx/products/create-new-operator-product) endpoint. See an example request in the code block below:
 
-```curl Request
+```sh Request
 curl --request POST \
      --url https://qa-lynx.nayax.com/operational/v1/operators/{OperatorID}/products \
      --header 'Authorization: BEARER-TOKEN' \
@@ -124,7 +124,7 @@ You can create multiple products for a single machine using the [Create Machine 
 
 <br />
 
-```curl Request
+```sh Request
 curl -X POST "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/machineProducts" \
 -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
 -H "Content-Type: application/json" \
@@ -262,7 +262,7 @@ Where:
 
 You can use the [Update Specific Product](/reference/lynx/products/update-specific-product) endpoint to change a product's details by adding the product's `NayaxProductID` in the path params and the information to change in the body request. As in the example request below:
 
-```curl Request
+```sh Request
 curl --request PUT \
      --url https://qa-lynx.nayax.com/operational/v1/products/{NayaxProductID} \
      --header 'Authorization: BEARER-TOKEN' \

@@ -20,7 +20,7 @@ Our release notes are structured into three primary categories to help you evalu
 
 This version includes the following improvements, fixes, and known issues for the SDK:
 
-<Accordion title="Improvements" icon="fa-rocket">
+<Accordion title="Improvements" icon="rocket">
   ### **Automated Currency Code Management (#7473)**
 
   The host application is no longer responsible for manually setting the currency code. The SDK now manages this directly from the Nayax Core, ensuring that the correct currency parameters are always applied without manual intervention. This change reduces integration complexity and prevents potential mismatches in currency data.
@@ -38,7 +38,7 @@ This version includes the following improvements, fixes, and known issues for th
   Host applications can now manage the reader serial port locally through a configuration file located at `/etc/oti_kiosk/init.cfg`. By defining the `READER_SERIAL_PORT` attribute (e.g., `READER_SERIAL_PORT=/dev/ttyS0`), the SDK can pinpoint the hardware interface immediately.
 </Accordion>
 
-<Accordion title="Fixes" icon="fa-wrench">
+<Accordion title="Fixes" icon="wrench">
   ### **Event Delivery and Reader Stability (#7443, #7497)**
 
   Fixed an intermittent issue where [`ReaderMessageEvent`](/docs/reader-messages) would stop arriving at the host application. Additionally, we resolved a connectivity bug where the EMV Core was unable to reconnect to a serial reader following a POS firmware update.
@@ -52,7 +52,7 @@ This version includes the following improvements, fixes, and known issues for th
   Fixed an issue in the previous distribution where incorrect sample application source files were included. The SDK v1.4 package now contains the verified and updated source code.
 </Accordion>
 
-<Accordion title="Known Issues" icon="fa-exclamation-triangle">
+<Accordion title="Known Issues" icon="exclamation-triangle">
   ### **Offline Acceptance Limitation (#6918)**
 
   The `PMT_ACCEPT_OFFLINE` command currently only functions for DEMO purposes. Transactions processed under this flag are not yet sent to the server and will remain local to the device until a future update.
@@ -74,7 +74,7 @@ This version includes the following improvements, fixes, and known issues for th
 
 This version includes the following improvements and known issues for the SDK:
 
-<Accordion title="Improvements" icon="fa-rocket">
+<Accordion title="Improvements" icon="rocket">
   ### **e-Receipt and Remote Settlement Support (#6782, #7411)**
 
   The SDK now supports e-Receipts and Remote (Deferred) Settlement. The [`TransactionComplete`](/docs/event-callbacks) API has been updated to return `additional_parameters`, allowing for a decoupled settlement flow where capture and final settlement occur independently across systems via a server-to-server API.
@@ -102,7 +102,7 @@ This version includes the following improvements and known issues for the SDK:
   Logs now include a date prefix (e.g., `31-23:59:59 INFO [APP3]`) for better chronological tracking. Furthermore, a new TMS "Upload" command for the `TRACE` file-name allows for the remote retrieval of trace folders from the reader.
 </Accordion>
 
-<Accordion title="Fixes" icon="fa-wrench">
+<Accordion title="Fixes" icon="wrench">
   ### **Offline Stability and Display Logic (#7385, #7371)**
 
   Fixed a UI synchronization issue where a `PreAuthorize` command initiated without a network connection would incorrectly display "DECLINED" before switching to "SUCCESS" once the network recovered. We also resolved a critical crash occurring when calling `PreAuthorize` multiple times while offline.
@@ -120,7 +120,7 @@ This version includes the following improvements and known issues for the SDK:
   \*\* The `PayTransaction` API is now officially deprecated. Please migrate to `PreAuthorize` and `ConfirmTransaction`.
 </Accordion>
 
-<Accordion title="Known Issues" icon="fa-exclamation-triangle">
+<Accordion title="Known Issues" icon="exclamation-triangle">
   ### **Offline Acceptance Limitation (#6918)**
 
   The `PMT_ACCEPT_OFFLINE` command currently only functions for DEMO purposes. Transactions processed under this flag are not yet sent to the server and will remain local to the device.
@@ -136,7 +136,7 @@ This version includes the following improvements and known issues for the SDK:
 
 This version includes the following improvements and known issues for the SDK:
 
-<Accordion title="Improvements" icon="fa-rocket">
+<Accordion title="Improvements" icon="rocket">
   ### **Official Firmware Releases (#6813, #7165, #7157)**
 
   This version includes the official release of UNO-8 Firmware (v54227), which addresses previous issues with tokenization and closed-loop recognition. Additionally, the UNO-mini Firmware (v071514) is now included as a beta release.
@@ -144,7 +144,7 @@ This version includes the following improvements and known issues for the SDK:
   The new UNO-mini firmware introduces advanced debugging capabilities. When activated via configuration (Tag DFA276), the right-most LED will blink rapidly to indicate the debug state is active.
 </Accordion>
 
-<Accordion title="Fixes" icon="fa-wrench">
+<Accordion title="Fixes" icon="wrench">
   ### **Serial Reader Communication Stability**
 
   Fixed a critical communication bug affecting serial readers that caused the link between the EMV Core and the hardware to fail. Connectivity is now more resilient during extended operations.
@@ -158,7 +158,7 @@ This version includes the following improvements and known issues for the SDK:
   Fixed a resource leak where network sockets were occasionally left open and unused. This optimization ensures better system performance and prevents the SDK from exhausting available network handles.
 </Accordion>
 
-<Accordion title="Known Issues" icon="fa-exclamation-triangle">
+<Accordion title="Known Issues" icon="exclamation-triangle">
   ### **Power Voltage Requirement (UNO-mini)**
 
   The UNO-mini requires a stable power supply of at least 4.5V. Operation below this threshold may cause the device to enter an inconsistent state, preventing correct hardware functionality.
@@ -182,7 +182,7 @@ This version includes the following improvements and known issues for the SDK:
 
 This version includes the following improvements and known issues for the SDK:
 
-<Accordion title="Improvements" icon="fa-rocket">
+<Accordion title="Improvements" icon="rocket">
   ### **GetAttribute API Command (#71156) (Android Only)**
 
   We’ve added the `GetAttribute` command to the API to allow for easier retrieval of device properties. This simplifies your integration by providing direct access to metadata through a single command, which can be tested using the new ‘Config’ tab in the Sample application.
@@ -206,7 +206,7 @@ This version includes the following improvements and known issues for the SDK:
   The SDK now automatically includes the **Reader configuration name** in the version data sent to the server. This provides better visibility into active device settings during remote troubleshooting.
 </Accordion>
 
-<Accordion title="Fixes" icon="fa-wrench">
+<Accordion title="Fixes" icon="wrench">
   ### **Log Truncation and Display (#6960, #7136)**
 
   Fixed an intermittent issue where log lines were truncated at the end. We also resolved a bug where the Left LED failed to blink during the device's idle state, ensuring proper visual status indication.
@@ -230,7 +230,7 @@ This version includes the following improvements and known issues for the SDK:
   Updated default log levels to include server calls/responses and fixed the 'Thank you' message display, which previously appeared incorrectly after a cancelled or timed-out transaction.
 </Accordion>
 
-<Accordion title="Known Issues" icon="fa-exclamation-triangle">
+<Accordion title="Known Issues" icon="exclamation-triangle">
   ### **Offline Acceptance Limitation (#6918)**
 
   The `PMT_ACCEPT_OFFLINE` command currently only functions for DEMO purposes. Transactions processed under this flag are not yet sent to the server and remain local to the device.
@@ -264,7 +264,7 @@ This version includes the following improvements and known issues for the SDK:
 
 This version includes the following improvements and known issues for the SDK:
 
-<Accordion title="Improvements" icon="fa-rocket">
+<Accordion title="Improvements" icon="rocket">
   ### **Mifare UID Support in GetCardToken (#6550)**
 
   The [`GetCardToken`](/docs/payment-1) command has been updated to return the Mifare UID. This improvement allows for more precise identification of Mifare-based cards during the tokenization process, providing consistent card data across different card types.
@@ -284,7 +284,7 @@ This version includes the following improvements and known issues for the SDK:
   > **Note:** For Linux, this feature is currently listed as a known limitation in this version.
 </Accordion>
 
-<Accordion title="Fixes" icon="fa-wrench">
+<Accordion title="Fixes" icon="wrench">
   ### **Closed Loop UID Reporting (#6980)**
 
   Fixed an issue where the UID for closed loop cards was missing from the [`TransactionComplete`](/docs/event-callbacks) event. The SDK now correctly and consistently returns the UID upon transaction completion.
@@ -302,7 +302,7 @@ This version includes the following improvements and known issues for the SDK:
   Fixed several logic issues related to the `PRE_AUTH_AMOUNT` parameter to ensure more reliable pre-authorization processing within the Android environment.
 </Accordion>
 
-<Accordion title="Known Issues" icon="fa-exclamation-triangle">
+<Accordion title="Known Issues" icon="exclamation-triangle">
   ### **Offline Acceptance Limitation (#6918)**
 
   The `PMT_ACCEPT_OFFLINE` command currently only functions for DEMO purposes. Transactions processed under this flag are not yet sent to the server and remain local to the device.
@@ -342,7 +342,7 @@ This version includes the following improvements and known issues for the SDK:
 
 This version includes the following improvements and known issues for the SDK:
 
-<Accordion title="Improvements" icon="fa-rocket">
+<Accordion title="Improvements" icon="rocket">
   ### **New API Commands and Continuous Polling (#6550)**
 
   We have introduced the `GetCardToken` API command and added support for Continuous Polling during `Pre-Authorize` and `Pay` operations. This allows the reader to remain in an active polling state, improving the user experience for sequential transaction attempts and enabling expanded token-based integrations.
@@ -368,7 +368,7 @@ This version includes the following improvements and known issues for the SDK:
   The SDK now allows for the retrieval of CLP card UIDs even in environments without a network connection. This functionality is active when `CLP_MIFARE_ENABLED` is set to `2`.
 </Accordion>
 
-<Accordion title="Fixes" icon="fa-wrench">
+<Accordion title="Fixes" icon="wrench">
   ### **Offline Stability and Logic (#6919, #6938)**
 
   Fixed a critical issue where the EMV Core would crash when no internet connection was detected. We also updated the [`Void`](/docs/payment-1) command logic: calling [`Void`](/docs/payment-1) after a [`Pre-Authorize`](/docs/payment-1) or `Pay` no longer incorrectly triggers a [`Cancel Transaction`](/docs/payment-1), allowing a new transaction to start independently.
@@ -382,7 +382,7 @@ This version includes the following improvements and known issues for the SDK:
   Fixed a bug in EMV Core v0.8.516 where the system ignored the `READER_SERIAL_PORT` setting and defaulted to `/dev/ttyACM0`. The SDK now correctly respects defined local serial port settings.
 </Accordion>
 
-<Accordion title="Known Issues" icon="fa-exclamation-triangle">
+<Accordion title="Known Issues" icon="exclamation-triangle">
   ### **USB Reader Exclusive Support (Android Only)**
 
   This version of the Android SDK currently only supports USB readers. Support for RS232 (Serial) readers is planned for a future release.
@@ -410,7 +410,7 @@ This version includes the following improvements and known issues for the SDK:
 
 This version includes the following improvements and known issues for the SDK:
 
-<Accordion title="Improvements" icon="fa-rocket">
+<Accordion title="Improvements" icon="rocket">
   ### **Android Platform Launch (Android Only)**
 
   We are excited to announce the first official release of the SDK for the Android platform. This version establishes the foundational architecture for payment processing, device communication, and independent service management on Android-based environments.
@@ -428,7 +428,7 @@ This version includes the following improvements and known issues for the SDK:
   We have added the [`GetAttribute()`](/docs/remote-management) command to the API, allowing host applications to retrieve configuration attributes directly from the SDK. This ensures the host can always verify the active configuration state in real-time.
 </Accordion>
 
-<Accordion title="Fixes" icon="fa-wrench">
+<Accordion title="Fixes" icon="wrench">
   ### **Socket and File System Optimization (Linux Only)**
 
   The EMV Core and Test application now use Internal (Unix domain) sockets by default for more efficient local communication. Additionally, the EMV Core now automatically generates a default `CONNECT.CFG` file if it is missing from the `etc` folder.
@@ -438,7 +438,7 @@ This version includes the following improvements and known issues for the SDK:
   Fixed an issue where the TMS command `GET_Production_Info` would fail, ensuring that production metadata can be retrieved reliably from the device.
 </Accordion>
 
-<Accordion title="Known Issues" icon="fa-exclamation-triangle">
+<Accordion title="Known Issues" icon="exclamation-triangle">
   ### **USB Reader Exclusive Support (Android Only)**
 
   The initial Android release exclusively supports USB readers. Support for RS232 (Serial) reader configurations is currently in development.
@@ -468,7 +468,7 @@ This version includes the following improvements and known issues for the SDK:
 
 This version includes the following improvements, fixes, and known issues for the SDK:
 
-<Accordion title="Improvements" icon="fa-rocket">
+<Accordion title="Improvements" icon="rocket">
   ### **UART Communication and Mifare Support**
 
   This version includes significant improvements to UART communication stability. We have also enhanced the support for Closed Loop Mifare transactions by adding compatibility for Mifare Ultralight (identified as ‘U’) and supporting 7-byte UIDs.
@@ -476,7 +476,7 @@ This version includes the following improvements, fixes, and known issues for th
   > **Note:** For Closed Loop Mifare to function correctly, the reader must be configured with specific tags: **Enable Technology (DF 4F)** must include Mifare, and **Return UID (DF 0D)** must be set to `0x01`.
 </Accordion>
 
-<Accordion title="Fixes" icon="fa-wrench">
+<Accordion title="Fixes" icon="wrench">
   ### **Config Response Parsing (#6560)**
 
   Fixed an issue where an empty line in the `CON_CONFIG` response would trigger a 'failed to read line' error. The parser now handles empty lines gracefully without interrupting the configuration process.
@@ -488,7 +488,7 @@ This version includes the following improvements, fixes, and known issues for th
   **Guidance:** Developers should use the [`GetStatus()`](/docs/remote-management) command to verify if the terminal is ready. If the device is currently polling for a card, [`GetStatus()`](/docs/remote-management) will return the `PaymentTransaction` status.
 </Accordion>
 
-<Accordion title="Known Issues" icon="fa-exclamation-triangle">
+<Accordion title="Known Issues" icon="exclamation-triangle">
   ### **Transaction Completion Event Delivery (#6582)**
 
   There remains an intermittent issue where the [`TransactionComplete`](/docs/event-callbacks) event is not always successfully sent to the host application.
@@ -498,7 +498,7 @@ This version includes the following improvements, fixes, and known issues for th
 
 This version includes the following improvements and known issues for the SDK:
 
-<Accordion title="Improvements" icon="fa-rocket">
+<Accordion title="Improvements" icon="rocket">
   ### **Initial Closed Loop Mifare Support**
 
   This version introduces foundational support for Closed Loop Mifare transactions, allowing the SDK to process Mifare-based card interactions for private loop environments.
@@ -506,7 +506,7 @@ This version includes the following improvements and known issues for the SDK:
   > **Note:** To enable this functionality, the reader must be configured with specific tags: **Enable Technology (DF 4F)** must include Mifare, and **Return UID (DF 0D)** must be set to `0x01`.
 </Accordion>
 
-<Accordion title="Known Issues" icon="fa-exclamation-triangle">
+<Accordion title="Known Issues" icon="exclamation-triangle">
   ### **Configuration Parsing Errors (#6560)**
 
   An empty line in the `CON_CONFIG` response may trigger a 'failed to read line' error, potentially interrupting the configuration handshake.
@@ -528,7 +528,7 @@ This version includes the following improvements and known issues for the SDK:
 
 This version includes the following improvements and known issues for the SDK:
 
-<Accordion title="Improvements" icon="fa-rocket">
+<Accordion title="Improvements" icon="rocket">
   ### **Initial Linux Lite Release**
 
   This version marks the first official release of the Lite SDK for Linux-based systems. Built entirely in C, this version is optimized for low-resource environments and provides a lightweight foundation for embedded payment integration.
@@ -536,7 +536,7 @@ This version includes the following improvements and known issues for the SDK:
   This release is designed for developers who require a high-performance, low-footprint solution for managing transactions and reader communication on Linux hardware.
 </Accordion>
 
-<Accordion title="Known Issues" icon="fa-exclamation-triangle">
+<Accordion title="Known Issues" icon="exclamation-triangle">
   ### **Mifare Routing and UID Limitations**
 
   Currently, all Mifare closed-loop transactions are routed to the OTI server. In this version, there is no existing configuration to allow the host application to receive the card UID directly through the EMV-Core API.
