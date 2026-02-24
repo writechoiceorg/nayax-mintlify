@@ -1,0 +1,69 @@
+---
+title: "Initialize Transactions"
+---
+
+The `/initialize` endpoint is the first step in processing an e-commerce transaction within the Nayax system. Its primary function is to initiate a payment request from the Nayax SDK, essentially setting the stage for a customer to complete their purchase.
+
+<Note>
+**Tokenization**
+
+The `/initialize` endpoint is also part of the process for tokenizing a card. If a Card-on-File (COF) initialization is triggered, the eCom API will respond with a Nayax card token to the Nayax SDK. See [Nayax Tokens](/docs/nayax-ecom-tokens) for more details.
+</Note>
+
+## Sale Request
+
+Here is an example of a JSON request for the POST [ `/initialize` ](/reference/post_initialize) endpoint, demonstrating a simple sale transaction.
+
+```json
+{
+  "BasicInfo": {
+    "SessionExpiration": "2025-08-15T10:00:00Z",
+    "RedirectURL": "https://www.examplemerchant.com/return",
+    "Amount": 1500,
+    "DecimalPlace": 2,
+    "Currency": "USD",
+    "Country": "US",
+    "RequestType": 0,
+    "EntryMode": "ECOM",
+    "MachineId": "0434334921100366"
+  },
+  "MachineInfo": {
+    "CardholderCountry": "US"
+  },
+  "CardHolderInfo": {
+    "PaymentPageLan": "en",
+    "CardholderEmail": "customer@example.com"
+  },
+  "eReceipt data": {
+    "AdditionalReceiptData": "[{\"key\":\"orderNumber\",\"value\":\"12345\"}]"
+  }
+}
+```
+
+For more details on each parameter, see the [ `/initialize` ](/reference/post_initialize) endpoint API reference page.
+
+## Transaction Type
+
+The [`/initialize`](<ref: post_initialize>) endpoint supports various transaction types such as a sale, refund, void, and pre-authorizations. The `RequestType` parameter, a mandatory number field, specifies the type of transaction to be performed for a session. It serves as a flag to inform the system of the desired action.
+
+The table below displays the codes available for the `RequestType` parameter and the associated transaction type.
+
+| Code | Transaction Type     | Description                                                                                                                                                 |
+| ---- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `0`  | Sale                 | A simple, immediate transaction where funds are authorized and captured at the same time. Used for a single, complete purchase.                             |
+| `1`  | Auth (Authorization) | A transaction type for pre-authorization that reserves a specific amount of funds on a card without immediately charging it.                                |
+| `2`  | Settlement           | Used to capture funds that have been previously authorized, finalizing the transaction, and moving the money from the customer's account to the merchant's. |
+| `3`  | Void                 | Used to cancel a transaction before it has been settled.                                                                                                    |
+| `4`  | Refund               | For returning funds to a customer's account after a sale has been completed.                                                                                |
+| `5`  | Partial refund       | This is similar to a refund, but only a portion of the original transaction amount is returned to the customer.                                             |
+| `6`  | Incremental auth     | Used to increase the amount of a pre-authorized transaction.                                                                                                |
+| `7`  | Cancel Auth          | This action cancels a pre-authorized transaction, releasing the held funds on the customer's card.                                                          |
+| `8`  | Partial capture      | Allows a merchant to capture a portion of the pre-authorized amount, rather than the full amount.                                                           |
+
+## See Also
+
+<Columns cols={2}>
+  <Card title="Nayax Tokens" arrow href="/docs/nayax-ecom-tokens" />
+
+  <Card title="Webhook Notifications" arrow href="/docs/webhook-notifications" />
+</Columns>
