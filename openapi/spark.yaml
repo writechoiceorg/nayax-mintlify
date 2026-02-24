@@ -1,0 +1,2101 @@
+openapi: 3.0.1
+info:
+  title: Nayax Spark API
+  description: RemoteStart V2
+  version: v2
+servers:
+  - url: https://{domain}/api
+    variables:
+      domain:
+        default: nayax-spark-dmz.nayax.com
+        description: Service URL
+tags:
+  - name: Transactions
+paths:
+  /Version:
+    get:
+      tags:
+        - Transactions
+      summary: Get Version
+      description: Returns the SparkApi assembly version and build
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+  /ExternalCancel:
+    post:
+      tags:
+        - Transactions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalCancelRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ExternalCancelRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ExternalCancelRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ExternalCancelResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalCancelResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ExternalCancelResponse'
+  /ExternalSettlement:
+    post:
+      tags:
+        - Transactions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalSettlementRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ExternalSettlementRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ExternalSettlementRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ExternalSettlementResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalSettlementResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ExternalSettlementResponse'
+  /StartAuthentication:
+    post:
+      tags:
+        - Transactions
+      description: >
+        The `StartAuthentication` endpoint is the first step in any Spark
+        transaction. It authenticates the transaction request using a pre-shared
+        token and a cryptographically signed payload.
+      requestBody:
+        description: The request payload for transaction authentication.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartAuthenticationRequest'
+      responses:
+        '200':
+          description: Success. The transaction request was successfully authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartAuthenticationResponse'
+  /StartSession:
+    post:
+      tags:
+        - Transactions
+      description: >
+        This is the initial API call sent by Nayax. It initiates the transaction
+        session by authenticating both parties and generating a
+        `SparkTransactionId`, which will be echoed in all subsequent calls
+        throughout the transaction's lifecycle.
+      requestBody:
+        description: The payload to initiate a new session.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartSessionRequest'
+      responses:
+        '200':
+          description: Success. A new session has been successfully initiated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartSessionResponse'
+  /TriggerTransaction:
+    post:
+      tags:
+        - Transactions
+      description: >
+        The `TriggerTransaction` endpoint initiates user interaction with the
+        physical terminal by sending a wake-up signal to the specified device.
+      requestBody:
+        description: The request payload containing the details to trigger a transaction.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriggerTransactionRequest'
+      responses:
+        '200':
+          description: Success. The transaction was successfully triggered.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TriggerTransactionResponse'
+  /TransactionCallback:
+    post:
+      tags:
+        - Transactions
+      description: >
+        The terminal uses the `TransactionCallback` endpoint to notify the
+        integrator about the result of a card tap. It is triggered automatically
+        when a user presents a card, and an authorization flow is initiated with
+        the payment provider.
+      requestBody:
+        description: The request payload including the result of the card scan operation.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionCallbackRequest'
+      responses:
+        '200':
+          description: Success. A simple 200 OK server acknowledgment is sufficient.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionCallbackOutcome'
+  /TransactionNotify:
+    post:
+      tags:
+        - Transactions
+      description: >
+        The `TransactionNotify` endpoint is used to notify the integrator about
+        the final details of a charging session, including charger availability,
+        amount, and display information.
+      requestBody:
+        description: The request payload containing final session details.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionNotifyRequest'
+      responses:
+        '200':
+          description: Success. The transaction notification was received.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionNotifyResponse'
+  /Settlement:
+    post:
+      tags:
+        - Transactions
+      description: >
+        The `Settlement` endpoint is used to finalize an approved transaction.
+        After the session ends and the total amount is known, the integrator
+        sends the final amount along with optional e-receipt information. This
+        method is only relevant for transactions with Pre-Authorization.
+      requestBody:
+        description: >-
+          The request payload containing the final transaction amount and
+          optional e-receipt data.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SettlementRequest'
+      responses:
+        '200':
+          description: Success. The transaction has been successfully settled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettlementResponse'
+  /TimeoutCallback:
+    post:
+      tags:
+        - Transactions
+      description: >
+        The `TimeoutCallback` API call notifies that the payment session has
+        timed out due to inactivity or a failure to complete the expected flow
+        within a defined period.
+      requestBody:
+        description: The request payload containing details of the timed-out session.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeoutCallbackRequest'
+      responses:
+        '200':
+          description: Success. A simple 200 OK server acknowledgment is sufficient.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeoutCallbackOutcome'
+  /CancelTransaction:
+    post:
+      tags:
+        - Transactions
+      description: >-
+        The /CancelTransaction endpoint is a POST request that allows you to
+        cancel a transaction currently in progress. This method is referred to
+        as "Cancel" in the Pre-Authorization flow and "Void" in the
+        Pre-Selection flow.
+      requestBody:
+        description: The request to cancel a transaction.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelTransactionRequest'
+      responses:
+        '200':
+          description: Success. The transaction has been successfully canceled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelTransactionResponse'
+  /StopNotify:
+    post:
+      tags:
+        - Transactions
+      description: >
+        The `StopNotify` endpoint enables Spark to determine whether a card
+        presented at the payment terminal while idle is authorized to stop an
+        ongoing session. A matching card should result in an `Approved`
+        response; otherwise, the Spark integrator should return a `Declined`
+        verdict.
+      requestBody:
+        description: >-
+          The request payload containing card and terminal identifiers to
+          validate a stop request.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StopNotifyRequest'
+      responses:
+        '200':
+          description: Success. The stop request was successfully processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StopNotifyResponse'
+  /AvailabilityCheck:
+    post:
+      tags:
+        - Transactions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvailabilityCheckRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AvailabilityCheckRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/AvailabilityCheckRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AvailabilityCheckResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilityCheckResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilityCheckResponse'
+  /StopCallback:
+    post:
+      tags:
+        - Transactions
+      description: >
+        The `StopCallback` endpoint notifies the integrator that a consumer has
+        presented a payment card to stop an ongoing session.
+      requestBody:
+        description: >-
+          The request payload containing details of the card and session to be
+          stopped.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StopCallbackRequest'
+      responses:
+        '200':
+          description: Success. A simple 200 OK server acknowledgment is sufficient.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StopCallbackOutcome'
+  /DeclineCallback:
+    post:
+      tags:
+        - Transactions
+      description: >
+        The `DeclineCallback` API call is used to notify you of a failure in the
+        Spark transaction process. It is typically triggered after a successful
+        `/TriggerTransaction` response with a verdict of `Approved`, but when
+        the flow subsequently fails for any reason before payment authorization.
+      requestBody:
+        description: The request payload containing details of the failed transaction.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeclineCallbackRequest'
+      responses:
+        '200':
+          description: Success. A simple 200 OK server acknowledgment is sufficient.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeclineCallbackOutcome'
+  /InfoQuery:
+    post:
+      tags:
+        - Transactions
+      description: >
+        Nayax sends an `InfoQuery` API after a successful `StartSession`
+        response. Its main purposes are to retrieve information to be shown on
+        the POS device before payment begins and to check the availability
+        status of the requested service station.
+      requestBody:
+        description: The request payload containing details to query for.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InfoQueryRequest'
+      responses:
+        '200':
+          description: Success. The requested information has been successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoQueryResponse'
+components:
+  schemas:
+    VersionResponse:
+      type: object
+      properties:
+        ProductVersion:
+          type: string
+          nullable: false
+        Copyright:
+          type: string
+          nullable: false
+        ApiVersion:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AuthStatus:
+      type: object
+      description: The object containing the card authorization result.
+      properties:
+        Verdict:
+          type: string
+          description: >-
+            The authorization decision, which can be `"Approved"`, `"Declined"`,
+            etc.
+        ErrorCode:
+          type: integer
+          description: An optional numeric error code if the card was declined.
+        ErrorDescription:
+          type: string
+          description: An explanation of the error, if any.
+        StatusMessage:
+          type: string
+          description: A status message returned by Spark.
+      example:
+        Verdict: Approved
+        ErrorCode: 0
+        ErrorDescription: ''
+        StatusMessage: ''
+    StartAuthenticationRequest:
+      type: object
+      nullable: true
+      description: >
+        The request payload for the `/spark/StartAuthentication` endpoint. This
+        call is the initial step for a transaction, authenticating the request
+        and preparing the session.
+      properties:
+        TokenId:
+          type: integer
+          format: int32
+          description: |
+            A unique token provided by Nayax to identify your integration.
+        TerminalId:
+          type: string
+          nullable: false
+          description: |
+            The unique device ID of the target terminal.
+        TerminalIdType:
+          type: integer
+          format: int32
+          description: >
+            Defines the type of `TerminalId` being used. Use `1` for the
+            hardware serial number (`HW Serial`) or `2` for the Nayax Machine
+            ID.
+        Random:
+          type: string
+          nullable: false
+          description: |
+            A random string used as part of the encryption handshake.
+        Cipher:
+          type: string
+          nullable: false
+          description: >
+            The AES-256 ECB encrypted payload. This is a Base64-encoded string
+            that contains the Spark Transaction ID, a random string, and a
+            timestamp.
+      example:
+        TokenId: 116383
+        TerminalId: '0434334921100366'
+        TerminalIdType: 1
+        Random: 123456789qwertyui
+        Cipher: >-
+          X305dITNTAw2vHsxE+taVcn6UvgBC3fdI6QbqeABgHbo8CKsoZhqISJfslehCiA+L7XYrqvKFci7C6BNj/trzBuNJwBEjgBzKhhgpJ5ggnw=
+    StartSessionRequest:
+      type: object
+      nullable: true
+      description: >
+        The request payload sent by the Spark platform to the integrator's
+        configured `StartSession` endpoint to initiate a transaction session.
+      properties:
+        HwSerial:
+          type: string
+          nullable: false
+          description: |
+            The serial number of the payment terminal hardware.
+        MachineId:
+          type: integer
+          format: int64
+          description: |
+            The unique identifier for the Nayax machine.
+        TokenId:
+          type: integer
+          format: int32
+          description: |
+            A unique token provided by Nayax for secure authentication.
+        Random:
+          type: string
+          nullable: false
+          description: |
+            A random alphanumeric string used for session verification.
+      example:
+        HwSerial: '0434334921100366'
+        MachineId: 71234996
+        TokenId: 116383
+        Random: 123456789qwertyui
+    StartSessionResponse:
+      type: object
+      nullable: true
+      description: >
+        The response payload from the `StartSession` endpoint, containing
+        encrypted data and the session status.
+      properties:
+        Cipher:
+          type: string
+          nullable: false
+          description: |
+            The encrypted data used to authenticate and initiate the session.
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: >
+            The unique identifier for this transaction, which is echoed in all
+            subsequent calls throughout the transaction's lifecycle.
+        Status:
+          $ref: '#/components/schemas/Status'
+      example:
+        Cipher: >-
+          X305dITNTAw2vHsxE+taVcn6UvgBC3fdI6QbqeABgHbo8CKsoZhqISJfslehCiA+L7XYrqvKFci7C6BNj/trzBuNJwBEjgBzKhhgpJ5ggnw=
+        Status:
+          Verdict: Approved
+    TriggerTransactionRequest:
+      type: object
+      nullable: true
+      description: >
+        The request payload for the `/spark/TriggerTransaction` endpoint. This
+        call initiates user interaction with a physical terminal and provides
+        the necessary details for the transaction.
+      properties:
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: >
+            The unique session ID received from Spark during the
+            `StartAuthentication` process.
+        TerminalId:
+          type: string
+          nullable: false
+          description: |
+            The unique ID of the target terminal.
+        TerminalIdType:
+          type: integer
+          format: int32
+          nullable: true
+          description: >
+            Defines the ID type used for the `TerminalId`. Use `1` for the HW
+            Serial or `2` for the Nayax Machine ID.
+        Amount:
+          type: number
+          format: double
+          description: >
+            The amount to be pre-authorized or charged for the transaction. This
+            value is required for the Pre-Selection flow.
+        PosDisplay:
+          type: string
+          nullable: true
+          description: |
+            An optional custom message to show on the terminal's display.
+        EReceiptData:
+          type: string
+          nullable: true
+          description: >
+            Optional JSON-formatted string representing e-receipt details for
+            machine operators who wish to provide digital receipts.
+        TransactionTimeout:
+          type: integer
+          format: int16
+          description: >
+            The timeout in seconds for the terminal to wait for a card to be
+            presented. This value must be greater than `0`.
+      example:
+        SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
+        TerminalId: '0434334921100366'
+        TerminalIdType: 1
+        Amount: 15
+        PosDisplay: >-
+          ;Charging Station:3;Day:30.52p;Night:9p;Standing charge:52.18p/day;
+          Off-peak:12:30-04:30;
+        TransactionTimeout: 60
+    TriggerTransactionResponse:
+      type: object
+      nullable: true
+      description: >
+        The response payload from the `/spark/TriggerTransaction` endpoint,
+        which confirms the result of the request to initiate user interaction
+        with a physical terminal.
+      properties:
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: |
+            The unique transaction ID, echoed from the request.
+        Status:
+          $ref: '#/components/schemas/Status'
+          description: >
+            An object containing the resulting verdict and an optional error
+            description.
+      example:
+        SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
+        Status:
+          Verdict: Approved
+          ErrorDescription: ' No Errors '
+    TransactionCallbackRequest:
+      type: object
+      nullable: true
+      description: >
+        The request payload sent by the Spark platform to the integrator's
+        configured `TransactionCallback` endpoint. This request includes the
+        full result of the card scan operation and is essential for proceeding
+        with transaction confirmation or rejection handling.
+      properties:
+        NayaxTransactionId:
+          type: integer
+          format: int64
+          description: |
+            The unique internal transaction ID assigned by Nayax.
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: |
+            The unique session ID generated in `StartAuthentication`.
+        SiteId:
+          type: integer
+          format: int16
+          description: |
+            The ID of the vending site or Spark location.
+        TerminalId:
+          type: string
+          nullable: false
+          description: |
+            The unique ID of the terminal that read the card.
+        MachineId:
+          type: integer
+          format: int64
+          description: |
+            The identifier of the vending machine or device.
+        HwSerial:
+          type: string
+          nullable: false
+          description: |
+            The hardware serial number of the terminal.
+        MachineAuTime:
+          type: string
+          nullable: true
+          description: |
+            The timestamp from the machine in the format `yyyyMMddHHmmssSSS`.
+        AuthStatus:
+          $ref: '#/components/schemas/AuthStatus'
+          description: |
+            The object containing the card authorization result.
+        CardLast4Digits:
+          type: string
+          nullable: true
+          description: |
+            The last four digits of the presented card.
+        CardHash:
+          type: string
+          nullable: false
+          description: |
+            The one-way hash of the full card number.
+        CardUid:
+          type: string
+          nullable: true
+          description: |
+            The unique identifier of the card (for prepaid cards).
+        Amount:
+          type: number
+          format: double
+          description: |
+            The transaction amount in the smallest currency unit (e.g., cents).
+      example:
+        NayaxTransactionId: 2004545072
+        SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
+        SiteId: 2
+        TerminalId: '0434334921100366'
+        MachineId: 71234996
+        HwSerial: '0434334921100366'
+        AuthStatus:
+          Verdict: Approved
+          ErrorCode: 0
+          ErrorDescription: ''
+          StatusMessage: ''
+        CardLast4Digits: '1234'
+        CardHash: 7f2082ba5dbccf706b6987e75b62083f65b5695bc2d8c827c3e46769d007a9e6
+        CardUid: '1288528281124927'
+        MachineAuTime: '20240205194122328'
+        Amount: 1500
+    TransactionCallbackOutcome:
+      type: object
+      nullable: true
+      description: >
+        The response payload from the integrator to Nayax's
+        `TransactionCallback`, confirming the receipt of the transaction result.
+        This callback is triggered when a user presents a card and an
+        authorization flow is initiated.
+      properties:
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: >
+            The unique identifier for the Spark session. This ID is generated
+            during `StartAuthentication`.
+        Status:
+          $ref: '#/components/schemas/Status'
+      example:
+        SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
+        Status:
+          Verdict: Approved
+          ErrorDescription: No Errors
+    TransactionNotifyRequest:
+      type: object
+      nullable: true
+      description: >
+        The request payload for the `TransactionNotify` endpoint, which provides
+        final details of a charging session. This request is made after a
+        session has been prepared and the charger is ready for use.
+      properties:
+        HwSerial:
+          type: string
+          nullable: false
+          description: |
+            The hardware serial number of the terminal.
+        MachineId:
+          type: integer
+          format: int64
+          description: |
+            The ID of the vending machine or service device.
+        NayaxTransactionId:
+          type: integer
+          format: int64
+          description: |
+            The unique Nayax internal transaction ID.
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: |
+            The unique ID generated in `StartAuthentication`.
+        Amount:
+          type: number
+          format: double
+          description: >
+            The final amount to charge in central currency units (e.g.,
+            dollars).
+        CardLast4Digits:
+          type: string
+          nullable: false
+          description: |
+            The last four digits of the card presented.
+        CardHash:
+          type: string
+          nullable: false
+          description: |
+            The one-way hash of the whole card number.
+        CardUid:
+          type: string
+          nullable: true
+          description: |
+            The UID of the card (for prepaid cards).
+        ServiceStationNumber:
+          type: string
+          nullable: true
+          description: |
+            The number identifying the service station.
+        SiteId:
+          type: integer
+          format: int16
+          description: |
+            The identifier for the Spark site.
+        MachineAuTime:
+          type: string
+          nullable: true
+          description: |
+            The timestamp from the device in `yyyyMMddHHmmssSSS` format.
+      example:
+        HwSerial: '0434334921100366'
+        MachineId: 71234996
+        NayaxTransactionId: 2004545072
+        SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
+        Amount: 10
+        CardLast4Digits: '1234'
+        CardHash: 7f2082ba5dbccf706b6987e75b62083f65b5695bc2d8c827c3e46769d007a9e6
+        CardUid: '1288528281124927'
+        ServiceStationNumber: '5'
+        SiteId: 2
+        MachineAuTime: '20240205194122328'
+    TransactionNotifyResponse:
+      type: object
+      nullable: true
+      description: >
+        The response payload from the integrator to the `TransactionNotify`
+        request. This response confirms the session status and echoes key
+        identifiers.
+      properties:
+        NayaxTransactionId:
+          type: integer
+          format: int64
+          description: >
+            The Nayax internal unique identifier of the transaction, echoed from
+            the request.
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: |
+            The unique session ID, echoed from the request.
+        HwSerial:
+          type: string
+          nullable: false
+          description: >
+            The unique hardware serial number of the terminal, echoed from the
+            request.
+        MachineId:
+          type: integer
+          format: int64
+          description: |
+            The unique ID of the machine, echoed from the request.
+        SiteId:
+          type: integer
+          format: int16
+          nullable: true
+          description: >
+            The ID of the site where the transaction originated, echoed from the
+            request.
+        ServiceStationNumber:
+          type: string
+          nullable: true
+          description: |
+            The identifier of the service station, echoed from the request.
+        Status:
+          $ref: '#/components/schemas/Status'
+          description: >
+            An object confirming how to proceed. The `Verdict` is typically
+            `"Approved"` or `"Declined"`.
+      example:
+        NayaxTransactionId: 2004545072
+        SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
+        HwSerial: '0434334921100366'
+        MachineId: 71234996
+        SiteId: 2
+        ServiceStationNumber: '5'
+        Status:
+          Verdict: Approved
+          StatusMessage: Session will begin immediately.
+    SettlementRequest:
+      type: object
+      nullable: true
+      description: >
+        The request payload to finalize a pre-authorized transaction after the
+        session ends and the final amount is known. This method is only relevant
+        for transactions using the Pre-Authorization flow.
+      properties:
+        NayaxTransactionId:
+          type: integer
+          format: int64
+          description: >
+            The unique transaction ID assigned by Nayax for the transaction
+            being settled.
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: >
+            The unique session ID from the initial `/StartAuthentication`
+            request. This ID links the settlement to the original transaction.
+        SiteId:
+          type: integer
+          format: int16
+          nullable: true
+          description: >
+            The identifier of the site where the transaction occurred. This
+            value is an echo from the initial authorization callback.
+        TerminalId:
+          type: string
+          nullable: false
+          description: |
+            The serial or external ID of the terminal used for the transaction.
+        TerminalIdType:
+          type: integer
+          format: int32
+          nullable: true
+          description: >
+            Defines the ID type used for the `TerminalId`. Use `1` for the HW
+            Serial and `2` for the Nayax Machine ID.
+        Amount:
+          type: number
+          format: double
+          description: >
+            The final transaction amount to be settled, specified in major
+            currency units (e.g., dollars or euros).
+        EReceiptData:
+          type: string
+          nullable: true
+          description: >
+            An optional JSON-formatted string containing additional e-receipt
+            details. This data can be used to provide digital receipts to
+            consumers via the Nayax eReceipt platform.
+      example:
+        NayaxTransactionId: 2004545072
+        SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
+        SiteId: 2
+        TerminalId: '0434334921100366'
+        TerminalIdType: 1
+        Amount: 12.25
+        EReceiptData: >-
+          {"General":[{"Company":"Your Payments - Our Solutions","Station
+          Name":"B12"}],"Service":[{"Product":"Something Yummy","Price Per
+          Unit":"$2.45","Number of Units":2}]}
+    SettlementResponse:
+      type: object
+      nullable: true
+      description: >
+        The response payload returned by Spark upon a successful `Settlement`
+        request. This payload includes final transaction details such as the
+        settled amount, card information, and timestamps.
+      properties:
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: >
+            The unique ID used for this transaction session, which is an echo of
+            the value sent in the request.
+        Status:
+          $ref: '#/components/schemas/Status'
+        CardBrand:
+          type: string
+          nullable: true
+          description: >
+            The brand of the card used for the transaction, such as `Visa` or
+            `MasterCard`.
+        CardLast4Digits:
+          type: string
+          nullable: true
+          description: |
+            The last four digits of the payment card used.
+        AuthCode:
+          type: string
+          nullable: true
+          description: >
+            The authorization code returned by the payment provider for the
+            transaction.
+        MachineAuTime:
+          type: string
+          nullable: true
+          description: >
+            The device timestamp at the moment of authorization, formatted as
+            `yyyyMMddHHmmssSSS`.
+        AuTime:
+          type: string
+          nullable: true
+          description: |
+            The authorization server's timestamp.
+        SeTime:
+          type: string
+          nullable: true
+          description: >
+            The timestamp from the settlement server, formatted as
+            `yyyyMMddHHmmssSSS`.
+        CurrencyCode:
+          type: string
+          nullable: true
+          description: |
+            The ISO currency code for the transaction, such as `EUR`.
+        CurrencyNumeric:
+          type: string
+          nullable: true
+          description: |
+            The ISO 4217 numeric currency code, such as `978` for EUR.
+        FiscalRrn:
+          type: string
+          nullable: true
+          description: >
+            The fiscal reference number for the transaction, used for receipt
+            and audit purposes.
+        NayaxRRN:
+          type: string
+          nullable: true
+          description: |
+            The internal Nayax settlement reference number.
+        Amount:
+          type: number
+          format: double
+          description: |
+            The final settled amount, approved by the Payment Provider.
+      example:
+        SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
+        Status:
+          Verdict: Approved
+          ErrorDescription: No Errors
+        CardBrand: Visa
+        CardLast4Digits: '1234'
+        AuthCode: '333333'
+        MachineAuTime: '20240205194122328'
+        AuTime: '20240205174122328'
+        SeTime: '20240205192215572'
+        CurrencyCode: EUR
+        CurrencyNumeric: '978'
+        FiscalRrn: 1A2b3C4d5E6f7g8H9i
+        NayaxRRN: '111111'
+        Amount: 12.25
+    TimeoutCallbackRequest:
+      type: object
+      nullable: true
+      description: >
+        The request payload sent by Spark to a configured `TimeoutCallback`
+        endpoint. This notification is sent when a payment session times out due
+        to inactivity or failure to complete the flow within a set period.
+      properties:
+        TerminalId:
+          type: string
+          nullable: false
+          description: |
+            The identifier of the terminal that initiated the transaction.
+        MachineId:
+          type: integer
+          format: int64
+          description: |
+            The unique ID of the vending machine or device.
+        HwSerial:
+          type: string
+          nullable: false
+          description: |
+            The hardware serial number of the terminal.
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: >
+            The unique Spark transaction identifier for the timed-out session.
+            This ID should be used to reconcile or log the timeout event.
+      example:
+        TerminalId: '0434334921100366'
+        MachineId: 71234996
+        HwSerial: '0434334921100366'
+        SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
+    TimeoutCallbackOutcome:
+      type: object
+      nullable: true
+      description: >
+        The response payload from the integrator to Nayax's `TimeoutCallback`,
+        confirming the receipt of the timeout notification. This callback
+        signals that a pre-authorized payment session has timed out due to
+        inactivity.
+      properties:
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: >
+            The unique identifier for the Spark transaction that has timed out.
+            This ID should be used to reconcile or log the timeout event.
+        Status:
+          $ref: '#/components/schemas/Status'
+      example:
+        SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
+        Status:
+          Verdict: Approved
+          ErrorDescription: No Errors
+    ExternalSettlementRequest:
+      type: object
+      nullable: true
+      description: Settlement request details for an external transaction.
+      properties:
+        NayaxTransactionId:
+          type: integer
+          format: int64
+          description: Nayax Internal Unique identifier for the transaction.
+          example: 1234567890
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: Unique identifier for this transaction, used by Spark.
+          maxLength: 36
+          example: a1b2c3d4-e5f6-7890-1234-567890abcdef
+        MachineAuTime:
+          type: string
+          nullable: true
+          description: >
+            The date time string of when the `/Authorization` took place, in
+            local (machine) time. 
+          format: yyyyMMddHHmmssfff.
+          example: '20251212104530123'
+        SiteId:
+          type: integer
+          format: int16
+          nullable: true
+          description: >-
+            Optional. Echo value from Authorization Callback. Represents the
+            Site ID.
+          example: 2
+        TerminalId:
+          type: string
+          nullable: false
+          description: Unique Identifier for the Nayax Terminal.
+          example: '0434334921100366'
+        TerminalIdType:
+          type: integer
+          format: int32
+          nullable: true
+          description: >-
+            Indicates the type of TerminalId. 1 - Nayax HW serial, 2 - Nayax
+            Machine ID
+          enum:
+            - 1
+            - 2
+          example: 1
+        Amount:
+          type: number
+          format: double
+          description: >-
+            The value to be provided to the Terminal for transaction initiation.
+            Decimal (max 2 digits for cents)
+          example: 15.75
+        EReceiptData:
+          type: string
+          nullable: true
+          description: Optional. Transaction's 3rd party data for receipt generation.
+        ProductInfo:
+          type: array
+          nullable: true
+          description: Array of products associated with the settlement.
+          items:
+            $ref: '#/components/schemas/ProductInfo'
+    ProductInfo:
+      type: object
+      description: Information about a single product in the transaction.
+      properties:
+        Value:
+          type: number
+          format: decimal
+          example: 15.75
+          nullable: false
+          description: Mandatory. The monetary amount of the product.
+        Code:
+          type: integer
+          format: int64
+          example: 0
+          nullable: true
+          description: Represents the product code in the product's map.
+        Quantity:
+          type: integer
+          format: int64
+          example: 1
+          nullable: true
+          description: Quantity of the product purchased.
+    ExternalSettlementResponse:
+      type: object
+      nullable: true
+      description: Response details for an external settlement request.
+      properties:
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: The Spark unique identifier for this transaction.
+          example: a1b2c3d4-e5f6-7890-1234-567890abcdef
+        Status:
+          $ref: '#/components/schemas/Status'
+          description: The status of the settlement request.
+        AuthCode:
+          type: string
+          nullable: true
+          description: >-
+            For Credit card implementation, when the transaction is approved,
+            this is the External (usually Card issuer's) Authorization Code.
+          example: A1B2C3
+        MachineAuTime:
+          type: string
+          nullable: true
+          description: >-
+            The date time string of when the `/Authorization` or `/Sale` took
+            place, in local (machine) time.
+          format: yyyyMMddHHmmssfff
+          example: '20251212104530123'
+        Amount:
+          type: number
+          format: double
+          description: The value Settled by the card issuer during the Settlement phase.
+          example: 15.75
+    CancelTransactionRequest:
+      type: object
+      nullable: true
+      description: >-
+        The request body for canceling a transaction. This is used to cancel a
+        pre-authorized transaction or void a pre-selected one, providing details
+        such as the transaction ID, the reason for cancellation, and the amount.
+      properties:
+        NayaxTransactionId:
+          type: integer
+          format: int64
+          nullable: false
+          description: >-
+            The unique transaction ID assigned by Nayax, provided in the
+            `/TransactionCallback`.
+        SparkTransactionId:
+          type: string
+          nullable: false
+          description: >-
+            The unique session ID from the initial `/StartAuthentication`
+            request.
+        SiteId:
+          type: integer
+          format: int16
+          nullable: false
+          description: The ID of the site where the transaction occurred.
+        MachineAuTime:
+          type: string
+          nullable: false
+          description: >-
+            The timestamp of the cancellation from the device in its local
+            timezone. The format is `yyyyMMddHHmmssSSS`.
+        TerminalId:
+          type: string
+          nullable: false
+          description: The serial or external ID of the terminal used.
+          maxLength: 255
+        TerminalIdType:
+          type: integer
+          format: int32
+          nullable: false
+          description: >-
+            Defines the type of ID used for the `TerminalId` parameter. Use `1`
+            for the HW Serial or `2` for the Nayax Machine ID.
+        CancellationType:
+          type: integer
+          format: int32
+          nullable: false
+          description: >-
+            Indicates which cancellation flow is being implemented. Use `1` for
+            a Pre-Authorization Cancel or `2` for a Pre-Selection Void.
+        ReasonCode:
+          type: integer
+          format: int16
+          nullable: false
+          description: The internal code explaining the reason for the cancellation.
+        ReasonText:
+          type: string
+          nullable: true
+          description: >-
+            A human-readable explanation of the cancellation reason. This
+            parameter is optional.
+        CancelAmount:
+          type: number
+          format: double
+          nullable: false
+          description: >-
+            The amount to be canceled in major currency units (e.g., dollars or
+            euros).
+    CancelTransactionResponse:
+      type: object
+      nullable: true
+      description: >-
+        The response object for a canceled transaction, confirming the outcome
+        of the cancellation and providing key details such as transaction
+        identifiers, timestamps, and payment information.
+      properties:
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: The ID of the canceled session.
+        Status:
+          type: object
+          description: >-
+            An object containing the final verdict of the cancellation and a
+            descriptive message.
+          properties:
+            Verdict:
+              type: string
+              description: >-
+                The outcome of the cancellation. It will be `"Approved"` if
+                successful or `"Declined"` if it failed.
+            ErrorDescription:
+              type: string
+              description: >-
+                Provides additional information if the verdict is `"Declined"`,
+                or `"No Errors"` for a successful request.
+            ErrorCode:
+              type: number
+              description: >-
+                A numeric code that specifies the type of error that occurred.
+                This field is present only in error responses.
+        CardBrand:
+          type: string
+          nullable: true
+          description: >-
+            The brand of the card used for the transaction (e.g., `"Visa"`,
+            `"MasterCard"`).
+        CardLast4Digits:
+          type: string
+          nullable: true
+          description: The last four digits of the card used.
+        AuthCode:
+          type: string
+          nullable: true
+          description: The authorization code for the cancellation.
+        MachineAuTime:
+          type: string
+          nullable: true
+          description: >-
+            The timestamp of the cancellation from the device, in the format
+            `yyyyMMddHHmmssSSS`.
+        AuTime:
+          type: string
+          nullable: true
+          description: The timestamp from the authorization server.
+        CancelTime:
+          type: string
+          nullable: true
+          description: >-
+            The server timestamp of the cancellation confirmation, in the format
+            `yyyyMMddHHmmssSSS`.
+        CurrencyCode:
+          type: string
+          nullable: true
+          description: The ISO currency code (e.g., `"EUR"`).
+        CurrencyNumeric:
+          type: string
+          nullable: true
+          description: The ISO numeric currency code (e.g., `"978"` for EUR).
+        FiscalRrn:
+          type: string
+          nullable: true
+          description: The fiscal reference number for the receipt or audit trail.
+        NayaxRRN:
+          type: string
+          nullable: true
+          description: The Nayax reference number of the transaction.
+    StopNotifyRequest:
+      type: object
+      nullable: true
+      description: desc
+      properties:
+        StopSiteId:
+          type: integer
+          format: int16
+          description: Indication for Nayax Engine in which Site the transaction originated
+        MachineId:
+          type: integer
+          format: int64
+          description: |
+            - Length: 255
+            - Unique Identifier for the Nayax Machine
+        HwSerial:
+          type: string
+          nullable: false
+          description: |
+            - Length: 255
+            - Unique Identifier for the Nayax Device
+        CardLast4Digits:
+          type: string
+          nullable: true
+          description: Payment card's last 4 digits
+        CardHash:
+          type: string
+          nullable: false
+        CardUid:
+          type: string
+          nullable: true
+          description: Payment card's Unique identifier
+        ServiceStationNumber:
+          type: string
+          nullable: true
+          description: >
+            - Identifies the Spark Provider’s Point of Interaction number
+
+            - Will be provided by Nayax when the Nayax Device is configured to
+            support several service points via the Nayax backoffice system
+    StopNotifyResponse:
+      type: object
+      nullable: true
+      description: >
+        The response sent by the integrator to Nayax's `StopNotify` request,
+        which indicates whether the card presented can be used to stop a session
+        on the terminal. A `Verdict` of `"Approved"` indicates that the card
+        matches an ongoing session and the flow can proceed.
+      properties:
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: |
+            The Spark session identifier for the matched transaction.
+        NayaxTransactionId:
+          type: integer
+          nullable: true
+          format: int64
+          description: |
+            The unique ID for the Nayax transaction.
+        SiteId:
+          type: integer
+          format: int16
+          description: |
+            The original site ID where the transaction was initiated.
+        StopSiteId:
+          type: integer
+          format: int16
+          description: |
+            The site ID where the card was presented to stop the session.
+        MachineId:
+          type: integer
+          format: int64
+          description: |
+            The ID of the machine where the card was presented.
+        HwSerial:
+          type: string
+          nullable: false
+          description: |
+            The serial number of the machine.
+        MachineAuTime:
+          type: string
+          nullable: true
+          description: >
+            The local machine timestamp of the authorization in the format
+            `yyyyMMddHHmmssSSS`.
+        Status:
+          $ref: '#/components/schemas/Status'
+      example:
+        SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
+        NayaxTransactionId: 2004545072
+        SiteId: 2
+        StopSiteId: 4
+        MachineId: 71234996
+        HwSerial: '0434334921100366'
+        MachineAuTime: '20240205194122328'
+        Status:
+          Verdict: Approved
+          ErrorDescription: No Errors
+    AvailabilityCheckRequest:
+      type: object
+      nullable: true
+      description: >-
+        This object is used to check the availability of a service station and
+        retrieve details to display on the Nayax device before initiating a
+        transaction. It's sent after a successful StartSession response to
+        gather information for the POS device.
+      properties:
+        HwSerial:
+          type: string
+          nullable: false
+          description: >-
+            The unique serial number of the hardware terminal, used to identify
+            the Nayax device.
+          maxLength: 255
+        MachineId:
+          type: integer
+          format: int64
+          description: >-
+            The unique ID of the vending machine or terminal, as configured in
+            the Nayax system.
+          maxLength: 255
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: >-
+            The unique transaction ID assigned by Spark for the open session.
+            This ID is provided in the `/StartSession` and
+            `/StartAuthentication` responses and must be used for all subsequent
+            calls within the same transaction lifecycle.
+        Amount:
+          type: number
+          format: double
+          description: >-
+            The estimated amount for the session, to be displayed on the
+            terminal. This value is used for Pre-Authorization and Pre-Selection
+            flows to provide the consumer with a transaction estimate.
+          maxLength: 3
+        ServiceStationNumber:
+          type: string
+          nullable: true
+          description: >-
+            The identifier for the selected service station or point of
+            interaction. This parameter is included when the Nayax device is
+            configured to support multiple service points.
+        SiteId:
+          type: integer
+          format: int16
+          description: >-
+            The ID of the site where the transaction originated. This value
+            helps the Nayax Engine route the transaction to the correct
+            location.
+    AvailabilityCheckResponse:
+      type: object
+      nullable: true
+      description: >-
+        The response object for the InfoQuery API, providing status,
+        availability, and display information to the Nayax device before a
+        transaction begins.
+      properties:
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: The unique transaction ID from the original request.
+        HwSerial:
+          type: string
+          nullable: false
+          description: The unique serial number of the Nayax hardware terminal.
+          maxLength: 255
+        MachineId:
+          type: integer
+          format: int64
+          description: The unique identifier for the machine or device.
+        SiteId:
+          type: integer
+          format: int16
+          description: The ID of the site where the terminal is operating.
+        ServiceStationNumber:
+          type: string
+          nullable: true
+          description: >-
+            Identifies the selected service station or point of interaction
+            number. This parameter is provided by Nayax when the device supports
+            multiple service points.
+        ServiceStationAvailability:
+          type: integer
+          nullable: false
+          description: >-
+            The availability status of the service station. A value of `1`
+            indicates it's `Available`, `2` means `Busy`, and `3` signifies `Out
+            of Service`.
+        PosDisplay:
+          type: string
+          nullable: true
+          description: >-
+            A custom message to be displayed on the terminal screen, formatted
+            as a semicolon-delimited string.
+        Amount:
+          type: number
+          format: double
+          description: The estimated total amount for the session, in major currency units.
+        Status:
+          type: object
+          nullable: false
+          description: >-
+            An object containing the verdict of the availability check and a
+            descriptive message.
+          properties:
+            Verdict:
+              type: string
+              nullable: false
+              description: >-
+                The result of the request. This will be `"Approved"` if the
+                service station is available, or `"Declined"` if not.
+            StatusMessage:
+              type: string
+              nullable: false
+              description: >-
+                A human-readable message providing more context about the
+                status, such as "Charger is available for charging".
+            Status:
+              $ref: '#/components/schemas/Status'
+    ExternalCancelRequest:
+      type: object
+      nullable: true
+      description: >-
+        Request details for canceling an external payment transaction (e.g.,
+        voiding a pre-authorization).
+      properties:
+        NayaxTransactionId:
+          type: integer
+          format: int64
+          description: >-
+            Nayax Internal Unique identifier for the transaction being
+            cancelled.
+          example: 987654321
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: Spark Unique identifier for this transaction.
+          example: f8e7d6c5-b4a3-2109-fedc-ba9876543210
+        SiteId:
+          type: integer
+          format: int16
+          nullable: true
+          description: >-
+            Optional. Indication for the Nayax Engine in which Site the
+            transaction originated. Echo value from Authorization Callback.
+          example: 2
+        MachineAuTime:
+          type: string
+          nullable: true
+          description: >-
+            The date time string of when the `/Authorization` or `/Sale` took
+            place, in local (machine) time.
+          format: yyyyMMddHHmmssfff.
+          example: '20251212110000500'
+        TerminalId:
+          type: string
+          nullable: false
+          description: Unique Identifier for the Nayax Terminal.
+          maxLength: 255
+          example: NX0087654321
+        TerminalIdType:
+          type: integer
+          format: int32
+          nullable: true
+          description: >-
+            Indicates the type of TerminalId. 1 - Nayax HW serial, 2 - Nayax
+            Machine ID
+          enum:
+            - 1
+            - 2
+          example: 1
+        CancellationType:
+          type: integer
+          format: int32
+          description: >-
+            Indicates which cancellation flow is implemented. 1 -
+            Pre-Authorization Cancel, 2 - Pre-Selection Void
+          enum:
+            - 1
+            - 2
+          example: 1
+        ReasonCode:
+          type: string
+          format: int16
+          nullable: true
+          description: Conditional. Cancel reason code.
+          example: '01'
+        ReasonText:
+          type: string
+          nullable: true
+          description: >-
+            Conditional. Detailed description or text of the cancel reason.
+            Either ReasonCode or ReasonText must be provided. ExternalCancel
+            request without both will cause failure.
+          example: User requested cancellation
+        CancelAmount:
+          type: number
+          format: double
+          nullable: true
+          description: >-
+            Always mandatory. Amount to be cancelled. Can’t be higher than the
+            authorized amount.
+          example: 5
+    ExternalCancelResponse:
+      type: object
+      nullable: true
+      description: Response details for an external transaction cancellation request.
+      properties:
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: The Spark unique identifier for this transaction.
+          example: f8e7d6c5-b4a3-2109-fedc-ba9876543210
+        Status:
+          $ref: '#/components/schemas/Status'
+          description: The status of the cancellation request.
+        AuthCode:
+          type: string
+          nullable: true
+          description: >-
+            For Credit card implementation, when the transaction is approved,
+            this is the External (usually Card issuer's) Authorization Code.
+          example: D4E5F6
+        MachineAuTime:
+          type: string
+          nullable: true
+          description: >
+            The date time string of when the `/Authorization` or `/Sale` took
+            place, in local (machine) time. 
+          format: yyyyMMddHHmmssfff
+          example: '20251212110000500'
+    StopCallbackRequest:
+      type: object
+      nullable: true
+      description: >
+        The request payload sent by Spark to an integrator's configured
+        `StopCallback` endpoint to notify that a consumer has presented a card
+        to stop an ongoing session. This is used to validate and match the card
+        against an active session.
+      properties:
+        StopSiteId:
+          type: integer
+          format: int16
+          description: |
+            The ID of the site where the session stop was triggered.
+        MachineId:
+          type: integer
+          format: int64
+          description: >
+            The unique ID of the vending machine or device where the card was
+            presented.
+        HwSerial:
+          type: string
+          nullable: false
+          description: |
+            The hardware serial number of the terminal.
+        CardLast4Digits:
+          type: string
+          nullable: true
+          description: |
+            The last four digits of the card used for the transaction.
+        CardHash:
+          type: string
+          nullable: false
+          description: |
+            The hashed value of the payment card presented.
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: |
+            The Spark transaction identifier of the original initiated session.
+        NayaxTransactionId:
+          type: integer
+          nullable: true
+          format: int64
+          description: |
+            The unique Nayax transaction ID associated with the open session.
+        CardUid:
+          type: string
+          nullable: true
+          description: |
+            A unique identifier of the card, if available.
+        MachineAuTime:
+          type: string
+          nullable: true
+          description: |
+            The terminal's local timestamp in the format `yyyyMMddHHmmssSSS`.
+        ServiceStationNumber:
+          type: string
+          nullable: true
+          description: |
+            The identifier of the charging point or station used.
+      example:
+        StopSiteId: 4
+        MachineId: 71234996
+        HwSerial: '0434334921100366'
+        CardLast4Digits: '1234'
+        CardHash: 7f2082ba5dbccf706b6987e75b62083f65b5695bc2d8c827c3e46769d007a9e6
+        SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
+        NayaxTransactionId: 2004545072
+        CardUid: '1288528281124927'
+        MachineAuTime: '20240205194122328'
+        ServiceStationNumber: '5'
+    StopCallbackOutcome:
+      type: object
+      nullable: true
+      description: >
+        The response payload from the integrator to Nayax's `StopCallback`,
+        acknowledging the request and providing a status.
+      properties:
+        Status:
+          $ref: '#/components/schemas/Status'
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: >
+            The unique identifier for the Spark transaction that was requested
+            to be stopped.
+        ServiceStationNumber:
+          type: string
+          nullable: true
+          description: >
+            The number identifying the service station where the session stop
+            was attempted. This value is provided by Nayax if the device is
+            configured to support multiple service points.
+      example:
+        Status:
+          Verdict: Approved
+          ErrorDescription: No Errors
+        SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
+        ServiceStationNumber: '5'
+    StartAuthenticationResponse:
+      type: object
+      nullable: true
+      description: >
+        The response payload from the `/spark/StartAuthentication` endpoint. It
+        provides a unique hashed transaction ID and the authentication status.
+      properties:
+        HashedSparkTransactionId:
+          type: string
+          nullable: false
+          description: >
+            A SHA256 hash of the `SparkTransactionId` sent in the request. This
+            ID must be used for all subsequent steps of the transaction.
+        Status:
+          $ref: '#/components/schemas/Status'
+      example:
+        HashedSparkTransactionId: 9515af0d6b5c328b6383ff241fa7b03e489d6285a8db6a4f0d8369e3f044e8d7
+        Status:
+          Verdict: Approved
+          ErrorDescription: ' No Errors '
+    DeclineCallbackRequest:
+      type: object
+      nullable: true
+      description: >
+        The request payload sent by Spark to the integrator's
+        `/spark/DeclineCallback` endpoint to report a failed transaction.
+      properties:
+        MachineId:
+          type: integer
+          format: int64
+          description: >
+            The unique ID of the vending machine or terminal where the
+            transaction occurred.
+        HwSerial:
+          type: string
+          nullable: false
+          description: |
+            The serial number of the hardware terminal.
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: >
+            The unique identifier of the failed Spark transaction. This ID is
+            typically generated during the `StartAuthentication` process.
+        Status:
+          $ref: '#/components/schemas/Status'
+      example:
+        MachineId: 71234996
+        HwSerial: '0434334921100366'
+        SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
+        Status:
+          Verdict: Declined
+          ErrorCode: 44
+          ErrorDescription: Timeout on POS Device
+    DeclineCallbackOutcome:
+      type: object
+      nullable: true
+      description: >
+        The response payload from the `DeclineCallback` endpoint, providing
+        details about a failed Spark transaction. This payload confirms the
+        transaction's failure and provides contextual information.
+      properties:
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: >
+            The unique identifier for the failed Spark transaction session. This
+            ID is initially generated during the `StartAuthentication` process
+            and is used to track the session throughout its lifecycle.
+        Status:
+          $ref: '#/components/schemas/Status'
+      example:
+        SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
+        Status:
+          Verdict: Declined
+          ErrorCode: 44
+          ErrorDescription: Timeout on POS Device
+    InfoQueryRequest:
+      type: object
+      nullable: true
+      description: >
+        The request payload sent by Spark to the integrator's configured
+        `InfoQuery` endpoint to retrieve information about a service and its
+        availability.
+      properties:
+        HwSerial:
+          type: string
+          nullable: false
+          description: >
+            The serial number of the hardware terminal where the `InfoQuery`
+            originated.
+        MachineId:
+          type: integer
+          format: int64
+          description: |
+            The unique identifier for the machine or device.
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: >
+            The unique transaction ID assigned by Spark. This ID is used to
+            track the session throughout its lifecycle.
+        ServiceStationNumber:
+          type: string
+          nullable: true
+          description: >
+            An identifier for the selected service station (e.g., a charging
+            point number). This value identifies the Point of Interaction number
+            provided by the Spark Provider.
+        SiteId:
+          type: integer
+          format: int16
+          description: >
+            The ID of the site where the terminal is operating. This indicates
+            the location where the transaction flow originated.
+      example:
+        HwSerial: '0434334921100366'
+        MachineId: 71234996
+        SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
+        ServiceStationNumber: '5'
+        SiteId: 2
+    InfoQueryResponse:
+      type: object
+      nullable: true
+      description: desc
+      properties:
+        SparkTransactionId:
+          type: string
+          nullable: true
+          description: |
+            - Transaction ID generated in the /StartSession response
+        HwSerial:
+          type: string
+          nullable: false
+          description: |
+            - Length: 255
+            - Unique Identifier for the Nayax Device
+            - Echo value from InfoQuery Request
+        MachineId:
+          type: integer
+          format: int64
+          description: |
+            - Length: 255
+            - Unique Identifier for the Nayax Machine
+            - Echo value from InfoQuery Request
+        ServiceStationNumber:
+          type: string
+          nullable: true
+          description: >
+            - Identifies the Spark Provider’s Point of Interaction number
+
+            - Will be provided by Nayax when the Nayax Device is configured to
+            support several service points via the Nayax backoffice system
+
+            - Echo value from InfoQuery Request
+        ServiceStationAvailability:
+          type: integer
+          format: int32
+          nullable: false
+          description: >
+            - Indictaes if selected Service Station is (1) Available, (2) In
+            Session / Busy, (3) Out of Service
+        PosDisplay:
+          type: string
+          nullable: true
+          description: |
+            - Optional
+            - Allows presenting information on the payment terminal screen
+        Amount:
+          type: number
+          format: double
+          description: >
+            - Length: 3
+
+            - A value that will be provided to the Terminal for transaction
+            initiation
+        SiteId:
+          type: integer
+          format: int16
+          nullable: false
+          description: |
+            - Mandatory
+            - Echo value from InfoQuery Request
+        Status:
+          $ref: '#/components/schemas/Status'
+    Status:
+      type: object
+      nullable: false
+      description: Transaction Status Details
+      properties:
+        Verdict:
+          type: string
+          nullable: false
+          description: Status of the request (Approved / Declined)
+        ErrorCode:
+          type: integer
+          format: int16
+          nullable: true
+          description: |
+            - Conditional
+            - Reason for declined request
+        ErrorDescription:
+          type: string
+          nullable: true
+          description: |
+            - Conditional
+            - Length: 255
+            - Error description
+        StatusMessage:
+          type: string
+          nullable: true
+          description: |
+            - Optional
+            - Length: 255
+            - Transaction status message as free text field
+    ResponseCode:
+      enum:
+        - 0
+        - 20
+        - 21
+        - 22
+        - 23
+        - 24
+        - 25
+        - 26
+        - 27
+        - 28
+        - 29
+        - 30
+        - 31
+        - 32
+        - 33
+        - 34
+        - 35
+        - 36
+        - 37
+        - 38
+        - 39
+        - 40
+        - 41
+        - 42
+        - 43
+        - 44
+        - 45
+        - 46
+        - 47
+        - 48
+        - 49
+        - 801
+        - 802
+        - 990
+        - 992
+        - 997
+        - 999
+      type: integer
+      format: int32
+      description: >
+        Error description
+
+        * 0   - NoErrors,
+
+        * 20  - Machine Has No Device,
+
+        * 21  - Machine Not Connected To MQTT Server,
+
+        * 22  - Missing Device IP,
+
+        * 23  - IP Is Non VPN,
+
+        * 24  - Machine Not Responding,
+
+        * 25  - Unknown Machine ID,
+
+        * 26  - Validation Error,
+
+        * 27  - Unknown Transaction ID
+
+        * 28  - Already Cancelled,
+
+        * 29  - Not Allowed To Wake Device,
+
+        * 30  - Spark Integrator Not Active,
+
+        * 31  - Cancellation Failed,
+
+        * 32  - Transaction Not Found Or Old,
+
+        * 33  - Fail To Authenticate,
+
+        * 34  - Missing Amount,
+
+        * 35  - Settlement Failed,
+
+        * 36  - Site ID Not Found,
+
+        * 37  - Authorization Failed,
+
+        * 38  - Transaction Callback Failed
+
+        * 39  - Start Session Failed
+
+        * 40  - Timeout Callback Failed
+
+        * 41  - Transaction Notify Failed
+
+        * 42  - Service Availability Check Failed
+
+        * 43  - No Token for Spark Integrator
+
+        * 44  - Timeout on POS Device
+
+        * 45  - Cancelled on POS Device
+
+        * 46  - Info Query Failed
+
+        * 47  - Spark Device Start V2 Not Supported
+
+        * 48  - Spark Device Start V1 Not Supported
+
+        * 49  - Spark Remote Start and Spark Device Start Combination Not
+        Supported
+
+        * 801 - Device Stop Request Approved
+
+        * 802 - Device Stop Request Failed
+
+        * 990 - Transaction Cancelled by Spark Provider,
+
+        * 992 - TimeOutError,
+
+        * 997 - Nayax Validation Error,
+
+        * 999 - GeneralError
+x-readme:
+  explorer-enabled: false

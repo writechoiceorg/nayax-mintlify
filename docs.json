@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Anvil2",
+  "name": "Nayax Developer Portal",
   "colors": {
     "primary": "#FCC705",
     "light": "#FCC705",
@@ -11,14 +11,16 @@
     "light": "/images/home/logo_light.svg",
     "dark": "/images/home/logo_dark.svg"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/images/favicon.ico",
   "navigation": {
     "tabs": [
       {
-        "tab": "Home",
-        "icon": "house",
+        "tab": "Get Started",
+        "icon": "play",
         "pages": [
-          "index"
+          "docs/nayax-different-integrations",
+          "docs/integration-process",
+          "docs/terms-of-service"
         ]
       },
       {
@@ -286,7 +288,7 @@
             "item": "EMV Core",
             "icon": "credit-card",
             "description": "Connect with embedded Nayax payment devices (Uno line)",
-            "groups": [
+            "pages": [
               "docs/overview-2",
               {
                 "group": "Payment Flows",
@@ -390,7 +392,14 @@
               {
                 "group": "API Reference",
                 "pages": [
-                  "reference/overview-spark-api"
+                  "reference/overview-spark-api",
+                  {
+                    "group": "Endpoints",
+                    "openapi": {
+                      "source": "/openapi/spark.yaml",
+                      "directory": "reference/spark"
+                    }
+                  }
                 ]
               }
             ]
@@ -517,7 +526,14 @@
                   "reference/cards-1",
                   "reference/actor-types",
                   "reference/machine-types",
-                  "reference/languages"
+                  "reference/languages",
+                  {
+                    "group": "Endpoints",
+                    "openapi": {
+                      "source": "/openapi/lynx.yaml",
+                      "directory": "reference/lynx"
+                    }
+                  }
                 ]
               }
             ]
@@ -619,7 +635,14 @@
           {
             "group": "API Reference",
             "pages": [
-              "reference/cortina-api-overview"
+              "reference/cortina-api-overview",
+              {
+                "group": "Endpoints",
+                "openapi": {
+                  "source": "/openapi/cortina.yaml",
+                  "directory": "reference/cortina"
+                }
+              }
             ]
           }
         ]
@@ -706,8 +729,28 @@
           {
             "group": "API Reference",
             "pages": [
-              "reference/ecom-api-overview"
+              "reference/ecom-api-overview",
+              {
+                "group": "Endpoints",
+                "openapi": {
+                  "source": "/openapi/ecom.yaml",
+                  "directory": "reference/ecom"
+                }
+              }
             ]
+          }
+        ]
+      },
+      {
+        "tab": "E-Receipt",
+        "icon": "box-open",
+        "pages": [
+          {
+            "group": "API Reference",
+            "openapi": {
+              "source": "/openapi/e-receipt.yaml",
+              "directory": "reference/e-receipt"
+            }
           }
         ]
       }
