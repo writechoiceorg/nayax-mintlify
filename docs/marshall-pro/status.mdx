@@ -10,6 +10,9 @@ Use this method to:
 * Determine if the terminal is currently waiting for card interaction or processing data.
 * Identify if the terminal is offline or in a "not ready" state to track hardware health.
 
+Example of the display prompt on a Nayax device:
+![displaySelect](/images/nayax-display.png)
+
 ## Requests
 
 Requests for this endpoint are straightforward and do not require a `data` object. You must only provide the standard `command` and a unique `requestId`.
@@ -51,7 +54,7 @@ Use the following table to map its operational meaning:
 
 | Value | State | Description |
 | :--- | :--- | :--- |
-| **0** | Not Ready | The terminal is offline, disconnected, or initializing. |
-| **1** | Ready | The terminal is idle and ready to accept new commands. |
+| **0** | Not Ready (Unusable) | The terminal is offline, disconnected, or initializing. |
+| **1** | Idle | The terminal is idle and the reader is not detecting cards. |
 | **2** | Waiting for Card | The reader is active and prompted for a user's payment method. |
 | **3** | Processing | A transaction or command is currently being executed. |

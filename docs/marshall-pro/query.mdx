@@ -1,6 +1,6 @@
 ---
 title: "query"
-description: "Retrieve the current status or details of a specific transaction."
+description: "Retrieve the open (unsettled) transaction."
 ---
 
 The `query` method allows the client application to poll the terminal for the current status of a specific transaction using its `requestId` or `transactionId`. This serves as a critical safety mechanism for handling network timeouts or application crashes, ensuring the POS and the terminal remain in sync regarding the payment outcome.
@@ -20,21 +20,23 @@ The following example shows a typical request:
 "command": "query",
 "requestId": "req-006",
 "data": {
-"filter": "OPEN"
+"filter": "AUTHORIZED"
 }
 }
-
 ```
 
 ### Parameter Definitions
 
 The table below describes the parameters available for this request:
 
-| Name | Type | Required | Description |
-| :--- | :--- | :--- | :--- |
-| **command** | string | Yes | Set to `"query"`. |
-| **requestId** | string | Yes | The unique ID used in the original command you wish to check. |
-| **transactionId** | string | No | (Optional) The gateway transaction ID, if available. |
+| Field | Type | Required | Description |
+| :--- | :--- | :---: | :--- |
+| **command** | `string` | Yes | Always `query` for this request type. |
+| **requestId** | `string` | Yes | A unique identifier for the request, returned in the response. |
+| **filter** | `string` | No | Filter by status: `AUTHORIZED`, `ALL`, `SETTLED`, `FAILED`, or `EXPIRED`. |
+| **transactionId** | `string` | No | Specific ID to query a single transaction. |
+| **fromDate** | `string` | No | Start range for the query (ISO 8601). |
+| **toDate** | `string` | No | End range for the query (ISO 8601). |
 
 ## Responses
 
@@ -61,11 +63,11 @@ The following example shows a typical response:
 
 The `data` object will contain the most recent information available for that specific request:
 
-| Name | Type | Description |
+| Field | Type | Description |
 | :--- | :--- | :--- |
-| **state** | string | The current lifecycle state (e.g., `AUTHORIZED`, `SETTLED`, `DECLINED`, or `IN_PROGRESS`). |
-| **transactionId** | string | The unique identifier assigned by the gateway. |
-| **amount** | integer | The amount associated with the transaction (refer to `decimalPlace`). |
-| **cardBrand** | string | The brand of the card used (e.g., VISA). |
-| **maskedPan** | string | The masked card number. |
-| **errorCode** | integer | If the transaction failed, this returns the specific error code. |
+| **requestId** | `string` | Matches the `requestId` sent in the original request. |
+| **transactions** | `array` | A list of transaction objects matching the query. |
+| **transactionId** | `string` | The unique identifier for the transaction. |
+| **state** | `string` | The current status of the transaction (e.g., `AUTHORIZED`, `SETTLED`). |
+| **amount** | `number` | The authorized amount if `state` is `AUTHORIZED`; otherwise, the settled amount. |
+| **timeStamp** | `string` | The authorization creation time in Nayax servers (ISO 8601). |

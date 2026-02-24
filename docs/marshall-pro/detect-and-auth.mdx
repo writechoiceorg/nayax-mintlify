@@ -10,9 +10,6 @@ Use this method to:
 * Reserve funds immediately upon card tap, dip, or swipe to allow for instant pump activation.
 * Minimize the logic required between card detection and authorization by handling both through a unified command.
 
-Example of the card detection and pre-authorization prompt on a Nayax device:
-![detectAndAuth](/images/detect-and-auth.jpg)
-
 ## Requests
 
 All requests must include the `command`, `requestId`, and the `amount` to be held. The terminal will remain in a "Waiting for Card" state until a payment method is presented or a timeout occurs.
