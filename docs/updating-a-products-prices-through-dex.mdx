@@ -1,0 +1,71 @@
+---
+title: "Updating a Product's Prices through DEX"
+---
+
+This page shows you how to update product prices through DEX or send a DEX file to a machine using the Lynx API. In the step-by-step guide below, you'll use the following endpoint:
+
+<EndpointCard
+  title="Update Specific Machine Attribute"
+  href="/reference/lynx/machine-attribute/update-specific-machine-attribute"
+  method="put"
+/>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/security) page of this documentation to learn how to access your tokens and how to properly use them to authenticate your API requests.
+</Warning>
+
+## Updating the Prices
+
+Use the [Update Specific Machine Attribute](/reference/lynx/machine-attribute/update-specific-machine-attribute) endpoint to send a DEX file to a machine to update the prices and other product information.
+
+```curl Request
+curl -X PUT "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/attributes/<DEVICE_ATTRIBUTE_ID>" \
+-H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+-H "Content-Type: application/json" \
+-d '{
+  "DeviceAttributeID": "900",
+  "MachineID": "<MACHINE_ID>",
+  "DeviceAttributeValue": "<NEW_VALUE>"
+}'
+```
+
+> 📘
+>
+> Replace `<MACHINE_ID>` with the actual identifier of the machine, `<DEVICE_ATTRIBUTE_ID>` with the attribute you want to update (in this example, "900" for DEX updates), and `<NEW_VALUE>` with the updated value. Use a valid access token for `<YOUR_ACCESS_TOKEN>`.
+
+* **DeviceAttributeID**: In this example, the attribute ID "900" might correspond to a DEX-related update, such as sending new price data.
+* **MachineID**: Specifies the machine that is receiving the DEX data update.
+* **DeviceAttributeValue**: The new value for the specified attribute, such as the updated price or DEX content.
+
+The response from this API call confirms the updated attribute details.
+
+```json Response
+{
+  "DeviceAttributeID": 900,
+  "MachineID": 5001,
+  "DeviceAttributeValue": "2.99",
+  "DeviceAttributeCodeID": 1234,
+  "DeviceAttributeName": "PriceUpdateDEX",
+  "DeviceAttributeGroup": "Pricing",
+  "DeviceAttributeReadOnlyBit": false,
+  "MachineAttributeRef": "MACH001",
+  "MachineRef": "MACH001"
+}
+```
+
+Where:
+
+* **DeviceAttributeID**: The ID of the updated attribute.
+* **MachineID**: The identifier of the machine where the attribute update occurred.
+* **DeviceAttributeValue**: The new value that was set for the attribute.
+* **DeviceAttributeCodeID**: A code associated with the updated attribute.
+* **DeviceAttributeName**: The name of the updated attribute.
+* **DeviceAttributeGroup**: The group/category to which the attribute belongs, such as "Pricing."
+* **DeviceAttributeReadOnlyBit**: Indicates whether the attribute is read-only (`false` in this case).
+* **MachineAttributeRef**: A reference identifier for the machine attribute.
+* **MachineRef**: The reference identifier for the machine.
+
+<br />
+

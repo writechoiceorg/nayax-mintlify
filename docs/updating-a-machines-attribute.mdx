@@ -8,7 +8,7 @@ This page uses the Lynx API to update an attribute of a machine. In the step-by-
 
 <EndpointCard
   title="Bulk Update Machine Attributes"
-  href="/reference/bulk-update-machine-attributes"
+  href="/reference/lynx/machine-attribute/bulk-update-machine-attributes"
   method="put"
 />
 
@@ -20,7 +20,7 @@ Refer to the [Security & Token](/docs/security) page of this documentation to le
 
 ## Updating Machine's Attribute
 
-Use the [Bulk Update Machine Attributes](/reference/bulk-update-machine-attributes) endpoint to update specific machine attributes. Provide the `MachineID` as a path parameter, along with the attributes you want to change as body parameters, as exemplified below:
+Use the [Bulk Update Machine Attributes](/reference/lynx/machine-attribute/bulk-update-machine-attributes) endpoint to update specific machine attributes. Provide the `MachineID` as a path parameter, along with the attributes you want to change as body parameters, as exemplified below:
 
 ```curl Request
 curl -X PUT "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/attributes" \

@@ -12,13 +12,13 @@ These action can also be done through Lynx API programaticallly using the follow
 <Columns cols={2}>
 <EndpointCard
   title="Get Actor Details by ActorID"
-  href="/reference/get-actor-by-actorid"
+  href="/reference/lynx/actors/get-actor-details-by-actorid"
   method="get"
 />
 
 <EndpointCard
   title="Update Operator/Sub-Operator"
-  href="/reference/update-actor"
+  href="/reference/lynx/actors/update-operatorsub-operator"
   method="put"
 />
 </Columns>
@@ -31,7 +31,7 @@ Refer to the [Security & Token](/docs/security) page of this documentation to le
 
 ## Retrieve Operator Details
 
-[Get Actor Details by ActorID ](/reference/get-actor-by-actorid)retrieves comprehensive information about a specific actor. This endpoint provides detailed attributes, including profile information and associated configurations, for the actor identified by the provided ActorID.
+[Get Actor Details by ActorID ](/reference/lynx/actors/get-actor-details-by-actorid)retrieves comprehensive information about a specific actor. This endpoint provides detailed attributes, including profile information and associated configurations, for the actor identified by the provided ActorID.
 
 ```curl Request
 curl --request GET \
@@ -115,7 +115,7 @@ The response will have the details of the requested operator.
 
 ## Update Operator
 
-The [Update Operator/Sub-Operator](/reference/update-actor) endpoint allows to edit the inforamtion of the specified operator.
+The [Update Operator/Sub-Operator](/reference/lynx/actors/update-operatorsub-operator) endpoint allows to edit the inforamtion of the specified operator.
 
 ```curl Request
 curl --request PUT \

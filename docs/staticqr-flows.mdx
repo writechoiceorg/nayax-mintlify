@@ -31,11 +31,11 @@ See the diagram below:
 
 The steps in this process are as follows:
 
-1. The process begins when the customer scans the QR code on the Nayax Device. This action triggers the Integrator to send a [StaticQR Start](/reference/post_cortina-integratorname-start) request to the Cortina API, informing it of the incoming transaction.
+1. The process begins when the customer scans the QR code on the Nayax Device. This action triggers the Integrator to send a [StaticQR Start](/reference/cortina/staticqr/cortina-staticqr-start) request to the Cortina API, informing it of the incoming transaction.
    * Important note: as opposed to the other Cortinas, the Start Session command in Static QR is initiated by the Cortina payment provider and sent to Nayax's servers (whereas for the other Cortinas it's the other way around)
 2. The Nayax Server sends a WakeUp Device Request to the Device and Vending Machine to initiate the transaction process.
 3. The Device approves the request and sends an Authorization Request to the Nayax Server, which begins the payment authorization process.
-4. The Nayax server requests authorization using the Cortina API [StaticQR Sale](/reference/post_cortina-staticqr-sale) endpoint.
+4. The Nayax server requests authorization using the Cortina API [StaticQR Sale](/reference/cortina/staticqr/cortina-staticqr-sale) endpoint.
 5. The Nayax Server receives the Response from the Integrator and returns it to the Device.
 6. If authorized, the Device begins the Vending Session, and the machine dispenses the product or service. The device sends the settlement command to the Nayax Server.
 7. The Nayax server forwards the Settlement Request to the integrator using Cortina's API [Sale End Notification](/reference/cortina/cortina/post-sale-end-notification) endpoint, with the final transaction amount to be settled.
@@ -45,7 +45,7 @@ This response is typically always approved in this flow, as the authorization ha
 <Warning>
 **Void**
 
-In case the product fails to be dispensed to client, the Nayax Engine uses the[StaticQR Cancel](/reference/post_cortina-staticqr-sale) endpoind to void the payment request.
+In case the product fails to be dispensed to client, the Nayax Engine uses the[StaticQR Cancel](/reference/cortina/staticqr/cortina-staticqr-sale) endpoind to void the payment request.
 </Warning>
 
 ### Pre-Authorization
@@ -58,19 +58,19 @@ See the diagram below:
 
 Where:
 
-1. The Integrator sends a [StaticQR Start](/reference/post_cortina-integratorname-start) request to Nayax using Cortina API, informing it of the incoming transaction.
+1. The Integrator sends a [StaticQR Start](/reference/cortina/staticqr/cortina-staticqr-start) request to Nayax using Cortina API, informing it of the incoming transaction.
 2. The Nayax Server sends a WakeUp Device Request to the Device and Vending Machine to initiate the transaction process.
 3. The Device approves the request and sends an Authorization Request to the Nayax Server, which begins the payment authorization process.
-4. The Nayax server requests authorization using the Cortina API [StaticQR Authorization](/reference/post_cortina-staticqr-authorization) endpoint.
+4. The Nayax server requests authorization using the Cortina API [StaticQR Authorization](/reference/cortina/staticqr/cortina-staticqr-authorization) endpoint.
 5. The Nayax Server receives the Response from the Integrator and returns it to the Device.
 6. If authorized, the Device begins the Vending Session, and the machine dispenses the product or service.
 7. The device sends the settlement command to the Nayax Server.
-8. The Nayax server forwards the Settlement Request to the integrator using Cortina's API [StaticQR Settlement](/reference/post_cortina-staticqr-settlement) endpoint, with the final transaction amount to be settled.
+8. The Nayax server forwards the Settlement Request to the integrator using Cortina's API [StaticQR Settlement](/reference/cortina/staticqr/cortina-staticqr-settlement) endpoint, with the final transaction amount to be settled.
 
 <Warning>
 **Cancellation**
 
-In case the product fails to be dispensed to client, the Nayax Engine uses the [StaticQR Cancel](/reference/post_cortina-staticqr-cancel) endpoint to cancel the Pre Authorization and the transaction.
+In case the product fails to be dispensed to client, the Nayax Engine uses the [StaticQR Cancel](/reference/cortina/staticqr/cortina-staticqr-cancel) endpoint to cancel the Pre Authorization and the transaction.
 </Warning>
 
 

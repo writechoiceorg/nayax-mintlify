@@ -6,9 +6,9 @@ The **Spark External Settlement** feature allows third-party servers to complete
 
 The External Settlement flow makes use of the following Spark methods:
 
-* <Anchor label="`StartAuthentication`" target="_blank" href="https://developerhub.nayax.com/update/reference/post_startauthentication">`StartAuthentication`</Anchor>
-* <Anchor label="`ExternalSettlement`" target="_blank" href="https://developerhub.nayax.com/update/reference/post_externalsettlement">`ExternalSettlement`</Anchor>
-* <Anchor label="`ExternalCancel`" target="_blank" href="https://developerhub.nayax.com/update/reference/post_externalcancel">`ExternalCancel`</Anchor>
+* <Anchor label="`StartAuthentication`" target="_blank" href="/reference/spark/transactions/startauthentication">`StartAuthentication`</Anchor>
+* <Anchor label="`ExternalSettlement`" target="_blank" href="/reference/spark/transactions/externalsettlement">`ExternalSettlement`</Anchor>
+* <Anchor label="`ExternalCancel`" target="_blank" href="/reference/spark/transactions/externalcancel">`ExternalCancel`</Anchor>
 
 ## External Settlement Flow
 
@@ -38,7 +38,7 @@ Below is a breakdown of the diagram:
 
 1. **Authorization Request:** The process begins with transaction initiation on the Nayax Device, which sends an authorization request to the Nayax Server.
 2. **Authorization Response:** The Nayax Server performs authorization with the payment provider and sends the response back to the device, which then returns to an IDLE state. The transaction remains authorized but unsettled.
-3. **/StartAuthentication:** After the service or product is provided (or fails to be provided), the 3rd Party Server initiates communication by calling the [StartAuthentication](/reference/post_startauthentication) method. This call must include an encrypted cipher to securely authenticate both Nayax and the integrator.
+3. **/StartAuthentication:** After the service or product is provided (or fails to be provided), the 3rd Party Server initiates communication by calling the [StartAuthentication](/reference/spark/transactions/startauthentication) method. This call must include an encrypted cipher to securely authenticate both Nayax and the integrator.
 4. **Start Authentication Response:** The Nayax Server decrypts the cipher, validates the credentials and timestamps, and responds with a hashed `SparkTransactionId` to confirm authenticity.
 5. **/ExternalSettlement (If Service Provided):** The 3rd Party Server sends the settlement request.
    * **Critical Identification:** The request must contain the `NayaxTransactionId` and `SiteId` to correctly match the original transaction.
@@ -47,7 +47,7 @@ Below is a breakdown of the diagram:
 
 **Alternatively (If Service/Product(s) Not Provided):**
 
-5. **/ExternalCancel:** The 3rd Party Server sends an [ExternalCancel](/reference/post_externalcancel) request. This is **mandatory** to release the consumer's captured funds if no service was delivered. For **Pre-Selection** flows, this method is referred to as a **Void**, while for **Pre-Authorization**, it is a **Cancel**.
+5. **/ExternalCancel:** The 3rd Party Server sends an [ExternalCancel](/reference/spark/transactions/externalcancel) request. This is **mandatory** to release the consumer's captured funds if no service was delivered. For **Pre-Selection** flows, this method is referred to as a **Void**, while for **Pre-Authorization**, it is a **Cancel**.
 6. **External Cancel Response:** The Nayax Server initiates the financial cancellation with the payment provider and confirms the outcome to the 3rd Party Server.
 
 ## Outcomes and Error Handling
@@ -91,9 +91,9 @@ If you manage a Products Map in Nayax Core, you can include an array of objects 
 ## See Also
 
 <Columns cols={3}>
-  <Card title="StartAuthentication" href="https://developerhub.nayax.com/reference/post_startauthentication" />
+  <Card title="StartAuthentication" href="/reference/spark/transactions/startauthentication" />
 
-  <Card title="ExternalSettlement" href="https://developerhub.nayax.com/reference/post_externalsettlement" />
+  <Card title="ExternalSettlement" href="/reference/spark/transactions/externalsettlement" />
 
-  <Card title="ExternalCancel" href="https://developerhub.nayax.com/reference/post_externalcancel" />
+  <Card title="ExternalCancel" href="/reference/spark/transactions/externalcancel" />
 </Columns>

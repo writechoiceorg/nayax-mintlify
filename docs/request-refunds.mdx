@@ -31,7 +31,7 @@ This process can be performed programmatically through the Lynx API. The followi
 
 <EndpointCard
   title="Request a Payment Refund"
-  href="/reference/request-payment-refund"
+  href="/reference/lynx/payment/request-a-payment-refund"
   method="post"
 />
 
@@ -43,7 +43,7 @@ Refer to the [Security & Token](/docs/security) page of this documentation to le
 
 ### Initiating the request
 
-To start the request, use the [Request a Payment Refund](/reference/request-payment-refund)  endpoint to request a refund. Providing the attributes regarding the rebate in the body parameters of the request, as exemplified below:
+To start the request, use the [Request a Payment Refund](/reference/lynx/payment/request-a-payment-refund)  endpoint to request a refund. Providing the attributes regarding the rebate in the body parameters of the request, as exemplified below:
 
 ```curl Request
 curl --request POST \
@@ -75,7 +75,7 @@ Below, you can see a description of each of the parameters:
 
 #### How to obtain TransactionID and SiteID
 
-The `TransactionId `and `SiteId ` can be retrieved in the Lynx API using the [ Get Last Sales for Machine ](/reference/get-last-sales-for-machine) endpoint to retrieve the last sales using the `MachineID` and the response object should have the necessary data.
+The `TransactionId `and `SiteId ` can be retrieved in the Lynx API using the [ Get Last Sales for Machine ](/reference/lynx/machines/get-last-sales-for-machine-by-machineid) endpoint to retrieve the last sales using the `MachineID` and the response object should have the necessary data.
 
 ## Request Status
 

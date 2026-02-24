@@ -36,7 +36,7 @@ Lynx API allows you to programmatically create a pick list for a specific machin
 
 <EndpointCard
   title="Create Pick List"
-  href="/reference/generate-pick-list"
+  href="/reference/lynx/machine-inventory/create-pick-list"
   method="post"
 />
 
@@ -48,7 +48,7 @@ Refer to the [Security & Token](/docs/security) page of this documentation to le
 
 ### Generate a New Pick List Request
 
-Use the [Create Pick List](/reference/generate-pick-list) endpoint to create a list for a specified machine based on its current stock levels and sales data.
+Use the [Create Pick List](/reference/lynx/machine-inventory/create-pick-list) endpoint to create a list for a specified machine based on its current stock levels and sales data.
 
 ```bash
 curl -X POST "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/pickLists" \

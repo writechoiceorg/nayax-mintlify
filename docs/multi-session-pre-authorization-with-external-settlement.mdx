@@ -7,7 +7,7 @@ This guide explains the **Multi-Session Pre-Authorization with External Settleme
 <Note>
 ****Prerequisite****
 
-For this flow to function, the [ExternalSettlement](/reference/post_externalsettlement) setting must be enabled by Nayax.
+For this flow to function, the [ExternalSettlement](/reference/spark/transactions/externalsettlement) setting must be enabled by Nayax.
 </Note>
 
 ## Configuration & Device Behavior
@@ -16,8 +16,8 @@ Once enabled, the Nayax Engine changes how the physical device handles transacti
 
 * The device will not send its own settlement command after a successful authorization.
 * The transaction remains unsettled until an external request is received.
-* The only way to settle a transaction is via the [ExternalSettlement](/reference/post_externalsettlement) command.
-* For Multi-session flows, the "Close Session" command is no longer relevant; use [ExternalSettlement](/reference/post_externalsettlement) instead.
+* The only way to settle a transaction is via the [ExternalSettlement](/reference/spark/transactions/externalsettlement) command.
+* For Multi-session flows, the "Close Session" command is no longer relevant; use [ExternalSettlement](/reference/spark/transactions/externalsettlement) instead.
 
 This provides integrators the flexibility to trigger the settlement stage externally according to their own business logic, supporting all flow types (Pre-Selection/Pre-Authorization).
 
