@@ -23,13 +23,13 @@ To create a new virtual credit card with Lynx API you can use the **POST** metho
 <Columns cols={2}>
 <EndpointCard
   title="V1: Create Virtual Card"
-  href="/reference/create-virtual-card"
+  href="/reference/lynx/cards/create-virtual-card"
   method="post"
 />
 
 <EndpointCard
   title="V2: Create New Card"
-  href="/reference/create-new-card"
+  href="/reference/lynx/cards/create-new-card"
   method="post"
 />
 </Columns>
@@ -44,7 +44,7 @@ The sections below will guide you through creating a card using any of these opt
 
 ### V1 endpoint
 
-The V1 option is more straightforward, with only the essential fields for basic card creation and minimal optional fields. To create the card, send a **POST** request to the [Create Virtual Card](/reference/create-virtual-card) endpoint, filling in the card details in the body parameters. See the example in the code block below:
+The V1 option is more straightforward, with only the essential fields for basic card creation and minimal optional fields. To create the card, send a **POST** request to the [Create Virtual Card](/reference/lynx/cards/create-virtual-card) endpoint, filling in the card details in the body parameters. See the example in the code block below:
 
 ```curl
 curl --request POST \
@@ -105,7 +105,7 @@ A successful request will return a JSON object containing the details of the new
 ### V2 endpoint
 
 The V2 option provides extended functionality, including additional fields for detailed customization. This version lets you specify card type, physical type, membership level, activation and expiration dates, and group limits.
-To create the card, send a **POST** request to the[ Create New Card](/reference/create-new-card) endpoint, filling in the card details in the body parameters. See the example in the code block below:
+To create the card, send a **POST** request to the[ Create New Card](/reference/lynx/cards/create-new-card) endpoint, filling in the card details in the body parameters. See the example in the code block below:
 
 ```curl
 curl --request POST \
@@ -220,6 +220,6 @@ Once you send the request to create the card using any endpoints mentioned above
 The card created through the Lynx API is available in the Nayax Core, confirming it was successfully created.
 
 <Note>
-  the `ExternalApplicationUserID `field won't appear in Nayax Core, but it would appear when using the **GET** method of the [cards ](/reference/get-cards)endpoint.
+  the `ExternalApplicationUserID `field won't appear in Nayax Core, but it would appear when using the **GET** method of the [cards ](/reference/lynx/cards/get-cards)endpoint.
 </Note>
 

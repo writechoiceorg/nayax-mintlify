@@ -167,8 +167,6 @@ paths:
 
           **Important:** This endpoint might be exposed server-to-server for two-step flows, potentially requiring changes in authentication mechanisms. Recurring payment calls will originate from the server only. Fiscalization and eReceipt processes should also be operated during this flow.
 
-          /\*! tailwindcss v4.1.17 | MIT License | https: //tailwindcss.com \*/ @layer theme, base, components, utilities; @layer utilities;
-
           Processes a payment using a previously saved card token. This endpoint is primarily used for recurring payments (MIT or CIT transactions).
 
           This endpoint may be exposed server-to-server for two-factor authentication flows, potentially requiring changes to authentication mechanisms. Recurring payment calls will originate from the server only. Fiscalization and eReceipt processes should also be operated during this flow.
@@ -182,17 +180,7 @@ paths:
           </Note>
       tags:
         - Payments
-      summary: Process Payment with a Card Token (Charge Token)
-      description: >-
-        Processes a payment using a previously saved card token. This endpoint
-        is primarily used for recurring payments (MIT or CIT transactions).
-
-
-        **Important:** This endpoint might be exposed server-to-server for
-        two-step flows, potentially requiring changes in authentication
-        mechanisms. Recurring payment calls will originate from the server only.
-        Fiscalization and eReceipt processes should also be operated during this
-        flow.
+      summary: Charge Token
       requestBody:
         description: Request to charge a saved token for a payment.
         required: true

@@ -18,12 +18,12 @@ If you are not fully PCI DSS compliant, we recommend using Nayax tokens to proce
 
 ## Tokenize Payments
 
-Once the token is created, you can use it to perform recurring payments using the [Charge Token](/reference/post_charge-token) endpoint.
+Once the token is created, you can use it to perform recurring payments using the [Charge Token](/reference/ecom/payments/charge-token) endpoint.
 
 <Note>
 **Token Type Behavior**
 
-A token's type (subscription/COF/top-up) is set during its initial creation and stored in our system. If a subsequent [Charge Token](/reference/post_charge-token) request includes a different token type parameter, it is ignored. The system always uses the original token type from the initialization request, regardless of what is provided in later charge requests.
+A token's type (subscription/COF/top-up) is set during its initial creation and stored in our system. If a subsequent [Charge Token](/reference/ecom/payments/charge-token) request includes a different token type parameter, it is ignored. The system always uses the original token type from the initialization request, regardless of what is provided in later charge requests.
 </Note>
 
 See [Nayax Tokens](/docs/nayax-ecom-tokens) for more details on how to manage tokens.
