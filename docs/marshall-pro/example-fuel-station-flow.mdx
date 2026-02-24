@@ -10,27 +10,30 @@ The system starts by activating the terminal to wait for a card or mobile wallet
 
 ```json
 {
-  "command": "cardDetect",
-  "requestId": "fuel-001",
-  "data": {
-    "amount": 50000,
-    "tranType": 1,
-    "channels": ["CTLS", "CHIP", "SWIPE"]
-  }
+"command": "cardDetect",
+"requestId": "fuel-001",
+"data": {
+"amount": 50000,
+"tranType": 1,
+"channels": ["CTLS", "CHIP", "SWIPE"]
+}
 }
 ```
+
 ### Step 2: Confirm Payment Location
 Once a card is detected, ask the user if they are paying here or inside.
 
 ```json
 {
-  "command": "displayConfirm",
-  "requestId": "fuel-002",
-  "data": {
-    "title": "Choose Payment Method",
-    "yesLabel": "Pay at Pump",
-    "noLabel": "Pay in Store"
-  }
+"command": "displayConfirm",
+"requestId": "fuel-002",
+"data": {
+"title": "Choose Payment Method",
+"yesLabel": "Pay at Pump",
+"noLabel": "Pay in Store",
+"yesImage": "payatpump",
+"noImage": "payinstore"
+}
 }
 ```
 
@@ -39,32 +42,69 @@ Prompt the user to select their desired fuel grade.
 
 ```json
 {
-  "command": "displaySelect",
-  "requestId": "fuel-003",
-  "data": {
-    "title": "Select Fuel Type",
-    "options": [
-      {"tag": "87", "label": "Unleaded 87"},
-      {"tag": "89", "label": "Unleaded 89"},
-      {"tag": "DSL", "label": "Diesel"}
-    ],
-    "showTags": true
-  }
+"command": "displaySelect",
+"requestId": "fuel-003",
+"data": {
+"title": "Select Fuel Type",
+"options": [
+{"tag": "87", "label": "Unleaded 87"},
+{"tag": "89", "label": "Unleaded 89"},
+{"tag": "DSL", "label": "Diesel"}
+],
+"showTags": true
+}
 }
 ```
 
-### Step 4: Finalize
-**Authorize:** Call `authorize` to hold the \$500.00 max limit.
-**Fueling:** Use `displayScreen` to show a "Fueling in progress" animation.
-**Settle:** When the nozzle is holstered, call `settle` with the actual amount (e.g., $78.50).
+### Step 4: Authorize Max Amount
+Call the authorization command to place a hold on the funds based on the initial cardDetect amount.
 
 ```json
 {
-  "command": "settle",
-  "requestId": "fuel-006",
-  "data": {
-    "transactionId": "TXN-20260113-004000",
-    "amount": 7850
-  }
+"command": "authorize",
+"requestId": "fuel-004"
+}
+```
+
+### Step 5: Show Fueling Screen
+Update the terminal display to show a looping animation while the pump is active.
+
+```json
+{
+"command": "displayScreen",
+"requestId": "fuel-005",
+"data": {
+"title": "Fueling...",
+"mediaId": "fueling",
+"fitImage": "FULL",
+"loop": true
+}
+}
+```
+
+### Step 6: Settle Actual Amount
+When the nozzle is holstered, call settle with the final transaction amount.
+
+```json
+{
+"command": "settle",
+"requestId": "fuel-006",
+"data": {
+"transactionId": "TXN-20260113-004000",
+"amount": 7850
+}
+}
+```
+
+### Step 7: Print Receipt
+Finalize the process by providing a physical or digital record of the transaction.
+
+```json
+{
+"command": "print",
+"requestId": "fuel-007",
+"data": {
+"printData": "Fuel Receipt\nUnleaded 87\n15.7 gal @ $5.00/gal\nTotal: $78.50"
+}
 }
 ```
