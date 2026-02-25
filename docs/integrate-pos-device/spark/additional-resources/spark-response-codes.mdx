@@ -23,11 +23,11 @@ Here's a comprehensive list of response codes, their descriptions, and the relev
 | `34`          | Missing Amount                            | [`/TriggerTransaction`](/docs/triggertransaction) ,[`/Settlement`](/docs/settlement)             |
 | `35`          | Settlement Failed                         | [`/Settlement`](/docs/settlement)                                                              |
 | `36`          | Site ID Not Found                         | [`/Settlement`](/docs/settlement) , [`/CancelTransaction`](/docs/canceltransaction)              |
-| `37`          | Authorization Failed                      | [`/TransactionCallback`](/docs/transactioncallback)                                            |
-| `38`          | Transaction Callback Failed               | [`/TransactionCallback`](/docs/transactioncallback)  [`/DeclineCallback`](/docs/declinecallback) |
+| `37`          | Authorization Failed                      | [`/TransactionCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback)                                            |
+| `38`          | Transaction Callback Failed               | [`/TransactionCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback)  [`/DeclineCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/declinecallback) |
 | `40`          | Timeout Callback Failed                   | [`/TimeoutCallback`](/reference/spark/transactions/timeoutcallback)                                               |
-| `44`          | Timeout on POS Device                     | [`/DeclineCallback`](/docs/declinecallback)                                                    |
-| `45`          | Cancelled on POS Device                   | [`/DeclineCallback`](/docs/declinecallback)                                                    |
+| `44`          | Timeout on POS Device                     | [`/DeclineCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/declinecallback)                                                    |
+| `45`          | Cancelled on POS Device                   | [`/DeclineCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/declinecallback)                                                    |
 | `50`          | Deferred Settlement Failed                | /ExternalSettlement                                                                          |
 | `51`          | Deferred Cancel Failed                    | /ExternalCancel                                                                              |
 | `52`          | No Support for Deferred Settlement/Cancel | /ExternalSettlement, /ExternalCancel                                                         |

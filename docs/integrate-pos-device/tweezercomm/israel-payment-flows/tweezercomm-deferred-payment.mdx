@@ -21,9 +21,9 @@ To understand the Deferred transaction flow, consider the following sequence of 
 
 Here's a breakdown of each step:
 
-1. After the client application (POS) performs its [`doPeriodic()`](/docs/doperiodic) to settle the stored card transactions.
+1. After the client application (POS) performs its [`doPeriodic()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) to settle the stored card transactions.
 2. `setConfig()` Will switch the device to work in deferred mode, using offline mode.
-3. The pos send a [`doTransaction()`](/docs/dotransaction-ashrait) request to the Nayax Device, triggering a new transaction.
+3. The pos send a [`doTransaction()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransaction-ashrait) request to the Nayax Device, triggering a new transaction.
 4. The CardHolder taps their contactless card.
 5. The Nayax Device checks for "Deferred pre-conditions" and, upon approval, returns the transaction result as `Approved->Pending` This means the transaction is approved.
    <Note>
@@ -34,7 +34,7 @@ Here's a breakdown of each step:
 8. The Nayax Device communicates with SHVA to initiate the pending transaction authorization.
 9. The transaction results are returned to the Device.
 10. The transaction results are returned to the client application.
-11. The flow concludes with a final [`doPeriodic()`](/docs/doperiodic) call from the client application, to settle all authorized transactions.
+11. The flow concludes with a final [`doPeriodic()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) call from the client application, to settle all authorized transactions.
 
 ## See Also
 
@@ -42,25 +42,25 @@ Here's a breakdown of each step:
 <Card
   icon="link"
   title="Regular Transaction"
-  href="/docs/single-phase-transaction"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/single-phase-transaction"
   arrow
 />
 <Card
   icon="link"
   title="Two Phases Transaction"
-  href="/docs/2-phase-transaction"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/2-phase-transaction"
   arrow
 />
 <Card
   icon="link"
   title="Pre-Authorization (Israel)"
-  href="/docs/tweezercomm-pre-authorization-israel"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-pre-authorization-israel"
   arrow
 />
 <Card
   icon="link"
   title="Split Transaction"
-  href="/docs/tweezercomm-split-transaction"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-split-transaction"
   arrow
 />
 </Columns>

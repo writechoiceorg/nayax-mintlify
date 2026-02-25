@@ -16,10 +16,10 @@ Here's a breakdown of each step:
 2. The cardholder inserts, shows, or swipes their card.
 3. The Nayax Device communicates with the payment server to perform the pre-authorization.
 4. The payment server responds, and the Nayax Device relays the `Authorization result` back to the POS.
-5. At a later time, the POS sends another [`doTransaction()`](/docs/dotransaction-ashrait) request, this time with a parameter (`Trancode=3`) to initiate the completion of the pre-authorized transaction.
+5. At a later time, the POS sends another [`doTransaction()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransaction-ashrait) request, this time with a parameter (`Trancode=3`) to initiate the completion of the pre-authorized transaction.
 6. The Nayax Device communicates with the payment server to complete the transaction.
 7. The payment server responds with a `Completion result`, which the Nayax Device sends back to the POS.
-8. At the end of the day, the POS sends a [`doPeriodic()`](/docs/doperiodic) request. The Nayax Device communicates with the payment server to perform the settlement of the day's transactions and sends a[`doPeriodic()`](/docs/doperiodic) result back to the POS.
+8. At the end of the day, the POS sends a [`doPeriodic()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) request. The Nayax Device communicates with the payment server to perform the settlement of the day's transactions and sends a[`doPeriodic()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) result back to the POS.
 
 ## See Also
 
@@ -27,25 +27,25 @@ Here's a breakdown of each step:
 <Card
   icon="link"
   title="Regular Transaction"
-  href="/docs/single-phase-transaction"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/single-phase-transaction"
   arrow
 />
 <Card
   icon="link"
   title="Two Phases Transaction"
-  href="/docs/2-phase-transaction"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/2-phase-transaction"
   arrow
 />
 <Card
   icon="link"
   title="Defferred Payment"
-  href="/docs/tweezercomm-deferred-payment"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-deferred-payment"
   arrow
 />
 <Card
   icon="link"
   title="Split Transaction"
-  href="/docs/tweezercomm-split-transaction"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-split-transaction"
   arrow
 />
 </Columns>

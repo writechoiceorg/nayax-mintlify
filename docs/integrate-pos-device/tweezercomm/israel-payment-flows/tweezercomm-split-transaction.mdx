@@ -12,8 +12,8 @@ To understand the Split transaction flow, consider the following sequence of eve
 
 Here's a breakdown of each step:
 
-1. The Milgam System sends one or more [`addSubRetailer()`](/docs/addsubretailer) requests to the Nayax Device. In the example, three such requests are made.
-2. The Milgam System performs its [`doPeriodic()`](/docs/doperiodic) call and then initiates a transaction with a [`doTransaction()`](/docs/dotransaction-ashrait) request.
+1. The Milgam System sends one or more [`addSubRetailer()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/addsubretailer) requests to the Nayax Device. In the example, three such requests are made.
+2. The Milgam System performs its [`doPeriodic()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) call and then initiates a transaction with a [`doTransaction()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransaction-ashrait) request.
 3. The CardHolder presents their card.
 4. The Nayax Device communicates with the payment server to perform the Authorization and Settlement of the transaction.
 5. The payment server sends the transaction result back to the Nayax Device.
@@ -25,25 +25,25 @@ Here's a breakdown of each step:
 <Card
   icon="link"
   title="Regular Transaction"
-  href="/docs/single-phase-transaction"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/single-phase-transaction"
   arrow
 />
 <Card
   icon="link"
   title="Two Phases Transaction"
-  href="/docs/2-phase-transaction"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/2-phase-transaction"
   arrow
 />
 <Card
   icon="link"
   title="Pre-Authorization (Israel)"
-  href="/docs/tweezercomm-pre-authorization-israel"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-pre-authorization-israel"
   arrow
 />
 <Card
   icon="link"
   title="Defferred Payment"
-  href="/docs/tweezercomm-deferred-payment"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-deferred-payment"
   arrow
 />
 </Columns>

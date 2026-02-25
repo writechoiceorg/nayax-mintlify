@@ -17,13 +17,13 @@ To understand the 2 Phases transaction flow, consider the following sequence of 
 
 Here's a breakdown of each step:
 
-1. The client application (labeled as DC) initiates the first phase of the transaction by sending a [`doTransactionPhase1`](/docs/dotransactionphase1)request to the Nayax Device.
+1. The client application (labeled as DC) initiates the first phase of the transaction by sending a [`doTransactionPhase1`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase1)request to the Nayax Device.
 2. The Nayax Device prompts the CardHolder to present their card by either inserting, showing, or swiping it.
-3. The Nayax Device responds to the DC with a [`doTransactionPhase1`](/docs/dotransactionphase1) response, which contains the card and transaction properties.
-4. After any necessary user interaction (e.g., changes or cancellations), the DC sends a [`doTransactionPhase2`](/docs/dotransactionphase2) request to the Nayax Device to complete the transaction.
+3. The Nayax Device responds to the DC with a [`doTransactionPhase1`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase1) response, which contains the card and transaction properties.
+4. After any necessary user interaction (e.g., changes or cancellations), the DC sends a [`doTransactionPhase2`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase2) request to the Nayax Device to complete the transaction.
 5. The Nayax Device sends an authorization request to the Payment Server.
 6. The payment server processes the request and sends an authorization response back to the Nayax Device, which then relays the Authorization response to the DC.
-7. At the end of the day, the DC sends a [`doPeriodic`](/docs/doperiodic) request to the Nayax Device, which communicates with the payment server to complete the day's batch process. The Nayax Device then sends a [`doPeriodic`](/docs/doperiodic) response back to the DC.
+7. At the end of the day, the DC sends a [`doPeriodic`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) request to the Nayax Device, which communicates with the payment server to complete the day's batch process. The Nayax Device then sends a [`doPeriodic`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) response back to the DC.
 
 ## See Also
 
@@ -31,25 +31,25 @@ Here's a breakdown of each step:
 <Card
   icon="link"
   title="Regular Transaction"
-  href="/docs/single-phase-transaction"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/single-phase-transaction"
   arrow
 />
 <Card
   icon="link"
   title="Pre-Authorization (Israel)"
-  href="/docs/tweezercomm-pre-authorization-israel"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-pre-authorization-israel"
   arrow
 />
 <Card
   icon="link"
   title="Defferred Payment"
-  href="/docs/tweezercomm-deferred-payment"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-deferred-payment"
   arrow
 />
 <Card
   icon="link"
   title="Split Transaction"
-  href="/docs/tweezercomm-split-transaction"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-split-transaction"
   arrow
 />
 </Columns>

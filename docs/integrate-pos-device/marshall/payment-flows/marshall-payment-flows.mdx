@@ -7,17 +7,17 @@ The Nayax Marshall SDK offers a diverse range of payment flows, each designed to
 The following pages provide a more detailed description of each one:
 
 <Columns cols={2}>
-  <Card icon="link" title="Single Session with Pre-Selection" href="/docs/marshall-single-session-with-pre-sel" />
+  <Card icon="link" title="Single Session with Pre-Selection" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel" />
 
-  <Card icon="link" title="Single Session with Pre-Authorization" href="/docs/marshall-single-session-with-pre-auth" />
+  <Card icon="link" title="Single Session with Pre-Authorization" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-auth" />
 </Columns>
 
 <Columns cols={3}>
-  <Card icon="link" title="Multi-Vend with Pre-Selection" href="/docs/marshall-multi-vend-with-pre-sel" />
+  <Card icon="link" title="Multi-Vend with Pre-Selection" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-vend-with-pre-sel" />
 
-  <Card icon="link" title="Multi-Vend with Pre-Authorization" href="/docs/marshall-multi-vend-with-pre-auth" />
+  <Card icon="link" title="Multi-Vend with Pre-Authorization" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-vend-with-pre-auth" />
 
-  <Card icon="link" title="Multi-Session" href="/docs/marshall-multi-session" />
+  <Card icon="link" title="Multi-Session" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session" />
 </Columns>
 
 ## Recommended Flows
@@ -26,20 +26,20 @@ If you are unsure which flow is ideal for your machine type, the following table
 
 | Machine Type          | Recommended Flow                                                                                                              | Recommended Configuration                                           |
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| Vending Machine       | [Single Session + Pre-Selection](/docs/marshall-single-session-with-pre-sel)                                                    | Always Idle                                                         |
-| Coin Exchanger        | [Single Session + Pre-Selection](/docs/marshall-single-session-with-pre-sel)                                                    | Always Idle                                                         |
-| Cotton Candy          | [Single Session + Pre-Selection](/docs/marshall-single-session-with-pre-sel)                                                    | Always Idle + Explicit Vend Success                                 |
-| Photo Booth           | [Single Session + Pre-Selection](/docs/marshall-single-session-with-pre-sel)                                                    | Always Idle                                                         |
-| Coffee Machine        | [Single Session + Pre-Selection](/docs/marshall-single-session-with-pre-sel)                                                    | Always Idle                                                         |
-| Massage Chair         | [Single Session + Pre-Selection](/docs/marshall-single-session-with-pre-sel)                                                    | Always Idle                                                         |
-| Car Washing Machine   | [Single Session + Pre-Selection](/docs/marshall-single-session-with-pre-sel)                                                    | Always Idle                                                         |
-| EV Charger 1          | [Multi Session](/docs/marshall-multi-session)                                                                                   | Price not final                                                     |
-| EV Charger 2          | [Multi Session](/docs/marshall-multi-session)                                                                                   | Price not final + Mifare approved by VMC                            |
-| EV Charger 3          | [Multi Session](/docs/marshall-multi-session)                                                                                   | Price not final + Mifare approved by VMC + Info Session             |
-| EV Charger 4          | [Multi Session](/docs/marshall-multi-session)                                                                                   | Price not final + Mifare approved by VMC + Info Session + Always On |
-| Smart Fridge          | [Multi Session](/docs/marshall-multi-session)+ [Sub flows / features](/docs/sub-flows-features#/) | Price not final + Always On                                         |
-| Power Bank            | [Multi Session](/docs/marshall-multi-session)+ [Sub flows / features](/docs/sub-flows-features#/) | Price not final + Always On                                         |
-| Locker                | [Multi Session](/docs/marshall-multi-session)                                                                                   | Price not final                                                     |
-| Racket Rental Machine | [Multi Session](/docs/marshall-multi-session)                                                                                   | Price not final + Always Idle                                       |
+| Vending Machine       | [Single Session + Pre-Selection](/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel)                                                    | Always Idle                                                         |
+| Coin Exchanger        | [Single Session + Pre-Selection](/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel)                                                    | Always Idle                                                         |
+| Cotton Candy          | [Single Session + Pre-Selection](/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel)                                                    | Always Idle + Explicit Vend Success                                 |
+| Photo Booth           | [Single Session + Pre-Selection](/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel)                                                    | Always Idle                                                         |
+| Coffee Machine        | [Single Session + Pre-Selection](/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel)                                                    | Always Idle                                                         |
+| Massage Chair         | [Single Session + Pre-Selection](/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel)                                                    | Always Idle                                                         |
+| Car Washing Machine   | [Single Session + Pre-Selection](/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel)                                                    | Always Idle                                                         |
+| EV Charger 1          | [Multi Session](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session)                                                                                   | Price not final                                                     |
+| EV Charger 2          | [Multi Session](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session)                                                                                   | Price not final + Mifare approved by VMC                            |
+| EV Charger 3          | [Multi Session](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session)                                                                                   | Price not final + Mifare approved by VMC + Info Session             |
+| EV Charger 4          | [Multi Session](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session)                                                                                   | Price not final + Mifare approved by VMC + Info Session + Always On |
+| Smart Fridge          | [Multi Session](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session)+ [Sub flows / features](/docs/integrate-pos-device/marshall/payment-flows/sub-flows-features#/) | Price not final + Always On                                         |
+| Power Bank            | [Multi Session](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session)+ [Sub flows / features](/docs/integrate-pos-device/marshall/payment-flows/sub-flows-features#/) | Price not final + Always On                                         |
+| Locker                | [Multi Session](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session)                                                                                   | Price not final                                                     |
+| Racket Rental Machine | [Multi Session](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session)                                                                                   | Price not final + Always Idle                                       |
 
 <br />

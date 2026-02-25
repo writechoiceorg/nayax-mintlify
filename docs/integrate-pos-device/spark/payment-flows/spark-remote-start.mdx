@@ -35,7 +35,7 @@ Below is a breakdown of the diagram:
 5. The Nayax Device responds to the Nayax Server, confirming it has woken up.
 6. The Nayax Server sends a [`TriggerTransactionResponse`](/docs/triggertransactionresponse) back to the 3rd Party Server.
 7. The consumer presents their card to the Nayax Device. The Nayax Device then sends an [`AuthorizationRequest`](/docs/authorizationrequest) to the Nayax Server.
-8. The Nayax Server performs authorization with a Payment Provider and sends a [`TransactionCallback`](/docs/transactioncallback) to the 3rd Party Server.
+8. The Nayax Server performs authorization with a Payment Provider and sends a [`TransactionCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback) to the 3rd Party Server.
 9. The 3rd Party Server acknowledges the transaction callback by sending a [`TransactionCallbackACK`](/docs/transactioncallbackack) (HTTP 200) to the Nayax Server. At this point, the service can be provided on the Service Station.
 10. The Nayax Server sends an `AuthorizationResponse` to the Nayax Device, indicating the outcome of the authorization. The Nayax Device then returns to an idle state.
 11. The 3rd Party Server sends a [`Settlement`](/docs/settlement) request to the Nayax Server.
@@ -56,8 +56,8 @@ Below is a breakdown of the diagram:
 5. The Nayax Device responds to the Nayax Server, confirming it has woken up.
 6. The Nayax Server sends a [`TriggerTransaction`](/docs/triggertransaction) response back to the 3rd Party Server.
 7. The consumer presents their card to the Nayax Device. The Nayax Device then sends an `AuthorizationRequest` to the Nayax Server.
-8. The Nayax Server processes transactions by performing sales, authorizations, and settlements with a Payment Provider. Concurrently, it sends a [`TransactionCallback`](/docs/transactioncallback) to the 3rd Party Server.
-9. The 3rd Party Server acknowledges the transaction callback by sending a [`TransactionCallback`](/docs/transactioncallback) (HTTP 200) to the Nayax Server. At this point, the service can be provided at the Service Station.
+8. The Nayax Server processes transactions by performing sales, authorizations, and settlements with a Payment Provider. Concurrently, it sends a [`TransactionCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback) to the 3rd Party Server.
+9. The 3rd Party Server acknowledges the transaction callback by sending a [`TransactionCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback) (HTTP 200) to the Nayax Server. At this point, the service can be provided at the Service Station.
 10. The Nayax Server sends an `AuthorizationResponse` to the Nayax Device, indicating the outcome of the authorization. The Nayax Device then returns to an idle state.
 
 ## See Also
@@ -78,7 +78,7 @@ Below is a breakdown of the diagram:
 <Card
   icon="link"
   title="TransactionCallback"
-  href="/docs/transactioncallback"
+  href="/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback"
   arrow
 />
 </Columns>
