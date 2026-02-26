@@ -1,0 +1,24 @@
+---
+title: "Two-Phase Pre-Authorization Flow"
+description: "Enable external data collection and manual authorization triggers for fueling sessions."
+---
+
+This guide walks through the **Two-Phase Pre-Authorization** fueling flow. This sequence allows for external data collection (such as plate numbers) after the card is detected but *before* the authorization request is sent, providing a more flexible validation process for fueling sessions.
+
+## Payment Flow
+Visualize the 2-phase pre-authorization process in the following diagram, which illustrates the separation between card detection, user input, and the final authorization.
+
+![pre-auth-flow](/images/pre-auth-flow.jpg)
+
+Below is a breakdown of the sequence:
+
+1. Your system triggers the `cardDetect` command to enable the VPOS reader.
+2. Once a card is detected, the VPOS sends a confirmation back to your system.
+3. Your system sends a `displayInput` command to the VPOS to prompt the user (e.g., "Enter plate#").
+4. The user enters the data on the VPOS terminal, which is sent back to your system as a "user entry".
+5. After receiving the required input, your system sends the `authorize` command to the VPOS.
+6. The VPOS confirms the card is authorized with an **OK** response.
+7. Your system sends a `displayScreen` command to show "Start refuel" to the consumer.
+8. The fueling session takes place (**Start refuel → End refuel**).
+9. Your system sends the `settle` command to the VPOS to capture the final transaction amount.
+10. Your system displays a "Thank you" message and optionally triggers the `print` command for a receipt.
