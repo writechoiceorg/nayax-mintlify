@@ -1,0 +1,67 @@
+---
+title: "Deferred Payment"
+---
+
+The Deferred transaction flow processes a payment request in two distinct phases:
+
+1. A Pre-Authorization phase
+2. A final Authorization and Settlement phase
+
+This two-step approach is particularly useful for transactions where the final amount or details may change after the initial card interaction.
+
+## Transaction Flow
+
+To understand the Deferred transaction flow, consider the following sequence of events:
+
+<Note>
+  Steps insisde the green area are performed online, and the ones inside the red area are performed offline.
+</Note>
+
+<Frame><img src="/images/docs/tweezercomm-deferred-payment/image1.png" /></Frame>
+
+Here's a breakdown of each step:
+
+1. After the client application (POS) performs its [`doPeriodic()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) to settle the stored card transactions.
+2. `setConfig()` Will switch the device to work in deferred mode, using offline mode.
+3. The pos send a [`doTransaction()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransaction-ashrait) request to the Nayax Device, triggering a new transaction.
+4. The CardHolder taps their contactless card.
+5. The Nayax Device checks for "Deferred pre-conditions" and, upon approval, returns the transaction result as `Approved->Pending` This means the transaction is approved.
+   <Note>
+     Once the deferred mode is finished working, continue to step 6.
+   </Note>
+6. The client application calls `setConfig()` Setting off-line mode to false.
+7. The client application calls the `authorizePendingTransactions()` , sending the pending transactions to Nayax's device asking to settling them (but no settlement is performed yet).
+8. The Nayax Device communicates with SHVA to initiate the pending transaction authorization.
+9. The transaction results are returned to the Device.
+10. The transaction results are returned to the client application.
+11. The flow concludes with a final [`doPeriodic()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) call from the client application, to settle all authorized transactions.
+
+## See Also
+
+<Columns cols={2}>
+<Card
+  icon="link"
+  title="Regular Transaction"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/single-phase-transaction"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Two Phases Transaction"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/2-phase-transaction"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Pre-Authorization (Israel)"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-pre-authorization-israel"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Split Transaction"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-split-transaction"
+  arrow
+/>
+</Columns>
+

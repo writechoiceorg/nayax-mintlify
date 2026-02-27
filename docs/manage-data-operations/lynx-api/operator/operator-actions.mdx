@@ -1,0 +1,220 @@
+---
+title: "Operator Actions"
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+In Nayax core there are various actions that can be taken regarding Operators, such as updating or  retrieving information of an operator, all of these are performed in the **Administration > Operators** menu.
+
+<Frame><img src="/images/docs/operator-actions/image1.png" /></Frame>
+
+These action can also be done through Lynx API programaticallly using the following endpoints:
+<Columns cols={2}>
+<EndpointCard
+  title="Get Actor Details by ActorID"
+  href="/reference/lynx/actors/get-actor-details-by-actorid"
+  method="get"
+/>
+
+<EndpointCard
+  title="Update Operator/Sub-Operator"
+  href="/reference/lynx/actors/update-operatorsub-operator"
+  method="put"
+/>
+</Columns>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+</Warning>
+
+## Retrieve Operator Details
+
+[Get Actor Details by ActorID ](/reference/lynx/actors/get-actor-details-by-actorid)retrieves comprehensive information about a specific actor. This endpoint provides detailed attributes, including profile information and associated configurations, for the actor identified by the provided ActorID.
+
+<CodeGroup>
+```sh Request
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/actors/{ActorID} \
+     --header 'Authorization: BEARER-TOKEN' \
+     --header 'accept: application/json'
+```
+
+```json Response
+{
+  "ParentActorID": 0,
+  "ActorID": 0,
+  "ActorDescription": "string",
+  "ActorCode": 0,
+  "ActorAddress": "string",
+  "ActorContact": "string",
+  "ActorTypeID": 0,
+  "ActorStatus": 0,
+  "ActorHierarchyLevel": 0,
+  "CurrencyID": 0,
+  "LastUpdated": "2024-11-25T20:58:19.906Z",
+  "RouteManagerName": "string",
+  "RouteManagerMobile": "string",
+  "TimeZoneKey": 0,
+  "DayLightSavingsBit": true,
+  "CountryID": 0,
+  "DailyCCTransLimitPerCard": 0,
+  "DailyPPTransLimitPerCard": 0,
+  "DailyExternalPPTransLimitPerCard": 0,
+  "DailyCCTransLimitPerCardPerOperator": 0,
+  "OperatorActorID": 0,
+  "DistributorActorID": 0,
+  "AreaActorID": 0,
+  "RouteActorID": 0,
+  "ActorHierarchy": "string",
+  "ActorHasChildrenBit": true,
+  "ActorHasMachinesBit": true,
+  "ActorImageURL": "string",
+  "ActorContractInfo": "string",
+  "ActorSQSID": 0,
+  "UseProductGroupVATBit": true,
+  "EreceiptTransactionEndEnableBit": true,
+  "MaximumRevalueAmountLimit": 0,
+  "ActorCreatedBy": 0,
+  "ActorCreationDate": "2024-11-25T20:58:19.906Z",
+  "UpdateBy": 0,
+  "CultureID": 0,
+  "RevaluePayoutByDistributor": true,
+  "FiscalizationBit": true,
+  "GeoCountryID": 0,
+  "GeoState": "string",
+  "GeoCity": "string",
+  "GeoAddress": "string",
+  "GeoStreetNumber": "string",
+  "GeoLongitude": 0,
+  "GeoLatitude": 0,
+  "GeoZipCode": "string",
+  "GeoZoom": 0,
+  "ActorLanguageID": 2,
+  "ActorMerchantBit": "string",
+  "ActorMerchantNameForDescriptor": "string",
+  "OverrideGeoInherritcanceBit": true,
+  "AirportID": 0,
+  "VerticalCustomJSON": "string",
+  "FiscalizationActorID": 0,
+  "SupportIncrementalAuth": true,
+  "MaximumDefaultCredit": 0,
+  "Refs": {
+    "additionalProp": "string"
+  }
+}
+```
+</CodeGroup>
+
+<Note>
+**path Params**
+
+Change `{ActorID}`with the actual Operator ID to retrieve the details from.
+</Note>
+
+The response will have the details of the requested operator.
+
+## Update Operator
+
+The [Update Operator/Sub-Operator](/reference/lynx/actors/update-operatorsub-operator) endpoint allows to edit the inforamtion of the specified operator.
+
+<CodeGroup>
+```sh Request
+curl --request PUT \
+     --url https://qa-lynx.nayax.com/operational/v1/actors/{ActorID} \
+     --header 'Authorization: BEARER-TOKEN' \
+     --header 'accept: application/json' \
+     --header 'Content-Type: application/json' \
+     --data '{
+       "ActorDescription": "Updated Main Branch",
+       "ActorCode": 1002,
+       "ActorAddress": "456 New Street, Metropolis",
+       "ActorContact": "updated-contact@branch.com",
+       "ActorTypeID": 16,
+       "ActorStatus": 1,
+       "CurrencyID": 840,
+       "CountryID": 840,
+       "GeoCity": "Metropolis",
+       "GeoLongitude": -77.0364,
+       "GeoLatitude": 38.8951
+     }'
+
+```
+
+```json Response
+{
+  "ParentActorID": 0,
+  "ActorID": 0,
+  "ActorDescription": "string",
+  "ActorCode": 0,
+  "ActorAddress": "string",
+  "ActorContact": "string",
+  "ActorTypeID": 0,
+  "ActorStatus": 0,
+  "ActorHierarchyLevel": 0,
+  "CurrencyID": 0,
+  "LastUpdated": "2024-11-25T20:58:19.906Z",
+  "RouteManagerName": "string",
+  "RouteManagerMobile": "string",
+  "TimeZoneKey": 0,
+  "DayLightSavingsBit": true,
+  "CountryID": 0,
+  "DailyCCTransLimitPerCard": 0,
+  "DailyPPTransLimitPerCard": 0,
+  "DailyExternalPPTransLimitPerCard": 0,
+  "DailyCCTransLimitPerCardPerOperator": 0,
+  "OperatorActorID": 0,
+  "DistributorActorID": 0,
+  "AreaActorID": 0,
+  "RouteActorID": 0,
+  "ActorHierarchy": "string",
+  "ActorHasChildrenBit": true,
+  "ActorHasMachinesBit": true,
+  "ActorImageURL": "string",
+  "ActorContractInfo": "string",
+  "ActorSQSID": 0,
+  "UseProductGroupVATBit": true,
+  "EreceiptTransactionEndEnableBit": true,
+  "MaximumRevalueAmountLimit": 0,
+  "ActorCreatedBy": 0,
+  "ActorCreationDate": "2024-11-25T20:58:19.906Z",
+  "UpdateBy": 0,
+  "CultureID": 0,
+  "RevaluePayoutByDistributor": true,
+  "FiscalizationBit": true,
+  "GeoCountryID": 0,
+  "GeoState": "string",
+  "GeoCity": "string",
+  "GeoAddress": "string",
+  "GeoStreetNumber": "string",
+  "GeoLongitude": 0,
+  "GeoLatitude": 0,
+  "GeoZipCode": "string",
+  "GeoZoom": 0,
+  "ActorLanguageID": 2,
+  "ActorMerchantBit": "string",
+  "ActorMerchantNameForDescriptor": "string",
+  "OverrideGeoInherritcanceBit": true,
+  "AirportID": 0,
+  "VerticalCustomJSON": "string",
+  "FiscalizationActorID": 0,
+  "SupportIncrementalAuth": true,
+  "MaximumDefaultCredit": 0,
+  "Refs": {
+    "additionalProp": "string"
+  }
+}
+```
+</CodeGroup>
+
+The body parameters are the same as used when [Creating an operator](/docs/manage-data-operations/lynx-api/operator/create-operator).
+
+<Note>
+**path Params**
+
+Change `{ActorID}` with the actual Operator ID to update.
+</Note>
+
+The response will have the updated details of the requested operator.
+

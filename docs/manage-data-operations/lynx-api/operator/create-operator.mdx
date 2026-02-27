@@ -1,0 +1,113 @@
+---
+title: "Create Operator"
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+In Nayax Core, you can create and manage operators using the **Operator** menu. To create a new Operator, follow the steps below:
+
+1. Go to **Administration > Operator**.
+2. Click **Create > Add New Operator**.
+3. Now, you must fill out the required details on the form.
+   1. **Operator Internal Code**: This is the SAP Customer number.
+   2. **Parent**: Refers to the parent actor for this new operator, which, in this example, is the distributor itself.
+   3. **Type**: The operator type.
+   4. **Status**: The status of the operator.
+   5. **Regional Settings**: Configuration regarding currency and timezone.
+4. When finished, click **Save Information**.
+
+<Frame><img src="/images/docs/create-operator/image1.png" /></Frame>
+
+<Warning>
+**Actor Types**
+
+Note that when you create an actor directly below the distributor, there are only two types available: Institute or Operator. To create Routes, Area, or Location actor types, they must be below an actor with the Operator type.
+</Warning>
+
+## Lynx API
+
+This process can also be done programmatically through Lynx API with a POST request to the following endpoint:
+
+<EndpointCard
+  title="Create New Actor"
+  href="/reference/lynx/actors/create-a-new-actor"
+  method="post"
+/>
+
+<br />
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+</Warning>
+
+### Create Operator Request
+
+The [Create New Actor ](/reference/lynx/actors/create-a-new-actor)endpoint allows for registering a new operator in the Nayax system. See the example request in the code block below:
+
+```sh Request
+curl --request POST \
+     --url https://qa-lynx.nayax.com/operational/v1/actors/{ParentActorID} \
+     --header 'Authorization: BEARER-TOKEN' \
+     --header 'accept: application/json' \
+     --header 'Content-Type: application/json' \
+     --data '{
+       "ActorDescription": "Main Branch",
+       "ActorCode": 1001,
+       "ActorAddress": "123 Main Street, Metropolis",
+       "ActorContact": "contact@branch.com",
+       "ActorTypeID": 16,
+       "ActorStatus": 1,
+       "CurrencyID": 840,
+       "CountryID": 840,
+       "ActorMerchantBit": true,
+       "ActorCreationDate": "2024-11-25T12:00:00Z",
+       "ActorLanguageID": 7,
+       "GeoCity": "Metropolis",
+       "GeoLongitude": -77.0364,
+       "GeoLatitude": 38.8951
+     }'
+
+```
+
+<Note>
+**Path Params**
+
+Change the `ParentActorID` with the unique identifier of the parent actor under which the new operator will be created.
+</Note>
+
+In the body parameters, fill in the following:
+
+| **Parameter**         | `Type`           | Description                                                                       |
+| --------------------- | ---------------- | --------------------------------------------------------------------------------- |
+| **ParentActorID**     | `int64/null`     | The unique identifier of the parent actor is if this actor is a sub-entity.       |
+| **ActorID**           | `int64/null`     | The unique identifier for the actor.                                              |
+| **ActorDescription**  | `string/null`    | A brief description of the actor.                                                 |
+| **ActorCode**         | `int64/null`     | A code representing the actor is often used for identification or categorization. |
+| **ActorAddress**      | `string/null`    | The physical address associated with the actor.                                   |
+| **ActorContact**      | `string/null`    | Contact information for the actor, such as a phone number or email.               |
+| **ActorTypeID**       | `int32/null`     | The identifier represents the type of actor.                                      |
+| **ActorStatus**       | `int32/null`     | The current status of the actor.                                                  |
+| **CurrencyID**        | `int32/null`     | The currency identifier used by the actor for transactions.                       |
+| **CountryID**         | `int32/null`     | The identifier for the country in which the actor is located.                     |
+| **ActorMerchantBit**  | `boolean/null`   | Indicates whether the actor is associated with a merchant.                        |
+| **ActorLanguageID**   | `int32/null`     | The language preference of the actor.                                             |
+| **GeoCity**           | `string/null`    | The city where the actor is located.                                              |
+| **GeoLongitude**      | `double/null`    | The geographic longitude of the actor's location.                                 |
+| **GeoLatitude**       | `double/null`    | The geographic latitude of the actor's location.                                  |
+| **ActorCreationDate** | `date-time/null` | The date and time when this actor was created.                                    |
+
+A successful request will return a response with the created operator details.
+
+## Verify Creation
+
+You can check if your operator was correctly created in Nayax Core in the `Operators` menu.
+
+1. Use the **Search** function to filter your operator.
+2. Select it from the list.
+
+<Frame><img src="/images/docs/create-operator/image2.png" /></Frame>
+
+You can see all the operator information in the **Details** tab.
+

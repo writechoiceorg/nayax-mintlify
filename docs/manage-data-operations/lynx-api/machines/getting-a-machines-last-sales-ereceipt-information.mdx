@@ -1,0 +1,413 @@
+---
+title: "Getting a Machine's Last Sales & generating eReceipt"
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+This page presents how to retrieve a Machine's Last Sales using its Machine ID with Lynx API and also with Nayax core. The guide will use the following endpoints:
+
+<Columns cols={2}>
+
+<EndpointCard
+  title="Get Last Sales"
+  href="/reference/lynx/machines/get-last-sales-for-machine-by-machineid"
+  method="get"
+/>
+
+<EndpointCard
+  title="Generate eReceipt"
+  href="/reference/lynx/ereceipt/generate-ereceipt-for-your-transaction"
+  method="get"
+/>
+</Columns>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+</Warning>
+
+## Retrieving a Machine's Last Sales
+
+To retrieve a machine's Last Sales using its Machine ID, you need to use the [Get Last Sales for Machine](/reference/lynx/machines/get-last-sales-for-machine-by-machineid) endpoint. By providing the machine's Machine ID in the request you can retrieve the corresponding machine's unique identifier.
+
+The code block below exemplifies the request, using the `MachineID` as a query parameter to filter the result:
+
+```sh
+curl -X 'GET' \
+  'https://lynx.nayax.com/Operational/v1/machines/<MACHINE_ID>/lastSales' \
+  -H 'accept: text/plain' \
+  -H 'Authorization: Bearer <YOUR_ACCESS_TOKEN>'
+```
+
+<Note>
+  Remember to replace `<MACHINE_ID>` with the actual machine's Machine ID.
+</Note>
+
+The response will include details about the machine, including the Machine's ID.
+
+```json
+[
+  {
+    "TransactionID": 4625276436,
+    "PaymentServiceTransactionID": null,
+    "PaymentServiceProviderName": null,
+    "MachineID": 629665354,
+    "MachineName": "Marshall temp- do not touch #3",
+    "MachineNumber": "",
+    "InstituteLocationName": null,
+    "AuthorizationValue": 700,
+    "SettlementValue": 700,
+    "CurrencyCode": "AUD",
+    "PaymentMethod": "Prepaid Credit",
+    "RecognitionMethod": "Prepaid Credit",
+    "CardNumber": "2736390748",
+    "CardBrand": null,
+    "CLI": null,
+    "ProductName": "Unknown(0 = 700.00)\n",
+    "MultivendTransactionBit": false,
+    "MultivendNumverOfProducts": 0,
+    "UnitOfMeasurement": null,
+    "Quantity": 1,
+    "EnergyConsumed": 0,
+    "AuthorizationDateTimeGMT": "2026-02-08T09:31:51.817",
+    "MachineAuthorizationTime": "2026-02-08T11:31:51.46",
+    "SettlementDateTimeGMT": "2026-02-09T01:53:07.96",
+    "SiteID": 4,
+    "SiteName": "US"
+  },
+  {
+    "TransactionID": 4625272758,
+    "PaymentServiceTransactionID": null,
+    "PaymentServiceProviderName": null,
+    "MachineID": 629665354,
+    "MachineName": "Marshall temp- do not touch #3",
+    "MachineNumber": "",
+    "InstituteLocationName": null,
+    "AuthorizationValue": 44.64,
+    "SettlementValue": 44.64,
+    "CurrencyCode": "AUD",
+    "PaymentMethod": "Prepaid Credit",
+    "RecognitionMethod": "Prepaid Credit",
+    "CardNumber": "2736390748",
+    "CardBrand": null,
+    "CLI": null,
+    "ProductName": "Unknown(0 = 44.64)\n",
+    "MultivendTransactionBit": false,
+    "MultivendNumverOfProducts": 0,
+    "UnitOfMeasurement": null,
+    "Quantity": 1,
+    "EnergyConsumed": 0,
+    "AuthorizationDateTimeGMT": "2026-02-08T09:28:18.38",
+    "MachineAuthorizationTime": "2026-02-08T11:28:18.117",
+    "SettlementDateTimeGMT": "2026-02-08T09:29:37.527",
+    "SiteID": 4,
+    "SiteName": "US"
+  },
+  {
+    "TransactionID": 4600648084,
+    "PaymentServiceTransactionID": null,
+    "PaymentServiceProviderName": null,
+    "MachineID": 629665354,
+    "MachineName": "Marshall temp- do not touch #3",
+    "MachineNumber": "",
+    "InstituteLocationName": null,
+    "AuthorizationValue": 0.1,
+    "SettlementValue": 0.05,
+    "CurrencyCode": "AUD",
+    "PaymentMethod": "Prepaid Credit",
+    "RecognitionMethod": "Prepaid Credit",
+    "CardNumber": "2736390748",
+    "CardBrand": null,
+    "CLI": null,
+    "ProductName": "Unknown(0 = 0.05)\n",
+    "MultivendTransactionBit": false,
+    "MultivendNumverOfProducts": 0,
+    "UnitOfMeasurement": null,
+    "Quantity": 1,
+    "EnergyConsumed": 0,
+    "AuthorizationDateTimeGMT": "2026-02-03T08:18:01.53",
+    "MachineAuthorizationTime": "2026-02-03T10:18:01.143",
+    "SettlementDateTimeGMT": "2026-02-03T08:18:15.617",
+    "SiteID": 4,
+    "SiteName": "US"
+  },
+  {
+    "TransactionID": 4600630276,
+    "PaymentServiceTransactionID": null,
+    "PaymentServiceProviderName": null,
+    "MachineID": 629665354,
+    "MachineName": "Marshall temp- do not touch #3",
+    "MachineNumber": "",
+    "InstituteLocationName": null,
+    "AuthorizationValue": 0.1,
+    "SettlementValue": 0.05,
+    "CurrencyCode": "AUD",
+    "PaymentMethod": "Prepaid Credit",
+    "RecognitionMethod": "Prepaid Credit",
+    "CardNumber": "2736390748",
+    "CardBrand": null,
+    "CLI": null,
+    "ProductName": "Unknown(0 = 0.05)\n",
+    "MultivendTransactionBit": false,
+    "MultivendNumverOfProducts": 0,
+    "UnitOfMeasurement": null,
+    "Quantity": 1,
+    "EnergyConsumed": 0,
+    "AuthorizationDateTimeGMT": "2026-02-03T08:07:52.03",
+    "MachineAuthorizationTime": "2026-02-03T10:07:51.663",
+    "SettlementDateTimeGMT": "2026-02-03T08:08:11.187",
+    "SiteID": 4,
+    "SiteName": "US"
+  },
+  {
+    "TransactionID": 4545673740,
+    "PaymentServiceTransactionID": "260122075902",
+    "PaymentServiceProviderName": "Stub Billing",
+    "MachineID": 629665354,
+    "MachineName": "Marshall temp- do not touch #3",
+    "MachineNumber": "",
+    "InstituteLocationName": null,
+    "AuthorizationValue": 0.1,
+    "SettlementValue": 0.1,
+    "CurrencyCode": "AUD",
+    "PaymentMethod": "Credit Card",
+    "RecognitionMethod": "Credit Card",
+    "CardNumber": "5453 xxxx xxxx 5803",
+    "CardBrand": "MASTERCARD",
+    "CLI": null,
+    "ProductName": "Unknown(0 = 0.10)\n",
+    "MultivendTransactionBit": false,
+    "MultivendNumverOfProducts": 0,
+    "UnitOfMeasurement": null,
+    "Quantity": 1,
+    "EnergyConsumed": 0,
+    "AuthorizationDateTimeGMT": "2026-01-22T07:59:02.103",
+    "MachineAuthorizationTime": "2026-01-22T09:59:02.07",
+    "SettlementDateTimeGMT": "2026-01-22T08:53:02.977",
+    "SiteID": 4,
+    "SiteName": "US"
+  },
+  {
+    "TransactionID": 4545672122,
+    "PaymentServiceTransactionID": "260122075814",
+    "PaymentServiceProviderName": "Stub Billing",
+    "MachineID": 629665354,
+    "MachineName": "Marshall temp- do not touch #3",
+    "MachineNumber": "",
+    "InstituteLocationName": null,
+    "AuthorizationValue": 0.1,
+    "SettlementValue": 0.1,
+    "CurrencyCode": "AUD",
+    "PaymentMethod": "Credit Card",
+    "RecognitionMethod": "Credit Card",
+    "CardNumber": "5453 xxxx xxxx 5803",
+    "CardBrand": "MASTERCARD",
+    "CLI": null,
+    "ProductName": "Unknown(0 = 0.10)\n",
+    "MultivendTransactionBit": false,
+    "MultivendNumverOfProducts": 0,
+    "UnitOfMeasurement": null,
+    "Quantity": 1,
+    "EnergyConsumed": 0,
+    "AuthorizationDateTimeGMT": "2026-01-22T07:58:14.687",
+    "MachineAuthorizationTime": "2026-01-22T09:58:14.643",
+    "SettlementDateTimeGMT": "2026-01-22T07:58:30.44",
+    "SiteID": 4,
+    "SiteName": "US"
+  },
+  {
+    "TransactionID": 4515594836,
+    "PaymentServiceTransactionID": null,
+    "PaymentServiceProviderName": null,
+    "MachineID": 629665354,
+    "MachineName": "Marshall temp- do not touch #3",
+    "MachineNumber": "",
+    "InstituteLocationName": null,
+    "AuthorizationValue": 0.1,
+    "SettlementValue": 0.1,
+    "CurrencyCode": "AUD",
+    "PaymentMethod": "Prepaid Credit",
+    "RecognitionMethod": "Prepaid Credit",
+    "CardNumber": "2736390748",
+    "CardBrand": null,
+    "CLI": null,
+    "ProductName": "Unknown(0 = 0.10)\n",
+    "MultivendTransactionBit": false,
+    "MultivendNumverOfProducts": 0,
+    "UnitOfMeasurement": null,
+    "Quantity": 1,
+    "EnergyConsumed": 0,
+    "AuthorizationDateTimeGMT": "2026-01-15T11:44:11.867",
+    "MachineAuthorizationTime": "2026-01-15T13:44:11.53",
+    "SettlementDateTimeGMT": "2026-01-15T11:45:58.207",
+    "SiteID": 4,
+    "SiteName": "US"
+  },
+  {
+    "TransactionID": 4515585818,
+    "PaymentServiceTransactionID": null,
+    "PaymentServiceProviderName": null,
+    "MachineID": 629665354,
+    "MachineName": "Marshall temp- do not touch #3",
+    "MachineNumber": "",
+    "InstituteLocationName": null,
+    "AuthorizationValue": 0.1,
+    "SettlementValue": 0.05,
+    "CurrencyCode": "AUD",
+    "PaymentMethod": "Prepaid Credit",
+    "RecognitionMethod": "Prepaid Credit",
+    "CardNumber": "2736390748",
+    "CardBrand": null,
+    "CLI": null,
+    "ProductName": "Unknown(0 = 0.05)\n",
+    "MultivendTransactionBit": false,
+    "MultivendNumverOfProducts": 0,
+    "UnitOfMeasurement": null,
+    "Quantity": 1,
+    "EnergyConsumed": 0,
+    "AuthorizationDateTimeGMT": "2026-01-15T11:40:29.583",
+    "MachineAuthorizationTime": "2026-01-15T13:40:29.207",
+    "SettlementDateTimeGMT": "2026-01-15T11:40:49.12",
+    "SiteID": 4,
+    "SiteName": "US"
+  },
+  {
+    "TransactionID": 4515573274,
+    "PaymentServiceTransactionID": null,
+    "PaymentServiceProviderName": null,
+    "MachineID": 629665354,
+    "MachineName": "Marshall temp- do not touch #3",
+    "MachineNumber": "",
+    "InstituteLocationName": null,
+    "AuthorizationValue": 0.1,
+    "SettlementValue": 0.1,
+    "CurrencyCode": "AUD",
+    "PaymentMethod": "Prepaid Credit",
+    "RecognitionMethod": "Prepaid Credit",
+    "CardNumber": "2736390748",
+    "CardBrand": null,
+    "CLI": null,
+    "ProductName": "Unknown(0 = 0.10)\n",
+    "MultivendTransactionBit": false,
+    "MultivendNumverOfProducts": 0,
+    "UnitOfMeasurement": null,
+    "Quantity": 1,
+    "EnergyConsumed": 0,
+    "AuthorizationDateTimeGMT": "2026-01-15T11:35:16.5",
+    "MachineAuthorizationTime": "2026-01-15T13:35:16.15",
+    "SettlementDateTimeGMT": "2026-01-15T11:36:57.857",
+    "SiteID": 4,
+    "SiteName": "US"
+  },
+  {
+    "TransactionID": 4515568878,
+    "PaymentServiceTransactionID": null,
+    "PaymentServiceProviderName": null,
+    "MachineID": 629665354,
+    "MachineName": "Marshall temp- do not touch #3",
+    "MachineNumber": "",
+    "InstituteLocationName": null,
+    "AuthorizationValue": 0.1,
+    "SettlementValue": 0.1,
+    "CurrencyCode": "AUD",
+    "PaymentMethod": "Prepaid Credit",
+    "RecognitionMethod": "Prepaid Credit",
+    "CardNumber": "2736390748",
+    "CardBrand": null,
+    "CLI": null,
+    "ProductName": "Unknown(0 = 0.10)\n",
+    "MultivendTransactionBit": false,
+    "MultivendNumverOfProducts": 0,
+    "UnitOfMeasurement": null,
+    "Quantity": 1,
+    "EnergyConsumed": 0,
+    "AuthorizationDateTimeGMT": "2026-01-15T11:33:23.537",
+    "MachineAuthorizationTime": "2026-01-15T13:33:23.113",
+    "SettlementDateTimeGMT": "2026-01-15T11:34:58.007",
+    "SiteID": 4,
+    "SiteName": "US"
+  }
+]
+
+```
+
+<br />
+
+### Nayax Core
+
+You can also find the Machine's Last Sales in Nayax Core in the machine's details, to do so follow the steps below:
+
+1. Access **Operations > Machines**.
+2. Use the **Search** feature to find the machine.
+3. Select the machine from the list.
+4. Click on **Info > Last Sales**:
+
+<Frame><img src="/images/docs/getting-a-machines-last-sales-ereceipt-information/image1.png" /></Frame>
+
+<br />
+
+## Generating eReceipt
+
+To generate a transaction's eReceipt, you need to use the [Generate eReceipt](/reference/lynx/ereceipt/generate-ereceipt-for-your-transaction) endpoint. By providing the following information in the request:
+
+* TransactionID, MachineAuthorizationTime, SiteID - all 3 fields' values are retrieved via the Last Sales method mentioned above
+* Machine ID
+* Consumer's full name
+* Consumer's email address
+
+You can retrieve the corresponding machine's unique identifier.
+
+The code block below exemplifies the request, using the `DeviceSerial` as a query parameter to filter the result:
+
+```sh
+curl -X 'POST' \
+  'https://lynx.nayax.com/Operational/v1/ereceipt/generate' \
+  -H 'accept: text/plain' \
+  -H 'Content-Type: application/json-patch+json' \
+  -d '{
+  "TrasactionID": <TRANSACTION_ID>,
+  "TransactionDateTime": <MACHINE_AUTHORIZATION_TIME>,
+  "TrasactionSiteID": <SITE_ID>,
+  "MachineID": <MACHINE_ID>,
+  "FullName": "string",
+  "Email": "string"
+}'
+```
+
+<Note>
+  Remember to replace `<TRANSACTION_ID>` ,  `<MACHINE_AUTHORIZATION_TIME>`, `<SITE_ID>`, `<MACHINE_ID>`with the actual details of the transcation.
+</Note>
+
+The response will include details about the eReceipt sent, including the PDF's link.
+
+```json
+{
+  "ReceiptURL": "https://nayax-ereceipt.s3.amazonaws.com/2026/02/12/YaelLawtonStubBilling/OFpQBN-x25GKRbZE8ySlnDnrO44iYVAEUKcw-vKmpoY1/ereceipt4625276436.pdf",
+  "EmailSent": true,
+  "EreceiptID": 6203654
+}
+```
+
+### Nayax Core
+
+You can also find the Machine's Last Sales in Nayax Core in the machine's details, to do so follow the steps below:
+
+1. Access **Reports > Online Reports > Dynamic Transactions Monitor**.
+
+<Frame><img src="/images/docs/getting-a-machines-last-sales-ereceipt-information/image2.png" /></Frame>
+
+2. Use the **Search** feature to find the relevant transaction by the transaction ID.
+
+<Frame><img src="/images/docs/getting-a-machines-last-sales-ereceipt-information/image3.png" /></Frame>
+
+3. Select the relevant transaction from the list.
+4. Right-click on the transaction, then select **Generate eReceipt**:
+
+<Frame><img src="/images/docs/getting-a-machines-last-sales-ereceipt-information/image4.png" /></Frame>
+
+<br />
+
+5. Insert the relevant details and click on "Generate eReceipt:
+
+<Frame><img src="/images/docs/getting-a-machines-last-sales-ereceipt-information/image5.png" /></Frame>

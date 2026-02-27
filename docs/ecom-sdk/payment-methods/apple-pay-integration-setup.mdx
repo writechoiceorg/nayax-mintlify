@@ -1,0 +1,18 @@
+---
+title: "Apple Pay Integration Setup"
+---
+
+To enable Apple Pay as a payment method with the Nayax eCom SDK, you must verify your merchant domain. Follow these steps to complete the integration:
+
+1. Contact your Nayax Solution Architect with the URL from where Apple Pay transactions will originate (your merchant domain).
+
+2. Host a domain association file to prove ownership of your domain.
+   * **Download the certificate file here:**
+     [https://nayax-ecom-apple-pay.nayax.com/.well-known/apple-developer-merchantid-domain-association](https://nayax-ecom-apple-pay.nayax.com/.well-known/apple-developer-merchantid-domain-association)
+
+   * **Host the file at the exact following path on your server:**
+     `[https://your-domain.com/.well-known/apple-developer-merchantid-domain-association](your-domain.com/.well-known/apple-developer-merchantid-domain-association)`
+
+3. Ensure the URL hosting the certificate is accessible from the public internet. At a minimum, it must be open to Apple's validation servers. See [Apple Pay IP Addresses](https://developer.apple.com/documentation/applepayontheweb/setting-up-your-server#Allow-Apple-Pay-IP-Addresses) to learn more.
+
+4. After completing steps 1-3, email your Nayax Solution Architect. They will finalize the configuration on the Nayax side.

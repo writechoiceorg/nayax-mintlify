@@ -1,0 +1,57 @@
+---
+title: "Overview"
+---
+
+Cortina API allows third-party integrators, such as payment providers or Payment Gateways, to process payment transactions securely and efficiently. It acts as a communication layer that enables Nayax’s devices to interact with external payment platforms through well-defined request/response flows.
+
+## Transaction Flow Components
+
+Cortina API is the central layer in the payment flow, ensuring that transactions are valid, secure, and processed.
+
+<Frame><img src="/images/docs/overview-cortina/image1.png" /></Frame>
+
+The flow involves four key components:
+
+1. **Customer**: Customers initiate payment by presenting their payment method at the POS (Point of Sale) terminal.
+2. **POS (Point of Sale)**: The POS terminal receives the credit card details and the transaction amount. It then sends the card and transaction details to the Nayax server for further processing.
+3. **Nayax**: Nayax receives the payment request and uses the Cortina API to verify the transaction. The API handles the transaction's authentication, authorization, and final settlement.
+4. **Payment Gateway**: The Payment Gateway processes transaction details, authorizes payments, and clears funds.
+
+Nayax uses the Cortina API to authorize and clear the transaction, ensuring that the payment is valid and is processed securely.
+
+## See Also
+
+This section provides a comprehensive guide to understanding and integrating with Cortina.
+
+See the following pages for more information about Cortina and its features.
+
+<Columns cols={3}>
+<Card
+  icon="link"
+  title="Integration Process"
+  href="/docs/cortina/cortina-integration"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Authentication"
+  href="/docs/cortina/start-session/cortina-auth"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Cortina Prepaid"
+  href="/docs/cortina/prepaid-card/prepaid-card-flows"
+  arrow
+/>
+<Card
+  icon="link"
+  title="StaticQR"
+  href="/docs/cortina/staticqr/staticqr-flows"
+  arrow
+/>
+</Columns>
+
+
+
+<br />

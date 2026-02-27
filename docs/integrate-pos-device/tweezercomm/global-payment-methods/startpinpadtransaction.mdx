@@ -1,0 +1,271 @@
+---
+title: "startPinpadTransaction"
+---
+
+The `startPinpadTransaction` method initiates the PinPad process on the payment terminal, instructing it to get ready to receive card information via Magnetic Stripe Read (MSR) or Contactless (Tap) or Contact. In case of Contact transaction- the transaction would proceed to doPinPadTransaction, otherwise will not- more on that in [Pinpad Mode](/docs/integrate-pos-device/tweezercomm/pinpad-mode).\
+The response will provide the method of payment used through the `panEntryMode` parameter.
+
+This method captures raw card data (Track 2 or EMV tags) from the physical device, preparing the system for subsequent authorization steps.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, ensure to configure the following:
+
+* The `method `field must be set to `startPinpadTransaction`.
+* The service must be set to `engine `in the `params`.
+
+The request includes a list of parameters, with the first being the service name, which is currently fixed as `engine`, and the second being a dictionary containing all other transaction-specific details.
+
+```json
+{
+    "jsonrpc":"2.0",
+    "method":"startPinpadTransaction",
+    "id":"123454352",
+    "params": [
+        "engine",{
+            "vuid": "{{$guid}}",
+            "amount":100,
+            "tranType":1
+        }
+    ]
+}
+```
+
+### Request Parameters
+
+The table below describes the parameters of the request:
+
+| Name       | Type    | Description                                                         |
+| :--------- | :------ | :------------------------------------------------------------------ |
+| `vuid`     | string  | Vendor (client) unique transaction identifier.                      |
+| `amount`   | integer | Amount of the transaction in cents.                                 |
+| `tranType` | float   | Transaction type code. For example, `1` for a standard transaction. |
+
+## Response
+
+A successful request will return a response containing the captured card data, which varies depending on whether the card was read via magnetic stripe or contactless (EMV).
+
+### Magnetic Stripe Read Response
+
+This response is returned when the card is successfully swiped via the magnetic stripe reader.
+
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "123454352",
+   "result": {
+       "statusCode": 0,
+       "statusMessage": "ok",
+       "panEntryMode": 0,
+     		"track2": "65458643975398",
+
+   }
+}
+```
+
+#### Response Parameters
+
+The table below describes the response parameters for this method when a Magnetic Stripe Read occurs.
+
+<table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        Name
+      </th>
+
+      <th>
+        Type
+      </th>
+
+      <th>
+        Description
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `statusCode`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        The PinPad transaction status. A value of `0` indicates success.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `statusMessage`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        The transaction message (e.g., `ok`).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `panEntryMode`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        POS Entry Mode, indicating the method of card entry.
+
+        * `0` indicates a Magnetic Stripe read.
+        * `1` indicates a Contact read.
+        * `3` indicates a Contactless read.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `track2`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        The raw Track 2 card data captured from the magnetic stripe.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+### &#x20;Contactless Read Response
+
+This response is returned when the card is successfully swiped via the magnetic stripe reader.
+
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "123454352",
+   "result": {
+       "statusCode": 0,
+       "statusMessage": "ok",
+       "panEntryMode": 3,
+       "tags": {
+           "95": "tag value",
+           "9F02": "tag value",
+           "5A": "tag value",
+           "5F34": "tag value",
+           "5F2A": "tag value",
+           "9F02": "tag value",
+           "9F03": "tag value",
+           "9A": "tag value",
+           "9C": "tag value",
+           "9F1A": "tag value",
+           "9F21": "tag value",
+           "9F37": "tag value",
+           "9F36": "tag value",
+           "9F26": "tag value",
+           "9F27": "tag value"
+       }
+   }
+}
+```
+
+#### Response Parameters
+
+The table below describes the response parameters for this method when a Contactless Read occurs.
+
+<table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        Name
+      </th>
+
+      <th>
+        Type
+      </th>
+
+      <th>
+        Description
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `statusCode`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        The PinPad transaction status. A value of `0` indicates success.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `statusMessage`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        The transaction message (e.g., `ok`).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `panEntryMode`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        POS Entry Mode, indicating the method of card entry.
+
+        * `0` indicates a Magnetic Stripe read.
+        * `1` indicates a Contact read.
+        * `3` indicates a Contactless read.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `tags`
+      </td>
+
+      <td>
+        json of strings
+      </td>
+
+      <td>
+        A dictionary containing raw **EMV Tag-Value pairs** captured from the contactless chip.
+      </td>
+    </tr>
+  </tbody>
+</table>

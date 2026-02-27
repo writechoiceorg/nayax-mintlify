@@ -1,0 +1,71 @@
+---
+title: "Upload Refund Documentation"
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+In cases where the customer contacts the billing provider directly for a refund, the `IsRefundedExternally` has to be set to `true`  when accepting the refund and the file received by the billing provider added in the `RefundedDocumentUrl`
+
+In Nayax Core, this is set when accepting or declining a refund by selecting **Refunded Externally**. You can upload the refund document. See the image below:
+
+<Frame><img src="/images/docs/upload-refund-document/image1.png" /></Frame>
+
+## Lynx API
+
+With Lynx API you can also upload the refund documentation to get the `RefundedDocumentUrl`  the endpoint below is used for this:
+
+<EndpointCard
+  title="Upload Refund Documentation"
+  href="/reference/lynx/payment/upload-refund-documentation"
+  method="post"
+/>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens and how to properly use them to authenticate your API requests.
+</Warning>
+
+Use the [Upload Refund Documentation](/reference/lynx/payment/upload-refund-documentation) endpoint to upload the file received by the billing provider. See the request example below:
+
+```sh Request
+curl --request POST \
+     --url https://qa-lynx.nayax.com/operational/v1/payment/upload-refund \
+     --header 'Authorization: <YOUR_ACCESS_TOKEN>' \
+     --header 'accept: application/json' \
+     --header 'content-type: application/json' \
+     --data '
+{
+  "FileName": "string",
+  "FileData": "string",
+  "TransactionId": 0,
+  "SiteId": 0,
+  "MachineAuTime": "2024-10-10T16:30:37.179Z"
+}
+'
+```
+
+The table below details the body parameters of the request.
+
+| **Name**      | **Type**  | **Description**                                                                                                                                   |
+| ------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| FileName      | string    | The name of the file being uploaded.                                                                                                              |
+| FileData      | base64    | The base64-encoded content of the file being uploaded. You can use a [PDF to base 64 online convertor](https://base64.guru/converter/encode/pdf). |
+| TransactionId | int64     | The unique identifier of the transaction associated with the file.                                                                                |
+| SiteId        | int32     | The unique identifier of the site where the transaction occurred.                                                                                 |
+| MachineAuTime | date-time | The machine's authorization time is associated with the transaction.                                                                              |
+
+<Note>
+  The `TransactionId`, `SiteId `and `MachineAuTime `need to be the same as sent in the refund request.
+</Note>
+
+Once the request is done successfully, the response will contain a URL with the uploaded document.
+
+```json Response
+{
+  "FileURL": "string"
+}
+```
+
+Now you can add this URL to the `RefundedDocumentUrl` flag when using the [Approve Refund](/docs/manage-data-operations/lynx-api/refunds/approve-or-decline-a-refund) endpoint.
+

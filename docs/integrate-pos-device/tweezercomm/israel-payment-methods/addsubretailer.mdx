@@ -1,0 +1,386 @@
+---
+title: "addSubRetailer"
+---
+
+The `addSubRetailer ` method is used to load sub-retailers into the terminal. This method can only be used if the main retailer is defined as RAV-SAPAK at Shva.
+
+<Warning>
+**Use `doPeriodic`**
+
+After loading new retailers, you should use the `doPeriodic` method.
+</Warning>
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Integration ](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, ensure to configure the following:
+
+* The `method `field must be set to `addSubRetailer` .
+* The service must be set to `ashrait `in the `params`.
+
+The request needs to include the `retailerId` list.
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "addSubRetailer",
+    "id": "123454352",
+    "params": [
+        "ashrait",
+        {
+            "retailerId": [
+                "0883806",
+                "0884806"
+            ]
+        }
+    ]
+}
+```
+
+### Request Parameters
+
+The table below describes the request parameters for this method.
+
+| Name         | Type  | Description        |
+| :----------- | :---- | :----------------- |
+| `retailerId` | array | List of retailers. |
+
+## Response
+
+A successful request will return the following response:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "OK"
+    }
+}
+```
+
+### Response Parameters
+
+The table below describes the response parameters for this method.
+
+<table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        Name
+      </th>
+
+      <th>
+        Type
+      </th>
+
+      <th>
+        Description
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `statusCode`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Transaction status. A value of `0` indicates a successful (approved) transaction.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `statusMessage`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Transaction message (e.g., `ok`)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `mutag`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Card brand
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `solek`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Acquirer
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `manpik`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Card Issuer
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `uid`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Transaction unique identifier
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `posEntryMode`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        POS Entry Mode, type of card transaction. Values are:
+        `0` (MSR),
+        `5` (CTLS MSR),
+        `40` (Contact EMV),
+        `50` (Phone),
+        `51` (Signature only),
+        `80` (Fallback (err)),
+        `81` (Fallback (no AID))
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `cardNumber`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Masked personal account number (PAN)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `rrn`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Transaction authorization number from the authorized entity
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `issuerAuthNum`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Issuer authorization number
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `acquirerMerchantID`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Merchant ID in the acquirer system
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `authCodeManpik`
+      </td>
+
+      <td>
+        integer
+      </td>
+
+      <td>
+        Code of authorization. Values are:
+        `0` (Unauthorized transaction),
+        `1` (Authorized by issuer),
+        `2` (Declined by issuer),
+        `3` (Stip approved ABS),
+        `4` (Stip declined ABS),
+        `5` (Voice approval),
+        `6` (Voice declined),
+        `7` (Approved by issuer pre-auth),
+        `8` (Approved by card)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `gatewayToken`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Gateway token of the card
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `appVersion`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Payment application version
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `retailerId`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Terminal retailer Id
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `ecrNo`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        POS identifier
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `vuid`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Vendor unique identifier
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `tranCode`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        Transaction Code
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `merchantReceipt`
+      </td>
+
+      <td>
+        array of key/value
+      </td>
+
+      <td>
+        Merchant receipt to print or save
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `customerReceipt`
+      </td>
+
+      <td>
+        array of key/value
+      </td>
+
+      <td>
+        Customer receipt to print
+      </td>
+    </tr>
+  </tbody>
+</table>

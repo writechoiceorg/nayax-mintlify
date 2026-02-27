@@ -1,0 +1,84 @@
+---
+title: "sendGeneralEvent"
+---
+
+The `sendGeneralEvent` method allows the terminal to communicate specific operational events or status updates to the system. This is mainly used to monitor the results of background processes such as periodic communications, setup routines, or reporting transaction-specific data.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Get Started](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) for more details on how the requests are structured and sent.
+</Note>
+
+In the request, the `method` field needs to be set to `sendGeneralEvent`, as shown in the example below:
+
+```json
+{
+  "id": "123",
+  "method": "sendGeneralEvent",
+  "jsonrpc": "2.0",
+  "params": [
+    "device",
+    {
+      "eventCode": 0,
+      "eventData": {
+        "transactionAmount": "100.00",
+        "card": "6935"
+      }
+    }
+  ]
+}
+```
+
+### Request Parameters
+
+The table below describes the request parameters for this method:
+
+| Name        | Type    | Description                                                                  |
+| :---------- | :------ | :--------------------------------------------------------------------------- |
+| `params[0]` | string  | Must contain the value `device`                                              |
+| `params[1]` | object  | Contains the `eventCode` and associated `eventData`                          |
+| `eventCode` | integer | The identifier for the specific event ([see Enums below](#event-code-enums)) |
+| `eventData` | object  | Metadata related to the event, such as amount, card digits                   |
+
+#### Event Code Enums
+
+| Value | Name                                                      |
+| :---- | :-------------------------------------------------------- |
+| **0** | `GeneralEventCode_Event`                                  |
+| **1** | `GeneralEventCode_EventEstablishmentFinishedSuccessfully` |
+| **2** | `GeneralEventCode_EventPeriodicFinishedSuccessfully`      |
+| **3** | `GeneralEventCode_EventEstablishmentFailed`               |
+| **4** | `GeneralEventCode_EventPeriodicFailed`                    |
+| **5** | `GeneralEventCode_EventMiniSettlementFailed`              |
+| **6** | `GeneralEventCode_EventCardReadError`                     |
+| **7** | `GeneralEventCode_EventMustToGoOnlineError`               |
+| **8** | `GeneralEventCode_EventTransactionReport`                 |
+
+## Response
+
+A successful request will return the following response:
+
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "123",
+   "result": {
+       "statusCode": 0,
+       "statusMessage": "ok"
+   }
+}
+```
+
+### Response Parameters
+
+The table below describes the response parameters for this method:
+
+| Name            | Type    | Description                                    |
+| :-------------- | :------ | :--------------------------------------------- |
+| `statusCode`    | integer | Operation status (0 = OK, others = errors TBD) |
+| `statusMessage` | string  | Status description (e.g., "ok")                |
+
+<br />

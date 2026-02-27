@@ -1,0 +1,99 @@
+---
+title: "External Settlement"
+---
+
+The **Spark External Settlement** feature allows third-party servers to complete or cancel transactions authorized directly on a Nayax payment terminal but not initiated via a standard Spark flow. This provides integrators with the flexibility to trigger the settlement stage externally based on their own business logic, supporting all machine protocols (Pulse, MDB, Marshall) and flow types (PreSelection/PreAuthorization).
+
+The External Settlement flow makes use of the following Spark methods:
+
+*   [`StartAuthentication`](/reference/spark/transactions/startauthentication)
+*   [`ExternalSettlement`](/reference/spark/transactions/externalsettlement)
+*   [`ExternalCancel`](/reference/spark/transactions/externalcancel)
+
+## External Settlement Flow
+
+The **External Settlement** flow allows a third party to complete a transaction that was authorized directly on a terminal.
+
+<Note>
+**Prerequisite**
+
+For this flow to function, the **External Settlement** setting must be enabled by Nayax.
+</Note>
+
+Once enabled, the Nayax Engine instructs the device not to send its own settlement command after a successful authorization, keeping the transaction in an unsettled state until an external request is received.
+
+<Danger>
+**Note**
+
+This feature applies only to transactions authorized outside of the Spark start flows (Remote Start or Device Start).
+
+In addition, in case of using External Settlement with Marshall Multisession- note that you should not send "Close Session" command for settlement.
+</Danger>
+
+To understand the external settlement flow, see the diagram below:
+
+<Frame><img src="/images/docs/external-settlement/image1.png" /></Frame>
+
+Below is a breakdown of the diagram:
+
+1. **Authorization Request:** The process begins with transaction initiation on the Nayax Device, which sends an authorization request to the Nayax Server.
+2. **Authorization Response:** The Nayax Server performs authorization with the payment provider and sends the response back to the device, which then returns to an IDLE state. The transaction remains authorized but unsettled.
+3. **/StartAuthentication:** After the service or product is provided (or fails to be provided), the 3rd Party Server initiates communication by calling the [StartAuthentication](/reference/spark/transactions/startauthentication) method. This call must include an encrypted cipher to securely authenticate both Nayax and the integrator.
+4. **Start Authentication Response:** The Nayax Server decrypts the cipher, validates the credentials and timestamps, and responds with a hashed `SparkTransactionId` to confirm authenticity.
+5. **/ExternalSettlement (If Service Provided):** The 3rd Party Server sends the settlement request.
+   * **Critical Identification:** The request must contain the `NayaxTransactionId` and `SiteId` to correctly match the original transaction.
+   * **Time Limit:** Transactions must be settled within **48 hours** of initiation. Settlement attempts after this window will fail.
+6. **External Settlement Response:** The Nayax Server settles with the payment provider and sends a success/failure response to the 3rd Party Server.
+
+**Alternatively (If Service/Product(s) Not Provided):**
+
+5. **/ExternalCancel:** The 3rd Party Server sends an [ExternalCancel](/reference/spark/transactions/externalcancel) request. This is **mandatory** to release the consumer's captured funds if no service was delivered. For **Pre-Selection** flows, this method is referred to as a **Void**, while for **Pre-Authorization**, it is a **Cancel**.
+6. **External Cancel Response:** The Nayax Server initiates the financial cancellation with the payment provider and confirms the outcome to the 3rd Party Server.
+
+## Outcomes and Error Handling
+
+Integrators should monitor the `ErrorCode` and `StatusMessage` within the `Status` object to determine the result of a request and the necessary follow-up action.
+
+| Outcome                           | Event Code | Description                                                                    | Recommended Action                                                            |
+| :-------------------------------- | :--------: | :----------------------------------------------------------------------------- | :---------------------------------------------------------------------------- |
+| **Success**                       |     N/A    | Transaction successfully settled or cancelled.                                 | No further action required.                                                   |
+| **Authentication Failure**        |     33     | Nayax could not verify the credentials for the 3rd-party server.               | Retry the authentication request immediately.                                 |
+| **Capability Validation Failed**  |     52     | The Machine or VAS Provider is not configured for External Settlement.         | Check Nayax Core configuration; ensure "Support External Settlement" is TRUE. |
+| **External Settlement Failed**    |     50     | Request failed due to missing fields, unmatched identifiers, or system errors. | Retry up to 5 times within 24 hours of the first attempt.                     |
+| **External Cancel Failed**        |     51     | Cancellation failed due to missing fields or processing errors.                | No manual action required. Nayax will automatically retry via AutoCancel.     |
+| **Transaction Already Completed** |   50 / 51  | Transaction was already completed or invalidated.                              | Validate the transaction status in your system.                               |
+
+### Troubleshooting Tips
+
+* **Missing Mandatory Fields**: If fields like `SiteId` are missing, the system returns event code 50 or 51 and specifies the missing fields in the `StatusMessage`.
+* **Transaction Not Found**: If you receive a "Transaction was not found" error, ensure that `NayaxTransactionId`and `SiteId` exactly match the original transaction data.
+* **Card Scheme Compliance**: Transactions that remain unsettled for too long will be automatically canceled by the system. However, integrators must not rely on this and should send an External Cancel immediately if no settlement will occur to avoid poor user experience and potential disputes.
+
+## Advanced Settlement Features
+
+### Digital Receipts (`eReceiptData`)
+
+For operators using the Nayax eReceipt platform, the `ExternalSettlement` request includes an `eReceiptData` field.
+
+* This field allows you to add custom data (in JSON format) such as company name, station name, or support information directly to the digital receipt.
+* **Format Example**: `{"General":[{"Company":"Your Payments","Station Name":"812"}]}`.
+
+### Product Management (`ProductInfo`)
+
+If you manage a Products Map in Nayax Core, you can include an array of objects to report exactly what was sold:
+
+* **Value**: The decimal amount of a single product.
+* **Code**: The integer representing the Product Code in the Products Map.
+* **Quantity**: The number of units provided.
+
+**Example**: `[{"Value": 6.50, "Code": 12, "Quantity": 3}]`.
+
+## See Also
+
+<Columns cols={3}>
+  <Card icon="link" title="StartAuthentication" href="/reference/spark/transactions/startauthentication" />
+
+  <Card icon="link" title="ExternalSettlement" href="/reference/spark/transactions/externalsettlement" />
+
+  <Card icon="link" title="ExternalCancel" href="/reference/spark/transactions/externalcancel" />
+</Columns>

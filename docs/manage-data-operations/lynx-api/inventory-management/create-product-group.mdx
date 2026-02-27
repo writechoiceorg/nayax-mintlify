@@ -1,0 +1,66 @@
+---
+title: "Product Groups"
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+Product groups in Nayax are organizational entities that categorize products into clusters. By grouping similar products, operators can streamline processes like inventory tracking, reporting, and restocking, ensuring better management and oversight of their product offerings.
+
+In Nayax Core, you can create a product group in the following way:
+
+1. Go to **Administration> Products**.
+2. Click **Create > Add Product Group**
+3. Fill in the required Product Group details in the form
+   1. Operator: Select which operator is associated with the group.
+   2. Description: the name of the product group.
+4. Click **Save** to finish.
+
+<Frame><img src="/images/docs/create-product-group/image1.png" /></Frame>
+
+## Lynx API
+
+You can also perform this programmatically through Lynx API by performing a POST Request on the following endpoint:
+
+<EndpointCard
+  title="Create Product Groups"
+  href="/reference/create-product-groups"
+  method="post"
+/>
+
+<br />
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens and how to properly use them to authenticate your API requests.
+</Warning>
+
+### Create a new Product Group
+
+You can define and organize product groups using the [Create New Product Group]()  endpoint. See an example request in the code block below:
+
+```sh
+curl --request POST \
+     --url https://qa-lynx.nayax.com/operational/v1/productGroups \
+     --header 'Authorization: BEARER-TOKEN' \
+     --header 'accept: application/json' \
+     --header 'Content-Type: application/json' \
+     --data '{
+       "ActorID": 12345,
+       "ProductGroupName": "Beverages",
+       "ProductGroupCode": 1001,
+       "ProductGroupSubCode": 10,
+       "ProductGroupCategoryCode": "DRINKS"
+     }'
+```
+
+Send the following body parameters in the request object:
+
+| **Parameter**                | `Type`        | Description                                                           |
+| ---------------------------- | ------------- | --------------------------------------------------------------------- |
+| **ActorID**                  | `int64`       | The unique identifier of the actor associated with the product group. |
+| **ProductGroupName**         | `string/null` | The name of the product group to be created (e.g., "Beverages").      |
+| **ProductGroupCode**         | `int64/null`  | The code associated with the product group.                           |
+| **ProductGroupSubCode**      | `int64/null`  | A sub-code for further categorizing the product group.                |
+| **ProductGroupCategoryCode** | `string/null` | The category code associated with the product group (e.g., "DRINKS"). |
+

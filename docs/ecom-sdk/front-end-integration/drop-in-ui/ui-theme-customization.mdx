@@ -1,0 +1,74 @@
+---
+title: "UI Theme Customization"
+---
+
+The eCOM SDK supports comprehensive customization of its Mobile (iOS/Android) and Web UI components, enabling you to align the checkout experience with your brand identity.
+
+<Warning>
+**Android Customization**
+
+Android currently has limited UI customization options. Please contact a Nayax Integration Engineer for assistance.
+</Warning>
+
+## iOS Customization
+
+The iOS SDK allows you to customize the appearance of the payment components using style configuration objects that you pass during initialization.
+
+You customize the UI by modifying nested properties within a dedicated Style object (e.g., `DropInComponent.Style` or `FormComponentStyle`). These objects expose granular control over colors, typography, and layout for various UI elements.
+
+| Element Type   | Example Property (Swift)                                    | Description                                              |
+| :------------- | :---------------------------------------------------------- | :------------------------------------------------------- |
+| **Colors**     | `style.listComponent.sectionHeader.title.color`             | Changes the color of titles, text fields, and buttons.   |
+| **Typography** | `style.formComponent.textField.text.font`                   | Adjusts font size, weight, and style for text elements.  |
+| **Buttons**    | `style.formComponent.mainButtonItem.button.backgroundColor` | Sets the background and text colors for primary buttons. |
+
+To change section headers to red and the primary button background to black with white text:
+
+```swift
+var style = DropInComponent.Style()
+// Customize text colors
+style.listComponent.sectionHeader.title.color = .red 
+style.formComponent.textField.title.color = .red 
+// Customize button appearance
+style.formComponent.mainButtonItem.button.backgroundColor = .black
+style.formComponent.mainButtonItem.button.title.color = .white
+
+let configuration = DropInComponent.Configuration(style: style)
+// Initialize component with custom configuration
+let component = DropInComponent(paymentMethods: paymentMethods, context: context, configuration: configuration)
+```
+
+## Web Customization
+
+For web integrations, the SDK's styling is primarily driven by CSS Custom Properties (CSS Variables), enabling easy, global theme overrides without modifying the core library code.
+
+The library defines hundreds of CSS variables prefixed with --adyen-sdk-\` that control the colors, spacing, typography, and borders of all Drop-in and Component elements. To apply your custom theme, you override these variables in your own CSS file.
+
+1. Create a CSS file (e.g., `override.css`) and define your preferred values for the relevant `--adyen-sdk-` variables, typically at the `:root` level for global application.
+   ```css
+   :root {
+       /* Changes the background color for selected payment method item */
+       --adyen-sdk-color-background-secondary: #f7f7f8; 
+       /* Changes the primary button background color */
+       --adyen-sdk-color-background-always-dark: #333333; 
+   }
+   ```
+2. Ensure your custom CSS file is imported after the SDK's main stylesheet.
+   ```javascript
+   import { AdyenCheckout } from '@adyen/adyen-web';
+   import '@adyen/adyen-web/styles/adyen.css'; // Original SDK Styles
+   import './override.css'; // Your Custom Overrides (must be imported last)
+   ```
+
+The following table lists a selection of commonly modified variables. You can override virtually any visual aspect using this method.
+
+| CSS Variable                               | Default Value          | Primary Scope/Element Affected                                              |
+| :----------------------------------------- | :--------------------- | :-------------------------------------------------------------------------- |
+| `--adyen-sdk-color-background-always-dark` | `#00112c` (Dark Blue)  | Primary button background color (Pay button)                                |
+| `--adyen-sdk-color-label-on-color`         | `#ffffff` (White)      | Text color that appears *on* a colored background (e.g., on the Pay button) |
+| `--adyen-sdk-color-outline-primary-active` | `#00112c` (Dark Blue)  | Focus and active border/box-shadow color for input fields                   |
+| `--adyen-sdk-color-background-secondary`   | `#f7f7f8` (Light Gray) | Background for the selected payment method item                             |
+| `--adyen-sdk-text-subtitle-font-size`      | `16px`                 | Font size for input fields and section titles                               |
+| `--adyen-sdk-border-radius-m`              | `8px`                  | General border radius for components and fields                             |
+
+For elements inside iframes (such as Card Number, CVC, and Expiry Date fields for security compliance), specific styling guidelines must be followed. Consult the Styling Secured Fields guide for details.

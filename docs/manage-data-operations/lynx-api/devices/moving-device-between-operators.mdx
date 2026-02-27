@@ -1,0 +1,69 @@
+---
+title: "Move Devices Between Operators"
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+Lynx API allows you to reassign devices from one operator to another within the hierarchy in your Nayax system. This is particularly useful for businesses managing multiple operators, regions, or organizational units, ensuring seamless control and tracking of devices as they change hands.
+
+This page presents how to move a device from one operator to another using the Lynx API. In the step-by-step guide below, you'll use the following endpoint:
+
+<EndpointCard
+  title="Move Devices"
+  href="/reference/lynx/devices/move-devices-to-actor-id"
+  method="put"
+/>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+</Warning>
+
+## Moving Devices
+
+Use the [Move Devices](/reference/lynx/devices/move-devices-to-actor-id) endpoint to assign or move devices to the specified `actorId`. The request body should include an array of device identifiers, such as serial numbers. See the example request in nthe code block below:
+
+```sh Request
+curl -X PUT "https://lynx.nayax.com/operational/api/v1/devices/move/<ACTOR_ID>" \
+-H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+-H "Content-Type: application/json" \
+-d '[
+  "SN12345X",
+  "SN67890Y"
+]'
+```
+
+<Note>
+**Path Params**
+
+Replace `<ACTOR_ID>` with the target actor's unique identifier for the new operator.
+</Note>
+
+As you can see, the body of the request above contains two serial numbers for devices that will be moved to the targeted Operator. The response will return the status of each device moved. See the code block below:
+
+```json Response
+[
+  {
+    "HW_serial": "SN12345X",
+    "actor_id": 3001492652,
+    "is_connected": true
+  },
+  {
+    "HW_serial": "SN67890Y",
+    "actor_id": 3001492652,
+    "is_connected": false
+  }
+]
+```
+
+Where:
+
+| Parameter      | Description                                                                              |
+| :------------- | :--------------------------------------------------------------------------------------- |
+| `HW_serial`    | The hardware serial number of the device.                                                |
+| `actor_id`     | Confirms the new `actorId` to which the device was moved                                 |
+| `is_connected` | Indicates whether or not the device was connected to a virtual machine before moving it. |
+
+<br />
+

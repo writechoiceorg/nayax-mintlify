@@ -1,0 +1,97 @@
+---
+title: "doPinpadTransaction"
+---
+
+The `doPinpadTransaction` method is used in the PinPad flow to continue an ongoing EMV transaction after the initial card capture. This is primarily done to prompt the cardholder to enter a PIN or to exchange additional EMV data (tags) with the payment terminal, advancing the EMV state machine.
+
+<Warning>
+**Contact Transactions Only**
+
+  This method is relevant to contact transactions (inserted cards), which require a controlled multi-step EMV dialogue involving the terminal and the PIN pad.
+</Warning>
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, ensure to configure the following:
+
+* The `method` field must be set to `doPinpadTransaction`.
+* The `service` must be set to `engine `in the params.
+
+The request includes the service name and a dictionary of EMV tags that the host system must return to the terminal/card to proceed with the transaction dialogue.
+
+```json
+{
+   "jsonrpc": "2.0",
+   "method": "doPinpadTransaction",
+   "id": "123454352",
+   "params": [
+       "engine",
+       {
+           "tags": {
+               "95": "tag value",
+               "9F02": "tag value"
+           }
+       }
+   ]
+}
+```
+
+### Request Parameters
+
+The table below describes the request parameters for this method.
+
+| Name   | Type            | Description                                                                                                                                  |
+| :----- | :-------------- | :------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tags` | JSON of strings | A dictionary containing the required EMV Tag-Value pairs that the host system must return to the card/terminal to continue the EMV dialogue. |
+
+## Response
+
+A successful response indicates that the PinPad transaction state has advanced, either by successfully collecting the PIN from the cardholder or by completing an EMV data exchange round.
+
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "123454352",
+   "result": {
+       "statusCode": 0,
+       "statusMessage": "ok",
+       "pem": EMVMANAGER_CONTACT,
+       "tags": {
+           "95": "tag value",
+           "9F02": "tag value",
+           "5A": "tag value",
+           "5F34": "tag value",
+           "5F2A": "tag value",
+           "9F02": "tag value",
+           "9F03": "tag value",
+           "9A": "tag value",
+           "9C": "tag value",
+           "9F1A": "tag value",
+           "9F21": "tag value",
+           "9F37": "tag value",
+           "9F36": "tag value",
+           "9F26": "tag value",
+           "9F27": "tag value"
+       }
+   }
+}
+```
+
+### Response Parameters
+
+Below is a table with all the possible response parameters and their description:
+
+| Name            | Type            | Description                                                                                                                                                 |
+| :-------------- | :-------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `statusCode`    | integer         | The PinPad transaction status. A value of `0` indicates success.                                                                                            |
+| `statusMessage` | string          | The transaction message (e.g., `ok`).                                                                                                                       |
+| `pem`           | integer         | POS Entry Mode, indicating the method of card entry (e.g., `EMVMANAGER_CONTACT`).                                                                           |
+| `tags`          | JSON of strings | A dictionary containing updated or new EMV Tag-Value pairs from the card/terminal, including information like the masked PAN (`5A`) or updated cryptograms. |
+
+<br />

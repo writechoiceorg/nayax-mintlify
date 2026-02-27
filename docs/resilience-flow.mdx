@@ -2,18 +2,18 @@
 title: "Resilience Mechanism"
 ---
 
-TweezerComm has a resilience mechanism for handling transaction completion or cancellation in case of errors or failures. Whenever an error occurs, such as a `statusCode != 0`  TweezerComm will automatically fall back to this mechanism, ensuring that transactions are completed successfully or through retries and verification steps to prevent inconsistencies. 
+TweezerComm has a resilience mechanism for handling transaction completion or cancellation in case of errors or failures. Whenever an error occurs, such as a `statusCode != 0`  TweezerComm will automatically fall back to this mechanism, ensuring that transactions are completed successfully or through retries and verification steps to prevent inconsistencies.
 
 ## How it Works
 
 The flow chart describes the flow of the mechanism.
 
-<Frame>![](/images/docs/resilience-flow/images1.png)</Frame>
+<Frame>![](/images/docs/resilience-flow/image1.png)</Frame>
 
 When a transaction requires completion (settlement) or cancellation, and the system verifies whether a response has been received, the flow can vary depending on the reaction.
 
 * If a response was received,  the system proceeds to check the `StatusCode`. If it  is equal to `0`, it will finish the completion process, else it will trigger the retry mechanism.
-* If no response is received, the system retrieves transaction details using the `getTransactionByVuid()` method. 
+* If no response is received, the system retrieves transaction details using the `getTransactionByVuid()` method.
   * To check if the transaction is finalized, the system evaluates  if `IsFinalAmount=1 ` and `TransactionDeposited=1/2`.
   * If they are not equal to those values, the system triggers the retry mechanism.
 
@@ -21,7 +21,18 @@ The process continuously loops back to the start of the Completion/Cancel flow, 
 
 ## See Also
 
-<CardGroup cols={2}>
-  <Card title="Payment Flows" href="/docs/tweezercomm-payment-flows" icon="arrow-up-right" />
-  <Card title="GetTransactionByVuid" href="/docs/gettransactionbyvuid" icon="arrow-up-right" />
-</CardGroup>
+<Columns cols={3}>
+<Card
+  icon="link"
+  title="Payment Flows"
+  href="/docs/tweezercomm-payment-flows"
+  arrow
+/>
+<Card
+  icon="link"
+  title="GetTransactionByVuid"
+  href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/gettransactionbyvuid"
+  arrow
+/>
+</Columns>
+

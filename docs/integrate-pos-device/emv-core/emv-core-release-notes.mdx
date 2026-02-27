@@ -1,0 +1,545 @@
+---
+title: "Release Notes"
+---
+
+This section provides a comprehensive history of updates, enhancements, and stability improvements to EMV Core across our supported platforms.
+
+Our release notes are structured into three primary categories to help you evaluate the impact of each update:
+
+* **Improvements**: New API commands, expanded card support, and performance enhancements.
+* **Fixes**: Resolved bugs and logic corrections to ensure system stability.
+* **Known Issues**: Current limitations or pending features with recommended workarounds.
+
+<Note>
+  **Platform-Specific Features**
+
+  While most updates are universal, platform-specific improvements or fixes are marked with **(Android Only)** or **(Linux Only)** in the section titles.
+</Note>
+
+### SDK Version 1.4 (Latest)
+
+This version includes the following improvements, fixes, and known issues for the SDK:
+
+<Accordion title="Improvements" icon="rocket">
+  ### **Automated Currency Code Management (#7473)**
+
+  The host application is no longer responsible for manually setting the currency code. The SDK now manages this directly from the Nayax Core, ensuring that the correct currency parameters are always applied without manual intervention. This change reduces integration complexity and prevents potential mismatches in currency data.
+
+  ***
+
+  ### **Server Connectivity and Automatic Failover (#7474)**
+
+  The EMV Core has been updated to automatically attempt connections to both the Nayax Core `tms-c.otiglobal.com` and the OTI TMS `tms.otiglobal.com`. You may now omit the `TMS_SVC_URL` attribute from your configuration to allow for a smoother transition for devices migrating from OTI TMS management to the Nayax Core system.
+
+  ***
+
+  ### **Local Serial Port Management (#7308) (Linux Only)**
+
+  Host applications can now manage the reader serial port locally through a configuration file located at `/etc/oti_kiosk/init.cfg`. By defining the `READER_SERIAL_PORT` attribute (e.g., `READER_SERIAL_PORT=/dev/ttyS0`), the SDK can pinpoint the hardware interface immediately.
+</Accordion>
+
+<Accordion title="Fixes" icon="wrench">
+  ### **Event Delivery and Reader Stability (#7443, #7497)**
+
+  Fixed an intermittent issue where [`ReaderMessageEvent`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages) would stop arriving at the host application. Additionally, we resolved a connectivity bug where the EMV Core was unable to reconnect to a serial reader following a POS firmware update.
+
+  ### **Sample Application Token Reporting (Linux Only)**
+
+  Fixed a logic error in the Sample application where card tokens were not being returned in the `Transaction Complete` event when using open-loop cards.
+
+  ### **Sample Application Resources (Android Only)**
+
+  Fixed an issue in the previous distribution where incorrect sample application source files were included. The SDK v1.4 package now contains the verified and updated source code.
+</Accordion>
+
+<Accordion title="Known Issues" icon="exclamation-triangle">
+  ### **Offline Acceptance Limitation (#6918)**
+
+  The `PMT_ACCEPT_OFFLINE` command currently only functions for DEMO purposes. Transactions processed under this flag are not yet sent to the server and will remain local to the device until a future update.
+
+  ***
+
+  ### **Terminal ID Update Delay (#7211, #7030)**
+
+  Changing readers without performing a manual reset of the EMV Core does not trigger an update to the Terminal ID. We recommend a full reset whenever hardware is swapped to ensure the correct terminal identity is registered.
+
+  ***
+
+  ### **Authorizing Status Event (#7510)**
+
+  There is a known intermittent issue where the EMV Core may fail to send the [`ReaderMessageEvent`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages) with index 36 (“Authorizing”). Applications should handle the transaction flow even if this specific status update is missing.
+</Accordion>
+
+### SDK Version 1.2
+
+This version includes the following improvements and known issues for the SDK:
+
+<Accordion title="Improvements" icon="rocket">
+  ### **e-Receipt and Remote Settlement Support (#6782, #7411)**
+
+  The SDK now supports e-Receipts and Remote (Deferred) Settlement. The [`TransactionComplete`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) API has been updated to return `additional_parameters`, allowing for a decoupled settlement flow where capture and final settlement occur independently across systems via a server-to-server API.
+
+  ***
+
+  ### **Nayax Core Attribute and Limit Management (#7139, #7346, #7269)**
+
+  We have introduced the [`UpdateMachineAttributes`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/remote-management) API to transmit machine parameters to the Nayax Core. Additionally, EMV Contactless limits (`R_CL_TRANS_LIMIT`) and CDCVM transaction limits (`R_CDCVM_TRANS_LIMIT`) are now manageable directly from the Nayax Core.
+
+  The SDK also provides expanded remote reset options (Restart Application, Reboot, or Restart Reader) triggered from the Nayax Core or OTI TMS.
+
+  ***
+
+  ### **Nayax Core Managed Closed-Loop Cards**
+
+  Closed-loop and Pre-paid cards can now be managed via the Nayax Core by setting `CLP_MIFARE_ENABLED=1`. This allows the Nayax server to process CLP cards directly.
+
+  > **Note:** The default value for `CLP_MIFARE_ENABLED` has been changed to `2` (Local API) in this version to prioritize local UID delivery by default.
+
+  ***
+
+  ### **Enhanced Diagnostics and Logging (#6888)**
+
+  Logs now include a date prefix (e.g., `31-23:59:59 INFO [APP3]`) for better chronological tracking. Furthermore, a new TMS "Upload" command for the `TRACE` file-name allows for the remote retrieval of trace folders from the reader.
+</Accordion>
+
+<Accordion title="Fixes" icon="wrench">
+  ### **Offline Stability and Display Logic (#7385, #7371)**
+
+  Fixed a UI synchronization issue where a `PreAuthorize` command initiated without a network connection would incorrectly display "DECLINED" before switching to "SUCCESS" once the network recovered. We also resolved a critical crash occurring when calling `PreAuthorize` multiple times while offline.
+
+  ### **Reader Boot and Core Invocations (#7199, #7272)**
+
+  Fixed an issue where the EMV Core would prematurely report a `Ready` status while the reader was still in its boot sequence. Additionally, we implemented protection against multiple simultaneous invocations of the EMV Core to prevent resource conflicts.
+
+  ### **Enhanced Log Management**
+
+  The default configurations for log retention and transmission (`LOG_NO_OF_FILES`, `LOG_FILE_SIZE`, and `LOG_HOURS_TO_UPLOAD`) have been increased to provide better diagnostic coverage and data retention.
+
+  ### **API Deprecation**
+
+  \*\* The `PayTransaction` API is now officially deprecated. Please migrate to `PreAuthorize` and `ConfirmTransaction`.
+</Accordion>
+
+<Accordion title="Known Issues" icon="exclamation-triangle">
+  ### **Offline Acceptance Limitation (#6918)**
+
+  The `PMT_ACCEPT_OFFLINE` command currently only functions for DEMO purposes. Transactions processed under this flag are not yet sent to the server and will remain local to the device.
+
+  ***
+
+  ### **Terminal ID Update Delay (#7211, #7030)**
+
+  Changing readers without performing a manual reset of the EMV Core does not trigger an update to the Terminal ID. We recommend resetting the EMV Core whenever hardware is replaced to ensure the correct terminal identity is registered.
+</Accordion>
+
+### SDK Version 1.1 (Linux Only)
+
+This version includes the following improvements and known issues for the SDK:
+
+<Accordion title="Improvements" icon="rocket">
+  ### **Official Firmware Releases (#6813, #7165, #7157)**
+
+  This version includes the official release of UNO-8 Firmware (v54227), which addresses previous issues with tokenization and closed-loop recognition. Additionally, the UNO-mini Firmware (v071514) is now included as a beta release.
+
+  The new UNO-mini firmware introduces advanced debugging capabilities. When activated via configuration (Tag DFA276), the right-most LED will blink rapidly to indicate the debug state is active.
+</Accordion>
+
+<Accordion title="Fixes" icon="wrench">
+  ### **Serial Reader Communication Stability**
+
+  Fixed a critical communication bug affecting serial readers that caused the link between the EMV Core and the hardware to fail. Connectivity is now more resilient during extended operations.
+
+  ### **TMS Independence (#7144)**
+
+  Fixed an issue where payment processing was dependent on the Terminal Management System (TMS). Transactions can now be completed successfully even when the TMS is unavailable or offline.
+
+  ### **Socket Resource Management (#7331)**
+
+  Fixed a resource leak where network sockets were occasionally left open and unused. This optimization ensures better system performance and prevents the SDK from exhausting available network handles.
+</Accordion>
+
+<Accordion title="Known Issues" icon="exclamation-triangle">
+  ### **Power Voltage Requirement (UNO-mini)**
+
+  The UNO-mini requires a stable power supply of at least 4.5V. Operation below this threshold may cause the device to enter an inconsistent state, preventing correct hardware functionality.
+
+  ***
+
+  ### **Terminal ID Update Delay (#7211, #7030)**
+
+  Changing readers without performing a manual reset of the EMV Core does not trigger an update to the Terminal ID.
+
+  We recommend resetting the EMV Core whenever hardware is replaced to ensure the correct terminal identity is successfully registered.
+
+  ***
+
+  ### **Offline Acceptance Limitation (#6918)**
+
+  The `PMT_ACCEPT_OFFLINE` command currently only functions for DEMO purposes. Transactions processed under this flag are not sent to the server in this version.
+</Accordion>
+
+### SDK Version 1.0
+
+This version includes the following improvements and known issues for the SDK:
+
+<Accordion title="Improvements" icon="rocket">
+  ### **GetAttribute API Command (#71156) (Android Only)**
+
+  We’ve added the `GetAttribute` command to the API to allow for easier retrieval of device properties. This simplifies your integration by providing direct access to metadata through a single command, which can be tested using the new ‘Config’ tab in the Sample application.
+
+  ***
+
+  ### **Sample Test Application Enhancements (Linux Only)**
+
+  The Linux Sample application now includes full keyboard command support for all APIs and an optional ‘auto’ flow mode for continuous transaction loops. It also includes dedicated sample code for [`GetCardToken`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) and [`CardTokenReceived`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) functions.
+
+  ***
+
+  ### **Enhanced Java Logging (#7129) (Android Only)**
+
+  Logs now include Java application calls and responses (marked with the **\[APP2]** prefix), helping you distinguish between application-level events and SDK internal processes for faster debugging.
+
+  ***
+
+  ### **Reader Configuration Reporting (#7117) (Android Only)**
+
+  The SDK now automatically includes the **Reader configuration name** in the version data sent to the server. This provides better visibility into active device settings during remote troubleshooting.
+</Accordion>
+
+<Accordion title="Fixes" icon="wrench">
+  ### **Log Truncation and Display (#6960, #7136)**
+
+  Fixed an intermittent issue where log lines were truncated at the end. We also resolved a bug where the Left LED failed to blink during the device's idle state, ensuring proper visual status indication.
+
+  ### **Card Type and CLP Response Mapping (#7091, #7169, #7180)**
+
+  Fixed the identification of closed-loop cards (previously defaulting to ‘Mifare’) and added support for Mifare Plus UIDs. Additionally, the CLP Transaction response has been aligned with open-loop formats: status now returns `LocalCLP` and the error description is cleared upon successful reads.
+
+  ### **System Timing and Synchronization (#6658, #7200, #7204)**
+
+  Resolved logic issues in `PRE_AUTH_AMOUNT` and fixed a hang where [`TransactionComplete`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) would wait for a timeout if the reader was in boot. We also corrected a mutex timing bug that caused false-positive `SAT_Mutex_Acquire` timeout errors on some systems.
+
+  ### **Connectivity and Firmware Fixes (#7157, #7165, #6813)**
+
+  Fixed connectivity issues for the UNO-mini TTL after a reset and resolved recognition errors for Mifare PLUS ISO 14443-4 as closed loop. We also addressed a failure in [`GetCardToken`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) for specific Visa and Amex cards.
+
+  > **Note:** These fixes require specific firmware versions: UNO-mini FW EMVS\_v071457, UNO-8 FW 54222, and UNO-8 FW 54216.
+
+  ### **Android Diagnostics and UI (#7130, #7210) (Android Only)**
+
+  Updated default log levels to include server calls/responses and fixed the 'Thank you' message display, which previously appeared incorrectly after a cancelled or timed-out transaction.
+</Accordion>
+
+<Accordion title="Known Issues" icon="exclamation-triangle">
+  ### **Offline Acceptance Limitation (#6918)**
+
+  The `PMT_ACCEPT_OFFLINE` command currently only functions for DEMO purposes. Transactions processed under this flag are not yet sent to the server and remain local to the device.
+
+  ***
+
+  ### **Terminal ID and Discovery Delays (#7211, #7030, #6994)**
+
+  Changing readers without a manual EMV Core reset will not update the Terminal ID. Additionally, the EMV Core may take approximately one minute to locate the reader after a hardware reset.
+
+  ***
+
+  ### **System Status and Messaging (#7199, #7196, #7205, #7182)**
+
+  The SDK does not currently trigger [`SystemStatusChanged`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) for network changes and may report a `Ready` status while the reader is still booting. Furthermore, [`CancelTransaction`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) will return "Cannot Cancel" if a transaction is already Authorizing or Completed.
+
+  ***
+
+  ### **Hardware and Resource Usage**
+
+  On UNO-mini hardware, the Left LED may stay illuminated after a poll timeout. Additionally, when a reader is unavailable, [`GetStatus`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/remote-management) calls occur at a high frequency (every 1ms), which may increase resource usage.
+
+  ***
+
+  ### **Test App Transaction Delay (#7207) (Android Only)**
+
+  The Android Sample Test Application does not respond to `TransactionComplete` after a timeout, resulting in a delay before a new transaction can be initiated in the test environment.
+</Accordion>
+
+### SDK Version 0.9
+
+This version includes the following improvements and known issues for the SDK:
+
+<Accordion title="Improvements" icon="rocket">
+  ### **Mifare UID Support in GetCardToken (#6550)**
+
+  The [`GetCardToken`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) command has been updated to return the Mifare UID. This improvement allows for more precise identification of Mifare-based cards during the tokenization process, providing consistent card data across different card types.
+
+  ***
+
+  ### **Enhanced EMV Core Startup and Recovery (#6838) (Android Only)**
+
+  The EMV Core now initiates automatically upon system startup and will attempt to restart automatically in the event of a crash. This ensures the background service remains operational regardless of the Test application's state.
+
+  ***
+
+  ### **GetCardToken Continuous Mode (#6978) (Android Only)**
+
+  We have added support for Continuous mode within the `GetCardToken` command. This allows the application to remain in a polling state for tokenization, which is ideal for processing multiple cards in quick succession.
+
+  > **Note:** For Linux, this feature is currently listed as a known limitation in this version.
+</Accordion>
+
+<Accordion title="Fixes" icon="wrench">
+  ### **Closed Loop UID Reporting (#6980)**
+
+  Fixed an issue where the UID for closed loop cards was missing from the [`TransactionComplete`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) event. The SDK now correctly and consistently returns the UID upon transaction completion.
+
+  ### **UI and Input Stability (#6987, #7001)**
+
+  Fixed a bug where clicking "Cancel" five times rapidly caused the system to hang in a polling state for 60 seconds. We also corrected an issue where the Demo application version number failed to update after changes were applied.
+
+  ### **UNO-mini Firmware Events (#6961)**
+
+  Resolved a compatibility issue where the UNO-mini firmware did not support Reader Message Events. The firmware now correctly broadcasts these events to the host application/SDK.
+
+  ### **Pre-Authorization Logic (#6658) (Android Only)**
+
+  Fixed several logic issues related to the `PRE_AUTH_AMOUNT` parameter to ensure more reliable pre-authorization processing within the Android environment.
+</Accordion>
+
+<Accordion title="Known Issues" icon="exclamation-triangle">
+  ### **Offline Acceptance Limitation (#6918)**
+
+  The `PMT_ACCEPT_OFFLINE` command currently only functions for DEMO purposes. Transactions processed under this flag are not yet sent to the server and remain local to the device.
+
+  ***
+
+  ### **SDK Upgrade Installation Requirement (Android Only)**
+
+  When updating to SDK v0.9, you must manually uninstall both existing APKs (service and app) before installing the new files to avoid registration or connectivity errors.
+
+  ***
+
+  ### **System Connectivity and Discovery (#7030, #6994)**
+
+  The EMV Core must be manually restarted after replacing a reader to recognize new hardware. Additionally, there is an expected delay of approximately one minute for the core to locate the reader after a reset.
+
+  ***
+
+  ### **Card Type & Tokenization (#7091, #6813, #6978)**
+
+  All closed loop cards incorrectly appear as ‘Mifare’ in the `cardType` field. Furthermore, `GetCardToken` does not yet work with specific Visa and Amex cards and lacks Continuous mode support on Linux (Issue #6978).
+
+  ***
+
+  ### **Log Truncation and Notifications (#6960)**
+
+  Log lines are intermittently truncated at the end of the output. Additionally, the `SystemStatusChanged` callback is not triggered by changes in network availability; independent monitoring is recommended.
+
+  ***
+
+  ### **USB Reader Exclusive Support (#6895) (Android Only)**
+
+  In this version of the Android SDK, only USB Readers are supported. Serial Readers are currently incompatible.
+</Accordion>
+
+### SDK Version 0.8
+
+This version includes the following improvements and known issues for the SDK:
+
+<Accordion title="Improvements" icon="rocket">
+  ### **New API Commands and Continuous Polling (#6550)**
+
+  We have introduced the `GetCardToken` API command and added support for Continuous Polling during `Pre-Authorize` and `Pay` operations. This allows the reader to remain in an active polling state, improving the user experience for sequential transaction attempts and enabling expanded token-based integrations.
+
+  ***
+
+  ### **Local Configuration and Logging (Android Only)**
+
+  The Android SDK now allows for the local update of the EMV Core configuration for on-site adjustments. Additionally, log files can be read directly from device storage at: `/sdcard/Android/media/com.nayax.emvCore/*.log`.
+
+  ***
+
+  ### **Expanded Closed Loop (CLP) and Vicinity Support**
+
+  This version adds support for a wider range of CLP cards, including Mifare Classic, DESFire, and Ultralight, as well as Vicinity (ISO 15693) cards like HID (Type P).
+
+  > **Note:** Vicinity cards require UNO-8 firmware 054198 or higher. The ‘Enable Technology’ tag (DF4F) must have byte 2 bit 8 set (`00800000`).
+
+  ***
+
+  ### **Offline CLP UID Retrieval**
+
+  The SDK now allows for the retrieval of CLP card UIDs even in environments without a network connection. This functionality is active when `CLP_MIFARE_ENABLED` is set to `2`.
+</Accordion>
+
+<Accordion title="Fixes" icon="wrench">
+  ### **Offline Stability and Logic (#6919, #6938)**
+
+  Fixed a critical issue where the EMV Core would crash when no internet connection was detected. We also updated the [`Void`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) command logic: calling [`Void`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) after a [`Pre-Authorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) or `Pay` no longer incorrectly triggers a [`Cancel Transaction`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1), allowing a new transaction to start independently.
+
+  ### **TMS and Reader Connectivity (#6862)**
+
+  Fixed an issue where the Terminal Management System (TMS) would not function if a reader was not connected. TMS operations now work independently of the reader's presence.
+
+  ### **Serial Port Configuration (#6862) (Linux Only)**
+
+  Fixed a bug in EMV Core v0.8.516 where the system ignored the `READER_SERIAL_PORT` setting and defaulted to `/dev/ttyACM0`. The SDK now correctly respects defined local serial port settings.
+</Accordion>
+
+<Accordion title="Known Issues" icon="exclamation-triangle">
+  ### **USB Reader Exclusive Support (Android Only)**
+
+  This version of the Android SDK currently only supports USB readers. Support for RS232 (Serial) readers is planned for a future release.
+
+  ***
+
+  ### **UNO-mini and Event Support (#6961)**
+
+  The current UNO-mini firmware does not support [`ReaderMessageEvent`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages), which may limit real-time visual or text feedback during certain operations on this hardware.
+
+  ***
+
+  ### **GetCardToken and Polling Limitations (#6978)**
+
+  The newly added [`GetCardToken`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) command does not yet support Continuous polling mode. The process will terminate after a single attempt or timeout.
+
+  ***
+
+  ### **Log Truncation and Status Notifications (#6960)**
+
+  There is an intermittent issue where log lines are cut off at the end of the file. Additionally, the `SystemStatusChanged` callback is not triggered by changes in network availability.
+</Accordion>
+
+### SKD Version 0.7
+
+This version includes the following improvements and known issues for the SDK:
+
+<Accordion title="Improvements" icon="rocket">
+  ### **Android Platform Launch (Android Only)**
+
+  We are excited to announce the first official release of the SDK for the Android platform. This version establishes the foundational architecture for payment processing, device communication, and independent service management on Android-based environments.
+
+  ***
+
+  ### **Expanded Configuration Attributes (Linux Only)**
+
+  This version introduces several new configuration attributes for granular control: `OPEN_LOOP_ENABLED` (toggles open-loop payments), `PRE_AUTH_AMOUNT` (optional default transaction value), and `KIOSK_TCP_LOCALHOST` (restricts sockets to the localhost interface).
+
+  ***
+
+  ### **Configuration Retrieval via GetAttribute() (Linux Only)**
+
+  We have added the [`GetAttribute()`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/remote-management) command to the API, allowing host applications to retrieve configuration attributes directly from the SDK. This ensures the host can always verify the active configuration state in real-time.
+</Accordion>
+
+<Accordion title="Fixes" icon="wrench">
+  ### **Socket and File System Optimization (Linux Only)**
+
+  The EMV Core and Test application now use Internal (Unix domain) sockets by default for more efficient local communication. Additionally, the EMV Core now automatically generates a default `CONNECT.CFG` file if it is missing from the `etc` folder.
+
+  ### **TMS Production Info Retrieval (#6705) (Linux Only)**
+
+  Fixed an issue where the TMS command `GET_Production_Info` would fail, ensuring that production metadata can be retrieved reliably from the device.
+</Accordion>
+
+<Accordion title="Known Issues" icon="exclamation-triangle">
+  ### **USB Reader Exclusive Support (Android Only)**
+
+  The initial Android release exclusively supports USB readers. Support for RS232 (Serial) reader configurations is currently in development.
+
+  ***
+
+  ### **Network Status Notifications**
+
+  The EMV Core does not currently trigger the [`SystemStatusChanged`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) callback for network connectivity changes. Developers should implement independent monitoring logic if the application needs to react to network state changes.
+
+  ***
+
+  ### **Transaction Completion Event Delivery (#6582) (Linux Only)**
+
+  There is an intermittent issue where the [`TransactionComplete`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) event is not always successfully transmitted to the host application.
+
+  ***
+
+  ### **Sequential Pre-Authorization Restrictions (#6576) (Linux Only)**
+
+  Initiating a `PreAuthorize` command immediately after a previous one (without a card interaction) may fail.
+
+  **Workaround:** Wait for the [`TransactionComplete`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) event or use `GetStatus()` to verify terminal readiness; it will return `PaymentTransaction` if the reader is still polling.
+</Accordion>
+
+### SDK Version 0.6.03 (Linux Only)
+
+This version includes the following improvements, fixes, and known issues for the SDK:
+
+<Accordion title="Improvements" icon="rocket">
+  ### **UART Communication and Mifare Support**
+
+  This version includes significant improvements to UART communication stability. We have also enhanced the support for Closed Loop Mifare transactions by adding compatibility for Mifare Ultralight (identified as ‘U’) and supporting 7-byte UIDs.
+
+  > **Note:** For Closed Loop Mifare to function correctly, the reader must be configured with specific tags: **Enable Technology (DF 4F)** must include Mifare, and **Return UID (DF 0D)** must be set to `0x01`.
+</Accordion>
+
+<Accordion title="Fixes" icon="wrench">
+  ### **Config Response Parsing (#6560)**
+
+  Fixed an issue where an empty line in the `CON_CONFIG` response would trigger a 'failed to read line' error. The parser now handles empty lines gracefully without interrupting the configuration process.
+
+  ### **Sequential Transaction Logic (#6576)**
+
+  Confirmed that calling [`PreAuthorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) while a previous [`PreAuthorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) command is still active (polling) is intentionally rejected.
+
+  **Guidance:** Developers should use the [`GetStatus()`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/remote-management) command to verify if the terminal is ready. If the device is currently polling for a card, [`GetStatus()`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/remote-management) will return the `PaymentTransaction` status.
+</Accordion>
+
+<Accordion title="Known Issues" icon="exclamation-triangle">
+  ### **Transaction Completion Event Delivery (#6582)**
+
+  There remains an intermittent issue where the [`TransactionComplete`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) event is not always successfully sent to the host application.
+</Accordion>
+
+### SDK Version 0.6.00 (Linux Only)
+
+This version includes the following improvements and known issues for the SDK:
+
+<Accordion title="Improvements" icon="rocket">
+  ### **Initial Closed Loop Mifare Support**
+
+  This version introduces foundational support for Closed Loop Mifare transactions, allowing the SDK to process Mifare-based card interactions for private loop environments.
+
+  > **Note:** To enable this functionality, the reader must be configured with specific tags: **Enable Technology (DF 4F)** must include Mifare, and **Return UID (DF 0D)** must be set to `0x01`.
+</Accordion>
+
+<Accordion title="Known Issues" icon="exclamation-triangle">
+  ### **Configuration Parsing Errors (#6560)**
+
+  An empty line in the `CON_CONFIG` response may trigger a 'failed to read line' error, potentially interrupting the configuration handshake.
+
+  ***
+
+  ### **Sequential Pre-Authorization Failure (#6576)**
+
+  Initiating a [`PreAuthorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) command while a previous one is still active (and no card has been presented) will cause the command to fail. Users should ensure the current transaction is finalized or timed out before starting a new one.
+
+  ***
+
+  ### **Transaction Event Delivery (#6582)**
+
+  The [`TransactionComplete`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) event is not always successfully transmitted to the host application, which may require the application to poll for status updates to confirm transaction outcomes.
+</Accordion>
+
+### SDK Version 0.1 (Linux Only)
+
+This version includes the following improvements and known issues for the SDK:
+
+<Accordion title="Improvements" icon="rocket">
+  ### **Initial Linux Lite Release**
+
+  This version marks the first official release of the Lite SDK for Linux-based systems. Built entirely in C, this version is optimized for low-resource environments and provides a lightweight foundation for embedded payment integration.
+
+  This release is designed for developers who require a high-performance, low-footprint solution for managing transactions and reader communication on Linux hardware.
+</Accordion>
+
+<Accordion title="Known Issues" icon="exclamation-triangle">
+  ### **Mifare Routing and UID Limitations**
+
+  Currently, all Mifare closed-loop transactions are routed to the OTI server. In this version, there is no existing configuration to allow the host application to receive the card UID directly through the EMV-Core API.
+
+  A future update is planned to include a dedicated configuration setting that will enable the direct transmission of card UIDs to the host API, facilitating easier local management of private loop cards.
+</Accordion>

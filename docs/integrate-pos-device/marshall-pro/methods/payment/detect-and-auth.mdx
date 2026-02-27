@@ -1,0 +1,93 @@
+---
+title: "detectAndAuth"
+description: "Detect, read, and pre-authorize funds in a single-phase operation."
+---
+
+The `detectAndAuth` method combines card detection and pre-authorization into a single command. It is the primary method used for Pay-at-the-Pump transactions, streamlining the workflow by activating the reader and requesting a financial hold in one step.
+
+Use this method to:
+* Simultaneously activate the reader and prepare the authorization request to reduce total transaction time.
+* Reserve funds immediately upon card tap, dip, or swipe to allow for instant pump activation.
+* Minimize the logic required between card detection and authorization by handling both through a unified command.
+
+Example of the card detection and pre-authorization prompt on a Nayax device:
+<Frame>
+![detectAndAuth](/images/detect-and-auth.jpg)
+</Frame>
+
+## Requests
+
+All requests must include the `command`, `requestId`, and the `amount` to be held. The terminal will remain in a "Waiting for Card" state until a payment method is presented or a timeout occurs.
+
+The following example shows a typical request:
+```json
+{
+"command": "detectAndAuth",
+"requestId": "req-1-3",
+"data": {
+"amount": 50000,
+"tranType": 1,
+"channels": ["CTLS", "CHIP", "SWIPE"]
+}
+}
+```
+
+### Parameter Definitions
+
+The table below describes the parameters available for this request:
+
+| Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| **amount** | integer | Yes | The amount to hold/pre-authorize in minor units (refer to `decimalPlace`). |
+| **tranType** | integer | No | `1`: Pre-authorization, `2`: Pre-selection (Default is `1`). |
+| **channels** | array | No | Defines allowed payment methods: `CTLS` (Contactless), `CHIP` (EMV), `SWIPE` (Magnetic Stripe), or `QR`. Defaults to all if omitted. |
+
+## Responses
+
+The terminal returns a response only after the card has been successfully read and the authorization has been processed by the payment gateway.
+
+The following example shows a typical **credit card** response:
+```json
+{
+"requestId": "req-1-3",
+"data": {
+"transactionId": "TXN-20260113-003000",
+"authorizedAmount": 50000,
+"state": "AUTHORIZED",
+"cardBrand": "MASTERCARD",
+"cardEntryMode": "CHIP",
+"maskedPan": "************5678",
+"aid": "A0000000031010"
+}
+}
+```
+
+The following example shows a typical **QR code** response:
+```json
+{
+"requestId": "req-005",
+"data": {
+"state": "CARD_READ",
+"cardEntryMode": "QR",
+"qrCode": "1168743871706458"
+}
+}
+```
+
+<Info>
+  **Note:** If a QR code is used, the client system is responsible for any external authorization and settlement logic.
+</Info>
+
+### Response Parameters
+
+Below are the parameters returned in the `data` object upon a successful transaction:
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| **transactionId** | string | The unique ID for the authorized transaction. **Save this value** for the `settle` command. |
+| **authorizedAmount** | integer | The final amount approved and held by the bank. |
+| **state** | string | Returns `AUTHORIZED` upon success. |
+| **cardBrand** | string | The brand of the detected card (e.g., MASTERCARD). |
+| **cardEntryMode** | string | The method used to capture data: `CTLS`, `CHIP`, `SWIPE`, or `QR`. |
+| **maskedPan** | string | The masked card number for receipt and logging purposes. |
+| **aid** | string | The Application Identifier for EMV-based transactions. |

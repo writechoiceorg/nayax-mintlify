@@ -1,0 +1,26 @@
+---
+title: "Integration Overview"
+description: "Architecture and transaction flow for the Marshall Protocol in fuel-based environments."
+---
+
+The **Marshall Pro (Fuel)** is a specialized communication framework designed to facilitate seamless transaction management between your local application and Nayax payment hardware. 
+<Frame>
+![Marshall Fuel Architecture](/images/integration.png)
+</Frame>
+
+The ecosystem consists of four primary components working in tandem to authorize, execute, and monitor transactions:
+
+<CardGroup cols={2}>
+  <Card title="Nayax Device" icon="terminal">
+    Physical hardware (Onyx, VPOS Touch) at the pump that interacts with Card, Mobile, or QR payments.
+  </Card>
+  <Card title="Your Application" icon="computer">
+    Local POS or Fuel Controller integrated with the **Marshall SDK** to manage the transaction lifecycle.
+  </Card>
+  <Card title="Nayax Telemetry" icon="server">
+    Cloud-based servers handling device health, remote configuration, and transaction logging.
+  </Card>
+  <Card title="Payment Gateway" icon="building-columns">
+    The financial backend responsible for final authorization and settlement of funds.
+  </Card>
+</CardGroup>

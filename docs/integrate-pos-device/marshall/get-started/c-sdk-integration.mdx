@@ -1,0 +1,124 @@
+---
+title: "C SDK Integration"
+---
+
+<Warning>
+**C SDK Only**
+
+The functions and information on this page are relevant only for the **C SDK** .
+</Warning>
+
+This guide shows you how to integrate the **Marshall C SDK** into your platform. You will learn to configure essential serial port functions, implement required timer ticks, and set up the VMC configuration object to get the SDK running.
+
+The C SDK includes working implementations for Linux, Windows, or STM32 microcontrollers. If your platform differs, use these implementations as a reference to adapt the SDK accordingly onto your own platform.
+
+## Pre-requisites
+
+Before running the C SDK, ensure you configure the following platform-specific elements:
+
+* **Serial Port Communication:** Implement methods for reading and writing bytes from your platform's serial port, which connects to Nayax's device. The SDK interacts with the hardware through this serial interface. You must implement the following functions:
+  * `drv_usart_rx_byte()`: Reads a single byte from the serial port.
+  * `drv_usart_rx_chunk()`: Reads multiple bytes in one operation.
+  * `drv_usart_get_rx_pending()`: Returns the number of pending bytes in the serial buffer.
+  * `drv_usart_tx_data()`: Sends data bytes to the VPOS device.
+* **Periodic Timer Tick:** Implement a periodic timer tick to invoke the `vmc_link_background()` function. This function should be called with an interval of 5 ms to 10 ms. Additionally, ensure the `cpu_platform_get_time()` function returns a continuously incrementing millisecond counter since the system startup.
+* **UART Communication Validation:** Verify that the UART communication with Nayax's device is fully functional.
+  * Check for proper data transmission and reception.
+  * Validate that event callbacks are triggered correctly.
+
+## Integrate Marshall
+
+To get started with the C SDK, follow these steps. You can refer to the provided `mymain.c` file for a sample code and guidance on importing necessary namespaces into your project.
+
+1. Instantiate a VMC configuration object:
+
+   ```c C
+   vmc_config_t   	config;
+   ```
+
+2. Fill in the appropriate fields. The following code block presents a standard configuration:
+
+   ```c C
+   vmc_init()
+   	__strcpy(config.model, "marshall-c-sdk-demo");
+   	__strcpy(config.serial, "01234567");
+   	__strcpy(config.sw_ver, "vmc app version");
+   	__strcpy(config.vmc_hw_ver, “01234567”);
+   	__strcpy(config. vmc_manuf_code, “manuf”);
+
+   	config.multi_vend_support = __false;
+   	config.multi_session_support = __false;
+   	config.price_not_final_support = __false;
+   	config.reader_always_on = __false;
+   	config.always_idle = __false;
+   	config.explicit_vend_success = __false;
+   	config.vend_denied_policy = vend_denied_policy_persist_e;
+
+   	config.mifare_approved_by_vmc_support = __false;
+   	config.mag_card_approved_by_vmc_support = __false;
+   	config.qr_approved_by_vmc_support  = __false;
+
+   	config.dump_packets_level = debug_level_dump_moderate;
+   	config.debug = __true;
+
+   ```
+
+<Note>
+**Mandatory Fields**
+
+The customer machine information are mandatory fields for the VMC configuration, these are the `model`, `serial` , `hw_ver` and the `manuf_code`. Read more about these fields in [VMC Configuration Object](#doc:vmc-configuration-object).
+</Note>
+
+3. Configure the SDK and register to link events.
+   ```c C
+   vmc_link_register_callback((vmc_link_event_handler_cb_t)vmc_link_event_handler_cb);
+   vmc_vend_register_callback((vmc_vend_event_handler_cb_t)vmc_vend_event_handler_cb);
+   vmc_general_register_callback((vmc_general_event_handler_cb_t)vmc_general_event_handler_cb);
+   ```
+
+4. Start the SDK and wait for the `onReady()` event:
+   ```c C
+   vmc_link_start()
+   ```
+
+## Implement Payment Flows
+
+As explained in [Payment Flows](/docs/integrate-pos-device/marshall/payment-flows/marshall-payment-flows), the Marshall SDK supports various payment flows. The pages below explain how to implement each in your VMC using the **C SDK**.
+
+<Columns cols={3}>
+<Card
+  icon="link"
+  title="Single Session"
+  href="/docs/integrate-pos-device/marshall/simulators-sample-codes/single-session"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Multi-Session"
+  href="/docs/integrate-pos-device/marshall/simulators-sample-codes/multi-session"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Multi-Vend"
+  href="/docs/integrate-pos-device/marshall/simulators-sample-codes/multi-vend"
+  arrow
+/>
+</Columns>
+
+## See Also
+
+<Columns cols={2}>
+<Card
+  icon="link"
+  title="C SDK Integration"
+  href="/docs/spark-security-authentication"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Methods & Functions"
+  href="/docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark"
+  arrow
+/>
+</Columns>

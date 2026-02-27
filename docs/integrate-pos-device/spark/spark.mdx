@@ -1,0 +1,44 @@
+---
+title: "Spark"
+---
+
+Spark is Nayax’s server-to-server API, enabling third-party systems to initiate and manage payment transactions on Nayax terminals remotely. It is designed for use cases where direct communication with the terminal, such as through Marshall, is not possible or desired, or as remote-controlled electric vehicle (EV) chargers, intelligent vending machines, or connected kiosks.
+
+Spark enables developers to initiate a session, handle authentication, authorize payments, and trigger settlements, all from their backend system. At the same time, Nayax manages the actual card interactions through its POS devices, such as VPOS Touch.
+
+Spark allows you to:
+
+* Control terminals remotely over the internet.
+* Offer flexible user experiences: remote commands, self-managed loyalty cards, and dynamic pricing.
+* Retain control over the business logic while Nayax handles the payment processing and compliance.
+
+## Remote and Device Start
+
+As an integrator, you'll utilize the Spark API to manage distinct transaction flows, initiating sessions either remotely or directly from the device.
+
+* With Remote Start, your server initiates the transaction by requesting that Nayax would activate a specific device, a flow beneficial for app/ computer-driven transactions.
+* With Device Start the transaction process begins directly from Nayax's terminal when a consumer interacts with it, allowing you to display crucial information, such as tariffs or service station availability, to the user via Nayax's `InfoQuery` API method before the session even formally commences on the machine.
+
+This distinction in initiation points is crucial for tailoring your integration to the specific user experience you aim to provide.
+
+## Guides
+
+This section provides guides to assist you in using the Spark API, outlining the integration process, authentication methods, available API methods, and other relevant information. See the pages below to learn more:
+
+<Columns cols={3}>
+  <Card icon="link" title="Integration" href="/docs/integrate-pos-device/spark/spark-integration" />
+
+  <Card icon="link" title="Network Requirements" href="/docs/integrate-pos-device/spark/spark-network-requirement" />
+
+  <Card icon="link" title="Security & Authentication" href="/docs/integrate-pos-device/spark/security-authentication/index" />
+
+  <Card icon="link" title="Payment Flows" href="/docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark" />
+
+  <Card icon="link" title="Spark API Reference" href="/reference/integrate-pos-device/spark/overview#" />
+
+  <Card icon="link" title="Webhook Callbacks" href="/docs/integrate-pos-device/spark/webhook-callbacks/index" />
+
+  <Card icon="link" title="Additional Resources" href="/docs/integrate-pos-device/spark/additional-resources/index" />
+
+  <Card icon="link" title="Sample Codes" href="/docs/integrate-pos-device/spark/sample-codes/spark-authentication-code-sample" />
+</Columns>

@@ -1,0 +1,94 @@
+---
+title: "Edit Products"
+---
+
+This page presents how to edit a product in the Product Map using the Lynx API. In the step-by-step guide below, you'll use the following endpoints:
+
+<Columns cols={3}>
+<EndpointCard
+  title="Get Machine Products"
+  href="/reference/lynx/machine-products/get-machine-products"
+  method="get"
+/>
+
+<EndpointCard
+  title="Get a Machine Product"
+  href="/reference/lynx/machine-products/get-a-machine-product"
+  method="get"
+/>
+
+<EndpointCard
+  title="Update a Machine Product"
+  href="/reference/lynx/machine-products/update-a-machine-product"
+  method="put"
+/>
+</Columns>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens and how to properly use them to authenticate your API requests.
+</Warning>
+
+## Update Product Request
+
+Use the [Update a Machine Product](/reference/lynx/machine-products/update-a-machine-product) endpoint to update the product details, such as changing the `CashPrice`. Keep other values unchanged, including the `MDBCode`.
+
+```sh Request
+curl -X PUT "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/machineProducts/<PRODUCT_ID>" \
+-H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+-H "Content-Type: application/json" \
+-d ' {
+    "DexPrice": 1.50,
+    "ProductRef": "PROD001",
+    "MachineProductRef": "MACH001-A1",
+    "ProductGroupRef": "BEVERAGES",
+    "MachineRef": "MACH001",
+    "MachineProductID": 101,
+    "NayaxProductID": 1001,
+    "MachineID": 5001,
+    "MDBCode": 1,
+    "PAR": 10,
+    "CashPrice": 2.00,
+    "CreditCardPrice": 1.80,
+    "MachinePrice": 1.70,
+    "RetailPrice": 1.85,
+    "DEXProductName": "Cola Drink",
+    "PACode": "PA001",
+    "PCCode": "PC001",
+    "ProductMinimumPickQTY": 5,
+    "VendOutAlertThreshold": 2,
+    "LastUpdated": "2024-10-10T16:50:35.423Z",
+    "MissingStockByDEX": 3,
+    "DEXMissingStockLastUpdated": "2024-10-10T16:50:35.423Z",
+    "PrePaidCardPrice": 1.65,
+    "OperatorButtonCode": "BTN001",
+    "LastUpdatedByMobile": "2024-10-10T16:50:35.423Z",
+    "ProductGroupID": 201,
+    "MissingStockByMDB": 0,
+    "MDBMissingStockLastUpdated": "2024-10-10T16:50:35.423Z",
+    "SelectionVendOutBit": false,
+    "CommissionValue": 0.05,
+    "ExternalPrepaidPrice": 1.60,
+    "product_mark_for_alerts": 1,
+    "last_sale_dt": "2024-10-09T16:30:00.000Z",
+    "last_sale_mdb_dt": "2024-10-09T16:30:00.000Z",
+    "slow_mover": false
+  }'
+```
+
+<Note>
+**Path Params**
+
+Replace `<PRODUCT_ID>` with the identifier of the product you're updating. Make sure to update the `CashPrice` while leaving other values unchanged.
+</Note>
+
+The response from this API call will confirm that the update was successful. A status code of `200` indicates the request was processed correctly, even if the response includes details about a different product.
+
+Where:
+
+* **CashPrice**: The new price of the product.
+* **LastUpdated**: The timestamp indicating when the product was last modified.
+
+<br />
+

@@ -1,0 +1,32 @@
+---
+mode: wide
+title: "Payment Flows"
+---
+
+Spark supports multiple payment flows to handle different use cases depending on how the payment process is initiated.
+
+* **Remote Start**: The transaction is initiated by the integrator's server remotely, often triggered by a consumer action outside the physical payment device (e.g., plugging in an EV charger).
+* **Device Start**: The transaction begins directly from the Nayax payment terminal, where the consumer interacts with the device to select a service point or product.
+
+Each flow involves a specific sequence of API calls and device interactions tailored for either integrator-driven or device-driven control, and  uses a standard set of Spark API methods, such as `StartAuthentication`, `TriggerTransaction`, and `Settlement`. But the timing and responsibility differ depending on the initiator and logic owner. To learn more about each one, see the following pages.
+
+<Columns cols={3}>
+<Card
+  icon="link"
+  title="Device Start"
+  href="/docs/integrate-pos-device/spark/payment-flows/spark-device-start"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Remote Start"
+  href="/docs/integrate-pos-device/spark/payment-flows/spark-remote-start"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Device Stop"
+  href="/docs/integrate-pos-device/spark/payment-flows/spark-device-stop"
+  arrow
+/>
+</Columns>

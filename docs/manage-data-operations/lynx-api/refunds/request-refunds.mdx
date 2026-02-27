@@ -1,0 +1,85 @@
+---
+title: "Request Refunds"
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+The refund process begins by submitting a request with details such as the refund amount and reason. This notifies the customer that the refund is being processed. We will describe this process in more detail on this page.
+
+<Warning>
+**Credit Cards Only**
+
+Refunds can only be requested for transaction done through Credit Card. This option is not available for prepaid cards.
+</Warning>
+
+In Nayax Core, refunds can be requested through the **Dynamic Transactions Monitor**. Follow the steps below to do so.
+
+1. Access **Reports > Online Reports > Dynamic Transactions Monitor**.
+2. Search for the transaction to refund. You can use the filter feature to make this easier.
+3. Right-click the transaction you want to refund.
+4. Click **Request Refund**
+
+   <Frame><img src="/images/docs/request-refunds/image1.png" /></Frame>
+5. A pop-up window will appear. In it, choose if the refund is complete or partial and write the reason for the refund.
+6. Click **Request Refund**.
+
+   <Frame><img src="/images/docs/request-refunds/image2.png" /></Frame>
+
+## Lynx API
+
+This process can be performed programmatically through the Lynx API. The following endpoint is used to process the refund.
+
+<EndpointCard
+  title="Request a Payment Refund"
+  href="/reference/lynx/payment/request-a-payment-refund"
+  method="post"
+/>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens and how to properly use them to authenticate your API requests.
+</Warning>
+
+### Initiating the request
+
+To start the request, use the [Request a Payment Refund](/reference/lynx/payment/request-a-payment-refund)  endpoint to request a refund. Providing the attributes regarding the rebate in the body parameters of the request, as exemplified below:
+
+```sh Request
+curl --request POST \
+     --url https://qa-lynx.nayax.com/operational/v1/payment/refund-request \
+     --header 'accept: application/json' \
+     --header 'content-type: application/json' \
+     --data '
+{
+  "RefundAmount": 0,
+  "RefundEmailList": "string",
+  "RefundReason": "string",
+  "TransactionId": 0,
+  "SiteId": 0,
+  "MachineAuTime": "2024-10-10T16:30:37.179Z"
+}
+'
+```
+
+Below, you can see a description of each of the parameters:
+
+| **Name**            | **Type**    | **Description**                                                             |                                                                            |
+| :------------------ | :---------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------------------- |
+| **RefundAmount**    | `double \   | null`                                                                       | The amount to be refunded to the customer.                                 |
+| **RefundEmailList** | `string \   | null`                                                                       | A list of email addresses to notify about the refund, separated by commas. |
+| **RefundReason**    | `string \   | null`                                                                       | The reason for requesting the refund.                                      |
+| **TransactionId**   | `int64`     | The unique identifier of the transaction for which the refund is requested. |                                                                            |
+| **SiteId**          | `int32`     | The unique identifier of the site where the transaction occurred.           |                                                                            |
+| **MachineAuTime**   | `date-time` | The machine's authorization time is associated with the transaction.        |                                                                            |
+
+#### How to obtain TransactionID and SiteID
+
+The `TransactionId `and `SiteId ` can be retrieved in the Lynx API using the [ Get Last Sales for Machine ](/reference/lynx/machines/get-last-sales-for-machine-by-machineid) endpoint to retrieve the last sales using the `MachineID` and the response object should have the necessary data.
+
+## Request Status
+
+Once you send the request, a notification email will be sent to the email address entered in the request parameters.
+
+The refund is now in the `pending `status and will need to be approved or declined. See [Approve or Decline a Refund](/docs/manage-data-operations/lynx-api/refunds/approve-or-decline-a-refund) for more details.
+

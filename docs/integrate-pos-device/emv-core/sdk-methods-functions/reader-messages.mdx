@@ -1,0 +1,35 @@
+---
+title: "Reader Messages"
+---
+
+Reader messages are critical for communicating the status of the card reader to users during a transaction. The EMV Core SDK provides a `ReaderMessageEvent `callback to relay these messages, which can be displayed in the application’s user interface.
+
+The sections below contain tables describing the different reader messages that can be displayed.
+
+| Category | Hex (Internal) | Decimal (API) | Message Details |
+| :--- | :--- | :--- | :--- |
+| **Main States** | 0x00 | 0 | (Blank Screen) |
+| | 0x01 | 1 | Present card |
+| | 0x11 | 17 | Welcome |
+| | 0x23 | 35 | Card read OK Remove card |
+| | 0x04 | 4 | Please remove card |
+| | 0x0D | 13 | Approved sign |
+| **Recovery States** | 0x05 | 5 | Please present one card only |
+| | 0x03 | 3 | Please present one card only |
+| | 0x27 | 39 | Read error Please try again |
+| **Stateless Messages** | 0x12 | 18 | Thank You |
+| | 0x15 | 21 | Please Use Another Card |
+| | 0x19 | 25 | Please Wait |
+| | 0x1A | 26 | International Card, Please Swipe! |
+| **Online Results** | 0x24 | 36 | Authorizing Please wait |
+| | 0x06 | 6 | Approved |
+| | 0x09 | 9 | Not Approved |
+| **Offline Results** | 0x07 | 7 | Approved |
+| | 0x08 | 8 | Not Approved |
+| **Error States** | 0x1E | 30 | Timed Out Please insert or swipe card |
+| | 0x25 | 37 | Communication Failure |
+| | 0x26 | 38 | Please insert or swipe card |
+| | 0x0A | 10 | Terminated |
+| | 0x0B | 11 | PIN Entry Required – see attendant |
+| | 0x0C | 12 | See Phone |
+| | 255 | N/A | Message from EMV Core (e.g. after reading Mifare card) |

@@ -1,0 +1,59 @@
+---
+title: "getRetailerInfo"
+---
+
+The `getRetailerInfo` method allows the client application to verify the merchant (retailer) name and ID associated with the device. This can be used after the establishment process (process done by Nayax's team) or client setup to confirm that the correct merchant information such as the ID and name provided by the ABS (Shva) has been configured.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, ensure to configure the following:
+
+* The `method` field must be set to `getRetailerInfo`.
+* The service must be set to `ashrait` in the `params`.
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getRetailerInfo",
+    "params": [
+        "ashrait"
+    ],
+    "id": "136bdaa3"
+}
+```
+
+### Request Parameters
+
+This method doesn't require any parameters beyond the standard service name.
+
+## Response
+
+A successful call returns the retailer's identification details.
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "136bdaa3",
+    "result": {
+        "id": "0883012013",
+        "name": "MODULARITY 12",
+        "transmitTime": 1721217720
+    }
+}
+```
+
+### Response Parameters
+
+The table below describes the response parameters for this method.
+
+| Name           | Type    | Description                                                     |
+| :------------- | :------ | :-------------------------------------------------------------- |
+| `id`           | string  | The unique identifier for the retailer.                         |
+| `name`         | string  | The registered name of the retailer.                            |
+| `transmitTime` | integer | The time the information was transmitted, in Unix epoch format. |

@@ -1,0 +1,908 @@
+---
+title: "Void"
+---
+
+Cortina SQR uses the `Void`command to notify the integrator in order to initiate the cancelation process with the Cortina payment provider whenever on the bellow scenarios takes place:
+
+1. Issues during vending process- Cancel button being pressed by the consumer/ vend failure (issue with product dispensing/service providing) by the machine.
+2. No `Sale` Response until timeout.
+
+This command is essential for having the payment provider aware that the transaction was cancelled on Nayax's end (as well as from the consumer's POV), and is done in order for the payment provider to complete the cancellation on it's end.
+
+* Note- this command is relevant for PreSelection only. It's equivalent of PreAuthorization flow is the `Cancel` command.
+
+## Request
+
+Nayax's servers send a POST request to your configured `Void `endpoint, which would be of the following format:
+
+`(customer's URL)/Cortina/StaticQR/Void`
+
+The payload includes the full result of the card scan operation:
+
+```json
+{
+  "ReasonCode": 0,
+  "ReasonText": "string",
+  "BasicInfo": {
+    "TransactionId": "236584335969834429321847829253667359,",
+    "Amount": 0.1,
+    "CurrencyCode": "USD",
+    "CurrencyNumeric": 376,
+    "SiteId": 12
+  },
+  "MachineInfo": {
+    "Id": 869761713,
+    "Name": "TestPayStaticQR V2",
+    "TerminalId": 987654321,
+    "DecimalPlace": 2,
+    "Offset": 2,
+    "GroupId": "Beverages",
+    "OperatorId": 12345,
+    "ZipCode": 10001,
+    "Country": {
+      "Name": "United States of America",
+      "NumericCode": 840,
+      "Alpha2Code": "US",
+      "Alpha3Code": "USA"
+    }
+  },
+  "ActorInfo": {
+    "Id": 2001102296,
+    "Name": "Far East Dev Zone",
+    "OperatorId": 2000305191,
+    "OperatorName": "TanyaT_OP",
+    "MerchantId": 10011
+  },
+  "CustomData": {
+    "DirectActor": 12312312,
+    "Operator": 123121434134,
+    "Distributor": "superDistributor",
+    "Actor": 12312312,
+    "Machine": 131231348
+  },
+  "PaymentInfo": {
+    "SrvTranId": "string",
+    "AuthCode": "string",
+    "AuthAmount": 0,
+    "SettAmount": 0,
+    "RRN": "string",
+    "Token": "string",
+    "AuthDateTime": "string",
+    "SettDateTime": "string",
+    "TraceNumber": "string",
+    "AuthSource": "string",
+    "AdditionalData": "string",
+    "IsGatewayTimeout": true
+  }
+}
+```
+
+### Request Parameters
+
+The following table describes the parameters included in the request body:
+
+<table>
+  <thead>
+    <tr>
+      <th style={{ textAlign: "left" }}>Field</th>
+      <th style={{ textAlign: "left" }}>Type</th>
+      <th style={{ textAlign: "left" }}>Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td style={{ textAlign: "left" }} colspan="3"><strong>Transaction Identifiers & References</strong></td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`TransactionId`</td>
+      <td style={{ textAlign: "left" }}>String(36)</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **unique identifier** for this transaction.
+
+        <ul>
+          <li>Echoes the encrypted ID from `/StartSession` if used.</li>
+          <li>Otherwise, the **Nayax Engine** generates this value.</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`NayaxTransactionId`</td>
+      <td style={{ textAlign: "left" }}>Int(64)</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **Nayax internal unique ID** for the transaction, echoed in further requests.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`SrvTranId`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **Integrator's internal transaction ID**.
+
+        <ul>
+          <li>**Conditional**: Required if `/StartSession` was **not** used.</li>
+          <li>If used, it should be empty or echo the Transaction ID.</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`RRN`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        **Reference Retrieval Number (RRN)**. Recommended to be visible to the **consumer/card holder** for support.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`AuthCode`</td>
+      <td style={{ textAlign: "left" }}>String(40)</td>
+
+      <td style={{ textAlign: "left" }}>
+        **External Authorization Code** (usually from the Card Issuer's bank).
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Token`</td>
+      <td style={{ textAlign: "left" }}>String(256)</td>
+
+      <td style={{ textAlign: "left" }}>
+        A unique token for the transaction. **For Nayax internal use only.**
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`TraceNumber`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Trace number. **For Nayax internal use only.**
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`AuthSource`</td>
+      <td style={{ textAlign: "left" }}>String(5)</td>
+
+      <td style={{ textAlign: "left" }}>
+        **For Nayax internal use only.**
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }} colspan="3"><strong>Financial & Time Details</strong></td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Amount`</td>
+      <td style={{ textAlign: "left" }}>Double</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **payment amount** (Decimal with max 3 digits for cents).
+
+        <ul>
+          <li>Example: 1 cent = `0.01`.</li>
+          <li>**Note:** Currencies with no decimal places are still represented as a double (e.g., 234 JYN = `234.0`).</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`AuthAmount`</td>
+      <td style={{ textAlign: "left" }}>Double</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **original amount requested** in the `/Authorization` request. Conditional on `/Authorization` response.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`SettAmount`</td>
+      <td style={{ textAlign: "left" }}>Double</td>
+
+      <td style={{ textAlign: "left" }}>
+        The original amount requested in the `/Settlement` or `/Sale` process. **Irrelevant for Authorization**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`AuthDateTime`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        The date and time the `/Authorization` took place. **Format:`ddMMyyHHmmss`**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`SettDateTime`</td>
+      <td style={{ textAlign: "left" }}>Double</td>
+
+      <td style={{ textAlign: "left" }}>
+        The Settlement Date/Time. Irrelevant for the Authorization command.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`CurrencyCode`</td>
+      <td style={{ textAlign: "left" }}>String(3)</td>
+
+      <td style={{ textAlign: "left" }}>
+        Currency code in **ISO 4217 Alpha-3** format.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`CurrencyNumeric`</td>
+      <td style={{ textAlign: "left" }}>String(3)</td>
+
+      <td style={{ textAlign: "left" }}>
+        Currency code in **ISO 4217 Numeric-3** format.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }} colspan="3"><strong>Card & Payment Details</strong></td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`CardNumber`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Card details provided based on transaction type:
+
+        <ul>
+          <li>Full **Track 2** for card-present Authorization/Sale.</li>
+          <li>Card **PAN only** for other transaction types.</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`EntryMode`</td>
+      <td style={{ textAlign: "left" }}>String(4)</td>
+
+      <td style={{ textAlign: "left" }}>
+        **How the card details were read**:
+
+        <ul>
+          <li>**MCR**: Magnetic Stripe Read (swipe)</li>
+          <li>**CON**: Contact Chip (insert)</li>
+          <li>**CLS**: Contactless Chip (tap)</li>
+          <li>**NFC**: Phone/Mobile contactless</li>
+          <li>**QR**: QR code read by DOT</li>
+          <li>*Consult Nayax POC for specific edge cases.*</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`ExpYear`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Card expiration year (**YY** format). **Conditional** (only when Interface is 1 or 10).
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`ExpMonth`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Card expiration month (**MM** format). **Conditional** (only when Interface is 1 or 10).
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`EMVData`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        EMV tags data in **TLV (Tag-Length-Value) format**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`CVV2`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Card Verification Value 2 (**CVV2**).
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`IDNumber`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Cardholder **ID Number**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`RandomNumber`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Further information is unavailable.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`PrimaryId`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        **Primary Brand ID**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`PrimaryDescription`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        **Primary Brand Description**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`SecondaryId`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        **Secondary Brand ID**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`SecondaryDescription`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        **Secondary Brand Description**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`CardHolderName`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        **Card Holder Name**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }} colspan="3"><strong>Machine & Location Details</strong></td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`SiteId`</td>
+      <td style={{ textAlign: "left" }}>Int(16)</td>
+
+      <td style={{ textAlign: "left" }}>
+        Region of the **Nayax server**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Id`</td>
+      <td style={{ textAlign: "left" }}>Int(64)</td>
+
+      <td style={{ textAlign: "left" }}>
+        **Machine entity unique ID**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Name`</td>
+      <td style={{ textAlign: "left" }}>String(255)</td>
+
+      <td style={{ textAlign: "left" }}>
+        **Machine Name**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`TerminalId`</td>
+      <td style={{ textAlign: "left" }}>String(255)</td>
+
+      <td style={{ textAlign: "left" }}>
+        **Terminal identifier**. Contact Nayax TPOC to define.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`DecimalPlace`</td>
+      <td style={{ textAlign: "left" }}>Int(64)</td>
+
+      <td style={{ textAlign: "left" }}>
+        **Decimal point location** for amounts.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Offset`</td>
+      <td style={{ textAlign: "left" }}>String(255)</td>
+
+      <td style={{ textAlign: "left" }}>
+        **UTC timezone offset**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`GroupId`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        **For Nayax internal use only.**
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`OperatorId`</td>
+      <td style={{ textAlign: "left" }}>String(255)</td>
+
+      <td style={{ textAlign: "left" }}>
+        **Merchant ID** (String format).
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }} colspan="3"><strong>Country & Actor Geo Details</strong></td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Name`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Country **Full Name**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`NumericCode`</td>
+      <td style={{ textAlign: "left" }}>String(3)</td>
+
+      <td style={{ textAlign: "left" }}>
+        **ISO-3166-1 Numeric-3 code**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Alpha2Code`</td>
+      <td style={{ textAlign: "left" }}>String(2)</td>
+
+      <td style={{ textAlign: "left" }}>
+        **ISO-3166-1 Alpha-2 code**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Alpha3Code`</td>
+      <td style={{ textAlign: "left" }}>String(3)</td>
+
+      <td style={{ textAlign: "left" }}>
+        **ISO-3166-1 Alpha-3 code**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`State`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Actor geo **state code**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`City`</td>
+      <td style={{ textAlign: "left" }}>String(255)</td>
+
+      <td style={{ textAlign: "left" }}>
+        Actor geo **City**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`CountryCode`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Actor geo **Country code (ISO3)**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`ZipCode`</td>
+      <td style={{ textAlign: "left" }}>String(255)</td>
+
+      <td style={{ textAlign: "left" }}>
+        Actor geo **Zip code**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Address`</td>
+      <td style={{ textAlign: "left" }}>String(255)</td>
+
+      <td style={{ textAlign: "left" }}>
+        Actor geo **Address**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Longitude`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Machine Location **Longitude**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Latitude`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Machine Location **Latitude**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }} colspan="3"><strong>Custom Data (JSON Strings) & System Flags</strong></td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`DirectActor`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Direct actor **custom data** (String in **JSON format**).
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Operator`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Operator **custom data** (String in **JSON format**).
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Distributor`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Distributor **custom data** (String in **JSON format**).
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Actor`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Actor **custom data** (String in **JSON format**).
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Machine`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Machine **custom data** (String in **JSON format**).
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`AdditionalData`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        General custom data string in **JSON format**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`IsGatewayTimeout`</td>
+      <td style={{ textAlign: "left" }}>Bool</td>
+
+      <td style={{ textAlign: "left" }}>
+        Indicates if a **gateway timeout** occurred (valid in the response).
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## Response
+
+The Void Response that the customer's payment method would send to Nayax's servers.\
+The payload should look as follows:
+
+```json
+{
+  "Status": {
+    "Verdict": "Approved",
+    "StatusMessage": "Cortina V2 Stub Tester"
+  },
+  "PaymentInfo": {
+    "SrvTranId": "236584335969834429321847829253667359",
+    "AuthCode": "333333",
+    "AuthAmount": 0.1,
+    "SettAmount": 0.1,
+    "RRN": "111111",
+    "Token": "",
+    "AuthDateTime": "230221101008",
+    "SettDateTime": "230221101009",
+    "TraceNumber": "4444",
+    "AuthSource": "55555",
+    "IsGatewayTimeout": false
+  }
+}
+```
+
+### Response Parameters
+
+The following table describes the fields returned in the API response:
+
+<table>
+  <thead>
+    <tr>
+      <th style={{ textAlign: "left" }}>Field</th>
+      <th style={{ textAlign: "left" }}>Type</th>
+      <th style={{ textAlign: "left" }}>Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td style={{ textAlign: "left" }} colspan="3"><strong>Transaction Status & Error Codes</strong></td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Verdict`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        The constant string representing the **final status of the request**:
+
+        <ul>
+          <li>**`Approved`**</li>
+          <li>**`Declined`**</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Code`</td>
+      <td style={{ textAlign: "left" }}>Int(32)</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **Decline Code**. **Conditional**—only present if `Verdict` is 'Declined'. Valid codes include:
+
+        <ul>
+          <li>**1:** Insufficient funds</li>
+          <li>**5:** Suspected Fraud</li>
+          <li>**6:** General system failure</li>
+          <li>**7:** Invalid amount</li>
+          <li>**8 / 998:** Format/parsing error or Validation error</li>
+          <li>**992:** Timeout exception</li>
+          <li>**997:** Missing mandatory parameters</li>
+          <li>**999:** General exception</li>
+          <li>*See full list for other status and internal errors (e.g., 40, 990, 1011).*</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`StatusMessage`</td>
+      <td style={{ textAlign: "left" }}>String(255)</td>
+
+      <td style={{ textAlign: "left" }}>
+        A free text field containing the **transaction status message** or additional varying data regarding the outcome.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`CustomDeclineCode`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Used for specifying a **custom decline code** (e.g., related to Soft Decline or Switch Interface). May reflect the acquirer's response code.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }} colspan="3"><strong>Financial & Time Details</strong></td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`AuthAmount`</td>
+      <td style={{ textAlign: "left" }}>Double</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **original amount requested** in the `/Authorization` Request.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`SettAmount`</td>
+      <td style={{ textAlign: "left" }}>Double</td>
+
+      <td style={{ textAlign: "left" }}>
+        The original amount requested in the `/Settlement` or `/Sale` process. **Irrelevant for Authorization**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`AuthDateTime`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        The date and time the `/Authorization` took place. **Format:`ddMMyyHHmmss`**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`SettDateTime`</td>
+      <td style={{ textAlign: "left" }}>Double</td>
+
+      <td style={{ textAlign: "left" }}>
+        The Settlement Date/Time. Irrelevant for the Authorization command.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }} colspan="3"><strong>Transaction Identifiers & References</strong></td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`SrvTranId`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **Integrator's internal transaction ID**.
+
+        <ul>
+          <li>**Conditional**: Required if `/StartSession` was **not** used.</li>
+          <li>If used, it should be empty or echo the Transaction ID.</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`AuthCode`</td>
+      <td style={{ textAlign: "left" }}>String(40)</td>
+
+      <td style={{ textAlign: "left" }}>
+        **External Authorization Code** (usually from the Card Issuer's bank).
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`RRN`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        **Reference Retrieval Number (RRN)**. Recommended to be visible to the **consumer/card holder** for support.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Token`</td>
+      <td style={{ textAlign: "left" }}>String(256)</td>
+
+      <td style={{ textAlign: "left" }}>
+        A unique token for the transaction. **For Nayax internal use only.**
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`TraceNumber`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Trace number. **For Nayax internal use only.**
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`AuthSource`</td>
+      <td style={{ textAlign: "left" }}>String(5)</td>
+
+      <td style={{ textAlign: "left" }}>
+        **For Nayax internal use only.**
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`InitiateTranReference`</td>
+      <td style={{ textAlign: "left" }}>Int(64)</td>
+
+      <td style={{ textAlign: "left" }}>
+        **Conditional**: Reflects the **original Nayax Transaction ID** for prepaid loyalty card re-attempts.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }} colspan="3"><strong>Loyalty & System Details</strong></td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`RegularCreditType`</td>
+      <td style={{ textAlign: "left" }}>Int(32)</td>
+
+      <td style={{ textAlign: "left" }}>
+        Defines the unit of measure for `RegularCredit` (Enum values):
+
+        <ul>
+          <li>**0:** Credit is counted in **transactions** (count).</li>
+          <li>**1:** Credit is counted as an **amount** (currency).</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`RegularCredit`</td>
+      <td style={{ textAlign: "left" }}>Double</td>
+
+      <td style={{ textAlign: "left" }}>
+        The regular credit value (amount or transaction count) based on the `RegularCreditType`. **Uses Decimal place 2.**
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`RevalueCredit`</td>
+      <td style={{ textAlign: "left" }}>Int(32)</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **revalue credit amount**. **Only present** if the associated card is configured as revalue-able.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`IsRevalueCard`</td>
+      <td style={{ textAlign: "left" }}>Bool</td>
+
+      <td style={{ textAlign: "left" }}>
+        Indication if card is **allowed revalue**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`IsGatewayTimeout`</td>
+      <td style={{ textAlign: "left" }}>Bool</td>
+
+      <td style={{ textAlign: "left" }}>
+        Indicates if a **gateway timeout** occurred (valid in the response).
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`ProviderExternalData`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        External data from the provider in **JSON format string**.
+      </td>
+    </tr>
+  </tbody>
+</table>

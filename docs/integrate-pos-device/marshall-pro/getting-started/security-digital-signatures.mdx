@@ -1,0 +1,36 @@
+---
+title: "Security & Digital Signatures"
+description: "Implement RSA SHA-256 signatures for secure data entry."
+---
+
+Certain commands, such as `displayInput`, require a digital signature to ensure the integrity of the request.
+
+### Key Management
+The client system is responsible for generating an **RSA SHA-256** private-public key pair. 
+* The **Private Key** must be maintained securely on your server.
+* The **Public Key** is used by the VPOS to verify the request.
+
+### C# Implementation
+Below is an example of how to sign a message and verify the signature using PKCS#1 padding.
+
+```csharp C#
+static string SignMessage(string message, string privateKeyBase64)
+{
+    using (RSA rsa = ImportPrivateKey(privateKeyBase64))
+    {
+        byte[] messageBytes = Encoding.UTF8.GetBytes(message);
+        byte[] signature = rsa.SignData(messageBytes, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        return Convert.ToBase64String(signature);
+    }
+}
+
+static bool VerifySignature(string message, string signatureBase64, string publicKeyBase64)
+{
+    using (RSA rsa = ImportPublicKey(publicKeyBase64))
+    {
+        byte[] messageBytes = Encoding.UTF8.GetBytes(message);
+        byte[] signature = Convert.FromBase64String(signatureBase64);
+        return rsa.VerifyData(messageBytes, signature, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+    }
+}
+```

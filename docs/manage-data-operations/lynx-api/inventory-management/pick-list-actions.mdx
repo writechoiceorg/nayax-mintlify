@@ -1,0 +1,156 @@
+---
+title: "Pick List Actions"
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+In Nayax core, various actions can be taken regarding pick lists, such as updating, deleting, or retrieving a pick list from a machine. All of these are performed in the **Operations > Machine Inventory** menu.
+
+<Frame><img src="/images/docs/pick-list-actions/image1.png" /></Frame>
+
+These actions can also be performed through Lynx API using the following endpoints:
+
+<Columns cols={2}>
+<EndpointCard
+  title="Generate Pick List"
+  href="/reference/lynx/machine-inventory/create-pick-list"
+  method="post"
+/>
+
+<EndpointCard
+  title="Get Pick List"
+  href="/reference/lynx/machine-inventory/get-pick-list"
+  method="get"
+/>
+
+<EndpointCard
+  title="Update Pick List"
+  href="/reference/lynx/machine-inventory/update-pick-list"
+  method="put"
+/>
+
+<EndpointCard
+  title="delete Delete Pick List"
+  href="/reference/lynx/machine-inventory/delete-pick-list"
+/>
+</Columns>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+</Warning>
+
+## Get Pick List from Machine
+
+You can retrieve the pick list associated with a specific machine using the [Get Pick List](/reference/lynx/machine-inventory/get-pick-list) endpoint. See the example request below:
+
+```sh Request
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/machines/{MachineID}/pickList \
+     --header 'Authorization: BEARER-TOKEN' \
+     --header 'accept: application/json'
+```
+
+<Note>
+**Path Param**
+
+Change `MachineID` with the actual ID of the machine to retrieve the pick list from.
+</Note>
+
+A successful response will return the pick list with all the products available on the machine.
+
+## Update Pick List
+
+You can modify the pick list for a specific machine using the [Update Pick List](/reference/lynx/machine-inventory/update-pick-list) endpoint. This endpoint allows you to update the quantities of products to be restocked or adjust other details in the pick list. See the example request below:
+
+```sh Request
+curl --request PUT \
+     --url https://qa-lynx.nayax.com/operational/v1/machines/inventory/picklists/update \
+     --header 'Authorization: BEARER-TOKEN' \
+     --header 'accept: application/json' \
+     --header 'Content-Type: application/json' \
+     --data '{
+       "MachineId": 12345,
+       "Products": [
+         {
+           "MachineProductId": 67890,
+           "PickQty": 10
+         },
+         {
+           "MachineProductId": 54321,
+           "PickQty": 5
+         }
+       ]
+     }'
+```
+
+Where:
+
+<table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        Parameter
+      </th>
+
+      <th>
+        Type
+      </th>
+
+      <th>
+        Description
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        **MachineId**
+      </td>
+
+      <td>
+        `int64`
+      </td>
+
+      <td>
+        The unique identifier of the machine whose pick list is being updated.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        **Products**
+      </td>
+
+      <td>
+        `array of objects`
+      </td>
+
+      <td>
+        A list of products to be updated in the pick list:
+        `MachineProductId`: The unique identifier of the product in the machine.
+        `PickQty`The updated quantity of the product to be picked.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+A successful response will return the pick list with the updated pick quantities.
+
+## Delete Pick List
+
+Using the [Delete Pick List](/reference/lynx/machine-inventory/delete-pick-list) endpoint, you can remove the existing pick list associated with a specific machine. This endpoint helps operators clear outdated or incorrect pick lists to ensure accurate restocking processes.
+
+```sh Request
+curl --request DELETE \
+     --url https://qa-lynx.nayax.com/operational/v1/machines/{MachineID}/pickList \
+     --header 'Authorization: BEARER-TOKEN' \
+     --header 'accept: application/json'
+```
+
+A successful request will return the confirmation of the deletion of the pick list.
+
+
+

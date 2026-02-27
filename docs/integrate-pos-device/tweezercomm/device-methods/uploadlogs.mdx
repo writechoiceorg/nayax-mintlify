@@ -1,0 +1,48 @@
+---
+title: "uploadLogs"
+---
+
+The `uploadLogs` method sends diagnostic logs from the terminal to the Modularity back-end systems. This is useful for troubleshooting, support, and system monitoring.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Get Started](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) for more details on how the requests are structured and sent.
+</Note>
+
+In the request, the method field should be set to `uploadLogs`, and the params must include the service name device:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "uploadLogs",
+    "id": "123454352",
+    "params": [
+        "device"
+    ]
+}
+```
+
+## Response
+
+A successful request will return a response similar to the one in the code block below:
+
+```json
+{
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "ok"
+    }
+}
+```
+
+### Response Parameters
+
+Below is a table with all the possible response parameters and their description:
+
+| Name            | Type    | Description                    |
+| --------------- | ------- | ------------------------------ |
+| `statusCode`    | integer | Operation status (0 = success) |
+| `statusMessage` | string  | Operation message              |

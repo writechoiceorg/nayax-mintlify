@@ -1,0 +1,1013 @@
+---
+title: "Decline Reason Codes"
+---
+
+Transaction refusal codes constitute a standardized classification system designed to communicate the precise reason for payment authorization failures within the electronic payment processing infrastructure. This reference documentation establishes a comprehensive framework for interpreting declined transactions across multiple failure scenarios.
+
+## Decline Codes
+
+The table below describes each Decline Code in more detail.
+
+<table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        Refusal Reason Code
+      </th>
+
+      <th>
+        Refusal Reason
+      </th>
+
+      <th>
+        Description
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        0
+      </td>
+
+      <td>
+        (none)
+      </td>
+
+      <td>
+        Sometimes `refusalReasonCode: 0` is returned along with `resultCode: Authorised`. When this happens, ignore the refusal reason code. The transaction succeeded.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        2
+      </td>
+
+      <td>
+        Refused
+      </td>
+
+      <td>
+        The transaction was refused.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        3
+      </td>
+
+      <td>
+        Referral
+      </td>
+
+      <td>
+        Referrals.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        4
+      </td>
+
+      <td>
+        Acquirer Error
+      </td>
+
+      <td>
+        The transaction did not go through due to an error that occurred on the acquirer's end.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        5
+      </td>
+
+      <td>
+        Blocked Card
+      </td>
+
+      <td>
+        The card used for the transaction is blocked, therefore unusable.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        6
+      </td>
+
+      <td>
+        Expired Card
+      </td>
+
+      <td>
+        The card used for the transaction has expired, therefore unusable.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        7
+      </td>
+
+      <td>
+        Invalid Amount
+      </td>
+
+      <td>
+        An amount mismatch occurred during the transaction process.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        8
+      </td>
+
+      <td>
+        Invalid Card Number
+      </td>
+
+      <td>
+        The specified card number is incorrect or invalid.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        9
+      </td>
+
+      <td>
+        Issuer Unavailable
+      </td>
+
+      <td>
+        It is not possible to contact the consumer's bank to authorise the transaction.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        10
+      </td>
+
+      <td>
+        Not supported
+      </td>
+
+      <td>
+        The shopper's bank does not support or allow this type of transaction.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        11
+      </td>
+
+      <td>
+        3D Not Authenticated
+      </td>
+
+      <td>
+        3D Secure authentication was not executed, or it did not execute successfully.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        12
+      </td>
+
+      <td>
+        Not enough balance
+      </td>
+
+      <td>
+        The card does not have enough money to cover the payable amount.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        14
+      </td>
+
+      <td>
+        Acquirer Fraud
+      </td>
+
+      <td>
+        Possible fraud.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        15
+      </td>
+
+      <td>
+        Cancelled
+      </td>
+
+      <td>
+        The transaction was cancelled.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        16
+      </td>
+
+      <td>
+        Shopper Cancelled
+      </td>
+
+      <td>
+        The consumer cancelled the transaction before it was completed.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        17
+      </td>
+
+      <td>
+        Invalid Pin
+      </td>
+
+      <td>
+        The specified PIN is incorrect or invalid.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        18
+      </td>
+
+      <td>
+        Pin tries exceeded
+      </td>
+
+      <td>
+        The consumer entered an incorrect PIN more than three times consecutively.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        19
+      </td>
+
+      <td>
+        Pin validation not possible
+      </td>
+
+      <td>
+        It is not possible to validate the specified PIN number.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        20
+      </td>
+
+      <td>
+        FRAUD
+      </td>
+
+      <td>
+        The pre-authorisation risk checks resulted in a fraud score of 100 or more. Therefore, the transaction was flagged as fraudulent and was refused.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        21
+      </td>
+
+      <td>
+        Not Submitted
+      </td>
+
+      <td>
+        The transaction was not submitted correctly for processing.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        22
+      </td>
+
+      <td>
+        FRAUD-CANCELLED
+      </td>
+
+      <td>
+        The sum of pre-authorisation and post-authorisation risk checks resulted in a fraud score of 100 or more. Therefore, the transaction was flagged as fraudulent and was refused.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        23
+      </td>
+
+      <td>
+        Transaction Not Permitted
+      </td>
+
+      <td>
+        The following declined codes are mapped to this refusal reason:
+
+        * 57: Transaction not permitted to issuer/cardholder
+        * 57: Transaction not allowed for this merchant
+        * 58: Transaction not permitted to acquirer/terminal
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        24
+      </td>
+
+      <td>
+        CVC Declined
+      </td>
+
+      <td>
+        The specified CVC (card security code) is invalid.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        25
+      </td>
+
+      <td>
+        Restricted Card
+      </td>
+
+      <td>
+        The following decline codes are mapped to this refusal reason:
+        "62: Restricted Card"
+        "62: Invalid card in this country"
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        26
+      </td>
+
+      <td>
+        Revocation Of Auth
+      </td>
+
+      <td>
+        Indicates that the consumer requested to stop a subscription.
+        Decline codes such as the following are mapped to this refusal reason:
+        "R1: Revocation of Authorization Order"
+        "R3: Revocation of All Authorizations Order"
+        "R0: Stop Payment Order"
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        27
+      </td>
+
+      <td>
+        Declined Non Generic
+      </td>
+
+      <td>
+        This response maps all those response codes that cannot be reliably mapped. This makes it easier to tell generic declines (for example, Mastercard "05: Do not honor" response) from more specific ones.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        28
+      </td>
+
+      <td>
+        Withdrawal amount exceeded
+      </td>
+
+      <td>
+        The transaction amount was higher than the withdrawal amount permitted for the consumer's card.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        29
+      </td>
+
+      <td>
+        Withdrawal count exceeded
+      </td>
+
+      <td>
+        The consumerexceeded the number of withdrawals that is permitted for the consumer's card.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        31
+      </td>
+
+      <td>
+        Issuer Suspected Fraud
+      </td>
+
+      <td>
+        Issuer reported the transaction as suspected fraud.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        32
+      </td>
+
+      <td>
+        AVS Declined
+      </td>
+
+      <td>
+        The address data the consumer entered is incorrect.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        33
+      </td>
+
+      <td>
+        Card requires online pin
+      </td>
+
+      <td>
+        The consumer's bank requires the consumer to enter the PIN.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        34
+      </td>
+
+      <td>
+        No checking account available on Card
+      </td>
+
+      <td>
+        The consumer's bank requires a checking account to complete the purchase.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        35
+      </td>
+
+      <td>
+        No savings account available on Card
+      </td>
+
+      <td>
+        The consumer's bank requires a savings account to complete the purchase.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        36
+      </td>
+
+      <td>
+        Mobile pin required
+      </td>
+
+      <td>
+        The consumer's bank requires the consumer to enter a mobile PIN.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        37
+      </td>
+
+      <td>
+        Contactless fallback
+      </td>
+
+      <td>
+        The consumer abandoned the transaction after attempting a contactless payment and being prompted to try a different card entry method (PIN or swipe).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        38
+      </td>
+
+      <td>
+        Authentication required
+      </td>
+
+      <td>
+        The issuer declined the authentication exemption request and requires authentication for the transaction. Retry with 3D Secure.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        39
+      </td>
+
+      <td>
+        RReq not received from DS
+      </td>
+
+      <td>
+        The issuer or the scheme wasn't able to communicate the outcome via RReq.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        40
+      </td>
+
+      <td>
+        Current AID is in Penalty Box
+      </td>
+
+      <td>
+        The payment network is currently unavailable. Retry the transaction with a different payment method.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        41
+      </td>
+
+      <td>
+        CVM Required Restart Payment
+      </td>
+
+      <td>
+        A PIN or signature is required. Retry the transaction.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        42
+      </td>
+
+      <td>
+        3DS Authentication Error
+      </td>
+
+      <td>
+        The 3D Secure authentication failed due to an issue at the card network or issuer. Retry the transaction, or try again with a different payment method.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        46
+      </td>
+
+      <td>
+        Transaction blocked by Adyen to prevent excessive retry fees
+      </td>
+
+      <td>
+        Adyen's excessive retry prevention service blocked the transaction to make sure that you are not charged penalty fees.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        1062
+      </td>
+
+      <td>
+        Unauthorized – Machine is not active
+      </td>
+
+      <td>
+        Machine is not found or not active.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        1063
+      </td>
+
+      <td>
+        Unauthorized – VAS eCOM provider is not active or not exist
+      </td>
+
+      <td>
+        VAS is not found or not active.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        1064
+      </td>
+
+      <td>
+        Unauthorized – VAS SDK integrator is not active or not exist
+      </td>
+
+      <td>
+        VAS is not found or not active.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        1065
+      </td>
+
+      <td>
+        Unauthorized – Token is not valid
+      </td>
+
+      <td>
+        Expired token.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        1066
+      </td>
+
+      <td>
+        Unauthorized - Authentication failed
+      </td>
+
+      <td>
+        Other reason.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        1067
+      </td>
+
+      <td>
+        The request failed validation because required fields are missing.
+      </td>
+
+      <td>
+        When getting a request that is missing a mandatory field.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        1068
+      </td>
+
+      <td>
+        The request was declined 81
+      </td>
+
+      <td>
+        When the request is rejected due to risk.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        1069
+      </td>
+
+      <td>
+        Immediate decline from the provider
+      </td>
+
+      <td />
+    </tr>
+
+    <tr>
+      <td>
+        980
+      </td>
+
+      <td>
+        Unauthorized - Authentication failed
+      </td>
+
+      <td>
+        Failed.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        981
+      </td>
+
+      <td>
+        Unauthorized – Machine is not active
+      </td>
+
+      <td />
+    </tr>
+
+    <tr>
+      <td>
+        982
+      </td>
+
+      <td>
+        Unauthorized – VAS eCOM provider is not active or not exist
+      </td>
+
+      <td />
+    </tr>
+
+    <tr>
+      <td>
+        983
+      </td>
+
+      <td>
+        Unauthorized – VAS SDK integrator is not active or not exist
+      </td>
+
+      <td />
+    </tr>
+
+    <tr>
+      <td>
+        601
+      </td>
+
+      <td>
+        Card token is not valid
+      </td>
+
+      <td>
+        In the case the Token is not approved/exists in Nayax DB.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        602
+      </td>
+
+      <td>
+        Card Token is pending
+      </td>
+
+      <td>
+        In the event that we have yet to receive a response from the billing provider.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        603
+      </td>
+
+      <td>
+        Transaction not found
+      </td>
+
+      <td>
+        In the event we couldn’t locate the transaction that the merchant asked us to check.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        604
+      </td>
+
+      <td>
+        Transaction is pending
+      </td>
+
+      <td>
+        In the event that the last status we received from the billing provider was “Pending”.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        33
+      </td>
+
+      <td>
+        Failed to Authenticate
+      </td>
+
+      <td>
+        Invalid cipher (structure or value).
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        34
+      </td>
+
+      <td>
+        Decryption Failure
+      </td>
+
+      <td>
+        The provided cipher decryption failed.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        984
+      </td>
+
+      <td>
+        Unauthorized – Token is not valid
+      </td>
+
+      <td>
+        The `TokenId `was not found for `EcmVas`.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        998
+      </td>
+
+      <td>
+        Validation error
+      </td>
+
+      <td>
+        `ValidateMerchant `had an exception.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        992
+      </td>
+
+      <td>
+        Timeout
+      </td>
+
+      <td />
+    </tr>
+
+    <tr>
+      <td>
+        997
+      </td>
+
+      <td>
+        Did not receive mandatory parameters
+      </td>
+
+      <td />
+    </tr>
+
+    <tr>
+      <td>
+        999
+      </td>
+
+      <td>
+        General error
+      </td>
+
+      <td />
+    </tr>
+
+    <tr>
+      <td>
+        29
+      </td>
+
+      <td>
+        Invalid Token
+      </td>
+
+      <td>
+        If Token exists, check failed.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        29
+      </td>
+
+      <td>
+        Invalid Token
+      </td>
+
+      <td>
+        If Token is not “Active”.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        29
+      </td>
+
+      <td>
+        Invalid Token
+      </td>
+
+      <td>
+        If Token ID is not associated with Actor ID.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        29
+      </td>
+
+      <td>
+        Invalid Token
+      </td>
+
+      <td>
+        If Token ID is not associated to VAS eCOM.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        29
+      </td>
+
+      <td>
+        Invalid Token
+      </td>
+
+      <td>
+        If Random ≠ Random.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        29
+      </td>
+
+      <td>
+        Expired Request
+      </td>
+
+      <td>
+        Timestamp ≥ 5 minutes.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## See Also
+
+<Columns cols={2}>
+  <Card icon="link" title="eCom API Overview" href="/reference/ecom-sdk/overview" />
+
+  <Card icon="link" title="Back-End Integration" href="/docs/ecom-sdk/back-end-integration/ecom-sdk-back-end-integration" />
+</Columns>

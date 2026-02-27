@@ -1,0 +1,32 @@
+---
+title: "Android SDK Installation"
+---
+
+Integrating the EMV Core SDK into an Android environment allows for pre-certified EMV payment processing within a Kiosk or POS application. This guide covers the system requirements and the step-by-step installation process for the version.
+
+### System Requirements and SDK Files
+
+Before beginning, ensure the host hardware meets the following criteria:
+
+* **Android OS**: Version 7 or above.
+* **Network**: Stable internet communication with TLS v1.2 or above.
+* **Permissions**: The application must have permission to read `/sys/class`.
+* **SDK Package Components**:
+  1. `com.nayax.emvCore-release-v.v-bbb.apk`: The mandatory EMV-Core service package.
+  2. `com.nayax.emv_core_android_test-release-v.v-bbb.apk`: The sample application used for testing.
+  3. `emv-core-test-v.v-bbb.zip`: An Android Studio project containing a library and sample source code in Java.
+
+### Installation Steps
+
+Follow these steps to install the SDK on Android:
+
+1. **Deploy APKs**: Install the EMV-Core Service package followed by the Test application on the target Android device.
+2. **Hardware Connection**: Connect the UNO reader to the Android device.
+3. **System Prompts**:
+   * When the system prompts you to "Allow EmvCore Service to access Saturn 8700," check the "Always open..." box and press **OK** to whitelist the reader.
+   * Select **Allow** on the "Stop optimizing battery usage" prompt to keep the service running in the background.
+4. **Restarting**: If communication issues occur between the reader and the application, restart the service.
+
+### Verification
+
+Once the applications are running and the reader is connected, the status line at the top of the test application screen should display **"Ready"**. You can then navigate to the **'Maintenance'** page and press **'Get Data'** to retrieve software versions and hardware status.

@@ -1,0 +1,58 @@
+---
+title: "abortDisplay"
+---
+
+The `abortDisplay` method is used to cancel ongoing display operations initiated on the terminal (e.g. instructional messages, prompts).
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+To invoke this method, set the `method `field to `abortDisplay`, and include the service name and parameters as shown below.
+
+```json
+{
+    "jsonrpc":"2.0",
+    "method":"abortDisplay",
+    "id":"123",
+    "params": [
+        "device",{}
+    ]
+}
+```
+
+### Request Parameters
+
+The table below describes the parameters of the request:
+
+| Name     | Type     | Description                    |
+| -------- | -------- | ------------------------------ |
+| `device` | `string` | The service name (fixed value) |
+
+## Response
+
+A successful request will return the following response:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "ok"
+    }
+}
+```
+
+### Response Parameters
+
+The table below describes the response parameters for this method:
+
+| Name            | Type      | Description                          |
+| --------------- | --------- | ------------------------------------ |
+| `statusCode`    | `integer` | Operation status (0 = success)       |
+| `statusMessage` | `string`  | Message indicating operation result. |

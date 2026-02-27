@@ -1,0 +1,22 @@
+---
+title: "Testing & Troubleshooting"
+---
+
+Once your implementation is complete, it is critical to verify the security of your endpoint. Use the following test cases and troubleshooting guide to ensure a robust integration.
+
+### Test Cases
+
+To confirm your validation logic is functional, do the following checks:
+
+* Confirm that requests with valid HMAC signatures are accepted and processed.
+* Verify that requests with incorrect or missing HMACs are rejected with a `401 Unauthorized` or `403 Forbidden` status.
+* Manually modify a single character in the payload and verify that the HMAC is invalidated and the request is rejected.
+
+### Troubleshooting Validation
+
+If your calculated hash does not match the one provided by Nayax, do the following checks:
+
+* Confirm your secret key matches the one provided to your Nayax Architect and ensure you aren't accidentally using a "Test" key in a "Production" environment.
+* Ensure the fields are concatenated in the exact order defined by the Nayax implementation. Remember that the hash is sensitive to sequence.
+* Ensure you are using UTF-8 string encoding and that you haven't stripped or added extra whitespace or delimiter characters.
+* Review the `HmacService` class in the `SDK.Api.Contracts` library as the "source of truth" for the calculation logic.

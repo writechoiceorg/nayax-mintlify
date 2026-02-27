@@ -1,0 +1,102 @@
+---
+title: "Retrieve Hierarchy"
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+Nayax Core shows an operator's hierarchy in the **Operator** menu on the left sidebar. If you check its data, the **Company** section will detail its operator ID and Parent Operator.
+
+<Frame><img src="/images/docs/retrieve-hierarchy/image1.png" /></Frame>
+
+## Lynx API
+
+You can also use Lynx API to programmatically retrieve the hierarchy of an Operator and its details by using the following endpoint:
+
+<EndpointCard
+  title="Get Actor Hierarchy for Current User"
+  href="/reference/lynx/actors/get-actor-hierarchy-for-current-user"
+  method="get"
+/>
+
+### Get Operator Hierarchy
+
+The [Get Actor Hierarchy for Current User](/reference/lynx/actors/get-actor-hierarchy-for-current-user) endpoint retrieves the hierarchy for the current user or a specified actor/operator and its child entities, such as areas, routes, and machines, by providing the `ActorID` in the query params of the request. See the example request in the code block below:
+
+```sh
+curl --request GET \
+     --url 'https://qa-lynx.nayax.com/operational/v1/actors/hierarchy?ActorID=<ID>' \
+     --header 'accept: application/json'
+```
+
+The available Query Params are:
+
+| Parameter             | Description                                                                                                                |
+| :-------------------- | :------------------------------------------------------------------------------------------------------------------------- |
+| `ActorID`             | The unique ID of the operator or actor whose hierarchy you want to retrieve.                                               |
+| `StatusID`            | Filter the hierarchy to include only actors with a specific status. Use this to retrieve only active or inactive entities. |
+| `HierarchyLevelLimit` | Specify the maximum depth of the hierarchy to be returned. For example, 1 for immediate children and 2 for grandchildren.  |
+
+<Note>
+**Lynx API Actors**
+
+In Nayax Core, the Operators and its types, such as "Area" and "Routes", are only nomenclatures that help you differentiate them. However, in Lynx API, they are all referred to as Actors, which are only differentiated by the `ActorTypeID`.
+</Note>
+
+### Response
+
+With a successful request, the endpoint will return an array of Operator objects. See an example in the code block below:
+
+```json
+{
+  "ParentActorID": 0,
+  "ActorID": 12345,
+  "ActorDescription": "Operator A",
+  "ActorTypeID": 2,
+  "ActorStatus": 1,
+  "ActorHierarchyLevel": 0,
+  "ActorChildren": [
+    {
+      "ParentActorID": 12345,
+      "ActorID": 23456,
+      "ActorDescription": "Area A",
+      "ActorTypeID": 3,
+      "ActorStatus": 1,
+      "ActorHierarchyLevel": 1,
+      "ActorChildren": [
+        {
+          "ParentActorID": 23456,
+          "ActorID": 34567,
+          "ActorDescription": "Route A",
+          "ActorTypeID": 4,
+          "ActorStatus": 1,
+          "ActorHierarchyLevel": 2,
+          "ActorChildren": [
+            {
+              "ParentActorID": 34567,
+              "ActorID": 45678,
+              "ActorDescription": "Machine 1",
+              "ActorTypeID": 5,
+              "ActorStatus": 1,
+              "ActorHierarchyLevel": 3,
+              "ActorChildren": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+As you can see above, this is the hierarchy for the Operator with the `ActorID: 12345` showing each of its children operators. The table below describes each of the response's body parameters:
+
+| Parameter             | Description                                                 |
+| :-------------------- | :---------------------------------------------------------- |
+| `ParentActorID`       | ID of the parent actor for the specified actor.             |
+| `ActorID`             | Unique ID of the current actor.                             |
+| `ActorDescription`    | Description or name of the actor.                           |
+| `ActorTypeID`         | Type of actor (e.g., Operator, Area, Route).                |
+| `ActorStatus`         | Status of the actor (e.g., active, inactive).               |
+| `ActorHierarchyLevel` | The level of the actor within the hierarchy.                |
+| `ActorChildren`       | A list of child actor IDs or details for the current actor. |
+

@@ -1,0 +1,62 @@
+---
+title: "endPinpadTransaction"
+---
+
+The `endPinpadTransaction` The method is used to terminate the PinPad mode session on the payment terminal. This is the final step in the card/PIN capture process and should be called regardless of whether the transaction was successful, cancelled, or failed the PinPad steps. Successfully ending the session ensures the terminal is reset and ready for the next operation.
+
+<Warning>
+**Contact Transactions Only**
+
+  This method is relevant to contact transactions (inserted cards), which require a controlled multi-step EMV dialogue involving the terminal and the PIN pad.
+</Warning>
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, ensure to configure the following:
+
+* The `method `field must be set to `endPinpadTransaction`.
+* The `service `must be set to `engine `in the params.
+
+The request takes a fixed format with no specific parameters in the second object.
+
+```json
+{
+   "jsonrpc": "2.0",
+   "method": "endPinpadTransaction",
+   "id": "123454353",
+   "params": [
+       "engine",
+       {}
+   ]
+}
+```
+
+## Response
+
+A successful response indicates that the PinPad mode on the terminal has been successfully exited and the device has returned to its idle state.
+
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "123454353",
+   "result": {
+       "statusCode": 0,
+       "statusMessage": "ok"
+   }
+}
+```
+
+### Response Parameters
+
+Below is a table with all the possible response parameters and their description:
+
+| Name            | Type    | Description                                                                                             |
+| :-------------- | :------ | :------------------------------------------------------------------------------------------------------ |
+| `statusCode`    | integer | The status of the command. A value of `0` indicates the terminal successfully ended the PinPad session. |
+| `statusMessage` | string  | The message confirming the status (e.g., `ok`).                                                         |

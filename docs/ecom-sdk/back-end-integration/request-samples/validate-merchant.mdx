@@ -1,0 +1,42 @@
+---
+title: "Validate Merchant"
+---
+
+The `ValidateMerchant `Request is the first step in securely identifying a merchant. The core of the request relies on the Merchant Token ID, which is a unique, secure token assigned to the merchant during the initial onboarding process. This token serves as the primary identifier. The request also includes supplementary data (`ActorId`, `MachineId`, `Random`) and a `Cipher `field.
+
+The `Cipher `field is typically a digitally signed or encrypted payload used to verify the integrity and authenticity of the request against the pre-shared secrets or keys established during the merchant's enrollment.
+
+## Request
+
+Requests are performed to the [`/validate-merchant`](/reference/ecom/management/validate-merchant-start-authentication) endpoint.
+
+```json
+{
+  "TokenId": "MERCH-ABC123XYZ",
+  "ActorId": "SYS-WEB-API-01",
+  "MachineId": "IP-192-168-1-50",
+  "Random": "aBcD1EfgH2iJkLmnOpQrS3tUvWxYz",
+  "Cipher": "MjQ5ZDlmNjVhZmY2NzQzZjI1NzdjYjY0ZGUyNTEwYWE="
+}
+```
+
+The table below describes the parameters of the request:
+
+| Field       | Type   | Description                                                                                                                                                                      | Required |
+| :---------- | :----- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------- |
+| `TokenId`   | String | The **unique identifier** (token) created during the merchant onboarding process. This identifies the merchant.                                                                  | Yes      |
+| `ActorId`   | String | The ID of the specific user, system, or process initiating the request *on behalf of* the merchant.                                                                              | Yes      |
+| `MachineId` | String | A unique identifier for the hardware or device from which the request originates.                                                                                                | Yes      |
+| `Random`    | String | A **unique, unpredictable string** (a nonce) used to prevent replay attacks. This must be a new value for every request.                                                         | Yes      |
+| `Cipher`    | String | The **secure payload** (e.g., an HMAC signature or encrypted block) is generated using the request fields and the merchant's secret key. This proves the request's authenticity. | Yes      |
+
+## Response
+
+A successful validation returns a `200 OK` status and a body containing the validated merchant details.
+
+| Field               | Type           | Description                                                                                                       | Required | Constraints                       |
+| :------------------ | :------------- | :---------------------------------------------------------------------------------------------------------------- | :------- | :-------------------------------- |
+| `verdict`           | string | null | Const string values **'Approved'** or **'Declined'**.                                                             | Yes      | Must be 'Approved' or 'Declined'. |
+| `code`              | int32          | Response code. **0 for Approved**, relevant decline code for Declined.                                            | No       | Integer value.                    |
+| `statusMessage`     | string | null | Optional. Session status message free text field or additional varying data.                                      | No       | Free text.                        |
+| `customDeclineCode` | string | null | A custom decline code can also be used to return the **HashedEcomTransactionId** for a validate-merchant success. | No       | String value.                     |

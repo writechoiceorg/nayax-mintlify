@@ -1,0 +1,58 @@
+---
+title: "getRetailerInfo"
+---
+
+The `getRetailerInfo `  method allows you to verify the merchant's name and ID. This is useful for confirming that a terminal was configured correctly after installation or setup.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+To call this method, the `method` field should be set to `getRetailerInfo`, and the params array must include the fixed service name `engine`.
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getRetailerInfo",
+    "id": "136bdaa3",
+    "params": [
+        "engine"
+    ]
+}
+```
+
+### Request Parameters
+
+See the table below for a description of the available request parameters for this method.
+
+| Name     | Type   | Description            |
+| :------- | :----- | :--------------------- |
+| `engine` | string | The fixed service name |
+
+## Response
+
+A successful request will return a response similar to the one in the code block below:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "136bdaa3",
+    "result": {
+        "id": "12970568",
+        "name": "MACHINE_TEST"
+    }
+}
+```
+
+### Response Parameters
+
+The table below lists the possible values of the `result` object:
+
+| Name   | Type   | Description                      |
+| ------ | ------ | -------------------------------- |
+| `id`   | string | The unique retailer (machine) ID |
+| `name` | string | The name of the retailer         |

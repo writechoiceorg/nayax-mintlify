@@ -2,7 +2,7 @@
 title: "Get Started"
 ---
 
-TweezerComm follows the [JSON-RPC 2.0](http://www.jsonrpc.org/specification) specification to standardize transaction processing between the POS/ECR and Agamento payment application (that runs on Nayax attended devices). JSON-RPC is a lightweight, remote procedure call (RPC) protocol encoded in JSON. It allows client and server communication using structured requests and responses. 
+TweezerComm follows the [JSON-RPC 2.0](http://www.jsonrpc.org/specification) specification to standardize transaction processing between the POS/ECR and Agamento payment application (that runs on Nayax attended devices). JSON-RPC is a lightweight, remote procedure call (RPC) protocol encoded in JSON. It allows client and server communication using structured requests and responses.
 
 Refer to the sections below to learn how to submit requests on TweezerComm.
 
@@ -14,7 +14,7 @@ TweezerComm operates over HTTPS using a standard REST API convention. The SPICy 
 https://device_ip:8080/SPICy
 ```
 
-All requests are processed at this endpoint using a **POST** method. Remember to replace `device_ip` with the actual IP address of your device. 
+All requests are processed at this endpoint using a **POST** method. Remember to replace `device_ip` with the actual IP address of your device.
 
 <Note>
 **Agamento Port**
@@ -45,9 +45,9 @@ To request TweezerComm via the SPICy server, the client application must send an
 In this request, you need to configure the following parameters:
 
 * `jsonrpc`: Defines the JSON-RPC version. In this case, always set it to `2.0`.
-* `method`: Specifies the method to be used. See [Payment Services Methods](doc:transaction-methods) and [Device Methods](doc:device-methods) for a list and description of available methods.
+* `method`: Specifies the method to be used. See [Payment Services Methods](/docs/transaction-methods) and [Device Methods](/docs/integrate-pos-device/tweezercomm/device-methods/index) for a list and description of available methods.
 * `id`: A unique identifier for tracking the request.
-* `params`:  This is an array divided into two parts. 
+* `params`:  This is an array divided into two parts.
   * The first specifies the payment service in this example it is `engine`.
   * The second part contains the parameters specific to the requested method.
 
@@ -55,7 +55,17 @@ By following this structure, client applications can reliably interact with Twee
 
 ## See Also
 
-<CardGroup cols={2}>
-  <Card title="Payment Flows" href="/docs/tweezercomm-payment-flows" icon="arrow-up-right" />
-  <Card title="Create Payments" href="/docs/tweezercomm-create-payments" icon="arrow-up-right" />
-</CardGroup>
+<Columns cols={3}>
+<Card
+  icon="link"
+  title="Payment Flows"
+  href="/docs/tweezercomm-payment-flows"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Create Payments"
+  href="/docs/tweezercomm-create-payments"
+  arrow
+/>
+</Columns>
