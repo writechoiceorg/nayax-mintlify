@@ -1,0 +1,18 @@
+---
+title: "Post-Pay Flow"
+description: "Process immediate payments for fixed-price services or completed transactions without the need for pre-authorization."
+---
+
+This guide walks through the post-pay flow. Unlike pre-authorization sequences, this simplified flow is used when the final transaction amount is known upfront or the service has already been provided, resulting in an immediate "Pay and Go" experience for the consumer.
+
+## Payment Flow
+Visualize the Post-Pay process with the diagram below, which illustrates the direct sequence from reader activation to successful payment and receipt printing.
+
+![post-pay](/images/post-pay.jpg) 
+
+Below is a breakdown of the sequence:
+
+1. Your system initiates the transaction by sending the `pay` command to the VPOS terminal.
+2. The VPOS enables the reader, detects the card, and processes the payment. Upon success, it returns an **OK** response to your system.
+3. Your system sends a `displayScreen` command to the VPOS to show the confirmation message: **"Thank you."**
+4. If a physical record is needed, your system triggers the `print` command.

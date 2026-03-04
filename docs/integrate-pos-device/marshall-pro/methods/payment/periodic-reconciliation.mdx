@@ -1,0 +1,20 @@
+---
+title: "Periodic Reconciliation"
+description: "Maintain system integrity by querying and settling open transactions to ensure all fueling sessions are correctly finalized."
+---
+
+This guide walks through the periodic reconciliation flow. This maintenance sequence is designed to run at regular intervals to identify any transactions that were not settled during the normal flow (e.g., due to a network timeout or hardware reset), ensuring that revenue is captured and the terminal remains in a healthy state.
+
+## Reconciliation Flow
+
+Visualize the Periodic Reconciliation process with the diagram below, which illustrates the sequence from disabling the reader to batch-settling open transactions.
+
+![periodic-reconciliation](/images/periodic-reconciliation.jpg)
+
+Below is a breakdown of the sequence:
+
+1. Your system sends the `stopCardDetect` command to the VPOS to prevent new transactions from starting during reconciliation.
+2. Your system triggers a `query` command to request a list of all transactions currently pending settlement.
+3. For every open transaction returned by the VPOS, your system sends a `settle` command.
+4. The VPOS returns an **OK** for each successful settlement.
+5. Once reconciliation is complete, your system sends the `cardDetect` command to re-enable the reader for new consumers.
