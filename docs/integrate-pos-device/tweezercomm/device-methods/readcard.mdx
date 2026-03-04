@@ -1,0 +1,105 @@
+---
+title: "readCard"
+---
+
+The `readCard `method reads data from a card using either the magnetic swipe reader (MSR) or the contactless NFC reader. It supports Mifare cards only for NFC. This method is commonly used in loyalty or identification scenarios.
+
+If the user cancels the operation or the request times out, it can be aborted using the abortReadCard method.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer) for more details on how the requests are structured and sent.
+</Note>
+
+In the request, the method field should be set to `readCard` the parameters should define the reader configuration and user interface messages.
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "readCard",
+    "id": "1234567890",
+    "params": [
+        "device",
+        {
+            "readMsr": true,
+            "readMifare": true,
+            "message1": "SWIPE OR PRESENT CARD",
+            "message2": "",
+            "message3": "",
+            "timeout": 40,
+            "cancelable": true,
+            "mifare": {
+                "type": "classic",
+                "commType": 2,
+                "appId": "A12345",
+                "appKey": "00000000000000000000000000000123",
+                "appKeyNo": 0,
+                "appCryptoMethod": 1,
+                "fileNo": 0,
+                "fileType": 0,
+                "expectedDataLen": 4
+            }
+        }
+    ]
+}
+```
+
+### Request Parameters
+
+See the table below for a description of the available request parameters for this method.
+
+| Name         | Type   | Description                                     |
+| ------------ | ------ | ----------------------------------------------- |
+| `readMsr`    | bool   | Whether to enable the magnetic stripe reader.   |
+| `readMifare` | bool   | Whether to enable the NFC reader (Mifare only). |
+| `message1`   | string | Main message shown to the user.                 |
+| `message2`   | string | First subtitle shown to the user.               |
+| `message3`   | string | Second subtitle shown to the user.              |
+| `timeout`    | int    | Timeout in seconds.                             |
+| `cancelable` | bool   | Whether to allow canceling the operation.       |
+
+**Mifare Object Parameters**
+
+| Name              | Type   | Description                           |
+| ----------------- | ------ | ------------------------------------- |
+| `type`            | string | Card type (classic, desfireev2, etc.) |
+| `commType`        | int    | Communication type                    |
+| `appId`           | string | Application ID                        |
+| `appKey`          | string | Application key                       |
+| `appKeyNo`        | int    | Application key number                |
+| `appCryptoMethod` | int    | Crypto method                         |
+| `fileNo`          | int    | File number                           |
+| `fileType`        | int    | File type                             |
+| `expectedDataLen` | int    | Expected data length                  |
+
+## Response
+
+A successful request will return a response similar to the one in the code block below:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "ok",
+        "cardEntryMode": 1,
+        "cardId": "string"
+    }
+}
+```
+
+### Response Parameters
+
+Below is a table with all the possible response parameters and their description
+
+| Name            | Type    | Description                            |
+| --------------- | ------- | -------------------------------------- |
+| `statusCode`    | integer | Operation status (0 = success)         |
+| `statusMessage` | string  | Operation result message               |
+| `cardEntryMode` | int     | Entry mode: 0 = Swipe, 1 = Contactless |
+| `track2`        | string  | Track 2 data (for swipe only)          |
+| `cardId`        | string  | Card ID (for contactless only)         |

@@ -1,0 +1,63 @@
+---
+title: "C SDK Simulator"
+---
+
+import {TerminalBlock} from "/snippets/TerminalBlock.jsx";
+
+The Nayax Marshall SDK includes a simulator to help developers test and debug their device integration with the Nayax payment system. The simulator replicates the behaviour of the actual hardware and software interactions, allowing you to validate the vending process without needing physical hardware.
+
+## Simulator
+
+When the C SDK simulator is started on a terminal, its menu will look like this:
+
+<TerminalBlock>
+  [0]: start session 0
+  [1]: close session 0
+  [2]: info session
+  [3]: cancel session
+  [4]: query sessions
+  [5]: reader state
+  [6]: link stats
+  [7]: quit
+</TerminalBlock>
+
+The table below describes each option on the simulator terminal.
+
+| Command           | Description                                                                                                                  |
+| :---------------- | :--------------------------------------------------------------------------------------------------------------------------- |
+| `Start session 0` | Starts a session (a transaction) with product code 0.                                                                        |
+| `Close Session 0` | Only relevant in multisession. Closes the session (settles it) at the end of a transaction.                                  |
+| `Cancel Session`  | Cancels the transaction from the peripheral's end. Can be sent up until the consumer's card has been approved.               |
+| `Query sessions`  | Gives information about which sessions are currently open. *This option is relevant from 4.0.0.22 and above*.                |
+| `Reader state`    | Gives information about whether the reader is `enabled (1)/disabled (0)`. *This option is relevant from 4.0.0.22 and above*. |
+| `Link stats`      | Provides information about the number of CRC errors, packet retransmissions, and communication losses.                       |
+| `Quit`            | Quits the simulator program.                                                                                                 |
+
+## Transaction Flow Examples
+
+Below are examples of the flow for each transaction type:
+
+1. **Regular Transaction** (Single Session):
+   1. Start a session: with `[0]: Start session`.
+   2. Present card, wait for authorization and "Thank you" screen.
+2. **Multi-Session Transaction**:
+   1. Start a session with `[0]: Start session 0`.
+   2. Present card, wait for authorization and "Thank you" screen.
+   3. Close the relevant session- in this case, use `[1]: Close Session 0`.
+
+## See Also
+
+<Columns cols={3}>
+<Card
+  icon="link"
+  title="C# SDK Simulator"
+  href="/docs/integrate-pos-device/marshall/simulators-sample-codes/csharp-sdk-simulator"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Java SDK Simulator"
+  href="/docs/integrate-pos-device/marshall/simulators-sample-codes/java-sdk-simulator"
+  arrow
+/>
+</Columns>

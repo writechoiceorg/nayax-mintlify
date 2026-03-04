@@ -1,0 +1,192 @@
+---
+title: "Multi-Vending with Pre-Authorization"
+---
+
+This guide explains the **Multi-Vending with Pre-Authorization** flow. This method allows a customer to purchase multiple products in one session after a single initial payment approval. This streamlines the transaction by consolidating authorization into one initial step.
+
+## Payment Flow
+
+The diagram below illustrates the complete sequence of events for a Multi-Vending with Pre-Authorization transaction.
+
+<Frame><img src="/images/docs/marshall-multi-vend-with-pre-auth/image1.png" /></Frame>
+
+Below is a breakdown of the diagram:
+
+1. The consumer presents the card to the Nayax Device.
+2. The Nayax Device sends an authorization request to the Nayax Server.
+3. The Nayax Server forwards the authorization request to the Billing Provider.
+4. The Billing Provider sends an authorization response (approved) to the Nayax Server.
+5. Nayax Server sends the authorization response (approved) back to the Nayax Device.
+6. The peripheral's SDK begins the session and triggers the "session begin" event:
+  <CodeGroup>
+   ```c C
+   vmc_vend_event_handler_cb(vm_vend_event_on_session_begin)
+   ```
+   ```csharp C#
+   vend_callbacks(onBeginSession(funds_avail))
+   ```
+   ```java Java
+   vmc_vend_events()
+   (via onBeginSession(funds_avail))
+   ```
+   </CodeGroup>
+7. Message to the consumer: "Please Select a Product."
+8. The consumer selects the desired product/s from the vending machine. Said products are being added to a list called "session":
+   <CodeGroup>
+   ```c C
+   session_products[0].code = 1;
+   session_products[0] .qty = 1;
+   session_products[0].price = 10;
+   session_products[0].unit = 1;
+
+   session_products[1].code = 2;
+   session_products[1].qty = 1;
+   session_products[1].price = 20;
+   session_products[1].unit = 1;
+   if (config.multi_vend_support)
+   {
+   	session->products = session_products;
+     session->total_products = 2;
+   }
+   ```
+   ```csharp C#
+   List<vmc_vend_t.vend_item_t> list = new List<vmc_vend_t.vend_item_t>();
+
+   list.Add(new vmc_vend_t.vend_item_t((ushort)1, (ushort)10, (ushort)1, (byte)1));
+   list.Add(new vmc_vend_t.vend_item_t((ushort)2, (ushort)20, (ushort)2, (byte)1));
+   list.Add(new vmc_vend_t.vend_item_t((ushort)3, (ushort)30, (ushort)3, (byte)1));
+
+   // prepare single session object
+   session = new vmc_vend_t.vend_session_t(list);
+   ```
+   ```java Java
+   	ArrayList<vmc_vend_t.vend_item_t> list = new ArrayList<vmc_vend_t.vend_item_t>();
+
+     list.add(new vmc_vend_t.vend_item_t((short) 0, (short) 100, (short) 1, (byte) 1));
+     list.add(new vmc_vend_t.vend_item_t((short) 1, (short) 100, (short) 1, (byte) 1));
+     list.add(new vmc_vend_t.vend_item_t((short) 2, (short) 200, (short) 2, (byte) 1));
+     list.add(new vmc_vend_t.vend_item_t((short) 3, (short) 100, (short) 1, (byte) 1));
+     list.add(new vmc_vend_t.vend_item_t((short) 4, (short) 200, (short) 2, (byte) 1));
+
+     // in this sample we can have up to 2 sessions (in case of multi-session)
+     m_sessions = new vmc_vend_t.vend_session_t[1];
+
+     // prepare single session object
+     m_sessions[0] = new vmc_vend_t.vend_session_t(3, list);
+   ```
+   </CodeGroup>
+
+9. The peripheral's SDK sends a "Multi Vend Request" to the Nayax Device:
+   <CodeGroup>
+   ```c C
+   vmc_vend_vend_request(vend_session_t *session)
+   ```
+   ```csharp C#
+   vmc_instance.vend.vend_request(session);
+   ```
+   ```java Java
+   m_vmc.vend.vend_request(m_sessions[m_active_session]);
+   ```
+   </CodeGroup>
+
+10. The peripheral's SDK handles transaction data received from the Nayax Device via Transfer Data (said data includes information about the Nayax transaction ID and the consumer's card details):
+  <CodeGroup>
+      ```c C
+      vmc_vend_event_handler_cb(vm_vend_event_on_transaction_info)
+      ```
+      ```csharp C#
+      vend_callbacks(onTransactionInfo(data))
+      ```
+      ```java Java
+      vmc_vend_events()
+      (via onTransactionInfo(data))
+      ```
+  </CodeGroup>
+
+11. The peripheral's SDK triggers the "vend approved" event:
+  <CodeGroup>
+    ```c C
+    vmc_vend_event_handler_cb(vm_vend_event_on_vend_approved)
+    ```
+    ```csharp C#
+    vend_callbacks()
+    (via onVendApproved(session))
+    ```
+    ```java Java
+    vmc_vend_events()
+    (via onVendApproved(session))
+    ```
+   </CodeGroup>
+
+12. The peripheral dispenses the product/ provides the service to the consumer
+13. The SDK reports "vend success":
+  <CodeGroup>
+    ```c C
+    vmc_vend_vend_status(&session, __true)
+    ```
+    ```csharp C#
+    vmc_vend_events()
+    (via onVendApproved(session) -which would return "true")
+    ```
+    ```java Java
+    vmc_vend_events()
+    (via onVendApproved(session) -which would return "true")
+    ```
+  </CodeGroup>
+
+    <br />
+
+<Note>
+  **Note:** in case of partial dispensing (meaning not all of the selected items were actually vended) you can create a new list with only the items which were actually vended prior to responding with "true":
+</Note>
+
+<Frame><img src="/images/docs/marshall-multi-vend-with-pre-auth/image2.jpg" /></Frame>
+
+And completes the vending session:
+
+```c C
+vmc_vend_vend_session_complete_lowlevel()
+```
+
+```csharp C#
+no such function in C# or Java due to the nature of the languages
+```
+
+```java Java
+no such function in C# or Java due to the nature of the languages
+```
+
+14. Message to the consumer: "Please Take Product."
+15. Nayax Device sends a settlement request to the Nayax Server.
+16. Nayax Server forwards the settlement request to the Billing Provider.
+17. The billing Provider sends a settlement response (OK) to the Nayax Server.
+18. Nayax Server sends the settlement response (OK) back to the Nayax Device.
+19. The vending session ends.
+20. Message to Card Holder: "Thank you & Goodbye."
+
+## See Also
+
+<Columns cols={3}>
+<Card
+  icon="link"
+  title="Payment Flows"
+  href="/docs/integrate-pos-device/marshall/payment-flows/marshall-payment-flows"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Get Started"
+  href="/docs/integrate-pos-device/marshall/get-started/marshall-get-started"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Methods & Functions"
+  href="/docs/integrate-pos-device/marshall/methods-functions/marshall-methods-and-functions"
+  arrow
+/>
+</Columns>
+
+
+
+<br />

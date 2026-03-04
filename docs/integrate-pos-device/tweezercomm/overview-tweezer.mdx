@@ -1,0 +1,101 @@
+---
+title: "TweezerComm"
+---
+
+TweezerComm is a secure and efficient payment communication protocol that enables seamless integration between client applications and Nayax attended payment devices. It allows point-of-sale (POS) systems, electronic cash registers (ECRs), and other payment-enabled applications to process transactions securely over a structured JSON-RPC interface.
+
+It enables client applications to communicate with the Agamento payment application (which runs on a Nayax attended terminal), the central unit for transaction processing. Communication should be over a **local network** such as **HTTPS** (the best practice), **HTTP**, **BT** or **USB** connection, allowing to:
+
+* Initiate and manage transactions.
+* Retrieve and process transaction data.
+* Handle settlements, refunds, and pre-authorizations.
+
+## &#x20;Payment services
+
+Nayax's TweezerComm protocol supports two primary payment services, one for global users and one exclusive to Israel.
+
+* **Global Payments**: The `Engine `Service is the primary service for processing credit card and closed-loop transactions with the Nayax Gateway. The Nayax Gateway is responsible for setting device parameters and processing transactions according to the settings configured in Nayax Core. This service is widely used, supporting many payment providers in numerous countries. Before a transaction can be executed, the device must complete an "establishment" process (managed by Nayax's team).
+* **Israel Payments**: The `Ashrait `Service is a specialized service for performing AshraitEMV transactions. The client application communicates with the AshraitEMV Application (AEA), which can run on a stand-alone terminal or a central server. All approved transactions are written to the AEA's database. A key part of this service is the batch process, where the AEA transmits approved transactions to the ABS (SHVA) server.
+
+The sections below list the relevant guides for each payment service.
+
+## Global TweezerComm Guides
+
+This section provides guides to assist you in using TweezerComm with the Nayax global payment service, outlining the integration process and available API methods. See the pages below to learn more:
+
+<Card
+  icon="link"
+  title="Get Started"
+  href="/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started"
+  arrow
+/>
+<Columns cols={2}>
+<Card
+  icon="link"
+  title="Global Payment Flows"
+  href="/docs/integrate-pos-device/tweezercomm/global-payment-flows/payment-flows-copy-1"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Global Payment Methods"
+  href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/payment-services-methods-copy-1"
+  arrow
+/>
+</Columns>
+
+## Israel TweezerComm Guides
+
+This section provides guides to assist you in using TweezerComm with the Nayax Israel payment service, outlining the integration process and available API methods. See the pages below to learn more:
+
+<Card
+  icon="link"
+  title="Get Started"
+  href="/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started"
+  arrow
+/>
+<Columns cols={2}>
+<Card
+  icon="link"
+  title="Israel Payment Flows"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-israel-payment-flows"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Israel Payment Methods"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/tweezercomm-israel-payment-methods"
+  arrow
+/>
+</Columns>
+
+## General Guides
+
+This section provides general guides that are relevant to TweezerComm's payment services. See the pages below to learn more:
+
+<Columns cols={3}>
+<Card
+  icon="link"
+  title="Device Methods"
+  href="/docs/integration-tweezer"
+  arrow
+/>
+<Card
+  icon="link"
+  title="TC Service"
+  href="/docs/integrate-pos-device/tweezercomm/tc-service"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Resilience Mechanism"
+  href="/docs/resilience-flow"
+  arrow
+/>
+</Columns>
+<Card
+  icon="link"
+  title="Additional Resources"
+  href="/docs/integrate-pos-device/spark/additional-resources/index"
+  arrow
+/>

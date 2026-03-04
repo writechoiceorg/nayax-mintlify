@@ -1,0 +1,56 @@
+---
+title: "stopCardDetect"
+description: "Deactivate the terminal reader and cancel the card detection phase."
+---
+
+The `stopCardDetect` method is a utility command used to manually deactivate the terminal's reader. This serves to maintain control over the user experience when a transaction is abandoned or a different workflow is required.
+
+Use this method to:
+* Terminate the detection phase if a customer cancels the operation at the pump or POS.
+* Close the reader safely if a locally managed timeout is reached without user interaction.
+* Clear the reader state to prepare the terminal for a different command or a return to the idle screen.
+
+Example of the stop detection screen on a Nayax device:
+<Frame>
+![stopCardDetect](/images/stop-card-detect.jpg)
+</Frame>
+
+## Requests
+
+This request is a simple trigger and does not require a `data` object. You must provide the standard `command` and a unique `requestId`.
+
+The following example shows a typical request:
+```json
+{
+"command": "stopCardDetect",
+"requestId": "req-004"
+}
+```
+
+### Parameter Definitions
+
+The table below describes the required fields for the stop request:
+
+| Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| **command** | string | Yes | Set to `"stopCardDetect"`. |
+| **requestId** | string | Yes | A unique identifier for tracking the response. |
+
+## Responses
+
+The terminal acknowledges the command once the reader has been successfully disabled.
+
+The following example shows a typical response:
+```json
+{
+"requestId": "req-004"
+}
+```
+
+### Response Parameters
+
+The response confirms the termination of the detection session:
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| **requestId** | string | Echoes the unique identifier of the original request. |

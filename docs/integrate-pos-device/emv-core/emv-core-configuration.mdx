@@ -1,0 +1,38 @@
+---
+title: "Configuration Parameters"
+---
+
+The EMV Core configuration determines how your terminal functions, handles transactions, and interacts with external systems. To ensure compatibility across various hardware and regional requirements, settings are defined using a standard `<Parameter Name>=<Value>` format (e.g., `TMS_SVC_URL=tms.otiglobal.com`).
+
+### Managing Settings
+
+Configuration is handled centrally through the **Nayax Core** server. To adjust these settings:
+
+1. Navigate to **Operations** > **Machines**.
+2. Locate the **Embedded** and **Embedded Advanced** sections.
+3. Click the **?** next to specific fields to identify which configuration parameters correspond to the options on the page.
+
+<Frame><img src="/images/docs/emv-core-configuration/image1.png" /></Frame>
+
+Once saved, the server generates a configuration file and automatically pushes it to the device.
+
+The table below lists the primary configuration keys available for both platforms:
+
+| Category              | Parameter Name          | Description                                                         | Type       | Default Value                 | Platform Notes                                   |
+| :-------------------- | :---------------------- | :------------------------------------------------------------------ | :--------- | :---------------------------- | :----------------------------------------------- |
+| **Network & System**  | `ETH_INTERFACE`         | Network interface for reporting; autodetects if empty.              | String     | empty                         | Fallback to eth0.                                |
+|                       | `KIOSK_USE_TCP_SOCKETS` | Set to 1 to use TCP ports 10000 (cmd) and 10001 (events).           | Bool (1/0) | 0                             | Disables domain sockets if set.                  |
+|                       | `DAILY_RESTART_HOUR`    | Automatic daily reboot hour (0-23); 0 is disabled.                  | U8         | 0                             | Reboot occurs within 30 minutes of the set hour. |
+|                       | `KIOSK_TCP_LOCALHOST`   | Limits EMV-Core sockets to the localhost interface.                 | Bool (1/0) | 0                             | Introduced in SDK v0.7.                          |
+| **TMS & Payment**     | `TMS_SVC_URL`           | URL for Terminal Management System.                                 | URL String | tms.otiglobal.com             | Use tms-c.otiglobal.com for Nayax Core.          |
+|                       | `PAYMENT_SVC_URL`       | URL for payment processing server.                                  | URL String | payment-nayax-p.otiglobal.com | Max 256 characters.                              |
+|                       | `SERVER_POLL_INTERVAL`  | Seconds between calls to the server for updates.                    | U16        | 600                           | Low values increase data usage.                  |
+| **Reader Settings**   | `READER_IS_SERIAL`      | 0=USB, 1=Serial, 2=Auto-detect.                                     | 0/1/2      | 2                             | Removed in SDK v1.4; use `READER_SERIAL_PORT`.   |
+|                       | `READER_SERIAL_PORT`    | Sets the actual port device (e.g., /dev/ttyS0).                     | String     | None (USB)                    | Not supported in Android SDK.                    |
+|                       | `CURRENCY_CODE`         | ISO 4217 code (e.g., 840 for USD).                                  | String     | 840                           | v1.4 takes this automatically from Nayax Core.   |
+| **Open Loop Payment** | `OPEN_LOOP_ENABLED`     | Enables/Disables open-loop payment.                                 | Bool (1/0) | 1                             | Introduced in SDK v0.7.                          |
+|                       | `PMT_ACCEPT_OFFLINE`    | Automatically approves auth when network is down (Store & Forward). | Bool (1/0) | 0                             | 0=Disabled, 1=No comm, 2=Always.                 |
+|                       | `PRE_AUTH_AMUONT`       | Default pre-authorization amount if not provided by API.            | Int        | 0                             | Provided in cents.                               |
+| **Closed Loop (CLP)** | `CLP_MIFARE_ENABLED`    | Enables Mifare detection as a closed loop.                          | Int        | 2                             | 0=Off, 1=Server approval, 2=Local Host API.      |
+| **Logging**           | `LOG_FILE_SIZE`         | Max size in KB for each log file.                                   | Int        | 1024                          | Default was 256 KB before SDK v1.2.              |
+|                       | `LOG_NO_OF_FILES`       | Number of log files kept before rotation.                           | Int        | 10                            | Default was 6 before SDK v1.2.                   |

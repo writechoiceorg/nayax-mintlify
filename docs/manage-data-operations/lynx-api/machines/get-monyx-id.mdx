@@ -1,0 +1,59 @@
+---
+title: "Get Monyx ID"
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+Lynx API allows you to retrieve the Monyx ID of a machine with a GET request. This page will guide you on how to do so using the endpoint below.
+
+<EndpointCard
+  title="Get Payment Methods for Machine"
+  href="/reference/lynx/machines/get-payment-methods-for-machine"
+  method="get"
+/>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+</Warning>
+
+## Retrieving the Monyx ID
+
+You'll use the [Get Payment Methods for Machine](/reference/lynx/machines/get-payment-methods-for-machine) to get the Monyx ID, see the request below:
+
+```sh Request
+curl -X GET "https://lynx.nayax.com/operational/api/v1/machines/{MachineID}/paymentMethods" \
+-H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+-H "Content-Type: application/json"
+```
+
+<Note>
+**Path Params**
+
+Replace `<MachineID>` with the actual machine unique identifier you want to search.
+</Note>
+
+With a successful request, the endpoint will return the information on the available payment methods of the machine. See the code block below:
+
+```json Response
+{
+    "MachineID": "98108",
+    "PaymentMethodID": 22,
+    "ConvenienceFeePercentageEdit": false,
+    "ConvenienceFeeValue": 0,
+    "lastUpdated": "2021-05-25T08:01:05.473",
+    "ExternalPaymentProviderUsername": null,
+    "ExternalPaymentProviderPassword": null,
+    "ExternalPaymentProviderTerminalID": null,
+    "ExternalPaymentProviderLocationIdentifier": null,
+    "PaymentMethodWorkingDays": null,
+    "PaymentMethodCustomData": "{\\\"use_phone_contactless\\\":false,\\\"use_phone_transaction\\\":false,\\\"monyx_machine_id\\\":31066766}",
+    "ConvenienceFeeBackupValue": 0,
+    "PaymentMethodIDString": null
+  }
+```
+
+You can find the Monyx ID in the `PaymentMethodCustomData` parameter, in this example it would be: `"monyx_machine_id\":31066766`
+
+<br />

@@ -1,0 +1,64 @@
+---
+title: "Authentication"
+---
+
+To ensure secure communication, every request sent by the Integrator must include two specific authentication headers. These headers verify your identity and ensure the integrity of the transaction data.
+
+## Prerequisites
+
+Before you begin, ensure you have the following resources:
+
+* A valid Sign Key (shared by Nayax, typically 16 characters)
+* The associated Sign Key ID
+
+<Warning>
+  Your request body must contain the `SparkTransactionId` field.
+</Warning>
+
+## Authenticate Requests
+
+Once you have the required resources, you can start authenticating your API requests to Spark by following the steps below:
+
+1. Combine the static string `IntegratorId` with your ID in the following format `IntegratorId: {SignKeyID}`. See the example below:
+   ```
+   IntegratorId: 927
+   ```
+2. Join the `SparkTransactionId` from your request body with your `Sign Key`, separated by a semicolon (`;`), in the following format:  `SparkTransactionId;SignKey`
+   ```
+   123456789123456789abcdefghijklmnopqr;RbtdDsiVNjkAeRty
+   ```
+3. Perform a **SHA-256** hash on the resulting string using **UTF-8** encoding. Resulting hash:
+   ```
+   1b7dd1c4010698824de66f13e1387efc28a4bba00b720d4be8cdb3b598b9603e
+   ```
+4. The final header should look like the following:
+   ```
+   TransactionSignature: 1b7dd1c4010698824de66f13e1387efc28a4bba00b720d4be8cdb3b598b9603e
+   ```
+
+## Request Example (cURL)
+
+See an example request for the `/StartAuthentication` endpoint:
+
+```bash
+curl --location '[https://api.nayax.com/StartAuthentication](https://api.nayax.com/StartAuthentication)' \
+--header 'IntegratorId: 927' \
+--header 'TransactionSignature: 1b7dd1c4010698824de66f13e1387efc28a4bba00b720d4be8cdb3b598b9603e' \
+--header 'Content-Type: application/json' \
+--data '{
+ "TokenId": 116383,
+ "TerminalId": "0434334921100366",
+ "TerminalIdType": 1,
+ "Random": "123456789qwertyui",
+ "Cipher": "X305dITNTAw2vHsxE+taVcn6UvgBC3fdI6QbqeABgHbo8CKsoZhqISJfslehCiA+L7XYrqvKFci7C6BNj/tr zBuNJwBEjgBzKhhgpJ5ggnw=",
+ "SparkTransactionId": "123456789123456789abcdefghijklmnopqr"
+}'
+```
+
+## See Also
+
+<Columns cols={2}>
+  <Card icon="link" title="Transaction Flows" href="/docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark" />
+
+  <Card icon="link" title="API Methods" href="/docs/api-methods-spark" />
+</Columns>

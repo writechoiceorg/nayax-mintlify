@@ -1,0 +1,59 @@
+---
+title: "doMiniSettlement"
+---
+
+The `doMiniSettlement` method is used to settle transactions.
+
+<Note>
+  Supported processors: CG, PC.
+</Note>
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Integration ](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, ensure to configure the following:
+
+* The `method `field must be set to `doMiniSettlement` .
+* The service must be set to `ashrait` in the `params`.
+
+```json
+{
+    "jsonrpc":"2.0",
+    "method":"doMiniSettlement",
+    "params":[
+        "ashrait"
+    ],
+    "id":1
+}
+```
+
+## Response
+
+A successful request will return the following response:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "statusCode": 0,
+        "ackNumber": "1234567",
+        "queriedTransactions": ["12345","12345"]
+    },
+    "id": 1
+}
+```
+
+### Response Parameters
+
+The table below describes the response parameters for this method.
+
+| Name                   | Type              | Description                                                                      |
+| :--------------------- | :---------------- | :------------------------------------------------------------------------------- |
+| `statusCode`           | integer           | Operation status. A value of `0` indicates success. All other values are errors. |
+| `ackNumber`            | string            | The processor's reference number.                                                |
+| `queriedTransactions`  | array of strings  | A list of successfully transmitted transaction UIDs.                             |

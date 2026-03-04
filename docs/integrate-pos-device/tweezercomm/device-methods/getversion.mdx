@@ -1,0 +1,54 @@
+---
+title: "getVersion"
+---
+
+The `getVersion `method retrieves version information for one or more applications installed on the device, such as agamento, spi, or ashrait. It returns the current version tags for each requested application.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, the `method `field needs to be set to `getVersion` and the params must include an array of application names, as shown in the example request below:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getVersion",
+    "id": "123454352",
+    "params": [
+        [
+            "agamento",
+            "spi",
+            "ashrait"
+        ]
+    ]
+}
+```
+
+## Response
+
+A successful request will return a response similar to the one in the code block below:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": [
+        "01.05.00",
+        "01_12_00",
+        "01_10_00"
+    ]
+}
+```
+
+### Response Parameters
+
+Below is a table with all the possible response parameters and their description:
+
+| Name     | Type   | Description                                |
+| -------- | ------ | ------------------------------------------ |
+| `result` | string | Array of version tags for each app queried |

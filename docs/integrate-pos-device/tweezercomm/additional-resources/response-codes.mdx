@@ -1,0 +1,66 @@
+---
+title: "Response Codes"
+---
+
+This page lists all possible response codes returned by TweezerComm, along with descriptions and result types.
+
+## Response Codes
+
+The table below describes possible response codes returned from TweezerComm.
+
+| Code | Description             | Result          | Error Trigger                    |
+| ---- | ----------------------- | --------------- | -------------------------------- |
+| 0    | TRANSACTION APPROVED    | Success         | Payment processed successfully   |
+| 10   | PARTIAL APPROVAL        | Partial Success | Only part of the amount approved |
+| 162  | INFORMATIVE TRANSACTION | Info            | Non-financial transaction        |
+
+## Error Codes
+
+The table below describes all possible error codes returned by TweezerComm:
+
+| Code | Description                      | Result  | Error Trigger                           |
+| ---- | -------------------------------- | ------- | --------------------------------------- |
+| -64 | VOID NOT POSSIBLE                | Failure | Transaction cannot be voided            |
+| -61 | TRANSACTION NOT FOUND            | Failure | No record of transaction in system      |
+| -51 | ILLEGAL FIELD                    | Failure | Invalid data in request fields          |
+| -44 | INCORRECT EXPIRY DATE            | Failure | Card expiration date incorrect          |
+| -15 | CARD NOT ALLOWED                 | Failure | Card type not permitted                 |
+| -5  | NO PP RESPOND                    | Failure | No response from payment processor      |
+| -1  | SYSTEM NOT READY                 | Failure | System undergoing maintenance           |
+| 1    | BLOCKED CARD                     | Failure | Card is blocked by issuer               |
+| 2    | STOLEN CARD                      | Failure | Card reported as stolen                 |
+| 3    | CALL CREDIT CARD COMPANY         | Failure | Manual verification required            |
+| 4    | TRANSACTION DECLINED             | Failure | Issuer declined the transaction         |
+| 5    | FAKE CARD                        | Failure | Fraudulent card detected                |
+| 6    | LAST 3 DIGITS INCORRECT          | Failure | Incorrect CVV/CVC entered               |
+| 7    | SECURITY CODE INCORRECT          | Failure | Wrong security code provided            |
+| 8    | INCORRECT AVS                    | Failure | Address verification mismatch           |
+| 9    | CARD EXPIRED                     | Failure | Expired credit/debit card               |
+| 11   | MISSING POINTS                   | Failure | Insufficient reward points              |
+| 12   | CARD NOT ALLOWED                 | Failure | Restricted card usage                   |
+| 13   | DECLINED. INCORRECT BALANCE CODE | Failure | Incorrect balance type                  |
+| 14   | DECLINED. CARD NOT ASSOCIATED    | Failure | Card not linked to account              |
+| 15   | DECLINED. NETWORK ERROR          | Failure | Network issue during processing         |
+| 16   | DECLINED. CURRENCY NOT ALLOWED   | Failure | Unsupported currency for transaction    |
+| 26   | CREDIT TERM NOT ALLOWED          | Failure | Credit terms not permitted              |
+| 30   | UNKNOWN CARD                     | Failure | Card details unrecognized               |
+| 36   | CARD EXPIRED NO CONNECTION       | Failure | Expired card, network issue             |
+| 44   | INCORRECT TRACK2                 | Failure | Magnetic stripe data incorrect          |
+| 45   | INCORRECT PAN                    | Failure | Incorrect primary account number        |
+| 46   | MSR NOT ALLOWED                  | Failure | Magnetic stripe reader usage denied     |
+| 50   | NO ACQUIRING DATA                | Failure | Acquiring bank details missing          |
+| 126  | TRANSACTION CANCELED             | Failure | User or system canceled transaction     |
+| 160  | INCORRECT AUTH NUMBER            | Failure | Invalid authorization code              |
+| 161  | BLOCKED CARD                     | Failure | Card blocked due to fraud               |
+| 200  | CARD DECLINED                    | Failure | Payment rejected by issuer              |
+| 400  | MUST GO ONLINE                   | Failure | Requires online processing              |
+| 450  | ONLINE APPROVAL FAILED           | Failure | Online authorization rejected           |
+| 458  | AUTH NUM NOT ALLOWED             | Failure | Unauthorized authentication number      |
+| 911  | PA ERROR                         | Failure | 3D Secure authentication error          |
+| 912  | PA TIMEOUT                       | Failure | 3D Secure authentication timeout        |
+| 991  | PERIODIC IS NEEDED               | Failure | Recurring authentication required       |
+| 993  | TIMEOUT                          | Failure | Transaction request timed out           |
+| 995  | VUID ALREADY EXIST               | Failure | Duplicate transaction detected          |
+| 998  | TRANSACTION CANCELED             | Failure | Transaction manually canceled           |
+| 4000 | GATEWAY ERROR                    | Failure | Payment gateway malfunction             |
+| 5003 | ILLEGAL ACTION                   | Failure | Illegal or unsupported action requested |

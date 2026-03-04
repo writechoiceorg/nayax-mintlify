@@ -1,0 +1,171 @@
+---
+title: "C# & Java SDK Integration"
+---
+
+This guide shows you how to integrate the **Marshall SDK** into your **C#** or **Java** application. You’ll learn how to:
+
+* Import the SDK package into your project
+* Create and configure a VMC settings object
+* Set up the serial (**COM**) port for communication
+* Register event listeners and start the SDK
+
+The instructions are presented side by side for both languages.
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+* Downloaded the appropriate SDK files, `.jar` for **Java** or `.dll` for **C#**.
+* Identified the correct **COM** port for the Marshall cable.
+* For Java- ensure that you have Java 8 (also known as Java 1.8) and above. Note that for the newest version of Nayax's Java SDK (0.1.6.8) you'd need Java 11- but should you like us to, we can look into having it be compiled with    Java 8.
+
+## Integrate Marshall
+
+To perform the integration, follow the steps below:
+
+1. Import the provided.`.JAR` or SDK DLL file into your project.
+
+2. Import the necessary namespaces in your code.
+   <CodeGroup>
+   ```java Java
+   import com.bitmick.marshall.models.*;
+   ```
+   ```csharp C#
+   using com.bitmick.marshall.models;
+   ```
+   </CodeGroup>
+
+3. Instantiate a VMC configuration object:
+
+   <CodeGroup>
+   ```java Java
+   public vmc_configuration vmc_config = new vmc_configuration();
+   ```
+
+   ```csharp C#
+   vmc_configuration vmc_config = new vmc_configuration();
+   ```
+   </CodeGroup>
+
+4. Fill in the appropriate fields. The following code block presents a standard configuration:
+   <CodeGroup>
+   ```java Java
+   public static void main(string[] args) {
+           vmc_config.multi_vend_support = false;
+           vmc_config.multi_session_support = false;
+           vmc_config.price_not_final_support = false;
+           vmc_config.reader_always_on = false;
+           vmc_config.always_idle = false;
+           vmc_config.vend_denied_policy = vmc_configuration.vend_denied_policy_cancel;
+           vmc_config.explicit_vend_success = false;
+           vmc_config.long_price = false;
+
+           vmc_config.mifare_approved_by_vmc_support = false;
+           vmc_config.mag_card_approved_by_vmc_support = false;
+           vmc_config.qr_approved_by_vmc_support = false;
+
+           vmc_config.dump_packets_level = vmc_configuration.debug_level_dump_moderate;
+           vmc_config.debug = true;
+   }
+   ```
+
+   ```csharp C#
+   public class vend_machine
+               vmc_config.multi_session_support = false;
+               vmc_config.multi_vend_support = false;
+               vmc_config.price_not_final_support = false;
+               vmc_config.reader_always_on = false;
+               vmc_config.always_idle = false;
+               vmc_config.explicit_vend_success = false;
+               vmc_config.vend_denied_policy = vmc_configuration.vend_denied_policy_cancel;
+               vmc_config.long_price = false;
+
+               vmc_config.mag_card_approved_by_vmc_support = false;
+               vmc_config.mifare_approved_by_vmc_support = false;
+
+               vmc_config.debug = true;
+               vmc_config.dump_packets_level = vmc_configuration.debug_level_dump_moderate;
+
+   ```
+   </CodeGroup>
+
+<Warning>
+**Mandatory Fields**
+
+The customer machine information is mandatory for the VMC configuration. These are the `model`, `serial`, `hw_ver`, and the `manuf_code`. Read more about these fields in [VMC Configuration Object](/docs/integrate-pos-device/marshall/get-started/vmc-configuration-object).
+</Warning>
+
+5. Setup the **COM** port.
+   <CodeGroup>
+   ```java Java
+   m_vmc.link.set_serial_port(new pc_port("COM18", 115200))
+   ```
+   ```csharp C#
+   m_vmc.link.set_serial_port(new pc_port("COM18", 115200))
+   ```
+   </CodeGroup>
+<Warning>
+**COM Port**
+
+Make sure that you change the `COM` parameter to the one your Marshall cable is connected to.
+</Warning>
+
+* Note- in the near future we plan on having the possibility to use Marshall over ETH (supported only for VPOSM)- in that case, the would be no COM port but rather an IP address which would be under the same local network as the Nayax device, and optionally the relevant IP port (which by default should remain untouched \[has by default the value of "12345" which is meaningless])
+  <CodeGroup>
+  ```java Java
+  m_vmc.link.set_serial_port(new eth_port("192.168.112.127", (short) 12345, false));
+  ```
+  ```csharp C#
+  vmc_instance = marshall_init(new eth_port("192.168.68.101", 12345));
+  ```
+  </CodeGroup>
+
+1. Configure the SDK and register to link events.
+
+<CodeGroup>
+```java Java
+m_vmc.link.configure(vmc_config);
+m_vmc.link.set_events(new vmc_link_events());
+```
+
+```csharp C#
+m_vmc.link.configure(vmc_config);
+m_vmc.link.set_events(new vmc_link_events());
+```
+</CodeGroup>
+
+7. Start the SDK and wait for the `onReady()` event:
+
+<CodeGroup>
+```java Java
+vmc_instance .start();
+```
+
+```csharp C#
+m_vmc.link.start();
+```
+</CodeGroup>
+
+<Note>
+**Using Android**
+
+On android, you either need support from your provider or use a FTDI chip, which we provide
+port implementation for. (see the “android” folder in the JAVA SDK release)
+</Note>
+
+## See Also
+
+<Columns cols={2}>
+<Card
+  icon="link"
+  title="C SDK Integration"
+  href="/docs/integrate-pos-device/marshall/get-started/c-sdk-integration"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Methods & Functions"
+  href="/docs/integrate-pos-device/marshall/methods-functions/marshall-methods-and-functions"
+  arrow
+/>
+</Columns>

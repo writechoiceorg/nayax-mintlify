@@ -1,0 +1,34 @@
+---
+title: "DynamicQR Decline Reasons"
+---
+
+When a transaction is declined, the Cortina API returns a specific decline reason code that explains why the payment was not approved. These codes are essential for integrators and merchants to understand the cause of the decline and take appropriate action. The third-party integrator is responsible for returning the response, including the corresponding decline code from the list, based on the payment method used.
+
+The following decline reason codes are used when processing DynamicQR transactions:
+
+| **Code** | **Description**                                                         |
+| -------- | ----------------------------------------------------------------------- |
+| 1        | Insufficient funds                                                      |
+| 2        | Transaction ID unknown                                                  |
+| 3        | Cardholder exceeded daily/weekly/monthly transaction count limit        |
+| 4        | The cardholder exceeded the transaction amount limit                    |
+| 5        | Suspected fraud                                                         |
+| 6        | General system failure                                                  |
+| 7        | Invalid amount                                                          |
+| 8        | Request cannot be parsed (format error)                                 |
+| 9        | Transaction not allowed to cardholder                                   |
+| 20       | No VPN or MQTT enabled                                                  |
+| 30       | The machine is not responding                                           |
+| 40       | For Nayax internal use only                                             |
+| 50       | Unknown machine Id                                                      |
+| 990      | CertificateFileName not found                                           |
+| 991      | Failed to decipher message body                                         |
+| 992      | Timeout exception                                                       |
+| 993      | Pending (relevant only for the Inquiry command)                         |
+| 994      | Card Brand not supported                                                |
+| 996      | Transaction ID Unknown / Duplicate Transaction ID (Start Session Error) |
+| 997      | Missing mandatory parameters                                            |
+| 998      | Validation/request cannot be parsed                                     |
+| 999      | General exception                                                       |
+| 1010     | Public Key Certificate not found                                        |
+| 1011     | Method not Implemented                                                  |

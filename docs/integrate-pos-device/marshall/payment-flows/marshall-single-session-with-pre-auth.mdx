@@ -1,0 +1,128 @@
+---
+title: "Single Session with Pre-Authorization"
+---
+
+This guide explains the **Pre-Authorization** vending flow. This process is key to minimizing risk because it approves payment before the customer selects a product.
+
+## Payment Flow
+
+Visualize the Pre-Authorization process with the diagram below, which illustrates each step of the single vending session flow, from product selection to payment authorization and dispensing.
+
+<Frame><img src="/images/docs/marshall-single-session-with-pre-auth/image1.png" /></Frame>
+
+Below is a breakdown of the diagram:
+
+1. The consumer presents the card to the Nayax Device.
+2. The Nayax Device sends an authorization request to the Nayax Server.
+3. The Nayax Server forwards the authorization request to the Billing Provider.
+4. The Billing Provider sends an authorization response (approved) to the Nayax Server.
+5. Nayax Server sends the authorization response (approved) back to the Nayax Device.
+6. The peripheral's SDK begins the session and triggers the "session begin" event:
+  <CodeGroup>
+   ```c C
+   vmc_vend_event_handler_cb(vm_vend_event_on_session_begin)
+   ```
+   ```csharp C#
+   vend_callbacks(onBeginSession(funds_avail))
+   ```
+   ```java Java
+   vmc_vend_events()
+   (via onBeginSession(funds_avail))
+   ```
+  </CodeGroup>
+
+7. Message to the consumer: "Please Select a Product."
+8. The consumer selects a product.
+9. The peripheral's SDK sends a "vend request" to the Nayax Device:
+10. The peripheral's SDK handles transaction data received from the Nayax Device via Transfer Data command (said data includes information about the Nayax transaction ID and the consumer's card details):
+  <CodeGroup>
+    ```c C
+    vmc_vend_event_handler_cb(vm_vend_event_on_transaction_info)
+    ```
+    ```csharp C#
+    vend_callbacks(onTransactionInfo(data))
+    ```
+    ```java Java
+    vmc_vend_events()
+    (via onTransactionInfo(data))
+    ```
+  </CodeGroup>
+
+11. The peripheral's SDK triggers the "vend approved" event:
+  <CodeGroup>
+    ```c C
+    vmc_vend_event_handler_cb(vm_vend_event_on_vend_approved)
+    ```
+    ```csharp C#
+    vend_callbacks()
+    (via onVendApproved(session))
+    ```
+    ```java Java
+    vmc_vend_events()
+    (via onVendApproved(session))
+    ```
+  </CodeGroup>
+
+12. The peripheral dispenses the product/ provides the service to the consumer
+13. The SDK reports vend success:
+  <CodeGroup>
+    ```c C
+    vmc_vend_vend_status(&session, __true)
+    ```
+    ```csharp C#
+    vmc_vend_events()
+    (via onVendApproved(session) -which would return "true")
+    ```
+    ```java Java
+    vmc_vend_events()
+    (via onVendApproved(session) -which would return "true")
+    ```
+  </CodeGroup>
+
+    And completes the vend session:
+  <CodeGroup>
+    ```c C
+    vmc_vend_vend_session_complete_lowlevel()
+    ```
+    ```csharp C#
+    no such function in C# or Java due to the nature of the languages
+    ```
+    ```java Java
+    no such function in C# or Java due to the nature of the languages
+    ```
+  </CodeGroup>
+
+14. Message to the consumer: "Please Take Product."
+15. Nayax Device sends a settlement request to the Nayax Server.
+16. Nayax Server forwards the settlement request to the Billing Provider.
+17. The billing Provider sends a settlement response (OK) to the Nayax Server.
+18. Nayax Server sends the settlement response (OK) back to the Nayax Device.
+19. The vending session ends.
+20. Message to Card Holder: "Thank you & Goodbye."
+
+## See Also
+
+<Columns cols={3}>
+<Card
+  icon="link"
+  title="Payment Flows"
+  href="/docs/integrate-pos-device/marshall/payment-flows/marshall-payment-flows"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Get Started"
+  href="/docs/integrate-pos-device/marshall/get-started/marshall-get-started"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Methods & Functions"
+  href="/docs/integrate-pos-device/marshall/methods-functions/marshall-methods-and-functions"
+  arrow
+/>
+</Columns>
+
+
+
+<br />

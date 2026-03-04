@@ -1,0 +1,527 @@
+---
+title: "Webhook Notifications"
+---
+
+Webhook notifications are automated messages sent by Nayax to your back-end to communicate the final status of a transaction, which can be:
+
+* [Sale/Auth - Approved (Authorized)](#saleauth)
+* [Sale/Auth - Declined](#saleauth)
+* [Refund - Approved (Refunded)](#refund)
+* [Refund - Declined (RefundFailed)](#refund)
+* [Void/Cancel - Approved (Cancelled)](#voidcancel)
+* [Void/Cancel - Declined (CancelFailed)](#voidcancel)
+* [Incremental Authorization - Approved (Authorized)](#incremental-authorization)
+* [Incremental Authorization - Declined](#incremental-authorization)
+
+This ensures you are always up to date with the latest transaction information.
+
+<Note>
+**Webhook URL**
+
+You will provide the URL to receive the webhooks during the onboarding phase.
+</Note>
+
+## Webhook Request
+
+See the examples for each type of request below:
+
+<Tabs>
+  <Tab title="Sale/Auth">
+    This webhook communicates whether a transaction was authorized or declined by the card issuer.
+
+    The following example shows the structure of a standard Sale or Authorization webhook request:
+    <CodeGroup>
+    ```json Approved (Authorized)
+    {
+      "CardInfo": {
+        "IssuerBin": "411111",
+        "Brand": "Visa",
+        "CardBin": "411111",
+        "CardFinalDigits": "1111",
+        "ExpiryDate": "12/2025",
+        "IssuingCountry": "US",
+        "IssuingBank": "Chase Bank",
+        "IsCardCommercial": "false",
+        "CardHolderName": "John Doe",
+        "Alias": "card_alias_123",
+        "AliasType": "Default"
+      },
+      "Ecom3DSInfo": {
+        "Is3DSOffered": "true",
+        "Is3DSOfferedResponse": "Y",
+        "Is3DSAuthenticated": "true",
+        "Is3DSAuthenticatedResponse": "Y",
+        "IsScaExemptionRequested": "false",
+        "LiabilityShift": "true",
+        "CardEnrolled": "Y",
+        "Eci": "05",
+        "Xid": "3ds_xid_abc123"
+      },
+      "RetryAttempts": [],
+      "AdditionalInfo": {
+        "AdditionalData": "Order #12345",
+        "AdditionalReceiptData": "Thank you for your purchase"
+      },
+      "NayaxToken": "tok_nayax_abc123def456",
+      "NayaxSession": "sess_nayax_xyz789",
+      "ExternalTransactionStatus": 13,
+      "AuthCode": "AUTH123456",
+      "PaymentAccountReference": "PAR123456789",
+      "ShopperCountry": "US",
+      "ShopperLocale": "en-US",
+      "ShopperIp": "192.168.1.100",
+      "PaymentMethod": "scheme",
+      "Currency": "USD",
+      "Amount": "99.99",
+      "Cavv": "AAABBZIGAwAAAABQllRGAAAAAAA=",
+      "CavvAlgorithm": "1",
+      "CvcResult": "M",
+      "EReceiptUrl": "https://receipts.nayax.com/receipt/abc123"
+    }
+    ```
+
+    ```json Declined
+    {
+      "CardInfo": {
+        "IssuerBin": "542418",
+        "Brand": "Mastercard",
+        "CardBin": "542418",
+        "CardFinalDigits": "8888",
+        "ExpiryDate": "09/2024",
+        "IssuingCountry": "GB",
+        "IssuingBank": "Barclays",
+        "IsCardCommercial": "false",
+        "CardHolderName": "Jane Smith",
+        "Alias": "card_alias_456",
+        "AliasType": "Default"
+      },
+      "Ecom3DSInfo": {
+        "Is3DSOffered": "true",
+        "Is3DSOfferedResponse": "Y",
+        "Is3DSAuthenticated": "false",
+        "Is3DSAuthenticatedResponse": "N",
+        "IsScaExemptionRequested": "false",
+        "LiabilityShift": "false",
+        "CardEnrolled": "Y",
+        "Eci": "07",
+        "Xid": "3ds_xid_def456"
+      },
+      "RetryAttempts": [
+        {
+          "AttemptNumber": "1",
+          "Result": "Declined",
+          "Timestamp": "2025-01-18T10:30:00Z"
+        }
+      ],
+      "AdditionalInfo": {
+        "AdditionalData": "Order #12346",
+        "AdditionalReceiptData": "Payment declined - Insufficient funds"
+      },
+      "NayaxToken": "tok_nayax_ghi789jkl012",
+      "NayaxSession": "sess_nayax_uvw456",
+      "ExternalTransactionStatus": 250,
+      "AuthCode": null,
+      "PaymentAccountReference": "PAR987654321",
+      "ShopperCountry": "GB",
+      "ShopperLocale": "en-GB",
+      "ShopperIp": "10.0.0.50",
+      "PaymentMethod": "scheme",
+      "Currency": "GBP",
+      "Amount": "150.00",
+      "Cavv": null,
+      "CavvAlgorithm": null,
+      "CvcResult": "N",
+      "EReceiptUrl": null
+    }
+    ```
+    </CodeGroup>
+
+  </Tab>
+
+  <Tab title="Refund">
+    This webhook confirms a successful refund or alerts you to a `RefundFailed` status, ensuring your ledger remains in sync with the actual movement of funds.
+
+    The following example shows the structure of a Refund webhook request:
+    <CodeGroup>
+    ```json Approved (Refunded)
+    {
+      "CardInfo": {
+        "IssuerBin": "411111",
+        "Brand": "Visa",
+        "CardBin": "411111",
+        "CardFinalDigits": "1111",
+        "ExpiryDate": "12/2025",
+        "IssuingCountry": "US",
+        "IssuingBank": "Chase Bank",
+        "IsCardCommercial": "false",
+        "CardHolderName": "John Doe",
+        "Alias": "card_alias_123",
+        "AliasType": "Default"
+      },
+      "Ecom3DSInfo": {
+        "Is3DSOffered": "false",
+        "Is3DSOfferedResponse": null,
+        "Is3DSAuthenticated": "false",
+        "Is3DSAuthenticatedResponse": null,
+        "IsScaExemptionRequested": "false",
+        "LiabilityShift": null,
+        "CardEnrolled": null,
+        "Eci": null,
+        "Xid": null
+      },
+      "RetryAttempts": [],
+      "AdditionalInfo": {
+        "AdditionalData": "Refund for Order #12345",
+        "AdditionalReceiptData": "Refund processed successfully"
+      },
+      "NayaxToken": "tok_nayax_abc123def456",
+      "NayaxSession": "sess_nayax_refund_123",
+      "ExternalTransactionStatus": 62,
+      "AuthCode": "REFUND789",
+      "PaymentAccountReference": "PAR123456789",
+      "ShopperCountry": "US",
+      "ShopperLocale": "en-US",
+      "ShopperIp": "192.168.1.100",
+      "PaymentMethod": "scheme",
+      "Currency": "USD",
+      "Amount": "99.99",
+      "Cavv": null,
+      "CavvAlgorithm": null,
+      "CvcResult": null,
+      "EReceiptUrl": "https://receipts.nayax.com/refund/xyz789"
+    }
+    ```
+
+    ```json Declined (RefundFailed)
+    {
+      "CardInfo": {
+        "IssuerBin": "411111",
+        "Brand": "Visa",
+        "CardBin": "411111",
+        "CardFinalDigits": "1111",
+        "ExpiryDate": "12/2025",
+        "IssuingCountry": "US",
+        "IssuingBank": "Chase Bank",
+        "IsCardCommercial": "false",
+        "CardHolderName": "John Doe",
+        "Alias": "card_alias_123",
+        "AliasType": "Default"
+      },
+      "Ecom3DSInfo": {
+        "Is3DSOffered": "false",
+        "Is3DSOfferedResponse": null,
+        "Is3DSAuthenticated": "false",
+        "Is3DSAuthenticatedResponse": null,
+        "IsScaExemptionRequested": "false",
+        "LiabilityShift": null,
+        "CardEnrolled": null,
+        "Eci": null,
+        "Xid": null
+      },
+      "RetryAttempts": [
+        {
+          "AttemptNumber": "1",
+          "Result": "RefundFailed",
+          "Timestamp": "2025-01-18T11:00:00Z"
+        }
+      ],
+      "AdditionalInfo": {
+        "AdditionalData": "Refund for Order #12347",
+        "AdditionalReceiptData": "Refund failed - Original transaction not found"
+      },
+      "NayaxToken": "tok_nayax_mno345pqr678",
+      "NayaxSession": "sess_nayax_refund_456",
+      "ExternalTransactionStatus": 64,
+      "AuthCode": null,
+      "PaymentAccountReference": "PAR111222333",
+      "ShopperCountry": "US",
+      "ShopperLocale": "en-US",
+      "ShopperIp": "192.168.1.100",
+      "PaymentMethod": "scheme",
+      "Currency": "USD",
+      "Amount": "49.99",
+      "Cavv": null,
+      "CavvAlgorithm": null,
+      "CvcResult": null,
+      "EReceiptUrl": null
+    }
+    ```
+    </CodeGroup>
+
+  </Tab>
+
+  <Tab title="Void/Cancel">
+    This webhook cancels a transaction before settlement occurs. This notification confirms whether the void was successful or if the request failed.
+
+    The following example shows the structure of a Void or Cancellation webhook request:
+    <CodeGroup>
+    ```json Approved (Cancelled)
+    {
+      "CardInfo": {
+        "IssuerBin": "378282",
+        "Brand": "American Express",
+        "CardBin": "378282",
+        "CardFinalDigits": "0005",
+        "ExpiryDate": "06/2026",
+        "IssuingCountry": "US",
+        "IssuingBank": "American Express",
+        "IsCardCommercial": "true",
+        "CardHolderName": "Michael Johnson",
+        "Alias": "card_alias_789",
+        "AliasType": "Default"
+      },
+      "Ecom3DSInfo": {
+        "Is3DSOffered": "false",
+        "Is3DSOfferedResponse": null,
+        "Is3DSAuthenticated": "false",
+        "Is3DSAuthenticatedResponse": null,
+        "IsScaExemptionRequested": "false",
+        "LiabilityShift": null,
+        "CardEnrolled": null,
+        "Eci": null,
+        "Xid": null
+      },
+      "RetryAttempts": [],
+      "AdditionalInfo": {
+        "AdditionalData": "Void for Order #12348",
+        "AdditionalReceiptData": "Transaction cancelled successfully"
+      },
+      "NayaxToken": "tok_nayax_stu901vwx234",
+      "NayaxSession": "sess_nayax_void_789",
+      "ExternalTransactionStatus": 22,
+      "AuthCode": "VOID456",
+      "PaymentAccountReference": "PAR444555666",
+      "ShopperCountry": "US",
+      "ShopperLocale": "en-US",
+      "ShopperIp": "172.16.0.20",
+      "PaymentMethod": "amex",
+      "Currency": "USD",
+      "Amount": "299.99",
+      "Cavv": null,
+      "CavvAlgorithm": null,
+      "CvcResult": null,
+      "EReceiptUrl": "https://receipts.nayax.com/void/abc456"
+    }
+    ```
+
+    ```json Declined (CancelFailed)
+    {
+      "CardInfo": {
+        "IssuerBin": "378282",
+        "Brand": "American Express",
+        "CardBin": "378282",
+        "CardFinalDigits": "0005",
+        "ExpiryDate": "06/2026",
+        "IssuingCountry": "US",
+        "IssuingBank": "American Express",
+        "IsCardCommercial": "true",
+        "CardHolderName": "Michael Johnson",
+        "Alias": "card_alias_789",
+        "AliasType": "Default"
+      },
+      "Ecom3DSInfo": {
+        "Is3DSOffered": "false",
+        "Is3DSOfferedResponse": null,
+        "Is3DSAuthenticated": "false",
+        "Is3DSAuthenticatedResponse": null,
+        "IsScaExemptionRequested": "false",
+        "LiabilityShift": null,
+        "CardEnrolled": null,
+        "Eci": null,
+        "Xid": null
+      },
+      "RetryAttempts": [
+        {
+          "AttemptNumber": "1",
+          "Result": "CancelFailed",
+          "Timestamp": "2025-01-18T11:30:00Z"
+        }
+      ],
+      "AdditionalInfo": {
+        "AdditionalData": "Void for Order #12349",
+        "AdditionalReceiptData": "Cancel failed - Transaction already settled"
+      },
+      "NayaxToken": "tok_nayax_yza567bcd890",
+      "NayaxSession": "sess_nayax_void_012",
+      "ExternalTransactionStatus": 53,
+      "AuthCode": null,
+      "PaymentAccountReference": "PAR777888999",
+      "ShopperCountry": "US",
+      "ShopperLocale": "en-US",
+      "ShopperIp": "172.16.0.20",
+      "PaymentMethod": "amex",
+      "Currency": "USD",
+      "Amount": "299.99",
+      "Cavv": null,
+      "CavvAlgorithm": null,
+      "CvcResult": null,
+      "EReceiptUrl": null
+    }
+    ```
+    </CodeGroup>
+
+  </Tab>
+
+  <Tab title="Incremental Authorization">
+    This webhook confirms whether an additional amount requested against an existing authorization was approved or declined, allowing you to manage risk in real time.
+
+    The following example shows the structure of an Incremental Authorization webhook request:
+    <CodeGroup>
+    ```json Approved (Authorized)
+    {
+      "CardInfo": {
+        "IssuerBin": "540123",
+        "Brand": "Mastercard",
+        "CardBin": "540123",
+        "CardFinalDigits": "4567",
+        "ExpiryDate": "03/2027",
+        "IssuingCountry": "DE",
+        "IssuingBank": "Deutsche Bank",
+        "IsCardCommercial": "false",
+        "CardHolderName": "Anna Schmidt",
+        "Alias": "card_alias_inc1",
+        "AliasType": "Default"
+      },
+      "Ecom3DSInfo": {
+        "Is3DSOffered": "true",
+        "Is3DSOfferedResponse": "Y",
+        "Is3DSAuthenticated": "true",
+        "Is3DSAuthenticatedResponse": "Y",
+        "IsScaExemptionRequested": "false",
+        "LiabilityShift": "true",
+        "CardEnrolled": "Y",
+        "Eci": "02",
+        "Xid": "3ds_xid_inc123"
+      },
+      "RetryAttempts": [],
+      "AdditionalInfo": {
+        "AdditionalData": "Incremental auth for Order #12350 - Additional charges",
+        "AdditionalReceiptData": "Additional amount authorized"
+      },
+      "NayaxToken": "tok_nayax_inc123efg456",
+      "NayaxSession": "sess_nayax_inc_345",
+      "ExternalTransactionStatus": 13,
+      "AuthCode": "INCAUTH789",
+      "PaymentAccountReference": "PAR123000111",
+      "ShopperCountry": "DE",
+      "ShopperLocale": "de-DE",
+      "ShopperIp": "85.10.20.30",
+      "PaymentMethod": "scheme",
+      "Currency": "EUR",
+      "Amount": "50.00",
+      "Cavv": "AAABBZIGAwAAAABQllRGBBBBBB=",
+      "CavvAlgorithm": "1",
+      "CvcResult": "M",
+      "EReceiptUrl": "https://receipts.nayax.com/incremental/inc789"
+    }
+    ```
+
+    ```json Declined
+    {
+      "CardInfo": {
+        "IssuerBin": "540123",
+        "Brand": "Mastercard",
+        "CardBin": "540123",
+        "CardFinalDigits": "4567",
+        "ExpiryDate": "03/2027",
+        "IssuingCountry": "DE",
+        "IssuingBank": "Deutsche Bank",
+        "IsCardCommercial": "false",
+        "CardHolderName": "Anna Schmidt",
+        "Alias": "card_alias_inc1",
+        "AliasType": "Default"
+      },
+      "Ecom3DSInfo": {
+        "Is3DSOffered": "true",
+        "Is3DSOfferedResponse": "Y",
+        "Is3DSAuthenticated": "false",
+        "Is3DSAuthenticatedResponse": "N",
+        "IsScaExemptionRequested": "false",
+        "LiabilityShift": "false",
+        "CardEnrolled": "Y",
+        "Eci": "07",
+        "Xid": "3ds_xid_inc456"
+      },
+      "RetryAttempts": [
+        {
+          "AttemptNumber": "1",
+          "Result": "Declined",
+          "Timestamp": "2025-01-18T12:00:00Z"
+        }
+      ],
+      "AdditionalInfo": {
+        "AdditionalData": "Incremental auth for Order #12351 - Additional charges",
+        "AdditionalReceiptData": "Incremental authorization declined - Limit exceeded"
+      },
+      "NayaxToken": "tok_nayax_inc789hij012",
+      "NayaxSession": "sess_nayax_inc_678",
+      "ExternalTransactionStatus": 250,
+      "AuthCode": null,
+      "PaymentAccountReference": "PAR123000222",
+      "ShopperCountry": "DE",
+      "ShopperLocale": "de-DE",
+      "ShopperIp": "85.10.20.30",
+      "PaymentMethod": "scheme",
+      "Currency": "EUR",
+      "Amount": "150.00",
+      "Cavv": null,
+      "CavvAlgorithm": null,
+      "CvcResult": "N",
+      "EReceiptUrl": null
+    }
+    ```
+    </CodeGroup>
+
+  </Tab>
+</Tabs>
+
+## Webhook Request Parameters
+
+The following parameters define the structure of the incoming webhook notification:
+
+| Field Name                  | Type   | Description                                                                    |
+| :-------------------------- | :----- | :----------------------------------------------------------------------------- |
+| `CardInfo`                  | Object | Root object containing payment card details.                                   |
+| `IssuerBin`                 | String | The first 6 digits of the card (BIN).                                          |
+| `Brand`                     | String | Card brand (e.g., Visa, Mastercard, Amex).                                     |
+| `CardBin`                   | String | Detailed BIN information.                                                      |
+| `CardFinalDigits`           | String | Last 4 digits of the card.                                                     |
+| `ExpiryDate`                | String | Format: `MM/YYYY`.                                                             |
+| `IssuingCountry`            | String | ISO 2-character country code of the issuer.                                    |
+| `IssuingBank`               | String | Name of the issuing financial institution.                                     |
+| `IsCardCommercial`          | String | "true" or "false" indicating if it is a business card.                         |
+| `CardHolderName`            | String | Name of the shopper as it appears on the card.                                 |
+| `Alias`                     | String | Unique identifier/token for the specific card.                                 |
+| `AliasType`                 | String | Type of alias used (e.g., "Default").                                          |
+| `Ecom3DSInfo`               | Object | Contains 3D Secure authentication details.                                     |
+| `Is3DSOffered`              | String | "true"/"false" if 3DS was initiated.                                           |
+| `Is3DSAuthenticated`        | String | "true"/"false" if shopper passed authentication.                               |
+| `LiabilityShift`            | String | "true"/"false" indicating if liability has shifted to the issuer.              |
+| `Eci`                       | String | Electronic Commerce Indicator (e.g., 02, 05, 07).                              |
+| `Xid`                       | String | Transaction identifier for 3DS.                                                |
+| `RetryAttempts`             | Array  | List of attempt objects containing `AttemptNumber`, `Result`, and `Timestamp`. |
+| `AdditionalInfo`            | Object | Metadata and receipt details.                                                  |
+| `AdditionalData`            | String | Custom merchant-defined data or order IDs.                                     |
+| `AdditionalReceiptData`     | String | Information to be displayed on the customer receipt.                           |
+| `NayaxToken`                | String | The reusable token for this payment method.                                    |
+| `NayaxSession`              | String | The unique session ID for the transaction.                                     |
+| `ExternalTransactionStatus` | Int    | Status code (e.g., 13=Approved, 250=Declined, 62=Refunded).                    |
+| `AuthCode`                  | String | Authorization code from the bank (null for declines).                          |
+| `PaymentAccountReference`   | String | PAR associated with the card for tracking across tokens.                       |
+| `ShopperCountry`            | String | Country of the shopper (ISO code).                                             |
+| `ShopperLocale`             | String | Language/Locale of the shopper (e.g., en-US).                                  |
+| `ShopperIp`                 | String | IP address of the shopper.                                                     |
+| `PaymentMethod`             | String | Method used (e.g., "scheme", "amex").                                          |
+| `Currency`                  | String | ISO4217 Alpha-3 format (e.g., USD, GBP, EUR).                                  |
+| `Amount`                    | String | The transaction amount formatted as a string.                                  |
+| `Cavv`                      | String | Cardholder Authentication Verification Value.                                  |
+| `CvcResult`                 | String | Response code for the CVC check (e.g., M=Match, N=No Match).                   |
+| `EReceiptUrl`               | String | URL to the digital receipt hosted by Nayax.                                    |
+
+## See Also
+
+<Columns cols={2}>
+  <Card icon="link" title="Initialize Transactions" href="/docs/start-a-transaction" />
+
+  <Card icon="link" title="Nayax Tokens" href="/docs/ecom-sdk/back-end-integration/nayax-ecom-tokens" />
+</Columns>

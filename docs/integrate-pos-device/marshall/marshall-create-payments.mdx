@@ -1,0 +1,138 @@
+---
+title: "Create Payments"
+---
+
+Once the SDK is running and the connection with the Nayax device is established, the device is ready to handle vending and cashless transactions.
+
+This guide shows you how to set up and manage cashless payment transactions from your peripheral's controller using the Nayax Marshall SDK.
+
+## Pre-requisites
+
+* Ensure your SDK is running and connected to the Nayax device indicated by the `onReady()` event.
+
+<Warning>
+**Integration**
+
+If you have not finished the integration process, check the [Get Started](/docs/integrate-pos-device/marshall/get-started/marshall-get-started)  page before continuing.
+</Warning>
+
+## Create a Payment
+
+To perform a transaction using the Nayax Marshall SDK, follow the steps below.
+
+1. Start by enabling the device for transactions.
+    <CodeGroup>
+    ```java Java
+    ⦁	m_vmc.vend.session_start(vmc_vend_t.session_type_credit_e);
+    ```
+    ```csharp C#
+    ⦁	vmc_instance.vend.session_start(vmc_vend_t.session_type_credit_e);
+    ```
+    ```c C
+    vmc_vend_session_start(vmc_vend_session_type_credit_e);
+    ```
+    </CodeGroup>
+2. When a client presents a card and it is approved, the `onSessionBegin()` event is triggered.
+   This is the signal for the peripheral, such as the vending machine, to prepare for payment approval.
+    <CodeGroup>
+    ```java Java
+    m_sessions[0] = new vmc_vend_t.vend_session_t((short) 0, 1, (byte) 0, 10);
+    //the fields are (from left to right): produce code (2 bytes long,meaning value up to 65535), quantity (2 byte), unit of measure (1 byte), price (2 bytes, meaning value up to 65535)
+    ```
+    ```csharp C#
+    List<vmc_vend_t.vend_item_t> list = new List<vmc_vend_t.vend_item_t> ();
+    list.Add(new vmc_vend_t.vend_item_t(0, 10, 1, 1));
+    //the fields are (from left to right): produce code (2 bytes long,meaning value up to 65535), price (2 bytes, meaning value up to 65535), quantity (2 bytes), unit of measure (1 byte), .
+    session = new vmc_vend_t.vend_session_t(list);
+    ```
+    ```c C
+    session_product.code = 1;
+    session_product .qty = 1;
+    session_product.price = 10;
+    session_product.unit = 1;
+    session->products = &session_product;
+    session->total_products = 1;
+    ```
+    </CodeGroup>
+
+<Warning>
+**Price field**
+
+The price field is set as an integer, meaning it does not take into consideration the Decimal Place: the actual price is calculated by the device based on the Decimal place- meaning if you set a price of 50 in the SDK, the peripherla would send a price of 50 to the device, who would look at it's own Decimal Place setting and would multiply the price sent by 10^(-decimal place). Meaning if the device has a Decimal Place of 2, the actual price the device would attempt to charge the consumer would be 0.50.\
+More on that on [Decimal Place](/docs/integrate-pos-device/marshall/marshall-faqs/faq#decimal-place).
+
+This means that in case of the device is using a Decimal Place of 2, the highest price would be 655.35 (0XFFFF with decimal of 2)
+</Warning>
+
+<Note>
+**Multi-vend Session**
+
+For a multi-vend session , when the consumer is able to select multiple items in one transaction, enable the `multi_vend_support` flag. The session would then include a list of products.\
+You can review an example of it in the demo apps.
+</Note>
+
+Then, inside the onSessionBegin() callback you would send the "Vend Request" for said session (transaction):
+
+<Note>
+  <CodeGroup>
+  ```java Java
+  m_vmc.vend.vend_request(m_sessions[m_active_session]);
+  ```
+
+  ```csharp C#
+  vmc_instance.vend.vend_request(session);
+  ```
+
+  ```c C
+  vmc_vend_vend_request(session);
+  ```
+  </CodeGroup>
+
+</Note>
+
+3. After the VPOS approves the vending request, the peripheral must notify the SDK that the product has been successfully delivered to the consumer. This is done by implementing the `onVendApproved(...)`API and returning one of the following:
+
+* **`True`** : If the vend process is successful, the client's credit card is charged the requested amount.
+* **`False `**: For a failed vend process.
+
+4. Whether it’s a single session or multi-session, the `onReady()` event will be called upon finishing the vending process, indicating that the device is ready for the next transaction.
+
+<Note>
+**Multi-Session**
+
+For multi-session configurations, when the session on the peripheral's end is finished, it is up for the peripheral to close the session in order for the transaction to be settled:
+
+<CodeGroup>
+```java Java
+m_vmc.vend.session_close(m_session)
+```
+
+```csharp C#
+m_vend_machine.vend.session_close(m_vend_machine.session)
+```
+
+```c C
+vmc_vend_session_close(session)
+```
+</CodeGroup>
+
+</Note>
+
+Following these steps ensures that the vending process, from card presentation to product delivery and payment, is handled efficiently and securely using the Nayax Marshall SDK.
+
+## See Also
+
+<Columns cols={2}>
+<Card
+  icon="link"
+  title="Get Started"
+  href="/docs/integrate-pos-device/marshall/get-started/marshall-get-started"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Methods & Functions"
+  href="/docs/integrate-pos-device/marshall/methods-functions/marshall-methods-and-functions"
+  arrow
+/>
+</Columns>

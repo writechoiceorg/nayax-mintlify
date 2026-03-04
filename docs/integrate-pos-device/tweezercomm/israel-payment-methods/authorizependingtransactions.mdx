@@ -1,0 +1,68 @@
+---
+title: "authorizePendingTransactions"
+---
+
+The `authorizePendingTransactions` method processes and finalizes all transactions that are currently in a pending state.
+
+This method is essential for merchants who use deferred payment transactions. It allows them to finalize multiple pending transactions in a single batch operation and retrieve a summary of which transactions were approved or declined.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+</Note>
+
+In the request, ensure to configure the following:
+
+* The `method` field needs to be set to.`authorizePendingTransactions`.
+* The service must be set to `ashrait` in the `params`.
+
+```json
+{
+   "jsonrpc":"2.0",
+   "method":"authorizePendingTransactions",
+   "params":[
+      "ashrait",
+      {}
+   ],
+   "id":1
+}
+```
+
+This method does not require any parameters in the params object.
+
+## Response
+
+A successful request will return a response similar to the one in the code block below:
+
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "1",
+   "result": {
+       "statusCode": 0,
+       "approvedTransactions": [
+           "25102113483608830127760"
+       ],
+       "declinedTransactions": [],
+       "totalAmount": 100,
+       "totalCount": 1
+   }
+}
+```
+
+### Response Parameters
+
+Below is a table with all the possible response parameters and their description:
+
+| Name                   | Type             | Description                                                                                               |
+| :--------------------- | :--------------- | :-------------------------------------------------------------------------------------------------------- |
+| `statusCode`           | integer          | The overall status of the batch operation. A value of `0` indicates the batch was processed successfully. |
+| `approvedTransactions` | array of strings | A list of transaction unique identifiers (UIDs) that were successfully authorized and captured.           |
+| `declinedTransactions` | array of strings | A list of transaction unique identifiers (UIDs) that were declined during the authorization attempt.      |
+| `totalAmount`          | integer          | The total amount (in cents) of all transactions that were approved in this batch.                         |
+| `totalCount`           | integer          | The total number of transactions that were approved in this batch.                                        |
+
+<br />

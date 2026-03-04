@@ -1,0 +1,77 @@
+---
+title: "Get Transaction Status"
+---
+
+This read-only query checks the current status of a previously initiated transaction session. It allows the merchant system to proactively poll the payment gateway for the transaction's definitive state.
+
+<Warning>
+**Read Only**
+
+This is a read-only request and does not trigger a Merchant Notification (webhook).
+</Warning>
+
+## Request
+
+This request targets a dedicated [status endpoint](/reference/ecom/management/retrieve-transaction-status-by-session-id). It utilizes the `NayaxSessionId `as the primary identifier for the transaction being queried.
+
+See the example below:
+
+```json
+{
+  "SessionInfo": {
+    "NayaxSessionId": "SESSION_ID_XYZ123"
+  },
+  "MachineInfo": {
+    "MachineId": "0434334921100366"
+  },
+  "ValidationKey": "AUTH_KEY_FOR_STATUS"
+}
+```
+
+### Request Parameters
+
+The following table details the parameters of the request:
+
+| Parameter        | Location    | Type   | Description                                                            | Required |
+| :--------------- | :---------- | :----- | :--------------------------------------------------------------------- | :------- |
+| `NayaxSessionId` | SessionInfo | String | The unique ID assigned to the payment session when it was initialized. | Yes      |
+| `MachineId`      | MachineInfo | String | The ID of the terminal or device initiating the query.                 | Yes      |
+| `ValidationKey`  | Root        | String | Cryptographic key (HMAC) to authenticate this query request.           | Yes      |
+
+## Response
+
+A successful status retrieval returns the definitive final state, including all relevant payment and status information.
+
+```json
+{
+  "status": {
+    "verdict": "Approved",
+    "code": 0,
+    "statusMessage": "Transaction successfully completed."
+  },
+  "basicInfo": {
+    "amount": 25.5,
+    "currency": "EUR",
+    "transactionId": "NAYAX_TRX_98765",
+    "transactionTimeUtc": "2025-08-28T10:30:00Z"
+  },
+  "paymentInfo": {
+    "authCode": "A1B2C3D4",
+    "providerTransactionId": "PSP_TRANS_ABC",
+    "authAmount": 25.5
+  }
+}
+```
+
+### Response Parameters
+
+The table below describes the parameters of the response:
+
+| Parameter               | Location    | Type     | Description                                                                             |
+| :---------------------- | :---------- | :------- | :-------------------------------------------------------------------------------------- |
+| `verdict`               | status      | String   | **'Approved'**, **'Declined'**, or **'Pending'**. The current state of the transaction. |
+| `code`                  | status      | Int32    | The final status code (0 for success).                                                  |
+| `transactionId`         | basicInfo   | String   | The unique ID of the transaction being queried.                                         |
+| `transactionTimeUtc`    | basicInfo   | DateTime | The UTC timestamp when the final status was recorded.                                   |
+| `authCode`              | paymentInfo | String   | The authorization code provided by the issuer (if successful).                          |
+| `providerTransactionId` | paymentInfo | String   | The unique ID assigned by the Payment Service Provider.                                 |

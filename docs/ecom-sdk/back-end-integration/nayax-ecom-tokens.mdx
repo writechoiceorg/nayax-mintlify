@@ -1,0 +1,161 @@
+---
+title: "Nayax Tokens"
+---
+
+The Nayax eCom SDK uses tokenisation for Credential on File (COF) transactions. When a COF initialisation is triggered, the eCom API responds with a Nayax card token to the eCom SDK. This token is then stored within Nayax's systems, and your application can utilise it for recurring transactions, as it signifies the cardholder's authorisation for the merchant to store and debit their card in the future.
+
+Tokens offer a secure method to store a card for future use, such as for subscription payments or saved card transactions.
+
+<Note>
+**Token Type Behaviour**
+
+A token's type (subscription/COF/top-up) is set during its initial creation and stored in our system. If a subsequent [Charge Token](/reference/ecom/payments/charge-token) request includes a different token type parameter, it is ignored. The system always uses the original token type from the initialization request, regardless of what is provided in later charge requests.
+</Note>
+
+## Charge a Token
+
+The [ `/charge-token`](/reference/ecom/payments/charge-token) endpoint is used for recurring payments. It should be used for recurring payment calls and requires a card token to be added to the request. These calls are performed only on the server.
+
+See an example request in the code block below:
+
+<CodeGroup>
+```json Request
+{
+  "BasicInfo": {
+    "Amount": 25.50,
+    "DecimalPlace": 2,
+    "Currency": "USD",
+    "RequestType": 0,
+    "EntryMode": "MIT",
+    "TokenModel": "Subscription",
+    "Token": "example_nayax_token_12345",
+    "MachineId": "0434334921100366",
+    "MerchantTransactionId": "abc-123-def-456",
+    "ValidationKey": "example_validation_key"
+  },
+  "CardHolderInfo": {
+    "CardHolderUniqId": "user-uuid-789"
+  }
+}
+```
+
+```json Response
+{
+    "api_error_message": null,
+    "card_acquirer": null,
+    "card_brand": null,
+    "card_issuer": null,
+    "card_type": null,
+    "issuer_auth_num": null,
+    "provider_card_token": "20000000814",
+    "token": "20000000814",
+    "transaction_id": 20000026432,
+    "machine_au_time": "2025-09-29T08:02:21.3219853Z",
+    "site_id": 1,
+    "event_source_id": null,
+    "credit_company": 0,
+    "is_debit_card": false,
+    "ecom_3ds_redirect_url": null,
+    "EReceiptQrUrl": null,
+    "EReceiptInvoiceNumber": null,
+    "EReceiptPlatformId": null,
+    "GatewayType": "EcomSdkApi",
+    "api_error_code": 0,
+    "ok": true,
+    "Exception": null,
+    "HasGatewayReplied": true,
+    "TimedOut": false,
+    "ErrorCode": null,
+    "UsedTerminal": null
+}
+```
+</CodeGroup>
+
+See more details about the parameters of the request in the `/payment` API Reference page.
+
+## Get Token Data
+
+The `/get-card-token `endpoint retrieves essential data about a saved card token. It allows you to access information such as the card's last four digits, expiration date, brand, and status.
+
+The request must include the following in the `BasicInfo` and `MachineInfo` objects.
+
+```json
+{
+  "basicInfo": {
+    "merchantRequestId": "REQ_GETTOKEN_001"
+  },
+  "machineInfo": {
+    "machineId": "0434334921100366"
+  },
+  "cardHolderInfo": {
+    "cardHolderUniqId": "unique_customer_id_123"
+  },
+  "tokenInfo": {
+    "nayaxTokenId": "NAYAXTOK12345"
+  }
+}
+```
+
+A successful response will return the token data as in the example below:
+
+```json
+{
+  "Status": {
+    "Verdict": "Approved",
+    "Code": 0,
+    "StatusMessage": " No Errors "
+  },
+  "TokenInfo": {
+    "4LastDigits": 1234,
+    "ExpiryDate": "03/2030",
+    "Brand": "Visa",
+    "Status": "Active"
+  }
+}
+```
+
+See more details about the parameters of the request in the [Retrieve Card Token]() API Reference page.
+
+## Delete a Token
+
+The Delete a Card Token endpoint allows you to delete a saved token. The request must include the following in the `BasicInfo` and `MachineInfo` objects:
+
+```json
+{
+  "basicInfo": {
+    "merchantRequestId": "REQ_DELTOKEN_001"
+  },
+  "machineInfo": {
+    "machineId": "0434334921100366"
+  },
+  "cardHolderInfo": {
+    "cardHolderUniqId": "unique_customer_id_123"
+  },
+  "tokenInfo": {
+    "nayaxTokenId": "NAYAXTOK12345"
+  }
+}
+```
+
+A successful response will return the status of the deletion. See the code block below:
+
+```json
+{
+  "status": {
+    "verdict": "Approved",
+    "code": 0,
+    "statusMessage": "Card token deleted successfully."
+  },
+  "tokenInfo": null
+}
+```
+
+See more details about the parameters of the request in the [Delete A Token]() API Reference page.
+
+## See Also
+
+<Columns cols={2}>
+  <Card icon="link" title="Initialize Transactions" href="/docs/start-a-transaction" />
+
+  <Card icon="link" title="Webhook Notifications" href="/docs/ecom-sdk/back-end-integration/webhook-notifications" />
+</Columns>

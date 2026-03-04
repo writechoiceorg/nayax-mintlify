@@ -1,0 +1,119 @@
+---
+title: "Authentication Code Sample"
+---
+
+This page provides a detailed sample code flow for integrating Spark's authentication mechanism into your third-party application. The core requirement for all API calls to the Spark DMZ is to ensure security and integrity by generating an encrypted payload (Cipher) and authenticating the request with a Signature header.
+
+<Note>
+**Samples in C#**
+
+The following code snippets are provided in **C#** for example purposes. Developers should implement the same logic (e.g., AES-256 ECB encryption, SHA-256 hashing) in their chosen programming language to successfully communicate with the Spark DMZ.
+</Note>
+
+## Step 1: Generating the Cipher
+
+The Cipher field is a securely encrypted payload that must be included in the request body. It serves as a strong mechanism to prove that you possess the necessary secret token without transmitting it openly.
+
+This function creates the final, encrypted Cipher string to be included in the request body.
+
+```csharp C#
+private string CreateCipher(string sparkTransactionId, string tokenSecretString, string random, bool needTimeStampInRandom = true)
+{
+    string timeStamp = needTimeStampInRandom ? $"{DateTime.UtcNow:yyMMddHHmm}" : string.Empty;
+    
+    // 1. Create the unencrypted payload string
+    string unencryptedCipher = $"{sparkTransactionId}={random}{timeStamp}";
+    
+    // 2. Encrypt the payload using AES-256 ECB
+    return CryptoUtils.EncryptAesECB256(unencryptedCipher, tokenSecretString);
+}
+```
+
+Where:
+
+* `sparkTransactionId`: Transaction identifier (use "1234" for testing)
+* `tokenSecretString`: Your secret token (key) which is used as the AES-256 ECB encryption key.
+* `random`: 17-digit random  number.
+* `timestamp`: UTC time in format `yyMMddHHmm` (optional)
+
+## Step 2: Create Signature
+
+The signature authenticates each request by combining the serialized request body with your header hash key and computing a SHA-256 hash. This signature is sent in the HTTP headers, along with your integrator ID, to verify the request's origin and integrity.
+
+This function calculates the signature string and packages it into the required HTTP headers.
+
+```csharp C#
+public Dictionary<string, string> CreateSignature<T>(T request, int integratorId) where T : class
+{
+		// 1. Serialize the entire request body to a JSON string
+  string serializedRequest = _jsonClient.Serialize(request, indent: false);
+
+    _integratorDictionary.TryGetValue(integratorId, out Dictionary<string, string> headerHashKeyDictionary);
+    if (headerHashKeyDictionary.IsNullOrEmpty() || serializedRequest.IsNullOrEmpty())
+    {
+        return null;
+    }
+  
+
+   // 2. Retrieve the Integrator's HeaderHashKey (integratorValue) 
+   // This value is shared and known only to the integrator and Nayax systems.
+    headerHashKeyDictionary.TryGetValue("HeaderHashKey", out string integratorValue);
+    if (integratorValue.IsNullOrEmpty())
+    {
+        return null;
+    }
+
+    return new Dictionary<string, string>
+    {
+        { "IntegratorId", integratorId.ToString() }, 
+        { "Signature", $"{ByteUtils.CalculateSHA256($"{serializedRequest};{integratorValue}")}" }
+    };
+}
+```
+
+Where:
+
+* `request`: The whole request body object (StartAuthenticationRequest3rdParty in this case)
+* `integratorId`: Your unique integrator ID.
+* `IntegratorValue`: A secret `HeaderHashKey `used to authenticate the integrator.
+
+The output will be a dictionary containing the two mandatory HTTP request headers: `IntegratorId `and `Signature`.
+
+## Request Model
+
+The request model defines the structure of data sent to initiate authentication with Spark. Each authentication request must include your token ID, terminal identification details, and the encrypted cipher (created using the `CreateCipher()` method), and the random 17-digit number used in cipher generation.
+
+```csharp C#
+public class StartAuthenticationRequest3rdParty
+{
+    public int TokenId { get; set; }
+    public string TerminalId { get; set; }
+    public int TerminalIdType { get; set; }
+    public string Cipher { get; set; }
+    public string Random { get; set; }
+}
+```
+
+## Response Model
+
+The response model defines the structure of data returned after initiating authentication with Spark. It includes the hashed transaction ID and status information.
+
+```csharp C#
+public class StartAuthenticationResponse3rdParty
+{
+    [JsonProperty("HashedSparkTransactionId", Required = Required.Always)]
+    public string HashedSparkTransactionId { get; set; }
+
+    [JsonProperty("Status", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
+    public Status Status { get; set; }
+}
+
+public class Status
+{
+    public string Verdict { get; set; }
+    public int ErrorCode { get; set; }
+    public string StatusMessage { get; set; }
+}
+```
+
+<br />

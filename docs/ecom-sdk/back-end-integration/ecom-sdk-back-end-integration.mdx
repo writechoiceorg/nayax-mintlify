@@ -1,0 +1,45 @@
+---
+title: "Back-End Integration"
+---
+
+Nayax provides the eCom API to handle the intricate server-side logic, data storage, and authentication required to ensure transactions are processed efficiently and securely.
+
+<Note>
+**API Reference**
+
+See the complete [API Reference](/reference/ecom-sdk/overview) of the eCom API for more details on its endpoints and parameters.
+</Note>
+
+<Note>
+**Integration URL**
+
+When performing your integration to the API use the stable URL
+
+* `https://stable-sdk-api.nayax.com/`
+</Note>
+
+## eCom API
+
+This API serves as the interface for handling eCom requests, including initialization and payment. See the diagram below:
+
+<Frame><img src="/images/docs/ecom-sdk-back-end-integration/image1.png" /></Frame>
+
+Where:
+
+1. The merchant's backend sends an API request to the Nayax Server.
+2. Nayax processes the request and sends a response (approved or declined) to the Merchant's back end.
+3. Asynchronously, the Nayax Server sends a webhook notification to your back-end with the final transaction status.
+
+
+
+## See Also
+
+<Columns cols={3}>
+  <Card icon="link" title="Initialize Transactions" href="/docs/start-a-transaction" />
+
+  <Card icon="link" title="Nayax Tokens" href="/docs/ecom-sdk/back-end-integration/nayax-ecom-tokens" />
+
+  <Card icon="link" title="Webhook Notifications" href="/docs/ecom-sdk/back-end-integration/webhook-notifications" />
+</Columns>
+
+<br />

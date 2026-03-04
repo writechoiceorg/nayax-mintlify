@@ -1,0 +1,50 @@
+---
+title: "Split Transaction"
+---
+
+The Split Transaction flow is used for transactions involving multiple sub-merchants. The diagram illustrates how a Milgam System can initiate a transaction on the Nayax Device and receive a response that includes a specific attribute for a sub-retailer.
+
+## Transaction Flow
+
+To understand the Split transaction flow, consider the following sequence of events:
+
+<Frame><img src="/images/docs/tweezercomm-split-transaction/image1.png" /></Frame>
+
+Here's a breakdown of each step:
+
+1. The Milgam System sends one or more [`addSubRetailer()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/addsubretailer) requests to the Nayax Device. In the example, three such requests are made.
+2. The Milgam System performs its [`doPeriodic()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) call and then initiates a transaction with a [`doTransaction()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransaction-ashrait) request.
+3. The CardHolder presents their card.
+4. The Nayax Device communicates with the payment server to perform the Authorization and Settlement of the transaction.
+5. The payment server sends the transaction result back to the Nayax Device.
+6. The Nayax Device relays the transaction result to the Milgam System, including a `subRetailer` attribute with the value `XXXXX` to identify the relevant sub-retailer.
+
+## See Also
+
+<Columns cols={2}>
+<Card
+  icon="link"
+  title="Regular Transaction"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/single-phase-transaction"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Two Phases Transaction"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/2-phase-transaction"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Pre-Authorization (Israel)"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-pre-authorization-israel"
+  arrow
+/>
+<Card
+  icon="link"
+  title="Defferred Payment"
+  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-deferred-payment"
+  arrow
+/>
+</Columns>
+

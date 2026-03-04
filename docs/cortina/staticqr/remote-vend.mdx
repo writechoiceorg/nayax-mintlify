@@ -1,0 +1,110 @@
+---
+title: "Product Remote Vend"
+---
+
+Remote Vend allows the integrator to initiate a transaction with the selected product using the `Start` call.
+
+The selected product can be sent as a product code for MDB or Marshal machines, or a specific pulse line ID for Pulse machines.
+
+## Virtual Machine's configurations:
+
+<Frame><img src="/images/docs/remote-vend/image1.png" /></Frame>
+
+## How to Implement
+
+When sending the Start request, add a "Products" attribute with an array with one or more products as follows:
+
+### Pulse machine
+
+#### Starting which firmware is it supported?
+
+4.0.10.23
+
+#### What is the format of the call?
+
+Cortina V1/V2:
+
+```json
+{
+
+"AppUserId":"260760",
+
+"TerminalId":"0456789456789456",
+
+"TransactionId":"12345129",
+
+"SecretToken":"1234OqgODDqYgkJbSU-Vxw0MkZM1XjHvbQeSTnHmhwltUM_5kB-ZSgofkCxNk3ZN0",
+
+"Products":
+
+[
+ {
+      
+ "Code":2
+
+ }
+
+ ]
+
+}
+```
+
+### Not Pulse (MDB, Marshall etc.)
+
+* MDB- note that Remote Vend is supported on MDB machines with level 3 only (a protocol limitation)
+
+#### What is the format of the call?
+
+**Cortina V1 (relevant for old integrations only):**
+
+```json
+{
+
+"AppUserId":"260760",
+
+"TerminalId":"0456789456789456",
+
+"TransactionId":"12345129",
+
+"SecretToken":"1234qgODDqYgkJbSU-Vxw0MkZM1XjHvbQeSTnHmhwltUM_5kB-ZSgofkCxNk3ZN0",
+
+"Products":
+
+[
+ {
+      
+ "ProductCode":2
+
+ }
+
+ ]
+
+}
+```
+
+**Cortina V2:**
+
+```json
+{
+
+"AppUserId":"260760",
+
+"TerminalId":"0456789456789456",
+
+"TransactionId":"12345129",
+
+"SecretToken":"1234OqgODDqYgkJbSU-Vxw0MkZM1XjHvbQeSTnHmhwltUM_5kB-ZSgofkCxNk3ZN0",
+
+"Products":
+
+[
+ {
+      
+ "Code":2
+
+ }
+
+ ]
+
+}
+```

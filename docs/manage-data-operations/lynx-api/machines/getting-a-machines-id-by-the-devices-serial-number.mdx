@@ -1,0 +1,138 @@
+---
+title: "Getting a Machine's ID by the Device's ID"
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+This page presents how to retrieve a Machine's ID using its Device ID with Lynx API and also with Nayax core. The guide will use the following endpoint:
+
+<EndpointCard
+  title="Get All Machines"
+  href="/reference/lynx/machines/get-all-machine-basic-info"
+  method="get"
+/>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+</Warning>
+
+## Retrieving the Machine's ID
+
+To retrieve a machine's ID using its serial number, you need to use the [Get All Machines](/reference/lynx/machines/get-all-machine-basic-info) endpoint. By providing the device's serial number in the request you can retrieve the corresponding machine's unique identifier.
+
+The code block below exemplifies the request, using the `DeviceSerial` as a query parameter to filter the result:
+
+```sh
+curl -X GET "https://lynx.nayax.com/operational/api/v1/machines?DeviceSerial=<DEVICE_SERIAL_NUMBER>" \
+-H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+-H "Content-Type: application/json"
+```
+
+<Note>
+  Remember to replace `<DEVICE_SERIAL_NUMBER>` with the actual device's serial number.
+</Note>
+
+The response will include details about the machine, including the Machine's ID.
+
+```json
+[
+  {
+    "MachineID": 942488501,
+    "ActorID": 2001492652,
+    "CountryID": 1,
+    "CurrencyID": 2,
+    "InstituteID": 3001,
+    "LocationID": 4001,
+    "MachineGroupID": 210631347,
+    "MachineModelID": 305,
+    "MachineName": "Marshall Vending",
+    "MachineNumber": "MV001",
+    "MachineStatusBit": 1,
+    "LanguageID": 7,
+    "OperatorActorID": 2001492652,
+    "DistributorActorID": 3001492652,
+    "AreaActorID": 4001492652,
+    "SalesSourceID": 30000512,
+    "MachineTypeID": 555001,
+    "SerialNumber": "SN12345X",
+    "VPOSSerialNumber": "VP12345",
+    "DeviceSerialNumber": "SN12345X",
+    "VPOSID": 98765,
+    "DeviceID": 123456,
+    "UseLocationFrom": 1,
+    "GeoCountry": 1,
+    "GeoState": "New York",
+    "GeoCity": "New York City",
+    "GeoAddress": "123 Main St",
+    "GeoStreetNumber": "123",
+    "GeoLongitude": -73.935242,
+    "GeoLatitude": 40.730610,
+    "GeoZoom": 15,
+    "GeoZipCode": "10001",
+    "SearchAddress": "123 Main St, New York, NY",
+    "Remarks": "High-traffic area",
+    "DexType": 2,
+    "DexMidnightReadsEnableBit": true,
+    "DexG85CheckEnableBit": true,
+    "DexDivideBillsBy": 100,
+    "DexG85CheckParsingFilterEnableBit": true,
+    "UseCardPriceCorrectCashPriceBit": false,
+    "MachineTimeZoneOffset": -5,
+    "DexReadInterval": 30,
+    "LocationType": 1,
+    "ApplyDisplayPickListSelectionsToReportsBit": true,
+    "DisplayPickListSelectionsAs": 1,
+    "LastUpdated": "2024-10-09T14:38:53.474Z",
+    "MachineProfile": 0,
+    "CityID": 101,
+    "RegionID": 201,
+    "CountryDialingCode": 1,
+    "DexIgnoreCRCCheckBit": true,
+    "DexParseLABit": false,
+    "ProductMapID": 501,
+    "Longitude": -73.935242,
+    "Latitude": 40.730610,
+    "DexTotalSalesMinusCardSalesBit": true,
+    "RouteActorID": 5001492652,
+    "MachineLogicAlertEnableBit": true,
+    "AlertRuleSetId": 601,
+    "MachineMemberTypePricingEnableBit": false,
+    "DexMultiplyCoinsBy": 10,
+    "DexMultiplyTubesBy": 5,
+    "CustomerID": 12345,
+    "CommissionType": 2,
+    "CommissionDefaultValue": 0.05,
+    "CreatedBy": 105,
+    "CreatedOn": "2023-06-01T12:00:00.000Z",
+    "UpdateBy": 107,
+    "TubeSource": 2,
+    "BillSource": 3,
+    "SmartStickerId": 8080,
+    "EnableRemoveVendBit": true,
+    "EnableEreceiptBit": true,
+    "ProductMapAutomaticCreationBit": true,
+    "Refs": {
+      "Documentation": "https://lynx.docs.com/machine/942488501"
+    }
+  }
+]
+
+```
+
+<br />
+
+## Nayax Core
+
+You can also find the Machine ID in Nayax Core in the machine's details, to do so follow the steps below:
+
+1. Access **Operations > Machines**.
+2. Use the **Search** feature to find the machine.
+3. Select the machine from the list.
+4. Acces the **General Information** tab to find the **Machine ID** under the **Hardware** section.
+
+<Frame><img src="/images/docs/getting-a-machines-id-by-the-devices-serial-number/image1.png" /></Frame>
+
+<br />
+

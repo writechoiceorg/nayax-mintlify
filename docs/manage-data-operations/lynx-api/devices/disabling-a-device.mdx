@@ -1,0 +1,110 @@
+---
+title: "Disable a Device"
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+Sometimes, you may want to disable a device associated with a Machine to stop it from processing payments and orders. This can quickly be done programmatically with Lynx API using the endpoint below.
+
+<EndpointCard
+  title="Update Device"
+  href="/reference/lynx/devices/get-device-by-deviceid"
+  method="put"
+/>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+</Warning>
+
+## Disabling the Device
+
+Use the [Update Device](ref:/update-device-by-deviceid) endpoint to update the device's status. You need to provide the `DeviceID`, `ActorID` (operator ID), and the new status flag. See an example request in the code block below:
+
+```sh
+curl -X PUT "https://lynx.nayax.com/operational/api/v1/devices/<DEVICE_ID>" \
+-H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+-H "Content-Type: application/json" \
+-d '{
+  "ActorID": "<ACTOR_ID>",
+  "StatusID": 2
+}'
+```
+
+<Note>
+**Path Params**
+
+Replace `<DEVICE_ID>` with the actual identifier of the device you want to disable.
+</Note>
+
+In the Body Parameters, you need to provide the following:
+
+<table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        **Body Parameter**
+      </th>
+
+      <th>
+        **Type**
+      </th>
+
+      <th>
+        **Description**
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `ActorID`
+      </td>
+
+      <td>
+        \`int64
+      </td>
+
+      <td>
+        The identifier of the operator that is associated with the device.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `StatusID`
+      </td>
+
+      <td>
+        \`int32
+      </td>
+
+      <td>
+        The status identifier of the device:
+
+        * *1*\* : Active
+        * *2*\* : Inactive
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+So, to disable the device, change the `StatusID `to 2. The response will show details about the device, confirming that the device's status has been disabled.
+
+## Validate the Updates
+
+You can also use the [Get Device by DeviceID](/reference/lynx/devices/get-device-by-deviceid)  endpoint to retrieve the device's information and validate the update's success.
+
+Another way to validate this is within Nayax Core, where you can check the details of each device and validate their current status. Follow the steps below to do so:
+
+1. In your Dashboard, go to **Administration >  Devices**.
+2. Use the search function to filter through the list of devices.
+3. Select the desired device from the list.
+4. Open the **General Information** tab and see the **Status** field.
+
+<Frame><img src="/images/docs/disabling-a-device/image1.png" /></Frame>
+
+<br />
+

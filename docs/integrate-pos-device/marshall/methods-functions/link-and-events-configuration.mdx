@@ -1,0 +1,124 @@
+---
+title: "Link and Events Configuration"
+---
+
+This page will explore the essential components and configurations needed to establish and manage the connection between your application and Nayax's payment devices using the Marshall SDK. This includes:
+
+* Handling events through the `vmc_link_events_t` interface.
+* Understanding the structure of `vpos_config_t` class.
+
+Refer to the following sections for more information.
+
+## Link Events Interface
+
+The `vmc_link_events_t`Interface defines the events related to the communication link between the vending machine controller (VMC) and Nayax devices. Implementing this interface enables your application to respond to critical events that occur during the device's operation.
+
+The following code block presents how to add the interface:
+
+<CodeGroup>
+```java Java
+public interface vmc_link_events_t
+void onReady(vmc_link.vpos_config_t config);
+void onCommError();
+```
+
+```csharp C#
+public interface vmc_link_events_t
+void onReady(vpos_config_t config);
+void onCommError();
+```
+</CodeGroup>
+
+### Interface Methods
+
+The table below describes the available methods of the interface.
+
+| Method          | Description                                                                                                                                                                                      |
+| :-------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `onReady()`     | This method is called when the link with the VPOS (Vend Point of Sale) is successfully established and the device is ready for vending operations. It provides the VPOS's configuration details. |
+| `onCommError()` | This method is invoked when a communication error occurs between the VMC and the VPOS, allowing your application to handle such errors appropriately.                                            |
+
+## VPOS Configuration Class
+
+The `vpos_config_t` class encapsulates the configuration settings for the VPOS, which are communicated between the VMC and the device.  The following code block lists all available configurations:
+
+<CodeGroup>
+```java Java
+public static class vpos_config_t 
+      public byte   prot_ver_major;
+      public byte   prot_ver_minor;
+      public byte   language;
+      public byte[] country_code;
+      public byte[] currency_code;
+      public byte   decimal_place;
+      public byte[] vpos_serial;
+      public int    machine_type;
+      public byte[] merchant_id;
+      public byte[] acquirer_terminal_id;
+      public byte[] machine_location;
+```
+```csharp C#
+public static class vpos_config_t 
+      public byte   prot_ver_major;
+      public byte   prot_ver_minor;
+      public byte   language;
+      public byte[] country_code;
+      public byte[] currency_code;
+      public byte   decimal_place;
+      public byte[] vpos_serial;
+      public int    machine_type;
+      public byte[] merchant_id;
+      public byte[] acquirer_terminal_id;
+      public byte[] machine_location;
+```
+
+```c C
+vpos_config_t
+	uint8_t 	 language;
+	uint8_t[] country_code;
+	uint8_t[] currency_code;
+	uint8_t   decimal_place;
+	uint8_t[] vpos_serial;
+	uint8_t[] merchant_id;
+	uint8_t[] acquirer_terminal_id;
+	uint8_t[] machine_location;
+```
+</CodeGroup>
+
+### Class Parameters
+
+The table below provides a detailed description of the parameters.
+
+| Parameter              | Type (inferred) | Description                                                                                                                                                            |
+| :--------------------- | :-------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `prot_ver_major`       | int             | The major version of the Marshall protocol.                                                                                                                            |
+| `prot_ver_minor`       | int             | The minor version of the Marshall protocol.                                                                                                                            |
+| `language`             | String          | The language setting of the VPOS.                                                                                                                                      |
+| `country_code`         | String          | The country code in ISO format.                                                                                                                                        |
+| `currency_code`        | String          | The currency code in ISO format.                                                                                                                                       |
+| `decimal_place`        | int             | The price is represented as 10 exponents. For example, if the decimal place is 2 and the requested price is 100, then the actual cost is 1.00 (with 2 decimal places). |
+| `vpos_serial`          | String          | The serial number of the VPOS.                                                                                                                                         |
+| `machine_type`         | String          | The type of machine connected to the VPOS.                                                                                                                             |
+| `merchant_id`          | String          | The merchant ID.                                                                                                                                                       |
+| `acquirer_terminal_id` | String          | The acquirer terminal ID.                                                                                                                                              |
+| `machine_location`     | String          | The location of the machine.                                                                                                                                           |
+
+## Callback function
+
+To register the callback events for link operations, use the following method:
+
+<CodeGroup>
+```java Java
+public vmc_link set_events(vmc_link_events_t events);
+```
+
+```csharp C#
+public vmc_link set_events(vmc_link_events_t events);
+```
+
+```c C
+void vmc_link_register_callback(vmc_vend_event_handler_cb_t cb)
+```
+</CodeGroup>
+
+By understanding and implementing these configurations and methods, you can effectively manage the communication link and event handling for Nayax payment devices, ensuring reliable and efficient vending operations.

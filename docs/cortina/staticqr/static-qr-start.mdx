@@ -1,0 +1,296 @@
+---
+title: "Start"
+---
+
+## Request
+
+The Cortina payment method would send a `Start` command to Nayax's servers in order to notify them about starting a transaction. The call would be of the following format:
+
+`https://lynx.nayax.com/payment/v2/transactions/cortina/(payment method's name)/start`
+
+The payload includes the following details:
+
+<CodeGroup>
+```json JSON-TerminalID
+{
+  "AppUserID": "19",
+	"TerminalId": "0456789456789456",
+  "TransactionId": "123456789qwertyuioasdfghjkl",
+  "SecretToken": "mrV3U3nsgGFrE3w5-wnBo_WCLPce-pZ1awRvTVTkungMIKThTVbj_fiXdfoGclhn0"
+}
+```
+
+```json JSON-UniQR
+{
+  "AppUserID": "19",
+	"UniQR": "https://qr.nayax.com/v1/rWg_p6pZh1pwjvbkGrmBLy3KgwSz3dq-y63r5FPxk2NOWw2",
+  "TransactionId": "123456789qwertyuioasdfghjkl",
+  "SecretToken": "mrV3U3nsgGFrE3w5-wnBo_WCLPce-pZ1awRvTVTkungMIKThTVbj_fiXdfoGclhn0"
+}
+```
+
+```json Product selection (relevant only for PreSelection flow)
+{
+  "AppUserID": "19",
+	"UniQR": "https://qr.nayax.com/v1/rWg_p6pZh1pwjvbkGrmBLy3KgwSz3dq-y63r5FPxk2NOWw2",
+  "TransactionId": "123456789qwertyuioasdfghjkl",
+  "SecretToken": "mrV3U3nsgGFrE3w5-wnBo_WCLPce-pZ1awRvTVTkungMIKThTVbj_fiXdfoGclhn0"
+  "Products":
+	[
+	 {
+       "Code":2
+ 		}
+	]
+}
+```
+</CodeGroup>
+
+### Request Parameters
+
+The following table describes the parameters included in the request body:
+
+<table>
+  <thead>
+    <tr>
+      <th style={{ textAlign: "left" }}>Field</th>
+      <th style={{ textAlign: "left" }}>Type</th>
+      <th style={{ textAlign: "left" }}>Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td style={{ textAlign: "left" }} colspan="3"><strong>User & Security Identifiers</strong></td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`AppUserID`</td>
+      <td style={{ textAlign: "left" }}>String(40)</td>
+
+      <td style={{ textAlign: "left" }}>
+        The consumer's **user ID on the 3rd party's app**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`TransactionId`</td>
+      <td style={{ textAlign: "left" }}>String(40)</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **unique identifier for the transaction**.
+
+        <ul>
+          <li>Will be echoed in all further requests and responses.</li>
+          <li>Minimum length of **8 characters**.</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`SecretToken`</td>
+      <td style={{ textAlign: "left" }}>String(64)</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **unique secret key** for your system, provided by Nayax in advance. **Must be kept secret.**
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Balance`</td>
+      <td style={{ textAlign: "left" }}>Double</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **balance of the user's account**. Decimal value (max 3 digits for cents).
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }} colspan="3"><strong>Machine Identification (One is Required)</strong></td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`TerminalId`</td>
+      <td style={{ textAlign: "left" }}>String(255)</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **Unique Identifier for the vending machine** (HW-Serial of the device).
+
+        <ul>
+          <li>**Conditional**: Must be sent if `UniQR` is **not** sent.</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`UniQR`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **QR code value** linked to the machine.
+
+        <ul>
+          <li>**Conditional**: Must be sent if `TerminalId` is **not** sent.</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }} colspan="3"><strong>Product Selection (`Products` Array)</strong></td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Products` Array</td>
+      <td style={{ textAlign: "left" }}>\*\*\*</td>
+
+      <td style={{ textAlign: "left" }}>
+        The array is **optional**, but if provided, some inner fields are mandatory. Only relevant for the **PreSelection flow**.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Code` inside `Products`</td>
+      <td style={{ textAlign: "left" }}>Int(16)</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **Code of the selected item**.
+
+        <ul>
+          <li>**Conditional**: Mandatory if the machine is **not** a Pulse machine.</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`PulseLineNumber` inside `Products`</td>
+      <td style={{ textAlign: "left" }}>Int(32)</td>
+
+      <td style={{ textAlign: "left" }}>
+        The pulse line number for remote vend capability.
+
+        <ul>
+          <li>**Conditional**: Mandatory if the machine is a **Pulse machine**.</li>
+          <li>Must be a **positive integer** ($\ge 0$).</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Name` inside `Products`</td>
+      <td style={{ textAlign: "left" }}>String(255)</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **Product name** as defined in the Nayax back office.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Price` inside `Products`</td>
+      <td style={{ textAlign: "left" }}>Double</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **original Product price** in the machine's currency.
+
+        <ul>
+          <li>**Conditional**: Mandatory if the machine does **not** have a price setup for the product code.</li>
+          <li>Note: The transaction amount is the final billing price after adjustments.</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`UnitOfMeasurement` inside `Products`</td>
+      <td style={{ textAlign: "left" }}>String(64)</td>
+
+      <td style={{ textAlign: "left" }}>
+        Product's **unit of measurement** (e.g., 'unit' or 'Liter').
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## Response
+
+The `Start` Response that Nayax's servers would send to the payment method.\
+The payload should look as follows:
+
+```json
+{
+  "Status": {
+    "Verdict": "Approved",
+    "StatusMessage": "Cortina V2 Stub Tester"
+  }
+}
+```
+
+### Response Parameters
+
+The following table describes the fields returned in the API response:
+
+<table>
+  <thead>
+    <tr>
+      <th style={{ textAlign: "left" }}>Field</th>
+      <th style={{ textAlign: "left" }}>Type</th>
+      <th style={{ textAlign: "left" }}>Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td style={{ textAlign: "left" }} colspan="3"><strong>Transaction Status & Error Codes</strong></td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Verdict` inside `Status`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        The constant string representing the **final status of the request**:
+
+        <ul>
+          <li>**`Approved`**</li>
+          <li>**`Declined`**</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Code` inside `Status`</td>
+      <td style={{ textAlign: "left" }}>Int(32)</td>
+
+      <td style={{ textAlign: "left" }}>
+        The **Decline Code**. **Conditional**—only present if `Verdict` is 'Declined'. Valid codes include:
+
+        <ul>
+          <li>**1:** Insufficient funds</li>
+          <li>**5:** Suspected Fraud</li>
+          <li>**6:** General system failure</li>
+          <li>**7:** Invalid amount</li>
+          <li>**8 / 998:** Format/parsing error or Validation error</li>
+          <li>**992:** Timeout exception</li>
+          <li>**997:** Missing mandatory parameters</li>
+          <li>**999:** General exception</li>
+          <li>*See full list for other status and internal errors (e.g., 40, 990, 1011).*</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`StatusMessage` inside `Status`</td>
+      <td style={{ textAlign: "left" }}>String(255)</td>
+
+      <td style={{ textAlign: "left" }}>
+        A free text field containing the **transaction status message** or additional varying data regarding the outcome.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`CustomDeclineCode` inside `Status`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+
+      <td style={{ textAlign: "left" }}>
+        Used for specifying a **custom decline code** (e.g., related to Soft Decline or Switch Interface). May reflect the acquirer's response code.
+      </td>
+    </tr>
+  </tbody>
+</table>

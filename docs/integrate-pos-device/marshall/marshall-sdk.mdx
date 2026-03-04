@@ -1,0 +1,62 @@
+---
+title: "Marshall"
+---
+
+The Marshall Protocol is a proprietary communication protocol developed by Nayax that operates over RS232. Designed as a robust communication protocol, it supports reliable transaction exchange between a machine controller and the VPOST, ONYX, and VPOSM product lines. It provides a very rich payment API that supports various payment flows, such as:
+
+* Pre-Selection
+* Pre-Authorization
+* Multi-Session
+* Multi-Vending
+
+The Marshall SDK provides a straightforward and comprehensive approach to leveraging these flows, eliminating the need to manage the details of the Marshall protocol.
+
+<Note>
+**Available Languages**
+
+For your convenience, the SDK is provided in C, C#, and JAVA.
+</Note>
+
+<br />
+
+<Warning>
+**Price field/ Decimal Place**
+
+The price field in Marshall is an integer that is 2 bytes long, meaning the highest value that can be sent to the device is 65535 (0xFFFF). The actual price the device would attempt to charge a consumer for would be a multiplication of the price sent form the peripheral with 10^(-decimal place): meaning the device would look at it's own Decimal Place configurations as set in Nayax Core (it's value depends on the country on which the device is installed in) when making the price calculations for the authorization and settlement.
+
+This means that in case of Decimal Place of 2, the highest price that the device would be able to authorize or charge the consumer would be 655.35
+</Warning>
+
+## System Overview
+
+The following diagram illustrates the transaction and communication flow of the Nayax system.
+
+<Frame><img src="/images/docs/marshall-sdk/image1.png" /></Frame>
+
+Below is a breakdown of the diagram:
+
+* At the core is the Nayax device, which manages transactions. This device communicates with Nayax payment and monitoring servers for transaction processing, which, in turn, interact with banks or payment gateways to finalize payments.
+* The blue arrows indicate the primary transaction flow between the Nayax device server and banks.
+* The host machine communicates with the VPOS over the Marshall protocol.
+
+## Guides
+
+<Note>
+**Terms of Service**
+
+Before getting started with the Marshall SDK, please read the [Terms of Service](/docs/get-started/terms-of-service) of our developer's zone.
+</Note>
+
+To start the Marshall SDK integration, we suggest you check the following documentation pages:
+
+<Columns cols={3}>
+  <Card icon="link" title="Get Started" href="/docs/integrate-pos-device/marshall/get-started/marshall-get-started" />
+
+  <Card icon="link" title="Payment Flows" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-payment-flows" />
+
+  <Card icon="link" title="Create Payments" href="/docs/integrate-pos-device/marshall/marshall-create-payments" />
+</Columns>
+
+
+
+<br />

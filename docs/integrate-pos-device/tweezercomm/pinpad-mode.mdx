@@ -1,0 +1,22 @@
+---
+title: "PinPad Mode"
+---
+
+The TweezerComm protocol allows you to use the device in pin-pad mode. In this mode, you can read the card details
+and use the EMV tags and data to create your own transaction object
+
+## Pinpad Mode Flow
+
+The diagram below illustrates the steps involved in using the TweezerComm methods to handle card presentation and PIN entry on a Nayax Device, focusing on Contactless and Swipe transactions.
+
+<Frame><img src="/images/docs/pinpad-mode/image1.png" /></Frame>
+
+Here's a breakdown of each step of the flow:
+
+1. The client application sends a `startPinpadTransaction()` Request to the Nayax Device to prepare it for a card-based transaction.
+2. The Nayax Device responds with a `startPinpadTransaction()` Response and then begins to display a prompt for the CardHolder to Insert, Show, or Swipe card.
+3. The CardHolder physically presents their card by inserting, swiping, or tapping it on the Nayax Device.
+4. If the CardHolder inserts the card (triggering the need for a PIN), the flow continues with the Client sending a `doPinpadTransaction()` Request to prompt for the PIN input.
+5. The CardHolder enters their PIN directly on the Nayax Device. The device responds to the client with the `doPinpadTransaction()` Response after the PIN is captured.
+6. Once the necessary card and PIN data are securely captured, the Client sends an `endPinpadTransaction()` Request to the Nayax Device.
+7. The Nayax Device confirms the PinPad process is complete the `endPinpadTransaction()` Response, returning the device to an idle state.

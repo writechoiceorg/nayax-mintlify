@@ -1,0 +1,267 @@
+---
+title: "Event Callbacks"
+---
+
+The SDK triggers event callbacks in the EMV Core SDK to notify the application of specific events during the transaction lifecycle. They enable developers to respond dynamically to changes in transaction status and system events. These callbacks provide real-time updates, ensuring seamless communication between the SDK and the application.
+
+These are the available callbacks.
+
+* [CardTokenReceived](#cardtokenreceived)
+* [ReaderMessageEvent](#readermessageevent)
+* [SystemStatusChanged](#systemstatuschanged)
+* [TransactionComplete](#transactioncomplete)
+
+You can read a more detailed description of each Callback event in the sections below.
+
+***
+
+## `CardTokenReceived`
+
+This event is triggered after a card token is successfully retrieved.
+
+<Tabs>
+  <Tab title="JSON">
+    Open loop example:
+
+    ```json
+    {"jsonrpc":"2.0", "method": "CardTokenReceived", "params": {"status": "OK",
+    "errorCode": 0, "errorDescription": "", "CardToken":
+    "WSAr79nKPywW3INXrWvr6IL3vgTgSJlwZBgseKDmMHM=", "PartialPan": ""}, "id": 702}
+    ```
+
+    Closed loop example:
+
+    ```json{"jsonrpc":"2.0", "method": "CardTokenReceived", "params": {"status":
+    "LocalCLP", "errorCode": 0, "errorDescription": "", "CardToken": "73D0D1C5",
+    "PartialPan": ""}, "id": 702}
+    ```
+  </Tab>
+
+  <Tab title="Android">
+    ```java Java
+    void CardTokenReceived(TokenDetails tokenDetails);
+    ```
+
+    Where:
+
+    | Parameter      | Description                 |
+    | :------------- | :-------------------------- |
+    | `tokenDetails` | String with the Card token. |
+  </Tab>
+
+  <Tab title="Linux">
+    ```c Linux
+    void LibOtiKiosk_Register_GetTokenResponse_Callback(GetTokenCb_t cb);
+    ```
+  </Tab>
+</Tabs>
+
+***
+
+## `ReaderMessageEvent`
+
+This callback provides updates on user interface messages from the card reader.
+
+<Tabs>
+  <Tab title="JSON">
+    ```json
+    {"jsonrpc": "2.0", "method": "ReaderMessageEvent", "params": {"index": 36,
+    "line1": "Authorizing", "line2": "Please wait"}}
+    ```
+
+    | Parameter | Description                                                                                                                                                                                                       |
+    | :-------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | **index** | The index of the message – Decimal value according to the Message Index table. **Note:** The actual text presented on the reader display depends on the Kiosk configuration and may differ from the table values. |
+  </Tab>
+
+  <Tab title="Android">
+    ```java Java
+    public ReaderMessage(int index, String line1, String line2)
+    ```
+
+    Parameters:
+
+    | Parameter | Description                                                                                                   |
+    | :-------- | :------------------------------------------------------------------------------------------------------------ |
+    | `index`   | The index of the message. Decimal value according to the [Reader messages Index table](/docs/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages) . |
+    | `line1`   | Text is shown on the 1st line of the reader display.                                                          |
+    | `line2`   | Text is shown on the 2nd line of the reader display.                                                          |
+
+<Warning>
+**Reader Configuration**
+
+For this feature to work, the reader must be configured to send External Display message events (Tag DF 46 with index 04).
+</Warning>
+  </Tab>
+
+  <Tab title="Linux">
+    ```c Linux
+    id on_reader_event(uint8_t msg_index, char* line1, char* line2) {
+    printf("Reader Display: %s | %s\n", line1, line2);
+    }
+    LibOtiKiosk_Register_ReaderEvent_Callback(on_reader_event);
+    ```
+  </Tab>
+</Tabs>
+
+***
+
+## `SystemStatusChanged`
+
+<Warning>
+  This method is only available for the Android operating system.
+</Warning>
+
+The `SystemStatusChanged `event indicates changes in the SDKs or connected devices' operational state.
+
+```java Java
+void onTransactionComplete(TransactionResult result);
+```
+
+`SystemStatus` is an enumeration representing the current state of the system. See the possible result values in the table below:
+
+| Result               | Description                                    |
+| -------------------- | ---------------------------------------------- |
+| `Ready`              | The SDK is ready for transactions.             |
+| `NotReady`           | The SDK is not operational.                    |
+| `PaymentTransaction` | A transaction is currently in progress.        |
+| `Update`             | A firmware or configuration update is ongoing. |
+
+***
+
+## `TransactionComplete`
+
+The `TransactionComplete ` is called by EMV Core when the transaction is complete and either succeeds or fails. Contains the details required by the POS to print a receipt and to link transactions to sale events
+
+<Tabs>
+  <Tab title="JSON">
+    Open loop request:
+
+    ```json JSON
+    {
+     "jsonrpc": "2.0",
+     "method": "TransactionComplete",
+     "params": {
+       "status": "OK",
+       "errorCode": 0,
+       "errorDescription": "",
+       "transactionId": "2046651064",
+       "authorizationDetails": {
+         "AmountAuthorized": 4.5,
+         "AmountRequested": 4.5,
+         "AuthorizationCode": "",
+         "PartialPan": "541333******4111",
+         "CardType": "MasterCard",
+         "IsTransactionApproved": true,
+         "eReceipt": "[https://s.wee.ai/tr/...eIHT](https://s.wee.ai/tr/...eIHT)",
+         "Card_ID": "",
+         "Card_Balance": 0.0,
+         "RRN": "",
+         "TransactionDbID": "2046651064",
+         "Transaction_Referance": "2046651064",
+         "CardToken": "5VXkNqtUDJBxQj9p/qTGt74jWaPHlRs7xxWa1Yu0gDI=",
+         "Additional_Parameters": {
+           "SiteId": "1",
+           "EntryMode": "4",
+           "MachineAuTime": "2025-09-03T14:12:30.006",
+           "NayaxTransactionId": "2046651064"
+         }
+       }
+     },
+     "id": 701
+    }
+    ```
+
+    Closed loop request:
+
+    ```json JSON
+       {"jsonrpc":"2.0", "method": "TransactionComplete", "params":
+    {"status": "LocalCLP", "errorCode": 0, "errorDescription": "",
+    "transactionId": "4701113B", "authorizationDetails":
+    {"CardType": "Mifare", "Card_ID": "4701113B", "Card_Balance": 0.00,
+    "CardToken": "4701113B", "Additional_Parameters": {}}}, "id": 701}
+
+    ```
+
+    Response:
+
+    ```json JSON
+    {"jsonrpc":"2.0", "result":true, "id":701}
+
+    ```
+  </Tab>
+
+  <Tab title="Android">
+    ```java Java
+    void TransactionComplete(AuthorizationDetails authorizationDetails);
+    ```
+
+<Note>
+**In case of no response**
+
+If EMV-Core doesn’t get an answer, it will re-send 2 times (for a total of 3 messages), and if it still doesn’t get an answer, it will assume the message received and will not cancel the transaction.
+</Note>
+
+    Where:
+
+    | Parameter                 | Description                                                                                                                                                  |
+    | :------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | `errorDescription`        | A short technical description of the error intended to help developers and tech support personnel identify the problem. It should not be presented to users. |
+    | `errorCode`               | A numerical code describing the error if one occurs. See the table below for details on each code.                                                           |
+    | `status`                  | Possible statuses: OK, Declined, Error, Timeout, Cancelled, LocalCLP.                                                                                        |
+    | `amountAuthorized`        | The amount approved for the transaction. The amount may be lower than the original request if it is a prepaid card.                                          |
+    | `amountRequested`         | Amount requested for transaction approval.                                                                                                                   |
+    | `authorization_Code`      | PSP Transaction Identifier issued for approved transactions (EVO, Apriva, Traderoot).                                                                        |
+    | `partialPan`              | Masked PAN with the card account number's first six and last four digits.                                                                                    |
+    | `cardType`                | Card scheme (MasterCard, Visa, Amex, etc.) or ‘Mifare’ in case of a closed loop.                                                                             |
+    | `authID`                  | Approval Code from the processor (for some processors).                                                                                                      |
+    | `receiptID`               | Digital receipt ID in the PSP System.                                                                                                                        |
+    | `transaction_Reference`   | Transaction reference. It should be used to confirm or void.                                                                                                 |
+    | `RRN`                     | Processor reference number for approved transactions.                                                                                                        |
+    | `card_ID`                 | Mifare UID in case of a Mifare card and `CLP_MIFARE_ENABLED=2`.                                                                                              |
+    | `isTransactionApproved`   | Boolean indicating the transaction approval status.                                                                                                          |
+    | `CardToken`               | A token identifying the card. For payment cards, it returns a Base64 string. For closed-loop cards (e.g., Mifare), it returns the card UID.                  |
+    | `Channel`                 | Channel used for card reading (e.g., Contactless, Magstripe, Contact).                                                                                       |
+    | `AID, TVR, IAD, TSI, ARC` | Card/Transaction parameters that may be used for the receipt.                                                                                                |
+    | `transactionTime`         | Transaction time.                                                                                                                                            |
+    | `application_Label`       | Card scheme (e.g., Visa, MasterCard, American Express).                                                                                                      |
+    | `currency`                | Currency code according to ISO 4217 code (e.g., 840 means $US).                                                                                              |
+    | `CVM`                     | Card Verification Method.                                                                                                                                    |
+    | `additional_Parameters`   | The payment processor sends optional additional parameters.                                                                                                  |
+    | `entryMode`               | *(No description provided)*                                                                                                                                  |
+    | `card_Balance`            | End-user card hash (NMI).                                                                                                                                    |
+
+    ## `TransactionComplete` Error Codes
+
+    These are the possible error codes in the response:
+
+    | Error Type           | Error Code                            |
+    | -------------------- | ------------------------------------- |
+    | JsonParse            | -32700                                |
+    | General              | -1000                                 |
+    | Terminate            | -999                                  |
+    | Timeout              | -998                                  |
+    | Payment              | -997                                  |
+    | Reader Communication | -996                                  |
+    | Positive code        | Payment Service Provider (PSP) errors |
+  </Tab>
+
+  <Tab title="Linux">
+    ```c Linux
+    void on_transaction_complete(otiKioskPaymentResponse* resp) {
+    if (resp->status == otiTransactionStatus_OK) {
+    printf("Transaction successful: %s\n", resp->transaction_reference);
+    } else {
+    printf("Transaction failed: %s\n", resp->error_message);
+    }
+    }
+    LibOtiKiosk_Register_TransactionComplete_Callback(on_transaction_complete);
+    ```
+
+    **Parameters:**
+
+    **`cb`**: A callback function of type `void (*)(otiKioskPaymentResponse* resp)`. This function is triggered automatically when a transaction reaches a final state.
+  </Tab>
+</Tabs>
+
+<br />

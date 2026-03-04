@@ -1,0 +1,114 @@
+---
+title: "Capabilities"
+---
+
+The information regarding the SDK's flags is being send withing the FirmwareInfo() function during the pairing process. Each of those bits turn on/off another function as following:
+
+<table align={["left","left"]}>
+  <thead>
+    <tr>
+      <th style={{ textAlign: "left" }}>
+        Bit
+      </th>
+
+      <th style={{ textAlign: "left" }}>
+        Description
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td style={{ textAlign: "left" }}>
+        `0-5`
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        Irrelevant for Marshall
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>
+        `6`
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        **Multi session.**
+        Peripheral works in Multi sessions mode.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>
+        `7`
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        **Peripheral will approve Contactless proprietary cards.**
+        Peripheral is connected to its server and authorizes its proprietary Contactless prepaid cards.
+        NOTE: Once this bit is set, system will support 3rd party proprietary cards ONLY!
+        i.e. there is no possibility to accept other proprietary cards.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>
+        `8`
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        **Vend request price is not final.**
+        Combined with Multi session support bit, enables a Pre-Authorization-like transaction flow.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>
+        `9`
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        **Peripheral will approve Magnetic stripe proprietary cards.**
+        Peripheral is connected to its server and authorizes its proprietary Magstripe prepaid cards.
+        NOTE: Once this bit is set, system will support 3rd party proprietary cards ONLY!
+        i.e. there is no possibility to accept other proprietary cards.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>
+        `10`
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        **Expanded Currency**
+        Support 4 Bytes Price (Range: 0 - 4,294,967,295).
+        NOTE: This capability is available for VPOS Media family ONLY!
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>
+        `11`
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        **Peripheral will approve QR code proprietary cards.**
+        Peripheral is connected to its server and authorizes its proprietary QR code cards.
+        NOTE: Once this bit is set, system will support 3rd party proprietary cards ONLY!
+        i.e. there is no possibility to accept other proprietary cards.
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }} />
+
+      <td style={{ textAlign: "left" }} />
+    </tr>
+  </tbody>
+</table>
+
+For example, if you're working with Multisession+ Price not final, the capabilities value would be: 0b0101000000=320 in decimal, and it would show the same in Nayax Core:
+
+<Frame><img src="/images/docs/capabilities/image1.png" /></Frame>

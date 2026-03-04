@@ -1,0 +1,45 @@
+---
+title: "TCP Communication"
+---
+
+## Connection & Protocol
+
+The VPOS acts as a **TCP/IP server** on **Port 5050**. Your system (POS/FCC) acts as the client and must initiate the connection. Communication is bidirectional over a persistent socket.
+
+<Note>
+**Single-Connection Rule**
+
+The terminal supports only one active connection; a new socket attempt will automatically close the previous one.
+
+The protocol uses a **Command-Response Pattern**. All client commands must include a `requestId`, which the terminal echoes back in its response to facilitate transaction tracking.
+</Note>
+
+### TCP Message Format
+
+To ensure data integrity, every message sent over the TCP socket (both commands and responses) must use a two-byte length prefix. This tells the receiver exactly how many bytes of JSON data follow in the stream.
+
+| Byte | Field | Description |
+| :--- | :--- | :--- |
+| 0-1 | Length Prefix | The length of the JSON message in bytes (excluding the prefix itself). |
+| 2-N | JSON Content | The actual message payload in UTF-8 format. |
+
+#### Encoding Example
+
+For a JSON command like `{"command":"pay","amount":5000}` (30 bytes total):
+
+**Binary Representation:**
+```text
+[0x00][0x1E]{"command":"pay","amount":5000}
+```
+
+<Note>
+**Big Endian (Network Order)**
+
+The length prefix is sent with the Most Significant Byte (MSB) first.
+
+```text
+Calculation: $(MSB \times 256) + LSB = \text{Total Bytes}$
+
+Example: A 300-byte message results in 0x01, 0x2C. 1*256+44 = 300.
+```
+</Note>

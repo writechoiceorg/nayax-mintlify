@@ -1,0 +1,264 @@
+---
+title: "Java SDK Simulator"
+---
+
+import {TerminalBlock} from "/snippets/TerminalBlock.jsx";
+
+The Nayax Marshall SDK includes a simulator to help developers test and debug their implementation with the Nayax payment system. The simulator replicates the behavior of the actual hardware and software interactions, allowing you to validate the vending process without needing physical hardware.
+
+## Simulator
+
+When the Java SDK simulator is started on a terminal, its menu will look like this:
+
+<TerminalBlock variant="ios">
+  [0]: Start Vend Session 0
+  [1]: Cancel Session
+  [2]: Close Session 0
+  [3]: Info Session
+  [4]: Check balance
+  [5]: query opened sessions
+  [6]: query reader state
+  [7]: cash sale
+  [8]: alert
+  [9]: select brand
+  [10]: transfer custom transaction_id
+  [11]: display message
+  [12]: open socket
+  [13]: close socket
+  [14]: UI control
+  [15]: marshall parser
+  [q]: quit
+</TerminalBlock>
+
+<TerminalBlock>
+  [0]: Start Vend Session 0
+  [1]: Cancel Session
+  [2]: Close Session 0
+  [3]: query opened sessions
+  [4]: query reader state
+  [5]: cash sale
+  [6]: alert
+  [7]: display message
+  [8]: open socket
+  [9]: close socket
+  [10]: UI control
+  [q]: quit
+</TerminalBlock>
+
+The following table describes each option:
+
+<table align={["left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        Command
+      </th>
+
+      <th>
+        Description
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        Start Vend Session 0
+      </td>
+
+      <td>
+        Starts a session (a transaction) with product code 0.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        Cancel Session
+      </td>
+
+      <td>
+        Cancels the transaction from the peripheral's end. Can be sent up until the consumer's card has been approved.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        Close Session 0
+      </td>
+
+      <td>
+        Only relevant in multisession. Closes the session (settles it) at the end of a transaction.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        Info Session
+      </td>
+
+      <td>
+        Retrieves card details (BIN, PAN-HASH, 4 digits) without charging the consumer or vending a product
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        Check balance
+      </td>
+
+      <td>
+        Relevant only for the Japanese market (TMN)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        Query opened sessions
+      </td>
+
+      <td>
+        Gives information about which sessions are currently open. *This option is relevant from 4.0.0.22 and above*.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        Query reader state
+      </td>
+
+      <td>
+        Gives information about whether the reader is `enabled (1)/ disabled (0)`. *This option is Relevant from 4.0.0.22 and above*.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        Cash sale
+      </td>
+
+      <td>
+        Simulates cash sale.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        Alert
+      </td>
+
+      <td>
+        Sends an alert to the DCS. It can be seen in Last Alerts.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        Select brand
+      </td>
+
+      <td>
+        Relevant only for the Japanese market and firmware version. When selected prior to starting a transaction and then selecting a product, the desired brand selection would take place (without going into the brand selection screen).
+        In order for the peripheral to know which brands are set on the device's end, the devices sends the brands information during the pairing process
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        transfer custom transaction\_id
+      </td>
+
+      <td>
+        Allows the customer to send a custom transaction ID. Needs to be sent during an ongoing transaction process (before or after the authorization)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        Display message
+      </td>
+
+      <td>
+        Currently, this option is not available.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        Open socket
+      </td>
+
+      <td>
+        For the peripheral, use Nayax's modem for its own needs.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        Close socket
+      </td>
+
+      <td>
+        Closes the socket which was opened for the peripheral.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        UI control
+      </td>
+
+      <td>
+        Tests the Display Control feature. Needs configurations in Nayax Core.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        Marshall parser
+      </td>
+
+      <td>
+        Irrelevant, an internal testing tool
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        Quit
+      </td>
+
+      <td>
+        Quits the simulator program.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## Transaction Flow Examples
+
+Below are examples of the flow for each transaction type:
+
+1. **Regular Transaction** (Single Session):
+   1. Start a session: with `[0]: Start session`.
+   2. Present card, wait for authorization and "Thank you" screen.
+2. **Multi-Session Transaction**:
+   1. Start a session with `[0]: Start session 0`.
+   2. Present card, wait for authorization and "Thank you" screen.
+   3. Close the relevant session- in this case, use `[2]: Close Session 0`.
+
+## See Also
+
+<Columns cols={2}>
+<Card
+  icon="link"
+  title="C# SDK Simulator"
+  href="/docs/integrate-pos-device/marshall/simulators-sample-codes/csharp-sdk-simulator"
+  arrow
+/>
+<Card
+  icon="link"
+  title="C SDK Simulator"
+  href="/docs/integrate-pos-device/marshall/simulators-sample-codes/c-sdk-simulator"
+  arrow
+/>
+</Columns>

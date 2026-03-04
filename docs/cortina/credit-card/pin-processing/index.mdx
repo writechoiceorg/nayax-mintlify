@@ -1,0 +1,38 @@
+---
+title: "PIN Processing"
+---
+
+A PIN (Personal Identification Number) is a numerical code used to authorize and verify the cardholder in transactions done with debit and credit cards. To protect the PIN during transmission, it must be encrypted using a secure PIN encryption key, which is managed in accordance with PCI PIN Security standards.
+
+When a Cardholder enters their PIN at a terminal, the PIN is encrypted by the Nayax terminal using a DUKPT algorithm and sent to the Nayax Engine as a PIN block, which is the encrypted PIN string.
+
+Nayax engine sends the PIN Block to MyHSM (Nayax HSM provider) for decryption, then re-encrypts it with a key shared with the Payment Gateway (the integrator).
+
+<Note>
+**Master/Session Key**
+
+For Cortina, Nayax supports the Master/Session Key management method only.
+
+* **Master Key** is the key exchange key, also known as the Zone Master Key (ZMK).
+* **Session Key** refers to the PIN encryption key also known as the Zone PIN Key (ZPK).
+</Note>
+
+See the diagram below:
+
+<Frame><img src="/images/docs/pin-processing/image1.png" /></Frame>
+
+## Supported PIN Exchange Methods
+
+Nayax supports two methods for PIN key exchange and encryption:
+
+* **Manual Key Exchange (Static Key)**: In this approach, the PIN is encrypted using a long-term cryptographic key known as a Zone PIN Key (ZPK). The ZPK is securely exchanged during the setup phase and is manually loaded into the MyHSM system in accordance with PCI requirements.
+* **Dynamic Key Exchange (Master/Session)**: In this method, the PIN is encrypted using a temporary session key (ZPK), which is dynamically generated and shared via an API by the Payment Gateway. To ensure secure transmission, the session ZPK is encrypted with a static *Zone Master Key (ZMK)*. Like the static ZPK, the ZMK is securely exchanged and preloaded into MyHSM during the initial setup. The PIN exchange process will be initiated by Nayax using Cortina `Renew Key` endpoint, the interval in which the key is exchanged, is configurable and will be discussed during the setup stage of the integration.
+
+<Note>
+**PIN Encryption Algorithm**
+
+* Nayax supports TDEA, 2TDEA, 3TDEA, AES-128 and AES-256
+* Nayax supports ISO 0-4 or ANSI PIN Block format.
+
+Please contact your Nayax Integrator for more details.
+</Note>

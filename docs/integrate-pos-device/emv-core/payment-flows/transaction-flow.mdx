@@ -1,0 +1,32 @@
+---
+title: "Payment Flows"
+mode: wide
+---
+
+The SDK supports multiple transaction flows to accommodate diverse use cases, from single-step payments to multi-step preauthorization and confirmation processes. This flexibility allows developers to choose the flow best suits their application's requirements while maintaining security and reliability.
+
+The available transaction flows are:
+
+<Columns cols={3}>
+<Card
+  icon="link"
+  title="Payment with Pre-Authorization"
+  href="/docs/integrate-pos-device/emv-core/payment-flows/payment-with-authorization"
+>
+  A two-step process where a transaction amount is preauthorized before being confirmed for settlement. Ideal for scenarios where the exact final amount is unknown (such as EV charging).
+</Card>
+<Card
+  icon="link"
+  title="Closed Loop Transaction"
+  href="/docs/integrate-pos-device/emv-core/payment-flows/closed-loop-transaction"
+>
+  Closed-loop transactions refer to operations using MIFARE cards. A MIFARE card UID is used to process the operations in their application server, which does not involve bank transactions.
+</Card>
+<Card
+  icon="link"
+  title="Single Step Payment"
+  href="/docs/integrate-pos-device/emv-core/payment-flows/single-step-payment"
+>
+  The single-step payment flow allows for immediate authorization and settlement in one operation, streamlining the payment process for use cases that require fast, straightforward transactions.
+</Card>
+</Columns>

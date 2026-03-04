@@ -1,0 +1,200 @@
+---
+title: "Approve or Decline Refunds"
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+When a refund is successfully requested, the transaction will remain in the **Pending** status until approved or declined. You can see this in Nayax core by going to **Reports > Online Reports > Dynamic Transactions Monitor**. Follow the steps below:
+
+1. Use the search feature to find the transaction. Then, choose **Refund Requested** to filter by **Status**.
+2. Right-click the transaction in the list.
+3. Click **Approve/Decline Refund**.
+
+   <Frame><img src="/images/docs/approve-or-decline-a-refund/image1.png" /></Frame>
+4. A pop-up window will appear. Click **Decline Refund** or **Approve Refund**.
+
+   <Frame><img src="/images/docs/approve-or-decline-a-refund/image2.png" /></Frame>
+
+## Lynx API
+
+This process can be done through the Lynx API using the endpoints below.
+
+<Columns cols={2}>
+<EndpointCard
+  title="Approve a Payment Refund"
+  href="/reference/approve-payment-refund"
+  method="post"
+/>
+
+<EndpointCard
+  title="Decline a Payment Refund"
+  href="/reference/decline-payment-refund"
+  method="post"
+/>
+</Columns>
+
+<br />
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens and how to properly use them to authenticate your API requests.
+</Warning>
+
+### Approve request
+
+Use the Approve Payment Refund endpoint to approve the refund. The code block below shows the request object and its body parameters:
+
+```sh Request
+curl --request POST \
+     --url https://qa-lynx.nayax.com/operational/v1/payment/refund-approve \
+     --header 'accept: application/json' \
+     --header 'content-type: application/json' \
+     --data '
+{
+  "IsRefundedExternally": true,
+  "RefundDocumentUrl": "string",
+  "TransactionId": 0,
+  "SiteId": 0,
+  "MachineAuTime": "2024-10-10T16:30:37.179Z"
+}
+'
+```
+
+See the table below for more details on each parameter:
+
+<table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        **Name**
+      </th>
+
+      <th>
+        **Type**
+      </th>
+
+      <th>
+        **Description**
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        **IsRefundedExternally**
+      </td>
+
+      <td>
+        `boolean`
+      </td>
+
+      <td>
+        It is used when the customer contacts the billing provider for a refund. In that case, this flag is set to true, and the file received by the billing provider is added to the `RefundedDocumentUrl`.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        **RefundDocumentUrl**
+      </td>
+
+      <td>
+        `string`
+      </td>
+
+      <td>
+        If `IsRefundedExternally` is set to `true`, the URL for the refund document from the billing provider needs to be added here.
+        See
+
+        [Upload Refund Documentation](/docs/upload-refund-documentation-1)
+
+        for more details on uploading the document and getting the URL.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        **TransactionId**
+      </td>
+
+      <td>
+        `int64`
+      </td>
+
+      <td>
+        The unique identifier of the transaction for which the refund is being approved.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        **SiteId**
+      </td>
+
+      <td>
+        `int32`
+      </td>
+
+      <td>
+        The unique identifier of the site where the transaction occurred.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        **MachineAuTime**
+      </td>
+
+      <td>
+        `date-time`
+      </td>
+
+      <td>
+        The machine's authorization time is associated with the transaction
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<Warning>
+  The `TransactionId`, `SiteId `and `MachineAuTime` need to be the same as sent in the refund request.
+</Warning>
+
+### Decline Request
+
+To decline a refund, use the [Decline a Payment Refund]()  endpoint. The code block below displays the request object and its body parameters.
+
+```sh Request
+curl --request POST \
+     --url https://qa-lynx.nayax.com/operational/v1/payment/refund-decline \
+     --header 'accept: application/json' \
+     --header 'content-type: application/json' \
+     --data '
+{
+  "DeclineReason": "string",
+  "TransactionId": 0,
+  "SiteId": 0,
+  "MachineAuTime": "2024-10-10T16:30:37.179Z"
+}
+'
+```
+
+See the table below for more details on each parameter:
+
+| **Name**          | **Type**    | **Description**                                                                  |
+| ----------------- | ----------- | -------------------------------------------------------------------------------- |
+| **DeclineReason** | `string`    | The reason for declining the refund request.                                     |
+| **TransactionId** | `int64`     | The unique identifier of the transaction for which the refund is being declined. |
+| **SiteId**        | `int32`     | The unique identifier of the site where the transaction occurred.                |
+| **MachineAuTime** | `date-time` | The machine's authorization time is associated with the transaction.             |
+
+<Warning>
+  The `TransactionId`, `SiteId `and `MachineAuTime` need to be the same as the one sent in the refund request.
+</Warning>
+
+## Request Status
+
+Once the request is approved or denied, the consumer will receive an email at the address provided in the refund request. The request status will also be updated. You can see this in Nayax core by going to **Reports > Online Reports > Dynamic Transactions Monitor**.
+
