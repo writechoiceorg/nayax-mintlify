@@ -3,9 +3,9 @@
   "theme": "mint",
   "name": "Nayax Developer Portal",
   "colors": {
-    "primary": "#FCC705",
+    "primary": "#6352E0",
     "light": "#FCC705",
-    "dark": "#FCC705"
+    "dark": "#6352E0"
   },
   "logo": {
     "light": "/images/home/logo_light.svg",
@@ -15,90 +15,17 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Get Started",
-        "icon": "play",
-        "pages": [
-          "docs/get-started/nayax-different-integrations",
-          "docs/get-started/integration-process",
-          "docs/get-started/terms-of-service"
-        ]
-      },
-      {
         "tab": "Integrate POS Device",
-        "icon": "box-open",
+        "icon": "terminal",
         "menu": [
-          {
-            "item": "Marshall Pro (Fuel)",
-            "icon": "gas-pump",
-            "groups": [
-              {
-                "group": "Getting Started",
-                "pages": [
-                  "docs/integrate-pos-device/marshall-pro/getting-started/index",
-                  "docs/integrate-pos-device/marshall-pro/getting-started/forecourt-architecture",
-                  "docs/integrate-pos-device/marshall-pro/getting-started/best-practices",
-                  "docs/integrate-pos-device/marshall-pro/getting-started/security-digital-signatures"
-                ]
-              },
-              {
-                "group": "Messaging Protocol",
-                "pages": [
-                  "docs/integrate-pos-device/marshall-pro/messaging-protocol/tcp-communication",
-                  "docs/integrate-pos-device/marshall-pro/messaging-protocol/request-response-format",
-                  "docs/integrate-pos-device/marshall-pro/messaging-protocol/error-codes",
-                  "docs/integrate-pos-device/marshall-pro/messaging-protocol/example-fuel-station-flow"
-                ]
-              },
-              {
-                "group": "Methods",
-                "pages": [
-                  "docs/integrate-pos-device/marshall-pro/methods/api",
-                  {
-                    "group": "General",
-                    "pages": [
-                      "docs/integrate-pos-device/marshall-pro/methods/general/info",
-                      "docs/integrate-pos-device/marshall-pro/methods/general/status"
-                    ]
-                  },
-                  {
-                    "group": "Payment",
-                    "pages": [
-                      "docs/integrate-pos-device/marshall-pro/methods/payment/card-detect",
-                      "docs/integrate-pos-device/marshall-pro/methods/payment/stop-card-detect",
-                      "docs/integrate-pos-device/marshall-pro/methods/payment/authorize",
-                      "docs/integrate-pos-device/marshall-pro/methods/payment/detect-and-auth",
-                      "docs/integrate-pos-device/marshall-pro/methods/payment/settle",
-                      "docs/integrate-pos-device/marshall-pro/methods/payment/pay",
-                      "docs/integrate-pos-device/marshall-pro/methods/payment/query"
-                    ]
-                  },
-                  {
-                    "group": "Display",
-                    "pages": [
-                      "docs/integrate-pos-device/marshall-pro/methods/display/display-screen",
-                      "docs/integrate-pos-device/marshall-pro/methods/display/display-input",
-                      "docs/integrate-pos-device/marshall-pro/methods/display/display-select",
-                      "docs/integrate-pos-device/marshall-pro/methods/display/display-confirm"
-                    ]
-                  },
-                  {
-                    "group": "Utility",
-                    "pages": [
-                      "docs/integrate-pos-device/marshall-pro/methods/utility/print"
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
           {
             "item": "Marshall",
             "icon": "microchip",
-            "description": "Connect any unattended machine via physical connectivity",
             "groups": [
               {
                 "group": "Guides",
                 "pages": [
+                  "docs/integrate-pos-device/marshall/get-started/marshall-integration-process",
                   "docs/integrate-pos-device/marshall/marshall-sdk",
                   {
                     "group": "Payment Flows",
@@ -184,13 +111,78 @@
             ]
           },
           {
+            "item": "Marshall Pro (Fuel)",
+            "icon": "gas-pump",
+            "groups": [
+              {
+                "group": "Getting Started",
+                "pages": [
+                  "docs/integrate-pos-device/marshall-pro/getting-started/marshall-pro-integration-process",
+                  "docs/integrate-pos-device/marshall-pro/getting-started/index",
+                  "docs/integrate-pos-device/marshall-pro/getting-started/forecourt-architecture",
+                  "docs/integrate-pos-device/marshall-pro/getting-started/best-practices",
+                  "docs/integrate-pos-device/marshall-pro/getting-started/security-digital-signatures"
+                ]
+              },
+              {
+                "group": "Messaging Protocol",
+                "pages": [
+                  "docs/integrate-pos-device/marshall-pro/messaging-protocol/tcp-communication",
+                  "docs/integrate-pos-device/marshall-pro/messaging-protocol/request-response-format",
+                  "docs/integrate-pos-device/marshall-pro/messaging-protocol/error-codes",
+                  "docs/integrate-pos-device/marshall-pro/messaging-protocol/example-fuel-station-flow"
+                ]
+              },
+              {
+                "group": "Methods",
+                "pages": [
+                  "docs/integrate-pos-device/marshall-pro/methods/api",
+                  {
+                    "group": "General",
+                    "pages": [
+                      "docs/integrate-pos-device/marshall-pro/methods/general/info",
+                      "docs/integrate-pos-device/marshall-pro/methods/general/status"
+                    ]
+                  },
+                  {
+                    "group": "Payment",
+                    "pages": [
+                      "docs/integrate-pos-device/marshall-pro/methods/payment/card-detect",
+                      "docs/integrate-pos-device/marshall-pro/methods/payment/stop-card-detect",
+                      "docs/integrate-pos-device/marshall-pro/methods/payment/authorize",
+                      "docs/integrate-pos-device/marshall-pro/methods/payment/detect-and-auth",
+                      "docs/integrate-pos-device/marshall-pro/methods/payment/settle",
+                      "docs/integrate-pos-device/marshall-pro/methods/payment/pay",
+                      "docs/integrate-pos-device/marshall-pro/methods/payment/query"
+                    ]
+                  },
+                  {
+                    "group": "Display",
+                    "pages": [
+                      "docs/integrate-pos-device/marshall-pro/methods/display/display-screen",
+                      "docs/integrate-pos-device/marshall-pro/methods/display/display-input",
+                      "docs/integrate-pos-device/marshall-pro/methods/display/display-select",
+                      "docs/integrate-pos-device/marshall-pro/methods/display/display-confirm"
+                    ]
+                  },
+                  {
+                    "group": "Utility",
+                    "pages": [
+                      "docs/integrate-pos-device/marshall-pro/methods/utility/print"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "item": "TweezerComm",
             "icon": "mobile",
-            "description": "Integrate Nayax's attended payment device with your Point of Sale.",
             "groups": [
               {
                 "group": "Guides",
                 "pages": [
+                  "docs/integrate-pos-device/tweezercomm/tweezercomm-integration-process",
                   "docs/integrate-pos-device/tweezercomm/overview-tweezer",
                   "docs/integrate-pos-device/tweezercomm/tweezercomm-get-started",
                   {
@@ -296,11 +288,11 @@
           {
             "item": "EMV Core",
             "icon": "credit-card",
-            "description": "Connect with embedded Nayax payment devices (Uno line)",
             "groups": [
               {
                 "group": "Guides",
                 "pages": [
+                  "docs/integrate-pos-device/emv-core/get-started/emv-core-integration-process",
                   "docs/integrate-pos-device/emv-core/overview",
                   {
                     "group": "Payment Flows",
@@ -347,11 +339,11 @@
           {
             "item": "Spark",
             "icon": "bolt",
-            "description": "Remotely integrate your platform with Nayax devices.",
             "groups": [
               {
                 "group": "Guides",
                 "pages": [
+                  "docs/integrate-pos-device/spark/spark-integration-process",
                   "docs/integrate-pos-device/spark/spark",
                   "docs/integrate-pos-device/spark/spark-integration",
                   "docs/integrate-pos-device/spark/spark-network-requirement",
@@ -405,16 +397,10 @@
               },
               {
                 "group": "API Reference",
-                "pages": [
-                  "reference/integrate-pos-device/spark/overview",
-                  {
-                    "group": "Endpoints",
-                    "openapi": {
-                      "source": "/openapi/spark.yaml",
-                      "directory": "reference/spark"
-                    }
-                  }
-                ]
+                "openapi": {
+                  "source": "/openapi/spark.yaml",
+                  "directory": "reference/spark"
+                }
               }
             ]
           }
@@ -422,7 +408,7 @@
       },
       {
         "tab": "Manage Data & Operations",
-        "icon": "box-open",
+        "icon": "gears",
         "menu": [
           {
             "item": "Amazon SQS",
@@ -465,7 +451,7 @@
                   "docs/manage-data-operations/lynx-api/lynx-overview",
                   "docs/manage-data-operations/lynx-api/security",
                   {
-                    "group": "Cards",
+                    "group": "Card Types",
                     "pages": [
                       "docs/manage-data-operations/lynx-api/cards/create-cards",
                       "docs/manage-data-operations/lynx-api/cards/retrieve-card-data",
@@ -541,7 +527,6 @@
               {
                 "group": "API Reference",
                 "pages": [
-                  "reference/manage-data-operations/lynx-api/overview",
                   "reference/manage-data-operations/lynx-api/cards",
                   "reference/manage-data-operations/lynx-api/actor-types",
                   "reference/manage-data-operations/lynx-api/machine-types",
@@ -561,11 +546,12 @@
       },
       {
         "tab": "Cortina",
-        "icon": "box-open",
+        "icon": "shield-check",
         "groups": [
           {
             "group": "Guides",
             "pages": [
+              "docs/cortina/cortina-integration-process",
               "docs/cortina/overview-cortina",
               "docs/cortina/cortina-integration",
               "docs/cortina/network-requirements",
@@ -654,7 +640,6 @@
           {
             "group": "API Reference",
             "pages": [
-              "reference/cortina/overview",
               {
                 "group": "Endpoints",
                 "openapi": {
@@ -668,11 +653,12 @@
       },
       {
         "tab": "eCom SDK",
-        "icon": "box-open",
+        "icon": "browser",
         "pages": [
           {
             "group": "Guides",
             "pages": [
+              "docs/ecom-sdk/get-started/ecom-integration-process",
               "docs/ecom-sdk/ecom-sdk-overview",
               {
                 "group": "Security & Authentication",
@@ -747,7 +733,6 @@
           {
             "group": "API Reference",
             "pages": [
-              "reference/ecom-sdk/overview",
               {
                 "group": "Endpoints",
                 "openapi": {
@@ -756,19 +741,6 @@
                 }
               }
             ]
-          }
-        ]
-      },
-      {
-        "tab": "E-Receipt",
-        "icon": "box-open",
-        "pages": [
-          {
-            "group": "API Reference",
-            "openapi": {
-              "source": "/openapi/e-receipt.yaml",
-              "directory": "reference/e-receipt"
-            }
           }
         ]
       }
@@ -2039,5 +2011,38 @@
       "source": "/reference/ecom-api-overview",
       "destination": "/reference/ecom-sdk/overview"
     }
-  ]
+  ],
+  "footer": {
+    "links": [
+      {
+        "header": "Legal & Policies",
+        "items": [
+          {
+            "label": "Privacy Policy",
+            "href": "https://www.nayax.com/legal/nayax-general-privacy-policy/"
+          },
+          {
+            "label": "Cookie Policy",
+            "href": "https://www.nayax.com/cookie-policy/"
+          },
+          {
+            "label": "Terms of Use",
+            "href": "https://www.nayax.com/terms-conditions/"
+          },
+          {
+            "label": "Quality Policy",
+            "href": "/legal/quality-policy"
+          },
+          {
+            "label": "Code of Ethics",
+            "href": "https://www.nayax.com/code-of-ethics/"
+          },
+          {
+            "label": "Whistleblowing",
+            "href": "https://www.nayax.com/whistleblowing-reporting-form/"
+          }
+        ]
+      }
+    ]
+  }
 }
