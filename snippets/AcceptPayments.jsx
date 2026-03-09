@@ -107,32 +107,32 @@ export const AcceptPayments = () => {
   );
 
   const cards = [
+        {
+      icon: <ExternalPrepaidIcon />,
+      title: "External Prepaid Card",
+      description:
+        "Accept your prepaid/closed-loop cards on Nayax payment devices with simple server-to-server integration.",
+      link: "/docs/cortina/prepaid-card/copy-of-prepaid-card-authorization",
+    },
+        {
+      icon: <StaticQRIcon />,
+      title: "Static QR",
+      description:
+        "Accept your digital wallet/loyalty app via static QR on Nayax payment devices via simple server-to-server integration.",
+      link: "/docs/cortina/staticqr/static-qr-start",
+    },
     {
       icon: <DynamicQRIcon />,
       title: "Dynamic QR",
       description:
         "Accept your digital wallet/loyalty app via secure dynamic QR scan on Nayax payment devices via simple server-to-server integration.",
-      link: "#dynamic-qr",
-    },
-    {
-      icon: <StaticQRIcon />,
-      title: "Static QR",
-      description:
-        "Accept your digital wallet/loyalty app via static QR on Nayax payment devices via simple server-to-server integration.",
-      link: "#static-qr",
+      link: "/docs/cortina/dynamicqr/dynamicqr-decline-reasons",
     },
     {
       icon: <EMVIntegrationIcon />,
       title: "EMV Integration",
       description: "Accept EMV card payments via your acquirer or payment gateway.",
-      link: "#emv-integration",
-    },
-    {
-      icon: <ExternalPrepaidIcon />,
-      title: "External Prepaid Card",
-      description:
-        "Accept your prepaid/closed-loop cards on Nayax payment devices with simple server-to-server integration.",
-      link: "#external-prepaid",
+      link: "/docs/cortina/credit-card/credit-card-decline-reasons",
     },
   ];
 

@@ -75,7 +75,7 @@ export const ManageData = () => {
       arrow: "Amazon SQS",
       description:
         "Retrieve real-time information on your sales and operations, including transactions, machine telemetry, and alerts via Amazon SQS services.",
-      link: "#amazon-sqs",
+      link: "/docs/manage-data-operations/amazon-sqs/overview",
     },
     {
       icon: <OperationsAPIIcon />,
@@ -83,7 +83,7 @@ export const ManageData = () => {
       arrow: "Lynx",
       description:
         "Connect to the Nayax Core management platform and manage your machines, devices, inventory, and prepaid cards from your own environment.",
-      link: "#lynx",
+      link: "docs/manage-data-operations/lynx-api/lynx-overview",
     },
   ];
 

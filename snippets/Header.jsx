@@ -15,12 +15,14 @@ export const Header = () => {
           <br />
           <p className="text-base md:text-lg text-gray-600 dark:text-gray-300">
             For more information,{" "}
-            <a
-              href="#contact"
-              className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline transition-colors"
-            >
-              contact us
-            </a>
+<a
+  href="https://www.nayax.com/contact/" 
+  target="_blank" 
+  rel="noopener noreferrer" 
+  className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 underline transition-colors"
+>
+  contact us
+</a>
           </p>
         </div>
 

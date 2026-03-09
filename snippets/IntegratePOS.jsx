@@ -206,21 +206,30 @@ export const IntegratePOS = () => {
   );
   const cards = [
     {
-      icon: <AttendedDeviceIcon />,
-      title: "Attended Retail Devices",
-      arrow: "TweezerComm",
-      description:
-        "Integrate Nayax's attended payment device (Nova line) with your Point of Sale, utilizing physical connectivity.",
-      link: "#tweezercomm",
-      comingSoon: false,
-    },
-    {
       icon: <UnattendedDeviceIcon />,
       title: "Unattended Devices",
       arrow: "Marshall",
       description:
         "Connect any unattended machine with Nayax's payment devices (VPOS Touch, Onyx), utilizing physical connectivity.",
-      link: "/docs/marshall-sdk",
+      link: "/docs/integrate-pos-device/marshall/get-started/marshall-integration-process",
+      comingSoon: false,
+    },
+        {
+      icon: <UnattendedDeviceIcon/>,
+      title: "Fuel & Forecourt Solutions",
+      arrow: "Marshall Pro (Fuel)",
+      description:
+        "A specialized integration for fuel dispensers and forecourt controllers, featuring a certified step-by-step certification process.",
+      link: "/docs/integrate-pos-device/marshall-pro/getting-started/index",
+      comingSoon: false,
+    },
+        {
+      icon: <AttendedDeviceIcon />,
+      title: "Attended Retail Devices",
+      arrow: "TweezerComm",
+      description:
+        "Integrate Nayax's attended payment device (Nova line) with your Point of Sale, utilizing physical connectivity.",
+      link: "/docs/integrate-pos-device/tweezercomm/overview-tweezer",
       comingSoon: false,
     },
     {
@@ -228,7 +237,7 @@ export const IntegratePOS = () => {
       title: "Embedded Devices",
       arrow: "EMV Core",
       description: "Connect any unattended machine with embedded Nayax payment devices (Uno line).",
-      link: "/docs/overview-2",
+      link: "/docs/integrate-pos-device/emv-core/get-started/emv-core-integration-process",
       comingSoon: false,
     },
     {
@@ -237,7 +246,7 @@ export const IntegratePOS = () => {
       arrow: "Spark",
       description:
         "Remotely integrate your platform with Nayax devices (server-to-server integration). Ideal for POS and platform integrations.",
-      link: "/docs/spark",
+      link: "/docs/integrate-pos-device/spark/spark-integration-process",
       comingSoon: false,
     },
     {
@@ -250,7 +259,6 @@ export const IntegratePOS = () => {
       comingSoon: true,
     },
   ];
-
   return (
     <section className="py-16 px-6 md:px-12 lg:px-20 bg-white dark:bg-[#1B1B1B]">
       <div className="max-w-[1400px] mx-auto">
