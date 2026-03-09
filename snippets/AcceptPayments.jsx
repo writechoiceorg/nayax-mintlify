@@ -147,7 +147,7 @@ export const AcceptPayments = () => {
           If your organization has its own customer app, loyalty card, or closed-loop payment method, you can easily
           accept it on any Nayax POS with a quick Cortina integration.{" "}
           <a
-            href="#cortina"
+            href="/docs/cortina/cortina-integration-process"
             className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
           >
             Learn More →
