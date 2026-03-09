@@ -1,5 +1,7 @@
 .card_content {
-  font-feature-settings: "clig" off, "liga" off;
+  font-feature-settings:
+    "clig" off,
+    "liga" off;
   font-family: Inter;
   font-style: normal;
   line-height: 18px;
@@ -27,30 +29,73 @@
 
 .card_content span.get {
   background: #0e9b71;
-  text-shadow: 1px 1px 0 #0d8d67, 0 1px 0 #0d8d67, 1px 0 0 #0d8d67;
+  text-shadow:
+    1px 1px 0 #0d8d67,
+    0 1px 0 #0d8d67,
+    1px 0 0 #0d8d67;
 }
 
 .card_content span.post {
   background: #0171c2;
-  text-shadow: 1px 1px 0 #0168b3, 0 1px 0 #0168b3, 1px 0 0 #0168b3;
+  text-shadow:
+    1px 1px 0 #0168b3,
+    0 1px 0 #0168b3,
+    1px 0 0 #0168b3;
 }
 
 .card_content span.patch {
   background: #df7d03;
-  text-shadow: 1px 1px 0 #d07503, 0 1px 0 #d07503, 1px 0 0 #d07503;
+  text-shadow:
+    1px 1px 0 #d07503,
+    0 1px 0 #d07503,
+    1px 0 0 #d07503;
 }
 
 .card_content span.put {
   background: #674ead;
-  text-shadow: 1px 1px 0 #604aa2, 0 1px 0 #604aa2, 1px 0 0 #604aa2;
+  text-shadow:
+    1px 1px 0 #604aa2,
+    0 1px 0 #604aa2,
+    1px 0 0 #604aa2;
 }
+
+/* fix footer link truncation */
+footer a.md\:truncate {
+  max-width: none;
+  text-overflow: unset;
+  white-space: nowrap;
+  overflow: visible;
+}
+
+div:has(> a.md\:truncate) {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+/* end */
+
+/* move last 2 navbar tabs to the right side */
+.nav-tabs {
+  width: 100%;
+}
+
+.nav-tabs a:nth-last-child(2) {
+  margin-left: auto;
+}
+/* end */
 
 pre.bash {
   background-color: black;
   color: white;
   font-size: medium;
-  font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono,
-    Courier New, monospace;
+  font-family:
+    Consolas,
+    Monaco,
+    Lucida Console,
+    Liberation Mono,
+    DejaVu Sans Mono,
+    Bitstream Vera Sans Mono,
+    Courier New,
+    monospace;
   width: 100%;
   display: inline-block;
 }
