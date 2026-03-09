@@ -459,11 +459,12 @@
                   "docs/manage-data-operations/lynx-api/lynx-overview",
                   "docs/manage-data-operations/lynx-api/security",
                   {
-                    "group": "Card Types",
+                    "group": "Cards",
                     "pages": [
                       "docs/manage-data-operations/lynx-api/cards/create-cards",
                       "docs/manage-data-operations/lynx-api/cards/retrieve-card-data",
-                      "docs/manage-data-operations/lynx-api/cards/add-credit-to-card"
+                      "docs/manage-data-operations/lynx-api/cards/add-credit-to-card",
+                      "reference/manage-data-operations/lynx-api/cards"
                     ],
                     "root": "docs/manage-data-operations/lynx-api/cards/managing-cards"
                   },
@@ -482,7 +483,8 @@
                       "docs/manage-data-operations/lynx-api/operator/nayax-hierarchy",
                       "docs/manage-data-operations/lynx-api/operator/retrieve-hierarchy",
                       "docs/manage-data-operations/lynx-api/operator/create-operator",
-                      "docs/manage-data-operations/lynx-api/operator/operator-actions"
+                      "docs/manage-data-operations/lynx-api/operator/operator-actions",
+                      "reference/manage-data-operations/lynx-api/actor-types"
                     ],
                     "root": "docs/manage-data-operations/lynx-api/operator/index"
                   },
@@ -495,7 +497,8 @@
                       "docs/manage-data-operations/lynx-api/machines/get-monyx-id",
                       "docs/manage-data-operations/lynx-api/machines/updating-a-machines-attribute",
                       "docs/manage-data-operations/lynx-api/machines/getting-a-machines-id-by-the-devices-serial-number",
-                      "docs/manage-data-operations/lynx-api/machines/getting-a-machines-last-sales-ereceipt-information"
+                      "docs/manage-data-operations/lynx-api/machines/getting-a-machines-last-sales-ereceipt-information",
+                      "reference/manage-data-operations/lynx-api/machine-types"
                     ],
                     "root": "docs/manage-data-operations/lynx-api/machines/machines-devices"
                   },
@@ -520,6 +523,7 @@
                     ],
                     "root": "docs/manage-data-operations/lynx-api/inventory-management/index"
                   },
+                  "reference/manage-data-operations/lynx-api/languages",
                   "docs/manage-data-operations/lynx-api/product-faqs",
                   {
                     "group": "Reports",
@@ -535,10 +539,6 @@
               {
                 "group": "API Reference",
                 "pages": [
-                  "reference/manage-data-operations/lynx-api/cards",
-                  "reference/manage-data-operations/lynx-api/actor-types",
-                  "reference/manage-data-operations/lynx-api/machine-types",
-                  "reference/manage-data-operations/lynx-api/languages",
                   {
                     "group": "Endpoints",
                     "openapi": {
@@ -554,7 +554,7 @@
       },
       {
         "tab": "Cortina",
-        "icon": "shield-check",
+        "icon": "credit-card",
         "groups": [
           {
             "group": "Guides",
@@ -661,7 +661,7 @@
       },
       {
         "tab": "eCom SDK",
-        "icon": "browser",
+        "icon": "shopping-cart",
         "pages": [
           {
             "group": "Guides",
