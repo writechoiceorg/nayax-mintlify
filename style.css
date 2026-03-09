@@ -67,9 +67,11 @@ footer a.md\:truncate {
   overflow: visible;
 }
 
-div:has(> a.md\:truncate) {
-  flex-wrap: wrap;
+footer div:has(> a.md\:truncate) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, auto));
   justify-content: center;
+  gap: 0.75rem 2rem;
 }
 /* end */
 
