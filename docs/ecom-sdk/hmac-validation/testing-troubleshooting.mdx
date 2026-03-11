@@ -2,21 +2,57 @@
 title: "Testing & Troubleshooting"
 ---
 
-Once your implementation is complete, it is critical to verify the security of your endpoint. Use the following test cases and troubleshooting guide to ensure a robust integration.
+## Test Cases
 
-### Test Cases
+To confirm your validation logic is functional, perform the following checks:
 
-To confirm your validation logic is functional, do the following checks:
+<CardGroup cols={3}>
+  <Card title="Valid Request" icon="check-double">
+    Confirm that requests with valid signatures return `200 OK`.
+  </Card>
+  <Card title="Invalid Signature" icon="xmark">
+    Verify that incorrect HMACs are rejected with `401 Unauthorized`.
+  </Card>
+  <Card title="Tamper Check" icon="shield-slash">
+    Modify one character in the `MerchantRequestId` to ensure the HMAC fails.
+  </Card>
+</CardGroup>
 
-* Confirm that requests with valid HMAC signatures are accepted and processed.
-* Verify that requests with incorrect or missing HMACs are rejected with a `401 Unauthorized` or `403 Forbidden` status.
-* Manually modify a single character in the payload and verify that the HMAC is invalidated and the request is rejected.
+## Troubleshooting Validation
 
-### Troubleshooting Validation
+If your calculated hash does not match the one provided by Nayax, audit your implementation against this checklist:
 
-If your calculated hash does not match the one provided by Nayax, do the following checks:
+<AccordionGroup>
+  <Accordion title="RequestType vs. RequestTypeName" icon="text-field">
+    Ensure you are using the **Enum Name string** (e.g., `"Sale"`, `"Auth"`) rather than the integer value (`"0"`, `"1"`). This is a common point of failure.
+  </Accordion>
 
-* Confirm your secret key matches the one provided to your Nayax Architect and ensure you aren't accidentally using a "Test" key in a "Production" environment.
-* Ensure the fields are concatenated in the exact order defined by the Nayax implementation. Remember that the hash is sensitive to sequence.
-* Ensure you are using UTF-8 string encoding and that you haven't stripped or added extra whitespace or delimiter characters.
-* Review the `HmacService` class in the `SDK.Api.Contracts` library as the "source of truth" for the calculation logic.
+  <Accordion title="Boolean Casing" icon="font-case">
+    Ensure booleans are converted to `"True"` or `"False"` (with a capital T/F). Lowercase strings like "true" will result in a signature mismatch.
+  </Accordion>
+
+  <Accordion title="Missing Fields & Delimiters" icon="brackets-curly">
+    If `NayaxTransactionId` is missing, the signing string **must** start with a colon (e.g., `:MerchantId...`). Ensure you are using a colon (`:`) as the delimiter.
+  </Accordion>
+
+  <Accordion title="Key Decoding" icon="key">
+    Verify you are decoding the 64-character hex string into **32 raw bytes** before using it as the HMAC-SHA256 key. Do not use the hex string directly.
+  </Accordion>
+
+  <Accordion title="Strict Field Order" icon="list-ol">
+    Verify the order is strictly: 
+    1. `NayaxTransactionId`
+    2. `MerchantRequestId`
+    3. `MachineId`
+    4. `RequestTypeName`
+    5. `IsApproved`
+  </Accordion>
+</AccordionGroup>
+
+## Response Logic
+
+How your server responds to a validation failure impacts retry behavior.
+
+<Note>
+  **Important**: If HMAC validation fails, **do not return 500**. Nayax will retry on a `500` response, but it will not retry on a `401`. Since a signature mismatch is usually a logic error, retrying will not resolve the issue.
+</Note>

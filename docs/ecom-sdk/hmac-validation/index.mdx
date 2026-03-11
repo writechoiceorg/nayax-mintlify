@@ -2,27 +2,78 @@
 title: "HMAC Validation"
 ---
 
-To ensure the integrity and authenticity of webhook notifications, Nayax uses Hash-based Message Authentication Code (HMAC). This mechanism allows you to verify that incoming data was sent by Nayax and has not been altered in transit.
+HMAC (Hash-based Message Authentication Code) is an optional security feature. When enabled, every merchant notification Nayax sends to your server will include an `Hmac` field in the notification body.
 
-Before you can begin validating requests, you must coordinate a one-time setup with your Nayax Professional Services Solution Architect.
+You use this to verify the notification genuinely came from Nayax and was not tampered with. 
 
-The HMAC key creation follows these steps:
+<Note>
+  The **Hmac** field is located in the notification body, not in an HTTP header.
+</Note>
 
-1. Create a unique HMAC secret key. with a hexadecimal string of at least 32 characters.
-2. Provide this key to your Nayax Architect.
-3. Confirm the following technical specifications with your Architect:
-   * **Field Order:** The exact sequence of payload fields used for the hash.
-   * **Encoding:** The string encoding format (standard is **UTF-8**).
-   * **Delimiters:** The specific characters used to separate fields in the payload.
-4. Store your secret key securely (e.g., in an environment variable). Never hardcode it in your source code.
+## How It Works
+To validate an incoming notification, follow these four steps to recreate the signature on your server:
 
-Once the setup is complete, the verification process follows these steps:
+<Steps>
+  <Step title="Build the signing string">
+    Take these 5 fields from the notification, in this exact order:
+    1. `NayaxTransactionId`
+    2. `MerchantRequestId`
+    3. `MachineId`
+    4. `RequestType` (**Enum name**, e.g., "Sale", "Auth", "Settlement")
+    5. `IsApproved` (boolean, converted to string: "True" or "False")
 
-1. Nayax generates a hash by combining the notification data with your secret key.
-2. Nayax sends the webhook with the signature included in the headers or payload.
-3. Your application receives the webhook and recalculates the hash using your local secret key.
-4. If your calculated hash matches the one sent by Nayax, the request is authentic.
+    Join them with `:` as the separator:
+    `{NayaxTransactionId}:{MerchantRequestId}:{MachineId}:{RequestTypeName}:{IsApproved}`
 
-<Danger>
-  **Important:** If the hashes do not match, the request should be treated as unauthorized and discarded. Always validate the HMAC before processing any notification.
-</Danger>
+    * **Missing Fields:** If a field is absent from the notification, use an empty string for it. The `:` separator is still included, never skip a field position.
+    * **RequestType:** Do not use the integer value (0, 1, 2). Use the corresponding string name from the enum.
+    * **Excluded Fields:** Do not include `RequestDate`, `Hmac` itself, nested objects, or arrays (e.g., `CardInfo`, `RetryAttempts`).
+  </Step>
+
+  <Step title="Prepare the secret key">
+    The key is a 64-character hex string. Decode it to raw bytes (every 2 hex characters = 1 byte) to result in 32 bytes.
+  </Step>
+
+  <Step title="Run HMAC-SHA256">
+    * **Input:** Signing string from Step 1, encoded as UTF-8 bytes.
+    * **Key:** 32 raw bytes from Step 2.
+    * **Output:** 32 raw bytes.
+  </Step>
+
+  <Step title="Base64 encode">
+    Encode the 32 output bytes as Base64. This is the value that appears in the `Hmac` field.
+  </Step>
+</Steps>
+
+## Signing String Examples
+Use the following scenarios to test your string concatenation logic against our standard format. All examples below use this *Test Key**:
+`a3f7c2e9d1b8456f0e3a7c9b2d4f6e8a1c3d5e7f9b0a2c4d6e8f0b1c3d5e7f90`
+
+### Example 1  Sale Notification
+* **NayaxTransactionId:** "20000121692"
+* **MerchantRequestId:** "5fbeb1ba-263f-4fe6-a109-642b562020c9"
+* **MachineId:** "1001316721"
+* **RequestType:** `0` → "Sale"
+* **IsApproved:** `true` → "True"
+
+**Signing string:** `20000121692:5fbeb1ba-263f-4fe6-a109-642b562020c9:1001316721:Sale:True`
+
+### Example 2  Auth Request (Transaction ID absent)
+* **NayaxTransactionId:** (absent) → ""
+* **MerchantRequestId:** "e84e9e10-6223-4e45-8da1-243d2d55b25e"
+* **MachineId:** "1000968111"
+* **RequestType:** `1` → "Auth"
+* **IsApproved:** `true` → "True"
+
+**Signing string:** `:e84e9e10-6223-4e45-8da1-243d2d55b25e:1000968111:Auth:True`
+
+## One-Time Setup
+To enable this feature, complete the following administrative and security tasks:
+* **Generate Key:** The integrator generates a secret key of exactly 64 hex characters.
+* **Share Key:** The key is shared securely with the Nayax Architect during onboarding.
+* **Store Securely:** Store the key as an environment variable (never hardcode it).
+* **Environment Separation:** Separate keys must be used for Production and Test/QA environments.
+
+<Warning>
+  **Important:** If HMAC validation fails on your end, do not return a `500` error. A broken HMAC implementation will not be fixed by retrying. Return a `401` instead.
+</Warning>

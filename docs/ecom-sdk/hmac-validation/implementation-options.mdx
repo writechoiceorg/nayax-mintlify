@@ -4,34 +4,36 @@ title: "Implementation Options"
 
 To integrate HMAC validation, you can either leverage the official Nayax SDK or implement the logic manually in your preferred language.
 
-These are the two options for implementation:
-
-### Nayax SDK (C# Developers)
+## Nayax SDK (C# Developers)
 
 C# developers can use the `SDK.Api.Contracts` library, which includes built-in HMAC validation functionality.
-
-These are the steps:
 
 1. **Install the library**: Run `Install-Package SDK.Api.Contracts`.
 2. **Use the HMAC Service**: Utilize the `HmacService` class, which handles all HMAC calculation and validation logic automatically.
 
-### Custom Implementation (Non-C# Developers)
+## Custom Implementation (Non-C# Developers)
 
-If you are not using C#, you should replicate the logic found in the Nayax SDK:
+If you are not using C#, you should replicate the logic found in the Nayax SDK using these technical specifications:
 
-* **Reference Library**: `SDK.Api.Contracts`
-* **Reference Class**: `HmacService`
-* **Key Functions**: `CalculateHmac()` and `ValidateHmac()`
+| Specification | Requirement |
+| :--- | :--- |
+| **Hmac field name** | `Hmac` This is the JSON field in the notification body. |
+| **Fields in signing string** | `NayaxTransactionId`, `MerchantRequestId`, `MachineId`, `RequestTypeName`, `IsApproved`. |
+| **Order** | Fields must be in the **exact** order listed above. |
+| **Delimiter** | Colon (`:`) |
+| **Missing fields** | Use an empty string, but the colon **must** still be included. |
+| **RequestType format** | Use the **Enum Name** (e.g., `"Sale"`, `"Auth"`, `"Settlement"`), **not** the integer value. |
+| **Boolean format** | `"True"` or `"False"` capital first letter (C# `.ToString()` format). |
+| **Key decoding** | 64 hex characters decoded to 32 raw bytes. |
+| **Hash output** | Base64. |
+| **Exclusions** | Do **not** include `RequestDate`, `Hmac` itself, nested objects, or arrays in the hash. |
 
 ## Security Best Practices
+To maintain a high level of security and prevent unauthorized access to your transaction data, adhere to the following guidelines:
 
-To keep your HMAC secret and webhook integration secure, follow these guidelines:
-
-| DO                                                            | DON'T                       |
-| :------------------------------------------------------------ | :-------------------------- |
-| Store in environment variables                                | Hardcode in the source code |
-| Use secrets management (Azure Key Vault, AWS Secrets Manager) | Commit to version control   |
-| Restrict access to production keys                            | Share via email or chat     |
-| Always validate HMAC before processing notifications          | Log keys in error messages  |
-
-<br />
+| DO | DON'T |
+| :--- | :--- |
+| Store in environment variables | Hardcode in the source code |
+| Use secrets management (Azure Key Vault, etc.) | Commit to version control |
+| Decode 64 hex chars to 32 raw bytes | Use the hex string directly as the key |
+| Always validate HMAC before processing | Log keys in error messages |
