@@ -1,77 +1,72 @@
 export const AcceptPaymentsEcom = () => {
 
+  // Refined icons with strokeWidth="2" for consistency
   const AuthIcon = () => (
-    <svg width="46" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFCD00" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="46" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFCD00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
       <path d="M7 11V7a5 5 0 0 1 10 0v4" />
     </svg>
   );
 
-  const IntegrationIcon = () => (
-    <svg width="46" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFCD00" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="16 18 22 12 16 6" />
-      <polyline points="8 6 2 12 8 18" />
+  const FrontEndIcon = () => (
+    <svg width="46" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFCD00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+      <line x1="8" y1="21" x2="16" y2="21" />
+      <line x1="12" y1="17" x2="12" y2="21" />
+    </svg>
+  );
+
+  const BackEndIcon = () => (
+    <svg width="46" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFCD00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <ellipse cx="12" cy="5" rx="9" ry="3" />
+      <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+      <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
     </svg>
   );
 
   const PaymentIcon = () => (
-    <svg width="46" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFCD00" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="46" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFCD00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
       <line x1="1" y1="10" x2="23" y2="10" />
     </svg>
   );
-  const FrontEndIcon = () => (
-  <svg width="46" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFCD00" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-    <line x1="8" y1="21" x2="16" y2="21" />
-    <line x1="12" y1="17" x2="12" y2="21" />
-  </svg>
-);
 
-const ShieldCheckIcon = () => (
-    <svg width="46" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFCD00" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  const ShieldCheckIcon = () => (
+    <svg width="46" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFCD00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
       <polyline points="9 11 11 13 15 9" />
     </svg>
   );
 
-const BackEndIcon = () => (
-  <svg width="46" height="48" viewBox="0 0 24 24" fill="none" stroke="#FFCD00" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <ellipse cx="12" cy="5" rx="9" ry="3" />
-    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
-    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-  </svg>
-)
-
   const cards = [
     {
       icon: <AuthIcon />,
-      title: "Security & Auth",
-      description: "Learn how to authenticate API requests using Sign Keys, Secret Tokens, and signature generation.",
+      title: "Authenticate Requests",
+      description: "Secure your API calls using Sign Keys, Secret Tokens, and signature generation.",
       link: "/docs/ecom-sdk/security-authentication/ecom-security-authentication",
     },
     {
       icon: <FrontEndIcon />,
-      title: "Front-End Integration",
-      description: "Implement the Drop-in UI and handle secure payment flows using our mobile and web SDKs.",
+      title: "Implement Front-End",
+      description: "Deploy the Drop-in UI for Web and Mobile to handle secure payment collection.",
       link: "/docs/ecom-sdk/front-end-integration/front-end-sdk",
     },
     {
       icon: <BackEndIcon />,
-      title: "Back-End Integration",
-      description: "Manage the full transaction lifecycle, recurring token payments, and asynchronous webhooks.",
+      title: "Manage Back-End",
+      description: "Handle the transaction lifecycle, recurring charges, and server-side sessions.",
       link: "/docs/ecom-sdk/back-end-integration/ecom-sdk-back-end-integration",
     },
     {
       icon: <PaymentIcon />,
-      title: "Payment Methods",
-      description: "Enable and configure global wallets like Apple Pay and Google Pay for your production environment.",
+      title: "Configure Methods",
+      description: "Enable digital wallets like Apple Pay and Google Pay for your merchant domain.",
       link: "/docs/ecom-sdk/payment-methods/index",
     },
     {
       icon: <ShieldCheckIcon />,
-      title: "HMAC Validation",
-      description: "Verify the authenticity of Nayax notifications to prevent request tampering and ensure security.",
+      title: "Validate Webhooks",
+      description: "Use HMAC signatures to verify the authenticity of incoming Nayax notifications.",
       link: "/docs/ecom-sdk/hmac-validation/index",
     },
   ];
@@ -83,7 +78,7 @@ const BackEndIcon = () => (
           Integrate Online Payments
         </h2>
         <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-4xl">
-          Build a seamless checkout experience. Access everything you need to integrate Nayax online payments into your web, iOS, or Android applications.
+          Build a seamless checkout experience. Access everything you need to implement the Nayax eCom SDK into your web, iOS, or Android applications.
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
@@ -97,11 +92,9 @@ const BackEndIcon = () => (
                 <div className="absolute inset-0 bg-yellow-400/20 dark:bg-yellow-400/10 rounded-full group-hover:bg-yellow-400/30 transition-colors"></div>
                 <div className="relative z-10">{card.icon}</div>
               </div>
-              
               <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-yellow-500 transition-colors">
                 {card.title}
               </h3>
-              
               <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 mb-0">
                 {card.description}
               </p>
