@@ -24,26 +24,25 @@ Where:
 Cortina Dynamic QR currently only supports Pre-Selection transaction types.
 </Warning>
 
-## Pre-selection Flow
+## Pre-Selection Flow
 
 The Pre-selection flow simplifies the payment process by merging the steps of product/service selection and authorization into a single transaction. This flow is typically used for low-value or quick transactions, where the customer’s selection and payment authorization are handled together in one step.
 
 See the diagram below:
 
-<Frame><img src="/images/docs/cortina-dynamicqr/image2.png" /></Frame>
+<Frame><img src="/images/docs/cortina-dynamicqr/Cortina Dynamic QR.png" /></Frame>
 
 The steps in this process are as follows:
 
-1. The process begins with selecting a product or service on the machine. This action triggers the Machine to send a QR command request to the Nayax Server, informing it of the incoming transaction.
-2. The Server sends the request to the integrator using the [DynamicQR GenerateQR](/reference/cortina/dynamicqr/cortina-dynamicqr-generateqr) endpoint.
-3. The Device approves the request and sends a Payment Request to the Nayax Server, which begins the payment authorization process.
-4. The Server sends the request to the integrator using the [DynamicQR Inquiry](/reference/cortina/dynamicqr/cortina-dynamicqr-inquiry) endpoint.
-5. The Nayax Server receives the Response from the Integrator and returns it to the Device.
-6. If authorized, the Device begins the Vending Session, and the machine dispenses the product or service. The device sends the settlement command to the Nayax Server.
-7. The Nayax server forwards the Settlement Request to the integrator using Cortina's API [Sale End Notification](/reference/cortina/cortina/post-sale-end-notification) endpoint, with the final transaction amount to be settled.
+1. The user selects a product and payment method on the Vending Machine.
+2. The Vending Machine sends a QR Command Request to the Nayax Server.
+3. The Nayax Server sends a GenerateQR (Amount, Channel) request to the Integrator using the [DynamicQR GenerateQR](/reference/cortina/dynamicqr/cortina-dynamicqr-generateqr) endpoint.
+4. The Integrator returns a Response including the QR code data to the Nayax Server.
+5. The Nayax Server sends the QR Command Response back to the Vending Machine, which then shows the QR code.
+6. Once the user scans the QR and confirms via mobile, the Vending Machine sends a QR Payment Command Request to the Nayax Server.
+7. The Nayax Server sends an Inquiry (Transaction ID) to the Integrator using the [DynamicQR Inquiry](/reference/cortina/dynamicqr/cortina-dynamicqr-inquiry) endpoint.
+8. The Integrator returns the Response Status (Approved/Pending) to the Nayax Server.
+9. The Nayax Server sends the QR Payment Command Response to the Vending Machine.
+10. The Vending Machine dispenses the product and sends the Settlement Command to the Nayax Server.
 
 This response is typically always approved in this flow, as the authorization has already been granted.
-
-
-
-<br />
