@@ -9,17 +9,17 @@ The `getReport` method is used to retrieve service transaction reports. It provi
 * This method is less relevant for the Global payment method due to the nature of how transactions are processed: Globally, each completed transaction that is saved on the payment terminal is sent immediately to the Engine and gets the final settlement.
   Whereas in Israel, each completed transaction that is saved on the payment terminal and is kept until the end of day and only then there's a bulk transmission (doPeriodic) of all of the transactions done that day to Ashrait and only then they are finally settled.
 
-  getReport is used in order to query the information that are saved on the payment terminal- so globally there wouldn't be any transactions saved there (that have not already reached the Engine)
+  getReport is used in order to query the information that is saved on the payment terminal- so globally there wouldn't be any transactions saved there (that have not already reached the Engine)
 
 ## Request
 
 <Note>
 **JSON-RPC 2.0**
 
-All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Get Started](/docs/integration-tweezer) for more details on how the requests are structured and sent.
 </Note>
 
-In the request, the `method `field needs to be set to `getReport`, as shown in the example request below:
+In the request, the `method` field needs to be set to `getReport`, as shown in the example request below:
 
 ```json
 {

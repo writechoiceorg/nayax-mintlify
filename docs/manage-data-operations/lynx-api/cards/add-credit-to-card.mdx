@@ -19,14 +19,14 @@ The following endpoint is used in this guide:
 <Warning>
 **Authentication**
 
-Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use them to authenticate your API requests.
 </Warning>
 
 ## Methods to add credit to card
 
 Adding credit to a card increases its available balance, allowing the cardholder to perform transactions. Lynx API offers a couple of ways to do so:
 
-* **PUT Method**: With this option you can use the same endpoints for creating or retrieving a cards data, but using a **PUT** request with the new amount of credit. For example you can use the [Update Card by ID](/reference/lynx/cards/update-card-by-id) endpoint with the `CardID` in the URL and the updated credit amount in the body parameters.
+* **PUT Method**: With this option you can use the same endpoints for creating or retrieving a card's data, but using a **PUT** request with the new amount of credit. For example you can use the [Update Card by ID](/reference/lynx/cards/update-card-by-id) endpoint with the `CardID` in the URL and the updated credit amount in the body parameters.
 * **POST Method**: Lynx API also offers a specific endpoint to perform a **POST** request with the credit to be added to card. This is a much simpler option, since you will not have to deal with the bigger body objects the **PUT** Method has.
 
 In this guide we will explore the **POST** method to add credit to a card. But you can check the Updating Card Details page for more details on **PUT** requests.
@@ -66,7 +66,7 @@ Once the request to add the card credit is successful, you can go to Nayax Core 
 2. On the top menu, navigate to Consumers > Card Management
 
     <Frame><img src="/images/docs/add-credit-to-card/image1.png" /></Frame>
-3. Search for the card which the credit was added and select it.
+3. Search for the card to which the credit was added and select it.
 
     <Frame><img src="/images/docs/add-credit-to-card/image2.png" /></Frame>
 

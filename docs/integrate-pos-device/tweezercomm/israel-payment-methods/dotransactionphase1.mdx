@@ -4,7 +4,7 @@ metadata:
   og:description: "The doTransactionPhase1 method begins a new transaction and retrieves its properties. Upon successful completion of this phase, the client can then."
 ---
 
-The `doTransactionPhase1 ` method begins a new transaction and retrieves its properties. Upon successful completion of this phase, the client can then proceed to the next stage of the process by calling the `doTransactionPhase2 `method to finalize the transaction.
+The `doTransactionPhase1` method begins a new transaction and retrieves its properties. Upon successful completion of this phase, the client can then proceed to the next stage of the process by calling the `doTransactionPhase2`method to finalize the transaction.
 
 This method is essential for initiating a transaction, validating key information, and preparing the system for the final processing step.
 
@@ -13,13 +13,13 @@ This method is essential for initiating a transaction, validating key informatio
 <Note>
 **JSON-RPC 2.0**
 
-All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Integration ](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Integration](/docs/integration-tweezer) for more details on how the requests are structured and sent.
 </Note>
 
 In the request, ensure to configure the following:
 
-* The `method `field must be set to `doTransactionPhase1` .
-* The service must be set to `ashrait `in the `params`.
+* The `method` field must be set to `doTransactionPhase1` .
+* The service must be set to `ashrait`in the `params`.
 
 The request includes a list of parameters, with the first being the service name, which is currently fixed as ashrait, and the second being a dictionary containing all other transaction-specific details.
 
@@ -654,7 +654,7 @@ The table below describes the response parameters for this method.
 
 | Name                  | Type              | Description                                                                          |
 | :-------------------- | :---------------- | :----------------------------------------------------------------------------------- |
-| `statusCode`          | integer           | The transaction status. A value of `0`indicates a successful (approved) transaction. |
+| `statusCode`          | integer           | The transaction status. A value of `0` indicates a successful (approved) transaction. |
 | `statusMessage`       | string            | The transaction message (e.g., `ok`).                                                |
 | `mutag`               | integer           | The card brand.                                                                      |
 | `solek`               | integer           | The acquirer.                                                                        |

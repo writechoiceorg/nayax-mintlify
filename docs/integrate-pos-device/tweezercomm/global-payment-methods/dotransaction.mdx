@@ -22,7 +22,7 @@ The sections below will describe the request parameters in more detail:
 <Note>
 **JSON-RPC 2.0**
 
-All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Get Started](/docs/integration-tweezer) for more details on how the requests are structured and sent.
 </Note>
 
 In the request, the `method` field needs to be set to `doTransaction`,  the transaction is defined by the `tranCode` parameter. Check the example request for each transaction type on the tabs below:
@@ -65,7 +65,7 @@ In the request, the `method` field needs to be set to `doTransaction`,  the tran
   </Tab>
 
   <Tab title="Pre-Authorization">
-    For a initiating a Pre-Authorization transaction, set the `tanType` parameter to `3`. The code block shows a request example for initiating a Pre-Authorization transaction:
+    For initiating a Pre-Authorization transaction, set the `tranType` parameter to `3`. The code block shows a request example for initiating a Pre-Authorization transaction:
 
     ```json
     {
@@ -95,7 +95,7 @@ In the request, the `method` field needs to be set to `doTransaction`,  the tran
   </Tab>
 
   <Tab title="Complete Pre-Authorization">
-    For a completing a Pre-Authorization transaction, set the `tranType` parameter to `6`. The code block shows a request example for completing a Pre-Authorization transaction:
+    For completing a Pre-Authorization transaction, set the `tranType` parameter to `6`. The code block shows a request example for completing a Pre-Authorization transaction:
 
     ```json
     {
