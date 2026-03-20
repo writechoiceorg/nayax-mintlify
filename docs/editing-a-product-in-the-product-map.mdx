@@ -21,7 +21,7 @@ This page presents how to edit a product in the Product Map using the Lynx API. 
 
 <EndpointCard
   title="Update a Machine Product"
-  href="/reference/lynx/machine-products/update-a-machine-product"
+  href="/reference/lynx/machine-products/update-machine-product"
   method="put"
 />
 </Columns>
@@ -34,7 +34,7 @@ Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) 
 
 ## Update Product Request
 
-Use the [Update a Machine Product](/reference/lynx/machine-products/update-a-machine-product) endpoint to update the product details, such as changing the `CashPrice`. Keep other values unchanged, including the `MDBCode`.
+Use the [Update a Machine Product](/reference/lynx/machine-products/update-machine-product) endpoint to update the product details, such as changing the `CashPrice`. Keep other values unchanged, including the `MDBCode`.
 
 ```sh Request
 curl -X PUT "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/machineProducts/<PRODUCT_ID>" \
