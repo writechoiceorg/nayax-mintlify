@@ -1,5 +1,7 @@
 ---
 title: "Add Credit to Card"
+metadata:
+  og:description: "This guide will walk you through adding credit to a card using the Lynx API. At the end, you’ll learn how to verify these changes in Nayax Core."
 ---
 
 import {EndpointCard} from "/snippets/EndpointCard.jsx";
@@ -22,7 +24,7 @@ Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) 
 
 ## Methods to add credit to card
 
-Adding credit to a card increases its available balance, allowing the cardholder to perform transactions. Lynx API allow offers a couple of ways to do so:
+Adding credit to a card increases its available balance, allowing the cardholder to perform transactions. Lynx API offers a couple of ways to do so:
 
 * **PUT Method**: With this option you can use the same endpoints for creating or retrieving a cards data, but using a **PUT** request with the new amount of credit. For example you can use the [Update Card by ID](/reference/lynx/cards/update-card-by-id) endpoint with the `CardID` in the URL and the updated credit amount in the body parameters.
 * **POST Method**: Lynx API also offers a specific endpoint to perform a **POST** request with the credit to be added to card. This is a much simpler option, since you will not have to deal with the bigger body objects the **PUT** Method has.
@@ -51,14 +53,14 @@ curl --request POST \
   Replace `{CardUniqueIdentifier}` with the actual identifier of the card.
 </Note>
 
-The amount to add is sent on the query parameters, see the availabe parameters on the list below:
+The amount to add is sent on the query parameters, see the available parameters on the list below:
 
 * `CardCredit`: The credit amount to be added.
 * `CreditChangeRemarks`: A note about the transaction for tracking purposes.
 
 ## Verifying credit on Nayax Core
 
-Once the request to add the card credit is succesful, you can go to Nayax Core and check the card´s credit and history in the **Card Management** tab. Follow the steps below to do so.
+Once the request to add the card credit is successful, you can go to Nayax Core and check the card´s credit and history in the **Card Management** tab. Follow the steps below to do so.
 
 1. Access your Nayax Core Dashboard
 2. On the top menu, navigate to Consumers > Card Management

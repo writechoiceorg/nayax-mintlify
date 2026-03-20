@@ -1,5 +1,7 @@
 ---
 title: "Flow & Configurations"
+metadata:
+  og:description: "## Vend Result Timeout (Timeout for Vend Success) This parameter sets how long the device will wait for a vend response ('Vend Approved'/'Vend."
 ---
 
 ## Vend Result Timeout (Timeout for Vend Success)
@@ -128,7 +130,7 @@ If no ACKS were received after the authorization or before the "Vend Success," N
 
 ## Approval by 3rd Party Server - How the Machine Notifies the SDK Whether or Not the Card Is Approved
 
-After the "Vend Request" is sent and a consumer presents his card the Transfer Data command would be sent and the peripheral would get the card's details and would forward them (on it's own, unrelated to the SDK) to the desired 3rd party server.
+After the "Vend Request" is sent and a consumer presents his card the Transfer Data command would be sent and the peripheral would get the card's details and would forward them (on its own, unrelated to the SDK) to the desired 3rd party server.
 Once the server has approved/ denied the card, the peripheral would notify the SDK (and that way it would also inform the device) through calling the "client\_gateway\_auth(bool approved)" command:
 
 <CodeGroup>
@@ -248,7 +250,7 @@ The possible statuses are:
 
 Then you can send the "Close Session" command.
 
-## Multivend: Example of How to Do Partial vVending
+## Multivend: Example of How to Do Partial Vending
 
 Partial vending is relevant only to Multivend and means that only some of the selected products could be vended.
 
@@ -295,7 +297,7 @@ if (vmc_config.multi_vend_support) //example of partial vending
 
 ## Session timeout- delayed by up to a minute
 
-The device queries it's opened sessions every 1 minute, meaning there may be up to 1 minute delay in the device settling the transaction than the timeout defined in Nayax Core.
+The device queries its opened sessions every 1 minute, meaning there may be up to 1 minute delay in the device settling the transaction than the timeout defined in Nayax Core.
 
 So for example:
 

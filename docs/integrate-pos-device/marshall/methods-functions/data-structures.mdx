@@ -1,5 +1,7 @@
 ---
 title: "Vending Session Management"
+metadata:
+  og:description: "This page covers the data structures used in the Marshall SDK to handle vending product requests and sessions. Such as: venditemt vendsessiondatat."
 ---
 
 This page covers the data structures used in the Marshall SDK to handle vending product requests and sessions. Such as:
@@ -50,7 +52,7 @@ The table below provides a more detailed description of the parameters.
 | :-------- | :-------------- | :-------------------------------------------------------------------------------------------------- |
 | `code`    | String or Int   | The unique identifier for the product, also known as the MDB code.                                  |
 | `price`   | Int             | Product price, where the real price is calculated as price / (10 ^ decimal places).                 |
-| `qty`     | Int             | The quantity of the product being vented.                                                           |
+| `qty`     | Int             | The quantity of the product being vended.                                                           |
 | `unit`    | Int             | Unit of measure for the product, with `0` indicating a discrete unit (e.g., a single drink bottle). |
 
 ## Vending Session Data Class

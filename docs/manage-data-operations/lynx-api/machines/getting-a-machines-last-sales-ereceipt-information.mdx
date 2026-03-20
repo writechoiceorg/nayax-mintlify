@@ -1,5 +1,7 @@
 ---
 title: "Getting a Machine's Last Sales & generating eReceipt"
+metadata:
+  og:description: "This page presents how to retrieve a Machine's Last Sales using its Machine ID with Lynx API and also with Nayax core. The guide will use the."
 ---
 
 import {EndpointCard} from "/snippets/EndpointCard.jsx";
@@ -376,7 +378,7 @@ curl -X 'POST' \
 ```
 
 <Note>
-  Remember to replace `<TRANSACTION_ID>` ,  `<MACHINE_AUTHORIZATION_TIME>`, `<SITE_ID>`, `<MACHINE_ID>`with the actual details of the transcation.
+  Remember to replace `<TRANSACTION_ID>` ,  `<MACHINE_AUTHORIZATION_TIME>`, `<SITE_ID>`, `<MACHINE_ID>`with the actual details of the transaction.
 </Note>
 
 The response will include details about the eReceipt sent, including the PDF's link.
@@ -408,6 +410,6 @@ You can also find the Machine's Last Sales in Nayax Core in the machine's detail
 
 <br />
 
-5. Insert the relevant details and click on "Generate eReceipt:
+5. Insert the relevant details and click on "Generate eReceipt":
 
 <Frame><img src="/images/docs/getting-a-machines-last-sales-ereceipt-information/image5.png" /></Frame>

@@ -1,5 +1,7 @@
 ---
 title: "Remote Start"
+metadata:
+  og:description: "In the Remote Start Flow, your remote server initiates the transaction, directing Nayax to activate a specific device. This method is particularly."
 ---
 
 In the Remote Start Flow, your remote server initiates the transaction, directing Nayax to activate a specific device. This method is particularly suited for scenarios where the transaction begins from an application or a computer, rather than directly at the Nayax terminal.
@@ -29,17 +31,17 @@ To understand the device start pre-authorization flow, see the diagram below:
 Below is a breakdown of the diagram:
 
 1. A consumer starts a session on a service station, which sends a [`StartAuthentication`](/docs/startauthentication) request to the Nayax Server via a 3rd Party Server.
-2. The Nayax Server responds to the 3rd Party Server with a [`StartAuthenticationResponse`](/docs/startauthenticationresponse).
+2. The Nayax Server responds to the 3rd Party Server with a [`StartAuthenticationResponse`](/docs/startauthentication).
 3. The 3rd Party Server sends a [`TriggerTransaction`](/docs/triggertransaction) request to the Nayax Server.
 4. The Nayax Server sends a "Wake Up" command to the Nayax Device.
 5. The Nayax Device responds to the Nayax Server, confirming it has woken up.
-6. The Nayax Server sends a [`TriggerTransactionResponse`](/docs/triggertransactionresponse) back to the 3rd Party Server.
-7. The consumer presents their card to the Nayax Device. The Nayax Device then sends an [`AuthorizationRequest`](/docs/authorizationrequest) to the Nayax Server.
+6. The Nayax Server sends a [`TriggerTransactionResponse`](/docs/triggertransaction) back to the 3rd Party Server.
+7. The consumer presents their card to the Nayax Device. The Nayax Device then sends an `AuthorizationRequest` to the Nayax Server.
 8. The Nayax Server performs authorization with a Payment Provider and sends a [`TransactionCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback) to the 3rd Party Server.
-9. The 3rd Party Server acknowledges the transaction callback by sending a [`TransactionCallbackACK`](/docs/transactioncallbackack) (HTTP 200) to the Nayax Server. At this point, the service can be provided on the Service Station.
+9. The 3rd Party Server acknowledges the transaction callback by sending a [`TransactionCallbackACK`](/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback) (HTTP 200) to the Nayax Server. At this point, the service can be provided on the Service Station.
 10. The Nayax Server sends an `AuthorizationResponse` to the Nayax Device, indicating the outcome of the authorization. The Nayax Device then returns to an idle state.
 11. The 3rd Party Server sends a [`Settlement`](/docs/settlement) request to the Nayax Server.
-12. The Nayax Server performs the settlement with the Payment Provider and sends a [`SettlementResponse`](/docs/settlementresponse) back to the 3rd Party Server.
+12. The Nayax Server performs the settlement with the Payment Provider and sends a [`SettlementResponse`](/docs/settlement) back to the 3rd Party Server.
 
 ## Pre-Selection Flow
 

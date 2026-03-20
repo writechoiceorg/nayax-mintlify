@@ -1,5 +1,7 @@
 ---
 title: "Create Payments"
+metadata:
+  og:description: "This guide shows you how to create doTransaction requests for both pre-authorization and single-step payments. You will learn to configure the."
 ---
 
 This guide shows you how to create [ `doTransaction`](/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction) requests for both pre-authorization and single-step payments. You will learn to configure the JSON-RPC parameters and specify transaction-specific details.
@@ -44,7 +46,7 @@ To create this request, follow the steps below:
    1. `jsonrpc`: Set this to  2.0.
    2. `method`:  Set this to `doTransaction`.
    3. `id`:  Input the ID of your request here.
-2. Add the `params` object inputting the payment service used, which in this example is`engine`.
+2. Add the `params` object inputting the payment service used, which in this example is `engine`.
 3. Now, add the parameters for the method:
    1. `vuid`: This is the unique transaction identifier the vendor (client) assigns.
    2. `amount`: The transaction amount in cents.
@@ -78,7 +80,7 @@ To create this request, follow the steps below:
    1. `jsonrpc`: Set this to  2.0.
    2. `method`:  Set it to `doTransaction`.
    3. `id`:  Input the ID of your request here.
-2. Add the `params` object inputting the payment service used, which in this example is`engine`.
+2. Add the `params` object inputting the payment service used, which in this example is `engine`.
 3. Now, add the parameters for the method:
    1. `vuid`: This is the unique transaction identifier the vendor (client) assigns.
    2. `amount`: The transaction amount in cents.

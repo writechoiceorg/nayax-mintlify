@@ -1,5 +1,7 @@
 ---
 title: "Settlement"
+metadata:
+  og:description: "Use the Settlement endpoint to finalize an approved transaction. After the session ends and the total amount is known, the integrator sends the."
 ---
 
 The `Settlement` endpoint is used to finalize an approved transaction. After the session ends and the total amount is known, the integrator sends the final amount along with optional e-receipt information.
@@ -12,7 +14,7 @@ This method is only relevant for transactions with Pre-Authorization.
 
 ## Request
 
-Send a POST request to Spark`/spark/Settlement` endpoint with the following body:
+Send a POST request to Spark `/spark/Settlement` endpoint with the following body:
 
 ```json
 {

@@ -1,5 +1,7 @@
 ---
 title: "Resilience Mechanism"
+metadata:
+  og:description: "TweezerComm has a resilience mechanism for handling transaction completion or cancellation in case of errors or failures. Whenever an error occurs."
 ---
 
 TweezerComm has a resilience mechanism for handling transaction completion or cancellation in case of errors or failures. Whenever an error occurs, such as a `statusCode != 0`  TweezerComm will automatically fall back to this mechanism, ensuring that transactions are completed successfully or through retries and verification steps to prevent inconsistencies.
