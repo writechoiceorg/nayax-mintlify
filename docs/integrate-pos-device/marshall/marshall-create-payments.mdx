@@ -25,10 +25,10 @@ To perform a transaction using the Nayax Marshall SDK, follow the steps below.
 1. Start by enabling the device for transactions.
     <CodeGroup>
     ```java Java
-    ⦁	m_vmc.vend.session_start(vmc_vend_t.session_type_credit_e);
+    m_vmc.vend.session_start(vmc_vend_t.session_type_credit_e);
     ```
     ```csharp C#
-    ⦁	vmc_instance.vend.session_start(vmc_vend_t.session_type_credit_e);
+    vmc_instance.vend.session_start(vmc_vend_t.session_type_credit_e);
     ```
     ```c C
     vmc_vend_session_start(vmc_vend_session_type_credit_e);
@@ -60,7 +60,7 @@ To perform a transaction using the Nayax Marshall SDK, follow the steps below.
 <Warning>
 **Price field**
 
-The price field is set as an integer, meaning it does not take into consideration the Decimal Place: the actual price is calculated by the device based on the Decimal place- meaning if you set a price of 50 in the SDK, the peripherla would send a price of 50 to the device, who would look at it's own Decimal Place setting and would multiply the price sent by 10^(-decimal place). Meaning if the device has a Decimal Place of 2, the actual price the device would attempt to charge the consumer would be 0.50.\
+The price field is set as an integer, meaning it does not take into consideration the Decimal Place: the actual price is calculated by the device based on the Decimal place- meaning if you set a price of 50 in the SDK, the peripheral would send a price of 50 to the device, who would look at its own Decimal Place setting and would multiply the price sent by 10^(-decimal place). Meaning if the device has a Decimal Place of 2, the actual price the device would attempt to charge the consumer would be 0.50.\
 More on that on [Decimal Place](/docs/integrate-pos-device/marshall/marshall-faqs/faq#decimal-place).
 
 This means that in case of the device is using a Decimal Place of 2, the highest price would be 655.35 (0XFFFF with decimal of 2)
@@ -95,7 +95,7 @@ Then, inside the onSessionBegin() callback you would send the "Vend Request" for
 3. After the VPOS approves the vending request, the peripheral must notify the SDK that the product has been successfully delivered to the consumer. This is done by implementing the `onVendApproved(...)`API and returning one of the following:
 
 * **`True`** : If the vend process is successful, the client's credit card is charged the requested amount.
-* **`False `**: For a failed vend process.
+* **`False`**: For a failed vend process.
 
 4. Whether it’s a single session or multi-session, the `onReady()` event will be called upon finishing the vending process, indicating that the device is ready for the next transaction.
 

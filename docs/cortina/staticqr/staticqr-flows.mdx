@@ -61,7 +61,7 @@ This response is typically always approved in this flow, as the authorization ha
 <Warning>
 **Void**
 
-In case the product fails to be dispensed to client, the Nayax Engine uses the[StaticQR Cancel](/reference/cortina/staticqr/cortina-staticqr-sale) endpoind to void the payment request.
+In case the product fails to be dispensed to client, the Nayax Engine uses the [StaticQR Cancel](/reference/cortina/staticqr/cortina-staticqr-cancel) endpoint to void the payment request.
 </Warning>
 
 ### Pre-Authorization
@@ -74,7 +74,7 @@ See the diagram below:
 
 Where:
 1. The user scans the QR code or enters the machine number into their mobile app.
-2. the Mobile App establishes a connection with the Integrator's backend server.
+2. The Mobile App establishes a connection with the Integrator's backend server.
 3. The Integrator sends a /Notify (TerminalID) request to the Nayax Server via the [StaticQR Start](/reference/cortina/staticqr/cortina-staticqr-start) endpoint.
 4. The Nayax Server sends a WakeUpDevice Request to the Nayax Device.
 5. The Nayax Device returns a WakeUp Device Response to the Nayax Server.

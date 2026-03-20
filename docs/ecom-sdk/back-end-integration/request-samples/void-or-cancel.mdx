@@ -16,7 +16,7 @@ If the transaction has already been captured and the settlement batch is closed 
 
 ## Request
 
-The Refund request uses the same endpoint as the initial  [ `/charge-token`](/reference/ecom/payments/charge-token)  request. The API determines it's a settlement based on the `RequestType` value within the `BasicInfo` object.
+The Void or Cancel request uses the same endpoint as the initial [`/charge-token`](/reference/ecom/payments/charge-token) request. The API determines it's a void or cancel based on the `RequestType` value within the `BasicInfo` object.
 
 See the example below:
 
@@ -46,15 +46,15 @@ See the example below:
 }
 ```
 
-Note that the `RequestType `is set to the value corresponding to a Refund (e.g., 3). The `Amount `specifies the refund amount (which can be less than the original capture amount for a partial refund).
+Note that the `RequestType` is set to the value corresponding to a Cancel (4) or Void (5). The `Amount` specifies the full amount of the original authorization/sale.
 
 ### Request Parameters
 
-The following table highlights the critical fields used to define a Refund request:
+The following table highlights the critical fields used to define a Void or Cancel request:
 
 | Parameter            | Type     | Description                                                       |
 | :------------------- | :------- | :---------------------------------------------------------------- |
-| `RequestType`        | Int32    | 4 for `Cancel ` ot 5 for `Void`.                                  |
+| `RequestType`        | Int32    | 4 for `Cancel` or 5 for `Void`.                                   |
 | `Amount`             | Decimal  | Must be the full amount of the original authorization/sale.       |
 | `MerchantRequestId`  | String   | A new, unique ID for this specific reversal attempt.              |
 | `TransactionId`      | String   | The unique Nayax ID returned in the original response.            |
@@ -97,7 +97,7 @@ The table below describes the parameters of the response:
 | Parameter               | Type     | Description                                                           |
 | :---------------------- | :------- | :-------------------------------------------------------------------- |
 | `verdict`               | String   | `Approved` or `Declined`. The final decision.                         |
-| `code`                  | Int32    | Response code: `0 `for approved otherwise, the relevant decline code. |
+| `code`                  | Int32    | Response code: `0` for approved; otherwise, the relevant decline code. |
 | `statusMessage`         | String   | A descriptive message about the transaction outcome.                  |
 | `amount`                | Decimal  | The transaction amount processed.                                     |
 | `currency`              | String   | The currency of the transaction.                                      |

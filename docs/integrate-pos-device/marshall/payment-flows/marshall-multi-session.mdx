@@ -16,7 +16,7 @@ This differs from the Single-Session flow, in which settlement is performed imme
 <Note>
   Settlement should occur anywhere between **1 minute and 71 hours** (the exact value depends on a parameter called **"Session timeout"** in Nayax Core) after authorization process was completed.
 
-  Note that in case of the machine not sending a settlement command within a timeframe set in **"Session timeout"** parameter in Nayax Core- the device would settle the transaction on it's own and notify the peripheral about it via "Status" command.
+  Note that in case of the machine not sending a settlement command within a timeframe set in **"Session timeout"** parameter in Nayax Core- the device would settle the transaction on its own and notify the peripheral about it via "Status" command.
 
   For VPOSM- it's possible to have the transaction be cancelled instead of settled in case of timeout- but that would be possible via additional configuration on Nayax Core (unrelated to the Marshall flow- meaning from Marshall's POV, the device would always try and settle the transaction at session timeout).
 </Note>
@@ -51,7 +51,7 @@ If you use Single-Session with Pre-Authorization, the authorized credit amount m
 The diagrams below illustrate the sequence of events within the Multi-Session payment flow.
 
 <Note>
-  In this flow there are two parts to the transaction process, therefore the are two separate diagrams, one for each step.
+  In this flow there are two parts to the transaction process, therefore there are two separate diagrams, one for each step.
 </Note>
 
 <Frame><img src="/images/docs/marshall-multi-session/image1.jpg" /></Frame>
@@ -61,7 +61,7 @@ The diagrams below illustrate the sequence of events within the Multi-Session pa
 Below is a breakdown of the diagram:
 
 1. The Nayax Device sends a message to the consumer: "Please Select a Product."
-2. The consumer selects a product for the vending machine.
+2. The consumer selects a product from the vending machine.
 3. The peripheral's SDK sends a vending request to the Nayax Device:
     <CodeGroup>
     ```c C

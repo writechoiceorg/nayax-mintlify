@@ -45,12 +45,12 @@ curl --request GET \
      --header 'Authorization: Bearer <token>'
 ```
 
-This endpoint can also retrieve details of a specific card instead of all cards by adding query parameters to the request. For example, to get the details of a card with the Card Unique Identifier "1409315030\` you can use the query in the code block below.
+This endpoint can also retrieve details of a specific card instead of all cards by adding query parameters to the request. For example, to get the details of a card with the Card Unique Identifier `1409315030` you can use the query in the code block below.
 
 ```sh Request
 curl --request GET \
      --url 'https://qa-lynx.nayax.com/operational/v1/cards?CardUniqueIdentifier=1409315030%20' \
-     --header 'accept: application/json'
+     --header 'accept: application/json' \
      --header 'Authorization: Bearer <token>'
 ```
 
