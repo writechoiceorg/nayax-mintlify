@@ -4,7 +4,7 @@ metadata:
   og:description: "The abortTransaction method cancels an ongoing transaction before it is registered in the database, meaning before a doTransaction Response is."
 ---
 
-The `abortTransaction `method cancels an ongoing transaction before it is registered in the database, meaning before a doTransaction Response is received (= prior to a consumer's card presentation / prior to a transaction timeout taking place).\
+The `abortTransaction` method cancels an ongoing transaction before it is registered in the database, meaning before a doTransaction Response is received (= prior to a consumer's card presentation / prior to a transaction timeout taking place).\
 This ensures that transactions in progress but not yet finalized can be safely terminated without affecting the merchant's records.
 
 This method is beneficial when a user initiates a transaction but cancels before completion or when an issue is detected during processing that requires stopping the transaction.
@@ -14,13 +14,13 @@ This method is beneficial when a user initiates a transaction but cancels before
 <Note>
 **JSON-RPC 2.0**
 
-All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Integration ](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Integration](/docs/integration-tweezer) for more details on how the requests are structured and sent.
 </Note>
 
 In the request, ensure to configure the following:
 
-* The `method `field must be set to `abortTransaction` .
-* The service must be set to `ashrait `in the `params`.
+* The `method` field must be set to `abortTransaction`.
+* The service must be set to `ashrait` in the `params`.
 
 The request includes a list of parameters, with the first being the service name, which is currently fixed as `ashrait`, and the second being a dictionary containing all other transaction-specific details.
 

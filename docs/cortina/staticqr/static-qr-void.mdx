@@ -1,10 +1,10 @@
 ---
 title: "Void"
 metadata:
-  og:description: "Cortina SQR uses the Voidcommand to notify the integrator in order to initiate the cancelation process with the Cortina payment provider whenever on."
+  og:description: "Cortina SQR uses the Void command to notify the integrator in order to initiate the cancellation process with the Cortina payment provider whenever one of the below scenarios takes place."
 ---
 
-Cortina SQR uses the `Void`command to notify the integrator in order to initiate the cancelation process with the Cortina payment provider whenever on the bellow scenarios takes place:
+Cortina SQR uses the `Void` command to notify the integrator in order to initiate the cancellation process with the Cortina payment provider whenever one of the below scenarios takes place:
 
 1. Issues during vending process- Cancel button being pressed by the consumer/ vend failure (issue with product dispensing/service providing) by the machine.
 2. No `Sale` Response until timeout.
@@ -15,7 +15,7 @@ This command is essential for having the payment provider aware that the transac
 
 ## Request
 
-Nayax's servers send a POST request to your configured `Void `endpoint, which would be of the following format:
+Nayax's servers send a POST request to your configured `Void` endpoint, which would be of the following format:
 
 `(customer's URL)/Cortina/StaticQR/Void`
 

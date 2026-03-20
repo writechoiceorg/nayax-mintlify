@@ -50,11 +50,11 @@ For the example above:
 
 <Frame><img src="/images/docs/cortina-auth/image2.png" /></Frame>
 
-The Integrator must validate that the Transaction ID in requests like `GenerateQR`, `Sale`, `Authorization`, and `Inquiry `was created in a previous `Start Session` request and is still valid.\
+The Integrator must validate that the Transaction ID in requests like `GenerateQR`, `Sale`, `Authorization`, and `Inquiry` was created in a previous `Start Session` request and is still valid.
 It is recommended that the Transaction ID remain valid for no longer than 10 minutes for these requests.
 
 <Warning>
 **Expired Requests**
 
-Requests like `Settlement`, `Void`, `Cancel`, and `Refund `can still be processed even after the Transaction ID has expired, as these might be required after the original.`Authorization`, `Sale`, or `Inquiry` request.
+Requests like `Settlement`, `Void`, `Cancel`, and `Refund` can still be processed even after the Transaction ID has expired, as these might be required after the original `Authorization`, `Sale`, or `Inquiry` request.
 </Warning>

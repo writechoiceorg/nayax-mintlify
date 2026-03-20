@@ -8,7 +8,7 @@ This is the initial API call sent by Nayax. It initiates the transaction session
 
 ## Request
 
-The Spark platform sends a POST request to your configured `StartSession`endpoint. The payload includes the following body:
+The Spark platform sends a POST request to your configured `StartSession` endpoint. The payload includes the following body:
 
 ```json
 {
@@ -52,5 +52,5 @@ The table below describes the parameters of the response:
 | `Cipher`                  | string | Encrypted data used to authenticate and initiate the session                                                                            |
 | `Status`                  | object | Contains the outcome of the request                                                                                                     |
 | `Status.Verdict`          | string | "Approved" indicates successful session initiation                                                                                      |
-| `Status.ErrorDescription` | String | Provides a human-readable description of any errors that occurred, or indicates `No Errors `for a successful request.                   |
+| `Status.ErrorDescription` | String | Provides a human-readable description of any errors that occurred, or indicates `No Errors` for a successful request.                   |
 | `Status.ErrorCode`        | Number | A numeric code indicating a specific type of error that occurred during the transaction. This field is present only in error responses. |

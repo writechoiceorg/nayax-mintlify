@@ -68,7 +68,7 @@ Integrators should monitor the `ErrorCode` and `StatusMessage` within the `Statu
 ### Troubleshooting Tips
 
 * **Missing Mandatory Fields**: If fields like `SiteId` are missing, the system returns event code 50 or 51 and specifies the missing fields in the `StatusMessage`.
-* **Transaction Not Found**: If you receive a "Transaction was not found" error, ensure that `NayaxTransactionId`and `SiteId` exactly match the original transaction data.
+* **Transaction Not Found**: If you receive a "Transaction was not found" error, ensure that `NayaxTransactionId` and`SiteId` exactly match the original transaction data.
 * **Card Scheme Compliance**: Transactions that remain unsettled for too long will be automatically canceled by the system. However, integrators must not rely on this and should send an External Cancel immediately if no settlement will occur to avoid poor user experience and potential disputes.
 
 ## Advanced Settlement Features
