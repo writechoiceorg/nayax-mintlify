@@ -160,7 +160,7 @@ The table below describes all the parameters of the request:
         The amount of the payment Example: 1 cent = 0.01, 20 cents = 0.20
 
         * Note: Currencies with no Decimal Place shall be represented as double as well.\
-          Example: 234 JYN = 234.0.
+          Example: 234 JPY = 234.0.
       </td>
     </tr>
 
@@ -550,7 +550,7 @@ The table below describes all the parameters of the request:
       </td>
 
       <td>
-        The original amount requested in /Authorization requested.
+        The original amount requested in /Authorization.
       </td>
     </tr>
 
@@ -713,7 +713,7 @@ The table below describes all the parameters of the request:
 
       <td>
         String in JSON format.\
-        Contact Nayax TPOC on order define.
+        Contact Nayax TPOC in order to define.
       </td>
     </tr>
 
@@ -1004,11 +1004,11 @@ The table below describes all the parameters of the response:
         The Integrator then appends the char = and RandomNumber to create the ciphertext of 64 chars
         Format TransactionId=RandomNumber
         The integrator encrypts the ciphertexts with the Secret Token in AES ECB.
-        The AES key will be the last (right most) 256 bits (or 32 chars) of the Secret Token the matches the TokenID provided in the request.
+        The AES key will be the last (right most) 256 bits (or 32 chars) of the Secret Token that matches the TokenID provided in the request.
         Nayax will AES ECB decrypt and extract transaction id
         The transaction Id value will then be used for all further requests.
 
-        Information regarding how to generate the TranIDCipher (via encrypting the token alongside the Random Number and the customer's Transaction ID can be reviewed under [Start Session authentication process](/docs/cortina/start-session/cortina-auth#/)
+        Information regarding how to generate the TranIDCipher (via encrypting the token alongside the Random Number and the customer's Transaction ID) can be reviewed under [Start Session authentication process](/docs/cortina/start-session/cortina-auth#/)
       </td>
     </tr>
 
