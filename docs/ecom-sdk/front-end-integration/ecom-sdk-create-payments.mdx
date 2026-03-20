@@ -1,5 +1,7 @@
 ---
 title: "Initiate Payments"
+metadata:
+  og:description: "The startPaymentmethod is the primary entry point for initiating a payment flow within your application using the Nayax eCom SDK. The method."
 ---
 
 The `startPayment`method is the primary entry point for initiating a payment flow within your application using the Nayax eCom SDK. The method internally handles the calls to `validateMerchant `and `initialize `(the Nayax eCom API calls, not the SDK initialization). This means that you do not need to explicitly make these API calls before initiating a payment. The SDK will do the following:

@@ -1,5 +1,7 @@
 ---
 title: "startPinpadTransaction"
+metadata:
+  og:description: "The startPinpadTransaction method initiates the PinPad process on the payment terminal, instructing it to get ready to receive card information via."
 ---
 
 The `startPinpadTransaction` method initiates the PinPad process on the payment terminal, instructing it to get ready to receive card information via Magnetic Stripe Read (MSR) or Contactless (Tap) or Contact. In case of Contact transaction- the transaction would proceed to doPinPadTransaction, otherwise will not- more on that in [Pinpad Mode](/docs/integrate-pos-device/tweezercomm/pinpad-mode).\
