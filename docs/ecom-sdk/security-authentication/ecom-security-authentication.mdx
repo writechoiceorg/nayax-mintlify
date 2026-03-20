@@ -9,7 +9,7 @@ Nayax eCom SDK employs a robust system of unique security keys and hashed signat
 * **Secret Token**: A unique, pre-shared token (typically 66 characters long) used for the `/validate-merchant` method. Nayax can, at the integrator's request, provide additional authentication keys to distinguish between Nayax Merchants.
 * **Sign Key**: Used for signing requests by generating a hash. Integrators receive one Sign Key and one Sign Key ID.
 
-This page guides you through securely authenticating eCom SDK requests. This involves signing each request body with a shared `Sign Key` and attaching two mandatory headers: `Signature `and `IntegratorId`.
+This page guides you through securely authenticating eCom SDK requests. This involves signing each request body with a shared `Sign Key` and attaching two mandatory headers: `Signature`and `IntegratorId`.
 
 ## Pre-requisites
 
@@ -50,11 +50,11 @@ Once you have the required resources, you can start authenticating your request 
       ```json
       {"TokenlId":116383,...,"Cipher":"..."};RbtdDsiVNjkAeRty
       ```
-   2. Hash the result using SHA-256 (UTF-8 encoded) and use the output as your `Signature `header:
+   2. Hash the result using SHA-256 (UTF-8 encoded) and use the output as your `Signature`header:
       ```json
       536a5813206bcb663d98715d10a6b2612364245c865cdd5f781ff4428c4a6137
       ```
-5. Add the `IntegratorId `and `Signature `headers to your request.
+5. Add the `IntegratorId`and `Signature`headers to your request.
    ```json
    curl -X POST https://api-sandbox.nayax.com/ecom/validate-merchant \
    --header 'IntegratorId: 927' \

@@ -9,7 +9,7 @@ Spark uses a two-part security mechanism:
 * Token-based identification to associate the request with your account.
 * HMAC signature using a shared secret (`Sign Key`) to ensure the request body hasn’t been tampered with in transit.
 
-This page will guide you to securely authenticate Spark API requests using Nayax’s custom HMAC signature mechanism. This involves signing each request body with a shared `Sign Key` and attaching two mandatory headers: `Signature `and `IntegratorId`.
+This page will guide you to securely authenticate Spark API requests using Nayax’s custom HMAC signature mechanism. This involves signing each request body with a shared `Sign Key` and attaching two mandatory headers: `Signature`and `IntegratorId`.
 
 ## Pre-requisites
 
@@ -63,7 +63,7 @@ Once you have the required resources, you can start authenticating your API requ
       ```json
       536a5813206bcb663d98715d10a6b2612364245c865cdd5f781ff4428c4a6137
       ```
-4. Add the `IntegratorId `and `Signature `headers to your request.
+4. Add the `IntegratorId`and `Signature`headers to your request.
    ```json
    curl -X POST https://api-sandbox.nayax.com/spark/StartAuthentication \
    --header 'IntegratorId: 927' \

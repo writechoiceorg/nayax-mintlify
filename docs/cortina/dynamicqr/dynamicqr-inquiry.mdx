@@ -4,7 +4,7 @@ metadata:
   og:description: "Cortina DQR uses the Inquiry to inquire the approval status of a Transaction ID. This call will include the transaction’s final amount and the."
 ---
 
-Cortina DQR uses the `Inquiry`  to inquire the approval status of a Transaction ID. This call will include the transaction’s final amount and the transaction ID generated in the `GenerateQR` call.\
+Cortina DQR uses the `Inquiry` to inquire the approval status of a Transaction ID. This call will include the transaction’s final amount and the transaction ID generated in the `GenerateQR` call.\
 An “Approved” response this call will usually attempt to vend/release the product.\
 A “Decline” will terminate the transaction and a “Pending” response will trigger a subsequent `Inquiry` request after a predefined time.
 The Cortina payment provider shall validate the information and respond with the Dynamic QR information to be displayed on the Nayax device accordingly.

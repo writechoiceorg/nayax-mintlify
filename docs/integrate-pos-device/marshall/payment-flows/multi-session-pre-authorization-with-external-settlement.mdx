@@ -7,7 +7,7 @@ metadata:
 This guide explains the **Multi-Session Pre-Authorization with External Settlement** flow. This method allows for multiple transactions to be managed in parallel with an external server who manages the settlement process for each of the transactions (decides when the settlement would take place and for what final price).
 
 <Note>
-****Prerequisite****
+**Prerequisite**
 
 For this flow to function, the [ExternalSettlement](/reference/spark/transactions/externalsettlement) setting must be enabled by Nayax.
 </Note>
@@ -33,7 +33,7 @@ The following table has the technical requirements based on the feature:
 | **Incremental Auth**  | The final settlement price must not exceed the Maximum Default Credit set for the operator/machine.                           |
 
 <Note>
-****Incremental Authorization****
+**Incremental Authorization**
 
 External Settlement supports Incremental Authorization. Ensure your logic adheres to the Maximum Default Credit limits to avoid settlement failure. More on this in the [Incremental Authorization documentation](/docs/integrate-pos-device/marshall/payment-flows/sub-flows-features#incremental-authorization).
 </Note>
@@ -167,7 +167,7 @@ At this point, the peripheral must retain the (Nayax's) Transaction ID and Site 
 #### Settling the transaction (External Settlement)
 
 <Danger>
-****Important Note****
+**Important Note**
 
 If External Settlement is enabled, the terminal's standard "Close Session" behavior is altered. You must rely exclusively on the **External Settlement** or **External Cancel** APIs to manage the financial lifecycle of the transaction.
 </Danger>

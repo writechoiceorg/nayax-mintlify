@@ -19,12 +19,12 @@ Here's a breakdown of each step:
 3. The cardholder inserts, swipes, or taps their card on the Host Machine.
 4. The Agamento Application communicates with the Nayax Server for payment authorization.
 5. The Nayax Server responds with the authorization result, which is then returned to the Host Machine.
-6. Depending on the outcome of the approval, the Host Machine sends a `doTransaction(tranType=6/7)`Request to the Agamento Application to settle or cancel the transaction.
+6. Depending on the outcome of the approval, the Host Machine sends a `doTransaction(tranType=6/7)` Request to the Agamento Application to settle or cancel the transaction.
 7. The settlement or cancellation request is sent to the Nayax Server, which responds with the final transaction status.
 8. The Agamento App then relays this status back to the Host Machine, completing the process.
 
 <Warning>
-**Resilience Mechanis**
+**Resilience Mechanism**
 
 If the `statusCode != 0` (indicating an issue) is returned, the system refers to the [Resilience Mechanism](/docs/resilience-flow) to understand how TweezerComm handles errors or retry mechanisms.
 </Warning>
