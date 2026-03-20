@@ -39,7 +39,7 @@ To create a new virtual credit card with Lynx API you can use the **POST** metho
 <Warning>
 **Authentication**
 
-Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use them to authenticate your API requests.
 </Warning>
 
 The sections below will guide you through creating a card using any of these options through Lynx API.
@@ -107,7 +107,7 @@ A successful request will return a JSON object containing the details of the new
 ### V2 endpoint
 
 The V2 option provides extended functionality, including additional fields for detailed customization. This version lets you specify card type, physical type, membership level, activation and expiration dates, and group limits.
-To create the card, send a **POST** request to the[ Create New Card](/reference/lynx/cards/create-new-card) endpoint, filling in the card details in the body parameters. See the example in the code block below:
+To create the card, send a **POST** request to the [Create New Card](/reference/lynx/cards/create-new-card) endpoint, filling in the card details in the body parameters. See the example in the code block below:
 
 ```sh
 curl --request POST \
