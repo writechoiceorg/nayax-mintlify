@@ -41,7 +41,7 @@ The table below provides a more detailed description of the Methods.
 | `onReady(vmc_link.vpos_config_t config)`                       | This method is called when the link with the VPOS (Vend Point of Sale) is successfully established and the device is ready for vending operations. It provides the configuration details of the VPOS.                |
 | `onSessionBegin(int funds_avail)`                              | Triggered when a client presents a credit card, indicating that a new session has begun and funds are available for the transaction.                                                                                 |
 | `onTransactionInfo(vend_session_data_t data)`                  | Called on receipt of transaction data, providing detailed information about the current transaction.                                                                                                                 |
-| `onVendApproved(vend_session_t session)`                       | Invoked when a vending request is approved. This method should return `true` if the vendor process was successful, indicating that the client’s credit card will be charged, or `false`If the vendor process failed. |
+| `onVendApproved(vend_session_t session)`                       | Invoked when a vending request is approved. This method should return `true` if the vendor process was successful, indicating that the client’s credit card will be charged, or `false` if the vendor process failed. |
 | `onVendDenied(vend_session_t session)`                         | Called when a vending request is denied, allowing the application to handle the denial accordingly.                                                                                                                  |
 | `onSettlement(boolean success)`                                | Triggered when a transaction settlement occurs, indicating whether the settlement was successful.                                                                                                                    |
 | `onStatus(int status)`                                         | Called when the peripheral receives a `Status` command from Nayax's device, providing the current status of the session as defined in the Marshall Protocol section 8.11.                                            |
@@ -55,7 +55,7 @@ The table below provides a more detailed description of the Methods.
 <Warning>
 **C SDK Only**
 
-The enumeraion described on this section is relevant for the **C** SDK only.
+The enumeration described in this section is relevant for the **C** SDK only.
 </Warning>
 
 The `vmc_vend_event_e` enumeration is designed to handle events related to vending operations in the C SDK.
