@@ -1,14 +1,14 @@
 ---
 title: "Sale End Notification"
 metadata:
-  og:description: "Cortina uses the SaleEndNotificationcommand to notify the integrator about the completion of the transaction request with the Cortina payment."
+  og:description: "Cortina uses the SaleEndNotification command to notify the integrator about the completion of the transaction request with the Cortina payment."
 ---
 
-Cortina uses the `SaleEndNotification`command to notify the integrator about the completion of the transaction request with the Cortina payment provider.
+Cortina uses the `SaleEndNotification` command to notify the integrator about the completion of the transaction request with the Cortina payment provider.
 
 ## Request
 
-Nayax's servers send a POST request to your configured `SaleEndNotification`endpoint, which would be of the following format:
+Nayax's servers send a POST request to your configured `SaleEndNotification` endpoint, which would be of the following format:
 
 `(customer's URL)/Cortina/SaleEndNotification`
 
@@ -490,7 +490,7 @@ The table below describes all the parameters of the request:
 
     <tr>
       <td>
-        `PaymentInfo	`
+        `PaymentInfo`
       </td>
 
       <td>
@@ -733,7 +733,7 @@ The table below describes all the parameters of the request:
       </td>
 
       <td>
-        Was there was a gateway timeout (valid in response)
+        Was there a gateway timeout (valid in response)
       </td>
     </tr>
 
@@ -960,9 +960,9 @@ The payload should look as follows:
 }
 ```
 
-### Request Parameters
+### Response Parameters
 
-The table below describes all the parameters of the request:
+The table below describes all the parameters of the response:
 
 <table align={["left","left","left","left"]}>
   <thead>

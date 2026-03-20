@@ -21,4 +21,4 @@ Here's a breakdown of each step of the flow:
 4. If the CardHolder inserts the card (triggering the need for a PIN), the flow continues with the Client sending a `doPinpadTransaction()` Request to prompt for the PIN input.
 5. The CardHolder enters their PIN directly on the Nayax Device. The device responds to the client with the `doPinpadTransaction()` Response after the PIN is captured.
 6. Once the necessary card and PIN data are securely captured, the Client sends an `endPinpadTransaction()` Request to the Nayax Device.
-7. The Nayax Device confirms the PinPad process is complete the `endPinpadTransaction()` Response, returning the device to an idle state.
+7. The Nayax Device confirms the PinPad process is complete with the `endPinpadTransaction()` Response, returning the device to an idle state.

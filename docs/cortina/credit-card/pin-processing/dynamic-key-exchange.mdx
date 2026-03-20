@@ -1,7 +1,7 @@
 ---
 title: "Dynamic Key Exchange"
 metadata:
-  og:description: "Once a key needs to be renewed (the renewal interval will be discussed during project setup, a [Cortina RenewKey ]() request will be sent."
+  og:description: "Once a key needs to be renewed (the renewal interval will be discussed during project setup), a Cortina RenewKey request will be sent."
 ---
 
 Once a key needs to be renewed (the renewal interval will be discussed during project setup), a [Cortina RenewKey]() request will be sent. The request will include all the details of the current key in the `CurrentKeyData` object. The Payment Gateway should send the new key data in the `NewKeyData` object of the response, as in the example below:
