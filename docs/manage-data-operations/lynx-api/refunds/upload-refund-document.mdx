@@ -6,7 +6,7 @@ metadata:
 
 import {EndpointCard} from "/snippets/EndpointCard.jsx";
 
-In cases where the customer contacts the billing provider directly for a refund, the `IsRefundedExternally` has to be set to `true`  when accepting the refund and the file received by the billing provider added in the `RefundedDocumentUrl`
+In cases where the customer contacts the billing provider directly for a refund, the `IsRefundedExternally` has to be set to `true` when accepting the refund and the file received by the billing provider added in the `RefundedDocumentUrl`.
 
 In Nayax Core, this is set when accepting or declining a refund by selecting **Refunded Externally**. You can upload the refund document. See the image below:
 
@@ -14,7 +14,7 @@ In Nayax Core, this is set when accepting or declining a refund by selecting **R
 
 ## Lynx API
 
-With Lynx API you can also upload the refund documentation to get the `RefundedDocumentUrl`  the endpoint below is used for this:
+With Lynx API you can also upload the refund documentation to get the `RefundedDocumentUrl`, the endpoint below is used for this:
 
 <EndpointCard
   title="Upload Refund Documentation"
@@ -52,13 +52,13 @@ The table below details the body parameters of the request.
 | **Name**      | **Type**  | **Description**                                                                                                                                   |
 | ------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | FileName      | string    | The name of the file being uploaded.                                                                                                              |
-| FileData      | base64    | The base64-encoded content of the file being uploaded. You can use a [PDF to base 64 online convertor](https://base64.guru/converter/encode/pdf). |
+| FileData      | base64    | The base64-encoded content of the file being uploaded. You can use a [PDF to base 64 online converter](https://base64.guru/converter/encode/pdf). |
 | TransactionId | int64     | The unique identifier of the transaction associated with the file.                                                                                |
 | SiteId        | int32     | The unique identifier of the site where the transaction occurred.                                                                                 |
 | MachineAuTime | date-time | The machine's authorization time is associated with the transaction.                                                                              |
 
 <Note>
-  The `TransactionId`, `SiteId `and `MachineAuTime `need to be the same as sent in the refund request.
+  The `TransactionId`, `SiteId` and `MachineAuTime` need to be the same as sent in the refund request.
 </Note>
 
 Once the request is done successfully, the response will contain a URL with the uploaded document.

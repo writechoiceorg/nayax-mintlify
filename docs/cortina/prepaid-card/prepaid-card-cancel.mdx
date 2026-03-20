@@ -1,16 +1,16 @@
 ---
 title: "Cancel"
 metadata:
-  og:description: "Cortina Prepaid uses the Cancelcommand to notify the integrator in order to initiate the cancelation process with the Cortina payment provider."
+  og:description: "Cortina Prepaid uses the Cancel command to notify the integrator in order to initiate the cancelation process with the Cortina payment provider."
 ---
 
-Cortina Prepaid uses the `Cancel`command to notify the integrator in order to initiate the cancelation process with the Cortina payment provider whenever on the bellow scenarios takes place:
+Cortina Prepaid uses the `Cancel` command to notify the integrator in order to initiate the cancelation process with the Cortina payment provider whenever one of the below scenarios takes place:
 
 1. Getting a failed `Authorization` Response (either due to timeout or having an error code in the `Authorization` Response).
 2. Issues during product selection- inactivity of the consumer/Cancel button being pressed/invalid product selection by the consumer.
 3. Vend failure (issue with product dispensing/service providing) by the machine
 
-This command is essential for having the payment provider aware that the transaction was cancelled on Nayax's end (as well as from the consumer's POV), and is done in order for the payment provider to complete the cancellation on it's end.
+This command is essential for having the payment provider aware that the transaction was cancelled on Nayax's end (as well as from the consumer's POV), and is done in order for the payment provider to complete the cancellation on its end.
 
 <Note>
   Note: This command is relevant for PreAuthorization only. It's equivalent of PreSelection flow is the `Void` command.
@@ -18,7 +18,7 @@ This command is essential for having the payment provider aware that the transac
 
 ## Request
 
-Nayax's servers send a POST request to your configured `Cancel `endpoint, which would be of the following format:
+Nayax's servers send a POST request to your configured `Cancel` endpoint, which would be of the following format:
 
 `(customer's URL)/Cortina/PrePaid/Cancel`
 
@@ -945,7 +945,6 @@ The payload should look as follows:
     "RegularCredit": 0,
     "RevalueCredit": 0
   }
-}
 }
 ```
 
