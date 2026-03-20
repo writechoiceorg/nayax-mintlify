@@ -19,10 +19,10 @@ To ensure compatibility and optimal performance, your iOS project must meet the 
 
 ## Integrate eCom SDK
 
-The integration of eCom SDK consists of three steps:
+The integration of eCom SDK consists of four steps:
 
 1. Install the SDK.
-2. Handle URL callbacks
+2. Handle URL callbacks.
 3. Initialize the SDK.
 4. Add Configuration Class.
 
@@ -106,7 +106,7 @@ Add the following URL Types entry to your application's `Info.plist` file. This 
 </array>
 ```
 
-Depending on your project setup whether you use scenes, modify either your  or  to handle URL callbacks.
+Depending on your project setup whether you use scenes, modify either your `SceneDelegate` or `AppDelegate` to handle URL callbacks.
 
 * If you are using a `SceneDelegate`, add the following method:
   ```swift
@@ -132,7 +132,7 @@ Now initialize the SDK in your application, using the `initialize` method. Add t
 <Note>
 **Sign Key and ID**
 
-Nayax provides the `signId `, `signKey`, `securityTokenId` and `securityTokenValue` values during your onboarding. Ensure you handle these values securely.
+Nayax provides the `signId`, `signKey`, `securityTokenId`, and `securityTokenValue` values during your onboarding. Ensure you handle these values securely.
 </Note>
 
 ```swift Swift
@@ -165,7 +165,7 @@ Bool {              ...
 }
 ```
 
-### Step 3: Add Configuration Class
+### Step 4: Add Configuration Class
 
 Add the `NayaxEcomConfig` struct to set the essential properties of the SDK. This table describes the parameters required to initialize the `NayaxEcomConfig` object.
 
