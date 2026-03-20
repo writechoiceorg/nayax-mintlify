@@ -1,5 +1,7 @@
 ---
 title: "Webhook Callbacks"
+metadata:
+  og:description: "Webhooks are a crucial part of the Spark API, as they serve as automatic callbacks that alert your system to important events without requiring."
 ---
 
 Webhooks are a crucial part of the Spark API, as they serve as automatic callbacks that alert your system to important events without requiring constant monitoring. For example, the `DeclineCallback `is triggered if a transaction fails after a successful `TriggerTransaction `request. This could happen if a consumer cancels the transaction on the device or if the terminal times out. Other webhooks, like `TimeoutCallback `and `StopCallback`, let you know when a session has timed out or when a card has been presented to stop a session, respectively.

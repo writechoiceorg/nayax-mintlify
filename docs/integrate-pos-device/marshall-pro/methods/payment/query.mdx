@@ -1,6 +1,8 @@
 ---
 title: "query"
 description: "Retrieve the open (unsettled) transaction."
+metadata:
+  og:description: "The query method allows the client application to poll the terminal for the current status of a specific transaction using its requestId."
 ---
 
 The `query` method allows the client application to poll the terminal for the current status of a specific transaction using its `requestId` or `transactionId`. This serves as a critical safety mechanism for handling network timeouts or application crashes, ensuring the POS and the terminal remain in sync regarding the payment outcome.

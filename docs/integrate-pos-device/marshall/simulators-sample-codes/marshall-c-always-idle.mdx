@@ -1,5 +1,7 @@
 ---
 title: "C SDK Always Idle Mode"
+metadata:
+  og:description: "The SDK can also configure the peripheral to remain idle, meaning the transaction process would begin from the peripheral's end by sending the Vend."
 ---
 
 The SDK can also configure the peripheral to remain idle, meaning the transaction process would begin from the peripheral's end by sending the "Vend Request" with the relevant product (instead of having the peripheral enable the device's reader upon a product selection, then having the device respond with "Begin Session" to the consumer's card presentation and only then have the peripheral send the "Vend Request").
