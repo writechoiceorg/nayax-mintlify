@@ -1,10 +1,10 @@
 ---
 title: "endPinpadTransaction"
 metadata:
-  og:description: "Use the endPinpadTransaction The method to terminate the PinPad mode session on the payment terminal. This is the final step in the card/PIN capture."
+  og:description: "Use the endPinpadTransaction method to terminate the PinPad mode session on the payment terminal. This is the final step in the card/PIN capture."
 ---
 
-The `endPinpadTransaction` The method is used to terminate the PinPad mode session on the payment terminal. This is the final step in the card/PIN capture process and should be called regardless of whether the transaction was successful, cancelled, or failed the PinPad steps. Successfully ending the session ensures the terminal is reset and ready for the next operation.
+The `endPinpadTransaction` method is used to terminate the PinPad mode session on the payment terminal. This is the final step in the card/PIN capture process and should be called regardless of whether the transaction was successful, cancelled, or failed the PinPad steps. Successfully ending the session ensures the terminal is reset and ready for the next operation.
 
 <Warning>
 **Contact Transactions Only**
@@ -17,7 +17,7 @@ The `endPinpadTransaction` The method is used to terminate the PinPad mode sessi
 <Note>
 **JSON-RPC 2.0**
 
-All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer) for more details on how the requests are structured and sent.
 </Note>
 
 In the request, ensure to configure the following:

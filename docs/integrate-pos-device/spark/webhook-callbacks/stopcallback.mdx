@@ -10,9 +10,9 @@ metadata:
 This feature must be enabled in Nayax Core during the integration.
 </Warning>
 
-The `StopCallback ` endpoint It is used to notify the integrator that a consumer has presented their payment card at the terminal in an attempt to stop an ongoing session. This process allows the Spark integrator to validate and match the card against an active session that was originally authorized on the same terminal. This is primarily used in the Pre-Authorization transaction flow, if you choose to implement it.
+The `StopCallback` endpoint is used to notify the integrator that a consumer has presented their payment card at the terminal in an attempt to stop an ongoing session. This process allows the Spark integrator to validate and match the card against an active session that was originally authorized on the same terminal. This is primarily used in the Pre-Authorization transaction flow, if you choose to implement it.
 
-While the payment terminal is in Idle mode, it can accept a card presentation. If Nayax recognizes the card as belonging to an active transaction, it sends the `StopCallback `with the transaction details. If a session match is found, you need to send a `Settlement` request to complete the session termination.
+While the payment terminal is in Idle mode, it can accept a card presentation. If Nayax recognizes the card as belonging to an active transaction, it sends the `StopCallback` with the transaction details. If a session match is found, you need to send a `Settlement` request to complete the session termination.
 
 <Warning>
 **Timeout**

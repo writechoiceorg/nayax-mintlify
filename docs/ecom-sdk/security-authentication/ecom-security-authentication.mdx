@@ -48,13 +48,13 @@ Once you have the required resources, you can start authenticating your request 
 4. Generate the `Signature` header following the steps below:
    1. Concatenate the serialized request and the Sign Key, separated by ";".
       ```json
-      {"TokenlId":116383,...,"Cipher":"..."};RbtdDsiVNjkAeRty
+      {"TokenId":116383,...,"Cipher":"..."};RbtdDsiVNjkAeRty
       ```
-   2. Hash the result using SHA-256 (UTF-8 encoded) and use the output as your `Signature `header:
+   2. Hash the result using SHA-256 (UTF-8 encoded) and use the output as your `Signature` header:
       ```json
       536a5813206bcb663d98715d10a6b2612364245c865cdd5f781ff4428c4a6137
       ```
-5. Add the `IntegratorId `and `Signature `headers to your request.
+5. Add the `IntegratorId` and `Signature` headers to your request.
    ```json
    curl -X POST https://api-sandbox.nayax.com/ecom/validate-merchant \
    --header 'IntegratorId: 927' \

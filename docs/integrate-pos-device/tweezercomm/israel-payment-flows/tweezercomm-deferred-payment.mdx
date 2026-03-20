@@ -16,7 +16,7 @@ This two-step approach is particularly useful for transactions where the final a
 To understand the Deferred transaction flow, consider the following sequence of events:
 
 <Note>
-  Steps insisde the green area are performed online, and the ones inside the red area are performed offline.
+  Steps inside the green area are performed online, and the ones inside the red area are performed offline.
 </Note>
 
 <Frame><img src="/images/docs/tweezercomm-deferred-payment/image1.png" /></Frame>
@@ -25,7 +25,7 @@ Here's a breakdown of each step:
 
 1. After the client application (POS) performs its [`doPeriodic()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) to settle the stored card transactions.
 2. `setConfig()` Will switch the device to work in deferred mode, using offline mode.
-3. The pos send a [`doTransaction()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransaction-ashrait) request to the Nayax Device, triggering a new transaction.
+3. The POS sends a [`doTransaction()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransaction-ashrait) request to the Nayax Device, triggering a new transaction.
 4. The CardHolder taps their contactless card.
 5. The Nayax Device checks for "Deferred pre-conditions" and, upon approval, returns the transaction result as `Approved->Pending` This means the transaction is approved.
    <Note>
