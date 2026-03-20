@@ -22,15 +22,15 @@ The Lynx API provides various methods to retrieve all this information, allowing
 These are the available methods discussed on this page:
 
 <Columns cols={2}>
-  <Card icon="link" title="Get Specific Machine Basic Info by MachineID" href="/reference/lynx/machines/get-specific-machine-basic-info">
+  <Card icon="link" title="Get Specific Machine Basic Info by MachineID" href="/reference/lynx/machines/get-machine-basic-info">
     GET
   </Card>
 
-  <Card icon="link" title="Get Specific Machine Basic Info by Device" href="/reference/lynx/machines/get-specific-machine-basic-info-by-device">
+  <Card icon="link" title="Get Specific Machine Basic Info by Device" href="/reference/lynx/machines/get-machine-info-by-device">
     GET
   </Card>
 
-  <Card icon="link" title="Get Specific Machine Basic Info by VPOS" href="/reference/lynx/machines/get-specific-machine-basic-info-by-vpos">
+  <Card icon="link" title="Get Specific Machine Basic Info by VPOS" href="/reference/lynx/machines/get-machine-info-by-vpos">
     GET
   </Card>
 
@@ -49,7 +49,7 @@ Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) 
 
 ### Retrieve a Machine by `MachineID`
 
-Using the [Get Specific Machine Basic Info](/reference/lynx/machines/get-specific-machine-basic-info) you can get the details of a machine with a specific `MachineID`. See an example request in the code block below:
+Using the [Get Specific Machine Basic Info](/reference/lynx/machines/get-machine-basic-info) you can get the details of a machine with a specific `MachineID`. See an example request in the code block below:
 
 <CodeGroup>
 ```sh Request
@@ -146,7 +146,7 @@ Insert the `MachineID` in the path param of the request.
 
 ### Retrieve a Machine by `DeviceSerialNumber`
 
-Using the [Get Specific Machine Basic Info by Device](/reference/lynx/machines/get-specific-machine-basic-info-by-device) endpoint, you can retrieve the details of a machine associated with a specific DeviceSerialNumber. See an example request in the code block below:
+Using the [Get Specific Machine Basic Info by Device](/reference/lynx/machines/get-machine-info-by-device) endpoint, you can retrieve the details of a machine associated with a specific DeviceSerialNumber. See an example request in the code block below:
 
 <CodeGroup>
 ```sh Request
@@ -243,7 +243,7 @@ Insert the DeviceSerialNumber in the request path parameter to fetch the machine
 
 ### Retrieve a Machine by `VPOSSerial`
 
-Using the [Get Specific Machine Basic Info by VPOS](/reference/lynx/machines/get-specific-machine-basic-info-by-vpos) endpoint, you can retrieve the details of a machine associated with a specific `VPOSSerial`. See an example request in the code block below:
+Using the [Get Specific Machine Basic Info by VPOS](/reference/lynx/machines/get-machine-info-by-vpos) endpoint, you can retrieve the details of a machine associated with a specific `VPOSSerial`. See an example request in the code block below:
 
 <CodeGroup>
 ```sh Request
