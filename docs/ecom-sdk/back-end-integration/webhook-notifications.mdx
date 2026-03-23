@@ -12,7 +12,7 @@ This ensures you are always up to date with the latest transaction information.
 You will provide the URL to receive the webhooks during the onboarding phase.
 </Note>
 
-## Webhook Request
+## Webhook request
 There are two types of merchant notifications, depending on the `RequestType`.
 
 ### Type 1 — Sale or Auth (RequestType: 0)
@@ -93,7 +93,7 @@ Refer to the sample below for the payload structure:
 }
 ```
 
-## Webhook Request Parameters
+## Webhook request parameters
 The following parameters define the structure of the incoming webhook notification:
 
 | Field Name | Type | Description |
@@ -110,14 +110,14 @@ The following parameters define the structure of the incoming webhook notificati
 | `FollowUpRequestOptions` | Array[Int] | Available follow-up request types (e.g. [2, 4] means Settlement and Refund are available). |
 | `Hmac` | String | Optional. HMAC-SHA256 signature for validating authenticity. See HMAC Validation. |
 
-### Conditional Fields
+### Conditional fields
 The following fields are conditional and are not always present:
 
 * **NayaxToken**: Present when the actor uses Charge Token.
 * **AdditionalInfo**: Present if the actor includes it in the original request. Appears in both `MerchantNotification` and `MerchantTransactionNotification`.
 * **EReceiptUrl**: Present when the eReceipt feature is enabled.
 
-## Webhook Delivery & Retries
+## Webhook delivery & retries
 
 Nayax sends webhook notifications to the URL you provided during onboarding. The system reacts to your server's HTTP response codes as follows:
 
@@ -131,7 +131,7 @@ Nayax sends webhook notifications to the URL you provided during onboarding. The
 If HMAC validation fails on your end, **do not return 500**. A broken HMAC implementation will not be fixed by retrying. Fix the implementation and test with the examples on the [HMAC Validation](/docs/hmac-validation) page.
 </Note>
 
-## See Also
+## See also
 
 <Columns cols={2}>
   <Card icon="link" title="Initialize Transactions" href="/docs/start-a-transaction" />

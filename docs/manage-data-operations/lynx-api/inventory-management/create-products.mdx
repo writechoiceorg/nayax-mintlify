@@ -37,7 +37,7 @@ This process can also be completed through Lynx API. In the step-by-step guide b
 Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens and how to properly use them to authenticate your API requests.
 </Warning>
 
-### Create a new Product
+### Create a new product
 
 You can add a new product to an operator's catalog using the [Create New Operator Product ](/reference/lynx/products/create-operator-product) endpoint. See an example request in the code block below:
 
@@ -120,7 +120,7 @@ In the body parameters, send the following details about the product:
 | **ProductLastUpdated**              | `date-time/null` | The date and time when the product was last updated.                     |
 | **VatId**                           | `int32/null`     | The VAT (Value Added Tax) identifier associated with the product.        |
 
-### Create Multiple Products at Once
+### Create multiple products at once
 
 You can create multiple products for a single machine using the [Create Machine Products](/reference/lynx/machine-products/create-machine-products) endpoint. This allows you to add several products in one request, even if they belong to different product groups.
 
@@ -260,7 +260,7 @@ Where:
 | `LastUpdated`      | Timestamp of the last update.                     |
 | `IsActive`         | Indicates if the product is active.               |
 
-### Update Product
+### Update product
 
 You can use the [Update Specific Product](/reference/lynx/products/update-specific-product) endpoint to change a product's details by adding the product's `NayaxProductID` in the path params and the information to change in the body request. As in the example request below:
 
