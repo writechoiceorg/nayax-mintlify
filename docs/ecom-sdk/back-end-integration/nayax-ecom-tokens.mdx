@@ -4,7 +4,7 @@ metadata:
   og:description: "The Nayax eCom SDK uses tokenisation for Credential on File (COF) transactions. When a COF initialisation is triggered, the eCom API responds with a."
 ---
 
-The Nayax eCom SDK uses tokenisation for Credential on File (COF) transactions. When a COF initialisation is triggered, the eCom API responds with a Nayax card token to the eCom SDK. This token is then stored within Nayax's systems, and your application can utilise it for recurring transactions, as it signifies the cardholder's authorisation for the merchant to store and debit their card in the future.
+The Nayax eCom SDK uses tokenisation for Credential on File (COF) transactions. When a COF initialisation is triggered, the eCom API responds with a Nayax card token to the eCom SDK. This token is then stored within Nayax's systems, and your application can use it for recurring transactions, as it signifies the cardholder's authorisation for the merchant to store and debit their card in the future.
 
 Tokens offer a secure method to store a card for future use, such as for subscription payments or saved card transactions.
 
@@ -14,9 +14,9 @@ Tokens offer a secure method to store a card for future use, such as for subscri
 A token's type (subscription/COF/top-up) is set during its initial creation and stored in our system. If a subsequent [Charge Token](/reference/ecom/payments/charge-token) request includes a different token type parameter, it is ignored. The system always uses the original token type from the initialization request, regardless of what is provided in later charge requests.
 </Note>
 
-## Charge a Token
+## Charge a token
 
-The [ `/charge-token`](/reference/ecom/payments/charge-token) endpoint is used for recurring payments. It should be used for recurring payment calls and requires a card token to be added to the request. These calls are performed only on the server.
+Use the [ `/charge-token`](/reference/ecom/payments/charge-token) endpoint for recurring payments. It should be used for recurring payment calls and requires a card token to be added to the request. Perform these calls only on the server.
 
 See an example request in the code block below:
 
@@ -75,7 +75,7 @@ See an example request in the code block below:
 
 See more details about the parameters of the request in the `/payment` API Reference page.
 
-## Get Token Data
+## Get token data
 
 The `/get-card-token` endpoint retrieves essential data about a saved card token. It allows you to access information such as the card's last four digits, expiration date, brand, and status.
 
@@ -118,7 +118,7 @@ A successful response will return the token data as in the example below:
 
 See more details about the parameters of the request in the [Retrieve Card Token]() API Reference page.
 
-## Delete a Token
+## Delete a token
 
 The Delete a Card Token endpoint allows you to delete a saved token. The request must include the following in the `BasicInfo` and `MachineInfo` objects:
 
@@ -154,7 +154,7 @@ A successful response will return the status of the deletion. See the code block
 
 See more details about the parameters of the request in the [Delete A Token]() API Reference page.
 
-## See Also
+## See also
 
 <Columns cols={2}>
   <Card icon="link" title="Initialize Transactions" href="/docs/start-a-transaction" />

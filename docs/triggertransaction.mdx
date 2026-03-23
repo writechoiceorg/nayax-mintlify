@@ -4,7 +4,7 @@ metadata:
   og:description: "Use the TriggerTransaction endpoint to initiate user interaction with the physical terminal. It sends a wake-up signal to the specified device."
 ---
 
-The `TriggerTransaction` endpoint is used to initiate user interaction with the physical terminal. It sends a wake-up signal to the specified device. The request should contain a value that Nayax will use to authorize (Pre-Authorization) or charge (Pre-Selection) the consumer’s payment card.
+Use the `TriggerTransaction` endpoint to initiate user interaction with the physical terminal. It sends a wake-up signal to the specified device. The request should contain a value that Nayax will use to authorize (Pre-Authorization) or charge (Pre-Selection) the consumer’s payment card.
 
 * If the Pre-Authorization flow is implemented, the authorization value can be managed and retrieved from Nayax Core.
 * In case the Pre-Selection flow is implemented, a request with a missing amount will return an error.
@@ -163,7 +163,7 @@ The table below describes the parameters of the request:
 
 ## Response
 
-A successful response will return the following body:
+A successful response returns the following body:
 
 ```json
 

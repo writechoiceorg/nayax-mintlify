@@ -22,8 +22,8 @@ Integrating the eCom Android SDK consists of four steps:
 
 1. Install the SDK
 2. Initialize the SDK
-3. Add Configuration Class
-4. Register for Payment Result
+3. Add configuration class
+4. Register for payment result
 
 The sections below provide a detailed description of each step.
 
@@ -108,7 +108,7 @@ class App : Application() {
 }
 ```
 
-### Step 3: Add the Configuration Class
+### Step 3: Add the configuration class
 
 The configuration class defines the SDK's essential properties. The following table provides a description of each available configuration option:
 
@@ -121,7 +121,7 @@ The configuration class defines the SDK's essential properties. The following ta
 | `securityTokenValue` | `String`               | The security token value used for merchant validation.                          |
 | `enableLog`          | `Bool`                 | A flag to enable or disable SDK logging. Defaults to `false`.                   |
 
-### Step 4: Register for Payment Result
+### Step 4: Register for payment result
 
 Prepare the SDK to handle payment transaction results. Add the following setup in your `MainActivity`:
 
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
 
 Now that the eCom SDK is integrated into your Android application, you can start processing payments through it. See the [Front-End Integration](/docs/ecom-sdk/front-end-integration/front-end-sdk) guide for more details on how this works.
 
-## See Also
+## See also
 
 <Columns cols={2}>
   <Card icon="link" title="iOS SDK" href="/docs/ecom-sdk/get-started/ios-sdk" />
