@@ -1,5 +1,7 @@
 ---
 title: "Retrieve Hierarchy"
+metadata:
+  og:description: "Nayax Core shows an operator's hierarchy in the Operator menu on the left sidebar. If you check its data, the Company section will detail its."
 ---
 
 import {EndpointCard} from "/snippets/EndpointCard.jsx";
@@ -14,13 +16,13 @@ You can also use Lynx API to programmatically retrieve the hierarchy of an Opera
 
 <EndpointCard
   title="Get Actor Hierarchy for Current User"
-  href="/reference/lynx/actors/get-actor-hierarchy-for-current-user"
+  href="/reference/lynx/actors/get-actor-hierarchy"
   method="get"
 />
 
 ### Get Operator Hierarchy
 
-The [Get Actor Hierarchy for Current User](/reference/lynx/actors/get-actor-hierarchy-for-current-user) endpoint retrieves the hierarchy for the current user or a specified actor/operator and its child entities, such as areas, routes, and machines, by providing the `ActorID` in the query params of the request. See the example request in the code block below:
+The [Get Actor Hierarchy for Current User](/reference/lynx/actors/get-actor-hierarchy) endpoint retrieves the hierarchy for the current user or a specified actor/operator and its child entities, such as areas, routes, and machines, by providing the `ActorID` in the query params of the request. See the example request in the code block below:
 
 ```sh
 curl --request GET \

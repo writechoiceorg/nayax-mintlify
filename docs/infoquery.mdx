@@ -1,5 +1,7 @@
 ---
 title: "InfoQuery"
+metadata:
+  og:description: "Nayax sends an InfoQuery API after a successful StartSession response. Its main purposes are: To retrieve information to be shown on the POS device."
 ---
 
 Nayax sends an `InfoQuery` API after a successful `StartSession` response. Its main purposes are:
@@ -11,7 +13,7 @@ This ensures the consumer is informed and the device can proceed accordingly.
 
 ## Request
 
-Spark sends a GET request to your configured`InfoQuery` endpoint. The request body is as in the example below:
+Spark sends a GET request to your configured `InfoQuery` endpoint. The request body is as in the example below:
 
 ```json
 {
@@ -53,6 +55,7 @@ A successful response will return the following body:
  "Verdict": "Approved",
  "StatusMessage": "Charger is available for charging"
  }
+}
 ```
 
 ### Response Parameters
@@ -74,7 +77,7 @@ The table below describes the parameters of the response:
 
 #### `ServiceStationAvailability`
 
-Based on the `ServiceStationAvailability `field, the POS device will react in one of the following ways:
+Based on the `ServiceStationAvailability` field, the POS device will react in one of the following ways:
 
 * `1` (Available): The POS device proceeds to the payment stage.
 * `2` (Busy): The POS device will allow a Device Stop flow to be initiated.

@@ -1,5 +1,7 @@
 ---
 title: "Overview"
+metadata:
+  og:description: "The Marshall Protocol is a proprietary communication protocol developed by Nayax that operates over RS232. Designed as a robust communication."
 ---
 
 The Marshall Protocol is a proprietary communication protocol developed by Nayax that operates over RS232. Designed as a robust communication protocol, it supports reliable transaction exchange between a machine controller and the VPOST, ONYX, and VPOSM product lines. It provides a very rich payment API that supports various payment flows, such as:
@@ -22,7 +24,7 @@ For your convenience, the SDK is provided in C, C#, and JAVA.
 <Warning>
 **Price field/ Decimal Place**
 
-The price field in Marshall is an integer that is 2 bytes long, meaning the highest value that can be sent to the device is 65535 (0xFFFF). The actual price the device would attempt to charge a consumer for would be a multiplication of the price sent form the peripheral with 10^(-decimal place): meaning the device would look at it's own Decimal Place configurations as set in Nayax Core (it's value depends on the country on which the device is installed in) when making the price calculations for the authorization and settlement.
+The price field in Marshall is an integer that is 2 bytes long, meaning the highest value that can be sent to the device is 65535 (0xFFFF). The actual price the device would attempt to charge a consumer for would be a multiplication of the price sent from the peripheral with 10^(-decimal place): meaning the device would look at its own Decimal Place configurations as set in Nayax Core (its value depends on the country on which the device is installed in) when making the price calculations for the authorization and settlement.
 
 This means that in case of Decimal Place of 2, the highest price that the device would be able to authorize or charge the consumer would be 655.35
 </Warning>

@@ -1,5 +1,7 @@
 ---
 title: "Inquiry"
+metadata:
+  og:description: "Cortina DQR uses the Inquiry to inquire the approval status of a Transaction ID. This call will include the transaction’s final amount and the."
 ---
 
 Cortina DQR uses the `Inquiry`  to inquire the approval status of a Transaction ID. This call will include the transaction’s final amount and the transaction ID generated in the `GenerateQR` call.\
@@ -634,7 +636,7 @@ The following table describes the parameters included in the request body:
 The `Inquiry`Response that the customer's payment method would send to Nayax's servers.
 
 Usually the response would be either "Approved" or "Declined" with code 993 which means "pending"- meaning the payment provider is still working on deciding on whether or not to approve the consumer (pending "Approved" or "Declined" response).\
-In case of "pending" response, it will lead to Nayax's servers to keep polling until either a final response have been received ("Approved"/Declined") or it reaches the limit as configured in Nayax Core.
+In case of "pending" response, it will lead to Nayax's servers to keep polling until either a final response has been received ("Approved"/"Declined") or it reaches the limit as configured in Nayax Core.
 
 The payload should look as follows:
 

@@ -1,5 +1,7 @@
 ---
 title: "Get Machine Widget Data (API)"
+metadata:
+  og:description: "The Lynx Widget API provides access to widget data. In this article, you will learn how to retrieve widget information using API calls, from listing."
 ---
 
 The Lynx Widget API provides access to widget data. In this article, you will learn how to retrieve widget information using API calls, from listing all available widgets to obtaining data from a specific widget.
@@ -10,18 +12,18 @@ Before making calls to the Widget API, you need to have:
 
 * Access to the Lynx QA or Production environment
 * A valid API token (See [Security & Token](/docs/manage-data-operations/lynx-api/security))
-* [Machines](/reference/lynx/machines/get-specific-machine-basic-info) or [Operator](/docs/manage-data-operations/lynx-api/operator/index) IDs
+* [Machines](/reference/lynx/machines/get-machine-basic-info) or [Operator](/docs/manage-data-operations/lynx-api/operator/index) IDs
 
 ## Available Endpoints
 
 The Widget API offers two main endpoints:
 
 <Columns cols={2}>
-  <Card icon="link" title="Retrieve Widget Data" href="/reference/lynx/report/retrieve-widget-data">
+  <Card icon="link" title="Retrieve Widget Data" href="/reference/lynx/report/get-widget-data">
     This endpoint returns the actual data from a specific widget for a machine or operator.
   </Card>
 
-  <Card icon="link" title="Get Available Widgets" href="/reference/lynx/report/get-available-widgets">
+  <Card icon="link" title="Get Available Widgets" href="/reference/lynx/report/get-dashboard-widgets">
     This endpoint returns a complete list of all available widgets, including their IDs, names, descriptions, supported filters, and configurations.
   </Card>
 </Columns>
