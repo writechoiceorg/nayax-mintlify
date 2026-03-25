@@ -32,8 +32,8 @@ Below is a breakdown of the diagram:
 1. A consumer selects a service station (and/or presents a card) on the Nayax Device, which sends an [`InfoQuery`](/reference/spark/transactions/infoquery) request to the Nayax Server.
 2. The Nayax Server sends a [`StartSession`](/reference/spark/transactions/startsession) to the 3rd Party Server.
 3. The 3rd Party Server responds to the Nayax Server with a `StartSession Response`.
-4. The Nayax Server sends a `InfoQuery` to the 3rd Party Server.
-5. The 3rd Party Server responds to the Nayax Server with a `InfoQuery`.
+4. The Nayax Server sends an `InfoQuery` to the 3rd Party Server.
+5. The 3rd Party Server responds to the Nayax Server with an `InfoQuery`.
 6. The Nayax Server sends an `InfoQuery` command back to the Nayax Device.
 7. The consumer presents their card (if they haven't already done so). An `AuthorizationRequest` is sent from the Nayax Device to the Nayax Server.
 8. The Nayax Server performs authorization with a Payment Provider and then sends a [`TransactionNotify`](/reference/spark/transactions/transactionnotify)  to the 3rd Party Server.
