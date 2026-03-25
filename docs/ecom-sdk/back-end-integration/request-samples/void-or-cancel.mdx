@@ -1,10 +1,8 @@
 ---
 title: "Void or Cancel"
 metadata:
-  og:description: "The Void and Cancel requests both reverse a transaction, but their use depends critically on the original transaction's status. Both operations use."
+  og:description: "The Void and Cancel requests both reverse a transaction, but their use depends critically on the original transaction's status."
 ---
-
-<br />
 
 The Void and Cancel requests both reverse a transaction, but their use depends critically on the original transaction's status. Both operations use the same request structure but differ in their RequestType.
 
@@ -16,14 +14,14 @@ If the transaction has already been captured and the settlement batch is closed 
 
 ## Request
 
-The Void or Cancel request uses the same endpoint as the initial [`/charge-token`](/reference/ecom/payments/charge-token) request. The API determines it's a void or cancel based on the `RequestType` value within the `BasicInfo` object.
+The Void or Cancel request uses the same endpoint as the initial [`/close-transaction`](/reference/ecom/payments/close-transaction) request. The API determines it's a void or cancel based on the `RequestType` value within the `BasicInfo` object.
 
 See the example below:
 
 ```json
 {
   "basicInfo": {
-    "requestType": 4,          // Example: 4 for Cancel OR 5 for Void
+    "requestType": 3,          // 3 for Void, 7 for Cancel
     "entryMode": 1,
     "amount": 25.00,           // The full amount of the original transaction
     "currency": "EUR",
@@ -46,7 +44,7 @@ See the example below:
 }
 ```
 
-Note that the `RequestType` is set to the value corresponding to a Cancel (4) or Void (5). The `Amount` specifies the full amount of the original authorization/sale.
+Note that the `RequestType` is set to the value corresponding to a Void (3) or Cancel (7). The `Amount` specifies the full amount of the original authorization/sale.
 
 ### Request Parameters
 
@@ -54,7 +52,7 @@ The following table highlights the critical fields used to define a Void or Canc
 
 | Parameter            | Type     | Description                                                       |
 | :------------------- | :------- | :---------------------------------------------------------------- |
-| `RequestType`        | Int32    | 4 for `Cancel` or 5 for `Void`.                                   |
+| `RequestType`        | Int32    | The request type can be 3 for `Void`, 7 for `Cancel`.                                   |
 | `Amount`             | Decimal  | Must be the full amount of the original authorization/sale.       |
 | `MerchantRequestId`  | String   | A new, unique ID for this specific reversal attempt.              |
 | `TransactionId`      | String   | The unique Nayax ID returned in the original response.            |
