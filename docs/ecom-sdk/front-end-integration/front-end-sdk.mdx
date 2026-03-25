@@ -67,7 +67,6 @@ The SDK fires a [callback](/docs/ecom-sdk/front-end-integration/handling-payment
 Once the transaction is processed, Nayax automatically sends the result to your back-end as a [webhook notification](/docs/ecom-sdk/back-end-integration/webhook-notifications), a JSON payload containing the transaction status, card details, and your original `merchantRequestId`. Validate the [`Hmac`](/docs/ecom-sdk/hmac-validation/index) field before processing, then return `HTTP 200` to confirm receipt. This is your authoritative record of the transaction.
 
 ## Available Guides
-<br />
 
 <Columns cols={3}>
   <Card icon="link" title="Create Payments" href="/docs/ecom-sdk/front-end-integration/ecom-sdk-create-payments" />
@@ -76,5 +75,3 @@ Once the transaction is processed, Nayax automatically sends the result to your 
 
   <Card icon="link" title="Drop-In UI" href="/docs/ecom-sdk/front-end-integration/drop-in-ui/index" />
 </Columns>
-
-<br />
