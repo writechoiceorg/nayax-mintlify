@@ -10,38 +10,33 @@ The diagram below describes the typical payment flow for a front-end integration
 
 ```mermaid
 sequenceDiagram
-    autonumber
-    participant App as Front-End (Your App)
-    participant SDK as eCom SDK
-    participant Server as Nayax Server
-    participant Backend as Your Back-End
+    autonumber
+    participant A as App
+    participant S as SDK
+    participant N as Nayax
+    participant B as Backend
 
-    Note over App,Server: 1. Setup
+    Note over A,N: 1. Setup (Auto-Auth)
+    A->>S: startPayment()
+    S->>N: Open Session
+    N-->>S: Session Data
 
-    App->>SDK: Initiate payment (startPayment + PaymentData)
-    SDK->>Server: Authenticate merchant + open payment session
-    Server-->>SDK: Session confirmed (Session Data)
+    Note over A,S: 2. UI
+    S->>A: Render Drop-In UI
+    Note right of A: User taps "Pay"
 
-    Note over SDK,App: 2. UI
+    Note over S,N: 3. Execution
+    S->>N: authRequest
+    N-->>S: Approval
 
-    SDK->>App: Display payment screen (Drop-In UI)
-    Note over App: Cardholder enters card details and taps "Pay"
+    Note over A,B: 4 & 5 (Independent)
 
-    Note over SDK,Server: 3. Execution
+    Note over S,A: 4. Callback
+    S-->>A: onPaymentComplete
 
-    SDK->>Server: Submit authorization request (authRequest)
-    Server-->>SDK: Approval
-
-    Note over App,Backend: Steps 4 and 5 happen independently
-
-    Note over SDK,App: 4. Callback
-
-    SDK-->>App: Deliver result to your app (onPaymentComplete)
-
-    Note over Server,Backend: 5. Webhook
-
-    Server->>Backend: Send transaction record (POST + HMAC signature)
-    Backend-->>Server: Confirm receipt (HTTP 200)
+    Note over N,B: 5. Webhook
+    N->>B: POST (JSON + HMAC)
+    B-->>N: HTTP 200
 ```
 
 Here's the breakdown of the diagram:
