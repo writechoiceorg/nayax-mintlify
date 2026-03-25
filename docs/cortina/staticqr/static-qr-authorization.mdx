@@ -1,14 +1,16 @@
 ---
 title: "Authorization"
+metadata:
+  og:description: "Cortina SQR uses the Authorization command to notify the integrator about the result of a card tap in order to initiate the authorization process."
 ---
 
-Cortina SQR uses the `Authorization `command to notify the integrator about the result of a card tap in order to initiate the authorization process with the Cortina payment provider.
+Cortina SQR uses the `Authorization` command to notify the integrator about the result of a card tap in order to initiate the authorization process with the Cortina payment provider.
 
 This command is essential for proceeding to transaction confirmation or rejection handling.
 
 ## Request
 
-Nayax's servers send a POST request to your configured `Authoirzation `endpoint, which would be of the following format:
+Nayax's servers send a POST request to your configured `Authorization` endpoint, which would be of the following format:
 
 `(customer's URL)/Cortina/StaticQR/Authorization`
 

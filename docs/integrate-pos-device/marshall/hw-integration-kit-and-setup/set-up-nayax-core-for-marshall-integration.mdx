@@ -1,5 +1,7 @@
 ---
 title: "Set Up Nayax Core for Marshall Integration"
+metadata:
+  og:description: "Once you have completed the Marshall installation process, follow the steps below to configure the Nayax device to support the Marshall functionality."
 ---
 
 Once you have completed the Marshall installation process, follow the steps below to configure the Nayax device to support the Marshall functionality.
@@ -78,7 +80,7 @@ If your machine works in the **multi-session mode**, set the session timeout par
 **Session Expiration and Settlement**
 
 Once the session timeout reaches the defined limit, the session expires. In such cases, the settlement amount will correspond to the price sent during the "vend request" command.
-Once a session has timed out, the device would settle the transaction on it's own and send a "Status" command to the peripheral in order to notify it about the settlement taking place. This would let the peripheral know that it now longer needs to settle said transaction (as it has already been settled), and should he try to settle the already-settled transaction he would get "settlement error" (as the device couldn't find said session to settle it).
+Once a session has timed out, the device would settle the transaction on its own and send a "Status" command to the peripheral in order to notify it about the settlement taking place. This would let the peripheral know that it no longer needs to settle said transaction (as it has already been settled), and should he try to settle the already-settled transaction he would get "settlement error" (as the device couldn't find said session to settle it).
 </Note>
 
 ## Configure Keep Alive Parameter
@@ -119,7 +121,7 @@ Pre-selection supports Multi-Session operations, where one device can manage mul
 
 1. For the configured machine, click the **General** tab.
 2. Click the **MDB** section.
-3. Select **MDB Flags** and set **PreSelection Enabled **to** Yes**.
+3. Select **MDB Flags** and set **PreSelection Enabled** to **Yes**.
 
    <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image7.png" /></Frame>
 

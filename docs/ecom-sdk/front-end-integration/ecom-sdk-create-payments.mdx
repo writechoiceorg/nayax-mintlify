@@ -1,18 +1,20 @@
 ---
 title: "Initiate Payments"
+metadata:
+  og:description: "The startPayment method is the primary entry point for initiating a payment flow within your application using the Nayax eCom SDK. The method."
 ---
 
-The `startPayment`method is the primary entry point for initiating a payment flow within your application using the Nayax eCom SDK. The method internally handles the calls to `validateMerchant `and `initialize `(the Nayax eCom API calls, not the SDK initialization). This means that you do not need to explicitly make these API calls before initiating a payment. The SDK will do the following:
+The `startPayment` method is the primary entry point for initiating a payment flow within your application using the Nayax eCom SDK. The method internally handles the calls to `validateMerchant` and `initialize` (the Nayax eCom API calls, not the SDK initialization). This means that you do not need to explicitly make these API calls before initiating a payment. The SDK will do the following:
 
-* Perform the necessary `validateMerchant`call to authenticate the transaction securely.
-* Execute the `initialize `call to set up the payment session with Nayax servers and the billing provider.
+* Perform the necessary `validateMerchant` call to authenticate the transaction securely.
+* Execute the `initialize` call to set up the payment session with Nayax servers and the billing provider.
 * Trigger the Drop-In UI for the user to complete the payment.
 
 This allows you to focus on providing the `PaymentData` and handling the payment results, while the SDK takes care of the communication and security protocols.
 
 ## Payment Data
 
-The `startPayment` method  requires a `PaymentData `object that encapsulates all the necessary details for the transaction.
+The `startPayment` method requires a `PaymentData` object that encapsulates all the necessary details for the transaction.
 
 <CodeGroup>
 ```kotlin Kotlin

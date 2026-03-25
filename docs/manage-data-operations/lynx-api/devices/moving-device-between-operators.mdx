@@ -1,5 +1,7 @@
 ---
 title: "Move Devices Between Operators"
+metadata:
+  og:description: "Lynx API allows you to reassign devices from one operator to another within the hierarchy in your Nayax system. This is particularly useful for."
 ---
 
 import {EndpointCard} from "/snippets/EndpointCard.jsx";
@@ -22,7 +24,7 @@ Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) 
 
 ## Moving Devices
 
-Use the [Move Devices](/reference/lynx/devices/move-devices-to-actor-id) endpoint to assign or move devices to the specified `actorId`. The request body should include an array of device identifiers, such as serial numbers. See the example request in nthe code block below:
+Use the [Move Devices](/reference/lynx/devices/move-devices-to-actor-id) endpoint to assign or move devices to the specified `actorId`. The request body should include an array of device identifiers, such as serial numbers. See the example request in the code block below:
 
 ```sh Request
 curl -X PUT "https://lynx.nayax.com/operational/api/v1/devices/move/<ACTOR_ID>" \

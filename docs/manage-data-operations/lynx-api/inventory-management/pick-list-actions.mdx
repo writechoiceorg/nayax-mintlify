@@ -1,5 +1,7 @@
 ---
 title: "Pick List Actions"
+metadata:
+  og:description: "In Nayax core, various actions can be taken regarding pick lists, such as updating, deleting, or retrieving a pick list from a machine."
 ---
 
 import {EndpointCard} from "/snippets/EndpointCard.jsx";
@@ -13,7 +15,7 @@ These actions can also be performed through Lynx API using the following endpoin
 <Columns cols={2}>
 <EndpointCard
   title="Generate Pick List"
-  href="/reference/lynx/machine-inventory/create-pick-list"
+  href="/reference/lynx/machine-inventory/generate-pick-list"
   method="post"
 />
 
@@ -131,7 +133,7 @@ Where:
       <td>
         A list of products to be updated in the pick list:
         `MachineProductId`: The unique identifier of the product in the machine.
-        `PickQty`The updated quantity of the product to be picked.
+        `PickQty`: The updated quantity of the product to be picked.
       </td>
     </tr>
   </tbody>

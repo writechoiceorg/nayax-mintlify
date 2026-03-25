@@ -692,7 +692,8 @@
                       "docs/ecom-sdk/front-end-integration/drop-in-ui/ui-theme-customization"
                     ],
                     "root": "docs/ecom-sdk/front-end-integration/drop-in-ui/index"
-                  }
+                  },
+                  "docs/ecom-sdk/front-end-integration/test-cards"
                 ],
                 "root": "docs/ecom-sdk/front-end-integration/front-end-sdk"
               },
@@ -704,11 +705,13 @@
                   {
                     "group": "Request Samples",
                     "pages": [
+                      "docs/start-a-transaction",
                       "docs/ecom-sdk/back-end-integration/request-samples/validate-merchant",
                       "docs/ecom-sdk/back-end-integration/request-samples/charge-token",
                       "docs/ecom-sdk/back-end-integration/request-samples/settlement-1",
                       "docs/ecom-sdk/back-end-integration/request-samples/refunds-1",
                       "docs/ecom-sdk/back-end-integration/request-samples/void-or-cancel",
+                      "docs/ecom-sdk/back-end-integration/request-samples/incremental-authorization",
                       "docs/ecom-sdk/back-end-integration/request-samples/get-transaction-status"
                     ]
                   }

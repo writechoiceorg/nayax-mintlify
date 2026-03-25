@@ -1,5 +1,7 @@
 ---
 title: "endPinpadTransaction"
+metadata:
+  og:description: "Use the endPinpadTransaction The method to terminate the PinPad mode session on the payment terminal. This is the final step in the card/PIN capture."
 ---
 
 The `endPinpadTransaction` The method is used to terminate the PinPad mode session on the payment terminal. This is the final step in the card/PIN capture process and should be called regardless of whether the transaction was successful, cancelled, or failed the PinPad steps. Successfully ending the session ensures the terminal is reset and ready for the next operation.

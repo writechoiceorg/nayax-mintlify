@@ -1,5 +1,7 @@
 ---
 title: "Single Session Pre-Authorization with External Settlement"
+metadata:
+  og:description: "The Marshall implementation of ExternalSettlement separates the authorization and settlement phases of a transaction. While the Marshall peripheral."
 ---
 
 The Marshall implementation of [ExternalSettlement](/reference/spark/transactions/externalsettlement) separates the authorization and settlement phases of a transaction.
@@ -203,6 +205,6 @@ If the service was not provided:
 24. The 3rd Party Server starts the authentication process.
 25. Nayax server sends a response.
 26. The 3rd Party Server sends an [ExternalCancel](/reference/spark/transactions/externalcancel) request. It must contain: `NayaxTransactionId`, `SiteId` (information retrieved from the transaction's Transfer Data's command) and be sent within 48 hours of the authorization of the consumer's card.
-27. Nayax Server's initiate the cancellation process with the payment provider.
+27. Nayax Servers initiate the cancellation process with the payment provider.
 28. Nayax's servers receive the response from the payment provider.
 29. Nayax's servers send an [ExternalCancel](/reference/spark/transactions/externalcancel) response to the 3rd Party Server.
