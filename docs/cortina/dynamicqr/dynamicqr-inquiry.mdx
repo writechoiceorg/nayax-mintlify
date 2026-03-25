@@ -5,7 +5,7 @@ metadata:
 ---
 
 Cortina DQR uses the `Inquiry`  to inquire the approval status of a Transaction ID. This call will include the transaction’s final amount and the transaction ID generated in the `GenerateQR` call.\
-An “Approved” response this call will usually attempt to vend/release the product.\
+An “Approved” response to this call will usually attempt to vend/release the product.\
 A “Decline” will terminate the transaction and a “Pending” response will trigger a subsequent `Inquiry` request after a predefined time.
 The Cortina payment provider shall validate the information and respond with the Dynamic QR information to be displayed on the Nayax device accordingly.
 
@@ -13,7 +13,7 @@ This command is essential for the duration of the authorization process.
 
 ## Request
 
-Nayax's servers send a POST request to your configured `Inquiry`endpoint, which would be of the following format:
+Nayax's servers send a POST request to your configured `Inquiry` endpoint, which would be of the following format:
 
 `(customer's URL)/Cortina/DynamicQR/Inquiry`
 
@@ -195,7 +195,7 @@ The following table describes the parameters included in the request body:
 
         <ul>
           <li>Example: 1 cent = `0.01`.</li>
-          <li>**Note:** Currencies with no decimal places are still represented as a double (e.g., 234 JYN = `234.0`).</li>
+          <li>**Note:** Currencies with no decimal places are still represented as a double (e.g., 234 JPY = `234.0`).</li>
         </ul>
       </td>
     </tr>
@@ -505,7 +505,7 @@ The following table describes the parameters included in the request body:
     </tr>
 
     <tr>
-      <td style={{ textAlign: "left" }}>`Namme`</td>
+      <td style={{ textAlign: "left" }}>`Name`</td>
       <td style={{ textAlign: "left" }}>String(255)</td>
 
       <td style={{ textAlign: "left" }}>
@@ -633,7 +633,7 @@ The following table describes the parameters included in the request body:
 
 ## Response
 
-The `Inquiry`Response that the customer's payment method would send to Nayax's servers.
+The `Inquiry` Response that the customer's payment method would send to Nayax's servers.
 
 Usually the response would be either "Approved" or "Declined" with code 993 which means "pending"- meaning the payment provider is still working on deciding on whether or not to approve the consumer (pending "Approved" or "Declined" response).\
 In case of "pending" response, it will lead to Nayax's servers to keep polling until either a final response has been received ("Approved"/"Declined") or it reaches the limit as configured in Nayax Core.

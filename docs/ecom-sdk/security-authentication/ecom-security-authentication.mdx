@@ -48,7 +48,7 @@ Once you have the required resources, you can start authenticating your request 
 4. Generate the `Signature` header following the steps below:
    1. Concatenate the serialized request and the Sign Key, separated by ";".
       ```json
-      {"TokenlId":116383,...,"Cipher":"..."};RbtdDsiVNjkAeRty
+      {"TokenId":116383,...,"Cipher":"..."};RbtdDsiVNjkAeRty
       ```
    2. Hash the result using SHA-256 (UTF-8 encoded) and use the output as your `Signature `header:
       ```json

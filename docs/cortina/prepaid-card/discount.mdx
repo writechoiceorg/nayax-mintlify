@@ -8,7 +8,7 @@ The discount feature allows Payment Gateways, implementing Cortina Prepaid API, 
 
 ## How to Implement
 
-To do so, the final amount (after the discount amount was deducted) should be sent in `SettAmount` fields, under the `PaymentInfo` object of the [Settlement endpoint response]() or at the [Sale endpoint response]().
+To do so, the final amount (after the discount amount was deducted) should be sent in `SettAmount` fields, under the `PaymentInfo` object of the [Settlement endpoint response](/reference/cortina/cortina-prepaid/cortina-prepaid-settlement) or at the [Sale endpoint response](/reference/cortina/cortina-prepaid/cortina-prepaid-sale).
 
 The amount sent must be equal to or lower than the original amount and could never be higher than the original Authorization amount.
 

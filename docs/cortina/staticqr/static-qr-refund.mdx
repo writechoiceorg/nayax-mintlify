@@ -4,7 +4,7 @@ metadata:
   og:description: "Cortina SQR uses the Refund command to notify the integrator about the refund request in order to initiate the refund process with the Cortina."
 ---
 
-Cortina SQR uses the `Refund `command to notify the integrator about the refund request in order to initiate the refund process with the Cortina payment provider.\
+Cortina SQR uses the `Refund` command to notify the integrator about the refund request in order to initiate the refund process with the Cortina payment provider.\
 Said request would be triggered via either of the following options:
 
 * Nayax's Dynamic Transaction Monitor by selecting the relevant transaction, right-clicking on it and then selecting "Request Refund".
@@ -12,7 +12,7 @@ Said request would be triggered via either of the following options:
 
 ## Request
 
-Nayax's servers send a POST request to your configured `Refund`endpoint, which would be of the following format:
+Nayax's servers send a POST request to your configured `Refund` endpoint, which would be of the following format:
 
 `(customer's URL)/Cortina/StaticQR/Refund`
 
@@ -189,7 +189,7 @@ The following table describes the parameters included in the request body:
 
         <ul>
           <li>Example: 1 cent = `0.01`.</li>
-          <li>Currencies with no decimal places are still represented as a double (e.g., 234 JYN = `234.0`).</li>
+          <li>Currencies with no decimal places are still represented as a double (e.g., 234 JPY = `234.0`).</li>
         </ul>
       </td>
     </tr>

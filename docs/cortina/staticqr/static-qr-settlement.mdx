@@ -1,16 +1,16 @@
 ---
 title: "Settlement"
 metadata:
-  og:description: "Cortina SQR uses the Settlementcommand to notify the integrator about the result of a settlement process on the device's end (meaning a product has."
+  og:description: "Cortina SQR uses the Settlement command to notify the integrator about the result of a settlement process on the device's end."
 ---
 
-Cortina SQR uses the `Settlement`command to notify the integrator about the result of a settlement process on the device's end (meaning a product has been vended) in order to initiate the settlement process with the Cortina payment provider.
+Cortina SQR uses the `Settlement` command to notify the integrator about the result of a settlement process on the device's end (meaning a product has been vended) in order to initiate the settlement process with the Cortina payment provider.
 
 This command is essential for proceeding to transaction confirmation or rejection handling.
 
 ## Request
 
-Nayax's servers send a POST request to your configured `Settlement`endpoint, which would be of the following format:
+Nayax's servers send a POST request to your configured `Settlement` endpoint, which would be of the following format:
 
 `(customer's URL)/Cortina/StaticQR/Settlement`
 
@@ -252,7 +252,7 @@ The following table describes the parameters included in the request body:
 
         <ul>
           <li>Example: 1 cent = `0.01`.</li>
-          <li>**Note:** Currencies with no decimal places are still represented as a double (e.g., 234 JYN = `234.0`).</li>
+          <li>**Note:** Currencies with no decimal places are still represented as a double (e.g., 234 JPY = `234.0`).</li>
         </ul>
       </td>
     </tr>
