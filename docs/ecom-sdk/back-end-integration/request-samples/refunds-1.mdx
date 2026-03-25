@@ -1,7 +1,7 @@
 ---
 title: "Refunds"
 metadata:
-  og:description: "This request initiates the refund process by referencing the unique identifiers of the original, captured transaction. The API confirms the original."
+  og:description: "This request initiates the refund process by referencing the unique identifiers of the original, captured transaction."
 ---
 
 This request initiates the refund process by referencing the unique identifiers of the original, captured transaction. The API confirms the original transaction exists, calculates the amount available for refund, and instructs the payment processor to disburse the funds back to the cardholder.
@@ -14,14 +14,14 @@ A Refund Request can only be performed on transactions that have been captured (
 
 ## Request
 
-The Refund request uses the same endpoint as the initial [ `/charge-token`](/reference/ecom/payments/charge-token) request. The API determines it's a settlement based on the `RequestType` value within the `BasicInfo` object.
+The Refund request uses the same endpoint as the initial [ `/close-transaction`](/reference/ecom/payments/close-transaction) request. The API determines it's a settlement based on the `RequestType` value within the `BasicInfo` object.
 
 See the example below:
 
 ```json
 {
   "basicInfo": {
-    "requestType": 3,          // Example: 3 for Refund
+    "requestType": 4,          // 4 for Full Refund, 5 for Partial Refund
     "entryMode": 1,
     "amount": 25.00,           // The amount to be refunded (can be partial)
     "currency": "EUR",
@@ -44,7 +44,7 @@ See the example below:
 }
 ```
 
-Note that the `RequestType `is set to the value corresponding to a Refund (e.g., 3). The `Amount `specifies the refund amount (which can be less than the original capture amount for a partial refund).
+Note that the `RequestType` is set to the value corresponding to a Full Refund (4) or Partial Refund (5). The `Amount `specifies the refund amount (which can be less than the original capture amount for a partial refund).
 
 ### Request Parameters
 
@@ -52,7 +52,7 @@ The following table highlights the critical fields used to define a Refund reque
 
 | Parameter            | Location  | Type     | Description                                                                                                               | Required for Refund |
 | :------------------- | :-------- | :------- | :------------------------------------------------------------------------------------------------------------------------ | :------------------ |
-| `RequestType`        | basicInfo | Int32    | **Must be the value for 'Refund'**. (e.g., 3)                                                                             | Yes                 |
+| `RequestType`        | basicInfo | Int32    | The request type can be 4 for `Full Refund` or 5 for `Partial Refund`.                                                                           | Yes                 |
 | `Amount`             | basicInfo | Decimal  | The amount being refunded. **Must be less than or equal to the amount available for refund on the original transaction.** | Yes                 |
 | `MerchantRequestId`  | basicInfo | String   | A **new, unique ID** for this specific refund attempt.                                                                    | Yes                 |
 | `TransactionId`      | basicInfo | String   | The unique Nayax ID returned in the **original CAPTURE/SALE response**.                                                   | Yes                 |
