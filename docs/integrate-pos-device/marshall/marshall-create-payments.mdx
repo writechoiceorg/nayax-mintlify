@@ -63,13 +63,13 @@ To perform a transaction using the Nayax Marshall SDK, follow the steps below.
 The price field is set as an integer, meaning it does not take into consideration the Decimal Place: the actual price is calculated by the device based on the Decimal place- meaning if you set a price of 50 in the SDK, the peripheral would send a price of 50 to the device, who would look at its own Decimal Place setting and would multiply the price sent by 10^(-decimal place). Meaning if the device has a Decimal Place of 2, the actual price the device would attempt to charge the consumer would be 0.50.\
 More on that on [Decimal Place](/docs/integrate-pos-device/marshall/marshall-faqs/faq#decimal-place).
 
-This means that in case of the device is using a Decimal Place of 2, the highest price would be 655.35 (0XFFFF with decimal of 2)
+This means that in case the device is using a Decimal Place of 2, the highest price would be 655.35 (0XFFFF with decimal of 2)
 </Warning>
 
 <Note>
 **Multi-vend Session**
 
-For a multi-vend session , when the consumer is able to select multiple items in one transaction, enable the `multi_vend_support` flag. The session would then include a list of products.\
+For a multi-vend session, when the consumer is able to select multiple items in one transaction, enable the `multi_vend_support` flag. The session would then include a list of products.\
 You can review an example of it in the demo apps.
 </Note>
 

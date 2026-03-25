@@ -48,7 +48,7 @@ Marshall: Com error,Event = 1
 
 ```
 
-Should your peripheral continue to not respond (each packet would be sent once and would have another possible 2 retries which would try and get a response from your machine- would go into details about it bellow I the section about keepalives)- the Marshall link would be deemed broken.
+Should your peripheral continue to not respond (each packet would be sent once and would have another possible 2 retries which would try and get a response from your machine- would go into details about it below in the section about keepalives)- the Marshall link would be deemed broken.
 Then, the device will repeatedly send the "Reset()" command to launch the Pairing process.
 This means the pairing process has been initiated, indicating that the VPOST/VPOSM is looking for a peripheral to communicate with. Once the machine responds to it (with the Firmware Info command)- it would complete the process by sending the Config command.
 
