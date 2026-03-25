@@ -60,7 +60,7 @@ The table below outlines all the methods available through the interface.
   <tbody>
     <tr>
       <td>
-        `onDCSParamChange(int dcs_param, byte[] data)`
+        ` onDCSParamChange(int dcs_param, byte[] data)`
       </td>
 
       <td>
@@ -70,7 +70,7 @@ The table below outlines all the methods available through the interface.
 
     <tr>
       <td>
-        `onDisplayEventButtonPressed(byte button_id)`
+        ` onDisplayEventButtonPressed(byte button_id)`
       </td>
 
       <td>
@@ -80,7 +80,7 @@ The table below outlines all the methods available through the interface.
 
     <tr>
       <td>
-        `onDisplayEventTextInput(string input)`
+        ` onDisplayEventTextInput(string input)`
       </td>
 
       <td>
@@ -90,7 +90,7 @@ The table below outlines all the methods available through the interface.
 
     <tr>
       <td>
-        `onTransferData(byte[] data)`
+        ` onTransferData(byte[] data)`
       </td>
 
       <td>
@@ -102,7 +102,7 @@ The table below outlines all the methods available through the interface.
 
     <tr>
       <td>
-        `onTimeUpdate(byte year, byte month, byte day, byte hours, byte minutes, byte seconds)`
+        ` onTimeUpdate(byte year, byte month, byte day, byte hours, byte minutes, byte seconds)`
       </td>
 
       <td>
@@ -120,4 +120,4 @@ The following methods are available to interact with the general facilities of t
 | :----------------------------------------- | :--- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `register_callbacks(GeneralEvents events)` | void | Registers the callback events for the peripheral general module. This method allows your application to handle the events defined in the GeneralEvents interface. |
 | `alert(short id, String msg)`              | void | Sends an alert to Nayax Core, shown under **Last Alerts**.                                                                                                        |
-| `requestTime()`                            | void | Makes a time request from the VPOS. The response will arrive as an event (`onTimeUpdate`).                                                                        |
+| ` requestTime()`                            | void | Makes a time request from the VPOS. The response will arrive as an event (` onTimeUpdate`).                                                                        |

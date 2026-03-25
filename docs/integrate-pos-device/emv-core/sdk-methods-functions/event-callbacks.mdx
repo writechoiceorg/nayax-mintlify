@@ -48,7 +48,7 @@ This event is triggered after a card token is successfully retrieved.
 
     | Parameter      | Description                 |
     | :------------- | :-------------------------- |
-    | `tokenDetails` | String with the Card token. |
+    | ` tokenDetails` | String with the Card token. |
   </Tab>
 
   <Tab title="Linux">
@@ -85,7 +85,7 @@ This callback provides updates on user interface messages from the card reader.
 
     | Parameter | Description                                                                                                   |
     | :-------- | :------------------------------------------------------------------------------------------------------------ |
-    | `index`   | The index of the message. Decimal value according to the [Reader messages Index table](/docs/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages) . |
+    | ` index`   | The index of the message. Decimal value according to the [Reader messages Index table](/docs/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages) . |
     | `line1`   | Text is shown on the 1st line of the reader display.                                                          |
     | `line2`   | Text is shown on the 2nd line of the reader display.                                                          |
 
@@ -114,7 +114,7 @@ For this feature to work, the reader must be configured to send External Display
   This method is only available for the Android operating system.
 </Warning>
 
-The `SystemStatusChanged `event indicates changes in the SDKs or connected devices' operational state.
+The `SystemStatusChanged` event indicates changes in the SDKs or connected devices' operational state.
 
 ```java Java
 void onTransactionComplete(TransactionResult result);
@@ -133,7 +133,7 @@ void onTransactionComplete(TransactionResult result);
 
 ## `TransactionComplete`
 
-The `TransactionComplete ` is called by EMV Core when the transaction is complete and either succeeds or fails. Contains the details required by the POS to print a receipt and to link transactions to sale events
+The `TransactionComplete` is called by EMV Core when the transaction is complete and either succeeds or fails. Contains the details required by the POS to print a receipt and to link transactions to sale events
 
 <Tabs>
   <Tab title="JSON">
@@ -221,7 +221,7 @@ If EMV-Core doesn’t get an answer, it will re-send 2 times (for a total of 3 m
     | `transaction_Reference`   | Transaction reference. It should be used to confirm or void.                                                                                                 |
     | `RRN`                     | Processor reference number for approved transactions.                                                                                                        |
     | `card_ID`                 | Mifare UID in case of a Mifare card and `CLP_MIFARE_ENABLED=2`.                                                                                              |
-    | `isTransactionApproved`   | Boolean indicating the transaction approval status.                                                                                                          |
+    | ` isTransactionApproved`   | Boolean indicating the transaction approval status.                                                                                                          |
     | `CardToken`               | A token identifying the card. For payment cards, it returns a Base64 string. For closed-loop cards (e.g., Mifare), it returns the card UID.                  |
     | `Channel`                 | Channel used for card reading (e.g., Contactless, Magstripe, Contact).                                                                                       |
     | `AID, TVR, IAD, TSI, ARC` | Card/Transaction parameters that may be used for the receipt.                                                                                                |

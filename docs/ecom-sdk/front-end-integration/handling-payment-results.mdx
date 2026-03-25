@@ -62,7 +62,7 @@ It includes three callback methods to handle the payment result:
 
 * **Successful Transaction** (`onPaymentComplete` / `.complete`): This indicates that the payment process was completed, and the billing provider approved the transaction.
 * **Transaction Failure** (`onPaymentFail` / `.fail`): This signifies that the transaction failed due to an issue originating from the Drop-In UI or the billing provider's side, but not a general SDK error.
-* **General Error** (`onError `/ `.error`): This indicates that a more general error occurred during the transaction process, which might be related to the SDK's internal state, network issues, or authentication problems.
+* **General Error** (`onError` / `.error`): This indicates that a more general error occurred during the transaction process, which might be related to the SDK's internal state, network issues, or authentication problems.
 
 By implementing these callback mechanisms, your application can provide a robust and user-friendly payment experience, responding dynamically to all possible transaction outcomes.
 
@@ -78,7 +78,7 @@ The `PaymentCompleteData` data structure is received when a payment is successfu
 | ---------------- | ------------------------------------------- |
 | `merchantTranId` | The unique merchant transaction identifier. |
 | `sessionId`      | The session ID associated with the payment. |
-| `tokenId`        | The token ID.                               |
+| ` tokenId`        | The token ID.                               |
 | `resultCode`     | Result code from the payment processor.     |
 
 ### `PaymentFailData`

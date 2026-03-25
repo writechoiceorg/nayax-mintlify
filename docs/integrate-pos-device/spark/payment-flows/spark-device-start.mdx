@@ -38,7 +38,7 @@ Below is a breakdown of the diagram:
 7. The consumer presents their card (if they haven't already done so). An `AuthorizationRequest` is sent from the Nayax Device to the Nayax Server.
 8. The Nayax Server performs authorization with a Payment Provider and then sends a [`TransactionNotify`](/reference/spark/transactions/transactionnotify)  to the 3rd Party Server.
 9. The 3rd Party Server responds to the Nayax Server with a [`TransactionNotify`](/reference/spark/transactions/transactionnotify)Response.
-10. The Nayax Server sends an `AuthorizationResponse `Back to the Nayax Device. At this point, the service can be provided on the Service Station, and the Nayax Device is back to idle.
+10. The Nayax Server sends an `AuthorizationResponse` Back to the Nayax Device. At this point, the service can be provided on the Service Station, and the Nayax Device is back to idle.
 11. The 3rd Party Server sends a [`Settlement`](/reference/spark/transactions/settlement)  command to the Nayax Server.
 12. The Nayax Server performs the settlement with the Payment Provider and then sends a [`Settlement`](/reference/spark/transactions/settlement)  back to the 3rd Party Server.
 

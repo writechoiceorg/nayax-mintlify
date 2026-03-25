@@ -15,7 +15,7 @@ This enables greater flexibility for internal payment systems, free access progr
 <Note>
 **Enabling SMC**
 
-To support this feature, you must use a dedicated “Payment Method”. Machines supporting this Payment Method will able to support Spark Self-Managed cards and Credit Cards only (no additional Prepaid cards of different Providers).
+To support this feature, you must use a dedicated “Payment Method”. Machines supporting this Payment Method will be able to support Spark Self-Managed cards and Credit Cards only (no additional Prepaid cards of different Providers).
 
 Please ask your Nayax Integration Engineer for more information and configuration assistance
 </Note>
@@ -45,7 +45,7 @@ If you don’t validate the card on your side, unauthorized users could start se
 A typical SMC transaction would look like the following:
 
 1. The card is detected and accepted by Spark.
-2. Your backend receives a `/TransactionCallback `with card hash and UID.
+2. Your backend receives a `/TransactionCallback` with card hash and UID.
 3. You look up the badge in your internal employee system.
 4. If approved, the session continues, and a `/Settlement` is sent later.
    1. If denied, your backend sends`/CancelTransaction`.

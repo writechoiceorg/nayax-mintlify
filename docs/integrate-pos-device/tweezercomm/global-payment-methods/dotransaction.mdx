@@ -22,15 +22,15 @@ The sections below will describe the request parameters in more detail:
 <Note>
 **JSON-RPC 2.0**
 
-All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer) for more details on how the requests are structured and sent.
 </Note>
 
-In the request, the `method` field needs to be set to `doTransaction`,  the transaction is defined by the `tranCode` parameter. Check the example request for each transaction type on the tabs below:
+In the request, the ` method` field needs to be set to `doTransaction`,  the transaction is defined by the `tranCode` parameter. Check the example request for each transaction type on the tabs below:
 
 <Warning>
 **Mandatory Fields**
 
-`vuid`, `amount `and `tranType `are mandatory for all requests. All others depend on the type of transaction made.
+`vuid`, `amount` and `tranType` are mandatory for all requests. All others depend on the type of transaction made.
 </Warning>
 
 <Tabs>
@@ -123,7 +123,7 @@ In the request, the `method` field needs to be set to `doTransaction`,  the tran
     | `vuid`                  | string  | Vendor (client) unique transaction identifier.        |
     | `tranType`              | integer | Transaction type. **6**: Complete Pre-Authorization.  |
     | `amount`                | integer | Amount in cents.                                      |
-    | `originalTransactionId` | string  | The ID of the original pre-authorization transaction. |
+    | ` originalTransactionId` | string  | The ID of the original pre-authorization transaction. |
   </Tab>
 
   <Tab title="Cancel Pre-Authorization">
@@ -155,7 +155,7 @@ In the request, the `method` field needs to be set to `doTransaction`,  the tran
     | `vuid`                  | string  | Vendor (client) unique transaction identifier.        |
     | `tranType`              | integer | Transaction type. **7**: Cancel Pre-Authorization.    |
     | `amount`                | integer | Amount in cents.                                      |
-    | `originalTransactionId` | string  | The ID of the original pre-authorization transaction. |
+    | ` originalTransactionId` | string  | The ID of the original pre-authorization transaction. |
   </Tab>
 
   <Tab title="MOTO">
@@ -253,7 +253,7 @@ The service will return a response structured similarly to the examples provided
     | `maskedPan`                    | string  | The masked card number used for the transaction.        |
     | `currencyCode`                 | string  | Alphanumeric currency code (e.g., USD).                 |
     | `currencyISOCode`              | string  | Numeric ISO currency code (e.g., 840).                  |
-    | `originalSiteId`               | integer | Identifier of the originating site.                     |
+    | ` originalSiteId`               | integer | Identifier of the originating site.                     |
     | `mainBoardSerial`              | string  | Serial number of the device main board.                 |
     | `hwSerial`                     | string  | Hardware serial number.                                 |
   </Tab>

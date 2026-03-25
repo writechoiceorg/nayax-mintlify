@@ -14,7 +14,7 @@ To have logs of the SDK, you need to configure the following flags in the `main`
   * `debug_level_dump_none`: Don't generate a log.
   * `debug_level_dump_all`: Log all messages.
   * `debug_level_dump_moderate`: Logs all messages, excluding keep-alives and their ACKs.
-* `debug ` ( *boolean*): Enables or disables log generation.
+* `debug` ( *boolean*): Enables or disables log generation.
 
 You can add these flags to the main method, as in the example below.
 
@@ -71,7 +71,7 @@ static void terminal_tx_str(char *str)
 
 (The C SDK's demo app generates the log to the command line by default)
 
-* On the **Java SDK**, the default log file path is specified in the `FileWriter `initialization. See the following example.
+* On the **Java SDK**, the default log file path is specified in the `FileWriter` initialization. See the following example.
 
   ```java Java
   if (vmc_config.debug) {
@@ -86,4 +86,4 @@ static void terminal_tx_str(char *str)
   }
   ```
 
-In the code above, the log file is created at the root of the **C:** drive with the name `out.txt`. The `true `parameter in the `FileWriter `constructor indicates that data will be appended to the existing log file if it already exists.
+In the code above, the log file is created at the root of the **C:** drive with the name `out.txt`. The `true`parameter in the `FileWriter`constructor indicates that data will be appended to the existing log file if it already exists.

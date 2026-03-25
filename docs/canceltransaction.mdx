@@ -4,13 +4,13 @@ metadata:
   og:description: "The CancelTransaction endpoint allows you to cancel a transaction that is in progress. In the Pre-Authorization flow, this method is called Cancel."
 ---
 
-The `CancelTransaction `endpoint allows you to cancel a transaction that is in progress.
+The `CancelTransaction` endpoint allows you to cancel a transaction that is in progress.
 
 In the Pre-Authorization flow, this method is referred to as "Cancel," and in the Pre-Selection flow, it is referred to as "Void."
 
 ## Request
 
-Send a POST request to Spark`/spark/CancelTransaction` endpoint with the following body:
+Send a POST request to Spark `/spark/CancelTransaction` endpoint with the following body:
 
 ```json
 {
@@ -87,7 +87,7 @@ The table below describes the parameters of the request:
       </td>
 
       <td>
-        The session ID from the initial.`/StartAuthentication`
+        The session ID from the initial `/StartAuthentication`
       </td>
     </tr>
 
@@ -181,7 +181,7 @@ The table below describes the parameters of the request:
       <td>
         Indicates which cancellation flow is implemented:\
         `1` for a Pre-Authorization Cancel.\
-        `2 `for a Pre-Selection Void.
+        `2` for a Pre-Selection Void.
       </td>
     </tr>
 
@@ -276,7 +276,7 @@ The table below describes the parameters of the response:
 | `SparkTransactionId`      | String | ID of the canceled session.                                                                                                             |
 | `Status`                  | Object | Status object including result and error description.                                                                                   |
 | `Status.Verdict`          | String | "Approved" if successfully canceled, "Declined" if failed.                                                                              |
-| `Status.ErrorDescription` | String | Further info if`Declined`, or `"No Errors"` if success.                                                                                 |
+| `Status.ErrorDescription` | String | Further info if `Declined`, or `"No Errors"` if success.                                                                                 |
 | `Status.ErrorCode`        | Number | A numeric code indicating a specific type of error that occurred during the transaction. This field is present only in error responses. |
 | `CardBrand`               | String | Card brand used for the transaction (e.g., Visa, MasterCard).                                                                           |
 | `CardLast4Digits`         | String | The last four digits of the card used.                                                                                                  |

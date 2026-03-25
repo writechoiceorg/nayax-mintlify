@@ -103,7 +103,7 @@ See the table below for more details on each parameter:
       </td>
 
       <td>
-        `string`
+        ` string`
       </td>
 
       <td>
@@ -122,7 +122,7 @@ See the table below for more details on each parameter:
       </td>
 
       <td>
-        `int64`
+        ` int64`
       </td>
 
       <td>
@@ -136,7 +136,7 @@ See the table below for more details on each parameter:
       </td>
 
       <td>
-        `int32`
+        ` int32`
       </td>
 
       <td>
@@ -161,7 +161,7 @@ See the table below for more details on each parameter:
 </table>
 
 <Warning>
-  The `TransactionId`, `SiteId `and `MachineAuTime` need to be the same as sent in the refund request.
+  The `TransactionId`, `SiteId` and `MachineAuTime` need to be the same as sent in the refund request.
 </Warning>
 
 ### Decline Request
@@ -187,13 +187,13 @@ See the table below for more details on each parameter:
 
 | **Name**          | **Type**    | **Description**                                                                  |
 | ----------------- | ----------- | -------------------------------------------------------------------------------- |
-| **DeclineReason** | `string`    | The reason for declining the refund request.                                     |
-| **TransactionId** | `int64`     | The unique identifier of the transaction for which the refund is being declined. |
-| **SiteId**        | `int32`     | The unique identifier of the site where the transaction occurred.                |
+| **DeclineReason** | ` string`    | The reason for declining the refund request.                                     |
+| **TransactionId** | ` int64`     | The unique identifier of the transaction for which the refund is being declined. |
+| **SiteId**        | ` int32`     | The unique identifier of the site where the transaction occurred.                |
 | **MachineAuTime** | `date-time` | The machine's authorization time is associated with the transaction.             |
 
 <Warning>
-  The `TransactionId`, `SiteId `and `MachineAuTime` need to be the same as the one sent in the refund request.
+  The `TransactionId`, `SiteId` and `MachineAuTime` need to be the same as the one sent in the refund request.
 </Warning>
 
 ## Request Status

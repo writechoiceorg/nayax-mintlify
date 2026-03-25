@@ -4,7 +4,7 @@ metadata:
   og:description: "Use the cancelTransaction method to cancel a transaction that has already been approved and is registered in the database. Such a transaction can be."
 ---
 
-The `cancelTransaction` method is used to cancel a transaction that has already been approved and is registered in the database.
+The ` cancelTransaction` method is used to cancel a transaction that has already been approved and is registered in the database.
 
 <Warning>
   Such a transaction can be canceled as long as it is stored in the AEA database, which is cleared after the end-of-day batch when `doPeriodic` is called.
@@ -17,15 +17,15 @@ The client can also implement this action by calling `doTransactionPhase1` with 
 <Note>
 **JSON-RPC 2.0**
 
-All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Integration ](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Integration ](/docs/integration-tweezer) for more details on how the requests are structured and sent.
 </Note>
 
 In the request, ensure to configure the following:
 
-* The `method `field must be set to `cancelTransaction` .
-* The service must be set to `ashrait` in the params.
+* The ` method` field must be set to ` cancelTransaction` .
+* The service must be set to ` ashrait` in the params.
 
-The request includes a list of parameters, with the first being the service name, which is currently fixed as `ashrait`, and the second being a dictionary containing all other transaction-specific details.
+The request includes a list of parameters, with the first being the service name, which is currently fixed as ` ashrait`, and the second being a dictionary containing all other transaction-specific details.
 
 ```json
 {
@@ -48,7 +48,7 @@ The table below describes the request parameters for this method.
 
 | Name          | Type   | Description                                         |
 | :------------ | :----- | :-------------------------------------------------- |
-| `originalUID` | string | The original UID of the transaction to be canceled. |
+| ` originalUID` | string | The original UID of the transaction to be canceled. |
 | `vuid`        | string | Vendor (client) unique transaction identifier.      |
 
 ## Response
@@ -259,7 +259,7 @@ The table below describes the response parameters for this method.
 
     <tr>
       <td>
-        `issuerAuthNum`
+        ` issuerAuthNum`
       </td>
 
       <td>

@@ -4,17 +4,17 @@ metadata:
   og:description: "Use the showAnimation the method to display an animation on the device to indicate either an approved or declined action. This is typically shown."
 ---
 
-The `showAnimation` the method is used to display an animation on the device to indicate either an approved or declined action. This is typically shown after transaction processing.
+The `showAnimation` method is used to display an animation on the device to indicate either an approved or declined action. This is typically shown after transaction processing.
 
 ## Request
 
 <Note>
 **JSON-RPC 2.0**
 
-All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer) for more details on how the requests are structured and sent.
 </Note>
 
-To invoke this method, set the `method `field to `showAnimation`, and include the service name and parameters as shown below.
+To invoke this method, set the ` method` field to `showAnimation`, and include the service name and parameters as shown below.
 
 ```json
 {
@@ -43,8 +43,8 @@ The table below describes the parameters of the request:
 | `name`      | string  | Animation name. Valid values: `approved`, `declined` |
 | `repeat`    | boolean | Whether the animation should repeat (default: false) |
 | `hideAfter` | integer | Seconds to wait before hiding (0 = stay visible)     |
-| `string1`   | string  | Optional text to display as the first message        |
-| `string2`   | string  | Optional text to display as the second message       |
+| ` string1`   | string  | Optional text to display as the first message        |
+| ` string2`   | string  | Optional text to display as the second message       |
 
 ## Response
 
@@ -67,5 +67,5 @@ The table below describes the response parameters for this method:
 
 | Name            | Type    | Description                          |
 | --------------- | ------- | ------------------------------------ |
-| `statusCode`    | integer | Operation status (`0 `= success).    |
+| `statusCode`    | integer | Operation status (`0`= success).    |
 | `statusMessage` | string  | Message indicating operation result. |

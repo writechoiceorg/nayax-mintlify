@@ -4,17 +4,17 @@ metadata:
   og:description: "The displayQR method displays a QR code on the terminal's screen. It supports optional titles, subtitles, and a cancel button. The QR code must."
 ---
 
-The `displayQR `method displays a QR code on the terminal's screen. It supports optional titles, subtitles, and a cancel button. The QR code must belong to a predefined domain.
+The `displayQR` method displays a QR code on the terminal's screen. It supports optional titles, subtitles, and a cancel button. The QR code must belong to a predefined domain.
 
 ## Request
 
 <Note>
 **JSON-RPC 2.0**
 
-All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer) for more details on how the requests are structured and sent.
 </Note>
 
-To invoke this method, set the `method `field to `displayQR`, and include the service name and parameters as shown below.
+To invoke this method, set the ` method` field to `displayQR`, and include the service name and parameters as shown below.
 
 ```json
 {
@@ -40,11 +40,11 @@ The table below describes the parameters of the request:
 
 | Name            | Type      | Description                                          |
 | --------------- | --------- | ---------------------------------------------------- |
-| `title`         | `string`  | Title text to be shown above the QR code             |
-| `subtitle`      | `string`  | Subtitle text below the title                        |
-| `isCancellable` | `boolean` | Whether a cancel button is displayed (default: true) |
-| `urlData`       | `string`  | URL encoded as the QR code (**mandatory**)           |
-| `timeout`       | `integer` | Display timeout in seconds (default: 30)             |
+| `title`         | ` string`  | Title text to be shown above the QR code             |
+| `subtitle`      | ` string`  | Subtitle text below the title                        |
+| ` isCancellable` | `boolean` | Whether a cancel button is displayed (default: true) |
+| `urlData`       | ` string`  | URL encoded as the QR code (**mandatory**)           |
+| `timeout`       | ` integer` | Display timeout in seconds (default: 30)             |
 
 ## Response
 
@@ -67,5 +67,5 @@ The table below describes the response parameters for this method:
 
 | Name            | Type      | Description                         |
 | --------------- | --------- | ----------------------------------- |
-| `statusCode`    | `integer` | Operation status (0 = success)      |
-| `statusMessage` | `string`  | Message indicating operation result |
+| `statusCode`    | ` integer` | Operation status (0 = success)      |
+| `statusMessage` | ` string`  | Message indicating operation result |

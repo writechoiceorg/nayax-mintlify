@@ -4,15 +4,15 @@ metadata:
   og:description: "The Nayax eReceipt Platform enables seamless integration with digital receipt providers, enabling them to offer digital receipt services to Nayax."
 ---
 
-The Nayax eReceipt Platform enables seamless integration with digital receipt providers, enabling them to offer digital receipt services to Nayax customers. Integrators who possess additional transaction information on their third-party servers can use the `eReceiptData `field to include this data in the consumer's digital receipt.
+The Nayax eReceipt Platform enables seamless integration with digital receipt providers, enabling them to offer digital receipt services to Nayax customers. Integrators who possess additional transaction information on their third-party servers can use the `eReceiptData` field to include this data in the consumer's digital receipt.
 
-The `eReceiptData `field is currently relevant only for Pre-Authorization flows within the `/Settlement` method. Pre-selection is not yet supported for this feature.
+The `eReceiptData` field is currently relevant only for Pre-Authorization flows within the `/Settlement` method. Pre-selection is not yet supported for this feature.
 
 Any information provided in this field will be presented directly on the consumer's eReceipt. Therefore, it is crucial to avoid sharing sensitive or irrelevant data.
 
 ## Format Specification
 
-The `eReceiptData `field expects a JSON object. This object allows for the organization of data into distinct sections, each containing an array of key-value pair objects.
+The `eReceiptData` field expects a JSON object. This object allows for the organization of data into distinct sections, each containing an array of key-value pair objects.
 
 ```json
 {

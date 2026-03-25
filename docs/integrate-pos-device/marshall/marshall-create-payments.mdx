@@ -10,7 +10,7 @@ This guide shows you how to set up and manage cashless payment transactions from
 
 ## Pre-requisites
 
-* Ensure your SDK is running and connected to the Nayax device indicated by the `onReady()` event.
+* Ensure your SDK is running and connected to the Nayax device indicated by the ` onReady()` event.
 
 <Warning>
 **Integration**
@@ -34,7 +34,7 @@ To perform a transaction using the Nayax Marshall SDK, follow the steps below.
     vmc_vend_session_start(vmc_vend_session_type_credit_e);
     ```
     </CodeGroup>
-2. When a client presents a card and it is approved, the `onSessionBegin()` event is triggered.
+2. When a client presents a card and it is approved, the ` onSessionBegin()` event is triggered.
    This is the signal for the peripheral, such as the vending machine, to prepare for payment approval.
     <CodeGroup>
     ```java Java
@@ -92,12 +92,12 @@ Then, inside the onSessionBegin() callback you would send the "Vend Request" for
 
 </Note>
 
-3. After the VPOS approves the vending request, the peripheral must notify the SDK that the product has been successfully delivered to the consumer. This is done by implementing the `onVendApproved(...)`API and returning one of the following:
+3. After the VPOS approves the vending request, the peripheral must notify the SDK that the product has been successfully delivered to the consumer. This is done by implementing the ` onVendApproved(...)`API and returning one of the following:
 
 * **`True`** : If the vend process is successful, the client's credit card is charged the requested amount.
 * **`False`**: For a failed vend process.
 
-4. Whether it’s a single session or multi-session, the `onReady()` event will be called upon finishing the vending process, indicating that the device is ready for the next transaction.
+4. Whether it’s a single session or multi-session, the ` onReady()` event will be called upon finishing the vending process, indicating that the device is ready for the next transaction.
 
 <Note>
 **Multi-Session**

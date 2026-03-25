@@ -96,7 +96,7 @@ See the `GetAttribute` API signature in the code below:
 
     | Parameter        | Description                                                                                                                             |
     | :--------------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
-    | `attribute_name` | A null-terminated string representing the attribute key in the configuration file (e.g., `"PRE_AUTH_AMOUNT"`).                          |
+    | ` attribute_name` | A null-terminated string representing the attribute key in the configuration file (e.g., `"PRE_AUTH_AMOUNT"`).                          |
     | `out_value`      | A pointer to a caller-allocated buffer where the attribute value will be stored as a null-terminated string.                            |
     | `max_out_size`   | The maximum capacity of the `out_value` buffer in bytes. This prevents buffer overflows if the retrieved value is longer than expected. |
   </Tab>
@@ -270,7 +270,7 @@ See the `Initialize` API signature in the code below:
     | Parameter        | Description                                                                                                                                    |
     | :--------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- |
     | `server_address` | **Unix Domain Sockets:** Path to the folder containing sockets (can be NULL). **TCP Sockets:** IP address or hostname (defaults to localhost). |
-    | `is_local`       | Set to `true` for Unix domain sockets, or `false` for TCP sockets.                                                                             |
+    | ` is_local`       | Set to `true` for Unix domain sockets, or `false` for TCP sockets.                                                                             |
 
     #### Returns
 
@@ -294,7 +294,7 @@ See the `Initialize` API signature in the code below:
 
 ***
 
-## `isEMVCoreConnected`
+## ` isEMVCoreConnected`
 
 <Warning>
   This method is only available for the Android SDK.
@@ -302,7 +302,7 @@ See the `Initialize` API signature in the code below:
 
 Retrieves the current status of the reader, including its transaction readiness and connectivity state.
 
-See the `isEMVCoreConnected` API signature in the code below:
+See the ` isEMVCoreConnected` API signature in the code below:
 
 ```java Android
 boolean isEmvCoreConnected();

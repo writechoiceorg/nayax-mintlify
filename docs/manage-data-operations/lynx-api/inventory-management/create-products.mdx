@@ -83,42 +83,42 @@ curl --request POST \
 <Note>
 **Path Param**
 
-Ensure that you send the `OperatorID` as a path param to specify what operator the product belongs too.
+Ensure that you send the `OperatorID` as a path param to specify what operator the product belongs to.
 </Note>
 
 In the body parameters, send the following details about the product:
 
 | **Parameter**                       | `Type`           | Description                                                              |
 | ----------------------------------- | ---------------- | ------------------------------------------------------------------------ |
-| **NayaxProductID**                  | `int64/null`     | The unique identifier for the product in the Nayax system.               |
-| **ProductGroupID**                  | `int32/null`     | The unique identifier of the product group to which the product belongs. |
-| **ActorID**                         | `int64/null`     | The unique identifier of the actor associated with the product.          |
-| **ProductManufacturerID**           | `int32/null`     | The unique identifier of the product's manufacturer.                     |
-| **ProductName**                     | `string/null`    | The name of the product.                                                 |
-| **ProductCatalogNumber**            | `string/null`    | The catalog number assigned to the product.                              |
-| **ProductBarcode**                  | `string/null`    | The barcode associated with the product.                                 |
-| **ProductPackageQuantity**          | `int32/null`     | The quantity of product units per package.                               |
-| **ProductDescription**              | `string/null`    | A description of the product.                                            |
-| **ProductVolumeTypeID**             | `int32/null`     | The volume type identifier associated with the product.                  |
-| **DEXProductName**                  | `string/null`    | The name of the product in the DEX (Data Exchange) format.               |
+| **NayaxProductID**                  | ` int64/null`     | The unique identifier for the product in the Nayax system.               |
+| **ProductGroupID**                  | ` int32/null`     | The unique identifier of the product group to which the product belongs. |
+| **ActorID**                         | ` int64/null`     | The unique identifier of the actor associated with the product.          |
+| **ProductManufacturerID**           | ` int32/null`     | The unique identifier of the product's manufacturer.                     |
+| **ProductName**                     | ` string/null`    | The name of the product.                                                 |
+| **ProductCatalogNumber**            | ` string/null`    | The catalog number assigned to the product.                              |
+| **ProductBarcode**                  | ` string/null`    | The barcode associated with the product.                                 |
+| **ProductPackageQuantity**          | ` int32/null`     | The quantity of product units per package.                               |
+| **ProductDescription**              | ` string/null`    | A description of the product.                                            |
+| **ProductVolumeTypeID**             | ` int32/null`     | The volume type identifier associated with the product.                  |
+| **DEXProductName**                  | ` string/null`    | The name of the product in the DEX (Data Exchange) format.               |
 | **ProductCostPrice**                | `double/null`    | The cost price of the product.                                           |
 | **ProductDefaultRetailPrice**       | `double/null`    | The default retail price of the product.                                 |
-| **ProductMinimumPickQTY**           | `int32/null`     | The minimum quantity of the product that can be picked.                  |
-| **ProductStatus**                   | `int32/null`     | The status of the product, typically representing availability.          |
+| **ProductMinimumPickQTY**           | ` int32/null`     | The minimum quantity of the product that can be picked.                  |
+| **ProductStatus**                   | ` int32/null`     | The status of the product, typically representing availability.          |
 | **ProductCashPrice**                | `double/null`    | The price of the product when paid with cash.                            |
 | **ProductCreditCardPrice**          | `double/null`    | The price of the product when paid with a credit card.                   |
 | **ProductPrepaidCardPrice**         | `double/null`    | The price of the product when paid with a prepaid card.                  |
 | **ProductExternalPrepaidCardPrice** | `double/null`    | The price of the product when paid with an external prepaid card.        |
 | **ProductMemberTypePriceBit**       | `boolean/null`   | Indicates if the product has member-type-specific pricing.               |
-| **ProductPictureURL**               | `string/null`    | The URL of the product's picture.                                        |
+| **ProductPictureURL**               | ` string/null`    | The URL of the product's picture.                                        |
 | **CaloriesPer100g**                 | `double/null`    | The number of calories per 100 grams of the product.                     |
 | **CaloriesPerServing**              | `double/null`    | The number of calories per serving of the product.                       |
-| **EANCode**                         | `string/null`    | The European Article Number (EAN) code associated with the product.      |
-| **ProductCreatedBy**                | `int64/null`     | The identifier of the user who created the product entry.                |
+| **EANCode**                         | ` string/null`    | The European Article Number (EAN) code associated with the product.      |
+| **ProductCreatedBy**                | ` int64/null`     | The identifier of the user who created the product entry.                |
 | **ProductCreationDate**             | `date-time/null` | The date and time when the product was created.                          |
-| **ProductUpdatedBy**                | `int64/null`     | The identifier of the user who last updated the product entry.           |
+| **ProductUpdatedBy**                | ` int64/null`     | The identifier of the user who last updated the product entry.           |
 | **ProductLastUpdated**              | `date-time/null` | The date and time when the product was last updated.                     |
-| **VatId**                           | `int32/null`     | The VAT (Value Added Tax) identifier associated with the product.        |
+| **VatId**                           | ` int32/null`     | The VAT (Value Added Tax) identifier associated with the product.        |
 
 ### Create Multiple Products at Once
 

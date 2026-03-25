@@ -5,7 +5,7 @@ metadata:
   og:description: "The query method allows the client application to poll the terminal for the current status of a specific transaction using its requestId."
 ---
 
-The `query` method allows the client application to poll the terminal for the current status of a specific transaction using its `requestId` or `transactionId`. This serves as a critical safety mechanism for handling network timeouts or application crashes, ensuring the POS and the terminal remain in sync regarding the payment outcome.
+The `query` method allows the client application to poll the terminal for the current status of a specific transaction using its ` requestId` or `transactionId`. This serves as a critical safety mechanism for handling network timeouts or application crashes, ensuring the POS and the terminal remain in sync regarding the payment outcome.
 
 Use this method to:
 * Recover transaction states by checking the final outcome if the original response was lost due to a connection drop.
@@ -33,12 +33,12 @@ The table below describes the parameters available for this request:
 
 | Field | Type | Required | Description |
 | :--- | :--- | :---: | :--- |
-| **command** | `string` | Yes | Always `query` for this request type. |
-| **requestId** | `string` | Yes | A unique identifier for the request, returned in the response. |
-| **filter** | `string` | No | Filter by status: `AUTHORIZED`, `ALL`, `SETTLED`, `FAILED`, or `EXPIRED`. |
-| **transactionId** | `string` | No | Specific ID to query a single transaction. |
-| **fromDate** | `string` | No | Start range for the query (ISO 8601). |
-| **toDate** | `string` | No | End range for the query (ISO 8601). |
+| **command** | ` string` | Yes | Always `query` for this request type. |
+| **requestId** | ` string` | Yes | A unique identifier for the request, returned in the response. |
+| **filter** | ` string` | No | Filter by status: `AUTHORIZED`, `ALL`, `SETTLED`, `FAILED`, or `EXPIRED`. |
+| **transactionId** | ` string` | No | Specific ID to query a single transaction. |
+| **fromDate** | ` string` | No | Start range for the query (ISO 8601). |
+| **toDate** | ` string` | No | End range for the query (ISO 8601). |
 
 ## Responses
 
@@ -67,9 +67,9 @@ The `data` object will contain the most recent information available for that sp
 
 | Field | Type | Description |
 | :--- | :--- | :--- |
-| **requestId** | `string` | Matches the `requestId` sent in the original request. |
+| **requestId** | ` string` | Matches the ` requestId` sent in the original request. |
 | **transactions** | `array` | A list of transaction objects matching the query. |
-| **transactionId** | `string` | The unique identifier for the transaction. |
-| **state** | `string` | The current status of the transaction (e.g., `AUTHORIZED`, `SETTLED`). |
+| **transactionId** | ` string` | The unique identifier for the transaction. |
+| **state** | ` string` | The current status of the transaction (e.g., `AUTHORIZED`, `SETTLED`). |
 | **amount** | `number` | The authorized amount if `state` is `AUTHORIZED`; otherwise, the settled amount. |
-| **timeStamp** | `string` | The authorization creation time in Nayax servers (ISO 8601). |
+| **timeStamp** | ` string` | The authorization creation time in Nayax servers (ISO 8601). |

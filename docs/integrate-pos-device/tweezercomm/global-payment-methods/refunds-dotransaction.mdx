@@ -10,7 +10,7 @@ The `doTransaction` method allows you to process refunds. There are two primary 
 * **External Refund**: Done on a different terminal, requiring additional metadata for server-side validation.
 
 <Note>
-  To perform a Refund transaction, save the `originalTransactionId` from the original transaction.
+  To perform a Refund transaction, save the ` originalTransactionId` from the original transaction.
 </Note>
 
 ## Standard Refund
@@ -112,12 +112,12 @@ To perform a refund, you must include the following parameters within the `param
 | Name                           | Type    | Description                                                                 |
 | :----------------------------- | :------ | :-------------------------------------------------------------------------- |
 | `jsonrpc`                      | string  | JSON-RPC protocol version (e.g., "2.0").                                    |
-| `method`                       | string  | The API method to call: `doTransaction`.                                    |
+| ` method`                       | string  | The API method to call: `doTransaction`.                                    |
 | `vuid`                         | string  | Vendor unique identifier.                                                   |
 | `amount`                       | integer | The refund amount (in the smallest currency unit, e.g., cents).             |
-| `originalTransactionId`        | string  | **Mandatory.** The ID of the transaction to be refunded.                    |
+| ` originalTransactionId`        | string  | **Mandatory.** The ID of the transaction to be refunded.                    |
 | `tranType`                     | integer | **Mandatory.** Set to `2` for Refund transactions.                          |
-| `originalSiteId`               | integer | **Conditional.** Required for external refunds to identify the source site. |
+| ` originalSiteId`               | integer | **Conditional.** Required for external refunds to identify the source site. |
 | `transactionOriginalTime`      | string  | **Conditional.** Original timestamp in `YYYY-MM-DD HH:MM:SS.mmm` format.    |
 | `transactionOriginalAmount`    | integer | **Conditional.** The original amount of the initial transaction.            |
 | `transactionOriginalRequestId` | string  | **Conditional.** The original request GUID/ID.                              |

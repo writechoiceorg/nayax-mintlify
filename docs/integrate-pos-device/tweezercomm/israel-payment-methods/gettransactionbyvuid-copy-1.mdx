@@ -1,10 +1,10 @@
 ---
 title: "getTransactionByVuid"
 metadata:
-  og:description: "The getTransactionByVuid method retrieves a transaction using its vendor-unique identifier (void). This allows client applications to fetch."
+  og:description: "The getTransactionByVuid method retrieves a transaction using its vendor-unique identifier (vuid). This allows client applications to fetch."
 ---
 
-The `getTransactionByVuid `method retrieves a transaction using its vendor-unique identifier (void). This allows client applications to fetch transaction details, including status, amount, and processing details.
+The `getTransactionByVuid` method retrieves a transaction using its vendor-unique identifier (vuid). This allows client applications to fetch transaction details, including status, amount, and processing details.
 
 This method helps track transactions, confirm their status, and retrieve essential metadata, such as entry mode, timestamps, and deposit status.
 
@@ -13,13 +13,13 @@ This method helps track transactions, confirm their status, and retrieve essenti
 <Note>
 **JSON-RPC 2.0**
 
-All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Get Started](/docs/integration-tweezer) for more details on how the requests are structured and sent.
 </Note>
 
 In the request, ensure to configure the following:
 
-* The `method` field must be set to `getTransactionByVuid`.
-* The service must be set to `ashrait` in the `params`.
+* The ` method` field must be set to `getTransactionByVuid`.
+* The service must be set to ` ashrait` in the `params`.
 
 ```json
 {
@@ -90,7 +90,7 @@ Below is a table with all the possible response parameters and their description
 | `transactionOriginalRequestId` | string  | Original transaction request ID                     |
 | `transactionOriginalTime`      | string  | Original transaction timestamp                      |
 | `transactionOriginalAmount`    | integer | Original transaction amount                         |
-| `isFinalAmount`                | integer | Indicator if the amount is final                    |
+| ` isFinalAmount`                | integer | Indicator if the amount is final                    |
 | `transactionDeposited`         | integer | Deposit status of the transaction                   |
 | `mainBoardSerial`              | string  | Main board serial of the device                     |
 | `hwSerial`                     | string  | Hardware serial of the device                       |

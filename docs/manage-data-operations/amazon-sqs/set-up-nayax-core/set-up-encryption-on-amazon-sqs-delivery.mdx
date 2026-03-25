@@ -5,7 +5,7 @@ metadata:
 ---
 
 To set up Encryption on Delivery to Amazon SQS, you must have access to Nayax Core and
-Lynx API with the appropriate user permissions, Specifically the following roles:
+Lynx API with the appropriate user permissions. Specifically, the following roles:
 
 * **Lynx - SQS Encryption**
 
@@ -105,8 +105,8 @@ public string Decrypt(string cipherText)
 
 Where:
 
-1. It initializes the AES algorithm with a `key `and an initialization vector (`IV`) and then creates a `decryptor`.
-2. The encrypted message, provided as a `Base64 `string is converted back into bytes and read using a `MemoryStream `and `CryptoStream `with the `decryptor`.
+1. It initializes the AES algorithm with a `key` and an initialization vector (`IV`) and then creates a `decryptor`.
+2. The encrypted message, provided as a `Base64` string is converted back into bytes and read using a `MemoryStream` and `CryptoStream` with the `decryptor`.
 3. The decrypted data is then read and returned as the original plaintext string.
 
 The method essentially reverses the encryption process to retrieve the original message.

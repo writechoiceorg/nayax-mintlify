@@ -55,12 +55,12 @@ This table outlines the key attributes available for update:
 
 | **Name**                     | **Type**  | **Description**                                                      |
 | :--------------------------- | :-------- | :------------------------------------------------------------------- |
-| `DeviceAttributeID`          | `int64`   | A unique ID that identifies the specific attribute of the device.    |
-| `MachineID`                  | `int64`   | The unique identifier of the machine associated with this attribute. |
-| `DeviceAttributeValue`       | `string`  | The value assigned to the device attribute.                          |
-| `DeviceAttributeCodeID`      | `int32`   | The code identifier that categorizes the device attribute.           |
-| `DeviceAttributeName`        | `string`  | The name of the device attribute being modified.                     |
-| `DeviceAttributeGroup`       | `string`  | The group or category to which the device attribute belongs.         |
+| `DeviceAttributeID`          | ` int64`   | A unique ID that identifies the specific attribute of the device.    |
+| `MachineID`                  | ` int64`   | The unique identifier of the machine associated with this attribute. |
+| `DeviceAttributeValue`       | ` string`  | The value assigned to the device attribute.                          |
+| `DeviceAttributeCodeID`      | ` int32`   | The code identifier that categorizes the device attribute.           |
+| `DeviceAttributeName`        | ` string`  | The name of the device attribute being modified.                     |
+| `DeviceAttributeGroup`       | ` string`  | The group or category to which the device attribute belongs.         |
 | `DeviceAttributeReadOnlyBit` | `boolean` | Indicates whether the device attribute is read-only.                 |
 
 The response will indicate whether the update was entirely successful or if there were any failures.
@@ -79,13 +79,13 @@ The response will indicate whether the update was entirely successful or if ther
 
 Where:
 
-* `isFullySuccess` indicates whether the update was entirely successful (`true` if successful, `false` if there were any issues).
+* ` isFullySuccess` indicates whether the update was entirely successful (`true` if successful, `false` if there were any issues).
 * `failureItems` is an array of any failed items, where each entry includes:
   * `id`: The identifier of the failed item (e.g., attribute ID).
   * `error`: A description of the error encountered during the update.
 
 <Note>
-  If `isFullySuccess` is `true` and `failureItems` is empty. The update was completed successfully without any errors.
+  If ` isFullySuccess` is `true` and `failureItems` is empty. The update was completed successfully without any errors.
 </Note>
 
 <br />

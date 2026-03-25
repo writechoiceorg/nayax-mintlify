@@ -213,37 +213,37 @@ The following table describes the fields included in the transaction JSON messag
 
 | **Field Name**                      | **Type**    | **Description**                                                          |
 | ----------------------------------- | ----------- | ------------------------------------------------------------------------ |
-| **Machine Name**                    | `string`    | Machine / POS Name as defined under Operations > Machines > Machine Name |
-| **Machine Model**                   | `string`    | Model of the machine used.                                               |
-| **Operator Identifier**             | `string`    | Unique identifier for the machine operator.                              |
+| **Machine Name**                    | ` string`    | Machine / POS Name as defined under Operations > Machines > Machine Name |
+| **Machine Model**                   | ` string`    | Model of the machine used.                                               |
+| **Operator Identifier**             | ` string`    | Unique identifier for the machine operator.                              |
 | **Machine AuTime**                  | `Date Time` | Authorization time of the machine.                                       |
 | **Machine SeTime**                  | `Date Time` | Settlement time of the machine.                                          |
-| **Currency**                        | `string`    | Currency used in the transaction.                                        |
-| **Card String**                     | `string`    | Encrypted or masked card data.                                           |
-| **Brand**                           | `string`    | Brand associated with the transaction or card.                           |
-| **CLI**                             | `string`    | Caller Line Identification for tracking.                                 |
+| **Currency**                        | ` string`    | Currency used in the transaction.                                        |
+| **Card String**                     | ` string`    | Encrypted or masked card data.                                           |
+| **Brand**                           | ` string`    | Brand associated with the transaction or card.                           |
+| **CLI**                             | ` string`    | Caller Line Identification for tracking.                                 |
 | **SeValue**                         | `Decimal`   | Settled value of the transaction.                                        |
 | **Extra Charge**                    | `Decimal`   | Any additional charges applied.                                          |
-| **Payment Service**                 | `string`    | Payment service used, e.g., mobile payment via credit card.              |
+| **Payment Service**                 | ` string`    | Payment service used, e.g., mobile payment via credit card.              |
 | **Payment Method ID (1)**           | `Integer`   | Identifier for the primary payment method.                               |
 | **Recognition Method ID (3)**       | `Integer`   | Identifier for recognition method used.                                  |
-| **Catalog Number**                  | `string`    | Product catalog number.                                                  |
-| **Product**                         | `string`    | Product name, including MDB Code or PA Code if applicable.               |
-| **Device Number**                   | `string`    | Unique identifier of the device used for the transaction.                |
-| **Actor Hierarchy**                 | `string`    | Hierarchy of the actor involved in the transaction.                      |
-| **Payment Method Description**      | `string`    | Description of the payment method used.                                  |
-| **Recognition Description**         | `string`    | Description of the recognition method applied.                           |
-| **Card First 4 Digits**             | `string`    | First four digits of the card number.                                    |
-| **Card Last 4 Digits**              | `string`    | Last four digits of the card number.                                     |
-| **Card Type**                       | `string`    | Type of card used, e.g., debit or credit.                                |
-| **Machine Group**                   | `string`    | Group or category the machine belongs to.                                |
-| **Product Group**                   | `string`    | Group or category the product belongs to.                                |
+| **Catalog Number**                  | ` string`    | Product catalog number.                                                  |
+| **Product**                         | ` string`    | Product name, including MDB Code or PA Code if applicable.               |
+| **Device Number**                   | ` string`    | Unique identifier of the device used for the transaction.                |
+| **Actor Hierarchy**                 | ` string`    | Hierarchy of the actor involved in the transaction.                      |
+| **Payment Method Description**      | ` string`    | Description of the payment method used.                                  |
+| **Recognition Description**         | ` string`    | Description of the recognition method applied.                           |
+| **Card First 4 Digits**             | ` string`    | First four digits of the card number.                                    |
+| **Card Last 4 Digits**              | ` string`    | Last four digits of the card number.                                     |
+| **Card Type**                       | ` string`    | Type of card used, e.g., debit or credit.                                |
+| **Machine Group**                   | ` string`    | Group or category the machine belongs to.                                |
+| **Product Group**                   | ` string`    | Group or category the product belongs to.                                |
 | **Transaction ID**                  | `Integer`   | Unique identifier for the transaction.                                   |
 | **Site ID**                         | `Integer`   | Identifier for the site where the transaction occurred.                  |
 | **Authorization Time**              | `Date Time` | Time when the transaction was authorized.                                |
 | **Authorization Value**             | `Decimal`   | Authorized value of the transaction.                                     |
 | **PayServTransid**                  | `Integer`   | Payment service transaction ID.                                          |
-| **sePayServTransId**                | `string`    | Settlement payment service transaction ID.                               |
+| **sePayServTransId**                | ` string`    | Settlement payment service transaction ID.                               |
 | **Settlement Time**                 | `Date Time` | Time when the transaction was settled.                                   |
 | **Product Code in Map**             | `Integer`   | Mapped product code identifier.                                          |
 | **Cancel Type**                     | `Integer`   | Type of cancellation, if applicable.                                     |
@@ -257,11 +257,11 @@ The following table describes the fields included in the transaction JSON messag
 | **Updated DT**                      | `Date Time` | Date and time of the last update.                                        |
 | **Constant Preauthorization Value** |             | Preauthorized constant value, if applicable.                             |
 | **Is Partial Confirmation**         |             | Indicates if the confirmation was partial.                               |
-| **Authorization Code**              | `string`    | Code for authorization.                                                  |
+| **Authorization Code**              | ` string`    | Code for authorization.                                                  |
 | **Authorization Date and Time**     |             | Date and time of the authorization.                                      |
-| **Authorization RRN**               | `string`    | Retrieval reference number for the authorization.                        |
+| **Authorization RRN**               | ` string`    | Retrieval reference number for the authorization.                        |
 | **Event Code**                      |             | Code associated with the event.                                          |
-| **Guest Name**                      | `string`    | Name of the guest, if applicable.                                        |
+| **Guest Name**                      | ` string`    | Name of the guest, if applicable.                                        |
 | **Token**                           |             | Token associated with the transaction.                                   |
 | **Zip Code**                        |             | ZIP code of the location, if applicable.                                 |
 | **Billing Provider ID**             |             | Identifier for the billing provider.                                     |
@@ -281,15 +281,15 @@ The following table describes the fields included in the transaction JSON messag
 | **Use Phone Contact**               |             | Indicates if phone contact transactions are used.                        |
 | **Debit Card Prefix**               |             | Prefix for debit cards.                                                  |
 | **Actor Description**               |             | Description of the actor involved in the transaction.                    |
-| **Institute Description**           | `string`    | Description of the associated institute.                                 |
+| **Institute Description**           | ` string`    | Description of the associated institute.                                 |
 | **Location Code**                   | `Integer`   | Code for the location of the transaction.                                |
-| **Location Description**            | `string`    | Description of the transaction location.                                 |
+| **Location Description**            | ` string`    | Description of the transaction location.                                 |
 | **Operator Institute Code**         | `Integer`   | Code of the operator's institute.                                        |
 | **Area Description**                |             | Description of the area where the transaction occurred.                  |
 | **Product PA Code**                 |             | PA code of the product.                                                  |
-| **OP Button Code**                  | `string`    | Code for the operator button pressed.                                    |
+| **OP Button Code**                  | ` string`    | Code for the operator button pressed.                                    |
 | **Product Volume Type**             |             | Type of volume measurement for the product.                              |
-| **Barcode**                         | `string`    | Barcode of the product.                                                  |
+| **Barcode**                         | ` string`    | Barcode of the product.                                                  |
 | **Cost Price**                      | `Decimal`   | Cost price of the product.                                               |
 | **Card Price**                      | `Decimal`   | Price when paid with a card.                                             |
 | **Prepaid Price**                   | `Decimal`   | Prepaid price of the product.                                            |
@@ -299,20 +299,20 @@ The following table describes the fields included in the transaction JSON messag
 | **Product Name**                    |             | Name of the product.                                                     |
 | **Actor Code**                      | `Integer`   | Code of the actor involved.                                              |
 | **Actor ID**                        | `Integer`   | Unique ID for the actor.                                                 |
-| **Display Card Number**             | `string`    | Masked display of the card number.                                       |
-| **Card Holder Name**                | `string`    | Name of the cardholder.                                                  |
-| **User Identity**                   | `string`    | Identity of the user associated with the transaction.                    |
+| **Display Card Number**             | ` string`    | Masked display of the card number.                                       |
+| **Card Holder Name**                | ` string`    | Name of the cardholder.                                                  |
+| **User Identity**                   | ` string`    | Identity of the user associated with the transaction.                    |
 | **Billing Provider Name**           |             | Name of the billing provider.                                            |
 | **Is Offline Transaction**          |             | Indicates if the transaction was offline.                                |
 | **Is EMV Transaction**              |             | Indicates if the transaction used EMV technology.                        |
-| **Machine AuTime (Date only)**      | `string`    | Authorization date of the machine in a date-only format.                 |
-| **Machine AuTime (Time only)**      | `string`    | Authorization time of the machine in a time-only format.                 |
-| **Machine SeTime (Date only)**      | `string`    | Settlement date of the machine in a date-only format.                    |
-| **Machine SeTime (Time only)**      | `string`    | Settlement time of the machine in a time-only format.                    |
-| **Settlement Time (Date only)**     | `string`    | Settlement date in a date-only format.                                   |
-| **Settlement Time (Time only)**     | `string`    | Settlement time in a time-only format.                                   |
-| **Updated DT (Date only)**          | `string`    | Last updated date in a date-only format.                                 |
-| **Updated DT (Time only)**          | `string`    | Last updated time in a time-only format.                                 |
+| **Machine AuTime (Date only)**      | ` string`    | Authorization date of the machine in a date-only format.                 |
+| **Machine AuTime (Time only)**      | ` string`    | Authorization time of the machine in a time-only format.                 |
+| **Machine SeTime (Date only)**      | ` string`    | Settlement date of the machine in a date-only format.                    |
+| **Machine SeTime (Time only)**      | ` string`    | Settlement time of the machine in a time-only format.                    |
+| **Settlement Time (Date only)**     | ` string`    | Settlement date in a date-only format.                                   |
+| **Settlement Time (Time only)**     | ` string`    | Settlement time in a time-only format.                                   |
+| **Updated DT (Date only)**          | ` string`    | Last updated date in a date-only format.                                 |
+| **Updated DT (Time only)**          | ` string`    | Last updated time in a time-only format.                                 |
 | **Raw ENI Loyalty Num**             |             | Raw ENI loyalty number.                                                  |
 | **Parsed ENI Loyalty Num**          |             | Parsed ENI loyalty number.                                               |
 | **Products**                        | `Object`    | List of products involved in the transaction.                            |
@@ -338,15 +338,15 @@ The following table describes the fields included in the transaction JSON messag
 | **Member Type**                     |             | Type of membership associated with the transaction.                      |
 | **Is Refund Card**                  | `Boolean`   | Indicates if the card used is a refund card.                             |
 | **Contract Number**                 |             | Number of the contract associated with the transaction.                  |
-| **Airport Code**                    | `string`    | Code of the airport, if applicable.                                      |
+| **Airport Code**                    | ` string`    | Code of the airport, if applicable.                                      |
 | **Payed Value**                     | `Decimal`   | Value paid in the transaction.                                           |
 | **Consumer ID**                     | `Integer`   | Unique ID for the consumer.                                              |
 | **Discount Card ID**                | `Integer`   | Unique ID for the discount card used.                                    |
-| **Discount Card Number**            | `string`    | Number of the discount card used.                                        |
-| **Discount Card User Identity**     | `string`    | Identity of the discount card user.                                      |
-| **Discount Card Physical Type ID**  | `string`    | Physical type ID of the discount card.                                   |
-| **Discount Card Activation Date**   | `string`    | Activation date of the discount card.                                    |
-| **Discount Card Expiration Date**   | `string`    | Expiration date of the discount card.                                    |
+| **Discount Card Number**            | ` string`    | Number of the discount card used.                                        |
+| **Discount Card User Identity**     | ` string`    | Identity of the discount card user.                                      |
+| **Discount Card Physical Type ID**  | ` string`    | Physical type ID of the discount card.                                   |
+| **Discount Card Activation Date**   | ` string`    | Activation date of the discount card.                                    |
+| **Discount Card Expiration Date**   | ` string`    | Expiration date of the discount card.                                    |
 
 
 
