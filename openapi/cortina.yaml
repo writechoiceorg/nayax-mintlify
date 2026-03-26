@@ -5,7 +5,7 @@ components:
       description: Merchant (Actor) details.
       properties:
         Country:
-          $ref: '#/components/schemas/CountryInfo'
+          $ref: "#/components/schemas/CountryInfo"
         DynamicURL:
           description: >
             Optional URL configuration at the actor level. Supports dynamic
@@ -15,7 +15,7 @@ components:
           example: https://www.nayax.com/alternativeURL
           type: string
         GeoLocation:
-          $ref: '#/components/schemas/GeoLocation'
+          $ref: "#/components/schemas/GeoLocation"
         Id:
           description: >
             Unique ID of the actor (merchant) as defined in the Nayax
@@ -87,7 +87,7 @@ components:
             - Length: 250
           type: string
         CustomData:
-          $ref: '#/components/schemas/OnboardCustomData'
+          $ref: "#/components/schemas/OnboardCustomData"
         Key:
           description: |
             - Optional
@@ -142,22 +142,22 @@ components:
             Alpha2Code: US
             Alpha3Code: USA
             Name: UNITED STATES
-            NumericCode: '840'
-          DynamicURL: ''
+            NumericCode: "840"
+          DynamicURL: ""
           GeoLocation:
             Address: River
             City: Zambezi
             CountryCode: ZM
             State: State
-            ZipCode: '234234'
+            ZipCode: "234234"
           Id: 2001537302
-          MerchantId: '999999888885'
+          MerchantId: "999999888885"
           Name: TestPayCC V2 OP
         BasicInfo:
           AgeLimitation: 18
           Amount: 5
           CurrencyCode: ILS
-          CurrencyNumeric: '376'
+          CurrencyNumeric: "376"
           MachineAuTime: 71221132914
           NayaxTransactionId: 3584697384
           PaymentMethodID: 1
@@ -179,56 +179,56 @@ components:
             Alpha2Code: US
             Alpha3Code: USA
             Name: UNITED STATES
-            NumericCode: '840'
+            NumericCode: "840"
           DecimalPlace: 2
           GeoLocation:
             Address: River
             City: Zambezi
             CountryCode: ZM
-            ZipCode: '234234'
+            ZipCode: "234234"
           Id: 106791869
           Name: Itai_TestPayCC V2
-          Offset: '3.00'
-          TerminalId: '8888888844'
-          ZipCode: ''
+          Offset: "3.00"
+          TerminalId: "8888888844"
+          ZipCode: ""
       properties:
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         CardData:
-          $ref: '#/components/schemas/CardData'
+          $ref: "#/components/schemas/CardData"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
       type: object
     AgeVerificationResponse:
       additionalProperties: false
       example:
         PaymentInfo:
-          AdditionalData: ''
+          AdditionalData: ""
           AuthAmount: 5
-          AuthCode: '333333'
+          AuthCode: "333333"
           AuthDateTime: 71221132914
-          AuthSource: '555555'
-          RRN: '111111'
+          AuthSource: "555555"
+          RRN: "111111"
           SettAmount: 5
           SettDateTime: 12/7/2021 10:29:16 AM
-          SrvTranId: '222222'
+          SrvTranId: "222222"
           Token: Cortina V2 Stub Tester Token
-          TraceNumber: '4444'
+          TraceNumber: "4444"
         Status:
           Code: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     Balance:
       additionalProperties: false
@@ -240,7 +240,7 @@ components:
           format: double
           type: number
         RegularCreditType:
-          $ref: '#/components/schemas/RegularCreditType'
+          $ref: "#/components/schemas/RegularCreditType"
         RevalueCredit:
           description: |-
             Revalue credit amount.
@@ -286,7 +286,7 @@ components:
         CurrencyNumeric:
           description: |
             ISO 4217 currency code in Numeric-3 format.
-          example: '376'
+          example: "376"
           type: string
         IsDeferredAuthorization:
           description: |
@@ -312,7 +312,7 @@ components:
             Reference number for external identification. Should be visible to
             the end-user or external parties (e.g. card issuer, app provider).
             Echoed in `/Inquiry` requests.
-          example: '111111'
+          example: "111111"
           type: string
         NayaxTransactionId:
           description: |
@@ -349,7 +349,7 @@ components:
           example: N99O4XURDQYJZIK4OTCAWF1RHHA40TZWVCRB
           type: string
         TransitElement:
-          $ref: '#/components/schemas/TransitElement'
+          $ref: "#/components/schemas/TransitElement"
       required:
         - TransactionId
         - Amount
@@ -371,7 +371,7 @@ components:
           format: int64
           type: integer
         BatchStatus:
-          $ref: '#/components/schemas/BatchStatus'
+          $ref: "#/components/schemas/BatchStatus"
         BatchTransactionId:
           description: |
             The transaction id inside the batch (id)
@@ -383,7 +383,7 @@ components:
           example: true
           type: boolean
         OperationToPerform:
-          $ref: '#/components/schemas/BatchOperation'
+          $ref: "#/components/schemas/BatchOperation"
       type: object
     BatchOperation:
       description: |
@@ -423,21 +423,21 @@ components:
             Alpha2Code: US
             Alpha3Code: USA
             Name: UNITED STATES
-            NumericCode: '840'
-          DynamicURL: ''
+            NumericCode: "840"
+          DynamicURL: ""
           GeoLocation:
             Address: River
             City: Zambezi
             CountryCode: ZM
             State: State
-            ZipCode: '234234'
+            ZipCode: "234234"
           Id: 2001537302
-          MerchantId: '999999888885'
+          MerchantId: "999999888885"
           Name: TestPayCC V2 OP
         BasicInfo:
           Amount: 5
           CurrencyCode: ILS
-          CurrencyNumeric: '376'
+          CurrencyNumeric: "376"
           MachineAuTime: 71221132914
           NayaxTransactionId: 3584697384
           PaymentMethodID: 1
@@ -447,18 +447,18 @@ components:
         CardData:
           BrandInfo:
             PrimaryDescription: VISA
-            PrimaryId: '6'
-            SecondaryDescription: ''
-            SecondaryId: '0'
+            PrimaryId: "6"
+            SecondaryDescription: ""
+            SecondaryId: "0"
           CardHolderName: Test Card Holder
-          CardNumber: '****'
+          CardNumber: "****"
           EMVData: xxxxxxxx
           EntryMode: CON
-          ExpMonth: '12'
-          ExpYear: '22'
+          ExpMonth: "12"
+          ExpYear: "22"
         CustomData:
-          Actor: '****'
-          Machine: '****'
+          Actor: "****"
+          Machine: "****"
         DeviceInfo:
           FWVersion: 4.0.0.22-RC01 - Aug 25 2021
           HwSerial: 434324119376526
@@ -468,41 +468,41 @@ components:
             Alpha2Code: US
             Alpha3Code: USA
             Name: UNITED STATES
-            NumericCode: '840'
+            NumericCode: "840"
           DecimalPlace: 2
           GeoLocation:
             Address: River
             City: Zambezi
             CountryCode: ZM
-            ZipCode: '234234'
+            ZipCode: "234234"
           Id: 106791869
           Name: Itai_TestPayCC V2
-          Offset: '3.00'
-          TerminalId: '8888888844'
-          ZipCode: ''
+          Offset: "3.00"
+          TerminalId: "8888888844"
+          ZipCode: ""
       properties:
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         CardData:
-          $ref: '#/components/schemas/CardData'
+          $ref: "#/components/schemas/CardData"
         Products:
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: "#/components/schemas/Product"
           type: array
         ECom3DSInfo:
-          $ref: '#/components/schemas/ECom3DSInfo'
+          $ref: "#/components/schemas/ECom3DSInfo"
         DukptInfo:
-          $ref: '#/components/schemas/DukptInfo'
+          $ref: "#/components/schemas/DukptInfo"
         EncryptInfo:
-          $ref: '#/components/schemas/EncryptInfo'
+          $ref: "#/components/schemas/EncryptInfo"
       type: object
     CCAuthResponse:
       additionalProperties: false
@@ -513,33 +513,33 @@ components:
         EMVTags:
           Tag71: 860D8424000008D466284E10D1FF7C
           Tag72: 860D8424000008D466284E10D1FF7C
-          Tag8A: '3030'
+          Tag8A: "3030"
           Tag91: A93381BFF8C5E9EC0012
         PaymentInfo:
-          AdditionalData: ''
+          AdditionalData: ""
           AuthAmount: 5
-          AuthCode: '333333'
+          AuthCode: "333333"
           AuthDateTime: 71221132914
-          AuthSource: '555555'
-          RRN: '111111'
+          AuthSource: "555555"
+          RRN: "111111"
           SettAmount: 5
           SettDateTime: 12/7/2021 10:29:16 AM
-          SrvTranId: '222222'
+          SrvTranId: "222222"
           Token: Cortina V2 Stub Tester Token
-          TraceNumber: '4444'
+          TraceNumber: "4444"
         Status:
           Code: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
         ECom3DSResponseInfo:
-          $ref: '#/components/schemas/ECom3DSResponseInfo'
+          $ref: "#/components/schemas/ECom3DSResponseInfo"
         EMVTags:
-          $ref: '#/components/schemas/EMVTags'
+          $ref: "#/components/schemas/EMVTags"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     CCCancelRequest:
       additionalProperties: false
@@ -549,22 +549,22 @@ components:
             Alpha2Code: US
             Alpha3Code: USA
             Name: UNITED STATES
-            NumericCode: '840'
-          DynamicURL: ''
+            NumericCode: "840"
+          DynamicURL: ""
           GeoLocation:
             Address: River
             City: Zambezi
             CountryCode: ZM
             State: State
-            ZipCode: '234234'
+            ZipCode: "234234"
           Id: 2001537302
-          MerchantId: '999999888885'
+          MerchantId: "999999888885"
           Name: TestPayCC V2 OP
         BasicInfo:
           Amount: 0.1
           CurrencyCode: ILS
-          CurrencyNumeric: '376'
-          MachineAuTime: '291121220832'
+          CurrencyNumeric: "376"
+          MachineAuTime: "291121220832"
           NayaxTransactionId: 3584688030
           PaymentMethodID: 1
           SiteId: 1
@@ -572,47 +572,47 @@ components:
         CardData:
           BrandInfo:
             PrimaryDescription: MASTERCARD
-            PrimaryId: '8'
-            SecondaryDescription: ''
-            SecondaryId: '0'
+            PrimaryId: "8"
+            SecondaryDescription: ""
+            SecondaryId: "0"
           CardHolderName: Test Card Holder
-          CardNumber: '****'
+          CardNumber: "****"
           EntryMode: MCR
-          ExpMonth: '01'
-          ExpYear: '23'
+          ExpMonth: "01"
+          ExpYear: "23"
         CustomData:
-          Actor: '****'
+          Actor: "****"
         DeviceInfo:
-          FWVersion: ''
-          HwSerial: '0000000000000100'
+          FWVersion: ""
+          HwSerial: "0000000000000100"
         MachineInfo:
           City: Abbeville
           Country:
             Alpha2Code: US
             Alpha3Code: USA
             Name: UNITED STATES
-            NumericCode: '840'
+            NumericCode: "840"
           DecimalPlace: 2
           GeoLocation:
             Address: River
             City: Zambezi
             CountryCode: ZM
-            ZipCode: '234234'
+            ZipCode: "234234"
           Id: 106791869
           Name: Itai_TestPayCC V2
-          Offset: '3.00'
-          TerminalId: '8888888844'
-          ZipCode: '54321'
+          Offset: "3.00"
+          TerminalId: "8888888844"
+          ZipCode: "54321"
         PaymentInfo:
           AuthAmount: 0.1
-          AuthCode: '333333'
-          AuthDateTime: '291121220832'
-          AuthSource: '55555'
+          AuthCode: "333333"
+          AuthDateTime: "291121220832"
+          AuthSource: "55555"
           IsGatewayTimeout: false
-          RRN: '111111'
+          RRN: "111111"
           SettDateTime: 11/29/2021 7
           Token: Cortina V2 Stub Tester Token
-          TraceNumber: '4444'
+          TraceNumber: "4444"
         ReasonCode: 0
         ReasonText: Unknown Error
       properties:
@@ -622,25 +622,25 @@ components:
         ReasonText:
           type: string
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         CardData:
-          $ref: '#/components/schemas/CardData'
+          $ref: "#/components/schemas/CardData"
         Products:
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: "#/components/schemas/Product"
           type: array
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         EncryptInfo:
-          $ref: '#/components/schemas/EncryptInfo'
+          $ref: "#/components/schemas/EncryptInfo"
       type: object
     CCCancelResponse:
       additionalProperties: false
@@ -651,7 +651,7 @@ components:
           Verdict: Approved
       properties:
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     CCRefundRequest:
       additionalProperties: false
@@ -661,22 +661,22 @@ components:
             Alpha2Code: US
             Alpha3Code: USA
             Name: UNITED STATES
-            NumericCode: '840'
-          DynamicURL: ''
+            NumericCode: "840"
+          DynamicURL: ""
           GeoLocation:
             Address: River
             City: Zambezi
             CountryCode: ZM
             State: State
-            ZipCode: '234234'
+            ZipCode: "234234"
           Id: 2001537302
-          MerchantId: '999999888885'
+          MerchantId: "999999888885"
           Name: TestPayCC V2 OP
         BasicInfo:
           Amount: 3.9
           CurrencyCode: ILS
-          CurrencyNumeric: '376'
-          MachineAuTime: '201121220429'
+          CurrencyNumeric: "376"
+          MachineAuTime: "201121220429"
           NayaxTransactionId: 3584667527
           PaymentMethodID: 1
           SiteId: 1
@@ -685,69 +685,69 @@ components:
         CardData:
           BrandInfo:
             PrimaryDescription: MASTERCARD
-            PrimaryId: '8'
-            SecondaryDescription: ''
-            SecondaryId: '0'
+            PrimaryId: "8"
+            SecondaryDescription: ""
+            SecondaryId: "0"
           CardHolderName: Test Card Holder
-          CardNumber: '****'
+          CardNumber: "****"
           EntryMode: MCR
-          ExpMonth: '01'
-          ExpYear: '23'
+          ExpMonth: "01"
+          ExpYear: "23"
         CustomData:
-          Actor: '****'
-          Machine: '****'
+          Actor: "****"
+          Machine: "****"
         DeviceInfo:
-          FWVersion: ''
-          HwSerial: ''
+          FWVersion: ""
+          HwSerial: ""
         MachineInfo:
           City: Abbeville
           Country:
             Alpha2Code: US
             Alpha3Code: USA
             Name: UNITED STATES
-            NumericCode: '840'
+            NumericCode: "840"
           DecimalPlace: 2
           GeoLocation:
             Address: River
             City: Zambezi
             CountryCode: ZM
-            ZipCode: '234234'
+            ZipCode: "234234"
           Id: 0
           Name: Itai_TestPayCC V2
-          Offset: '3.00'
-          TerminalId: '8888888844'
-          ZipCode: '54321'
+          Offset: "3.00"
+          TerminalId: "8888888844"
+          ZipCode: "54321"
         PaymentInfo:
           AuthAmount: 3.9
-          AuthCode: '333333'
-          AuthDateTime: '201121220429'
-          AuthSource: '55555'
+          AuthCode: "333333"
+          AuthDateTime: "201121220429"
+          AuthSource: "55555"
           IsGatewayTimeout: false
-          RRN: '111111'
+          RRN: "111111"
           SettAmount: 3.9
           SettDateTime: 11/20/2021 7
           SrvTranId: S9IUQSOA46Z7MHZ51JQXB20HWRKEDC1F9LLV
           Token: Cortina V2 Stub Tester Token
-          TraceNumber: '4444'
+          TraceNumber: "4444"
         ReasonCode: 12
         ReasonText: Cashless Refunded by Operator
       properties:
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         CardData:
-          $ref: '#/components/schemas/CardData'
+          $ref: "#/components/schemas/CardData"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         EncryptInfo:
-          $ref: '#/components/schemas/EncryptInfo'
+          $ref: "#/components/schemas/EncryptInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         ReasonCode:
           format: int16
           type: integer
@@ -763,11 +763,11 @@ components:
           Verdict: Approved
       properties:
         Batch:
-          $ref: '#/components/schemas/Batch'
+          $ref: "#/components/schemas/Batch"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     CCSaleRequest:
       additionalProperties: false
@@ -777,22 +777,22 @@ components:
             Alpha2Code: US
             Alpha3Code: USA
             Name: UNITED STATES
-            NumericCode: '840'
-          DynamicURL: ''
+            NumericCode: "840"
+          DynamicURL: ""
           GeoLocation:
             Address: River
             City: Zambezi
             CountryCode: ZM
             State: State
-            ZipCode: '234234'
+            ZipCode: "234234"
           Id: 2001537302
-          MerchantId: '999999888885'
+          MerchantId: "999999888885"
           Name: TestPayCC V2 OP
         BasicInfo:
           Amount: 3.9
           CurrencyCode: ILS
-          CurrencyNumeric: '376'
-          MachineAuTime: '291121220837'
+          CurrencyNumeric: "376"
+          MachineAuTime: "291121220837"
           NayaxTransactionId: 3584688038
           PaymentMethodID: 1
           SiteId: 1
@@ -801,64 +801,64 @@ components:
         CardData:
           BrandInfo:
             PrimaryDescription: MASTERCARD
-            PrimaryId: '8'
-            SecondaryDescription: ''
-            SecondaryId: '0'
+            PrimaryId: "8"
+            SecondaryDescription: ""
+            SecondaryId: "0"
           CardHolderName: Test Card Holder
-          CardNumber: '****'
+          CardNumber: "****"
           EMVData: xxxxxxxx
           EntryMode: CON
-          ExpMonth: '01'
-          ExpYear: '23'
+          ExpMonth: "01"
+          ExpYear: "23"
         CustomData:
-          Actor: '****'
-          Machine: '****'
+          Actor: "****"
+          Machine: "****"
         DeviceInfo:
           FWVersion: unknown
-          HwSerial: '0000000000000100'
+          HwSerial: "0000000000000100"
         MachineInfo:
           City: Abbeville
           Country:
             Alpha2Code: US
             Alpha3Code: USA
             Name: UNITED STATES
-            NumericCode: '840'
+            NumericCode: "840"
           DecimalPlace: 2
           GeoLocation:
             Address: River
             City: Zambezi
             CountryCode: ZM
-            ZipCode: '234234'
+            ZipCode: "234234"
           Id: 106791869
           Name: Itai_TestPayCC V2
-          Offset: '3.00'
-          TerminalId: '8888888844'
-          ZipCode: ''
+          Offset: "3.00"
+          TerminalId: "8888888844"
+          ZipCode: ""
       properties:
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         CardData:
-          $ref: '#/components/schemas/CardData'
+          $ref: "#/components/schemas/CardData"
         Products:
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: "#/components/schemas/Product"
           type: array
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         ECom3DSInfo:
-          $ref: '#/components/schemas/ECom3DSInfo'
+          $ref: "#/components/schemas/ECom3DSInfo"
         DukptInfo:
-          $ref: '#/components/schemas/DukptInfo'
+          $ref: "#/components/schemas/DukptInfo"
         EncryptInfo:
-          $ref: '#/components/schemas/EncryptInfo'
+          $ref: "#/components/schemas/EncryptInfo"
       type: object
     CCSaleResponse:
       additionalProperties: false
@@ -869,33 +869,33 @@ components:
         EMVTags:
           Tag71: 860D8424000008D466284E10D1FF7C
           Tag72: 860D8424000008D466284E10D1FF7C
-          Tag8A: '3030'
+          Tag8A: "3030"
           Tag91: A93381BFF8C5E9EC0012
         PaymentInfo:
-          AdditionalData: ''
+          AdditionalData: ""
           AuthAmount: 3.9
-          AuthCode: '333333'
-          AuthDateTime: '291121220837'
-          AuthSource: '555555'
-          RRN: '111111'
+          AuthCode: "333333"
+          AuthDateTime: "291121220837"
+          AuthSource: "555555"
+          RRN: "111111"
           SettAmount: 3.9
           SettDateTime: 11/29/2021 7:08:37 PM
-          SrvTranId: '222222'
+          SrvTranId: "222222"
           Token: Cortina V2 Stub Tester Token
-          TraceNumber: '4444'
+          TraceNumber: "4444"
         Status:
           Code: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
         ECom3DSResponseInfo:
-          $ref: '#/components/schemas/ECom3DSResponseInfo'
+          $ref: "#/components/schemas/ECom3DSResponseInfo"
         EMVTags:
-          $ref: '#/components/schemas/EMVTags'
+          $ref: "#/components/schemas/EMVTags"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     CCSettRequest:
       additionalProperties: false
@@ -905,42 +905,42 @@ components:
             Alpha2Code: US
             Alpha3Code: USA
             Name: UNITED STATES
-            NumericCode: '840'
-          DynamicURL: ''
+            NumericCode: "840"
+          DynamicURL: ""
           GeoLocation:
             Address: River
             City: Zambezi
             CountryCode: ZM
             State: State
-            ZipCode: '234234'
+            ZipCode: "234234"
           Id: 2001537302
-          MerchantId: '999999888885'
+          MerchantId: "999999888885"
           Name: TestPayCC V2 OP
         BasicInfo:
           Amount: 3
           CurrencyCode: ILS
-          CurrencyNumeric: '376'
-          MachineAuTime: '071221133300'
+          CurrencyNumeric: "376"
+          MachineAuTime: "071221133300"
           NayaxTransactionId: 3584697388
           PaymentMethodID: 1
           SiteId: 1
           TimeoutMS: 15000
-          TransactionId: '3584697388'
+          TransactionId: "3584697388"
         CardData:
           BrandInfo:
             PrimaryDescription: VISA
-            PrimaryId: '6'
-            SecondaryDescription: ''
-            SecondaryId: '0'
+            PrimaryId: "6"
+            SecondaryDescription: ""
+            SecondaryId: "0"
           CardHolderName: Test Card Holder
-          CardNumber: '****'
-          EMVData: ' xxxxxxxx'
+          CardNumber: "****"
+          EMVData: " xxxxxxxx"
           EntryMode: CON
-          ExpMonth: '12'
-          ExpYear: '22'
+          ExpMonth: "12"
+          ExpYear: "22"
         CustomData:
-          Actor: '****'
-          Machine: '****'
+          Actor: "****"
+          Machine: "****"
         DeviceInfo:
           FWVersion: 4.0.0.22-RC01 - Aug 25 2021
           HwSerial: 434324119376526
@@ -950,50 +950,50 @@ components:
             Alpha2Code: US
             Alpha3Code: USA
             Name: UNITED STATES
-            NumericCode: '840'
+            NumericCode: "840"
           DecimalPlace: 2
           GeoLocation:
             Address: River
             City: Zambezi
             CountryCode: ZM
-            ZipCode: '234234'
+            ZipCode: "234234"
           Id: 106791869
           Name: Itai_TestPayCC V2
-          Offset: '3.00'
-          TerminalId: '8888888844'
-          ZipCode: '54321'
+          Offset: "3.00"
+          TerminalId: "8888888844"
+          ZipCode: "54321"
         PaymentInfo:
           AuthAmount: 5
-          AuthCode: '333333'
-          AuthDateTime: '071221133300'
-          AuthSource: '55555'
+          AuthCode: "333333"
+          AuthDateTime: "071221133300"
+          AuthSource: "55555"
           IsGatewayTimeout: false
-          RRN: '111111'
+          RRN: "111111"
           SettDateTime: 12/7/2021 10
-          SrvTranId: '3584697388'
+          SrvTranId: "3584697388"
           Token: Cortina V2 Stub Tester Token
-          TraceNumber: '4444'
+          TraceNumber: "4444"
       properties:
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         CardData:
-          $ref: '#/components/schemas/CardData'
+          $ref: "#/components/schemas/CardData"
         Products:
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: "#/components/schemas/Product"
           type: array
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         EncryptInfo:
-          $ref: '#/components/schemas/EncryptInfo'
+          $ref: "#/components/schemas/EncryptInfo"
       type: object
     CCSettResponse:
       additionalProperties: false
@@ -1007,26 +1007,26 @@ components:
           OperationToPerform: 1
         PaymentInfo:
           AuthAmount: 5
-          AuthCode: '333333'
-          AuthDateTime: '071221133300'
-          AuthSource: '55555'
+          AuthCode: "333333"
+          AuthDateTime: "071221133300"
+          AuthSource: "55555"
           IsGatewayTimeout: false
-          RRN: '111111'
+          RRN: "111111"
           SettDateTime: 12/7/2021 10
-          SrvTranId: '3584697388'
+          SrvTranId: "3584697388"
           Token: Cortina V2 Stub Tester Token
-          TraceNumber: '4444'
+          TraceNumber: "4444"
         Status:
           Code: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
         Batch:
-          $ref: '#/components/schemas/Batch'
+          $ref: "#/components/schemas/Batch"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     CCVoidRequest:
       additionalProperties: false
@@ -1036,74 +1036,74 @@ components:
             Alpha2Code: US
             Alpha3Code: USA
             Name: UNITED STATES
-            NumericCode: '840'
-          DynamicURL: ''
+            NumericCode: "840"
+          DynamicURL: ""
           GeoLocation:
             Address: River
             City: Zambezi
             CountryCode: ZM
             State: State
-            ZipCode: '234234'
+            ZipCode: "234234"
           Id: 2001537302
-          MerchantId: '999999888885'
+          MerchantId: "999999888885"
           Name: TestPayCC V2 OP
         BasicInfo:
           Amount: 3.9
           CurrencyCode: ILS
-          CurrencyNumeric: '376'
+          CurrencyNumeric: "376"
           MachineAuTime: 81221130018
           NayaxTransactionId: 3584701816
           PaymentMethodID: 1
           SiteId: 1
           TimeoutMS: 15000
-          TransactionId: '12345'
+          TransactionId: "12345"
         CardData:
           BrandInfo:
             PrimaryDescription: MASTERCARD
-            PrimaryId: '8'
-            SecondaryDescription: ''
-            SecondaryId: '0'
+            PrimaryId: "8"
+            SecondaryDescription: ""
+            SecondaryId: "0"
           CardHolderName: Test Card Holder
-          CardNumber: '****'
+          CardNumber: "****"
           EntryMode: MCR
-          ExpMonth: '01'
-          ExpYear: '23'
+          ExpMonth: "01"
+          ExpYear: "23"
         CustomData:
-          Actor: '****'
-          Machine: '****'
+          Actor: "****"
+          Machine: "****"
         DeviceInfo:
-          FWVersion: ''
-          HwSerial: '0000000000000100'
+          FWVersion: ""
+          HwSerial: "0000000000000100"
         MachineInfo:
           City: Abbeville
           Country:
             Alpha2Code: US
             Alpha3Code: USA
             Name: UNITED STATES
-            NumericCode: '840'
+            NumericCode: "840"
           DecimalPlace: 2
           GeoLocation:
             Address: River
             City: Zambezi
             CountryCode: ZM
-            ZipCode: '234234'
+            ZipCode: "234234"
           Id: 106791869
           Name: Itai_TestPayCC V2
-          Offset: '3.00'
-          TerminalId: '8888888844'
-          ZipCode: '54321'
+          Offset: "3.00"
+          TerminalId: "8888888844"
+          ZipCode: "54321"
         PaymentInfo:
           AuthAmount: 3.9
-          AuthCode: '12345'
-          AuthDateTime: '12345'
-          AuthSource: '12345'
+          AuthCode: "12345"
+          AuthDateTime: "12345"
+          AuthSource: "12345"
           IsGatewayTimeout: false
-          RRN: '12345'
+          RRN: "12345"
           SettAmount: 3.9
-          SettDateTime: '12345'
-          SrvTranId: '12345'
-          Token: '12345'
-          TraceNumber: '12345'
+          SettDateTime: "12345"
+          SrvTranId: "12345"
+          Token: "12345"
+          TraceNumber: "12345"
         ReasonCode: 50
       properties:
         ReasonCode:
@@ -1112,50 +1112,50 @@ components:
         ReasonText:
           type: string
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         CardData:
-          $ref: '#/components/schemas/CardData'
+          $ref: "#/components/schemas/CardData"
         Products:
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: "#/components/schemas/Product"
           type: array
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         EncryptInfo:
-          $ref: '#/components/schemas/EncryptInfo'
+          $ref: "#/components/schemas/EncryptInfo"
       type: object
     CCVoidResponse:
       additionalProperties: false
       example:
         PaymentInfo:
           AuthAmount: 0.1
-          AuthCode: '333333'
-          AuthDateTime: '230221101008'
-          AuthSource: '55555'
+          AuthCode: "333333"
+          AuthDateTime: "230221101008"
+          AuthSource: "55555"
           IsGatewayTimeout: false
-          RRN: '111111'
+          RRN: "111111"
           SettAmount: 0.1
-          SettDateTime: '230221101009'
-          SrvTranId: '236584335969834429321847829253667359'
-          Token: ''
-          TraceNumber: '4444'
+          SettDateTime: "230221101009"
+          SrvTranId: "236584335969834429321847829253667359"
+          Token: ""
+          TraceNumber: "4444"
         Status:
           Code: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     CardBrandInfo:
       additionalProperties: false
@@ -1166,7 +1166,7 @@ components:
           type: string
         PrimaryId:
           description: Primary Brand Id
-          example: '6'
+          example: "6"
           type: string
         SecondaryDescription:
           description: Secondary Brand Description
@@ -1174,7 +1174,7 @@ components:
           type: string
         SecondaryId:
           description: Secondary Brand Id
-          example: '0'
+          example: "0"
           type: string
       type: object
     CardData:
@@ -1184,11 +1184,11 @@ components:
         etc.)
       properties:
         BrandInfo:
-          $ref: '#/components/schemas/CardBrandInfo'
+          $ref: "#/components/schemas/CardBrandInfo"
         CVV2:
           description: |
             Optional, cvv2
-          example: '****'
+          example: "****"
           type: string
         CardHolderName:
           description: Card Holder Name
@@ -1205,7 +1205,7 @@ components:
 
             - For card not present, Settlement, Cancel, Void, Refund - The card
             PAN only will be sent.
-          example: '****'
+          example: "****"
           type: string
         EMVData:
           description: |
@@ -1246,15 +1246,15 @@ components:
           type: string
         ExpMonth:
           description: Conditional only when Interface is 1 or 10, (MM)
-          example: '01'
+          example: "01"
           type: string
         ExpYear:
           description: Conditional only when Interface is 1 or 10, (YY)
-          example: '23'
+          example: "23"
           type: string
         IDNumber:
           description: ID Number
-          example: '****'
+          example: "****"
           type: string
         IsDebitCard:
           description: Indication if card is Debit or Prepaid
@@ -1307,7 +1307,7 @@ components:
             String(3)
             Mandatory
             ISO-3166-1 format: Numeric-3 code
-          example: '840'
+          example: "840"
           type: string
       type: object
     CurrentKeyData:
@@ -1331,7 +1331,7 @@ components:
         KeyExpirationDt:
           description: |
             - Key Expiration Datetime
-          example: '2021-03-01 13:45:56.100'
+          example: "2021-03-01 13:45:56.100"
           type: string
         KeyFormatId:
           description: |
@@ -1346,7 +1346,7 @@ components:
         KeyRenewalDt:
           description: |
             - Key Renewal Datetime
-          example: '2021-03-01 13:45:56.100'
+          example: "2021-03-01 13:45:56.100"
           type: string
         ProviderId:
           description: |
@@ -1455,7 +1455,7 @@ components:
           description: >
             Encrypted PIN data provided by the cardholder. Encrypted using the
             key received from the TMS.
-          example: '****'
+          example: "****"
         PINBlockFormat:
           description: |
             * 0 - ISO 0
@@ -1472,16 +1472,16 @@ components:
         ActorInfo:
           CountryCode: US
           Id: 2001505522
-          MerchantId: '123456789'
+          MerchantId: "123456789"
           Name: TanyaT_OP
         BasicInfo:
           Amount: 0.1
           Currency: ILS
-          MachineAuTime: '230221101008'
+          MachineAuTime: "230221101008"
           SiteId: 1
-          TransactionId: '236584335969834429321847829253667359'
+          TransactionId: "236584335969834429321847829253667359"
         CustomData:
-          Actor: ''
+          Actor: ""
           Machine:
             dynamic_qr_channels_rec_ids: 8,19
         DeviceInfo:
@@ -1498,15 +1498,15 @@ components:
           DecimalPlace: 2
           Id: 869761713
           Name: TestPayDynamicQR V2
-          Offset: '2.00'
-          TerminalId: '987654321'
-          ZipCode: '1223311'
+          Offset: "2.00"
+          TerminalId: "987654321"
+          ZipCode: "1223311"
         PaymentInfo:
           AuthAmount: 0.1
           IsGatewayTimeout: false
-          RRN: '111111'
+          RRN: "111111"
           SettAmount: 0
-          SrvTranId: '236584335969834429321847829253667359'
+          SrvTranId: "236584335969834429321847829253667359"
         Polling:
           IsLastPolling: false
           PollingAttemptCounter: 30
@@ -1518,23 +1518,23 @@ components:
             UnitOfMeasurement: Unit
       properties:
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Polling:
-          $ref: '#/components/schemas/Polling'
+          $ref: "#/components/schemas/Polling"
           description: Optional Polling Information
         Products:
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: "#/components/schemas/Product"
             description: Mandatory Products details
           type: array
       type: object
@@ -1542,24 +1542,24 @@ components:
       additionalProperties: false
       example:
         PaymentInfo:
-          AdditionalData: ''
+          AdditionalData: ""
           AuthAmount: 0.1
-          AuthCode: '333333'
-          AuthDateTime: '230221101008'
-          AuthSource: '555555'
+          AuthCode: "333333"
+          AuthDateTime: "230221101008"
+          AuthSource: "555555"
           SettAmount: 0.1
-          SettDateTime: '230221101009'
+          SettDateTime: "230221101009"
           Token: Cortina V2 Stub Tester Token
-          TraceNumber: '4444'
+          TraceNumber: "4444"
         Status:
           Code: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
           description: |
             Use 993 to keep polling.
             See status description for more info
@@ -1614,9 +1614,9 @@ components:
             UnitOfMeasurement: USD
       properties:
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         ChannelId:
           description: >
             - Conditional, for Multi-channel integration, Contact Nayax TPOC to
@@ -1626,25 +1626,25 @@ components:
           format: int32
           type: integer
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Product:
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: "#/components/schemas/Product"
           type: array
       type: object
     DynamicQrResponse:
       example:
         QRCode: DynamicQrResponse_QRCode_Test
         QRData:
-          ChannelId: '19'
-          RRN: '111111'
-          SrvTranId: '236584335969834429321847829253667359'
+          ChannelId: "19"
+          RRN: "111111"
+          SrvTranId: "236584335969834429321847829253667359"
         Status:
           Code: 0
           StatusMessage: Cortina V2 Stub Tester
@@ -1657,25 +1657,25 @@ components:
             - QR URL for device
           type: string
         QRData:
-          $ref: '#/components/schemas/QRData'
+          $ref: "#/components/schemas/QRData"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     DynamicRefundRequest:
       additionalProperties: false
       properties:
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         ReasonCode:
           description: |
             - Optional
@@ -1694,29 +1694,29 @@ components:
       additionalProperties: false
       properties:
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     DynamicVoidRequest:
       additionalProperties: false
       example:
         ActorInfo:
           Id: 2001187922
-          MerchantId: '123456789'
+          MerchantId: "123456789"
           Name: TanyaT_OP
         BasicInfo:
           Amount: 0.1
           Currency: ILS
-          MachineAuTime: '230221121009'
+          MachineAuTime: "230221121009"
           SiteId: 1
-          TransactionId: '236584335969834429321847829253667359'
+          TransactionId: "236584335969834429321847829253667359"
         CustomData:
-          Actor: ''
+          Actor: ""
           Machine:
             dynamic_qr_channels_rec_ids: 18,19
         DeviceInfo:
-          FWVersion: ''
+          FWVersion: ""
           HwSerial: 434324119376524
           Id: 0
           Type: ONYX
@@ -1729,36 +1729,36 @@ components:
           DecimalPlace: 2
           Id: 869761713
           Name: TestPayDynamicQR V2
-          Offset: '2.00'
-          TerminalId: '987654321'
-          ZipCode: '1223311'
+          Offset: "2.00"
+          TerminalId: "987654321"
+          ZipCode: "1223311"
         PaymentInfo:
           AuthAmount: 0.1
-          AuthCode: '333333'
-          AuthDateTime: '230221101008'
-          AuthSource: '55555'
+          AuthCode: "333333"
+          AuthDateTime: "230221101008"
+          AuthSource: "55555"
           IsGatewayTimeout: false
-          RRN: '111111'
+          RRN: "111111"
           SettAmount: 0.1
-          SettDateTime: '230221101009'
-          SrvTranId: '236584335969834429321847829253667359'
-          Token: ''
-          TraceNumber: '4444'
+          SettDateTime: "230221101009"
+          SrvTranId: "236584335969834429321847829253667359"
+          Token: ""
+          TraceNumber: "4444"
         ReasonCode: 3
         ReasonText: Cashless Cancelled by machine
       properties:
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         ReasonCode:
           description: |
             - Optional
@@ -1778,25 +1778,25 @@ components:
       example:
         PaymentInfo:
           AuthAmount: 0.1
-          AuthCode: '333333'
-          AuthDateTime: '230221101008'
-          AuthSource: '55555'
+          AuthCode: "333333"
+          AuthDateTime: "230221101008"
+          AuthSource: "55555"
           IsGatewayTimeout: false
-          RRN: '111111'
+          RRN: "111111"
           SettAmount: 0.1
-          SettDateTime: '230221101009'
-          SrvTranId: '236584335969834429321847829253667359'
-          Token: ''
-          TraceNumber: '4444'
+          SettDateTime: "230221101009"
+          SrvTranId: "236584335969834429321847829253667359"
+          Token: ""
+          TraceNumber: "4444"
         Status:
           Code: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     ECIType:
       type: integer
@@ -1821,11 +1821,11 @@ components:
       type: object
       description: >
         Contains 3-D Secure (3DS) data used for Strong Customer Authentication
-        (SCA) in electronic commerce transactions. 
+        (SCA) in electronic commerce transactions.
       additionalProperties: false
       properties:
         ECI:
-          $ref: '#/components/schemas/ECIType'
+          $ref: "#/components/schemas/ECIType"
         ECom3DSAdditionalData:
           type: string
           description: Additional 3DS-specific data in string format.
@@ -1844,7 +1844,7 @@ components:
             `ECI = 05`.
           example: string
         ECom3DSVersion:
-          $ref: '#/components/schemas/ECom3DSType'
+          $ref: "#/components/schemas/ECom3DSType"
           description: |
             Specifies the supported 3DS version. Typically set to `1`.
         XID:
@@ -1905,7 +1905,7 @@ components:
             EMV Tag 8A (Authorisation Response Code), Mandatory for Contact.
             Value must be sent in ASCII value, e.g.value of 00 (HEXA) should be
             sent as 3030 (ASCII) and value of 05 (HEXA) should be sent as 3035 .
-          example: '3030'
+          example: "3030"
           type: string
         Tag91:
           description: EMV Tag 91 (Issuer Authentication Data), Mandatory for Contact.
@@ -1993,7 +1993,7 @@ components:
             String(255)
             Optional
             Zip code defined in the Nayax backoffice
-          example: '234234'
+          example: "234234"
           type: string
       type: object
     MachineInfo:
@@ -2006,7 +2006,7 @@ components:
           example: Abbeville
           type: string
         Country:
-          $ref: '#/components/schemas/CountryInfo'
+          $ref: "#/components/schemas/CountryInfo"
         DecimalPlace:
           description: >
             Number of decimal places for transaction amounts.
@@ -2023,7 +2023,7 @@ components:
           example: OperatorExternalID
           type: string
         GeoLocation:
-          $ref: '#/components/schemas/GeoLocation'
+          $ref: "#/components/schemas/GeoLocation"
         GroupId:
           description: |
             Internal Nayax group ID.
@@ -2044,7 +2044,7 @@ components:
         Offset:
           description: |
             UTC timezone offset. Maximum length: 255 characters.
-          example: '3.00'
+          example: "3.00"
           type: string
         OperatorId:
           description: >
@@ -2062,7 +2062,7 @@ components:
           description: >
             Optional terminal identifier defined in the Nayax backoffice.
             Contact Nayax TPOC to configure. Maximum length: 255 characters.
-          example: '8888888844'
+          example: "8888888844"
           type: string
         Type:
           description: >
@@ -2087,7 +2087,7 @@ components:
           format: int64
           type: integer
         CustomData:
-          $ref: '#/components/schemas/OnboardCustomData'
+          $ref: "#/components/schemas/OnboardCustomData"
         MachineId:
           description: |
             - Optional
@@ -2160,7 +2160,7 @@ components:
             - Length: 200
           type: string
         Country:
-          $ref: '#/components/schemas/OnboardCountryInfo'
+          $ref: "#/components/schemas/OnboardCountryInfo"
         DynamicURL:
           description: |
             - Optional, support different url's.
@@ -2168,7 +2168,7 @@ components:
             - Actor level url configuration
           type: string
         GeoLocation:
-          $ref: '#/components/schemas/OnboardGeoLocation'
+          $ref: "#/components/schemas/OnboardGeoLocation"
         Id:
           description: |
             - Optional
@@ -2227,7 +2227,7 @@ components:
             - Direct Merchant name as defined in the Nayax backoffice
           type: string
         OnboardingStatus:
-          $ref: '#/components/schemas/OnboardingStatusEnum'
+          $ref: "#/components/schemas/OnboardingStatusEnum"
         OperatorId:
           description: |
             - Optional
@@ -2275,24 +2275,24 @@ components:
     OnboardActorRequest:
       properties:
         ActorInfo:
-          $ref: '#/components/schemas/OnboardActorInfo'
+          $ref: "#/components/schemas/OnboardActorInfo"
         CustomData:
-          $ref: '#/components/schemas/OnboardCustomData'
+          $ref: "#/components/schemas/OnboardCustomData"
         DistributorInfo:
-          $ref: '#/components/schemas/OnboardDistributorInfo'
+          $ref: "#/components/schemas/OnboardDistributorInfo"
         OnboardingBasicInfo:
-          $ref: '#/components/schemas/OnboardingBasicInfo'
+          $ref: "#/components/schemas/OnboardingBasicInfo"
         OperatorInfo:
-          $ref: '#/components/schemas/OnboardOperatorInfo'
+          $ref: "#/components/schemas/OnboardOperatorInfo"
         UpdateInfo:
-          $ref: '#/components/schemas/OnboardUpdateInfo'
+          $ref: "#/components/schemas/OnboardUpdateInfo"
       type: object
     OnboardActorResponse:
       properties:
         ActorOnboardingData:
-          $ref: '#/components/schemas/ActorOnboardingData'
+          $ref: "#/components/schemas/ActorOnboardingData"
         OnboardStatus:
-          $ref: '#/components/schemas/OnboardStatus'
+          $ref: "#/components/schemas/OnboardStatus"
       type: object
     OnboardCountryInfo:
       additionalProperties: false
@@ -2374,7 +2374,7 @@ components:
             - Length: 250
           type: string
         Country:
-          $ref: '#/components/schemas/OnboardCountryInfo'
+          $ref: "#/components/schemas/OnboardCountryInfo"
         DynamicURL:
           description: |
             - Optional, support different url's.
@@ -2382,7 +2382,7 @@ components:
             - Actor level url configuration
           type: string
         GeoLocation:
-          $ref: '#/components/schemas/OnboardGeoLocation'
+          $ref: "#/components/schemas/OnboardGeoLocation"
         Id:
           description: |
             - Optional
@@ -2416,7 +2416,7 @@ components:
             - Direct Merchant name as defined in the Nayax backoffice
           type: string
         OnboardingStatus:
-          $ref: '#/components/schemas/OnboardingStatusEnum'
+          $ref: "#/components/schemas/OnboardingStatusEnum"
         OperatorId:
           description: |
             - Optional
@@ -2517,7 +2517,7 @@ components:
             - Machine City as defined in the Nayax backoffice
           type: string
         Country:
-          $ref: '#/components/schemas/OnboardCountryInfo'
+          $ref: "#/components/schemas/OnboardCountryInfo"
         ExternalId:
           description: >
             - Optional
@@ -2529,7 +2529,7 @@ components:
             number - operator).
           type: string
         GeoLocation:
-          $ref: '#/components/schemas/OnboardGeoLocation'
+          $ref: "#/components/schemas/OnboardGeoLocation"
         GroupId:
           type: string
         Id:
@@ -2551,7 +2551,7 @@ components:
             - UTC timezone offset
           type: string
         OnboardingStatus:
-          $ref: '#/components/schemas/OnboardingStatusEnum'
+          $ref: "#/components/schemas/OnboardingStatusEnum"
         OperatorId:
           description: |
             - Optional
@@ -2599,26 +2599,26 @@ components:
     OnboardMachineRequest:
       properties:
         ActorInfo:
-          $ref: '#/components/schemas/OnboardActorInfo'
+          $ref: "#/components/schemas/OnboardActorInfo"
         CustomData:
-          $ref: '#/components/schemas/OnboardCustomData'
+          $ref: "#/components/schemas/OnboardCustomData"
         DistributorInfo:
-          $ref: '#/components/schemas/OnboardDistributorInfo'
+          $ref: "#/components/schemas/OnboardDistributorInfo"
         MachineInfo:
-          $ref: '#/components/schemas/OnboardMachineInfo'
+          $ref: "#/components/schemas/OnboardMachineInfo"
         OnboardingBasicInfo:
-          $ref: '#/components/schemas/OnboardingBasicInfo'
+          $ref: "#/components/schemas/OnboardingBasicInfo"
         OperatorInfo:
-          $ref: '#/components/schemas/OnboardOperatorInfo'
+          $ref: "#/components/schemas/OnboardOperatorInfo"
         UpdateInfo:
-          $ref: '#/components/schemas/OnboardUpdateInfo'
+          $ref: "#/components/schemas/OnboardUpdateInfo"
       type: object
     OnboardMachineResponse:
       properties:
         MachineOnboardingData:
-          $ref: '#/components/schemas/MachineOnboardingData'
+          $ref: "#/components/schemas/MachineOnboardingData"
         OnboardStatus:
-          $ref: '#/components/schemas/OnboardStatus'
+          $ref: "#/components/schemas/OnboardStatus"
       type: object
     OnboardOperatorInfo:
       additionalProperties: false
@@ -2645,7 +2645,7 @@ components:
             - Length: 250
           type: string
         Country:
-          $ref: '#/components/schemas/OnboardCountryInfo'
+          $ref: "#/components/schemas/OnboardCountryInfo"
         DynamicURL:
           description: |
             - Optional, support different url's.
@@ -2653,7 +2653,7 @@ components:
             - Actor level url configuration
           type: string
         GeoLocation:
-          $ref: '#/components/schemas/OnboardGeoLocation'
+          $ref: "#/components/schemas/OnboardGeoLocation"
         Id:
           description: |
             - Optional
@@ -2687,7 +2687,7 @@ components:
             - Direct Merchant name as defined in the Nayax backoffice
           type: string
         OnboardingStatus:
-          $ref: '#/components/schemas/OnboardingStatusEnum'
+          $ref: "#/components/schemas/OnboardingStatusEnum"
         OperatorId:
           description: |
             - Optional
@@ -2870,19 +2870,19 @@ components:
       additionalProperties: false
       properties:
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         CardData:
-          $ref: '#/components/schemas/CardData'
+          $ref: "#/components/schemas/CardData"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
       type: object
     PPAuthResponse:
       additionalProperties: false
@@ -2910,14 +2910,14 @@ components:
           Verdict: Approved
       properties:
         Balance:
-          $ref: '#/components/schemas/Balance'
+          $ref: "#/components/schemas/Balance"
           description: |
             Type of Balance object
             Optional Pre-Paid balance details
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     PPCancelRequest:
       additionalProperties: false
@@ -3021,23 +3021,23 @@ components:
         ReasonText:
           type: string
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         CardData:
-          $ref: '#/components/schemas/CardData'
+          $ref: "#/components/schemas/CardData"
         Products:
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: "#/components/schemas/Product"
           type: array
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
       type: object
     PPCancelResponse:
       additionalProperties: false
@@ -3052,12 +3052,12 @@ components:
           Verdict: Approved
       properties:
         Balance:
-          $ref: '#/components/schemas/Balance'
+          $ref: "#/components/schemas/Balance"
           description: |
             Type of Balance object
             Optional Pre-Paid balance details
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     PPRefundRequest:
       additionalProperties: false
@@ -3161,19 +3161,19 @@ components:
         ReasonText:
           type: string
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         CardData:
-          $ref: '#/components/schemas/CardData'
+          $ref: "#/components/schemas/CardData"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
       type: object
     PPRefundResponse:
       additionalProperties: false
@@ -3188,14 +3188,14 @@ components:
           Verdict: Approved
       properties:
         Balance:
-          $ref: '#/components/schemas/Balance'
+          $ref: "#/components/schemas/Balance"
           description: |
             Type of Balance object
             Optional Pre-Paid balance details
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     PPRevalueRequest:
       additionalProperties: false
@@ -3224,7 +3224,7 @@ components:
           CurrencyCode: USD
           CurrencyNumeric: 376
           MachineAuTime: string
-          NayaxRRN: '111111'
+          NayaxRRN: "111111"
           NayaxTransactionId: 235841867
           PaymentMethodID: 266
           SiteId: 1
@@ -3278,19 +3278,19 @@ components:
           SrvTranId: 23658433596
       properties:
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         CardData:
-          $ref: '#/components/schemas/RevalueCardData'
+          $ref: "#/components/schemas/RevalueCardData"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         PaymentInfo:
-          $ref: '#/components/schemas/RevaluePaymentInfo'
+          $ref: "#/components/schemas/RevaluePaymentInfo"
       type: object
     PPRevalueResponse:
       additionalProperties: false
@@ -3313,13 +3313,13 @@ components:
           Verdict: Approved
       properties:
         Balance:
-          $ref: '#/components/schemas/Balance'
+          $ref: "#/components/schemas/Balance"
           description: |
             Type of Balance object
         PaymentInfo:
-          $ref: '#/components/schemas/RevaluePaymentInfo'
+          $ref: "#/components/schemas/RevaluePaymentInfo"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     PPSaleRequest:
       additionalProperties: false
@@ -3428,22 +3428,22 @@ components:
             UnitOfMeasurement: USD
       properties:
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         CardData:
-          $ref: '#/components/schemas/CardData'
+          $ref: "#/components/schemas/CardData"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Product:
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: "#/components/schemas/Product"
           type: array
       type: object
     PPSaleResponse:
@@ -3472,21 +3472,21 @@ components:
           Verdict: Approved
       properties:
         Balance:
-          $ref: '#/components/schemas/Balance'
+          $ref: "#/components/schemas/Balance"
           description: |
             Type of Balance object
             Optional Pre-Paid balance details
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         PosDisplay:
-          $ref: '#/components/schemas/PosDisplay'
+          $ref: "#/components/schemas/PosDisplay"
           description: >
             In this feature, MOL will have the ability to send Nayax two strings
             with free texting
 
             according to the API requirements.
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     PPSettRequest:
       additionalProperties: false
@@ -3594,23 +3594,23 @@ components:
         SecondaryDescription: string
       properties:
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         CardData:
-          $ref: '#/components/schemas/CardData'
+          $ref: "#/components/schemas/CardData"
         Products:
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: "#/components/schemas/Product"
           type: array
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
       type: object
     PPSettResponse:
       additionalProperties: false
@@ -3625,7 +3625,7 @@ components:
           Verdict: Approved
       properties:
         Balance:
-          $ref: '#/components/schemas/Balance'
+          $ref: "#/components/schemas/Balance"
           description: |
             Type of Balance object
             Optional Pre-Paid balance details
@@ -3633,7 +3633,7 @@ components:
           format: double
           type: number
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     PPVoidRequest:
       additionalProperties: false
@@ -3736,19 +3736,19 @@ components:
         ReasonText:
           type: string
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         CardData:
-          $ref: '#/components/schemas/CardData'
+          $ref: "#/components/schemas/CardData"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
       type: object
     PPVoidResponse:
       additionalProperties: false
@@ -3759,32 +3759,32 @@ components:
           RevalueCredit: 0
         PaymentInfo:
           AuthAmount: 0.1
-          AuthCode: '333333'
-          AuthDateTime: '230221101008'
-          AuthSource: '55555'
+          AuthCode: "333333"
+          AuthDateTime: "230221101008"
+          AuthSource: "55555"
           IsGatewayTimeout: false
-          RRN: '111111'
+          RRN: "111111"
           SettAmount: 0.1
-          SettDateTime: '230221101009'
-          SrvTranId: '236584335969834429321847829253667359'
-          Token: ''
-          TraceNumber: '4444'
+          SettDateTime: "230221101009"
+          SrvTranId: "236584335969834429321847829253667359"
+          Token: ""
+          TraceNumber: "4444"
         Status:
           Code: 0
           StatusMessage: string
           Verdict: Approved
       properties:
         Balance:
-          $ref: '#/components/schemas/Balance'
+          $ref: "#/components/schemas/Balance"
           description: |
             Type of Balance object
             Optional Pre-Paid balance details
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         PosDisplay:
-          $ref: '#/components/schemas/PosDisplay'
+          $ref: "#/components/schemas/PosDisplay"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     PaymentInfo:
       type: object
@@ -3803,14 +3803,14 @@ components:
             Integrator's internal transaction ID. Use only if `/StartSession`
             was not used. If `/StartSession` was used, this should be empty or
             echo the transaction ID from the request.
-          example: '3584697388'
+          example: "3584697388"
         AuthCode:
           type: string
           description: >
             External authorization code (usually from the card issuer). In
             dynamic QR, the approval code from the `/Inquiry` response overrides
             previous values.
-          example: '333333'
+          example: "333333"
         AuthAmount:
           type: number
           format: double
@@ -3831,7 +3831,7 @@ components:
           description: >
             Reference Retrieval Number. Should be visible to the cardholder and
             match the one in the `/GenerateQR` response.
-          example: '111111'
+          example: "111111"
         Token:
           type: string
           description: |
@@ -3842,18 +3842,18 @@ components:
           description: >
             Date and time of the `/Authorization` or `/Sale`. Format:
             `ddMMyyHHmmss`
-          example: '071221133300'
+          example: "071221133300"
         SettDateTime:
           type: string
           description: >
             Date and time of the `/Settlement` or `/Sale`. Format:
             `ddMMyyHHmmss`
-          example: '071221133330'
+          example: "071221133330"
         TraceNumber:
           type: string
           description: |
             Trace number. For internal Nayax use only.
-          example: '4444'
+          example: "4444"
         AdditionalData:
           type: string
           description: |
@@ -3897,7 +3897,7 @@ components:
     PosDisplay:
       properties:
         FreeInfo:
-          $ref: '#/components/schemas/FreeInfo'
+          $ref: "#/components/schemas/FreeInfo"
           additionalProperties: false
       type: object
     Product:
@@ -4004,9 +4004,9 @@ components:
       additionalProperties: false
       properties:
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         CurrentKeyData:
-          $ref: '#/components/schemas/CurrentKeyData'
+          $ref: "#/components/schemas/CurrentKeyData"
       type: object
     RenewKeyResponse:
       additionalProperties: false
@@ -4021,9 +4021,9 @@ components:
           Verdict: Approved
       properties:
         NewKeyData:
-          $ref: '#/components/schemas/NewKeyData'
+          $ref: "#/components/schemas/NewKeyData"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     ResponseCode:
       description: >
@@ -4110,7 +4110,7 @@ components:
           description: |
             - String ()
             - Mandatory
-          example: '****'
+          example: "****"
           type: string
         EntryMode:
           description: >
@@ -4157,7 +4157,7 @@ components:
 
             From support perspective - It is highly recommended that this ID
             shall be the one visible to the end consumer/Card holder.
-          example: '111111'
+          example: "111111"
           type: string
         RevalueAmount:
           description: |
@@ -4169,13 +4169,13 @@ components:
           description: |
             - String (40)
             - External (usually Card issuer's)Authorization Code
-          example: '333333'
+          example: "333333"
           type: string
         RevalueDateTime:
           description: |
             - The date time string of when the /Revalue took place
             - Format: ddMMyyHHmmss
-          example: '071221133300'
+          example: "071221133300"
           type: string
         RevalueFinalAmount:
           description: |
@@ -4186,16 +4186,16 @@ components:
         SrvTranId:
           description: |
             - the Integrator's internal transaction id.
-          example: '3584697388'
+          example: "3584697388"
           type: string
       type: object
     SaleEndNotificationRequest:
       additionalProperties: false
       properties:
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         DynamicURL:
           description: |
             - Optional, support different url's.
@@ -4203,19 +4203,19 @@ components:
             - Actor level url configuration
           type: string
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
       type: object
     SaleEndNotificationResponse:
       additionalProperties: false
       properties:
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     StartSessionRequest:
       additionalProperties: false
       properties:
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         DynamicURL:
           description: |
             - Optional, support different url's.
@@ -4235,7 +4235,7 @@ components:
       additionalProperties: false
       properties:
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
         TranIDCipher:
           description: >
             - Mandatory
@@ -4296,15 +4296,15 @@ components:
           ZipCode: 10001
       properties:
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
       type: object
     StaticAuthResponse:
       additionalProperties: false
@@ -4327,9 +4327,9 @@ components:
           Verdict: Approved
       properties:
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     StaticCancelRequest:
       additionalProperties: false
@@ -4383,17 +4383,17 @@ components:
         ReasonText: Cashless cancelled by consumer
       properties:
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         ReasonCode:
           description: |
             - Optional
@@ -4418,7 +4418,7 @@ components:
           Verdict: Approved
       properties:
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     StaticNotifyRequest:
       additionalProperties: false
@@ -4448,7 +4448,7 @@ components:
           type: string
         Products:
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: "#/components/schemas/Product"
           type: array
         SecretToken:
           description: |
@@ -4486,7 +4486,7 @@ components:
           Verdict: Approved
       properties:
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     StaticRefundRequest:
       additionalProperties: false
@@ -4539,15 +4539,15 @@ components:
         ReasonText: string
       properties:
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         ReasonCode:
           description: |
             - Optional
@@ -4569,9 +4569,9 @@ components:
           Verdict: Approved
       properties:
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     StaticSaleRequest:
       additionalProperties: false
@@ -4618,19 +4618,19 @@ components:
         ReasonText: string
       properties:
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         Products:
           description: Mandatory Products details
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: "#/components/schemas/Product"
           type: array
       type: object
     StaticSaleResponse:
@@ -4654,9 +4654,9 @@ components:
           Verdict: Approved
       properties:
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     StaticSettRequest:
       additionalProperties: false
@@ -4714,21 +4714,21 @@ components:
             UnitOfMeasurement: USD
       properties:
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
           description: Products details
         Products:
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: "#/components/schemas/Product"
           type: array
       type: object
     StaticSettResponse:
@@ -4740,7 +4740,7 @@ components:
           Verdict: Declined
       properties:
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     StaticVoidRequest:
       additionalProperties: false
@@ -4794,17 +4794,17 @@ components:
         ReasonText: string
       properties:
         ActorInfo:
-          $ref: '#/components/schemas/ActorInfo'
+          $ref: "#/components/schemas/ActorInfo"
         BasicInfo:
-          $ref: '#/components/schemas/BasicInfo'
+          $ref: "#/components/schemas/BasicInfo"
         CustomData:
-          $ref: '#/components/schemas/CustomData'
+          $ref: "#/components/schemas/CustomData"
         DeviceInfo:
-          $ref: '#/components/schemas/DeviceInfo'
+          $ref: "#/components/schemas/DeviceInfo"
         MachineInfo:
-          $ref: '#/components/schemas/MachineInfo'
+          $ref: "#/components/schemas/MachineInfo"
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         ReasonCode:
           description: |
             - Optional
@@ -4826,24 +4826,24 @@ components:
       example:
         PaymentInfo:
           AuthAmount: 0.1
-          AuthCode: '333333'
-          AuthDateTime: '230221101008'
-          AuthSource: '55555'
+          AuthCode: "333333"
+          AuthDateTime: "230221101008"
+          AuthSource: "55555"
           IsGatewayTimeout: false
-          RRN: '111111'
+          RRN: "111111"
           SettAmount: 0.1
-          SettDateTime: '230221101009'
-          SrvTranId: '236584335969834429321847829253667359'
-          Token: ''
-          TraceNumber: '4444'
+          SettDateTime: "230221101009"
+          SrvTranId: "236584335969834429321847829253667359"
+          Token: ""
+          TraceNumber: "4444"
         Status:
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
         PaymentInfo:
-          $ref: '#/components/schemas/PaymentInfo'
+          $ref: "#/components/schemas/PaymentInfo"
         Status:
-          $ref: '#/components/schemas/Status'
+          $ref: "#/components/schemas/Status"
       type: object
     Status:
       additionalProperties: false
@@ -4887,9 +4887,9 @@ components:
       description: Transit Element Information
       properties:
         DenyListIndication:
-          $ref: '#/components/schemas/DenyListIndication'
+          $ref: "#/components/schemas/DenyListIndication"
         TransitTransactionType:
-          $ref: '#/components/schemas/TransitTransactionType'
+          $ref: "#/components/schemas/TransitTransactionType"
       type: object
     TransitTransactionType:
       description: |
@@ -4925,28 +4925,28 @@ paths:
   /Cortina/AgeVerification:
     post:
       x-mint:
-        content: ''
+        content: ""
       description: Cortina Age Verification
       requestBody:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/AgeVerificationRequest'
+              $ref: "#/components/schemas/AgeVerificationRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/AgeVerificationRequest'
+              $ref: "#/components/schemas/AgeVerificationRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/AgeVerificationRequest'
+              $ref: "#/components/schemas/AgeVerificationRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AgeVerificationResponse'
+                $ref: "#/components/schemas/AgeVerificationResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/AgeVerificationResponse'
+                $ref: "#/components/schemas/AgeVerificationResponse"
           description: Success
       summary: Cortina Age Verification
       tags:
@@ -4967,13 +4967,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CCAuthRequest'
+              $ref: "#/components/schemas/CCAuthRequest"
       responses:
-        '200':
+        "200":
           content:
             text/json:
               schema:
-                $ref: '#/components/schemas/CCAuthResponse'
+                $ref: "#/components/schemas/CCAuthResponse"
           description: Success
       summary: Cortina Credit Card Authorization
       tags:
@@ -4990,22 +4990,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/CCCancelRequest'
+              $ref: "#/components/schemas/CCCancelRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/CCCancelRequest'
+              $ref: "#/components/schemas/CCCancelRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/CCCancelRequest'
+              $ref: "#/components/schemas/CCCancelRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CCCancelResponse'
+                $ref: "#/components/schemas/CCCancelResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/CCCancelResponse'
+                $ref: "#/components/schemas/CCCancelResponse"
           description: Success
       summary: Cortina Credit Card Cancel
       tags:
@@ -5022,22 +5022,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/CCSettRequest'
+              $ref: "#/components/schemas/CCSettRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/CCSettRequest'
+              $ref: "#/components/schemas/CCSettRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/CCSettRequest'
+              $ref: "#/components/schemas/CCSettRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CCSettResponse'
+                $ref: "#/components/schemas/CCSettResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/CCSettResponse'
+                $ref: "#/components/schemas/CCSettResponse"
           description: Success
       summary: Cortina Credit Card Incremental Auth
       tags:
@@ -5055,22 +5055,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/CCSaleRequest'
+              $ref: "#/components/schemas/CCSaleRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/CCSaleRequest'
+              $ref: "#/components/schemas/CCSaleRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/CCSaleRequest'
+              $ref: "#/components/schemas/CCSaleRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CCSaleResponse'
+                $ref: "#/components/schemas/CCSaleResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/CCSaleResponse'
+                $ref: "#/components/schemas/CCSaleResponse"
           description: Success
       summary: Cortina Credit Card Inquiry3DS
       tags:
@@ -5087,27 +5087,27 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/CCRefundRequest'
+              $ref: "#/components/schemas/CCRefundRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/CCRefundRequest'
+              $ref: "#/components/schemas/CCRefundRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/CCRefundRequest'
+              $ref: "#/components/schemas/CCRefundRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CCRefundResponse'
+                $ref: "#/components/schemas/CCRefundResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/CCRefundResponse'
+                $ref: "#/components/schemas/CCRefundResponse"
           description: Success
       summary: Cortina Credit Card Refund
       tags:
         - Cortina Credit Card
-  /Cortina/CreditCard`/Sale`:
+  /Cortina/CreditCard/Sale:
     post:
       x-mint:
         content: >-
@@ -5119,27 +5119,27 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/CCSaleRequest'
+              $ref: "#/components/schemas/CCSaleRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/CCSaleRequest'
+              $ref: "#/components/schemas/CCSaleRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/CCSaleRequest'
+              $ref: "#/components/schemas/CCSaleRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CCSaleResponse'
+                $ref: "#/components/schemas/CCSaleResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/CCSaleResponse'
+                $ref: "#/components/schemas/CCSaleResponse"
           description: Success
       summary: Cortina Credit Card Sale
       tags:
         - Cortina Credit Card
-  /Cortina/CreditCard`/Settlement`:
+  /Cortina/CreditCard/Settlement:
     post:
       x-mint:
         content: >-
@@ -5153,22 +5153,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/CCSettRequest'
+              $ref: "#/components/schemas/CCSettRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/CCSettRequest'
+              $ref: "#/components/schemas/CCSettRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/CCSettRequest'
+              $ref: "#/components/schemas/CCSettRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CCSettResponse'
+                $ref: "#/components/schemas/CCSettResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/CCSettResponse'
+                $ref: "#/components/schemas/CCSettResponse"
           description: Success
       summary: Cortina Credit Card Settlement
       tags:
@@ -5185,27 +5185,27 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/CCVoidRequest'
+              $ref: "#/components/schemas/CCVoidRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/CCVoidRequest'
+              $ref: "#/components/schemas/CCVoidRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/CCVoidRequest'
+              $ref: "#/components/schemas/CCVoidRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CCVoidResponse'
+                $ref: "#/components/schemas/CCVoidResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/CCVoidResponse'
+                $ref: "#/components/schemas/CCVoidResponse"
           description: Success
       summary: Cortina Credit Card Void
       tags:
         - Cortina Credit Card
-  /Cortina/DynamicQR`/GenerateQR`:
+  /Cortina/DynamicQR/GenerateQR:
     post:
       x-mint:
         content: >-
@@ -5217,27 +5217,27 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/DynamicQrRequest'
+              $ref: "#/components/schemas/DynamicQrRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/DynamicQrRequest'
+              $ref: "#/components/schemas/DynamicQrRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/DynamicQrRequest'
+              $ref: "#/components/schemas/DynamicQrRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DynamicQrResponse'
+                $ref: "#/components/schemas/DynamicQrResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/DynamicQrResponse'
+                $ref: "#/components/schemas/DynamicQrResponse"
           description: Success
       summary: Cortina DynamicQR GenerateQR
       tags:
         - DynamicQR
-  /Cortina/DynamicQR`/Inquiry`:
+  /Cortina/DynamicQR/Inquiry:
     post:
       x-mint:
         content: >-
@@ -5250,22 +5250,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/DynamicInquiryRequest'
+              $ref: "#/components/schemas/DynamicInquiryRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/DynamicInquiryRequest'
+              $ref: "#/components/schemas/DynamicInquiryRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/DynamicInquiryRequest'
+              $ref: "#/components/schemas/DynamicInquiryRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DynamicInquiryResponse'
+                $ref: "#/components/schemas/DynamicInquiryResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/DynamicInquiryResponse'
+                $ref: "#/components/schemas/DynamicInquiryResponse"
           description: Success
       summary: Cortina DynamicQR Inquiry
       tags:
@@ -5283,22 +5283,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/DynamicRefundRequest'
+              $ref: "#/components/schemas/DynamicRefundRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/DynamicRefundRequest'
+              $ref: "#/components/schemas/DynamicRefundRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/DynamicRefundRequest'
+              $ref: "#/components/schemas/DynamicRefundRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DynamicRefundResponse'
+                $ref: "#/components/schemas/DynamicRefundResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/DynamicRefundResponse'
+                $ref: "#/components/schemas/DynamicRefundResponse"
           description: Success
       summary: Cortina DynamicQR Refund
       tags:
@@ -5315,22 +5315,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/DynamicVoidRequest'
+              $ref: "#/components/schemas/DynamicVoidRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/DynamicVoidRequest'
+              $ref: "#/components/schemas/DynamicVoidRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/DynamicVoidRequest'
+              $ref: "#/components/schemas/DynamicVoidRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DynamicVoidResponse'
+                $ref: "#/components/schemas/DynamicVoidResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/DynamicVoidResponse'
+                $ref: "#/components/schemas/DynamicVoidResponse"
           description: Success
       summary: Cortina DynamicQR Void
       tags:
@@ -5347,22 +5347,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/PPAuthRequest'
+              $ref: "#/components/schemas/PPAuthRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/PPAuthRequest'
+              $ref: "#/components/schemas/PPAuthRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/PPAuthRequest'
+              $ref: "#/components/schemas/PPAuthRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PPAuthResponse'
+                $ref: "#/components/schemas/PPAuthResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/PPAuthResponse'
+                $ref: "#/components/schemas/PPAuthResponse"
           description: Success
       summary: Cortina Prepaid Authorization
       tags:
@@ -5379,22 +5379,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/PPCancelRequest'
+              $ref: "#/components/schemas/PPCancelRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/PPCancelRequest'
+              $ref: "#/components/schemas/PPCancelRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/PPCancelRequest'
+              $ref: "#/components/schemas/PPCancelRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PPCancelResponse'
+                $ref: "#/components/schemas/PPCancelResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/PPCancelResponse'
+                $ref: "#/components/schemas/PPCancelResponse"
           description: Success
       summary: Cortina Prepaid Cancel
       tags:
@@ -5411,27 +5411,27 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/PPRefundRequest'
+              $ref: "#/components/schemas/PPRefundRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/PPRefundRequest'
+              $ref: "#/components/schemas/PPRefundRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/PPRefundRequest'
+              $ref: "#/components/schemas/PPRefundRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PPRefundResponse'
+                $ref: "#/components/schemas/PPRefundResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/PPRefundResponse'
+                $ref: "#/components/schemas/PPRefundResponse"
           description: Success
       summary: Cortina Prepaid Refund
       tags:
         - Cortina Prepaid
-  /Cortina/Prepaid`/Sale`:
+  /Cortina/Prepaid/Sale:
     post:
       x-mint:
         content: >-
@@ -5443,27 +5443,27 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/PPSaleRequest'
+              $ref: "#/components/schemas/PPSaleRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/PPSaleRequest'
+              $ref: "#/components/schemas/PPSaleRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/PPSaleRequest'
+              $ref: "#/components/schemas/PPSaleRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PPSaleResponse'
+                $ref: "#/components/schemas/PPSaleResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/PPSaleResponse'
+                $ref: "#/components/schemas/PPSaleResponse"
           description: Success
       summary: Cortina Prepaid Sale
       tags:
         - Cortina Prepaid
-  /Cortina/Prepaid`/Settlement`:
+  /Cortina/Prepaid/Settlement:
     post:
       x-mint:
         content: >-
@@ -5475,22 +5475,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/PPSettRequest'
+              $ref: "#/components/schemas/PPSettRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/PPSettRequest'
+              $ref: "#/components/schemas/PPSettRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/PPSettRequest'
+              $ref: "#/components/schemas/PPSettRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PPSettResponse'
+                $ref: "#/components/schemas/PPSettResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/PPSettResponse'
+                $ref: "#/components/schemas/PPSettResponse"
           description: Success
       summary: Cortina Prepaid Settlement
       tags:
@@ -5507,22 +5507,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/PPVoidRequest'
+              $ref: "#/components/schemas/PPVoidRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/PPVoidRequest'
+              $ref: "#/components/schemas/PPVoidRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/PPVoidRequest'
+              $ref: "#/components/schemas/PPVoidRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PPVoidResponse'
+                $ref: "#/components/schemas/PPVoidResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/PPVoidResponse'
+                $ref: "#/components/schemas/PPVoidResponse"
           description: Success
       summary: Cortina Prepaid Void
       tags:
@@ -5540,22 +5540,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/RenewKeyRequest'
+              $ref: "#/components/schemas/RenewKeyRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/RenewKeyRequest'
+              $ref: "#/components/schemas/RenewKeyRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/RenewKeyRequest'
+              $ref: "#/components/schemas/RenewKeyRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RenewKeyResponse'
+                $ref: "#/components/schemas/RenewKeyResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/RenewKeyResponse'
+                $ref: "#/components/schemas/RenewKeyResponse"
           description: Success
       summary: Post Renew Key
       tags:
@@ -5573,22 +5573,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/SaleEndNotificationRequest'
+              $ref: "#/components/schemas/SaleEndNotificationRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/SaleEndNotificationRequest'
+              $ref: "#/components/schemas/SaleEndNotificationRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/SaleEndNotificationRequest'
+              $ref: "#/components/schemas/SaleEndNotificationRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SaleEndNotificationResponse'
+                $ref: "#/components/schemas/SaleEndNotificationResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/SaleEndNotificationResponse'
+                $ref: "#/components/schemas/SaleEndNotificationResponse"
           description: Success
       summary: Post Sale End Notification
       tags:
@@ -5606,22 +5606,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/StartSessionRequest'
+              $ref: "#/components/schemas/StartSessionRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/StartSessionRequest'
+              $ref: "#/components/schemas/StartSessionRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/StartSessionRequest'
+              $ref: "#/components/schemas/StartSessionRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StartSessionResponse'
+                $ref: "#/components/schemas/StartSessionResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/StartSessionResponse'
+                $ref: "#/components/schemas/StartSessionResponse"
           description: Success
       summary: Post Start Session
       tags:
@@ -5639,22 +5639,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/StaticAuthRequest'
+              $ref: "#/components/schemas/StaticAuthRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/StaticAuthRequest'
+              $ref: "#/components/schemas/StaticAuthRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/StaticAuthRequest'
+              $ref: "#/components/schemas/StaticAuthRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StaticAuthResponse'
+                $ref: "#/components/schemas/StaticAuthResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/StaticAuthResponse'
+                $ref: "#/components/schemas/StaticAuthResponse"
           description: Success
       summary: Cortina StaticQR Authorization
       tags:
@@ -5671,22 +5671,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/StaticCancelRequest'
+              $ref: "#/components/schemas/StaticCancelRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/StaticCancelRequest'
+              $ref: "#/components/schemas/StaticCancelRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/StaticCancelRequest'
+              $ref: "#/components/schemas/StaticCancelRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StaticCancelResponse'
+                $ref: "#/components/schemas/StaticCancelResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/StaticCancelResponse'
+                $ref: "#/components/schemas/StaticCancelResponse"
           description: Success
       summary: Cortina StaticQR Cancel
       tags:
@@ -5704,27 +5704,27 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/StaticRefundRequest'
+              $ref: "#/components/schemas/StaticRefundRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/StaticRefundRequest'
+              $ref: "#/components/schemas/StaticRefundRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/StaticRefundRequest'
+              $ref: "#/components/schemas/StaticRefundRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StaticRefundResponse'
+                $ref: "#/components/schemas/StaticRefundResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/StaticRefundResponse'
+                $ref: "#/components/schemas/StaticRefundResponse"
           description: Success
       summary: Cortina StaticQR Refund
       tags:
         - StaticQR
-  /Cortina/StaticQR`/Sale`:
+  /Cortina/StaticQR/Sale:
     post:
       x-mint:
         content: >-
@@ -5736,27 +5736,27 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/StaticSaleRequest'
+              $ref: "#/components/schemas/StaticSaleRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/StaticSaleRequest'
+              $ref: "#/components/schemas/StaticSaleRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/StaticSaleRequest'
+              $ref: "#/components/schemas/StaticSaleRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StaticSaleResponse'
+                $ref: "#/components/schemas/StaticSaleResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/StaticSaleResponse'
+                $ref: "#/components/schemas/StaticSaleResponse"
           description: Success
       summary: Cortina StaticQR Sale
       tags:
         - StaticQR
-  /Cortina/StaticQR`/Settlement`:
+  /Cortina/StaticQR/Settlement:
     post:
       x-mint:
         content: >-
@@ -5768,22 +5768,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/StaticSettRequest'
+              $ref: "#/components/schemas/StaticSettRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/StaticSettRequest'
+              $ref: "#/components/schemas/StaticSettRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/StaticSettRequest'
+              $ref: "#/components/schemas/StaticSettRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StaticSettResponse'
+                $ref: "#/components/schemas/StaticSettResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/StaticSettResponse'
+                $ref: "#/components/schemas/StaticSettResponse"
           description: Success
       summary: Cortina StaticQR Settlement
       tags:
@@ -5800,22 +5800,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/StaticVoidRequest'
+              $ref: "#/components/schemas/StaticVoidRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/StaticVoidRequest'
+              $ref: "#/components/schemas/StaticVoidRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/StaticVoidRequest'
+              $ref: "#/components/schemas/StaticVoidRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StaticVoidResponse'
+                $ref: "#/components/schemas/StaticVoidResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/StaticVoidResponse'
+                $ref: "#/components/schemas/StaticVoidResponse"
           description: Success
       summary: Cortina StaticQR Void
       tags:
@@ -5839,22 +5839,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/StaticNotifyRequest'
+              $ref: "#/components/schemas/StaticNotifyRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/StaticNotifyRequest'
+              $ref: "#/components/schemas/StaticNotifyRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/StaticNotifyRequest'
+              $ref: "#/components/schemas/StaticNotifyRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/StaticNotifyResponse'
+                $ref: "#/components/schemas/StaticNotifyResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/StaticNotifyResponse'
+                $ref: "#/components/schemas/StaticNotifyResponse"
           description: Success
       servers:
         - url: https://lynx.nayax.com/payment/v2/transactions
@@ -5874,22 +5874,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/OnboardActorRequest'
+              $ref: "#/components/schemas/OnboardActorRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/OnboardActorRequest'
+              $ref: "#/components/schemas/OnboardActorRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/OnboardActorRequest'
+              $ref: "#/components/schemas/OnboardActorRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OnboardActorResponse'
+                $ref: "#/components/schemas/OnboardActorResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/OnboardActorResponse'
+                $ref: "#/components/schemas/OnboardActorResponse"
           description: Success
       summary: Onboard Actor
       tags:
@@ -5907,22 +5907,22 @@ paths:
         content:
           application/*+json:
             schema:
-              $ref: '#/components/schemas/OnboardMachineRequest'
+              $ref: "#/components/schemas/OnboardMachineRequest"
           application/json:
             schema:
-              $ref: '#/components/schemas/OnboardMachineRequest'
+              $ref: "#/components/schemas/OnboardMachineRequest"
           text/json:
             schema:
-              $ref: '#/components/schemas/OnboardMachineRequest'
+              $ref: "#/components/schemas/OnboardMachineRequest"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OnboardMachineResponse'
+                $ref: "#/components/schemas/OnboardMachineResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/OnboardMachineResponse'
+                $ref: "#/components/schemas/OnboardMachineResponse"
           description: Success
       summary: Onboard Machine
       tags:
@@ -5936,14 +5936,14 @@ paths:
           returning the ApiVersion, ProductVersion, and Copyright details for
           diagnostic purposes.
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OnboardingVersionResponse'
+                $ref: "#/components/schemas/OnboardingVersionResponse"
             text/json:
               schema:
-                $ref: '#/components/schemas/OnboardingVersionResponse'
+                $ref: "#/components/schemas/OnboardingVersionResponse"
           description: Success
       summary: Get Version
       tags:
@@ -5955,10 +5955,10 @@ servers:
         default: example.com
         description: Customer ID assigned by the service provider
       port:
-        default: '443'
+        default: "443"
         enum:
-          - '443'
-          - '8443'
+          - "443"
+          - "8443"
 x-readme:
   explorer-enabled: false
   proxy-enabled: true
