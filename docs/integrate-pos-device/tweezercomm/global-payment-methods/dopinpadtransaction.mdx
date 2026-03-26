@@ -17,13 +17,13 @@ The `doPinpadTransaction` method is used in the PinPad flow to continue an ongoi
 <Note>
 **JSON-RPC 2.0**
 
-All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer) for more details on how the requests are structured and sent.
 </Note>
 
 In the request, ensure to configure the following:
 
 * The `method` field must be set to `doPinpadTransaction`.
-* The `service` must be set to `engine `in the params.
+* The `service` must be set to `engine` in the params.
 
 The request includes the service name and a dictionary of EMV tags that the host system must return to the terminal/card to proceed with the transaction dialogue.
 

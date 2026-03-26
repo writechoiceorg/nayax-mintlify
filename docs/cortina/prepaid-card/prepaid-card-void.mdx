@@ -1,23 +1,23 @@
 ---
 title: "Void"
 metadata:
-  og:description: "Cortina Prepaid uses the Voidcommand to notify the integrator in order to initiate the cancellation process with the Cortina payment provider."
+  og:description: "Cortina Prepaid uses the Void command to notify the integrator in order to initiate the cancellation process with the Cortina payment provider."
 ---
 
-Cortina Prepaid uses the `Void`command to notify the integrator in order to initiate the cancellation process with the Cortina payment provider whenever on the bellow scenarios takes place:
+Cortina Prepaid uses the `Void` command to notify the integrator in order to initiate the cancellation process with the Cortina payment provider whenever one of the below scenarios takes place:
 
 1. Issues during vending process- Cancel button being pressed by the consumer/ vend failure (issue with product dispensing/service providing) by the machine.
 2. No `Sale` Response until timeout.
 
-This command is essential for having the payment provider aware that the transaction was cancelled on Nayax's end (as well as from the consumer's POV), and is done in order for the payment provider to complete the cancellation on it's end.
+This command is essential for having the payment provider aware that the transaction was cancelled on Nayax's end (as well as from the consumer's POV), and is done in order for the payment provider to complete the cancellation on its end.
 
 <Note>
-  Note: this command is relevant for PreSelection only. It's equivalent of PreAuthorization flow is the `Cancel` command.
+  Note: this command is relevant for PreSelection only. Its equivalent in the PreAuthorization flow is the `Cancel` command.
 </Note>
 
 ## Request
 
-Nayax's servers send a POST request to your configured `Void `endpoint, which would be of the following format:
+Nayax's servers send a POST request to your configured `Void` endpoint, which would be of the following format:
 
 `(customer's URL)/Cortina/PrePaid/Void`
 
