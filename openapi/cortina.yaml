@@ -222,6 +222,7 @@ components:
           TraceNumber: "4444"
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
@@ -529,6 +530,7 @@ components:
           TraceNumber: "4444"
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
@@ -647,6 +649,7 @@ components:
       example:
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
@@ -759,6 +762,7 @@ components:
       example:
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
@@ -885,6 +889,7 @@ components:
           TraceNumber: "4444"
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
@@ -1018,6 +1023,7 @@ components:
           TraceNumber: "4444"
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
@@ -1149,6 +1155,7 @@ components:
           TraceNumber: "4444"
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
@@ -1553,6 +1560,7 @@ components:
           TraceNumber: "4444"
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
@@ -1647,6 +1655,7 @@ components:
           SrvTranId: "236584335969834429321847829253667359"
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
         additionalProperties: false
@@ -1790,6 +1799,7 @@ components:
           TraceNumber: "4444"
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
@@ -2906,6 +2916,7 @@ components:
           TraceNumber: 4444
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: string
           Verdict: Approved
       properties:
@@ -3048,6 +3059,7 @@ components:
           RevalueCredit: 0
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: string
           Verdict: Approved
       properties:
@@ -3184,6 +3196,7 @@ components:
           RevalueCredit: 0
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: string
           Verdict: Approved
       properties:
@@ -3309,6 +3322,7 @@ components:
           SrvTranId: 23658433596
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: string
           Verdict: Approved
       properties:
@@ -3468,6 +3482,7 @@ components:
           TraceNumber: 4444
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: string
           Verdict: Approved
       properties:
@@ -3621,6 +3636,7 @@ components:
           RevalueCredit: 0
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: string
           Verdict: Approved
       properties:
@@ -3771,6 +3787,7 @@ components:
           TraceNumber: "4444"
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: string
           Verdict: Approved
       properties:
@@ -4017,6 +4034,7 @@ components:
           Kcv: 05A301
         Status:
           Code: 0
+          CustomDeclineCode: 0
           StatusMessage: Cortina V2 Stub Tester
           Verdict: Approved
       properties:
@@ -4736,6 +4754,7 @@ components:
       example:
         Status:
           Code: 10
+          CustomDeclineCode: 10
           StatusMessage: Amount is missing
           Verdict: Declined
       properties:
@@ -4859,14 +4878,13 @@ components:
           type: integer
         CustomDeclineCode:
           description: >
-            - Optional
+            - Always mirrors the value of the Code field when Code is present,
+            regardless of Verdict.
 
-            - This field is used for specifying a custom decline code (i.e. Soft
-            Decline or Switch Interface).
-
-            - The value might be the same as the acquirer's response code or
-            composed by other data.
-          type: string
+            - Included in all responses (Approved or Declined) whenever Code is
+            present.
+          format: int32
+          type: integer
         StatusMessage:
           description: >
             - Optional
@@ -5949,7 +5967,7 @@ paths:
       tags:
         - Cortina Onboarding
 servers:
-  - url: https://{domain}:{port}/api
+  - url: https://{domain}:{port}
     variables:
       domain:
         default: example.com
