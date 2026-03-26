@@ -33,7 +33,7 @@ Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) 
 
 ## Retrieve Operator Details
 
-[Get Actor Details by ActorID ](/reference/lynx/actors/get-actor-by-actorid)retrieves comprehensive information about a specific actor. This endpoint provides detailed attributes, including profile information and associated configurations, for the actor identified by the provided ActorID.
+[Get Actor Details by ActorID ](/reference/lynx/actors/get-actor-by-actorid) retrieves comprehensive information about a specific actor. This endpoint provides detailed attributes, including profile information and associated configurations, for the actor identified by the provided ActorID.
 
 <CodeGroup>
 ```sh Request
@@ -110,16 +110,16 @@ curl --request GET \
 </CodeGroup>
 
 <Note>
-**path Params**
+**Path Params**
 
-Change `{ActorID}`with the actual Operator ID to retrieve the details from.
+Change `{ActorID}` with the actual Operator ID to retrieve the details from.
 </Note>
 
 The response will have the details of the requested operator.
 
 ## Update Operator
 
-The [Update Operator/Sub-Operator](/reference/lynx/actors/update-actor) endpoint allows to edit the information of the specified operator.
+The [Update Operator/Sub-Operator](/reference/lynx/actors/update-actor) endpoint allows you to edit the information of the specified operator.
 
 <CodeGroup>
 ```sh Request
@@ -213,7 +213,7 @@ curl --request PUT \
 The body parameters are the same as used when [Creating an operator](/docs/manage-data-operations/lynx-api/operator/create-operator).
 
 <Note>
-**path Params**
+**Path Params**
 
 Change `{ActorID}` with the actual Operator ID to update.
 </Note>

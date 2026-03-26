@@ -20,7 +20,7 @@ In these cases, the acquirer receives a decline code indicating that an Online P
 
 To implement it, return a `Verdict=Declined` with `Code 983` to the Authorization\Sale request.
 
-If a transaction were completed with an online PIN, the Nayax engine would return an echoed Authorization\Sale request with a PIN Block under the `DukptInfo `object.
+If a transaction were completed with an online PIN, the Nayax engine would return an echoed Authorization\Sale request with a PIN Block under the `DukptInfo` object.
 
 ```json
 "Status": {
@@ -36,7 +36,7 @@ In these cases, the acquirer receives a decline code indicating that the transac
 
 To implement it, return a `Verdict=Declined` with `Code 1021` to the Authorization\Sale request.
 
-If a transaction was completed with the contact interface, the Nayax engine will send a new Authorization\Sale request. If an online PIN was performed, the PIN Block will be sent under the `DukptInfo `object.
+If a transaction was completed with the contact interface, the Nayax engine will send a new Authorization\Sale request. If an online PIN was performed, the PIN Block will be sent under the `DukptInfo` object.
 
 ```json
 "Status": {
