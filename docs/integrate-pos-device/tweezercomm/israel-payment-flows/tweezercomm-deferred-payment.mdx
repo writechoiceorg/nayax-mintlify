@@ -32,7 +32,7 @@ Here's a breakdown of each step:
      Once the deferred mode is finished working, continue to step 6.
    </Note>
 6. The client application calls `setConfig()` Setting off-line mode to false.
-7. The client application calls the `authorizePendingTransactions()` , sending the pending transactions to Nayax's device asking to settling them (but no settlement is performed yet).
+7. The client application calls the `authorizePendingTransactions()`, sending the pending transactions to Nayax's device asking to settling them (but no settlement is performed yet).
 8. The Nayax Device communicates with SHVA to initiate the pending transaction authorization.
 9. The transaction results are returned to the Device.
 10. The transaction results are returned to the client application.

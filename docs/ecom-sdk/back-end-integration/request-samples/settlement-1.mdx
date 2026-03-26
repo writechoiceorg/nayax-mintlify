@@ -14,11 +14,11 @@ This request can also perform partial settlements.
 
 ## Request
 
-The Settlement request uses the same endpoint as the initial [ `/close-transaction`](/reference/ecom/payments/close-transaction) request. The API determines it's a settlement based on the `RequestType `value within the `BasicInfo `object.
+The Settlement request uses the same endpoint as the initial [ `/close-transaction`](/reference/ecom/payments/close-transaction) request. The API determines it's a settlement based on the `RequestType` value within the `BasicInfo` object.
 
 Note the key differences from a [ `/close-transaction`](/reference/ecom/payments/close-transaction) request:
 
-* The `RequestType `will be set to the value for Settlement/Capture, which is `2`.
+* The `RequestType` will be set to the value for Settlement/Capture, which is `2`.
 * The request includes the original Transaction ID (`transactionId`) and the original Merchant Request ID (`merchantRequestId`) from the authorization phase.
 
 See the example below:
