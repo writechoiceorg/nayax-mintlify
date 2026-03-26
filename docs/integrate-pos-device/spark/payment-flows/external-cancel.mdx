@@ -32,7 +32,7 @@ Below is a breakdown of the diagram:
 3. **Service Failure**: A failure occurs, and no service or product is delivered to the consumer.
 4. **/StartAuthentication**: To resolve the failed transaction, the **Third-Party Server** initiates communication by calling the [StartAuthentication](/reference/spark/transactions/startauthentication) method.
 5. **Authentication Response**: The Nayax Server validates the credentials and responds with a success message.
-6. **/ExternalCancel**: The **Third-Party Server** sends the [ExternalCancel](/reference/spark/transactions/externalcancel) request. This must include the original `NayaxTransactionId`and `SiteId`.
+6. **/ExternalCancel**: The **Third-Party Server** sends the [ExternalCancel](/reference/spark/transactions/externalcancel) request. This must include the original `NayaxTransactionId` and `SiteId`.
 7. **Financial Reversal**: Upon receiving the request, the Nayax Server performs the cancellation with the payment provider to release the funds.
 8. **External Cancel Response**: The Nayax Server confirms the cancellation outcome to the Third-Party Server.
 

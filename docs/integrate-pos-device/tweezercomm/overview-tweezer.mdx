@@ -16,8 +16,8 @@ It enables client applications to communicate with the Agamento payment applicat
 
 Nayax's TweezerComm protocol supports two primary payment services, one for global users and one exclusive to Israel.
 
-* **Global Payments**: The `Engine `Service is the primary service for processing credit card and closed-loop transactions with the Nayax Gateway. The Nayax Gateway is responsible for setting device parameters and processing transactions according to the settings configured in Nayax Core. This service is widely used, supporting many payment providers in numerous countries. Before a transaction can be executed, the device must complete an "establishment" process (managed by Nayax's team).
-* **Israel Payments**: The `Ashrait `Service is a specialized service for performing AshraitEMV transactions. The client application communicates with the AshraitEMV Application (AEA), which can run on a stand-alone terminal or a central server. All approved transactions are written to the AEA's database. A key part of this service is the batch process, where the AEA transmits approved transactions to the ABS (SHVA) server.
+* **Global Payments**: The `Engine` Service is the primary service for processing credit card and closed-loop transactions with the Nayax Gateway. The Nayax Gateway is responsible for setting device parameters and processing transactions according to the settings configured in Nayax Core. This service is widely used, supporting many payment providers in numerous countries. Before a transaction can be executed, the device must complete an "establishment" process (managed by Nayax's team).
+* **Israel Payments**: The `Ashrait` Service is a specialized service for performing AshraitEMV transactions. The client application communicates with the AshraitEMV Application (AEA), which can run on a stand-alone terminal or a central server. All approved transactions are written to the AEA's database. A key part of this service is the batch process, where the AEA transmits approved transactions to the ABS (SHVA) server.
 
 The sections below list the relevant guides for each payment service.
 

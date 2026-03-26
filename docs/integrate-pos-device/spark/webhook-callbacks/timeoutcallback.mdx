@@ -10,7 +10,7 @@ metadata:
 This method is only relevant for transactions with Pre-Authorization.
 </Note>
 
-The `TimeoutCallback `API call notifies that the payment session has timed out due to inactivity or failure to complete the expected flow within a defined period. This callback is typically triggered when the user does not proceed with the session after a pre-authorization and no further actions, such as `CancelTransaction`or `Settlement` are received.
+The `TimeoutCallback` API call notifies that the payment session has timed out due to inactivity or failure to complete the expected flow within a defined period. This callback is typically triggered when the user does not proceed with the session after a pre-authorization and no further actions, such as `CancelTransaction` or `Settlement` are received.
 
 It serves as a final indication that the session should be considered terminated.
 
@@ -22,7 +22,7 @@ Do not attempt any further actions for the timed-out session. Use the `SparkTran
 
 ## Request
 
-Spark sends a POST request to your configured`TimeoutCallback` endpoint. The request body is as in the example below:
+Spark sends a POST request to your configured `TimeoutCallback` endpoint. The request body is as in the example below:
 
 ```json
 {
