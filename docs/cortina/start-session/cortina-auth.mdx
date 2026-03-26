@@ -28,7 +28,7 @@ Below is a step-by-step breakdown of the authentication process, with examples t
    ```
 5. The Integrator generates an encryption key from the last 32 characters of the Secret Token (this is a 256-bit key).
    ```
-   wRvTVTkungMIKThTVbj_fiXdfoGclhn0.
+   wRvTVTkungMIKThTVbj_fiXdfoGclhn0
    ```
 6. Using AES encryption in ECB mode (with `PKCS5` padding), the Integrator encrypts the Ciphertext. The encrypted result is then returned in the Start Session response to Nayax. In our example it would produce the following cipher:
    ```
@@ -50,11 +50,11 @@ For the example above:
 
 <Frame><img src="/images/docs/cortina-auth/image2.png" /></Frame>
 
-The Integrator must validate that the Transaction ID in requests like `GenerateQR`, `Sale`, `Authorization`, and `Inquiry `was created in a previous `Start Session` request and is still valid.\
+The Integrator must validate that the Transaction ID in requests like `GenerateQR`, `Sale`, `Authorization`, and `Inquiry` was created in a previous `Start Session` request and is still valid.\
 It is recommended that the Transaction ID remain valid for no longer than 10 minutes for these requests.
 
 <Warning>
 **Expired Requests**
 
-Requests like `Settlement`, `Void`, `Cancel`, and `Refund `can still be processed even after the Transaction ID has expired, as these might be required after the original.`Authorization`, `Sale`, or `Inquiry` request.
+Requests like `Settlement`, `Void`, `Cancel`, and `Refund` can still be processed even after the Transaction ID has expired, as these might be required after the original `Authorization`, `Sale`, or `Inquiry` request.
 </Warning>

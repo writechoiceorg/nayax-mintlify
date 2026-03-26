@@ -53,7 +53,7 @@ Follow these steps to generate and encrypt your cipher:
 
 1. Concatenate the Spark Transaction ID, the "=" character, the Random String, and the Timestamp to form the 64-character ciphertext, as in the example below:
    ```
-   12c7cec2-c690-4425-9a1f db0db60e2d8c=123456789qwertyui2306061021
+   12c7cec2-c690-4425-9a1f-db0db60e2d8c=123456789qwertyui2306061021
    ```
 2. Extract the 32 rightmost characters from your provided Token to create the 256-bit AES encryption key. For example, suppose the token is the following:
    ```
@@ -91,5 +91,5 @@ The table below describes the parameters of the response:
 | `HashedSparkTransactionId` | String | A SHA256 hash of the Spark Transaction ID sent in the request.                                                                          |
 | `Status`                   | Object | An object containing details about the transaction's outcome, including its verdict and any associated error descriptions or codes.     |
 | `Status.Verdict`           | String | Indicates the overall outcome of the authentication attempt. Can be `Approved` for success or `Declined` for failure.                   |
-| `Status.ErrorDescription`  | String | Provides a human-readable description of any errors that occurred, or indicates `No Errors `for successful requests.                    |
+| `Status.ErrorDescription`  | String | Provides a human-readable description of any errors that occurred, or indicates `No Errors` for successful requests.                    |
 | `Status.ErrorCode`         | Number | A numeric code indicating a specific type of error that occurred during the transaction. This field is present only in error responses. |
