@@ -4,13 +4,13 @@ metadata:
   og:description: "The terminal uses the TransactionCallback endpoint to notify the integrator about the result of a card tap. It is triggered automatically when a user."
 ---
 
-The terminal uses the `TransactionCallback `endpoint to notify the integrator about the result of a card tap. It is triggered automatically when a user presents a card, and an authorization flow is initiated with the payment provider.
+The terminal uses the `TransactionCallback` endpoint to notify the integrator about the result of a card tap. It is triggered automatically when a user presents a card, and an authorization flow is initiated with the payment provider.
 
 This callback is essential for proceeding to transaction confirmation or rejection handling.
 
 ## Request
 
-The Spark platform sends a POST request to your configured `TransactionCallback `endpoint. The payload includes the full result of the card scan operation:
+The Spark platform sends a POST request to your configured `TransactionCallback` endpoint. The payload includes the full result of the card scan operation:
 
 ```json
 {
@@ -62,7 +62,7 @@ The table below describes all the parameters of the request:
 | `CardLast4Digits`             | String  | Yes      | The last four digits of the presented card.                                                                      |
 | `CardHash`                    | String  | Yes      | One-way hash of the full card number.                                                                            |
 | `CardUid`                     | String  | Yes      | UID of the card (for prepaid cards). See a more detailed explanation on the [SMC Support](/docs/integrate-pos-device/spark/additional-resources/smc-support) page. |
-| `MachineAuTime`               | String  | Yes      | Timestamp from the machine in the  format `yyyyMMddHHmmssSSS`.                                                   |
+| `MachineAuTime`               | String  | Yes      | Timestamp from the machine in the format `yyyyMMddHHmmssSSS`.                                                   |
 | `Amount`                      | Integer | Yes      | Transaction amount in the smallest currency unit (e.g., cents)                                                   |
 | `CardBrand`                   | String  | No       | Card brand used (e.g., Visa, MasterCard).                                                                        |
 | `CardFirst6Digits`            | String  | No       | The first 6 digits of the credit card (card BIN).                                                                |

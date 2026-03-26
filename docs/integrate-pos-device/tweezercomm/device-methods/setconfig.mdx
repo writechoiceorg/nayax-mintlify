@@ -4,17 +4,17 @@ metadata:
   og:description: "The setConfig method applies configuration settings to the terminal. These can include settings such as deposit server preferences, enabling the."
 ---
 
-The `setConfig `method applies configuration settings to the terminal. These can include settings such as deposit server preferences, enabling the manual interface, or forcing a reset. It is recommended that you call `setConfig `on each device initialization to ensure consistent configuration.
+The `setConfig` method applies configuration settings to the terminal. These can include settings such as deposit server preferences, enabling the manual interface, or forcing a reset. It is recommended that you call `setConfig` on each device initialization to ensure consistent configuration.
 
 ## Request
 
 <Note>
 **JSON-RPC 2.0**
 
-All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer)for more details on how the requests are structured and sent.
+All methods in TweezerComm follow a JSON-RPC 2.0 structure.  See [Get Started](/docs/integration-tweezer) for more details on how the requests are structured and sent.
 </Note>
 
-In the request, the `method `field needs to be set to `setConfig` and the params must include the service name and a dictionary of configuration fields, as shown in the example request below:
+In the request, the `method` field needs to be set to `setConfig` and the params must include the service name and a dictionary of configuration fields, as shown in the example request below:
 
 ```json
 {

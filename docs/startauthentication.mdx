@@ -4,9 +4,9 @@ metadata:
   og:description: "The StartAuthentication endpoint is the first step in any Spark transaction. It authenticates the transaction request using a pre-shared token and a."
 ---
 
-The `StartAuthentication `endpoint is the first step in any Spark transaction. It authenticates the transaction request using a pre-shared token and a cryptographically signed payload.
+The `StartAuthentication`endpoint is the first step in any Spark transaction. It authenticates the transaction request using a pre-shared token and a cryptographically signed payload.
 
-Spark responds with a unique `HashedSparkTransactionId `that must be used in all subsequent steps.
+Spark responds with a unique `HashedSparkTransactionId` that must be used in all subsequent steps.
 
 ## Request
 
@@ -25,7 +25,7 @@ The integrator sends a POST request to the `/spark/StartAuthentication`  endpoin
 <Warning>
 **Security**
 
-This request must be signed with the `Signature `and `IntegratorId `headers. See [Security & Authentication](/docs/spark-security-authentication) to learn more.
+This request must be signed with the `Signature` and `IntegratorId` headers. See [Security & Authentication](/docs/spark-security-authentication) to learn more.
 </Warning>
 
 ### Request Parameters
