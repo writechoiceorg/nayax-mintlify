@@ -74,12 +74,12 @@ The following sequence illustrates the complete journey for a multi-session sess
     <CodeGroup>
     ```java Java
     m_sessions[0] = new vmc_vend_t.vend_session_t((short) 0, 1, (byte) 0, 10);
-    //the fields are (from left to right): produce code (2 bytes long,meaning value up to 65535), quantity (2 byte), unit of measure (1 byte), price (2 bytes, meaning value up to 65535)
+    //the fields are (from left to right): product code (2 bytes long, meaning value up to 65535), quantity (2 byte), unit of measure (1 byte), price (2 bytes, meaning value up to 65535)
     ```
     ```csharp C#
     List<vmc_vend_t.vend_item_t> list = new List<vmc_vend_t.vend_item_t> ();
     list.Add(new vmc_vend_t.vend_item_t(0, 10, 1, 1));
-    //the fields are (from left to right): produce code (2 bytes long,meaning value up to 65535), price (2 bytes, meaning value up to 65535), quantity (2 bytes), unit of measure (1 byte), .
+    //the fields are (from left to right): product code (2 bytes long, meaning value up to 65535), price (2 bytes, meaning value up to 65535), quantity (2 bytes), unit of measure (1 byte).
     session = new vmc_vend_t.vend_session_t(list);
     ```
     ```c C
