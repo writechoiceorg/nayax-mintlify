@@ -47,14 +47,14 @@ When no product or service is provided, proactive management of the transaction 
 
 ### **Multi-Session Payment Flow**
 
-The following sequence illustrates the complete journey for a multi-session session:
+The following sequence illustrates the complete journey for a multi-session transaction:
 
 #### Initiation of transaction
 
 <Frame>![](/images/docs/multi-session-pre-authorization-with-external-settlement/image1.png)</Frame>
 
 1. Cardholder selects an item on the peripheral.
-2. Peripheral sends  `Reader Enable` to VPOS Touch.
+2. Peripheral sends `Reader Enable` to VPOS Touch.
 3. Nayax's device displays "Present Card" animations to the Cardholder.
 4. Cardholder presents payment.
 5. Nayax's device sends  `Begin Session` to the peripheral and the peripheral's SDK triggers the "session begin" event:
@@ -74,12 +74,12 @@ The following sequence illustrates the complete journey for a multi-session sess
     <CodeGroup>
     ```java Java
     m_sessions[0] = new vmc_vend_t.vend_session_t((short) 0, 1, (byte) 0, 10);
-    //the fields are (from left to right): produce code (2 bytes long,meaning value up to 65535), quantity (2 byte), unit of measure (1 byte), price (2 bytes, meaning value up to 65535)
+    //the fields are (from left to right): product code (2 bytes long,meaning value up to 65535), quantity (2 byte), unit of measure (1 byte), price (2 bytes, meaning value up to 65535)
     ```
     ```csharp C#
     List<vmc_vend_t.vend_item_t> list = new List<vmc_vend_t.vend_item_t> ();
     list.Add(new vmc_vend_t.vend_item_t(0, 10, 1, 1));
-    //the fields are (from left to right): produce code (2 bytes long,meaning value up to 65535), price (2 bytes, meaning value up to 65535), quantity (2 bytes), unit of measure (1 byte), .
+    //the fields are (from left to right): product code (2 bytes long,meaning value up to 65535), price (2 bytes, meaning value up to 65535), quantity (2 bytes), unit of measure (1 byte), .
     session = new vmc_vend_t.vend_session_t(list);
     ```
     ```c C
@@ -106,10 +106,10 @@ The following sequence illustrates the complete journey for a multi-session sess
     </CodeGroup>
 
 7. The device displays "Please Wait For Authorization".
-8. The device contacts Nayax’ Server.
-9. Nayax’ Server forwards request to the Bank/Gateway.
+8. The device contacts Nayax's Server.
+9. Nayax's Server forwards request to the Bank/Gateway.
 10. Bank/Gateway returns approval/decline.
-11. Nayax’ Server sends an authorization response.
+11. Nayax's Server sends an authorization response.
 
 <Frame>![](/images/docs/multi-session-pre-authorization-with-external-settlement/image2.png)</Frame>
 
@@ -131,8 +131,8 @@ vmc_vend_event_handler_cb(vm_vend_event_on_transaction_info)
 
 At this point, the peripheral must retain the (Nayax's) Transaction ID and Site ID received for later use in the External Settlement/External Cancel.
 
-12. **Optional:** The peripheral's SDK can respond to Nayax's device with its own Transaction number (this information won't be used anywhere, just in case the peripheral would like to have its own Transaction ID appearing in the SDK's logs).
-13. Nayax's device sends `Vend Approved`, triggering the peripheral's SDK "vend approved" event:
+13. **Optional:** The peripheral's SDK can respond to Nayax's device with its own Transaction number (this information won't be used anywhere, just in case the peripheral would like to have its own Transaction ID appearing in the SDK's logs).
+14. Nayax's device sends `Vend Approved`, triggering the peripheral's SDK "vend approved" event:
     <CodeGroup>
     ```java Java
     vmc_vend_events() (via onVendApproved(session))
@@ -145,7 +145,7 @@ At this point, the peripheral must retain the (Nayax's) Transaction ID and Site 
     ```
     </CodeGroup>
 
-14. The peripheral dispenses the product or provides the service to the consumer, and the SDK reports `Vend Success` and completes the local session:
+15. The peripheral dispenses the product or provides the service to the consumer, and the SDK reports `Vend Success` and completes the local session:
     <CodeGroup>
     ```java Java
     onVendApproved(session)
@@ -158,9 +158,9 @@ At this point, the peripheral must retain the (Nayax's) Transaction ID and Site 
     ```
     </CodeGroup>
 
-15. The peripheral sends `Session Complete` to indicate completion of the ongoing transaction process (not yet settling it).
-16. Nayax's device sends `End Session` to the peripheral.
-17. The peripheral sends `Reader Disable` to put the reader in standby.
+16. The peripheral sends `Session Complete` to indicate completion of the ongoing transaction process (not yet settling it).
+17. Nayax's device sends `End Session` to the peripheral.
+18. The peripheral sends `Reader Disable` to put the reader in standby.
 
 <br />
 
@@ -177,23 +177,23 @@ If External Settlement is enabled, the terminal's standard "Close Session" behav
 If the service was provided:
 
 19. Cardholder finishes interaction or returns the product.
-20. Peripheral notifies Nayax’ Server the process is complete.
-21. 3rd Party Server initiates auth with Nayax’ Server.
-22. Nayax’ Server confirms authentication status.
+20. Peripheral notifies Nayax's Server the process is complete.
+21. 3rd Party Server initiates auth with Nayax's Server.
+22. Nayax's Server confirms authentication status.
 23. 3rd Party Server requests final settlement.
-24. Nayax’ Server sends the capture request to the Bank/Gateway.
+24. Nayax's Server sends the capture request to the Bank/Gateway.
 25. Bank/Gateway confirms the funds transfer.
-26. Nayax’ Server confirms status to the 3rd Party Server.
-27. Nayax’ Server sends final settlement status to Nayax' device.
+26. Nayax's Server confirms status to the 3rd Party Server.
+27. Nayax's Server sends final settlement status to Nayax' device.
 28. Nayax's Device displays "Thank You and Good Bye" to the Cardholder.
 
 <Frame>![](/images/docs/multi-session-pre-authorization-with-external-settlement/image4.png)</Frame>
 
 If the service was not provided:
 
-19. 3rd Party Server requests auth from Nayax’ Server.
-20. Nayax’ Server confirms.
+19. 3rd Party Server requests auth from Nayax's Server.
+20. Nayax's Server confirms.
 21. The 3rd Party Server triggers a settlement or state change.
-22. Nayax’ Server requests a void from the Bank/Gateway.
+22. Nayax's Server requests a void from the Bank/Gateway.
 23. Bank/Gateway confirms the cancellation.
 24. Nayax’s Server notifies the 3rd Party Server of success.
