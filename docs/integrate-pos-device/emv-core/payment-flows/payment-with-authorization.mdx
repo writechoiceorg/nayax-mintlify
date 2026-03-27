@@ -56,7 +56,7 @@ The detailed steps are described below:
 4. The Host application can now confirm the transaction. The [`ConfirmTransaction`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#confirmtransaction) operation must be used to inform the transaction ID and the amount to be charged.
 
 <Note>
-  The final amount can differ from the amount informed in the pre-authorization. To avoid problems, Nayax suggest using the maximum value at the authorization phase if the final amount related to your selling process may vary.
+  The final amount can differ from the amount informed in the pre-authorization. To avoid problems, Nayax suggests using the maximum value at the authorization phase if the final amount related to your selling process may vary.
 </Note>
 
 5. Immediately, Nayax EMV Core will confirm and be responsible for the settlement process with the Nayax servers. However, it does not mean that the settlement process has been concluded.
@@ -66,7 +66,7 @@ The detailed steps are described below:
 Nayax will handle the settlement transaction to ensure the funds are transferred correctly.
 
 <Note>
-  If you need to cancel a previously pre-authorized transaction, instead of the host application sends a confirm transaction operation to EMV Core, it need to sends a void operation.
+  If you need to cancel a previously pre-authorized transaction, instead of the host application sends a confirm transaction operation to EMV Core, it needs to send a void operation.
 </Note>
 
 

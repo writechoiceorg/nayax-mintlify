@@ -55,7 +55,7 @@ The following table highlights the critical fields used to define a Settlement r
 
 | Parameter            | Location  | Type     | Description                                                                               | Required for Settlement |
 | :------------------- | :-------- | :------- | :---------------------------------------------------------------------------------------- | :---------------------- |
-| `RequestType`        | basicInfo | Int32    | Must be the value for 'Settlement' or 'Capture'. (e.g., 2)\*\*                              | Yes                     |
+| `RequestType`        | basicInfo | Int32    | Must be the value for 'Settlement' or 'Capture'. (e.g., 2)                              | Yes                     |
 | `Amount`             | basicInfo | Decimal  | The amount being captured. Must be less than or equal to the amount initially authorized. | Yes                     |
 | `MerchantRequestId`  | basicInfo | String   | The unique ID from the original authorization request.                                    | Yes                     |
 | `TransactionId`      | basicInfo | String   | The unique Nayax ID returned in the original authorization response.                      | Yes                     |
