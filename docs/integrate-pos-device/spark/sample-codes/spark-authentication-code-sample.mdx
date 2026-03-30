@@ -38,7 +38,7 @@ Where:
 * `random`: 17-digit random number.
 * `timestamp`: UTC time in format `yyMMddHHmm` (optional)
 
-## Step 2: Create Signature
+## Step 2: Create signature
 
 The signature authenticates each request by combining the serialized request body with your header hash key and computing a SHA-256 hash. This signature is sent in the HTTP headers, along with your integrator ID, to verify the request's origin and integrity.
 
@@ -81,7 +81,7 @@ Where:
 
 The output will be a dictionary containing the two mandatory HTTP request headers: `IntegratorId` and `Signature`.
 
-## Request Model
+## Request model
 
 The request model defines the structure of data sent to initiate authentication with Spark. Each authentication request must include your token ID, terminal identification details, and the encrypted cipher (created using the `CreateCipher()` method), and the random 17-digit number used in cipher generation.
 
@@ -96,7 +96,7 @@ public class StartAuthenticationRequest3rdParty
 }
 ```
 
-## Response Model
+## Response model
 
 The response model defines the structure of data returned after initiating authentication with Spark. It includes the hashed transaction ID and status information.
 

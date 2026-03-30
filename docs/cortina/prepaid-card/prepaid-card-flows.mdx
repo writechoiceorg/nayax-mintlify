@@ -13,7 +13,7 @@ Cortina supports two types of prepaid card transaction flows:
 
 Both flows involve interactions between various components, including the CardHolder, Nayax Device, Machine (MDB), Nayax Engine, and Integrator. See the sections below for more details on each flow.
 
-## Pre-Selection
+## Pre-selection
 
 The Pre-selection flow simplifies the payment process by merging the steps of product/service selection and authorization into a single transaction. This flow is typically used for low-value or quick transactions, where the customer’s selection and payment authorization are handled together in one step.
 
@@ -23,7 +23,7 @@ See the diagram below:
 
 The steps in this process are as follows:
 
-1. The card holder presents a card (Insert, tap, or swipe) to the Nayax Device.
+1. The cardholder presents a card (Insert, tap, or swipe) to the Nayax Device.
 2. The Nayax Device sends a Begin Vending Session (Default, credit...) command to the Operator Service Machine.
 3. The user selects a product, and the Operator Service Machine sends a Vend Request (Code, price...) to the Nayax Device.
 4. The Nayax Device sends an Authorization Command Request to the Nayax Server.
@@ -38,7 +38,7 @@ The steps in this process are as follows:
 
 This response is typically always approved in this flow, as the authorization has already been granted.
 
-### Exception Handling
+### Exception handling
 
 In the event of a failure at any critical junction (marked with a black circle in the diagram), the transaction is terminated. Because the payment occurs before the product is dispensed in this flow, specific Void logic is required to ensure customers are not charged for failed dispenses.
 
@@ -54,7 +54,7 @@ In the event of a failure at any critical junction (marked with a black circle i
 For a comprehensive list of financial response codes and authorization failures, refer to the [Prepaid Card Decline Reasons](/docs/cortina/prepaid-card/prepaid-card-decline-reasons) page. 
 </Note>
 
-## Pre-Authorization
+## Pre-authorization
 
 The Pre-authorization flow is used for transactions that require a two-step process. First, a session is initiated, followed by an authorization check. This flow ensures the transaction is valid and the customer has sufficient funds on the prepaid card before settlement.
 
@@ -64,7 +64,7 @@ See the diagram below:
 
 Where:
 
-1. The card holder presents a card (Insert, tap, or swipe) to the Nayax Device.
+1. The cardholder presents a card (Insert, tap, or swipe) to the Nayax Device.
 2. The Nayax Device sends an Authorization Command Request to the Nayax Server.
 3. The Nayax Server sends a /Start Session request to the Payment Provider via the [Start Session](/reference/cortina/cortina/post-start-session) endpoint.
 4. The Payment Provider returns a Start Session Response Success to the Nayax Server.
@@ -78,7 +78,7 @@ Where:
 12. The Nayax Server sends a /Settlement request (Final Amount) to the Payment Provider via the [Prepaid Settlement](/reference/cortina/cortina-prepaid/cortina-prepaid-settlement) endpoint.
 13. The Nayax Server returns a Settlement Command Response (Approved) to the Nayax Device, which then displays a "Thank you" message.
 
-### Exception Handling 
+### Exception handling 
 
 In the event of a failure at any critical junction (marked with a black circle in the diagram), the transaction is terminated. The following table outlines the recovery actions taken by the Nayax Engine:
 

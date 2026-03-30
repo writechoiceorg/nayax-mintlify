@@ -4,16 +4,16 @@ metadata:
   og:description: "Authentication using an access token is required to interact securely with the Lynx API. This guide provides an overview of generating and using."
 ---
 
-Authentication using an access token is required to interact securely with the Lynx API. This guide provides an overview of generating and using access tokens and best practices for ensuring API security.
+You need an access token to interact securely with the Lynx API. This guide provides an overview of generating and using access tokens and best practices for ensuring API security.
 
-## Access Token
+## Access token
 
 An access token is a security credential used to authenticate API requests. Each request to the Lynx API must include a valid access token in the `Authorization` header.
 
 <Warning>
 **Keep your Tokens Safe**
 
-It is important to avoid sharing your secret tokens in public places like Github or Bitbucket since it can allow malicious API calls.
+Do not share your secret tokens in public places like Github or Bitbucket since it can allow malicious API calls.
 </Warning>
 
 Access tokens can be found through the Nayax Back Office (Nayax Core). Follow these steps to retrieve an access token:
@@ -35,7 +35,7 @@ Access tokens can be found through the Nayax Back Office (Nayax Core). Follow th
 
     <Frame><img src="/images/docs/security/image4.png" /></Frame>
 
-## Using the Token in API Requests
+## Use the token in API requests
 
 Include the access token in the `Authorization` header for each API request. Here’s an example `curl` command:
 

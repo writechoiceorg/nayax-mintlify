@@ -22,7 +22,7 @@ This page presents how to move a device from one operator to another using the L
 Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
 </Warning>
 
-## Moving Devices
+## Move devices
 
 Use the [Move Devices](/reference/lynx/devices/move-devices-to-actor-id) endpoint to assign or move devices to the specified `actorId`. The request body should include an array of device identifiers, such as serial numbers. See the example request in the code block below:
 
@@ -42,7 +42,7 @@ curl -X PUT "https://lynx.nayax.com/operational/api/v1/devices/move/<ACTOR_ID>" 
 Replace `<ACTOR_ID>` with the target actor's unique identifier for the new operator.
 </Note>
 
-As you can see, the body of the request above contains two serial numbers for devices that will be moved to the targeted Operator. The response will return the status of each device moved. See the code block below:
+As you can see, the body of the request above contains two serial numbers for devices to move to the target operator. The response will return the status of each device moved. See the code block below:
 
 ```json Response
 [

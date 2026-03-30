@@ -6,7 +6,7 @@ metadata:
 
 The discount feature allows Payment Gateways, implementing Cortina Prepaid API, to adjust the final settlement amount of a transaction to represent a Discount given to the cardholder by the (External) Prepaid Provider.
 
-## How to Implement
+## How to implement
 
 To do so, the final amount (after the discount amount was deducted) should be sent in `SettAmount` fields, under the `PaymentInfo` object of the Settlement endpoint response or at the Sale endpoint response.
 

@@ -6,7 +6,7 @@ metadata:
 
 The authentication process in the Cortina API involves using the Start Session endpoint to send a pre-shared Token to the integrator, who will perform additional encryption steps to ensure secure communication between Nayax and the Integrator.
 
-## Authentication Process
+## Authentication process
 
 Below is a step-by-step breakdown of the authentication process, with examples to help you understand each part.
 
@@ -18,7 +18,7 @@ Below is a step-by-step breakdown of the authentication process, with examples t
    ```
    123456789qwertyuioasdfghjkl
    ```
-3. The Integrator generates a Transaction ID of 36 Numeric Characters. For example:
+3. You generate a Transaction ID of 36 Numeric Characters. For example:
    ```
    123456789012345678901234567890123456
    ```
@@ -26,11 +26,11 @@ Below is a step-by-step breakdown of the authentication process, with examples t
    ```
    123456789012345678901234567890123456=123456789qwertyuioasdfghjkl
    ```
-5. The Integrator generates an encryption key from the last 32 characters of the Secret Token (this is a 256-bit key).
+5. You generate an encryption key from the last 32 characters of the Secret Token (this is a 256-bit key).
    ```
    wRvTVTkungMIKThTVbj_fiXdfoGclhn0
    ```
-6. Using AES encryption in ECB mode (with `PKCS5` padding), the Integrator encrypts the Ciphertext. The encrypted result is then returned in the Start Session response to Nayax. In our example it would produce the following cipher:
+6. Using AES encryption in ECB mode (with `PKCS5` padding), you encrypt the Ciphertext. The encrypted result is then returned in the Start Session response to Nayax. In our example it would produce the following cipher:
    ```
    a0Qnxm4fWMskzFXiMivn8BDiQVSL6be/NXIICC9HBoAiry6DUdKYPQh/YS1G8nObE6/0o9N4MFuYA7CTAxAnphuNJwBEjgBzKhhgpJ5ggnw=
    ```
@@ -50,7 +50,7 @@ For the example above:
 
 <Frame><img src="/images/docs/cortina-auth/image2.png" /></Frame>
 
-The Integrator must validate that the Transaction ID in requests like `GenerateQR`, `Sale`, `Authorization`, and `Inquiry` was created in a previous `Start Session` request and is still valid.\
+You must validate that the Transaction ID in requests like `GenerateQR`, `Sale`, `Authorization`, and `Inquiry` was created in a previous `Start Session` request and is still valid.\
 It is recommended that the Transaction ID remain valid for no longer than 10 minutes for these requests.
 
 <Warning>

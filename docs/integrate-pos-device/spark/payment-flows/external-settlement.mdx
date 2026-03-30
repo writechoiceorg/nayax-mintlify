@@ -12,7 +12,7 @@ The External Settlement flow makes use of the following Spark methods:
 *   [`ExternalSettlement`](/reference/spark/transactions/externalsettlement)
 *   [`ExternalCancel`](/reference/spark/transactions/externalcancel)
 
-## External Settlement Flow
+## External settlement flow
 
 The **External Settlement** flow allows a third party to complete a transaction that was authorized directly on a terminal.
 
@@ -52,7 +52,7 @@ Below is a breakdown of the diagram:
 5. **/ExternalCancel:** The 3rd Party Server sends an [ExternalCancel](/reference/spark/transactions/externalcancel) request. This is **mandatory** to release the consumer's captured funds if no service was delivered. For **Pre-Selection** flows, this method is referred to as a **Void**, while for **Pre-Authorization**, it is a **Cancel**.
 6. **External Cancel Response:** The Nayax Server initiates the financial cancellation with the payment provider and confirms the outcome to the 3rd Party Server.
 
-## Outcomes and Error Handling
+## Outcomes and error handling
 
 Integrators should monitor the `ErrorCode` and `StatusMessage` within the `Status` object to determine the result of a request and the necessary follow-up action.
 
@@ -65,22 +65,22 @@ Integrators should monitor the `ErrorCode` and `StatusMessage` within the `Statu
 | **External Cancel Failed**        |     51     | Cancellation failed due to missing fields or processing errors.                | No manual action required. Nayax will automatically retry via AutoCancel.     |
 | **Transaction Already Completed** |   50 / 51  | Transaction was already completed or invalidated.                              | Validate the transaction status in your system.                               |
 
-### Troubleshooting Tips
+### Troubleshooting tips
 
 * **Missing Mandatory Fields**: If fields like `SiteId` are missing, the system returns event code 50 or 51 and specifies the missing fields in the `StatusMessage`.
 * **Transaction Not Found**: If you receive a "Transaction was not found" error, ensure that `NayaxTransactionId` and `SiteId` exactly match the original transaction data.
-* **Card Scheme Compliance**: Transactions that remain unsettled for too long will be automatically canceled by the system. However, integrators must not rely on this and should send an External Cancel immediately if no settlement will occur to avoid poor user experience and potential disputes.
+* **Card Scheme Compliance**: Transactions that remain unsettled for too long will be automatically canceled by the system. However, you must not rely on this and should send an External Cancel immediately if no settlement will occur to avoid poor user experience and potential disputes.
 
-## Advanced Settlement Features
+## Advanced settlement features
 
-### Digital Receipts (`eReceiptData`)
+### Digital receipts (`eReceiptData`)
 
 For operators using the Nayax eReceipt platform, the `ExternalSettlement` request includes an `eReceiptData` field.
 
 * This field allows you to add custom data (in JSON format) such as company name, station name, or support information directly to the digital receipt.
 * **Format Example**: `{"General":[{"Company":"Your Payments","Station Name":"812"}]}`.
 
-### Product Management (`ProductInfo`)
+### Product management (`ProductInfo`)
 
 If you manage a Products Map in Nayax Core, you can include an array of objects to report exactly what was sold:
 

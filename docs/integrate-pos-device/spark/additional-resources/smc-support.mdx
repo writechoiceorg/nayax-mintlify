@@ -20,7 +20,7 @@ To support this feature, you must use a dedicated “Payment Method”. Machines
 Please ask your Nayax Integration Engineer for more information and configuration assistance.
 </Note>
 
-## How SMC Works
+## How SMC works
 
 When SMC is enabled:
 
@@ -32,7 +32,7 @@ This makes the card interaction fast and seamless while shifting responsibility 
 
 ## Card UID
 
-The Payment card's Unique ID (Card UID) is a critical identifier for Spark self-managed cards. While Nayax automatically approves these cards, it's the integrator's responsibility to validate their authenticity and authorization for service. If an integrator determines a card is invalid or unauthorized, they must initiate a `/CancelTransaction` request.
+The Payment card's Unique ID (Card UID) is a critical identifier for Spark self-managed cards. While Nayax automatically approves these cards, it's your responsibility to validate their authenticity and authorization for service. If an integrator determines a card is invalid or unauthorized, they must initiate a `/CancelTransaction` request.
 
 <Warning>
 **Card Validation**
@@ -40,7 +40,7 @@ The Payment card's Unique ID (Card UID) is a critical identifier for Spark self-
 If you don’t validate the card on your side, unauthorized users could start sessions. Always compare the `UID` data in the callback.
 </Warning>
 
-## Use Case Example
+## Use case example
 
 A typical SMC transaction would look like the following:
 

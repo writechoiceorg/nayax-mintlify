@@ -6,7 +6,7 @@ metadata:
 
 A PIN (Personal Identification Number) is a numerical code used to authorize and verify the cardholder in transactions done with debit and credit cards. To protect the PIN during transmission, it must be encrypted using a secure PIN encryption key, which is managed in accordance with PCI PIN Security standards.
 
-When a Cardholder enters their PIN at a terminal, the PIN is encrypted by the Nayax terminal using a DUKPT algorithm and sent to the Nayax Engine as a PIN block, which is the encrypted PIN string.
+When a Cardholder enters their PIN at a terminal, the Nayax terminal encrypts the PIN using a DUKPT algorithm and sends it to the Nayax Engine as a PIN block, which is the encrypted PIN string.
 
 Nayax engine sends the PIN Block to MyHSM (Nayax HSM provider) for decryption, then re-encrypts it with a key shared with the Payment Gateway (the integrator).
 
@@ -23,7 +23,7 @@ See the diagram below:
 
 <Frame><img src="/images/docs/pin-processing/image1.png" /></Frame>
 
-## Supported PIN Exchange Methods
+## Supported PIN exchange methods
 
 Nayax supports two methods for PIN key exchange and encryption:
 
