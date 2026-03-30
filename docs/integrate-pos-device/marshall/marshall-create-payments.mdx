@@ -15,7 +15,7 @@ This guide shows you how to set up and manage cashless payment transactions from
 <Warning>
 **Integration**
 
-If you have not finished the integration process, check the [Get Started](/docs/integrate-pos-device/marshall/get-started/marshall-get-started)  page before continuing.
+If you have not finished the integration process, check the [Get Started](/docs/integrate-pos-device/marshall/get-started/marshall-get-started) page before continuing.
 </Warning>
 
 ## Create a Payment
@@ -69,7 +69,7 @@ This means that in case of the device is using a Decimal Place of 2, the highest
 <Note>
 **Multi-vend Session**
 
-For a multi-vend session , when the consumer is able to select multiple items in one transaction, enable the `multi_vend_support` flag. The session would then include a list of products.\
+For a multi-vend session, when the consumer is able to select multiple items in one transaction, enable the `multi_vend_support` flag. The session would then include a list of products.\
 You can review an example of it in the demo apps.
 </Note>
 
@@ -92,9 +92,9 @@ Then, inside the onSessionBegin() callback you would send the "Vend Request" for
 
 </Note>
 
-3. After the VPOS approves the vending request, the peripheral must notify the SDK that the product has been successfully delivered to the consumer. This is done by implementing the `onVendApproved(...)`API and returning one of the following:
+3. After the VPOS approves the vending request, the peripheral must notify the SDK that the product has been successfully delivered to the consumer. This is done by implementing the `onVendApproved(...)` API and returning one of the following:
 
-* **`True`** : If the vend process is successful, the client's credit card is charged the requested amount.
+* **`True`**: If the vend process is successful, the client's credit card is charged the requested amount.
 * **`False`**: For a failed vend process.
 
 4. Whether it’s a single session or multi-session, the `onReady()` event will be called upon finishing the vending process, indicating that the device is ready for the next transaction.
