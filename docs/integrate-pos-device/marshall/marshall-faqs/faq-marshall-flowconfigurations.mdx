@@ -114,7 +114,7 @@ In addition, unrelated to the information above, the Status command can provide 
 | `83`      | Present Card Again                                                                       |
 | `84`      | Insert or Swipe another card                                                             |
 
-Should the consumer have issues with the card reading he would be prompted to insert the card or use another card, but if the card does not have enough credit it won't show up on the screen as we wouldn't want to embarrass our consumer (and we won't show it on the SDK logs as this is not related to the communication between the VPOST and the machine but somewhat between the device and the acquirer).
+Should the consumer have issues with the card reading he would be prompted to insert the card or use another card, but if the card does not have enough credit it won't show up on the screen as we wouldn't want to embarrass our consumer (and we won't show it on the SDK logs as this is not related to the communication between the VPOST and the machine but rather between the device and the acquirer).
 Generally speaking, you can see the reasoning for a transaction being cancelled/ a card being rejected in Nayax Core.
 
 ## Communication Loss
@@ -164,7 +164,7 @@ public void onSessionBegin(int funds_avail)
         // vend request
         m_vmc.vend.vend_request(m_sessions[m_active_session]);
 
-        // example: approve mifar/mag card externally (vmc authenticates)
+        // example: approve mifare/mag card externally (vmc authenticates)
         if (vmc_config.mag_card_approved_by_vmc_support || vmc_config.mifare_approved_by_vmc_support)
             m_vmc.vend.client_gateway_auth(true);
     }
@@ -302,5 +302,5 @@ The device queries its opened sessions every 1 minute, meaning there may be up t
 So for example:
 
 If you set the timeout to be 1 minute, the session would expire anywhere between 1 minute to 1 minute and 59 seconds from starting it.
-If you set the timeout to be 5 minute, the session would expire anywhere between 5 minutes to 5 minutes and 59 seconds from starting it.\
+If you set the timeout to be 5 minutes, the session would expire anywhere between 5 minutes to 5 minutes and 59 seconds from starting it.\
 If you set the timeout to be 1 hour, the session would expire anywhere between 1 hour to 1 hour and 59 seconds from starting it.

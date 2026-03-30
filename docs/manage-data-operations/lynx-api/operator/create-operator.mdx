@@ -41,7 +41,7 @@ This process can also be done programmatically through Lynx API with a POST requ
 <Warning>
 **Authentication**
 
-Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use them to authenticate your API requests.
 </Warning>
 
 ### Create Operator Request
@@ -83,10 +83,10 @@ In the body parameters, fill in the following:
 
 | **Parameter**         | `Type`           | Description                                                                       |
 | --------------------- | ---------------- | --------------------------------------------------------------------------------- |
-| **ParentActorID**     | `int64/null`     | The unique identifier of the parent actor is if this actor is a sub-entity.       |
+| **ParentActorID**     | `int64/null`     | The unique identifier of the parent actor, if this actor is a sub-entity.         |
 | **ActorID**           | `int64/null`     | The unique identifier for the actor.                                              |
 | **ActorDescription**  | `string/null`    | A brief description of the actor.                                                 |
-| **ActorCode**         | `int64/null`     | A code representing the actor is often used for identification or categorization. |
+| **ActorCode**         | `int64/null`     | A code representing the actor, often used for identification or categorization.   |
 | **ActorAddress**      | `string/null`    | The physical address associated with the actor.                                   |
 | **ActorContact**      | `string/null`    | Contact information for the actor, such as a phone number or email.               |
 | **ActorTypeID**       | `int32/null`     | The identifier represents the type of actor.                                      |

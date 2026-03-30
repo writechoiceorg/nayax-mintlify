@@ -19,7 +19,7 @@ In Nayax Core, refunds can be requested through the **Dynamic Transactions Monit
 1. Access **Reports > Online Reports > Dynamic Transactions Monitor**.
 2. Search for the transaction to refund. You can use the filter feature to make this easier.
 3. Right-click the transaction you want to refund.
-4. Click **Request Refund**
+4. Click **Request Refund**.
 
    <Frame><img src="/images/docs/request-refunds/image1.png" /></Frame>
 5. A pop-up window will appear. In it, choose if the refund is complete or partial and write the reason for the refund.
@@ -45,7 +45,7 @@ Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) 
 
 ### Initiating the request
 
-To start the request, use the [Request a Payment Refund](/reference/lynx/payment/request-payment-refund)  endpoint to request a refund. Providing the attributes regarding the rebate in the body parameters of the request, as exemplified below:
+To start the request, use the [Request a Payment Refund](/reference/lynx/payment/request-payment-refund) endpoint to request a refund. Providing the attributes regarding the rebate in the body parameters of the request, as exemplified below:
 
 ```sh Request
 curl --request POST \
@@ -66,14 +66,14 @@ curl --request POST \
 
 Below, you can see a description of each of the parameters:
 
-| **Name**            | **Type**    | **Description**                                                             |                                                                            |
-| :------------------ | :---------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------------------- |
-| **RefundAmount**    | `double \   | null`                                                                       | The amount to be refunded to the customer.                                 |
-| **RefundEmailList** | `string \   | null`                                                                       | A list of email addresses to notify about the refund, separated by commas. |
-| **RefundReason**    | `string \   | null`                                                                       | The reason for requesting the refund.                                      |
-| **TransactionId**   | `int64`     | The unique identifier of the transaction for which the refund is requested. |                                                                            |
-| **SiteId**          | `int32`     | The unique identifier of the site where the transaction occurred.           |                                                                            |
-| **MachineAuTime**   | `date-time` | The machine's authorization time is associated with the transaction.        |                                                                            |
+| **Name**            | **Type**         | **Description**                                                             |
+| :------------------ | :--------------- | :-------------------------------------------------------------------------- |
+| **RefundAmount**    | `double \| null` | The amount to be refunded to the customer.                                  |
+| **RefundEmailList** | `string \| null` | A list of email addresses to notify about the refund, separated by commas.  |
+| **RefundReason**    | `string \| null` | The reason for requesting the refund.                                       |
+| **TransactionId**   | `int64`          | The unique identifier of the transaction for which the refund is requested. |
+| **SiteId**          | `int32`          | The unique identifier of the site where the transaction occurred.           |
+| **MachineAuTime**   | `date-time`      | The machine's authorization time is associated with the transaction.        |
 
 #### How to obtain TransactionID and SiteID
 

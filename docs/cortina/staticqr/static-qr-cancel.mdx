@@ -8,11 +8,11 @@ Cortina SQR uses the `Cancel` command to notify the integrator in order to initi
 
 1. Getting a failed `Authorization` Response (either due to timeout or having an error code in the `Authorization` Response).
 2. Issues during product selection- inactivity of the consumer/Cancel button being pressed/invalid product selection by the consumer.
-3. Vend failure (issue with product dispensing/service providing) by the machine
+3. Vend failure (issue with product dispensing/service providing) by the machine.
 
 This command is essential for having the payment provider aware that the transaction was cancelled on Nayax's end (as well as from the consumer's POV), and is done in order for the payment provider to complete the cancellation on its end.
 
-* Note- this command is relevant for PreAuthorization only. Its equivalent in the PreSelection flow is the `Void` command.
+* Note: This command is relevant for PreAuthorization only. Its equivalent in the PreSelection flow is the `Void` command.
 
 ## Request
 

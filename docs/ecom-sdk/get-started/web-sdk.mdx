@@ -106,7 +106,7 @@ const { NayaxEcomSDK } = require('@nayax/ecom-sdk');
 	securityTokenId: integer,
 	securityTokenValue: string,
 	enableLog: boolean
-1};
+};
 
 // Create SDK instance
 const ecomSDK = new NayaxEcomSDK(config);
@@ -116,7 +116,7 @@ const ecomSDK = new NayaxEcomSDK(config);
   The `signId`, `signKey`, `securityTokenId`, and `securityTokenValue` values will be provided by the Nayax eCOM Team. Ensure you handle these values securely.
 </Note>
 
-3. The `NayaxEcomConfig` interface encapsulates the essential properties for SDK configuration:
+2. The `NayaxEcomConfig` interface encapsulates the essential properties for SDK configuration:
 
 ```javascript
 interface NayaxEcomConfig {
@@ -157,7 +157,7 @@ const { NayaxEcomSDK } = require('@nayax/ecom-sdk');
 ```
 
 <Note>
-  The SDK automatically includes all required CSS styles (including Drop-in styles) bundled within the JavaScript. No separate CSS imports are needed
+  The SDK automatically includes all required CSS styles (including Drop-in styles) bundled within the JavaScript. No separate CSS imports are needed.
 </Note>
 
 ## Environment Configuration
@@ -168,7 +168,7 @@ The SDK supports four environments:
 | :----------- | :----------------------------- | :---------------------------------- |
 | `develop`    | Development environment.       | Internal development and testing.   |
 | `qa`         | Quality Assurance environment. | QA testing and integration testing. |
-| `stable`     | Staging environment            | Pre-production testing.             |
+| `stable`     | Staging environment.           | Pre-production testing.             |
 | `production` | Production environment.        | Live transactions.                  |
 
 Example for different environments:
