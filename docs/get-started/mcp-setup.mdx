@@ -1,0 +1,178 @@
+---
+title: "Connect to the Nayax MCP Server"
+description: "Use the Nayax MCP server to give AI coding assistants live access to Nayax developer documentation."
+metadata:
+  og:description: "Connect your AI coding assistant to the Nayax MCP server to get context-aware help with Nayax APIs, SDKs, and integration guides."
+---
+
+The Nayax developer portal exposes a [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server. When you connect your AI coding assistant to this server, it can read and search Nayax documentation in real time — so you get accurate, context-aware answers about Nayax APIs, SDKs, and integration flows without leaving your editor.
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+- An AI coding assistant that supports MCP (VS Code with GitHub Copilot, Cursor, or Claude Desktop)
+
+---
+
+## Connect from VS Code
+
+<Steps>
+
+<Step title="Open your workspace MCP configuration">
+
+In your project root, create or open `.vscode/mcp.json`.
+
+</Step>
+
+<Step title="Add the Nayax MCP server">
+
+Paste the following configuration:
+
+```json .vscode/mcp.json
+{
+  "servers": {
+    "nayax": {
+      "type": "http",
+      "url": "https://devzone.nayax.com/mcp"
+    }
+  },
+  "inputs": []
+}
+```
+
+</Step>
+
+<Step title="Reload the window">
+
+Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (macOS), then run **Developer: Reload Window**.
+
+</Step>
+
+<Step title="Verify the connection">
+
+Open GitHub Copilot Chat and ask a question about a Nayax API, such as:
+
+```
+How do I start a session with the Marshall SDK?
+```
+
+Copilot should answer using content from the Nayax developer portal.
+
+</Step>
+
+</Steps>
+
+---
+
+## Connect from Cursor
+
+<Steps>
+
+<Step title="Open MCP settings">
+
+In Cursor, go to **Settings** → **MCP** → **Add new global MCP server**.
+
+</Step>
+
+<Step title="Enter the server configuration">
+
+Paste the following JSON into the configuration editor:
+
+```json ~/.cursor/mcp.json
+{
+  "mcpServers": {
+    "nayax": {
+      "url": "https://devzone.nayax.com/mcp"
+    }
+  }
+}
+```
+
+</Step>
+
+<Step title="Save and restart Cursor">
+
+Save the file. Cursor detects the new server automatically on the next start.
+
+</Step>
+
+<Step title="Verify the connection">
+
+Open Cursor Chat and ask a Nayax-related question. The server name `nayax` appears in the tool list when MCP is active.
+
+</Step>
+
+</Steps>
+
+---
+
+## Connect from Claude Desktop
+
+<Steps>
+
+<Step title="Open Connectors settings">
+
+In Claude Desktop, go to **Settings** → **Connectors** → **Add custom connector**.
+
+</Step>
+
+<Step title="Enter the server details">
+
+Set the name to `nayax` and the URL to:
+
+```
+https://devzone.nayax.com/mcp
+```
+
+Save the connector.
+
+</Step>
+
+<Step title="Verify the connection">
+
+Start a new conversation, select the attachments button, and choose the `nayax` connector. Then ask:
+
+```
+Using the nayax MCP server, what authentication method does the Lynx API use?
+```
+
+Claude should respond with information pulled directly from the Nayax developer portal.
+
+</Step>
+
+</Steps>
+
+---
+
+## What you can do with the MCP server
+
+Once connected, your AI assistant can:
+
+- Search and retrieve content from any page in the Nayax developer portal
+- Answer questions about specific API endpoints, request parameters, and response fields
+- Explain integration flows, payment sessions, and SDK configuration options
+- Surface code examples from guides such as Marshall, Cortina, EMV Core, and the eCom SDK
+
+<Tip>
+For best results, be specific in your prompts. For example, ask "How do I handle a declined transaction in the Cortina prepaid card flow?" rather than a broad question like "Tell me about Cortina."
+</Tip>
+
+---
+
+## Troubleshooting
+
+**The MCP server does not appear in my tool list.**
+
+Confirm that:
+- The JSON in your configuration file is valid (no trailing commas, all braces closed).
+- You reloaded or restarted the editor after saving the file.
+- Your network can reach `https://devzone.nayax.com`.
+
+**The assistant returns outdated or incorrect information.**
+
+The MCP server reflects the published state of the Nayax developer portal. If documentation was recently updated, try starting a new conversation so the assistant fetches a fresh context.
+
+**I see an authentication error.**
+
+The Nayax MCP server does not require authentication. If you see an auth error, check whether a proxy or firewall is intercepting HTTPS requests to `devzone.nayax.com`.
