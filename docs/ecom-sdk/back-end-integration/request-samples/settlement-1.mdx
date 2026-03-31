@@ -55,13 +55,13 @@ The following table highlights the critical fields used to define a Settlement r
 
 | Parameter            | Location  | Type     | Description                                                                               | Required for Settlement |
 | :------------------- | :-------- | :------- | :---------------------------------------------------------------------------------------- | :---------------------- |
-| `RequestType`        | basicInfo | Int32    | Must be the value for 'Settlement' or 'Capture'. (e.g., 2)\*\*                              | Yes                     |
-| `Amount`             | basicInfo | Decimal  | The amount being captured. Must be less than or equal to the amount initially authorized. | Yes                     |
-| `MerchantRequestId`  | basicInfo | String   | The unique ID from the original authorization request.                                    | Yes                     |
-| `TransactionId`      | basicInfo | String   | The unique Nayax ID returned in the original authorization response.                      | Yes                     |
-| `TransactionTimeUtc` | basicInfo | DateTime | The UTC timestamp is returned in the original authorization response.                     | Yes                     |
-| `PaymentInfo`        | Root      | Object   | Typically left empty or minimal, as payment details are referenced by `TransactionId`.    | No                      |
-| `ValidationKey`      | Root      | String   | Cryptographic key (HMAC) to authenticate this specific settlement request.                | Yes                     |
+| `requestType`        | basicInfo | Int32    | Must be the value for 'Settlement' or 'Capture'. (e.g., 2)\*\*                              | **Yes**                     |
+| `amount`             | basicInfo | Decimal  | The amount being captured. Must be less than or equal to the amount initially authorized. | **Yes**                     |
+| `merchantRequestId`  | basicInfo | String   | The unique ID from the original authorization request.                                    | **Yes**                     |
+| `transactionId`      | basicInfo | String   | The unique Nayax ID returned in the original authorization response.                      | **Yes**                     |
+| `transactionTimeUtc` | basicInfo | DateTime | The UTC timestamp is returned in the original authorization response.                     | **Yes**                     |
+| `paymentInfo`        | Root      | Object   | Typically left empty or minimal, as payment details are referenced by `transactionId`.    | No                      |
+| `validationKey`      | Root      | String   | The key obtained from the `/validate-merchant` response, used to authenticate all subsequent API calls within the same transaction session. | **Yes**                     |
 
 ## Response
 

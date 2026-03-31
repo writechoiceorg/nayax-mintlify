@@ -4,6 +4,8 @@ metadata:
   og:description: "Spark is Nayax’s server-to-server API, enabling third-party systems to initiate and manage payment transactions on Nayax terminals remotely."
 ---
 
+import McpNote from '/snippets/mcp-server-note.mdx';
+
 Spark is Nayax’s server-to-server API, enabling third-party systems to initiate and manage payment transactions on Nayax terminals remotely. It is designed for use cases where direct communication with the terminal, such as through Marshall, is not possible or desired, or as remote-controlled electric vehicle (EV) chargers, intelligent vending machines, or connected kiosks.
 
 Spark enables developers to initiate a session, handle authentication, authorize payments, and trigger settlements, all from their backend system. At the same time, Nayax manages the actual card interactions through its POS devices, such as VPOS Touch.
@@ -13,6 +15,8 @@ Spark allows you to:
 * Control terminals remotely over the internet.
 * Offer flexible user experiences: remote commands, self-managed loyalty cards, and dynamic pricing.
 * Retain control over the business logic while Nayax handles the payment processing and compliance.
+
+<McpNote />
 
 ## Remote and Device Start
 
