@@ -1,6 +1,6 @@
 export const Header = () => {
   return (
-    <header className="relative min-h-[450px] bg-gradient-to-b from-gray-100 to-white dark:from-[#262626] dark:to-[#1B1B1B] py-16 px-6 md:px-12 lg:px-20 overflow-hidden flex items-center border-b border-gray-200 dark:border-gray-800">
+    <header className="relative min-h-[320px] bg-gradient-to-b from-gray-100 to-white dark:from-[#262626] dark:to-[#1B1B1B] py-10 px-6 md:px-12 lg:px-20 overflow-hidden flex items-center border-b border-gray-200 dark:border-gray-800">
       <div className="relative max-w-[1400px] mx-auto w-full">
         
         {/* Top Row: Title and Logo */}
