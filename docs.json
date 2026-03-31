@@ -32,7 +32,6 @@
                 "pages": [
                   "docs/integrate-pos-device/marshall/marshall-sdk",
                   "docs/integrate-pos-device/marshall/get-started/marshall-integration-process",
-                  "docs/get-started/mcp-setup",
                   {
                     "group": "Payment Flows",
                     "pages": [
@@ -751,6 +750,11 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "MCP Server",
+        "icon": "robot",
+        "pages": ["docs/get-started/mcp-setup"]
       },
       {
         "tab": "Release Notes",

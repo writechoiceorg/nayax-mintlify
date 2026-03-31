@@ -1,83 +1,90 @@
 ---
 title: "Connect to the Nayax MCP Server"
-description: "Use the Nayax MCP server to give AI coding assistants live access to Nayax developer documentation."
 metadata:
   og:description: "Connect your AI coding assistant to the Nayax MCP server to get context-aware help with Nayax APIs, SDKs, and integration guides."
 ---
 
-The Nayax developer portal exposes a [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server. When you connect your AI coding assistant to this server, it can read and search Nayax documentation in real time — so you get accurate, context-aware answers about Nayax APIs, SDKs, and integration flows without leaving your editor.
+[Model Context Protocol (MCP)](https://modelcontextprotocol.io) is an open standard that lets AI coding assistants 
+connect to external data sources and tools. 
+
+The Nayax developer portal includes an MCP server. 
+Connect your AI assistant to it, and it can read and search 
+Nayax documentation in real time, giving you accurate answers about Nayax 
+APIs, SDKs, and integration flows without leaving your editor.
 
 ## Prerequisites
 
-Before you begin, make sure you have:
+Before you begin, you'll need an MCP-compatible AI tool to act as the client host. 
+Common options include Claude desktop, Claude Code, Cursor, and VS Code with GitHub Copilot (Agent mode).
 
-- An AI coding assistant that supports MCP (VS Code with GitHub Copilot, Cursor, or Claude Desktop)
+## Connect to the Nayax MCP Server
 
----
+See how you can connect to our MCP server through different tools:
 
-## Connect from VS Code
+<Tabs>
+  <Tab title="Claude">
+    <Steps>
+      <Step title="Open Connectors settings">
+        In Claude, go to [**Settings** → **Connectors**](https://claude.ai/settings/integrations) and select **Add custom connector**.
+      </Step>
 
-<Steps>
+      <Step title="Enter the server details">
+        Set the name to `nayax` and the URL to `https://devzone.nayax.com/mcp`, then click **Add**.
+      </Step>
 
-<Step title="Open your workspace MCP configuration">
+      <Step title="Attach the server in chat">
+        To attach the server to your conversation:
+        1. Start a new conversation.
+        2. Select the attachments icon (the plus icon next to the input).
+        3. Choose the `nayax` connector.
+      </Step>
 
-In your project root, create or open `.vscode/mcp.json`.
-
-</Step>
-
-<Step title="Add the Nayax MCP server">
-
-Paste the following configuration:
-
-```json .vscode/mcp.json
-{
-  "servers": {
-    "nayax": {
-      "type": "http",
-      "url": "https://devzone.nayax.com/mcp"
-    }
-  },
-  "inputs": []
-}
-```
-
-</Step>
-
-<Step title="Reload the window">
-
-Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (macOS), then run **Developer: Reload Window**.
-
-</Step>
-
-<Step title="Verify the connection">
-
-Open GitHub Copilot Chat and ask a question about a Nayax API, such as:
+      <Step title="Verify the connection">
+        Ask a Nayax-related question such as:
 
 ```
-How do I start a session with the Marshall SDK?
+What authentication method does the Lynx API use?
 ```
 
-Copilot should answer using content from the Nayax developer portal.
+        Claude should respond with information pulled directly from the Nayax developer portal.
+      </Step>
+    </Steps>
+  </Tab>
 
-</Step>
+  <Tab title="Claude Code">
+    <Steps>
+      <Step title="Add the server via the CLI">
+        Run the following command in your terminal:
+```bash
+        claude mcp add --transport http nayax https://devzone.nayax.com/mcp
+```
 
-</Steps>
+        This registers the server globally across all your Claude Code sessions. For more on managing MCP servers in Claude Code, see the [Claude Code MCP documentation](https://docs.anthropic.com/en/docs/claude-code/mcp).
+      </Step>
 
----
+      <Step title="Verify the connection">
+        Start a Claude Code session and ask a Nayax-related question. To confirm the server is registered, run:
+```bash
+        claude mcp list
+```
 
-## Connect from Cursor
+        The `nayax` server should appear in the output.
+      </Step>
+    </Steps>
+  </Tab>
 
-<Steps>
+  <Tab title="Cursor">
+    <Steps>
+      <Step title="Open MCP settings">
+        1. Press `Cmd+Shift+P` (macOS) or `Ctrl+Shift+P` (Windows/Linux) to open the command palette. 
+        2. Search for **Open MCP settings**.
+        3. Select **Add custom MCP**. This opens the `mcp.json` file.
 
-<Step title="Open MCP settings">
+        For more details, see the [Cursor MCP documentation](https://cursor.com/docs/context/mcp).
+      </Step>
 
-In Cursor, go to **Settings** → **MCP** → **Add new global MCP server**.
-
-</Step>
-
-<Step title="Enter the server configuration">
-
-Paste the following JSON into the configuration editor:
+      <Step title="Add the Nayax MCP server">
+        In `mcp.json`, add the following configuration. If you already have other servers configured, add the `nayax` entry inside the existing `mcpServers` object.
 
 ```json ~/.cursor/mcp.json
 {
@@ -89,61 +96,60 @@ Paste the following JSON into the configuration editor:
 }
 ```
 
-</Step>
+      </Step>
 
-<Step title="Save and restart Cursor">
+      <Step title="Save and restart Cursor">
+        Save the file. Cursor detects the new server automatically on the next start.
+      </Step>
 
-Save the file. Cursor detects the new server automatically on the next start.
+      <Step title="Verify the connection">
+        To verify the connection, open Cursor Chat and ask a Nayax-related question. The server name `nayax` appears in the tool list when MCP is active.
+      </Step>
+    </Steps>
+  </Tab>
 
-</Step>
+  <Tab title="VS Code">
+    <Steps>
+      <Step title="Open your workspace MCP configuration">
+        In your project root (the top-level folder of your project), 
+        create or open a file called `.vscode/mcp.json`.
+      </Step>
 
-<Step title="Verify the connection">
-
-Open Cursor Chat and ask a Nayax-related question. The server name `nayax` appears in the tool list when MCP is active.
-
-</Step>
-
-</Steps>
-
----
-
-## Connect from Claude Desktop
-
-<Steps>
-
-<Step title="Open Connectors settings">
-
-In Claude Desktop, go to **Settings** → **Connectors** → **Add custom connector**.
-
-</Step>
-
-<Step title="Enter the server details">
-
-Set the name to `nayax` and the URL to:
-
+      <Step title="Add the Nayax MCP server">
+        Paste the following configuration:
+```json .vscode/mcp.json
+        {
+          "servers": {
+            "nayax": {
+              "type": "http",
+              "url": "https://devzone.nayax.com/mcp"
+            }
+          },
+          "inputs": []
+        }
 ```
-https://devzone.nayax.com/mcp
+      </Step>
+
+      <Step title="Reload the window">
+        Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (macOS), 
+        then run **Developer: Reload Window**.
+      </Step>
+
+      <Step title="Verify the connection">
+        Open your AI assistant in VS Code and ask a question about a Nayax API, such as:
 ```
-
-Save the connector.
-
-</Step>
-
-<Step title="Verify the connection">
-
-Start a new conversation, select the attachments button, and choose the `nayax` connector. Then ask:
-
-```
-Using the nayax MCP server, what authentication method does the Lynx API use?
+  How do I start a session with the Marshall SDK?
 ```
 
-Claude should respond with information pulled directly from the Nayax developer portal.
+        Your assistant should answer using content from the Nayax developer portal.
 
-</Step>
-
-</Steps>
-
----
+        <Note>
+          If you are using GitHub Copilot, make sure you are in [**Agent mode**](https://code.visualstudio.com/docs/copilot/chat/mcp-servers). You can switch to it by selecting it from the dropdown at the bottom of the chat input.
+        </Note>
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
 
 ## What you can do with the MCP server
 
@@ -158,21 +164,23 @@ Once connected, your AI assistant can:
 For best results, be specific in your prompts. For example, ask "How do I handle a declined transaction in the Cortina prepaid card flow?" rather than a broad question like "Tell me about Cortina."
 </Tip>
 
----
-
 ## Troubleshooting
 
-**The MCP server does not appear in my tool list.**
+These are some common errors you might encounter while setting up the Nayax MCP and how to solve them:
 
-Confirm that:
-- The JSON in your configuration file is valid (no trailing commas, all braces closed).
-- You reloaded or restarted the editor after saving the file.
-- Your network can reach `https://devzone.nayax.com`.
+<AccordionGroup>
+  <Accordion title="The MCP server does not appear in my tool list.">
+    Confirm that:
+    - The JSON in your configuration file is valid (no trailing commas, all braces closed).
+    - You reloaded or restarted the editor after saving the file.
+    - Your network can reach `https://devzone.nayax.com`.
+  </Accordion>
 
-**The assistant returns outdated or incorrect information.**
+  <Accordion title="The assistant returns outdated or incorrect information.">
+    The MCP server reflects the published state of the Nayax developer portal. If documentation was recently updated, try starting a new conversation so the assistant fetches a fresh context.
+  </Accordion>
 
-The MCP server reflects the published state of the Nayax developer portal. If documentation was recently updated, try starting a new conversation so the assistant fetches a fresh context.
-
-**I see an authentication error.**
-
-The Nayax MCP server does not require authentication. If you see an auth error, check whether a proxy or firewall is intercepting HTTPS requests to `devzone.nayax.com`.
+  <Accordion title="I see an authentication error.">
+    The Nayax MCP server does not require authentication. If you see an auth error, check whether a proxy or firewall is intercepting HTTPS requests to `devzone.nayax.com`.
+  </Accordion>
+</AccordionGroup>
