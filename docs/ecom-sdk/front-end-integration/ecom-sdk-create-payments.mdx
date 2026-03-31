@@ -19,6 +19,7 @@ The `startPayment` method requires a `PaymentData` object that encapsulates all 
 <CodeGroup>
 ```kotlin Kotlin
 data class PaymentData(
+    val validationKey: String,
     val merchantRequestId: String,
     val actorId: String,
     val amount: Double,
@@ -37,6 +38,7 @@ data class PaymentData(
 
 ```swift Swift
 public struct PaymentData {
+    public let validateMerchantTranId: String
     public let merchantRequestId: String
     public let actorId: String
     public let machineId: String
@@ -52,6 +54,7 @@ public struct PaymentData {
     public let additionalData: String?
 
     public init(
+        validateMerchantTranId: String,
         merchantRequestId: String,
         actorId: String,
         machineId: String,
@@ -66,6 +69,7 @@ public struct PaymentData {
         cardHolderInfo: CardHolderInfo? = nil,
         additionalData: String? = nil
     ) {
+        self.validateMerchantTranId = validateMerchantTranId
         self.merchantRequestId = merchantRequestId
         self.actorId = actorId
         self.machineId = machineId
@@ -101,7 +105,8 @@ Key parameters include:
 
 | Parameter             | Type                                                                  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | :-------------------- | :-------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `merchantRequestId`      | String                                                                | The actor's own transaction reference ID. Passed through to the webhook notification as `MerchantTransactionId`.                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `validateMerchantTranId` (iOS/Flutter)<br/>`validationKey` (Android) | String | **Merchant-generated. Required.** A unique 36-character GUID (UUID v4 format) that you generate per payment session. The SDK uses this value internally for the `/validate-merchant` authentication step. Generate a new UUID for each `startPayment()` call. Example: `"550e8400-e29b-41d4-a716-446655440000"` |
+| `merchantRequestId`      | String                                                                | **Merchant-generated. Required.** Your own unique transaction correlation ID. Nayax echoes this value back in webhook notifications as `MerchantRequestId`. Use it to match webhooks to your internal transactions. Example: `"req-2026-03-31-001"`                                                                                                                                                                                                                                                     |
 | `actorId`             | String                                                                | The unique identifier for the actor/entity initiating the transaction.                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `amount`              | Double (Android/iOS), or equivalent numeric type                      | The requested transaction amount (e.g., `15.00` for $15.00).                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `currencyCode`        | String (Alpha-3 format, e.g., "USD", "EUR", "ILS")                    | The currency of the transaction, adhering to ISO 4217 standards.                                                                                                                                                                                                                                                                                                                                                                                                                                       |
@@ -114,6 +119,35 @@ Key parameters include:
 | `showSaveCardConsent` | Boolean (Conditional)                                                 | If `entryMode` is `COF`, determines whether the "Ask for Consent" question appears on the payment page for saving card details.                                                                                                **Important**: Cardholder approval is mandatory for a valid Nayax token. This parameter is strictly for credit card-only flows; if other payment methods are available, the transaction will be automatically declined.                                                 |
 | `cardHolderInfo`      | Object containing `cardHolderUniqId` and `cardholderEmail` (Optional) | Provides cardholder details, especially relevant for tokenized transactions.                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
+
+<Warning>
+**You generate both of these values yourself:**
+- `validationKey` (Android) / `validateMerchantTranId` (iOS/Flutter) is the same field, named differently per platform. Pass a freshly generated UUID for every `startPayment()` call. The SDK uses it to authenticate the session with Nayax.
+- `merchantRequestId` is your own reference ID for the transaction. Nayax returns it in webhook notifications, so use a value that lets you match the webhook back to the correct order or record in your system.
+</Warning>
+
+## Initiate a Sale Payment (Android)
+
+The following example shows how to construct a `PaymentData` object for a standard sale transaction and pass it to `startPayment()`:
+
+```kotlin Kotlin
+val paymentData = PaymentData(
+    validationKey = UUID.randomUUID().toString(),       // 36-char GUID (Android)
+    merchantRequestId = UUID.randomUUID().toString(),   // Your correlation ID
+    actorId = "2007905102",
+    machineId = "1001621751",
+    amount = 25.00,
+    currencyCode = "USD",
+    countryCode = "US",
+    requestType = 0  // 0 = Sale, 1 = Auth
+)
+
+NayaxEcomSDK.startPayment(
+    context = context,
+    paymentData = paymentData,
+    callback = object : PaymentResultCallback { ... }
+)
+```
 
 ## See Also
 
