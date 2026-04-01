@@ -107,8 +107,8 @@ paths:
 
           *   **NayaxTransactionID**: The unique identifier for the transaction in the Nayax system.
           *   **SiteID**: The ID of the site where the machine is located.
-          *   **MachineAUTime**: The authorization timestamp from the terminal. Optional field but recommended
-              *   MachineAUTime is currently not available for Marshall machines due to Transfer Data not providing this information to the machine (hence the 3rd party servers would not have this information when trying to send the ExternalSettlement)
+          *   **MachineAUTime**: The authorization timestamp from the terminal. Optional field but recommended.
+              *   MachineAUTime is not available for Marshall machines. However, as this field is optional, you can still use ExternalSettlement without it.
 
           ## Where to Find this Information
 
@@ -116,10 +116,6 @@ paths:
 
           *   **OTI Devices**: Information is sent via the **CommerceAPI**.
           *   **Marshall Devices**: Information is sent via **Transfer Data**
-
-          <Note>
-          **Note**: `MachineAuTime` retrieval for Marshall is currently a work-in-progress.
-          </Note>
 
           *   **Alternative**: All integrators can retrieve this data via **Amazon SQS**.
 
