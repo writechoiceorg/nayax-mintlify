@@ -18,7 +18,7 @@ paths:
         - Transactions
       summary: Get Version
       x-mint:
-        content: Returns the SparkApi assembly version and build.
+        content: Returns the Spark API assembly version and build.
       responses:
         '200':
           description: Success
