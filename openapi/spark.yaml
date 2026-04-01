@@ -18,7 +18,7 @@ paths:
         - Transactions
       summary: Get Version
       x-mint:
-        content: Returns the SparkApi assembly version and build
+        content: Returns the Spark API assembly version and build.
       responses:
         '200':
           description: Success
@@ -98,6 +98,8 @@ paths:
                 $ref: '#/components/schemas/ExternalCancelResponse'
   /ExternalSettlement:
     post:
+      tags:
+        - Transactions
       summary: ExternalSettlement
       x-mint:
         content: |
@@ -156,8 +158,6 @@ paths:
           *   **Missing Identifiers**: Mandatory fields like `SiteId` were missing from the request.
           *   **Data Mismatch**: The IDs provided do not match the original authorization record.
           *   **Time Limit**: The request was sent more than 48 hours after the transaction started.
-      tags:
-        - Transactions
       requestBody:
         content:
           application/json:
