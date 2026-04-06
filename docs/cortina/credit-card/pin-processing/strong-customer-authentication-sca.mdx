@@ -8,13 +8,13 @@ Strong Customer Authentication (SCA) is a regulatory requirement under the EU’
 
 In a card-present transaction, SCA is typically performed through the Cardholder Verification Method (CVM), such as PIN entry, biometric verification (via mobile wallet), or signature, when the transaction amount exceeds the CVM limit.
 
-## Soft Decline
+## Soft decline
 
 In some cases, a transaction under the CVM limit will be declined with a Soft Decline.
 
 This occurs when a transaction is technically authorized by the issuer (i.e., the card is valid and has sufficient funds). Still, the issuer requests that Strong Customer Authentication (SCA) be performed before authorizing the payment. This is common in cases where the issuer suspects risk (e.g., a contactless tap without CVM after many prior low-value taps) or the transaction exceeds regulatory limits.
 
-### Decline with PIN Required
+### Decline with PIN required
 
 In these cases, the acquirer receives a decline code indicating that an Online PIN is required for transaction approval. In that case, the Terminal will keep the transaction session and ask the cardholder to enter their PIN on the PIN pad. The Encrypted PIN will then be sent back to the acquirer for validation before the transaction can be settled.
 
@@ -30,7 +30,7 @@ If a transaction were completed with an online PIN, the Nayax engine would retur
 }
 ```
 
-### Decline with Switch Interface
+### Decline with switch interface
 
 In these cases, the acquirer receives a decline code indicating that the transaction must be initiated again, using the Contact Interface. In that case, the Terminal will prompt the user to insert his card and perform a transaction with PIN (offline or online).
 

@@ -11,7 +11,7 @@ This page will explore the essential components and configurations needed to est
 
 Refer to the following sections for more information.
 
-## Link Events Interface
+## Link events interface
 
 The `vmc_link_events_t`Interface defines the events related to the communication link between the vending machine controller (VMC) and Nayax devices. Implementing this interface enables your application to respond to critical events that occur during the device's operation.
 
@@ -31,7 +31,7 @@ void onCommError();
 ```
 </CodeGroup>
 
-### Interface Methods
+### Interface methods
 
 The table below describes the available methods of the interface.
 
@@ -40,7 +40,7 @@ The table below describes the available methods of the interface.
 | `onReady()`     | This method is called when the link with the VPOS (Vend Point of Sale) is successfully established and the device is ready for vending operations. It provides the VPOS's configuration details. |
 | `onCommError()` | This method is invoked when a communication error occurs between the VMC and the VPOS, allowing your application to handle such errors appropriately.                                            |
 
-## VPOS Configuration Class
+## VPOS configuration class
 
 The `vpos_config_t` class encapsulates the configuration settings for the VPOS, which are communicated between the VMC and the device.  The following code block lists all available configurations:
 
@@ -87,7 +87,7 @@ vpos_config_t
 ```
 </CodeGroup>
 
-### Class Parameters
+### Class parameters
 
 The table below provides a detailed description of the parameters.
 

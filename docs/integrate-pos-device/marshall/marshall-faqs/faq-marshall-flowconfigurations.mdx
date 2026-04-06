@@ -4,13 +4,13 @@ metadata:
   og:description: "## Vend Result Timeout (Timeout for Vend Success) This parameter sets how long the device will wait for a vend response ('Vend Approved'/'Vend."
 ---
 
-## Vend Result Timeout (Timeout for Vend Success)
+## Vend result timeout (Timeout for vend success)
 
 This parameter sets how long the device will wait for a vend response ("Vend Approved"/"Vend Failure") from the peripheral after sending "Vend Approved" to it.
 The parameter's value in Nayax Core has a max value of 65535 seconds (18 hours 12 minutes and 15 seconds).
 Should you need a longer lap than that, you can use [Multi-Session](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session#/), in which the timeout for credit cards are 23 hours (<ins>can be up to 72 hours as of 2025</ins>), and for proprietary cards it's 72 hours.
 
-## Status Command
+## Status command
 
 Once the pairing process is complete, the device will immediately send a "Status" command when network communication is lost, so the machine knows.
 It would look something like this in the Java SDK (same look in C# and C):
@@ -117,7 +117,7 @@ In addition, unrelated to the information above, the Status command can provide 
 Should the consumer have issues with the card reading he would be prompted to insert the card or use another card, but if the card does not have enough credit it won't show up on the screen as we wouldn't want to embarrass our consumer (and we won't show it on the SDK logs as this is not related to the communication between the VPOST and the machine but somewhat between the device and the acquirer).
 Generally speaking, you can see the reasoning for a transaction being cancelled/ a card being rejected in Nayax Core.
 
-## Communication Loss
+## Communication loss
 
 The Marshall protocol uses ACK commands in response to each command sent, meaning that if your peripheral sends a command to the device, it will receive an ACK command in return, and vice versa.
 This command is a response from the receiving side to the sender, indicating that the command was received.
@@ -128,7 +128,7 @@ If no ACKS were received after "Vend Success," it's Nayax's responsibility to ma
 If no ACKS were received after the authorization or before the "Vend Success," Nayax would cancel the transaction.
 (If ACKs were not received before the authorization stage, the transaction is cancelled as well)
 
-## Approval by 3rd Party Server - How the Machine Notifies the SDK Whether or Not the Card Is Approved
+## Approval by 3rd party server - how the machine notifies the SDK whether or not the card is approved
 
 After the "Vend Request" is sent and a consumer presents his card the Transfer Data command would be sent and the peripheral would get the card's details and would forward them (on its own, unrelated to the SDK) to the desired 3rd party server.
 Once the server has approved/ denied the card, the peripheral would notify the SDK (and that way it would also inform the device) through calling the "client\_gateway\_auth(bool approved)" command:
@@ -206,7 +206,7 @@ if (config.mag_card_approved_by_vmc_support || config.mifare_approved_by_vmc_sup
 ```
 </CodeGroup>
 
-## Cancel Command
+## Cancel command
 
 Should you send "vend request" and have not yet received "vend approve"(/"vend denied"), you can send the "cancel" command, which would cause "vend denied" to be sent.
 
@@ -215,7 +215,7 @@ You can also avoid using "cancel" at this point and respond with "vend failure",
 
 You can also cancel a transaction before sending the "vend request" if the consumer wanted to start a transaction but then backed out before you've sent the "vend request" (either before presenting a card or right after you've received "begin session" before you were able to send out the "vend request"- should it be the 1st option all you'd see is "reader enable" in the SDK's logs).
 
-## Begin Session Being Sent Only After the Card's Authorization
+## Begin session being sent only after the card's authorization
 
 When using Prepaid cards, the authorization would come first, and the "begin session" would be sent afterwards.
 
@@ -230,7 +230,7 @@ A close session must be performed when the VPOST/Onyx is in idle mode (not in th
 You must not send "Close Session" while you've got an active transaction, as it can cause issues: the device processes "Close Session" first, which can get the active transaction stuck.\
 Please ensure to send the "Close Session" command only when onReady is triggered.
 
-## Not charging consumers/ Close session with price of 0- what is the issue?
+## Not charging consumers/ close session with price of 0- what is the issue?
 
 Regarding sending "close session" with price of 0- should you have liked to cancel the transaction, you should have sent a "close session" with the status that is not "ok", such as "failed to dispense" (as sending a <ins>"close session" with a price of 0 with status of "ok" is deemed as some sort of error</ins> with price calculation from your machine's end).\
 The reason is that anyone who would look at this device's virtual machine's last sales would think there is an issue on our end with settling the transaction (payment issues, configuration issues, etc.). In contrast, on your end there is no issue at all in the transaction process between your peripheral and the device, you just wanted to not charge the consumer due to your own reasoning.
@@ -250,7 +250,7 @@ The possible statuses are:
 
 Then you can send the "Close Session" command.
 
-## Multivend: Example of How to Do Partial Vending
+## Multivend: example of how to do partial vending
 
 Partial vending is relevant only to Multivend and means that only some of the selected products could be vended.
 

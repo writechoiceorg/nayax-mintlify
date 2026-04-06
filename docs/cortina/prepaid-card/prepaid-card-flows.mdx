@@ -4,7 +4,7 @@ metadata:
   og:description: "Prepaid card transactions work similarly to credit card payments but are used with pre-loaded cards. These cards do not require a connection to a."
 ---
 
-Prepaid card transactions work similarly to credit card payments but are used with pre-loaded cards. These cards do not require a connection to a bank account, making them ideal for closed-loop systems such as gift cards or loyalty cards. Prepaid cards are validated during the transaction, ensuring sufficient funds are available for the purchase.
+Prepaid card transactions work similarly to credit card payments but use pre-loaded cards. These cards do not require a connection to a bank account, making them ideal for closed-loop systems such as gift cards or loyalty cards. Prepaid cards are validated during the transaction, ensuring sufficient funds are available for the purchase.
 
 Cortina supports two types of prepaid card transaction flows:
 
@@ -13,9 +13,9 @@ Cortina supports two types of prepaid card transaction flows:
 
 Both flows involve interactions between various components, including the CardHolder, Nayax Device, Machine (MDB), Nayax Engine, and Integrator. See the sections below for more details on each flow.
 
-## Pre-Selection
+## Pre-selection
 
-The Pre-selection flow simplifies the payment process by merging the steps of product/service selection and authorization into a single transaction. This flow is typically used for low-value or quick transactions, where the customer’s selection and payment authorization are handled together in one step.
+The Pre-selection flow simplifies the payment process by merging product/service selection and authorization into a single transaction. Use this flow for low-value or quick transactions, where the system handles the customer's selection and payment authorization in one step.
 
 See the diagram below:
 
@@ -38,7 +38,7 @@ The steps in this process are as follows:
 
 This response is typically always approved in this flow, as the authorization has already been granted.
 
-### Exception Handling
+### Exception handling
 
 In the event of a failure at any critical junction (marked with a black circle in the diagram), the transaction is terminated. Because the payment occurs before the product is dispensed in this flow, specific Void logic is required to ensure customers are not charged for failed dispenses.
 
@@ -56,7 +56,7 @@ For a comprehensive list of financial response codes and authorization failures,
 
 ## Pre-Authorization
 
-The Pre-authorization flow is used for transactions that require a two-step process. First, a session is initiated, followed by an authorization check. This flow ensures the transaction is valid and the customer has sufficient funds on the prepaid card before settlement.
+Use the Pre-authorization flow for transactions that require a two-step process. First, a session is initiated, followed by an authorization check. This flow ensures the transaction is valid and the customer has sufficient funds on the prepaid card before settlement.
 
 See the diagram below:
 
@@ -78,7 +78,7 @@ Where:
 12. The Nayax Server sends a /Settlement request (Final Amount) to the Payment Provider via the [Prepaid Settlement](/reference/cortina/cortina-prepaid/cortina-prepaid-settlement) endpoint.
 13. The Nayax Server returns a Settlement Command Response (Approved) to the Nayax Device, which then displays a "Thank you" message.
 
-### Exception Handling 
+### Exception handling 
 
 In the event of a failure at any critical junction (marked with a black circle in the diagram), the transaction is terminated. The following table outlines the recovery actions taken by the Nayax Engine:
 

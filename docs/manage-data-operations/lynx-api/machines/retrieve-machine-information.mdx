@@ -15,7 +15,7 @@ In Nayax Core, machines have various attributes, such as the Operator of the mac
 
 You can see all the key information about the machine you may need for other requests there.
 
-## Lynx API Methods
+## Lynx API methods
 
 The Lynx API provides various methods to retrieve all this information, allowing you to programmatically access specific machine details, groups, statuses, and configurations.
 
@@ -47,7 +47,7 @@ See the following sections for more details on each method.
 Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
 </Warning>
 
-### Retrieve a Machine by `MachineID`
+### Retrieve a machine by `MachineID`
 
 Using the [Get Specific Machine Basic Info](/reference/lynx/machines/get-machine-basic-info) you can get the details of a machine with a specific `MachineID`. See an example request in the code block below:
 
@@ -144,7 +144,7 @@ curl --request GET \
 
 Insert the `MachineID` in the path param of the request.
 
-### Retrieve a Machine by `DeviceSerialNumber`
+### Retrieve a machine by `DeviceSerialNumber`
 
 Using the [Get Specific Machine Basic Info by Device](/reference/lynx/machines/get-machine-info-by-device) endpoint, you can retrieve the details of a machine associated with a specific DeviceSerialNumber. See an example request in the code block below:
 
@@ -241,7 +241,7 @@ curl --request GET \
 
 Insert the DeviceSerialNumber in the request path parameter to fetch the machine details associated with that device.
 
-### Retrieve a Machine by `VPOSSerial`
+### Retrieve a machine by `VPOSSerial`
 
 Using the [Get Specific Machine Basic Info by VPOS](/reference/lynx/machines/get-machine-info-by-vpos) endpoint, you can retrieve the details of a machine associated with a specific `VPOSSerial`. See an example request in the code block below:
 
@@ -338,7 +338,7 @@ curl --request GET \
 
 Insert the `VPOSSerial` in the path parameter of the request to fetch the machine details associated with that VPOS device.
 
-### Retrieve All Machine Basic Info
+### Retrieve all machine basic info
 
 Using the [Get All Machine Basic Info](/reference/lynx/machines/get-all-machine-basic-info) endpoint, you can retrieve basic information for all machines, with optional filtering by various parameters. See an example request in the code block below:
 

@@ -6,7 +6,7 @@ metadata:
 
 Unlike the two-phase model, the Single-phase transaction flow for the SHVA payment service processes and authorizes a payment request in a single, continuous sequence. This streamlined approach is used for regular payments where no intermediate user interaction is required.
 
-## Transaction Flow
+## Transaction flow
 
 To understand the single-phase transaction flow, consider the following sequence of events:
 
@@ -21,7 +21,7 @@ Here's a breakdown of each step:
 5. The Nayax Device relays the Authorization response to the DC, completing the payment portion of the flow.
 6. At the end of the day, the DC sends a [`doPeriodic`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) request to the Nayax Device, which then communicates with SHVA to complete the day's batch process. The Nayax Device sends a [`doPeriodic`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) response back to the DC.
 
-## See Also
+## See also
 
 <Columns cols={2}>
 <Card

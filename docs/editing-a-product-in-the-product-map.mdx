@@ -32,7 +32,7 @@ This page presents how to edit a product in the Product Map using the Lynx API. 
 Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens and how to properly use them to authenticate your API requests.
 </Warning>
 
-## Update Product Request
+## Update product request
 
 Use the [Update a Machine Product](/reference/lynx/machine-products/update-machine-product) endpoint to update the product details, such as changing the `CashPrice`. Keep other values unchanged, including the `MDBCode`.
 
@@ -85,7 +85,7 @@ curl -X PUT "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/mac
 Replace `<PRODUCT_ID>` with the identifier of the product you're updating. Make sure to update the `CashPrice` while leaving other values unchanged.
 </Note>
 
-The response from this API call will confirm that the update was successful. A status code of `200` indicates the request was processed correctly, even if the response includes details about a different product.
+The response confirms a successful update. A `200` status code means the server processed the request correctly, even if the response includes details about a different product.
 
 Where:
 

@@ -4,7 +4,7 @@ metadata:
   og:description: "Webhook notifications are automated messages sent by Nayax to your back-end to communicate the final status of a transaction. This ensures you are."
 ---
 
-Webhook notifications are automated messages sent by Nayax to your back-end to communicate the final status of a transaction.
+Nayax sends webhook notifications to your back-end to communicate the final status of a transaction.
 This ensures you are always up to date with the latest transaction information.
 
 <Note>
@@ -12,10 +12,10 @@ This ensures you are always up to date with the latest transaction information.
 You will provide the URL to receive the webhooks during the onboarding phase.
 </Note>
 
-## Webhook Request
+## Webhook request
 There are two types of merchant notifications, depending on the `RequestType`.
 
-### Type 1 — Sale or Auth (RequestType: 0)
+### Type 1 — sale or auth (RequestType: 0)
 The full notification structure contains card data, 3DS information, retry attempts, and all transaction fields.
 The following JSON example illustrates a typical successful Sale notification:
 
@@ -75,7 +75,7 @@ The following JSON example illustrates a typical successful Sale notification:
 }
 ```
 
-### Type 2 — All other request types (RequestType: 1, 2, 3…)
+### Type 2 — all other request types (RequestType: 1, 2, 3…)
 This is a minimal notification containing only core fields. Field presence varies by request type.
 Refer to the sample below for the payload structure:
 
@@ -93,7 +93,7 @@ Refer to the sample below for the payload structure:
 }
 ```
 
-## Webhook Request Parameters
+## Webhook request parameters
 The following parameters define the structure of the incoming webhook notification:
 
 | Field Name | Type | Description |
@@ -110,14 +110,14 @@ The following parameters define the structure of the incoming webhook notificati
 | `FollowUpRequestOptions` | Array[Int] | Available follow-up request types (e.g. [2, 4] means Settlement and Refund are available). |
 | `Hmac` | String | Optional. HMAC-SHA256 signature for validating authenticity. See HMAC Validation. |
 
-### Conditional Fields
+### Conditional fields
 The following fields are conditional and are not always present:
 
 * **NayaxToken**: Present when the actor uses Charge Token.
 * **AdditionalInfo**: Present if the actor includes it in the original request. Appears in both `MerchantNotification` and `MerchantTransactionNotification`.
 * **EReceiptUrl**: Present when the eReceipt feature is enabled.
 
-## Webhook Delivery & Retries
+## Webhook delivery & retries
 
 Nayax sends webhook notifications to the URL you provided during onboarding. The system reacts to your server's HTTP response codes as follows:
 
@@ -131,7 +131,7 @@ Nayax sends webhook notifications to the URL you provided during onboarding. The
 If HMAC validation fails on your end, **do not return 500**. A broken HMAC implementation will not be fixed by retrying. Fix the implementation and test with the examples on the [HMAC Validation](/docs/hmac-validation) page.
 </Note>
 
-## See Also
+## See also
 
 <Columns cols={2}>
   <Card icon="link" title="Initialize Transactions" href="/docs/start-a-transaction" />

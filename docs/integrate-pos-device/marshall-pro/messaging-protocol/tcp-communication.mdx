@@ -4,7 +4,7 @@ metadata:
   og:description: "## Connection & Protocol The VPOS acts as a TCP/IP server on Port 5050. Your system (POS/FCC) acts as the client and must initiate the connection."
 ---
 
-## Connection & Protocol
+## Connection & protocol
 
 The VPOS acts as a **TCP/IP server** on **Port 5050**. Your system (POS/FCC) acts as the client and must initiate the connection. Communication is bidirectional over a persistent socket.
 
@@ -16,7 +16,7 @@ The terminal supports only one active connection; a new socket attempt will auto
 The protocol uses a **Command-Response Pattern**. All client commands must include a `requestId`, which the terminal echoes back in its response to facilitate transaction tracking.
 </Note>
 
-### TCP Message Format
+### TCP message format
 
 To ensure data integrity, every message sent over the TCP socket (both commands and responses) must use a two-byte length prefix. This tells the receiver exactly how many bytes of JSON data follow in the stream.
 

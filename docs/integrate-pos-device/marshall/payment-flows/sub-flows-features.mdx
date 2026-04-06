@@ -6,19 +6,19 @@ metadata:
 
 # Sub Flows
 
-## Reader Always On
+## Reader always on
 
 This configuration is relevant for peripherals that want to start the transaction with product selection (PreSelection flow) but don't have a way to start a transaction from the peripheral- meaning they want the transaction process to be initiated from a consumer selecting a product on Nayax's device's screen, which would then trigger the peripheral to send the product's details.
 In rare cases, a consumer's card presentation can trigger the peripheral to send the product selection, but, as mentioned, this option is not very common.
 
-## Always Idle
+## Always idle
 
 The transaction starts with the consumer selecting a product (PreSelection flow) on the peripheral, which then sends the "Vend request" command without waiting for a "Begin Session" trigger (the "Vend request").
 This flow is very commonly used in the Far East.
 
 # Features
 
-## Transfer Data
+## Transfer data
 
 A command which provides information during the transaction process regarding the transaction details- Nayax’s transaction ID and the consumer’s card details:
 
@@ -36,7 +36,7 @@ Transfer Data also presents the optional feature of having the peripheral to sen
 
 More on Transfer Data in the [Transfer Data](/docs/integrate-pos-device/marshall/additional-resources/marshall-ontransferdata) page.
 
-## Display Control
+## Display control
 
 A feature for peripherals that requires the Marshall master to define different selection screens on the device before sending a request for a specific price. This way, the product selection comes from Nayax's device instead of the peripheral, and is helpful in cases in which the peripheral has no screen or way for consumers to select a product on its end.
 
@@ -66,7 +66,7 @@ The product names are taken from our product map, so you can create products in 
 
 You can add new products to your device's product map by going to the "product map" tab, clicking on "Map"-> "Add BIN", and then add the product code and product group, PA code and MDB code (this is the one which should match the product code in the SDK), and then of course click on "save".
 
-## Info Session
+## Info session
 
 An informative non-vending session that provides the peripheral with the consumer's card details upon their card presentation. The consumer is not charged (is notified via "card read successfully"), and the transaction ends with "Vend Denied" (since there is no actual authorization, nor is there a need to proceed to the vending process).\
 Used chiefly for consumer re-identification by having the consumer present the same card he used to start the transaction.\
@@ -76,7 +76,7 @@ Usually relevant for rentals and EV chargers.
   **Important note:** This feature requires the peripheral to have a screen/a way to distinguish between a vending session and info session, as it's up for the peripheral to know which type of session to initiate.
 </Note>
 
-## Incremental Authorization
+## Incremental authorization
 
 Incremental authorizations can be used to increase the total amount authorized when the estimate/initial authorization is insufficient.
 An incremental authorization request may also be based on a revised estimate of the cardholder's spending. Incremental authorizations do not replace the original approval—they are additional to previously authorized amounts. The sum of all linked estimated and incremental authorizations represents the Total amount permitted for a given transaction.
@@ -88,7 +88,7 @@ As of February 2026, the only billing providers which support this feature are H
 Should your devices have any other billing provider set up- Incremental Authorization won't work.
 </Danger>
 
-### How Incremental Authorization Works
+### How incremental authorization works
 
 The incremental feature has 2 "Default Credit" parameters- the regular one and "Maximum Default Credit".
 The regular default credit is the one that the consumer would initially be authorized for, just like in any PreAuthorization transaction you're familiar with (if there is not sufficient credit for the Default Credit the transaction would be cancelled on this step).

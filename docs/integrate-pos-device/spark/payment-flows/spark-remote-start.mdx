@@ -22,7 +22,7 @@ The Remote Start flows use the following Spark methods:
 Remote Start supports both pre-authorization and pre-selection transaction flows. The sections below provide a more detailed breakdown of each flow.
 </Note>
 
-## Pre-Authorization Flow
+## Pre-Authorization flow
 
 To understand the device start pre-authorization flow, see the diagram below:
 
@@ -43,7 +43,7 @@ Below is a breakdown of the diagram:
 11. The 3rd Party Server sends a [`Settlement`](/docs/settlement) request to the Nayax Server.
 12. The Nayax Server performs the settlement with the Payment Provider and sends a [`SettlementResponse`](/docs/settlement) back to the 3rd Party Server.
 
-## Pre-Selection Flow
+## Pre-Selection flow
 
 To understand the device start pre-selection flow, see the diagram below:
 
@@ -62,7 +62,7 @@ Below is a breakdown of the diagram:
 9. The 3rd Party Server acknowledges the transaction callback by sending a [`TransactionCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback) (HTTP 200) to the Nayax Server. At this point, the service can be provided at the Service Station.
 10. The Nayax Server sends an `AuthorizationResponse` to the Nayax Device, indicating the outcome of the authorization. The Nayax Device then returns to an idle state.
 
-## See Also
+## See also
 
 <Columns cols={3}>
 <Card

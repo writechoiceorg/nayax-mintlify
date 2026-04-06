@@ -26,27 +26,27 @@ This differs from the Single-Session flow, in which settlement is performed imme
   Meaning the peripheral should always send a settlement command, and in case of not wanting to charge the consumer he can change one of the settlements fields, called "status" (unrelated to the "Status" command) to a status of "Vend failure" for example- more on that in [Multisession- not charging a consumer at settlement stage](/docs/integrate-pos-device/marshall/marshall-faqs/faq-marshall-flowconfigurations#not-charging-consumers-close-session-with-price-of-0--what-is-the-issue)
 </Danger>
 
-## Why Use Multi-Session
+## Why use multi-Session
 
 The Multi-Session flow enables you to manage **multiple concurrent transactions** on a single device. It is ideal for peripherals with longer transaction times or those that serve several consumers simultaneously.
 
-### Concurrent Transactions
+### Concurrent transactions
 
 This flow is applicable in environments such as **EV chargers**, where multiple consumers may use the same station simultaneously but require independent payment processing.
 
-### Longer Transaction Times
+### Longer transaction times
 
 Multi-Session is also helpful when the vending process is longer than the standard **4 minutes and 15 seconds**.
 
 The flow allows the peripheral to notify the Nayax Device that vending can begin immediately after the card is authorized. The Nayax Device then waits for a later update from the peripheral regarding the final vend status or service stop, which enables settlement.
 
-### Quicker Credit Release
+### Quicker credit release
 
 The Multi-Session flow functions technically as a **Pre-Selection flow**. For some acquirers, this architecture can lead to a **quicker release of captured credit** than the Single-Session flow with Pre-Authorization.
 
 If you use Single-Session with Pre-Authorization, the authorized credit amount may take days or weeks to be released, which can confuse consumers who may think they were charged the full Pre-Authorization amount. Multi-Session helps mitigate this issue.
 
-## Payment Flow
+## Payment flow
 
 The diagrams below illustrate the sequence of events within the Multi-Session payment flow.
 

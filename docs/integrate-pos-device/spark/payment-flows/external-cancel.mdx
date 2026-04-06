@@ -8,14 +8,14 @@ The **External Cancel** is a mandatory operation for authorized transactions whe
 
 If no service is provided, you must send a cancellation request immediately. Failure to do so results in funds being captured, leading to a poor consumer experience and potential disputes.
 
-### External Cancel Flow Methods
+### External cancel flow methods
 
 The External Cancel flow makes use of the following Spark methods:
 
 * [StartAuthentication](/reference/spark/transactions/startauthentication)
 * [ExternalCancel](/reference/spark/transactions/externalcancel)
 
-### External Cancel Flow
+### External cancel flow
 
 This flow is required when a transaction was authorized on the Nayax Device, but the service failed or was canceled at the point of interaction.
 
@@ -36,7 +36,7 @@ Below is a breakdown of the diagram:
 7. **Financial Reversal**: Upon receiving the request, the Nayax Server performs the cancellation with the payment provider to release the funds.
 8. **External Cancel Response**: The Nayax Server confirms the cancellation outcome to the Third-Party Server.
 
-## Failure Handling and Retries
+## Failure handling and retries
 
 If a request fails, the follow-up action depends on which stage of the process failed:
 
