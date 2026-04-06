@@ -15,7 +15,7 @@ In both cases, Nayax does not manage session lifecycles, this responsibility lie
 
 If you choose to perform the card comparison, Nayax will send a `StopNotify` request. It provides the details of the card used for the stop event. You then need to match these cards to an ongoing session and return the relevant Spark and Nayax transaction IDs for the session to be stopped.
 
-Rejecting a `StopNotify` request will result in a rejection message displayed on the Nayax terminal for the consumer. However, this rejection does not impact the actual session status, as Nayax does not manage the session. You still need to perform the necessary actions to stop the session on their end.
+Rejecting a `StopNotify` request will result in a rejection message displayed on the Nayax terminal for the consumer. However, this rejection does not impact the actual session status, as Nayax does not manage the session. You still need to perform the necessary actions to stop the session on your end.
 
 Learn more about this endpoint on the following page:
 

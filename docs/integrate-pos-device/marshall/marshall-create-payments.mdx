@@ -92,7 +92,7 @@ Then, inside the onSessionBegin() callback you would send the "Vend Request" for
 
 </Note>
 
-3. After the VPOS approves the vending request, the peripheral must notify the SDK that the product has been successfully delivered to the consumer. This is done by implementing the `onVendApproved(...)`API and returning one of the following:
+3. After the VPOS approves the vending request, the peripheral must notify the SDK that the product has been successfully delivered to the consumer. This is done by implementing the `onVendApproved(...)` API and returning one of the following:
 
 * **`True`** : If the vend process is successful, the client's credit card is charged the requested amount.
 * **`False`**: For a failed vend process.
