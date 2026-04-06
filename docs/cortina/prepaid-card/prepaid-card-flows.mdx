@@ -8,8 +8,8 @@ Prepaid card transactions work similarly to credit card payments but are used wi
 
 Cortina supports two types of prepaid card transaction flows:
 
-* Pre-selection
-* Pre-authorization
+- Pre-selection
+- Pre-authorization
 
 Both flows involve interactions between various components, including the CardHolder, Nayax Device, Machine (MDB), Nayax Engine, and Integrator. See the sections below for more details on each flow.
 
@@ -19,7 +19,9 @@ The Pre-selection flow simplifies the payment process by merging the steps of pr
 
 See the diagram below:
 
-<Frame><img src="/images/docs/prepaid-card-flows/Cortina V2 External Prepaid API - Pre-selection.png" /></Frame>
+<Frame>
+  ![](/images/docs/prepaid-card-flows/Cortina V2 External Prepaid API - Pre-selection.png)
+</Frame>
 
 The steps in this process are as follows:
 
@@ -43,7 +45,7 @@ This response is typically always approved in this flow, as the authorization ha
 In the event of a failure at any critical junction (marked with a black circle in the diagram), the transaction is terminated. Because the payment occurs before the product is dispensed in this flow, specific Void logic is required to ensure customers are not charged for failed dispenses.
 
 | Scenario | Diagram Step Reference | Technical Resolution |
-| :--- | :--- | :--- |
+| :-- | :-- | :-- |
 | **Selection Timeout** | 3.b | Occurs if the user fails to choose a valid product within the machine's allowed timeframe. The session is closed before any payment is initiated. |
 | **Start Session Failed** | 5.b | Occurs if the `/Start Session` request fails or times out. The transaction is aborted before the Sale request. |
 | **Sale Request Failed** | 6.b | If the `/Sale` request fails, returns an error, or receives a **`992`** response code, the session is aborted. In cases of a gateway timeout, the [Prepaid Void](/reference/cortina/cortina-prepaid/cortina-prepaid-void) endpoint is triggered with the flag `isGatewayTimeout: True`. |
@@ -51,7 +53,7 @@ In the event of a failure at any critical junction (marked with a black circle i
 | **Notification Failure** | 11.b | Occurs if the optional `/SaleEndNotification` fails. As this is a reporting step, the transaction on the device is usually finalized, but the error is logged for reconciliation. |
 
 <Note>
-For a comprehensive list of financial response codes and authorization failures, refer to the [Prepaid Card Decline Reasons](/docs/cortina/prepaid-card/prepaid-card-decline-reasons) page. 
+  For a comprehensive list of financial response codes and authorization failures, refer to the [Prepaid Card Decline Reasons](/docs/cortina/prepaid-card/prepaid-card-decline-reasons) page.
 </Note>
 
 ## Pre-Authorization
@@ -60,7 +62,9 @@ The Pre-authorization flow is used for transactions that require a two-step proc
 
 See the diagram below:
 
-<Frame><img src="/images/docs/prepaid-card-flows/Cortina V2 External Prepaid API - Pre-auth.png" /></Frame>
+<Frame>
+  ![](/images/docs/prepaid-card-flows/Cortina V2 External Prepaid API - Pre-auth.png)
+</Frame>
 
 Where:
 
@@ -78,19 +82,19 @@ Where:
 12. The Nayax Server sends a /Settlement request (Final Amount) to the Payment Provider via the [Prepaid Settlement](/reference/cortina/cortina-prepaid/cortina-prepaid-settlement) endpoint.
 13. The Nayax Server returns a Settlement Command Response (Approved) to the Nayax Device, which then displays a "Thank you" message.
 
-### Exception Handling 
+### Exception Handling
 
 In the event of a failure at any critical junction (marked with a black circle in the diagram), the transaction is terminated. The following table outlines the recovery actions taken by the Nayax Engine:
 
 | Scenario | Diagram Step Reference | Technical Resolution |
-| :--- | :--- | :--- |
+| :-- | :-- | :-- |
 | **Start Session Failed** | 4.b | Occurs if the `/Start Session` request times out or returns an error. The session is aborted immediately. |
 | **Authorization Failed** | 5.b | Occurs if the provider denies the default credit amount. The transaction is terminated. |
 | **Selection Timeout** | 8.b | Occurs if the user fails to choose a valid product within the machine's allowed timeframe. |
 | **Vend Failed** | 10.b | If the machine fails to dispense (e.g., jam), the system triggers the [Prepaid Cancel](/reference/cortina/cortina-prepaid/cortina-prepaid-cancel) endpoint to release the Pre-Authorization and the transaction. |
 | **Settlement Failed** | 12.b | Occurs if the final settlement request fails or times out. This requires system logging for manual reconciliation. |
-| **Timeout / Void** | N/A | If no sale response is received within the timeout period, or a `992` response code is received, the [Prepaid Void](/reference/cortina/cortina-prepaid/cortina-prepaid-void) endpoint is used with the flag `isGatewayTimeout: True`. |
+| **Timeout / Void** | N/A | If no Sale Response is received within the timeout period, or a `992` response code is received- the [Prepaid Void](/reference/cortina/cortina-prepaid/cortina-prepaid-void) endpoint is triggered. |
 
 <Note>
-For a comprehensive list of financial response codes and authorization failures, refer to the [Prepaid Card Decline Reasons](/docs/cortina/prepaid-card/prepaid-card-decline-reasons) page. 
+  For a comprehensive list of financial response codes and authorization failures, refer to the [Prepaid Card Decline Reasons](/docs/cortina/prepaid-card/prepaid-card-decline-reasons) page.
 </Note>
