@@ -1,10 +1,10 @@
 ---
 title: "Void"
 metadata:
-  og:description: "Cortina DQR uses the Void command to notify the integrator in order to initiate the cancelation process with the Cortina payment provider whenever on."
+  og:description: "Cortina DQR uses the Void command to notify the integrator in order to initiate the cancellation process with the Cortina payment provider whenever on."
 ---
 
-Cortina DQR uses the `Void` command to notify the integrator in order to initiate the cancelation process with the Cortina payment provider whenever one of the below scenarios takes place:
+Cortina DQR uses the `Void` command to notify the integrator in order to initiate the cancellation process with the Cortina payment provider whenever one of the below scenarios takes place:
 
 1. Issues during vending process (after an "Approved" `Inquiry` response)- Cancel button being pressed by the consumer/ vend failure (issue with product dispensing/service providing) by the machine.
 2. No `Inquiry` Response until timeout.
@@ -189,7 +189,7 @@ The following table describes the parameters included in the request body:
 
         <ul>
           <li>Example: 1 cent = `0.01`.</li>
-          <li>**Note:** Currencies with no decimal places are still represented as a double (e.g., 234 JYN = `234.0`).</li>
+          <li>**Note:** Currencies with no decimal places are still represented as a double (e.g., 234 JPY = `234.0`).</li>
         </ul>
       </td>
     </tr>
