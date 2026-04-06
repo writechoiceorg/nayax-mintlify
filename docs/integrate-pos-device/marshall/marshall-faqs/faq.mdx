@@ -41,7 +41,7 @@ It can also cause packets to be sent/received improperly (leading to retries) an
 It can also cause the device to crash during powerup as during the powerup process there is a spike in energy consumption.
 In addition, if you are using Chipi-x, it also consumes energy, making the 12V even less likely to be sufficient for the device's valid operation.
 
-## VPOSM - Activating the Device
+## VPOSM - activating the device
 
 The first step is to scan the QR code displayed on the device screen with the phone’s camera.
 
@@ -55,7 +55,7 @@ Next, you will be redirected to a landing page where you will be required to ent
   **Note:** VPOSM 4S is not yet supported (only VPOSM5 as of now).
 </Note>
 
-## VPOSM (5, 4S): Getting the Device's Details (Serial Number, IP)
+## VPOSM (5, 4S): getting the device's details (Serial number, IP)
 
 You'd tap the top left corner of the screen 7 times, and a menu would appear:
 
@@ -68,7 +68,7 @@ In this example, the device has an eSIM (as in this example, it's VPOSM 4S, whic
 
 Should you like to return to the device's idle screen (to make transactions), click the top-left arrow, then select the Payment APP screen.
 
-## Changing Idle Screen/Customization of Screens/UI Control
+## Changing idle screen/Customization of screens/UI control
 
 At the moment, only the following modifications are available:
 
@@ -103,7 +103,7 @@ At the moment, only the following modifications are available:
 For VPOS Touch- During the transaction process, there is not much to do in terms of UI, and neither messages nor images/animations can be customized.
 Regarding VPOS Media- this is a new product that is at the final stages of development. There is a possibility of editing the screens and animations, but this section will be updated once it is released.
 
-## Firmware Update Process
+## Firmware update process
 
 **VPOST/ Onyx:**
 
@@ -114,7 +114,7 @@ For the MAIN update, you'd see "gloader" at the top of the screen, along with a 
 
 TBA
 
-## Device's Communication with Nayax's Servers- ETH/Fallback Mechanism
+## Device's communication with nayax's servers- ETH/Fallback mechanism
 
 We highly recommend that, even if customers plan to use the ETH connection, they leave the SIM card installed and the antenna connected as a fallback, as we've had many customers experience "hiccups"/issues with the ETH connection. In that case, the VPOST/Onyx would try to use the cellular one.
 
@@ -150,7 +150,7 @@ The electric components that we are using are working about ±7V.)
 Q: Are any HW handshaking signals (RTS/CTC) needed?
 A: No, only RxD/TxD/GnD is used.
 
-## Changing the product selection animation to a Smartfridge one
+## Changing the product selection animation to a smartfridge one
 
 You'd need to send the following file to the device via Machine File:
 

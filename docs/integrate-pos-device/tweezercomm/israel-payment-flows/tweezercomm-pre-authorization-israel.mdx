@@ -6,7 +6,7 @@ metadata:
 
 Tweezercomm's pre-authorization transactions are processed, authorized, and either settled or canceled based on the response from the payment server. This process also includes a resilience mechanism for handling errors.
 
-## Transaction Flow
+## Transaction flow
 
 To understand the pre-authorization transaction flow, consider the following sequence of events:
 
@@ -23,7 +23,7 @@ Here's a breakdown of each step:
 7. The payment server responds with a `Completion result`, which the Nayax Device sends back to the POS.
 8. At the end of the day, the POS sends a [`doPeriodic()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) request. The Nayax Device communicates with the payment server to perform the settlement of the day's transactions and sends a[`doPeriodic()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) result back to the POS.
 
-## See Also
+## See also
 
 <Columns cols={2}>
 <Card

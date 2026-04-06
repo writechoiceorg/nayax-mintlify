@@ -16,7 +16,7 @@ This page will guide you through implementing a multi-session payment in C SDK i
 
 See the section below for more details on each step.
 
-## Step 1: Include Libraries
+## Step 1: include libraries
 
 Start by including the necessary libraries for the SDK. See the code block below:
 
@@ -39,7 +39,7 @@ Start by including the necessary libraries for the SDK. See the code block below
 #include "drv_usart.h"
 ```
 
-## Step 2: Setup Macro and Global Variables
+## Step 2: setup macro and global variables
 
 The code below defines a macro for the module name used in logging/debugging and sets up the global variables that store configuration and session-related data.
 
@@ -66,11 +66,11 @@ Where:
 * `menu`: Stores menu-related settings.
 * `com_id`: Represents a communication ID.
 
-## Step 3: Setup Private Functions
+## Step 3: setup private functions
 
 Implement helper functions for debugging, event handling, and transaction processing. The following sections provide more details.
 
-### Debug Output Function
+### Debug output function
 
 This function determines the output stream for debug information.
 
@@ -89,7 +89,7 @@ Where:
 
 * `str`: String that contains the debug information.
 
-### CPU Timer Tick
+### CPU timer tick
 
 This function is called periodically (every 5-10ms) by the platform timer.
 
@@ -105,7 +105,7 @@ Where:
 
 * `p`: Pointer to optional parameter (unused in this function).
 
-### VMC Link Events Handler
+### VMC link events handler
 
 This function handles link events and logs relevant information.
 
@@ -146,7 +146,7 @@ Where:
 
 The function will always return the boolean value `__false`  as no success/failure is determined.
 
-### Multi-Session Vend Request Handler
+### Multi-Session vend request handler
 
 This function manages the session and its included items, then sends a vending request to the Nayax Device. See the code block below:
 
@@ -197,7 +197,7 @@ static void triggered_vend_request(void)
 It initializes `session_products` 0 and 1, each with a different product code and price. Each of those would be a separate session (transaction).
 This is, of course, a demo app, meaning you can (and should) manage your own products and prices to match your peripherals.
 
-### Multi-Session Vending Events Handler
+### Multi-Session vending events handler
 
 This function handles vend events for multi-session and logs relevant information.
 
@@ -308,7 +308,7 @@ This function will return a Boolean value:
 * `__false` in most cases.
 * `__true` for `vmc_vend_event_on_vend_approved` to indicate a successful vend approval.
 
-## Step 4: Setup Initialization Functions
+## Step 4: setup initialization functions
 
 After adding the helper functions, you need to implement the functions to initialize the VMC configuration and the Menu Handler. See the sections below for more details.
 
@@ -355,7 +355,7 @@ static void vmc_init(void)
 
 Since this is a multi-session payment ` config.multi_session_support` is set to`__true`.
 
-### Initialize Menu
+### Initialize menu
 
 Before initializing the menu, add the necessary handler functions. See the code below:
 
@@ -462,7 +462,7 @@ static void menu_init(void)
 }
 ```
 
-## Step 5: Implement the Main Function
+## Step 5: implement the main function
 
 Once all other parts are implemented, you can add the program's main entry point, which initializes the link to the peripheral and the menu, then starts an infinite loop that runs the menu. See the code below:
 

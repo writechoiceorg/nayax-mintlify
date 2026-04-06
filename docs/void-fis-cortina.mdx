@@ -4,9 +4,9 @@ metadata:
   og:description: "The Void flow is executed when a transaction needs to be canceled after the initial payment has been authorized but before the final settlement."
 ---
 
-The **Void** flow is executed when a transaction needs to be canceled after the initial payment has been authorized but before the final settlement and delivery. It ensures that both the financial hold is released and the registered sale is legally unregistered (or voided) with the tax authority.
+Run the **Void** flow to cancel a transaction after authorization but before final settlement and delivery. It releases the financial hold and unregisters (voids) the sale with the tax authority.
 
-## Void Flow
+## Void flow
 
 This diagram illustrates the end-to-end flow of a Void request:
 
@@ -24,4 +24,4 @@ Where:
 8. Fiscal Integrator forwards the Approved or Declined status back to the Nayax Engine.
 9. Nayax Engine sends a Cancel Report Success confirmation to the Nayax Device.
 
-In summary, the **Void** flow is the necessary mechanism to fully reverse a transaction across both the financial and tax authority systems.
+In summary, use the **Void** flow to fully reverse a transaction across both the financial and tax authority systems.

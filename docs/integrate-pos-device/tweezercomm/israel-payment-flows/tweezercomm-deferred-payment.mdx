@@ -11,7 +11,7 @@ The Deferred transaction flow processes a payment request in two distinct phases
 
 This two-step approach is particularly useful for transactions where the final amount or details may change after the initial card interaction.
 
-## Transaction Flow
+## Transaction flow
 
 To understand the Deferred transaction flow, consider the following sequence of events:
 
@@ -38,7 +38,7 @@ Here's a breakdown of each step:
 10. The transaction results are returned to the client application.
 11. The flow concludes with a final [`doPeriodic()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) call from the client application, to settle all authorized transactions.
 
-## See Also
+## See also
 
 <Columns cols={2}>
 <Card

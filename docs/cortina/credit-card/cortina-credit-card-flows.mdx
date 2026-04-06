@@ -15,7 +15,7 @@ Both flows involve interactions between components, including the Nayax Device, 
 
 ## Pre-selection
 
-The Pre-selection flow simplifies the payment process by merging the steps of product/service selection and authorization into a single transaction. This flow is typically used for low-value or quick transactions, where the customer’s selection and payment authorization are handled in a single step.
+The Pre-selection flow simplifies the payment process by merging the steps of product/service selection and authorization into a single transaction. This flow is typically used for low-value or quick transactions, where the customer’s selection and payment authorization happen in a single step.
 
 See the diagram below:
 
@@ -38,7 +38,7 @@ The steps in this process are as follows:
 
 This response is typically always approved in this flow, as the authorization has already been granted.
 
-### Exception Handling 
+### Exception handling 
 
 In the event of a failure at any critical junction (marked with a black circle in the diagram), the transaction is terminated. Since the **Sale** occurs before the product is dispensed in this flow, specific Void logic is required to ensure the cardholder is not charged for failed transactions.
 
@@ -56,7 +56,7 @@ For a comprehensive list of financial response codes and authorization failures,
 
 ## Pre-Authorization
 
-The Pre-authorization flow is used for transactions that require a two-step process. First, a session is initiated, followed by an authorization check. This flow ensures the transaction is valid and the customer has sufficient funds on the prepaid card before settlement.
+Use the Pre-authorization flow for transactions that require a two-step process. First, a session is initiated, followed by an authorization check. This flow ensures the transaction is valid and the customer has sufficient funds on the prepaid card before settlement.
 
 See the diagram below:
 
@@ -78,7 +78,7 @@ Where:
 12. The Nayax Server sends a /Settlement request (Final Amount) to the Payment Provider via the [Credit Card Settlement](/reference/cortina/cortina-credit-card/cortina-credit-card-settlement) endpoint.
 13. The Nayax Server returns a Settlement Command Response (Approved) to the Nayax Device, which then displays a "Thank you" message.
 
-### Exception Handling 
+### Exception handling 
 
 In the event of a failure at any critical junction (marked with a black circle in the diagram), the transaction is terminated. Because a hold is placed on the cardholder's funds during the authorization step, specific cleanup actions (Cancellations) are required if the vend is not completed.
 

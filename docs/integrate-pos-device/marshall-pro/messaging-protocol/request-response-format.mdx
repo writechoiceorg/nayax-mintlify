@@ -6,7 +6,7 @@ metadata:
 
 The Marshall Pro protocol uses a unified JSON structure for every message. This consistency allows you to build a single "wrapper" in your code to handle all terminal communications.
 
-## Request Object
+## Request object
 
 Every command sent from your system to the VPOS must follow this structure:
 
@@ -16,7 +16,7 @@ Every command sent from your system to the VPOS must follow this structure:
 | requestId | `string` | Yes | A unique ID used to track the response. |
 | data | `object` | No | A container for the specific parameters of the command. |
 
-### Request Example
+### Request example
 
 ```json
 {
@@ -29,7 +29,7 @@ Every command sent from your system to the VPOS must follow this structure:
 }
 ```
 
-## Response Object
+## Response object
 The terminal's response always mirrors your `requestId` so your system knows exactly which command is being answered.
 
 Success Response
@@ -45,7 +45,7 @@ If the command is processed successfully, the terminal returns the requested inf
 }
 ```
 
-## Error Response
+## Error response
 If an issue occurs, the response will include an error code and a descriptive message.
 
 ```json

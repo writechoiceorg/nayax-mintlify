@@ -12,7 +12,7 @@ You use this to verify the notification genuinely came from Nayax and was not ta
   The **Hmac** field is located in the notification body, not in an HTTP header.
 </Note>
 
-## How It Works
+## How it works
 To validate an incoming notification, follow these four steps to recreate the signature on your server:
 
 <Steps>
@@ -47,12 +47,12 @@ To validate an incoming notification, follow these four steps to recreate the si
   </Step>
 </Steps>
 
-## Signing String Examples
+## Signing string examples
 Use the following scenarios to verify your string concatenation logic.
 All examples use this test key:
 `a3f7c2e9d1b8456f0e3a7c9b2d4f6e8a1c3d5e7f9b0a2c4d6e8f0b1c3d5e7f90`
 
-### Example 1  Sale Notification (`NayaxTransactionId` present)
+### Example 1  sale notification (`NayaxTransactionId` present)
 Use the following table to verify how raw notification values are transformed into the signing string:
 
 | Field | Value in notification | Value used in signing string |
@@ -73,7 +73,7 @@ Use the following table to verify how raw notification values are transformed in
 uET4OAwxvSN6lwVEwzQ1qRWbMkxo4KR9JbUIcG0qqo0=
 ```
 
-### Example 2  Auth Request (`NayaxTransactionId` absent)
+### Example 2  auth request (`NayaxTransactionId` absent)
 This scenario demonstrates how to handle missing fields. Note that the separator is still required even if the first field is empty.
 
 | Field | Value in notification | Value used in signing string |
@@ -97,7 +97,7 @@ The algorithm expects exactly 5 positions separated by 4 colons.
 ```
 D4Ni+IqJev32uHlNPzz6oW8AFiGyZq7kQ8xh3QyLy8g=
 ```
-## Validating on Your End
+## Validating on your end
 1. Receive the POST notification from Nayax.
 2. Extract these 5 fields from the notification body:
    `NayaxTransactionId`, `MerchantRequestId`, `MachineId`, `RequestType`, `IsApproved`.
@@ -107,7 +107,7 @@ D4Ni+IqJev32uHlNPzz6oW8AFiGyZq7kQ8xh3QyLy8g=
 6. Base64-encode the 32-byte output.
 7. Compare your result to the `Hmac` field in the notification.
 
-### Validation Outcomes
+### Validation outcomes
 Once you compare your generated HMAC with the one provided in the notification, follow these actions:
 
 | Result | Action |
@@ -124,7 +124,7 @@ Once you compare your generated HMAC with the one provided in the notification, 
 If your HMAC implementation is incorrect during development, retrying will not help. Fix the implementation and test using the examples on this page.
 </Note>
 
-## One-Time Setup
+## One-time setup
 To enable this feature, complete the following administrative and security tasks:
 * **Generate Key:** The integrator generates a secret key of exactly 64 hex characters.
 * **Share Key:** The key is shared securely with the Nayax Architect during onboarding.

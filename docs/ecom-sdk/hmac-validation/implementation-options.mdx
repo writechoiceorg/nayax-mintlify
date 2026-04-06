@@ -13,7 +13,7 @@ C# developers can use the `SDK.Api.Contracts` library, which includes built-in H
 1. **Install the library**: Run `Install-Package SDK.Api.Contracts`.
 2. **Use the HMAC Service**: Utilize the `HmacService` class, which handles all HMAC calculation and validation logic automatically.
 
-## Custom Implementation (Non-C# Developers)
+## Custom implementation (Non-C# developers)
 
 If you are not using C#, you should replicate the logic found in the Nayax SDK using these technical specifications:
 
@@ -30,7 +30,7 @@ If you are not using C#, you should replicate the logic found in the Nayax SDK u
 | **Hash output** | Base64. |
 | **Exclusions** | Do **not** include `RequestDate`, `Hmac` itself, nested objects, or arrays in the hash. |
 
-## Security Best Practices
+## Security best practices
 To maintain a high level of security and prevent unauthorized access to your transaction data, adhere to the following guidelines:
 
 | DO | DON'T |

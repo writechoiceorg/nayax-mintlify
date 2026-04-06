@@ -6,7 +6,7 @@ metadata:
 
 Once you have completed the Marshall installation process, follow the steps below to configure the Nayax device to support the Marshall functionality.
 
-## Configure the Machine Model at the Machine Level
+## Configure the machine model at the machine level
 
 This configuration enables your system to interact appropriately with the selected devices, ensuring efficient, optimal operation.
 Note that during the integration, your Nayax Integrator would be the one to set up virtual machines for you, but in case you'd like to learn how to do that yourself, below are the necessary steps to configure the machine model:
@@ -58,7 +58,7 @@ For PreAuthorization:
 
 <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image3.png" /></Frame>
 
-## Configure Session Timeout Parameter
+## Configure session timeout parameter
 
 The **Multi-Session Mode** operates only in pre-selection mode but functions similarly to pre-authorization. The transaction flow is akin to a single vending process, with the addition of a **Close Session** command.
 
@@ -83,7 +83,7 @@ Once the session timeout reaches the defined limit, the session expires. In such
 Once a session has timed out, the device would settle the transaction on its own and send a "Status" command to the peripheral in order to notify it about the settlement taking place. This would let the peripheral know that it no longer needs to settle said transaction (as it has already been settled), and should he try to settle the already-settled transaction he would get "settlement error" (as the device couldn't find said session to settle it).
 </Note>
 
-## Configure Keep Alive Parameter
+## Configure keep alive parameter
 
 The Keep Alive signal ensures consistent communication between the Nayax device and the machine by sending a signal every second. Adjust the parameters to enhance the system's tolerance as follows:
 
@@ -101,7 +101,7 @@ It is highly recommended to keep it set to 1, and at most not have it above the 
 Read more on that in the [Stability/ starvation issues](/docs/integrate-pos-device/marshall/additional-resources/stablity-issues#/) section.
 </Note>
 
-## Configure Cashless Address
+## Configure cashless address
 
 The Cashless Address configuration ensures seamless communication between the machine and the Nayax device for cashless transactions. Follow these steps to set the correct address:
 
@@ -111,11 +111,11 @@ The Cashless Address configuration ensures seamless communication between the ma
 
    <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image6.png" /></Frame>
 
-## Configure Pre-Selection and Pre-Authorization
+## Configure pre-Selection and pre-Authorization
 
 Pre-selection and Pre-Authorization settings allow flexible transaction flows tailored to different vending scenarios. Pre-selection enables multi-session operations, while Pre-Authorization focuses on card-based transactions with a defined credit limit. Configure these parameters as needed for your machine’s functionality.
 
-### Pre-Selection - Multi-Sessions
+### Pre-Selection - multi-Sessions
 
 Pre-selection supports Multi-Session operations, where one device can manage multiple transactions in parallel, each comprising two parts: product selection and authorization, and settlement. To configure this:
 
@@ -138,7 +138,7 @@ When the transaction flow starts with the machine selection (PreSelection), then
 
    This ensures there are no time restrictions on product selection during payment.
 
-### Pre-Selection – Always Idle
+### Pre-Selection – always idle
 
 Pre-selection in Always Idle mode ensures the machine remains ready for consumers. Use the following steps to configure:
 
@@ -206,13 +206,13 @@ The Payment Flags option needs to be configured for Pre-authorization mode.
 
     <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image16.png" /></Frame>
 
-## Configure LCD Parameters
+## Configure LCD parameters
 
 To optimize the user experience, configure the LCD messages displayed during idle or disabled states. This includes customizing or disabling the **"Cash Only"** or **"Welcome"** messages to suit your machine's requirements.
 
 <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image17.png" /></Frame>
 
-### Cash Only Message for Amit and VPOS Devices
+### Cash only message for amit and VPOS devices
 
 By default, the VPOS device displays a **"Cash Only"** message when it is disabled or in idle mode. This occurs when the Transaction Start Method is set to start with the machine. For Marshall devices, this is the normal state. However, to ensure better communication, the "Cash Only" message should be customized.
 
@@ -223,7 +223,7 @@ Follow these steps to update the message:
 3. Click the **LCD** section.
 4. Enter an appropriate **Cash Only Message** that suits your needs.
 
-### Cash Only/Welcome Message for Touch Devices
+### Cash only/Welcome message for Touch devices
 
 When the Nayax Reader is disabled, the idle screen features animations instructing the consumer to choose a product or service first. Additionally, a "Welcome" message can be customized or disabled as needed.
 
@@ -234,7 +234,7 @@ Follow these steps to update the message:
 3. To customize the Welcome message, click on the **LCD section** and enter an appropriate message (for example, "Swipe card" to start the transaction).
 4. Click **Save** to store the customized Welcome message.
 
-## Define the Prepaid Card(s) in the System
+## Define the prepaid card(s) in the system
 
 Define the Prepaid Test Card(s) sent to the customer under the **Operator/Machine** so the customer can immediately begin their proprietary integration tests.
 

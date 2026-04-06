@@ -6,7 +6,7 @@ metadata:
 
 The front-end SDK enables you to integrate a payment page into your applications without directly handling complex payment processing or security. It simplifies the front-end payment experience by providing a few key methods for securely displaying and interacting with the payment page. At the same time, Nayax manages the complex interactions with the billing provider in the background.
 
-## Payment Flow
+## Payment flow
 
 The diagram below describes the typical payment flow for a front-end integration.
 
@@ -83,7 +83,7 @@ The SDK fires a [callback](/docs/ecom-sdk/front-end-integration/handling-payment
 
 Once the transaction is processed, Nayax automatically sends the result to your back-end as a [webhook notification](/docs/ecom-sdk/back-end-integration/webhook-notifications), a JSON payload containing the transaction status, card details, and your original `merchantRequestId`. Validate the [`Hmac`](/docs/ecom-sdk/hmac-validation/index) field before processing, then return `HTTP 200` to confirm receipt. This is your authoritative record of the transaction.
 
-## Available Guides
+## Available guides
 
 <Columns cols={3}>
   <Card icon="link" title="Create Payments" href="/docs/ecom-sdk/front-end-integration/ecom-sdk-create-payments" />

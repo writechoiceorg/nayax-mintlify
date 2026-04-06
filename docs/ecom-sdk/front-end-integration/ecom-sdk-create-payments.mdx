@@ -12,7 +12,7 @@ The `startPayment` method is the primary entry point for initiating a payment fl
 
 This allows you to focus on providing the `PaymentData` and handling the payment results, while the SDK takes care of the communication and security protocols.
 
-## Payment Data
+## Payment data
 
 The `startPayment` method requires a `PaymentData` object that encapsulates all the necessary details for the transaction.
 
@@ -126,7 +126,7 @@ Key parameters include:
 - `merchantRequestId` is your own reference ID for the transaction. Nayax returns it in webhook notifications, so use a value that lets you match the webhook back to the correct order or record in your system.
 </Warning>
 
-## Initiate a Sale Payment (Android)
+## Initiate a sale payment (Android)
 
 The following example shows how to construct a `PaymentData` object for a standard sale transaction and pass it to `startPayment()`:
 
@@ -149,7 +149,7 @@ NayaxEcomSDK.startPayment(
 )
 ```
 
-## See Also
+## See also
 
 <Columns cols={2}>
   <Card icon="link" title="Handle Payment Results" href="/docs/ecom-sdk/front-end-integration/handling-payment-results" />

@@ -11,7 +11,7 @@ Vending events are a crucial aspect of the Marshall SDK, enabling your applicati
 
 The sections below provide an overview of these events and their respective callback methods.
 
-## Vending Callbacks Interface
+## Vending callbacks interface
 
 <Warning>
 **Java and C# SDK's Only**
@@ -32,7 +32,7 @@ public abstract static interface vend_callbacks_t
 
 Implementing this interface allows your application to manage the lifecycle of a vending session, from initiation to settlement, and handle various statuses and commands received from Nayax's devices. Below is a list of methods available when using the `vend_callbacks_t` interface:
 
-### Interface Methods
+### Interface methods
 
 The table below provides a more detailed description of the Methods.
 
@@ -50,7 +50,7 @@ The table below provides a more detailed description of the Methods.
 | `onRemoteVend(int avail_funds, int product_code, int options)` | Triggered when the device receives a remote vend command, providing the available funds, product code, and options for dispensing the product.                                                                       |
 | `onReceipt(int ereceipt_type, String data)`                    | Called when a QR code receipt is generated, passing the QR code data to the peripheral to display for the consumer. (See Marshall Protocol section 8.12)                                                             |
 
-## Vending Events Enumeration
+## Vending events enumeration
 
 <Warning>
 **C SDK Only**
@@ -64,7 +64,7 @@ The `vmc_vend_event_e` enumeration is designed to handle events related to vendi
 Enum vmc_vend_event_e
 ```
 
-### Enumeration Methods
+### Enumeration methods
 
 Below is a list of methods available when using the `vend_callbacks_t` interface:
 

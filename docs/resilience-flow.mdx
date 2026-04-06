@@ -4,15 +4,15 @@ metadata:
   og:description: "TweezerComm has a resilience mechanism for handling transaction completion or cancellation in case of errors or failures. Whenever an error occurs."
 ---
 
-TweezerComm has a resilience mechanism for handling transaction completion or cancellation in case of errors or failures. Whenever an error occurs, such as a `statusCode != 0`, TweezerComm will automatically fall back to this mechanism, ensuring that transactions are completed successfully or through retries and verification steps to prevent inconsistencies.
+TweezerComm has a resilience mechanism for handling transaction completion or cancellation in case of errors or failures. Whenever an error occurs, such as a `statusCode != 0`, TweezerComm automatically falls back to this mechanism. It ensures that transactions complete successfully through retries and verification steps, preventing inconsistencies.
 
-## How it Works
+## How it works
 
 The flow chart describes the flow of the mechanism.
 
 <Frame>![](/images/docs/resilience-flow/image1.png)</Frame>
 
-When a transaction requires completion (settlement) or cancellation, and the system verifies whether a response has been received, the flow can vary depending on the reaction.
+When a transaction requires completion (settlement) or cancellation, and the system checks whether it received a response, the flow can vary depending on the reaction.
 
 * If a response was received, the system proceeds to check the `StatusCode`. If it is equal to `0`, it will finish the completion process, else it will trigger the retry mechanism.
 * If no response is received, the system retrieves transaction details using the `getTransactionByVuid()` method.
@@ -21,7 +21,7 @@ When a transaction requires completion (settlement) or cancellation, and the sys
 
 The process continuously loops back to the start of the Completion/Cancel flow, ensuring that it continues until a definitive success or failure condition is reached.
 
-## See Also
+## See also
 
 <Columns cols={3}>
 <Card

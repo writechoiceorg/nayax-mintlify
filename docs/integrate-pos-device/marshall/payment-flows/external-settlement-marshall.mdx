@@ -14,7 +14,7 @@ While the Marshall peripheral and Nayax device manage the initial interaction wi
 For this flow to function, the [ExternalSettlement](/reference/spark/transactions/externalsettlement) setting must be enabled by Nayax.
 </Note>
 
-## Configuration & Device Behavior
+## Configuration & device behavior
 
 Once enabled, the Nayax Engine changes how the physical device handles transactions:
 
@@ -40,14 +40,14 @@ The following table has the technical requirements based on the feature:
 External Settlement supports Incremental Authorization. Ensure your logic adheres to the Maximum Default Credit limits to avoid settlement failure. More on this in the [Incremental Authorization documentation](/docs/integrate-pos-device/marshall/payment-flows/sub-flows-features#incremental-authorization).
 </Note>
 
-## Managing Unsettled Transactions
+## Managing unsettled transactions
 
 When no product or service is provided, proactive management of the transaction is required to maintain a good user experience.
 
 * **External Cancel:** If it is known that no settlement will occur, you must send an **External Cancel** immediately.
 * **Consumer Impact:** If a transaction remains authorized without being canceled or settled, the consumer’s funds will stay captured on their payment method, leading to potential disputes.
 
-### External Settlement Flow
+### External settlement flow
 
 #### Initiation of transaction
 

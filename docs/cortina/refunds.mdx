@@ -6,7 +6,7 @@ metadata:
 
 The Refund feature allows merchants to return funds to customers for eligible transactions directly through the system. It supports both full and partial refunds, helping to resolve disputes, handle cancellations, or correct errors efficiently.
 
-Refunds are triggered from either Nayax Core or Lynx API and are done as MOTO transactions (PAN and Expiry date only) with a negative amount. The refund request is a standalone action that includes details of the original transaction.
+You trigger refunds from either Nayax Core or Lynx API. They process as MOTO transactions (PAN and Expiry date only) with a negative amount. The refund request is a standalone action that includes details of the original transaction.
 
 Refunds are available for all Cortina integration types.
 
@@ -16,7 +16,7 @@ Refunds are available for all Cortina integration types.
 Refunds require additional configuration on the Nayax side. If you wish to support them, please contact your assigned Nayax integration engineer.
 </Note>
 
-## How to Implement
+## How to implement
 
 A refund can be issued up to 180 days from the original transaction date using a [Cortina Refund request](/reference/cortina/cortina-credit-card/cortina-credit-card-refund) for the specific integration type used.
 

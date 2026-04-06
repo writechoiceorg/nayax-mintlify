@@ -4,7 +4,7 @@ metadata:
   og:description: "SMC (Self-Managed Cards) is a Spark feature that enables integrators to utilize closed-loop cards, such as RFID tags, company-issued badges."
 ---
 
-SMC (Self-Managed Cards) is a Spark feature that enables integrators to utilize closed-loop cards, such as RFID tags, company-issued badges, or loyalty cards, within Spark's Remote/Device start flows and Device Stop flow. Rather than relying on Nayax or the acquiring bank to authorize the card, your system is responsible for validating and authorizing it. It is ideal when:
+SMC (Self-Managed Cards) is a Spark feature that enables integrators to use closed-loop cards, such as RFID tags, company-issued badges, or loyalty cards, within Spark's Remote/Device start flows and Device Stop flow. Rather than relying on Nayax or the acquiring bank to authorize the card, your system is responsible for validating and authorizing it. It is ideal when:
 
 * You want to offer payment-free access (e.g., for employees or VIPs)
 * You’re using a loyalty card or RFID solution already in place
@@ -20,7 +20,7 @@ To support this feature, you must use a dedicated “Payment Method”. Machines
 Please ask your Nayax Integration Engineer for more information and configuration assistance.
 </Note>
 
-## How SMC Works
+## How SMC works
 
 When SMC is enabled:
 
@@ -40,7 +40,7 @@ The Payment card's Unique ID (Card UID) is a critical identifier for Spark self-
 If you don’t validate the card on your side, unauthorized users could start sessions. Always compare the `UID` data in the callback.
 </Warning>
 
-## Use Case Example
+## Use case example
 
 A typical SMC transaction would look like the following:
 
@@ -58,7 +58,7 @@ A typical SMC transaction would look like the following:
 `/CancelTransaction` is mandatory and will indicate an invalid card was presented or if the transaction is completed with no charge (no service provided / settlement=0).
 </Warning>
 
-## See Also
+## See also
 
 <Columns cols={2}>
 <Card

@@ -12,7 +12,7 @@ This page covers the data structures used in the Marshall SDK to handle vending 
 
 These structures define the classes and fields necessary to manage product details, session data, and the overall vending session.
 
-## Product Class
+## Product class
 
 The `vend_item_t` class represents an individual product request within a vending session. This class includes the product code, price, quantity, and unit of measure. The following code block lists all class parameters:
 
@@ -44,7 +44,7 @@ struct vend_item_t
 ```
 </CodeGroup>
 
-### Product Parameters
+### Product parameters
 
 The table below provides a more detailed description of the parameters.
 
@@ -55,7 +55,7 @@ The table below provides a more detailed description of the parameters.
 | `qty`     | Int             | The quantity of the product being vended.                                                           |
 | `unit`    | Int             | Unit of measure for the product, with `0` indicating a discrete unit (e.g., a single drink bottle). |
 
-## Vending Session Data Class
+## Vending session data class
 
 The `vend_session_data_t`class holds detailed information about a vending session, including transaction details and card information. The following code block lists all class parameters:
 
@@ -121,7 +121,7 @@ struct vmc_vend_transfer_data_t
 ```
 </CodeGroup>
 
-### Class Parameters
+### Class parameters
 
 The table below provides a more detailed description of the parameters.
 
@@ -139,7 +139,7 @@ The table below provides a more detailed description of the parameters.
 | `excel_data`             | String          | Additional data in Excel format.                  |
 | `cc_last_4_digits`       | String          | The last four digits of the credit card.          |
 
-## Vending Session Handle Class
+## Vending session handle class
 
 The `vend_session_t`class represents a vending session, encapsulating session-specific data, product lists, and session status. The following code block lists all class parameters:
 
@@ -173,7 +173,7 @@ struct vend_session_t
 	int total_products;
 ```
 
-### Vending Session Class Parameters
+### Vending session class parameters
 
 The table below provides a more detailed description of the parameters.
 

@@ -7,7 +7,7 @@ metadata:
 
 The following sequence illustrates a typical Pay-at-the-Pump workflow, combining payment detection, user interaction, and final settlement.
 
-### Step 1: Enable the Reader
+### Step 1: enable the reader
 The system starts by activating the terminal to wait for a card or mobile wallet.
 
 ```json
@@ -22,7 +22,7 @@ The system starts by activating the terminal to wait for a card or mobile wallet
 }
 ```
 
-### Step 2: Confirm Payment Location
+### Step 2: confirm payment location
 Once a card is detected, ask the user if they are paying here or inside.
 
 ```json
@@ -39,7 +39,7 @@ Once a card is detected, ask the user if they are paying here or inside.
 }
 ```
 
-### Step 3: Fuel Type Selection
+### Step 3: fuel type selection
 Prompt the user to select their desired fuel grade.
 
 ```json
@@ -58,7 +58,7 @@ Prompt the user to select their desired fuel grade.
 }
 ```
 
-### Step 4: Authorize Max Amount
+### Step 4: authorize max amount
 Call the authorization command to place a hold on the funds based on the initial cardDetect amount.
 
 ```json
@@ -68,7 +68,7 @@ Call the authorization command to place a hold on the funds based on the initial
 }
 ```
 
-### Step 5: Show Fueling Screen
+### Step 5: show fueling screen
 Update the terminal display to show a looping animation while the pump is active.
 
 ```json
@@ -84,7 +84,7 @@ Update the terminal display to show a looping animation while the pump is active
 }
 ```
 
-### Step 6: Settle Actual Amount
+### Step 6: settle actual amount
 When the nozzle is holstered, call settle with the final transaction amount.
 
 ```json
@@ -98,7 +98,7 @@ When the nozzle is holstered, call settle with the final transaction amount.
 }
 ```
 
-### Step 7: Print Receipt
+### Step 7: print receipt
 Finalize the process by providing a physical or digital record of the transaction.
 
 ```json

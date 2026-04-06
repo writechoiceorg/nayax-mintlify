@@ -4,7 +4,7 @@ metadata:
   og:description: "## Proprietary Cards Supported Nayax supports both swipe (Magstripe) and RFID cards. The RFID supported are working in frequency 13.56 MHz: Nayax."
 ---
 
-## Proprietary Cards Supported
+## Proprietary cards supported
 
 Nayax supports both swipe (Magstripe) and RFID cards.
 
@@ -23,13 +23,13 @@ Go to "Device Manager" -> "Ports":
 
 <Frame><img src="/images/docs/faq-general/image1.png" /></Frame>
 
-## Marshall Over ETH: Using the Same Cable for Both Marshall Communication As Well As the Device's with Nayax's Servers
+## Marshall over ETH: using the same cable for both Marshall communication as well as the device's with nayax's servers
 
 The supported configuration is to communicate via Ethernet with both the (Marshall) peripheral and Nayax's servers.\
 It’s the router’s role to provide access to the external world in parallel to the peripheral.\
 Having the device communicate with the peripheral via Ethernet and with the servers via eSIM is not currently supported, as this setup is technically less natural for Android.
 
-## Enabling Alerts
+## Enabling alerts
 
 To be able to see the alerts sent from the SDK in the Nayax Core, you should have the following configuration (even if your machine is not an EV charger)
 
@@ -56,7 +56,7 @@ vmc_general_alert((short)2, (char*)&alert_str, strlen((char*)&alert_str));
 ```
 </CodeGroup>
 
-## Product Map
+## Product map
 
 This feature allows you to manage products via Nayax Core for your peripherals. This feature is irrelevant for Marshall, as the Product map is not used there. The only relevance is that, if you look in Last Sales/Dynamic Transaction Monitor, you'd see the product name in the transaction details, which appears in the product map for the product code the peripheral has sent.
 
@@ -123,7 +123,7 @@ Once you click on the desired log (on a specific line in the table) and on the "
   **Important note:** The device must be online for the Grace to be collected.
 </Note>
 
-## Last Alerts retrieval
+## Last alerts retrieval
 
 Last Alerts is a log that appears in Nayax Core under your relevant device's virtual machine. The log provides information on alerts sent between the device and our servers. To retrieve it, you should go to the relevant virtual machine, and then click on Info-> Last Alerts:
 
