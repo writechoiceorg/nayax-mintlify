@@ -1,10 +1,10 @@
 ---
 title: "Get Machine Widget Data (API)"
 metadata:
-  og:description: "The Lynx Widget API provides access to widget data. In this article, you will learn how to retrieve widget information using API calls, from listing."
+  og:description: "The Lynx Widget API provides access to widget data. In this article, you will learn how to retrieve widget information using API calls, from listing available widgets to obtaining data from a specific widget."
 ---
 
-The Lynx Widget API provides access to widget data. In this article, you will learn how to retrieve widget information using API calls, from listing all available widgets to obtaining data from a specific widget.
+The Widgets Dashboard APIs allow you to discover which widgets are available for a given screen and then fetch the data for each individual widget. The APIs are exposed by the Lynx Operational API and proxy requests to the internal Cortex Reports service.
 
 ## Prerequisites
 
@@ -14,18 +14,421 @@ Before making calls to the Widget API, you need to have:
 * A valid API token (See [Security & Token](/docs/manage-data-operations/lynx-api/security))
 * [Machines](/reference/lynx/machines/get-machine-basic-info) or [Operator](/docs/manage-data-operations/lynx-api/operator/index) IDs
 
+## Base URL
+
+```
+https://<host>/v1/dashboard
+```
+
+<Note>
+  If the server is configured with `UseBasePath: true`, all routes are prefixed with `/operational`:
+
+  ```
+  https://<host>/operational/v1/dashboard
+  ```
+</Note>
+
+## Authentication
+
+All endpoints require authentication via JWT bearer token. Include the token in every request:
+
+```
+Authorization: Bearer <token>
+```
+
+See [Security & Token](/docs/manage-data-operations/lynx-api/security) for details on obtaining a token.
+
 ## Available Endpoints
 
-The Widget API offers two main endpoints:
-
-<Columns cols={2}>
-  <Card icon="link" title="Retrieve Widget Data" href="/reference/lynx/report/get-widget-data">
-    This endpoint returns the actual data from a specific widget for a machine or operator.
+<Columns cols={3}>
+  <Card icon="link" title="List Widgets for a Screen" href="/reference/lynx/report/get-dashboard-widgets">
+    Returns all widgets configured for a given screen type, including their IDs, names, and configurations.
   </Card>
 
-  <Card icon="link" title="Get Available Widgets" href="/reference/lynx/report/get-dashboard-widgets">
-    This endpoint returns a complete list of all available widgets, including their IDs, names, descriptions, supported filters, and configurations.
+  <Card icon="link" title="Retrieve Widget Data (POST)" href="/reference/lynx/report/get-widget-data">
+    Fetches data for a specific widget with full filter support (date range, machine ID, etc.). **Recommended for most use cases.**
+  </Card>
+
+  <Card icon="link" title="Retrieve Widget Data (GET)">
+    Simple variant for fetching widget data via query parameters. No filter support - use the POST variant when filters are needed.
   </Card>
 </Columns>
 
-<br />
+---
+
+## Endpoint Reference
+
+### List Widgets for a Screen
+
+Returns the set of widgets configured for a given screen type.
+
+```
+GET /v1/dashboard/widgets?screenTypeId={screenTypeId}
+```
+
+**Query Parameters**
+
+| Parameter      | Type  | Required | Description                                                                                   |
+|----------------|-------|----------|-----------------------------------------------------------------------------------------------|
+| `screenTypeId` | `int` | Yes      | Numeric ID identifying the dashboard screen type. See [ScreenTypeId Values](#screentypeid-values). |
+
+**Response** — `200 OK`
+
+Returns a JSON array of widget descriptors:
+
+```json
+[
+  {
+    "widgetTypeId": 12,
+    "widgetName": "Sales Summary",
+    "widgetConfig": {},
+    "categories": [],
+    "groups": []
+  }
+]
+```
+
+**Response Fields**
+
+| Field          | Type     | Description                                    |
+|----------------|----------|------------------------------------------------|
+| `widgetTypeId` | `int64`  | Unique identifier for the widget type          |
+| `widgetName`   | `string` | Display name of the widget                     |
+| `widgetConfig` | `object` | Widget rendering configuration (schema varies) |
+| `categories`   | `array`  | Optional category associations (nullable items) |
+| `groups`       | `array`  | Optional group associations (nullable items)   |
+
+```bash
+curl -X GET "https://<host>/operational/v1/dashboard/widgets?screenTypeId=1" \
+  -H "Authorization: Bearer <token>"
+```
+
+---
+
+### Get Widget Data (POST) - Recommended
+
+Fetches data for a specific widget with optional filters. Use this variant when you need to pass filters such as date range or machine ID.
+
+```
+POST /v1/dashboard/get-widget-data
+Content-Type: application/json
+```
+
+**Request Body**
+
+| Field          | Type                | Required | Description                                                                                                             |
+|----------------|---------------------|----------|-------------------------------------------------------------------------------------------------------------------------|
+| `screenTypeId` | `int32`             | Yes      | Screen type the widget belongs to. See [ScreenTypeId Values](#screentypeid-values).                                     |
+| `widgetTypeId` | `int64`             | Yes      | ID of the widget to load. Obtain from `GET /v1/dashboard/widgets`.                                                      |
+| `entityId`     | `int64` (nullable)  | No       | Scopes data to a specific entity (operator ID or machine ID depending on widget). Omit or pass `null` for operator-wide data. |
+| `filters`      | `WidgetFilterDto[]` | No       | List of dynamic filters. Multiple filters can be combined in a single request.                                          |
+
+**`WidgetFilterDto` Fields**
+
+| Field   | Type     | Description                                                                    |
+|---------|----------|--------------------------------------------------------------------------------|
+| `name`  | `string` | Filter parameter name. Widget-specific - see [Filter Names](#filter-names).    |
+| `value` | `string` | Filter value, always passed as a string regardless of type                     |
+| `type`  | `string` | Type hint for the value. See [Filter Types](#filter-types).                    |
+
+**Response** — `200 OK` — `WidgetDataResponseDto`
+
+```json
+{
+  "widgetDetails": {
+    "widgetTypeId": 19,
+    "widgetName": "Revenue Per Machine",
+    "widgetConfig": {},
+    "categories": [],
+    "groups": []
+  },
+  "data": {}
+}
+```
+
+**Response Fields**
+
+| Field           | Type                | Description                                              |
+|-----------------|---------------------|----------------------------------------------------------|
+| `widgetDetails` | `WidgetResponseDto` | Full widget descriptor (same shape as the list response) |
+| `data`          | `object`            | Widget data payload — shape varies by widget type        |
+
+<Warning>
+  Always use `Content-Type: application/json`. Using `application/json-patch+json` will cause a `500` error because the body cannot be deserialized.
+</Warning>
+
+```bash
+curl -X POST "https://<host>/operational/v1/dashboard/get-widget-data" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "screenTypeId": 1,
+    "widgetTypeId": 19,
+    "entityId": 12345,
+    "filters": [
+      { "name": "startDate", "value": "2025-01-01", "type": "Date" },
+      { "name": "endDate",   "value": "2025-12-31", "type": "Date" }
+    ]
+  }'
+```
+
+---
+
+### Get Widget Data (GET) - Simple Variant
+
+Fetches widget data via query parameters. Use this for simple lookups when no filters are needed.
+
+```
+GET /v1/dashboard/widget-data?screenTypeID={screenTypeID}&widgetTypeId={widgetTypeId}&entityId={entityId}
+```
+
+**Query Parameters**
+
+| Parameter      | Type               | Required | Description                                     |
+|----------------|--------------------|----------|-------------------------------------------------|
+| `screenTypeID` | `int` (byte)       | Yes      | Screen type the widget belongs to               |
+| `widgetTypeId` | `int64`            | Yes      | ID of the specific widget to load data for      |
+| `entityId`     | `int64` (nullable) | No       | Entity ID to scope data (e.g., operator ID)     |
+
+<Note>
+  This endpoint does not accept filters. For date range or machine ID filtering, use the POST variant instead.
+</Note>
+
+```bash
+curl -X GET "https://<host>/operational/v1/dashboard/widget-data?screenTypeID=1&widgetTypeId=19&entityId=12345" \
+  -H "Authorization: Bearer <token>"
+```
+
+---
+
+## Field Reference
+
+### ScreenTypeId Values
+
+`screenTypeId` identifies which dashboard screen context the widget belongs to:
+
+| Value | Screen               | Description                                 |
+|-------|----------------------|---------------------------------------------|
+| `1`   | Reports / Dashboard  | The main operator-level reporting dashboard |
+| `2`   | Operations / Machine | The machine-level operations screen         |
+
+Use `screenTypeId=1` for revenue, sales, and summary widgets. Use `screenTypeId=2` for per-machine operational widgets.
+
+---
+
+### EntityId
+
+`entityId` scopes the widget data to a specific entity. The meaning depends on the widget type:
+
+- **Operator-level widgets**: pass the **Operator ID** (ActorID)
+- **Machine-level widgets**: pass the **Machine ID**
+- **Omit or pass `null`** to retrieve data across all entities the authenticated user has access to
+
+---
+
+### WidgetTypeId
+
+Obtain the list of valid widget type IDs for a given screen by calling:
+
+```
+GET /v1/dashboard/widgets?screenTypeId=1
+```
+
+Each item in the response array contains `widgetTypeId` and `widgetName`. Use the name to identify which widget you need, then use its ID in subsequent data requests. The IDs are defined in the Cortex Reports service database and may vary by environment.
+
+<Note>
+  See the complete [Widgets ID List](/docs/manage-data-operations/lynx-api/reports/available-widgets) for a reference table of all known widget IDs.
+</Note>
+
+<Warning>
+  The Devzone reference page for "Retrieve Widget Data" uses `widgetTypeId: 5` ("Top Events For Period") in its example, but presents it as if it were a revenue widget. This is incorrect. Use `GET /v1/dashboard/widgets` to discover the correct `widgetTypeId` for revenue widgets in your environment (commonly ID `19`).
+</Warning>
+
+---
+
+### Filter Names
+
+Filter names are widget-specific. The following are commonly used across revenue and reporting widgets:
+
+| Name          | Description                                                 | Example Value        |
+|---------------|-------------------------------------------------------------|----------------------|
+| `startDate`   | Start of the date range (inclusive)                         | `"2025-01-01"`       |
+| `endDate`     | End of the date range (inclusive)                           | `"2025-12-31"`       |
+| `TimePeriod`  | Pre-defined time period in days (alternative to date range) | `"30"`               |
+| `MachineId`   | Filter data for a specific machine                          | `"98765"`            |
+| `groupBy`     | Grouping granularity                                        | `"day"` / `"month"` |
+
+<Warning>
+  `startDate`/`endDate` and `TimePeriod` are mutually exclusive - providing both may result in an error. Use one approach per request.
+</Warning>
+
+<Note>
+  **MachineId via `entityId` vs filter**: Some widgets accept the machine ID through the `entityId` field; others accept it as a `MachineId` filter entry. If the widget is scoped to the machine screen (`screenTypeId=2`), prefer `entityId`. If it is a dashboard widget (`screenTypeId=1`), use the `MachineId` filter. The exact behavior depends on the widget's stored procedure implementation.
+</Note>
+
+---
+
+### Filter Types
+
+The `type` field in a filter is a hint used by the backend to parse the `value` string:
+
+| Type       | Description                          |
+|------------|--------------------------------------|
+| `"Date"`   | ISO 8601 date string (`YYYY-MM-DD`)  |
+| `"int"`    | Integer value                        |
+| `"string"` | Free-text string                     |
+
+---
+
+## Multiple Filters in One Request
+
+The `filters` field is an array - multiple filters can be combined in a single request. For example, filtering by date range, machine ID, and grouping in one call:
+
+```json
+{
+  "screenTypeId": 1,
+  "widgetTypeId": 19,
+  "entityId": null,
+  "filters": [
+    { "name": "startDate", "value": "2025-01-01", "type": "Date"   },
+    { "name": "endDate",   "value": "2025-12-31", "type": "Date"   },
+    { "name": "MachineId", "value": "98765",      "type": "int"    },
+    { "name": "groupBy",   "value": "day",        "type": "string" }
+  ]
+}
+```
+
+The filters are forwarded to the Cortex Reports service, which applies them in the stored procedure for that widget type.
+
+---
+
+## Typical Integration Flow
+
+A standard integration follows three steps: discover available widgets, fetch their data with optional filters, then parse the response payload.
+
+```
+1. GET /v1/dashboard/widgets?screenTypeId=1
+       → Discover available widgets and their widgetTypeId values
+
+2. POST /v1/dashboard/get-widget-data  (recommended - supports filters)
+   OR
+   GET  /v1/dashboard/widget-data      (simple - no filter support)
+       → Fetch widget data, optionally scoped by entity and filtered by date/machine
+
+3. Parse the response:
+   - widgetDetails.widgetConfig → rendering hints
+   - data                       → actual data payload (structure varies per widget)
+```
+
+---
+
+## Error Handling
+
+The following HTTP status codes may be returned by the widget endpoints:
+
+| HTTP Status | Cause                                                                                                                                         |
+|-------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| `400`       | Missing required field, invalid parameter value                                                                                               |
+| `401`       | Missing or expired bearer token                                                                                                               |
+| `403`       | Authenticated but missing the required permission key for this endpoint                                                                       |
+| `500`       | Backend error - common causes: wrong `Content-Type` header (use `application/json`), invalid `widgetTypeId`, or an unrecognised filter format  |
+
+---
+
+## Permissions
+
+Each endpoint requires the authenticated user to have a specific menu permission assigned in Lynx. Permissions are checked by the `GetContext()` middleware on every request:
+
+| Endpoint                             | Permission Key                | OAuth Scope   |
+|--------------------------------------|-------------------------------|---------------|
+| `GET /v1/dashboard/widgets`          | `lynx_report_get_widgets`     | `report:read` |
+| `POST /v1/dashboard/get-widget-data` | `lynx_report_get_widget_data` | `report:read` |
+| `GET /v1/dashboard/widget-data`      | `lynx_report_get_widget`      | `report:read` |
+
+<Note>
+  `GET /v1/dashboard/widget-data` requires `lynx_report_get_widget`, which is separate from `lynx_report_get_widget_data` (the POST variant). If you have access to the POST endpoint but receive a `403` on the GET endpoint, request the `lynx_report_get_widget` permission in your Lynx role configuration.
+</Note>
+
+---
+
+## Revenue Per Machine — Integration Guide
+
+Use the following steps to retrieve revenue data broken down per machine, per day, and per month.
+
+### Step 1 — Discover widget IDs
+
+```bash
+curl -X GET "https://<host>/operational/v1/dashboard/widgets?screenTypeId=1" \
+  -H "Authorization: Bearer <token>"
+```
+
+From the response, identify the `widgetTypeId` values for revenue-related widgets (look for names containing "Revenue", "Sales", or similar).
+
+### Step 2 — Revenue per machine per day
+
+```bash
+curl -X POST "https://<host>/operational/v1/dashboard/get-widget-data" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "screenTypeId": 1,
+    "widgetTypeId": 19,
+    "entityId": <operatorId>,
+    "filters": [
+      { "name": "startDate", "value": "2025-01-01", "type": "Date" },
+      { "name": "endDate",   "value": "2025-01-31", "type": "Date" },
+      { "name": "groupBy",   "value": "day",        "type": "string" }
+    ]
+  }'
+```
+
+### Step 3 — Revenue per machine per month
+
+```bash
+curl -X POST "https://<host>/operational/v1/dashboard/get-widget-data" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "screenTypeId": 1,
+    "widgetTypeId": 19,
+    "entityId": <operatorId>,
+    "filters": [
+      { "name": "startDate", "value": "2025-01-01", "type": "Date" },
+      { "name": "endDate",   "value": "2025-12-31", "type": "Date" },
+      { "name": "groupBy",   "value": "month",      "type": "string" }
+    ]
+  }'
+```
+
+### Step 4 — Revenue for a specific machine
+
+Pass the machine ID via `entityId` (if the widget is machine-scoped) or via the `MachineId` filter:
+
+```bash
+curl -X POST "https://<host>/operational/v1/dashboard/get-widget-data" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "screenTypeId": 1,
+    "widgetTypeId": 19,
+    "entityId": null,
+    "filters": [
+      { "name": "startDate", "value": "2025-01-01", "type": "Date"   },
+      { "name": "endDate",   "value": "2025-12-31", "type": "Date"   },
+      { "name": "MachineId", "value": "<machineId>","type": "int"    },
+      { "name": "groupBy",   "value": "day",        "type": "string" }
+    ]
+  }'
+```
+
+<Note>
+  The exact filter names and `groupBy` values supported by a widget depend on its stored procedure in Cortex Reports. If a filter name is not recognised, it is silently ignored. Test with and without each filter and compare responses.
+</Note>
+
+---
+
+## Notes
+
+- The shape of the `data` field in `WidgetDataResponseDto` is dynamic and varies per widget type.
+- Widget type IDs are defined in the Cortex Reports service database and map to screen types via the `widget_dashboard_compatibility` column (`ScreenTypeId`).
+- The Lynx API acts as an authenticated pass-through proxy to Cortex Reports — it does not modify or validate filter contents beyond basic deserialization.

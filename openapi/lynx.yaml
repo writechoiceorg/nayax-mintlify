@@ -4116,13 +4116,18 @@ paths:
             schema:
               $ref: '#/components/schemas/WidgetRequestDto'
             example:
-              ScreenTypeId: 1
-              EntityId: 1001
-              WidgetTypeId: 5
-              Filters:
-                - Name: dateRange
-                  Value: 2023-01-01 to 2023-12-31
-                  Type: Date
+              screenTypeId: 1
+              widgetTypeId: 193
+              filters:
+                - name: startDate
+                  value: "2025-01-01"
+                  type: Date
+                - name: endDate
+                  value: "2025-12-31"
+                  type: Date
+                - name: MachineId
+                  value: "383444914"
+                  type: Int
       responses:
         '200':
           description: The widget data was successfully retrieved.
@@ -4132,27 +4137,116 @@ paths:
                 $ref: '#/components/schemas/WidgetDataResponseDto'
               example:
                 WidgetDetails:
-                  WidgetTypeId: 5
-                  WidgetName: Revenue Overview
+                  WidgetTypeId: 193
+                  WidgetName: Sales By Period
                   WidgetConfig:
-                    chartType: bar
-                    colorTheme: blue
+                    borderWidth: 1
+                    isTransposed: false
+                    plotAreaBorderWidth: 0
+                    isMultipleAxis: false
+                    legend:
+                      isVisible: true
+                      position: top
+                    tooltip:
+                      enable: false
+                    trackball:
+                      enable: true
+                      lineColor: "#3720A4"
+                      activationMode: singleTap
+                      lineDashArray:
+                        - 5
+                        - 5
+                    primaryXAxis:
+                      axisType: DateTime
+                      isVisible: true
+                      dateFormat: dd/MM/yy
+                    primaryYAxis:
+                      axisType: Numeric
+                      isVisible: true
+                      numberFormat:
+                        locale: en_In
+                        symbol: "₪"
+                      interval: 2
+                      axisLine: 0
+                      majorGridLines: 0
+                    seriesStyle:
+                      - serieType: Column
+                        color: "#3091C8"
+                        colorOpacity: 0.5
+                      - serieType: Line
+                        color: "#948EB1"
+                        colorOpacity: 0.5
+                        markerSettings:
+                          isVisible: true
+                          shape: Circle
+                          width: 8
+                          height: 8
+                      - serieType: Area
+                        color: "#3091C8"
+                        colorOpacity: 0.5
+                    seriesProperties:
+                      - name: chart_style
+                        label: payment_service_translated
+                        xValueKey: series_name
+                        yValueKey: aggregation_value
+                        defaultSerieStyle: Line
+                        optionsSerieStyle:
+                          - Column
+                          - Line
+                          - Area
+                    filters:
+                      - name: with_cash
+                        defaultValue: "0"
+                        type: bit
+                      - name: payment_method_id
+                        defaultValue: ""
+                        type: int
+                      - name: time_period
+                        defaultValue: "102"
+                        mustHaveValue: true
+                        type: int
                   Categories:
                     - 1
+                    - 7
+                    - 4
                     - 2
+                    - 3
                   Groups:
-                    - 10
-                    - 20
+                    - 1
+                    - 3
                 Data:
-                  labels:
-                    - Jan
-                    - Feb
-                    - Mar
-                  values:
-                    - 12000
-                    - 15000
-                    - 11000
-                  currency: USD
+                  - - aggregation_value: 514.1
+                      vends: 238
+                      payment_service_translated: Credit Card
+                      currency_descr: ILS
+                      currency_sign: "₪"
+                      currency_id: 2
+                      series_name: "2026-03-25T00:00:00"
+                      order_by: 0
+                    - aggregation_value: 119.08
+                      vends: 7
+                      payment_service_translated: Prepaid Credit
+                      currency_descr: ILS
+                      currency_sign: "₪"
+                      currency_id: 2
+                      series_name: "2026-03-25T00:00:00"
+                      order_by: 0
+                    - aggregation_value: 363.03
+                      vends: 23
+                      payment_service_translated: Credit Card
+                      currency_descr: USD
+                      currency_sign: "$"
+                      currency_id: 1
+                      series_name: "2026-03-25T00:00:00"
+                      order_by: 1
+                    - aggregation_value: 15.36
+                      vends: 6
+                      payment_service_translated: Prepaid Credit
+                      currency_descr: USD
+                      currency_sign: "$"
+                      currency_id: 1
+                      series_name: "2026-03-25T00:00:00"
+                      order_by: 1
   /v1/dashboard/widgets:
     get:
       tags:
