@@ -137,3 +137,21 @@ table {
   overflow-x: auto;
   white-space: normal;
 }
+
+/* Separator bar after "Docs Home" tab */
+.nav-tabs > a:first-child::after {
+  content: "|";
+  position: absolute;
+  right: -0.875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #d1d5db;
+  font-weight: 300;
+  pointer-events: none;
+  user-select: none;
+}
+
+.dark .nav-tabs > a:first-child::after {
+  color: #4b5563;
+}
+/* End separator bar */

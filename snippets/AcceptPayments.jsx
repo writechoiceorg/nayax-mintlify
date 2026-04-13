@@ -88,7 +88,7 @@ export const AcceptPayments = () => {
     <section className="py-16 px-6 md:px-12 lg:px-20 bg-white dark:bg-[#1B1B1B]">
       <div className="max-w-[1400px] mx-auto">
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          Accept Various Payments
+          In-Person Payments
         </h2>
         <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-5xl">
           Accept customer apps, loyalty cards, or closed-loop methods on any Nayax POS via a Cortina integration.{" "}

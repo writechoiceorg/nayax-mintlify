@@ -75,7 +75,7 @@ export const AcceptPaymentsEcom = () => {
     <section className="py-16 px-6 md:px-12 lg:px-20 bg-white dark:bg-[#1B1B1B]">
       <div className="max-w-[1400px] mx-auto">
         <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          Integrate Online Payments
+          Online & Mobile Payments
         </h2>
         <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-4xl">
           Build a seamless checkout experience. Access everything you need to implement the Nayax eCom SDK into your web, iOS, or Android applications.
