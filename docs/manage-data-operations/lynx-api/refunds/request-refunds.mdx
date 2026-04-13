@@ -66,14 +66,14 @@ curl --request POST \
 
 Below, you can see a description of each of the parameters:
 
-| **Name**            | **Type**    | **Description**                                                             |                                                                            |
-| :------------------ | :---------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------------------- |
-| **RefundAmount**    | `double \   | null`                                                                       | The amount to be refunded to the customer.                                 |
-| **RefundEmailList** | `string \   | null`                                                                       | A list of email addresses to notify about the refund, separated by commas. |
-| **RefundReason**    | `string \   | null`                                                                       | The reason for requesting the refund.                                      |
-| **TransactionId**   | `int64`     | The unique identifier of the transaction for which the refund is requested. |                                                                            |
-| **SiteId**          | `int32`     | The unique identifier of the site where the transaction occurred.           |                                                                            |
-| **MachineAuTime**   | `date-time` | The machine's authorization time is associated with the transaction.        |                                                                            |
+| **Name**            | **Type**           | **Description**                                                             |
+| :------------------ | :----------------- | :-------------------------------------------------------------------------- |
+| **RefundAmount**    | `double \| null`   | The amount to be refunded to the customer.                                  |
+| **RefundEmailList** | `string \| null`   | A list of email addresses to notify about the refund, separated by commas.  |
+| **RefundReason**    | `string \| null`   | The reason for requesting the refund.                                       |
+| **TransactionId**   | `int64`            | The unique identifier of the transaction for which the refund is requested. |
+| **SiteId**          | `int32`            | The unique identifier of the site where the transaction occurred.           |
+| **MachineAuTime**   | `date-time`        | The machine's authorization time is associated with the transaction.        |
 
 #### How to obtain TransactionID and SiteID
 
