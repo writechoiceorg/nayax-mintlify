@@ -1,0 +1,53 @@
+---
+title: "Dashboard Widgets Overview"
+description: "Widgets are visual components on the Lynx Reports dashboard that display machine and operator data."
+metadata:
+  og:description: "Widgets are visual components that show specific customized data to meet your business needs. You can find these widgets on Reports > Dashboard."
+---
+
+Widgets are visual components that show specific customized data to meet your business needs. You can find these widgets on **Reports > Dashboard**.
+
+There are widgets available at two levels:
+
+* **Operator/Actor Level:** Widgets that gather data from multiple machines.
+* **Machine Level:** Widgets that show data specific to a single machine.
+
+<Note>
+  Every widget has its own unique identifier (`widget_type_id`), filters, and other configuration options. See the [Widgets ID List](/docs/manage-data-operations/lynx-api/reports/available-widgets) for a full reference.
+</Note>
+
+## Documented Widgets
+
+The following widgets are documented with screenshots and filter details:
+
+<CardGroup cols={2}>
+  <Card title="Sales By Period" href="/docs/manage-data-operations/lynx-api/reports/widget-sales-by-period">
+    Bar chart showing revenue generated across your fleet over a selected time period.
+  </Card>
+  <Card title="Dashboard Sales Table" href="/docs/manage-data-operations/lynx-api/reports/widget-dashboard-sales-table">
+    Numeric breakdown of revenue and transaction counts by reporting window.
+  </Card>
+  <Card title="Last Year vs This Year Monthly Sales" href="/docs/manage-data-operations/lynx-api/reports/widget-last-year-vs-this-year">
+    Visual comparison of monthly sales performance between the current and previous year.
+  </Card>
+  <Card title="10 Most Popular Machines Sales/Vends" href="/docs/manage-data-operations/lynx-api/reports/widget-10-most-popular-machines">
+    Ranking of the top-performing machines in your fleet by sales and vend volume.
+  </Card>
+</CardGroup>
+
+## General Widget Actions
+
+These options appear on the right side of every widget and offer additional controls.
+
+<Frame><img src="/images/docs/widgets-lynx/image9.jpg" /></Frame>
+
+1. The **Dropdown Arrow** button offers the following options:
+
+<Accordion title="Options">
+  * **Lock Widget**: Secures the widget in its current position on the dashboard to prevent accidental moving or resizing.
+  * **Export**: Allows you to download the widget's raw data in PDF format for external reporting.
+  * **Remove Widget**: Deletes the widget from your current dashboard view.
+</Accordion>
+
+2. **Currency Toggle**: The bill/money icon opens a sub-menu that allows you to change the currency in the widget.
+3. **Resize Tool**: Located in the bottom-right corner of the widget, this icon lets you click and drag to resize the widget on your dashboard.

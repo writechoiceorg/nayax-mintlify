@@ -531,12 +531,28 @@
                   "docs/manage-data-operations/lynx-api/product-faqs",
                   {
                     "group": "Reports",
+                    "root": "docs/manage-data-operations/lynx-api/reports/index",
                     "pages": [
-                      "docs/manage-data-operations/lynx-api/reports/widgets-lynx",
-                      "docs/manage-data-operations/lynx-api/reports/available-widgets",
-                      "docs/manage-data-operations/lynx-api/reports/retrieve-machine-widget-data"
-                    ],
-                    "root": "docs/manage-data-operations/lynx-api/reports/index"
+                      {
+                        "group": "Dashboard Widgets",
+                        "root": "docs/manage-data-operations/lynx-api/reports/widgets-overview",
+                        "pages": [
+                          "docs/manage-data-operations/lynx-api/reports/widget-sales-by-period",
+                          "docs/manage-data-operations/lynx-api/reports/widget-dashboard-sales-table",
+                          "docs/manage-data-operations/lynx-api/reports/widget-last-year-vs-this-year",
+                          "docs/manage-data-operations/lynx-api/reports/widget-10-most-popular-machines"
+                        ]
+                      },
+                      {
+                        "group": "Widget API",
+                        "pages": [
+                          "docs/manage-data-operations/lynx-api/reports/retrieve-machine-widget-data",
+                          "docs/manage-data-operations/lynx-api/reports/available-widgets",
+                          "docs/manage-data-operations/lynx-api/reports/widget-filters",
+                          "docs/manage-data-operations/lynx-api/reports/integration-guide"
+                        ]
+                      }
+                    ]
                   }
                 ]
               },

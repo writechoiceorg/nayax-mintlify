@@ -1,0 +1,80 @@
+---
+title: "Revenue Per Machine: Integration Guide"
+description: "A step-by-step guide to retrieving revenue data broken down per machine, per day, and per month using the Widgets Dashboard API."
+---
+
+This guide walks through retrieving revenue data using the Widgets Dashboard API. For filter and field reference, see [Widget Filters Reference](/docs/manage-data-operations/lynx-api/reports/widget-filters).
+
+## Step 1: Discover widget IDs
+
+```bash
+curl -X GET "https://<host>/operational/v1/dashboard/widgets?screenTypeId=1" \
+  -H "Authorization: Bearer <token>"
+```
+
+From the response, identify the `widgetTypeId` values for revenue-related widgets (look for names containing "Revenue", "Sales", or similar).
+
+## Step 2: Revenue per machine per day
+
+Use the `groupBy: day` filter with a date range to retrieve daily revenue totals:
+
+```bash
+curl -X POST "https://<host>/operational/v1/dashboard/get-widget-data" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "screenTypeId": 1,
+    "widgetTypeId": 19,
+    "entityId": <operatorId>,
+    "filters": [
+      { "name": "startDate", "value": "2025-01-01", "type": "Date" },
+      { "name": "endDate",   "value": "2025-01-31", "type": "Date" },
+      { "name": "groupBy",   "value": "day",        "type": "string" }
+    ]
+  }'
+```
+
+## Step 3: Revenue per machine per month
+
+Switch `groupBy` to `month` and widen the date range to retrieve monthly revenue totals:
+
+```bash
+curl -X POST "https://<host>/operational/v1/dashboard/get-widget-data" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "screenTypeId": 1,
+    "widgetTypeId": 19,
+    "entityId": <operatorId>,
+    "filters": [
+      { "name": "startDate", "value": "2025-01-01", "type": "Date" },
+      { "name": "endDate",   "value": "2025-12-31", "type": "Date" },
+      { "name": "groupBy",   "value": "month",      "type": "string" }
+    ]
+  }'
+```
+
+## Step 4: Revenue for a specific machine
+
+Pass the machine ID via `entityId` (if the widget is machine-scoped) or via the `MachineId` filter:
+
+```bash
+curl -X POST "https://<host>/operational/v1/dashboard/get-widget-data" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "screenTypeId": 1,
+    "widgetTypeId": 19,
+    "entityId": null,
+    "filters": [
+      { "name": "startDate", "value": "2025-01-01", "type": "Date"   },
+      { "name": "endDate",   "value": "2025-12-31", "type": "Date"   },
+      { "name": "MachineId", "value": "<machineId>","type": "int"    },
+      { "name": "groupBy",   "value": "day",        "type": "string" }
+    ]
+  }'
+```
+
+<Note>
+  The exact filter names and `groupBy` values supported by a widget depend on its stored procedure in Cortex Reports. If a filter name is not recognised, it is silently ignored. Test with and without each filter and compare responses.
+</Note>

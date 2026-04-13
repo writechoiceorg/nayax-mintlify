@@ -1,0 +1,101 @@
+---
+title: "Widget Filters Reference"
+description: "Field reference for widget parameters, filter names, and filter types used with the Widgets Dashboard API."
+---
+
+This page covers the field reference for widget parameters and filters used when calling the Widgets Dashboard API endpoints.
+
+## Field Reference
+
+### ScreenTypeId Values
+
+`screenTypeId` identifies which dashboard screen context the widget belongs to:
+
+| Value | Screen               | Description                                 |
+|-------|----------------------|---------------------------------------------|
+| `1`   | Reports / Dashboard  | The main operator-level reporting dashboard |
+| `2`   | Operations / Machine | The machine-level operations screen         |
+
+Use `screenTypeId=1` for revenue, sales, and summary widgets. Use `screenTypeId=2` for per-machine operational widgets.
+
+### EntityId
+
+`entityId` scopes the widget data to a specific entity. The meaning depends on the widget type:
+
+- **Operator-level widgets**: pass the **Operator ID** (ActorID)
+- **Machine-level widgets**: pass the **Machine ID**
+- **Omit or pass `null`** to retrieve data across all entities the authenticated user has access to
+
+### WidgetTypeId
+
+Obtain the list of valid widget type IDs for a given screen by calling:
+
+```
+GET /v1/dashboard/widgets?screenTypeId=1
+```
+
+Each item in the response array contains `widgetTypeId` and `widgetName`. Use the name to identify which widget you need, then use its ID in subsequent data requests. The IDs are defined in the Cortex Reports service database and may vary by environment.
+
+<Note>
+  See the complete [Widgets ID List](/docs/manage-data-operations/lynx-api/reports/available-widgets) for a reference table of all known widget IDs.
+</Note>
+
+<Warning>
+  The Devzone reference page for "Retrieve Widget Data" uses `widgetTypeId: 5` ("Top Events For Period") in its example, but presents it as if it were a revenue widget. This is incorrect. Use `GET /v1/dashboard/widgets` to discover the correct `widgetTypeId` for revenue widgets in your environment (commonly ID `19`).
+</Warning>
+
+### Filter Names
+
+Filter names are widget-specific. The following are commonly used across revenue and reporting widgets:
+
+| Name          | Description                                                 | Example Value        |
+|---------------|-------------------------------------------------------------|----------------------|
+| `startDate`   | Start of the date range (inclusive)                         | `"2025-01-01"`       |
+| `endDate`     | End of the date range (inclusive)                           | `"2025-12-31"`       |
+| `TimePeriod`  | Pre-defined time period in days (alternative to date range) | `"30"`               |
+| `MachineId`   | Filter data for a specific machine                          | `"98765"`            |
+| `groupBy`     | Grouping granularity                                        | `"day"` / `"month"` |
+
+<Warning>
+  `startDate`/`endDate` and `TimePeriod` are mutually exclusive - providing both may result in an error. Use one approach per request.
+</Warning>
+
+<Note>
+  **MachineId via `entityId` vs filter**: Some widgets accept the machine ID through the `entityId` field; others accept it as a `MachineId` filter entry. If the widget is scoped to the machine screen (`screenTypeId=2`), prefer `entityId`. If it is a dashboard widget (`screenTypeId=1`), use the `MachineId` filter. The exact behavior depends on the widget's stored procedure implementation.
+</Note>
+
+### Filter Types
+
+The `type` field in a filter is a hint used by the backend to parse the `value` string:
+
+| Type       | Description                         |
+|------------|-------------------------------------|
+| `"Date"`   | ISO 8601 date string (`YYYY-MM-DD`) |
+| `"int"`    | Integer value                       |
+| `"string"` | Free-text string                    |
+
+## Multiple Filters in One Request
+
+The `filters` field is an array - multiple filters can be combined in a single request. For example, filtering by date range, machine ID, and grouping in one call:
+
+```json
+{
+  "screenTypeId": 1,
+  "widgetTypeId": 19,
+  "entityId": null,
+  "filters": [
+    { "name": "startDate", "value": "2025-01-01", "type": "Date"   },
+    { "name": "endDate",   "value": "2025-12-31", "type": "Date"   },
+    { "name": "MachineId", "value": "98765",      "type": "int"    },
+    { "name": "groupBy",   "value": "day",        "type": "string" }
+  ]
+}
+```
+
+The filters are forwarded to the Cortex Reports service, which applies them in the stored procedure for that widget type.
+
+## Notes
+
+- The shape of the `data` field in `WidgetDataResponseDto` is dynamic and varies per widget type.
+- Widget type IDs are defined in the Cortex Reports service database and map to screen types via the `widget_dashboard_compatibility` column (`ScreenTypeId`).
+- The Lynx API acts as an authenticated pass-through proxy to Cortex Reports. It does not modify or validate filter contents beyond basic deserialization.
