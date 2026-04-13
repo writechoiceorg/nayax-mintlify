@@ -10,7 +10,9 @@ DynamicQR codes enable customers to complete payments by scanning the code with 
 
 The image below describes the typical usage flow of DynamicQR.
 
-<Frame><img src="/images/docs/cortina-dynamicqr/image1.png" /></Frame>
+<Frame>
+  ![](/images/docs/cortina-dynamicqr/image1.png)
+</Frame>
 
 Where:
 
@@ -21,18 +23,20 @@ Where:
 5. The payment is processed and approved.
 
 <Warning>
-**Pre-Selection Only**
+  **Pre-Selection Only**
 
-Cortina Dynamic QR currently only supports Pre-Selection transaction types.
+  Cortina Dynamic QR currently only supports Pre-Selection transaction types.
 </Warning>
 
 ## Pre-Selection Flow
 
 The Pre-selection flow simplifies the payment process by merging the steps of product/service selection and authorization into a single transaction. This flow is typically used for low-value or quick transactions, where the customer’s selection and payment authorization are handled together in one step.
 
-See the diagram below:
+See the diagram below (the numbers inside the brackets relate to the different sources of timeout):
 
-<Frame><img src="/images/docs/cortina-dynamicqr/Cortina Dynamic QR.png" /></Frame>
+<Frame>
+  ![](/images/docs/cortina-dynamicqr/Cortina Dynamic QR.png)
+</Frame>
 
 The steps in this process are as follows:
 
@@ -46,5 +50,3 @@ The steps in this process are as follows:
 8. The Integrator returns the Response Status (Approved/Pending) to the Nayax Server.
 9. The Nayax Server sends the QR Payment Command Response to the Vending Machine.
 10. The Vending Machine dispenses the product and sends the Settlement Command to the Nayax Server.
-
-This response is typically always approved in this flow, as the authorization has already been granted.

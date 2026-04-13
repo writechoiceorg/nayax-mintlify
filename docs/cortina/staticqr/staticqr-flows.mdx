@@ -10,7 +10,9 @@ Static QR codes provide a straightforward, secure way to process payments via wa
 
 Before selecting a product, the user scans the QR code displayed on the machine, as in the image below.
 
-<Frame><img src="/images/docs/staticqr-flows/image1.png" /></Frame>
+<Frame>
+  ![](/images/docs/staticqr-flows/image1.png)
+</Frame>
 
 Once scanned, the customer’s mobile device interacts with the payment system to process the transaction, providing a seamless payment experience without requiring additional hardware.
 
@@ -18,8 +20,8 @@ Once scanned, the customer’s mobile device interacts with the payment system t
 
 Cortina supports two types of StaticQR transaction flows:
 
-* Pre-selection
-* Pre-authorization
+- Pre-selection
+- Pre-authorization
 
 Learn more in the sections below.
 
@@ -29,7 +31,9 @@ The Pre-selection flow simplifies the payment process by merging the steps of pr
 
 See the diagram below:
 
-<Frame><img src="/images/docs/staticqr-flows/Cortina Static QR - Pre-select.png" /></Frame>
+<Frame>
+  ![](/images/docs/staticqr-flows/Cortina Static QR - Pre-select.png)
+</Frame>
 
 The steps in this process are as follows:
 
@@ -59,9 +63,9 @@ The steps in this process are as follows:
 This response is typically always approved in this flow, as the authorization has already been granted.
 
 <Warning>
-**Void**
+  **Void**
 
-In case the product fails to be dispensed to client, the Nayax Engine uses the [StaticQR Cancel](/reference/cortina/staticqr/cortina-staticqr-cancel) endpoint to void the payment request.
+  In case the product fails to be dispensed to client or no Sale Response until timeout, the Nayax Engine uses the [StaticQR Void](https://devzone.nayax.com/docs/cortina/staticqr/static-qr-void) endpoint to void the payment request.
 </Warning>
 
 ### Pre-Authorization
@@ -70,9 +74,12 @@ The Pre-authorization Flow for Static QR involves several key steps to authentic
 
 See the diagram below:
 
-<Frame><img src="/images/docs/staticqr-flows/Cortina Static QR - Pre-auth.png" /></Frame>
+<Frame>
+  ![](/images/docs/staticqr-flows/Cortina Static QR - Pre-auth.png)
+</Frame>
 
 Where:
+
 1. The user scans the QR code or enters the machine number into their mobile app.
 2. The Mobile App establishes a connection with the Integrator's backend server.
 3. The Integrator sends a /Notify (TerminalID) request to the Nayax Server via the [StaticQR Start](/reference/cortina/staticqr/cortina-staticqr-start) endpoint.
@@ -97,7 +104,7 @@ Where:
 22. The Integrator sends a Settlement Response success to the Nayax Server.
 
 <Warning>
-**Cancellation**
+  **Cancellation**
 
-In case the product fails to be dispensed to client, the Nayax Engine uses the [StaticQR Cancel](/reference/cortina/staticqr/cortina-staticqr-cancel) endpoint to cancel the Pre Authorization and the transaction.
+  In case the product fails to be dispensed to client or no Authorization Response until timeout, the Nayax Engine uses the [StaticQR Cancel](/reference/cortina/staticqr/cortina-staticqr-cancel) endpoint to cancel the Pre Authorization and the transaction.
 </Warning>
