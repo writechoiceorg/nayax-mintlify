@@ -12,7 +12,7 @@ The `/initialize` endpoint is the first step in processing an e-commerce transac
   The `/initialize` endpoint is also part of the process for tokenizing a card. If a Card-on-File (COF) initialization is triggered, the eCom API will respond with a Nayax card token to the Nayax SDK. See [Nayax Tokens](/docs/ecom-sdk/back-end-integration/nayax-ecom-tokens) for more details.
 </Note>
 
-## Sale Request
+## Sale request
 
 Here is an example of a JSON request for the POST [`/initialize`](/reference/ecom/payments/initialize-an-e-commerce-transaction) endpoint, demonstrating a simple sale transaction.
 ```json
@@ -43,7 +43,7 @@ Here is an example of a JSON request for the POST [`/initialize`](/reference/eco
 
 For more details on each parameter, see the [`/initialize`](/reference/ecom/payments/initialize-an-e-commerce-transaction) endpoint API reference page.
 
-## Transaction Type
+## Transaction type
 
 The `RequestType` parameter specifies the type of transaction to be performed. Different values apply to different endpoints. Use codes `0`–`1` when calling `/initialize`. Use codes `2`–`8` when calling [`/close-transaction`](/reference/ecom/payments/close-transaction).
 

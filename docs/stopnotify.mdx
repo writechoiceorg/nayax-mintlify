@@ -12,9 +12,9 @@ This feature must be enabled in Nayax Core during the integration.
 
 The `StopNotify` endpoint enables Spark to determine whether a card presented at the payment terminal while idle is authorized to stop an ongoing session. This is primarily used in Pre-Authorization flows, where the same card must be presented again to terminate the session and proceed to settlement.
 
-Nayax will send the hashed card value and the last four digits captured earlier in the `/TransactionCallback` and `/TransactionNotify` along with terminal identifiers. Providers need to validate whether this card matches an ongoing session on that terminal. A matching card should result in an Approved response; otherwise, the Spark integrator should return a Declined verdict.
+Nayax sends the hashed card value, last four digits (from `/TransactionCallback` and `/TransactionNotify`), and terminal identifiers. Validate whether this card matches an ongoing session on that terminal. Return an **Approved** response for a matching card. Otherwise, return a **Declined** verdict.
 
-This feature must be enabled via Nayax Core. If no response is received from the Spark integrator within 5 seconds, the flow will be considered a failure from the consumer's perspective.
+Enable this feature in Nayax Core. If you do not respond within 5 seconds, the flow fails from the consumer's perspective.
 
 ## Request
 
@@ -32,7 +32,7 @@ Send a POST request to the Spark `/spark/StopNotify` endpoint with the following
 }
 ```
 
-### Request Parameters
+### Request parameters
 
 The table below describes the parameters of the request:
 
@@ -207,7 +207,7 @@ A successful response will return the following body:
 }
 ```
 
-### Response Parameters
+### Response parameters
 
 The table below describes the parameters of the response:
 

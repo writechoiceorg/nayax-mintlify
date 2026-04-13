@@ -43,7 +43,7 @@ These actions can also be performed through Lynx API using the following endpoin
 Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
 </Warning>
 
-## Get Pick List from Machine
+## Get pick list from machine
 
 You can retrieve the pick list associated with a specific machine using the [Get Pick List](/reference/lynx/machine-inventory/get-pick-list) endpoint. See the example request below:
 
@@ -62,7 +62,7 @@ Change `MachineID` with the actual ID of the machine to retrieve the pick list f
 
 A successful response will return the pick list with all the products available on the machine.
 
-## Update Pick List
+## Update pick list
 
 You can modify the pick list for a specific machine using the [Update Pick List](/reference/lynx/machine-inventory/update-pick-list) endpoint. This endpoint allows you to update the quantities of products to be restocked or adjust other details in the pick list. See the example request below:
 
@@ -141,9 +141,9 @@ Where:
 
 A successful response will return the pick list with the updated pick quantities.
 
-## Delete Pick List
+## Delete pick list
 
-Using the [Delete Pick List](/reference/lynx/machine-inventory/delete-pick-list) endpoint, you can remove the existing pick list associated with a specific machine. This endpoint helps operators clear outdated or incorrect pick lists to ensure accurate restocking processes.
+Using the [Delete Pick List](/reference/lynx/machine-inventory/delete-pick-list) endpoint, you can remove the existing pick list associated with a specific machine. This helps you clear outdated or incorrect pick lists to ensure accurate restocking processes.
 
 ```sh Request
 curl --request DELETE \

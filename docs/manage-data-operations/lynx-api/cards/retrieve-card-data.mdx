@@ -28,13 +28,13 @@ Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) 
 
 ## Verifying card details in Nayax Core
 
-To see the details of a card in Nayax Core, Access the **Card Management** tab and use the search bar to look for the card you want to check, and select it.
+To see the details of a card in Nayax Core, access the **Card Management** tab and use the search bar to look for the card you want to check, and select it.
 
 <Frame><img src="/images/docs/retrieve-card-data/image1.png" /></Frame>
 
 You will see all the details of the card presented to you, this is the same data retrieved by the Lynx API Endpoints mentioned before.
 
-## Get Cards
+## Get cards
 
 This general endpoint will retrieve an overview of all cards, including essential details like Card ID, Card Holder Name, and Card Status. See the example query:
 
@@ -64,7 +64,7 @@ Any of the following details of a card can be used as a query parameter:
 * `CardEmail`
 * `CardHolderName`
 
-## Get Card by the Card's Display Number
+## Get card by the card's display number
 
 It fetches card details based on its display number, which is the physical card number. This is ideal for cases where only the display number is available for reference.
 
@@ -81,7 +81,7 @@ curl --request GET \
   Replace `{CardDisplayNumber}` with the actual number of the card.
 </Note>
 
-## Get Prepaid Card
+## Get prepaid card
 
 It retrieves details of a prepaid card associated with a specific card ID. Use this to manage prepaid cards or verify their status and attributes.
 
@@ -101,7 +101,7 @@ curl --request GET \
 
 The response will have the details of the requested card.
 
-## Get the Credit from a Card
+## Get the credit from a card
 
 This option fetches the current credit balance for a specific card, identified by its unique identifier. Use it to monitor card balances, such as those of prepaid or technician cards.
 
@@ -129,7 +129,7 @@ curl --request GET \
 
 The response will include the credit balance of the card.
 
-## Get Card's Revalue
+## Get card's revalue
 
 Retrieves the revalue amount associated with a specific card, identified by the card's unique identifier. See the query example below:
 

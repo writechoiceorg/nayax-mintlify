@@ -13,7 +13,7 @@ The `doTransaction` method allows you to process refunds. There are two primary 
   To perform a Refund transaction, save the `originalTransactionId` from the original transaction.
 </Note>
 
-## Standard Refund
+## Standard refund
 
 A Standard Refund is utilized when a transaction needs to be reversed or partially returned using the same terminal that processed the original sale.
 
@@ -38,7 +38,7 @@ The following example shows a typical request body for a standard refund:
 }
 ```
 
-## External Refund \[from other device]
+## External refund [from other device]
 
 To refund a transaction initiated on a different terminal, the system requires the following metadata from the original transaction to ensure security and validity:
 
@@ -105,7 +105,7 @@ A successful request will return a response similar to the one in the code block
 }
 ```
 
-### Refund Request Parameters
+### Refund request parameters
 
 To perform a refund, you must include the following parameters within the `params` object of the `doTransaction` method.
 
@@ -124,7 +124,7 @@ To perform a refund, you must include the following parameters within the `param
 | `mainBoardSerial`              | string  | **Conditional.** Mainboard serial of the original device.                   |
 | `hwSerial`                     | string  | **Conditional.** Hardware serial of the original device.                    |
 
-### Refund Response Parameters
+### Refund response parameters
 
 Below are the parameters returned in the `result` object following a refund request:
 

@@ -17,7 +17,7 @@ Additionally, ensure you have the **Amazon SQS Queue URL**, **Access Key**, and 
 These setup instructions assume that the DEX Read schedule has already been configured.
 </Note>
 
-## Operator Level Setup
+## Operator level setup
 
 Follow these steps to configure DEX delivery at the operator level in the Nayax Core:
 
@@ -38,7 +38,7 @@ Follow these steps to configure DEX delivery at the operator level in the Nayax 
    d. Enable Encryption (Optional). See the [**Set Up Encryption**](/docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-encryption-on-amazon-sqs-delivery)  section for details.
 
    <Frame><img src="/images/docs/set-up-eva-dts-dexddcmp-audit-file-delivery/image3.png" /></Frame>
-8. Choose Dex Format and Filter settings:
+8. Select Dex format and filter settings:
    a. Ensure the format is set to **No Formatting**.
    b. Select the desired DEX Read Types. Only the selected Dex Origins will be sent to the Queue.
 
@@ -55,7 +55,7 @@ Setting up DEX delivery at the operator level does not initiate the delivery of 
 <Frame><img src="/images/docs/set-up-eva-dts-dexddcmp-audit-file-delivery/image6.png" /></Frame>
 </Warning>
 
-## Machine Level Setup
+## Machine level setup
 
 <Note>
 **Prerequisite: Dex Read Schedule Configuration**
@@ -82,7 +82,7 @@ To configure DEX delivery at the machine level:
    d. Enable Encryption (Optional). See the [**Set Up Encryption**](/docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-encryption-on-amazon-sqs-delivery)  section for details.
 
    <Frame><img src="/images/docs/set-up-eva-dts-dexddcmp-audit-file-delivery/image9.png" /></Frame>
-8. Choose Dex Format and Filter settings:
+8. Select Dex format and filter settings:
    a. Ensure the format is set to **No Formatting**.
    b. Select the desired DEX Read Types. Only the selected Dex Origins will be sent to the Queue.
 
@@ -91,7 +91,7 @@ To configure DEX delivery at the machine level:
 
    <Frame><img src="/images/docs/set-up-eva-dts-dexddcmp-audit-file-delivery/image11.png" /></Frame>
 
-## Example DEX/DDCMP Audit file JSON Message
+## Example DEX/DDCMP audit file JSON message
 
 Below is an example of the JSON message format for the DEX/DDCMP audit file that will be sent to Amazon SQS upon completing the setup:
 
@@ -134,7 +134,7 @@ Testing****1\r\nPA2*31*15004*0*0\r\nEA1*EGS*200205*0104***58\r\nEA1*EGT*200205*0
 }
 ```
 
-## JSON Message Fields Description
+## JSON message fields description
 
 The following table describes the fields included in the DEX/DDCMP audit file JSON message:
 

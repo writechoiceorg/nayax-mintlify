@@ -11,7 +11,7 @@ The two-phases transaction flow for the SHVA payment service divides a single tr
 
 This flow is often used by clients who implement a loyalty mechanism, as it allows for user interaction between the two phases, such as canceling or changing transaction values.
 
-## Transaction Flow
+## Transaction flow
 
 To understand the 2 Phases transaction flow, consider the following sequence of events:
 
@@ -27,7 +27,7 @@ Here's a breakdown of each step:
 6. The payment server processes the request and sends an authorization response back to the Nayax Device, which then relays the Authorization response to the DC.
 7. At the end of the day, the DC sends a [`doPeriodic`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) request to the Nayax Device, which communicates with the payment server to complete the day's batch process. The Nayax Device then sends a [`doPeriodic`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) response back to the DC.
 
-## See Also
+## See also
 
 <Columns cols={2}>
 <Card

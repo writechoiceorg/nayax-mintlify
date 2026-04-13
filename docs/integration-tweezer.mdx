@@ -8,7 +8,7 @@ TweezerComm follows the [JSON-RPC 2.0](http://www.jsonrpc.org/specification) spe
 
 Refer to the sections below to learn how to submit requests on TweezerComm.
 
-## Server Endpoint
+## Server endpoint
 
 TweezerComm operates over HTTPS using a standard REST API convention. The SPICy Server acts as the entry point for processing JSON-RPC messages. The server endpoint is structured as follows:
 
@@ -24,7 +24,7 @@ All requests are processed at this endpoint using a **POST** method. Remember to
 Agamento listens on port **8080** for TC Lan integration and **9090** for Bonjour integration, allowing communication between the client application and the payment device.
 </Note>
 
-## Perform a Request
+## Perform a request
 
 To request TweezerComm via the SPICy server, the client application must send an adequately formatted JSON-RPC request to the specified endpoint. Below is an example of how to initiate a basic transaction:
 
@@ -53,9 +53,9 @@ In this request, you need to configure the following parameters:
   * The first specifies the payment service in this example it is `engine`.
   * The second part contains the parameters specific to the requested method.
 
-By following this structure, client applications can reliably interact with TweezerComm for secure and efficient payment processing.
+By following this structure, you can reliably interact with TweezerComm for secure and efficient payment processing.
 
-## See Also
+## See also
 
 <Columns cols={3}>
 <Card
