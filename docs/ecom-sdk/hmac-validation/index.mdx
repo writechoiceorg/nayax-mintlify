@@ -52,7 +52,7 @@ Use the following scenarios to verify your string concatenation logic.
 All examples use this test key:
 `a3f7c2e9d1b8456f0e3a7c9b2d4f6e8a1c3d5e7f9b0a2c4d6e8f0b1c3d5e7f90`
 
-### Example 1  Sale Notification (`NayaxTransactionId` present)
+### Example 1 — Sale Notification (`NayaxTransactionId` present)
 Use the following table to verify how raw notification values are transformed into the signing string:
 
 | Field | Value in notification | Value used in signing string |
@@ -73,7 +73,7 @@ Use the following table to verify how raw notification values are transformed in
 uET4OAwxvSN6lwVEwzQ1qRWbMkxo4KR9JbUIcG0qqo0=
 ```
 
-### Example 2  Auth Request (`NayaxTransactionId` absent)
+### Example 2 — Auth Request (`NayaxTransactionId` absent)
 This scenario demonstrates how to handle missing fields. Note that the separator is still required even if the first field is empty.
 
 | Field | Value in notification | Value used in signing string |

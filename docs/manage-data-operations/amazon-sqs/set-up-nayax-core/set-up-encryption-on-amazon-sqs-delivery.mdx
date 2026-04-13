@@ -5,11 +5,11 @@ metadata:
 ---
 
 To set up Encryption on Delivery to Amazon SQS, you must have access to Nayax Core and
-Lynx API with the appropriate user permissions, Specifically the following roles:
+Lynx API with the appropriate user permissions. Specifically, the following roles:
 
 * **Lynx - SQS Encryption**
 
-To enable the encryption on the messages sent Amazon SQS you should mark the **Enable Encryption**
+To enable the encryption on the messages sent to Amazon SQS, you should mark the **Enable Encryption**
 check box in the relevant configuration section as described in the previous sections.
 
 ## Access the Lynx API
@@ -41,7 +41,7 @@ The Response will contain the following values:
 
 | Field Name     | Description                                                                        |
 | -------------- | ---------------------------------------------------------------------------------- |
-| **actor\_id**   | Auto generate unique id, represents the hierarchical entity in the hierarchy tree  |
+| **actor\_id**   | Auto-generated unique id, represents the hierarchical entity in the hierarchy tree  |
 | **enc\_ver**    | Numerator identifying Encryption Key Version                                       |
 | **enc\_key**    | Encryption Key, Alphanumeric GUID used to encrypt Messages delivered to Amazon SQS |
 | **created\_dt** | Encryption Key Creation Date and Time                                              |
