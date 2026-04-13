@@ -44,7 +44,7 @@ let component = DropInComponent(paymentMethods: paymentMethods, context: context
 
 For web integrations, the SDK's styling is primarily driven by CSS Custom Properties (CSS Variables), enabling easy, global theme overrides without modifying the core library code.
 
-The library defines hundreds of CSS variables prefixed with --adyen-sdk-\` that control the colors, spacing, typography, and borders of all Drop-in and Component elements. To apply your custom theme, you override these variables in your own CSS file.
+The library defines hundreds of CSS variables prefixed with `--adyen-sdk-` that control the colors, spacing, typography, and borders of all Drop-in and Component elements. To apply your custom theme, you override these variables in your own CSS file.
 
 1. Create a CSS file (e.g., `override.css`) and define your preferred values for the relevant `--adyen-sdk-` variables, typically at the `:root` level for global application.
    ```css

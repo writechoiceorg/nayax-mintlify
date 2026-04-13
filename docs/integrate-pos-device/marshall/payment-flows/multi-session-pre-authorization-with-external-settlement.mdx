@@ -47,17 +47,17 @@ When no product or service is provided, proactive management of the transaction 
 
 ### **Multi-Session Payment Flow**
 
-The following sequence illustrates the complete journey for a multi-session session:
+The following sequence illustrates the complete journey for a multi-session transaction:
 
 #### Initiation of transaction
 
 <Frame>![](/images/docs/multi-session-pre-authorization-with-external-settlement/image1.png)</Frame>
 
 1. Cardholder selects an item on the peripheral.
-2. Peripheral sends  `Reader Enable` to VPOS Touch.
+2. Peripheral sends `Reader Enable` to VPOS Touch.
 3. Nayax's device displays "Present Card" animations to the Cardholder.
 4. Cardholder presents payment.
-5. Nayax's device sends  `Begin Session` to the peripheral and the peripheral's SDK triggers the "session begin" event:
+5. Nayax's device sends `Begin Session` to the peripheral and the peripheral's SDK triggers the "session begin" event:
     <CodeGroup>
     ```java Java
     vmc_vend_events() (via onBeginSession(funds_avail))
@@ -131,7 +131,7 @@ vmc_vend_event_handler_cb(vm_vend_event_on_transaction_info)
 
 At this point, the peripheral must retain the (Nayax's) Transaction ID and Site ID received for later use in the External Settlement/External Cancel.
 
-12. **Optional:** The peripheral's SDK can respond to Nayax's device with its own Transaction number (this information won't be used anywhere, just in case the peripheral would like to have its own Transaction ID appearing in the SDK's logs).
+13. **Optional:** The peripheral's SDK can respond to Nayax's device with its own Transaction number (this information won't be used anywhere, just in case the peripheral would like to have its own Transaction ID appearing in the SDK's logs).
 13. Nayax's device sends `Vend Approved`, triggering the peripheral's SDK "vend approved" event:
     <CodeGroup>
     ```java Java
