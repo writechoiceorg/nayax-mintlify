@@ -28,8 +28,8 @@ export const ManageData = () => {
     {
       icon: <SalesAlertsIcon />,
       title: "Real-Time Sales & Alerts",
-      subtitle: "Amazon SQS",
-      description: "Monitor machine telemetry, transactions, and system alerts in real-time via Amazon SQS.",
+      subtitle: "Transaction Reporting",
+      description: "Receive transaction reports in real-time via Amazon SQS, or periodically via SFTP or Email.",
       link: "/docs/manage-data-operations/amazon-sqs/overview",
     },
     {
