@@ -99,7 +99,7 @@ For this feature to work, the reader must be configured to send External Display
 
   <Tab title="Linux">
     ```c Linux
-    id on_reader_event(uint8_t msg_index, char* line1, char* line2) {
+    void on_reader_event(uint8_t msg_index, char* line1, char* line2) {
     printf("Reader Display: %s | %s\n", line1, line2);
     }
     LibOtiKiosk_Register_ReaderEvent_Callback(on_reader_event);
