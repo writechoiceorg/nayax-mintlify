@@ -56,6 +56,40 @@ Follow these steps to configure transaction delivery at the operator level in th
 
 By completing these steps, your transaction data will be securely delivered to Amazon SQS based on the configuration you've set up.
 
+## Scheduled File Report (SFTP / Email)
+
+In addition to real-time Amazon SQS delivery, Nayax Core can deliver transaction reports periodically — either hourly or daily — to an SFTP server or by email. This is configured on the same **Transactions Report** tab, in the **Scheduled File Report Via Email / SFTP** section.
+
+### Enable and configure the report
+
+1. In the **Transactions Report** tab, scroll to the **Scheduled File Report Via Email / SFTP** section.
+2. Toggle **Enable Report** to on.
+3. Configure the report format:
+
+| Field | Description |
+|---|---|
+| **File Type** | Select **XML** or **CSV**. |
+| **Delimiter** | Choose Tab, Semicolon, Comma, Space, Pipe, or Other. |
+| **Other** | Custom delimiter character (only when **Other** is selected). |
+| **Include Headers Row** | Toggle on to include a column header row in the file. |
+
+4. Set the **Report Interval**: **Hourly** (select the minute) or **Daily** (select the time of day).
+
+### Connection details
+
+Fill in the delivery connection details:
+
+| Field | Required | Description |
+|---|---|---|
+| **IP Address** | Yes | Server hostname or IP address. |
+| **Port** | Yes | Server port. |
+| **Folder** | No | Remote destination folder path. |
+| **User** | Yes | Username. |
+| **Password** | Yes | Password. |
+| **Fingerprint** | No | Server fingerprint for verification. |
+
+Click **Validate** to test the connection, then save.
+
 ## Example Transaction JSON Message
 
 Below is an example of the transaction JSON message that will be sent to Amazon SQS once the setup is complete:

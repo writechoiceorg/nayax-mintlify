@@ -35,7 +35,7 @@
             "icon": "microchip",
             "groups": [
               {
-                "group": "Guides",
+                "group": "Marshall Guides",
                 "pages": [
                   "docs/integrate-pos-device/marshall/marshall-sdk",
                   "docs/integrate-pos-device/marshall/get-started/marshall-integration-process",
@@ -126,7 +126,7 @@
             "icon": "gas-pump",
             "groups": [
               {
-                "group": "Getting Started",
+                "group": "Marshall Pro Guides",
                 "pages": [
                   "docs/integrate-pos-device/marshall-pro/getting-started/index",
                   "docs/integrate-pos-device/marshall-pro/getting-started/marshall-pro-integration-process",
@@ -199,7 +199,7 @@
             "icon": "mobile",
             "groups": [
               {
-                "group": "Guides",
+                "group": "TweezerComm Guides",
                 "pages": [
                   "docs/integrate-pos-device/tweezercomm/overview-tweezer",
                   "docs/integrate-pos-device/tweezercomm/tweezercomm-integration-process",
@@ -309,7 +309,7 @@
             "icon": "credit-card",
             "groups": [
               {
-                "group": "Guides",
+                "group": "EMV Core Guides",
                 "pages": [
                   "docs/integrate-pos-device/emv-core/overview",
                   "docs/integrate-pos-device/emv-core/get-started/emv-core-integration-process",
@@ -360,7 +360,7 @@
             "icon": "bolt",
             "groups": [
               {
-                "group": "Guides",
+                "group": "Spark Guides",
                 "pages": [
                   "docs/integrate-pos-device/spark/spark",
                   "docs/integrate-pos-device/spark/spark-integration-process",
@@ -429,11 +429,11 @@
         "icon": "gears",
         "menu": [
           {
-            "item": "Amazon SQS",
+            "item": "Transaction Reporting",
             "icon": "envelope",
             "groups": [
               {
-                "group": "Guides",
+                "group": "Transaction Reporting Guides",
                 "pages": [
                   "docs/manage-data-operations/amazon-sqs/overview",
                   {
@@ -464,7 +464,7 @@
             "icon": "link",
             "groups": [
               {
-                "group": "Guides",
+                "group": "Lynx API Guides",
                 "pages": [
                   "docs/manage-data-operations/lynx-api/lynx-overview",
                   "docs/manage-data-operations/lynx-api/security",
@@ -577,7 +577,7 @@
         "icon": "credit-card",
         "groups": [
           {
-            "group": "Guides",
+            "group": "Cortina Guides",
             "pages": [
               "docs/cortina/overview-cortina",
               "docs/cortina/cortina-integration",
@@ -672,102 +672,6 @@
                 "openapi": {
                   "source": "/openapi/cortina.yaml",
                   "directory": "reference/cortina"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "eCom SDK",
-        "icon": "shopping-cart",
-        "pages": [
-          {
-            "group": "Guides",
-            "pages": [
-              "docs/ecom-sdk/ecom-sdk-overview",
-              "docs/ecom-sdk/get-started/ecom-integration-process",
-              {
-                "group": "Security & Authentication",
-                "pages": [
-                  "docs/ecom-sdk/security-authentication/ip-whitelist"
-                ],
-                "root": "docs/ecom-sdk/security-authentication/ecom-security-authentication"
-              },
-              {
-                "group": "Get Started",
-                "pages": [
-                  "docs/ecom-sdk/get-started/android-sdk",
-                  "docs/ecom-sdk/get-started/ios-sdk",
-                  "docs/ecom-sdk/get-started/web-sdk"
-                ],
-                "root": "docs/ecom-sdk/get-started/ecom-sdk-get-started"
-              },
-              "docs/ecom-sdk/tokenization",
-              {
-                "group": "Front-End Integration",
-                "pages": [
-                  "docs/ecom-sdk/front-end-integration/ecom-sdk-create-payments",
-                  "docs/ecom-sdk/front-end-integration/handling-payment-results",
-                  {
-                    "group": "Drop-in UI",
-                    "pages": [
-                      "docs/ecom-sdk/front-end-integration/drop-in-ui/ui-theme-customization"
-                    ],
-                    "root": "docs/ecom-sdk/front-end-integration/drop-in-ui/index"
-                  },
-                  "docs/ecom-sdk/front-end-integration/test-cards"
-                ],
-                "root": "docs/ecom-sdk/front-end-integration/front-end-sdk"
-              },
-              {
-                "group": "Back-End Integration",
-                "pages": [
-                  "docs/ecom-sdk/back-end-integration/nayax-ecom-tokens",
-                  "docs/ecom-sdk/back-end-integration/webhook-notifications",
-                  {
-                    "group": "Request Samples",
-                    "pages": [
-                      "docs/start-a-transaction",
-                      "docs/ecom-sdk/back-end-integration/request-samples/validate-merchant",
-                      "docs/ecom-sdk/back-end-integration/request-samples/charge-token",
-                      "docs/ecom-sdk/back-end-integration/request-samples/settlement-1",
-                      "docs/ecom-sdk/back-end-integration/request-samples/refunds-1",
-                      "docs/ecom-sdk/back-end-integration/request-samples/void-or-cancel",
-                      "docs/ecom-sdk/back-end-integration/request-samples/incremental-authorization",
-                      "docs/ecom-sdk/back-end-integration/request-samples/get-transaction-status"
-                    ]
-                  }
-                ],
-                "root": "docs/ecom-sdk/back-end-integration/ecom-sdk-back-end-integration"
-              },
-              {
-                "group": "Payment Methods",
-                "pages": [
-                  "docs/ecom-sdk/payment-methods/apple-pay-integration-setup",
-                  "docs/ecom-sdk/payment-methods/google-pay-integration-setup"
-                ],
-                "root": "docs/ecom-sdk/payment-methods/index"
-              },
-              "docs/ecom-sdk/ecom-decline-reason-codes",
-              {
-                "group": "HMAC Validation",
-                "pages": [
-                  "docs/ecom-sdk/hmac-validation/implementation-options",
-                  "docs/ecom-sdk/hmac-validation/testing-troubleshooting"
-                ],
-                "root": "docs/ecom-sdk/hmac-validation/index"
-              }
-            ]
-          },
-          {
-            "group": "API Reference",
-            "pages": [
-              {
-                "group": "Endpoints",
-                "openapi": {
-                  "source": "/openapi/ecom.yaml",
-                  "directory": "reference/ecom"
                 }
               }
             ]
