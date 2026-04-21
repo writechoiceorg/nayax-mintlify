@@ -247,142 +247,179 @@ Below is an example of the transaction JSON message that will be sent to Amazon 
 
 The following table describes the fields included in the transaction JSON message:
 
-| **Field Name**                      | **Type**    | **Description**                                                          |
-| ----------------------------------- | ----------- | ------------------------------------------------------------------------ |
-| **Machine Name**                    | `string`    | Machine / POS Name as defined under Operations > Machines > Machine Name |
-| **Machine Model**                   | `string`    | Model of the machine used.                                               |
-| **Operator Identifier**             | `string`    | Unique identifier for the machine operator.                              |
-| **Machine AuTime**                  | `Date Time` | Authorization time of the machine.                                       |
-| **Machine SeTime**                  | `Date Time` | Settlement time of the machine.                                          |
-| **Currency**                        | `string`    | Currency used in the transaction.                                        |
-| **Card String**                     | `string`    | Encrypted or masked card data.                                           |
-| **Brand**                           | `string`    | Brand associated with the transaction or card.                           |
-| **CLI**                             | `string`    | Caller Line Identification for tracking.                                 |
-| **SeValue**                         | `Decimal`   | Settled value of the transaction.                                        |
-| **Extra Charge**                    | `Decimal`   | Any additional charges applied.                                          |
-| **Payment Service**                 | `string`    | Payment service used, e.g., mobile payment via credit card.              |
-| **Payment Method ID (1)**           | `Integer`   | Identifier for the primary payment method.                               |
-| **Recognition Method ID (3)**       | `Integer`   | Identifier for recognition method used.                                  |
-| **Catalog Number**                  | `string`    | Product catalog number.                                                  |
-| **Product**                         | `string`    | Product name, including MDB Code or PA Code if applicable.               |
-| **Device Number**                   | `string`    | Unique identifier of the device used for the transaction.                |
-| **Actor Hierarchy**                 | `string`    | Hierarchy of the actor involved in the transaction.                      |
-| **Payment Method Description**      | `string`    | Description of the payment method used.                                  |
-| **Recognition Description**         | `string`    | Description of the recognition method applied.                           |
-| **Card First 4 Digits**             | `string`    | First four digits of the card number.                                    |
-| **Card Last 4 Digits**              | `string`    | Last four digits of the card number.                                     |
-| **Card Type**                       | `string`    | Type of card used, e.g., debit or credit.                                |
-| **Machine Group**                   | `string`    | Group or category the machine belongs to.                                |
-| **Product Group**                   | `string`    | Group or category the product belongs to.                                |
-| **Transaction ID**                  | `Integer`   | Unique identifier for the transaction.                                   |
-| **Site ID**                         | `Integer`   | Identifier for the site where the transaction occurred.                  |
-| **Authorization Time**              | `Date Time` | Time when the transaction was authorized.                                |
-| **Authorization Value**             | `Decimal`   | Authorized value of the transaction.                                     |
-| **PayServTransid**                  | `Integer`   | Payment service transaction ID.                                          |
-| **sePayServTransId**                | `string`    | Settlement payment service transaction ID.                               |
-| **Settlement Time**                 | `Date Time` | Time when the transaction was settled.                                   |
-| **Product Code in Map**             | `Integer`   | Mapped product code identifier.                                          |
-| **Cancel Type**                     | `Integer`   | Type of cancellation, if applicable.                                     |
-| **Is Revalue Transaction**          | `Boolean`   | Indicates if this is a revalue transaction.                              |
-| **Preselection Status**             | `Integer`   | Status of the preselection process.                                      |
-| **Is Phone Registration**           | `Boolean`   | Indicates if the phone is registered.                                    |
-| **Is Multivend**                    | `Boolean`   | Indicates if the transaction involves multiple vending actions.          |
-| **Settlement Failed**               |             | Indicates if the settlement process failed.                              |
-| **Sale ID**                         | `Integer`   | Unique identifier for the sale.                                          |
-| **Sale Value**                      | `Decimal`   | Value of the sale transaction.                                           |
-| **Updated DT**                      | `Date Time` | Date and time of the last update.                                        |
-| **Constant Preauthorization Value** |             | Preauthorized constant value, if applicable.                             |
-| **Is Partial Confirmation**         |             | Indicates if the confirmation was partial.                               |
-| **Authorization Code**              | `string`    | Code for authorization.                                                  |
-| **Authorization Date and Time**     |             | Date and time of the authorization.                                      |
-| **Authorization RRN**               | `string`    | Retrieval reference number for the authorization.                        |
-| **Event Code**                      |             | Code associated with the event.                                          |
-| **Guest Name**                      | `string`    | Name of the guest, if applicable.                                        |
-| **Token**                           |             | Token associated with the transaction.                                   |
-| **Zip Code**                        |             | ZIP code of the location, if applicable.                                 |
-| **Billing Provider ID**             |             | Identifier for the billing provider.                                     |
-| **AVS Only**                        |             | Indicates if the transaction was AVS-only.                               |
-| **BOS Transaction Key**             |             | Key for the BOS transaction.                                             |
-| **Disable Debit Cards**             |             | Indicates if debit cards are disabled.                                   |
-| **Force Transactions Terminal**     |             | Indicates if transactions are forced on the terminal.                    |
-| **Use Phone Transaction**           |             | Indicates if phone-based transactions are used.                          |
-| **License ID**                      |             | Identifier for the license.                                              |
-| **Merchant ID**                     |             | Identifier for the merchant.                                             |
-| **Billing Site ID**                 |             | Identifier for the billing site.                                         |
-| **Terminal ID**                     |             | Unique identifier for the terminal.                                      |
-| **User Name**                       |             | User name associated with the transaction.                               |
-| **User Password**                   |             | Password of the user.                                                    |
-| **With ZIP**                        |             | Indicates if ZIP verification was performed.                             |
-| **Use Phone Contactless**           |             | Indicates if contactless phone transactions are used.                    |
-| **Use Phone Contact**               |             | Indicates if phone contact transactions are used.                        |
-| **Debit Card Prefix**               |             | Prefix for debit cards.                                                  |
-| **Actor Description**               |             | Description of the actor involved in the transaction.                    |
-| **Institute Description**           | `string`    | Description of the associated institute.                                 |
-| **Location Code**                   | `Integer`   | Code for the location of the transaction.                                |
-| **Location Description**            | `string`    | Description of the transaction location.                                 |
-| **Operator Institute Code**         | `Integer`   | Code of the operator's institute.                                        |
-| **Area Description**                |             | Description of the area where the transaction occurred.                  |
-| **Product PA Code**                 |             | PA code of the product.                                                  |
-| **OP Button Code**                  | `string`    | Code for the operator button pressed.                                    |
-| **Product Volume Type**             |             | Type of volume measurement for the product.                              |
-| **Barcode**                         | `string`    | Barcode of the product.                                                  |
-| **Cost Price**                      | `Decimal`   | Cost price of the product.                                               |
-| **Card Price**                      | `Decimal`   | Price when paid with a card.                                             |
-| **Prepaid Price**                   | `Decimal`   | Prepaid price of the product.                                            |
-| **Machine Price**                   | `Decimal`   | Price charged by the machine.                                            |
-| **Cash Price**                      | `Decimal`   | Price when paid in cash.                                                 |
-| **Default Price**                   | `Decimal`   | Default price of the product.                                            |
-| **Product Name**                    |             | Name of the product.                                                     |
-| **Actor Code**                      | `Integer`   | Code of the actor involved.                                              |
-| **Actor ID**                        | `Integer`   | Unique ID for the actor.                                                 |
-| **Display Card Number**             | `string`    | Masked display of the card number.                                       |
-| **Card Holder Name**                | `string`    | Name of the cardholder.                                                  |
-| **User Identity**                   | `string`    | Identity of the user associated with the transaction.                    |
-| **Billing Provider Name**           |             | Name of the billing provider.                                            |
-| **Is Offline Transaction**          |             | Indicates if the transaction was offline.                                |
-| **Is EMV Transaction**              |             | Indicates if the transaction used EMV technology.                        |
-| **Machine AuTime (Date only)**      | `string`    | Authorization date of the machine in a date-only format.                 |
-| **Machine AuTime (Time only)**      | `string`    | Authorization time of the machine in a time-only format.                 |
-| **Machine SeTime (Date only)**      | `string`    | Settlement date of the machine in a date-only format.                    |
-| **Machine SeTime (Time only)**      | `string`    | Settlement time of the machine in a time-only format.                    |
-| **Settlement Time (Date only)**     | `string`    | Settlement date in a date-only format.                                   |
-| **Settlement Time (Time only)**     | `string`    | Settlement time in a time-only format.                                   |
-| **Updated DT (Date only)**          | `string`    | Last updated date in a date-only format.                                 |
-| **Updated DT (Time only)**          | `string`    | Last updated time in a time-only format.                                 |
-| **Raw ENI Loyalty Num**             |             | Raw ENI loyalty number.                                                  |
-| **Parsed ENI Loyalty Num**          |             | Parsed ENI loyalty number.                                               |
-| **Products**                        | `Object`    | List of products involved in the transaction.                            |
-| **Product VAT Id**                  |             | VAT identifier for the product.                                          |
-| **Product Tax Value**               |             | Tax value applied to the product.                                        |
-| **Product Tax Code**                |             | Tax code associated with the product.                                    |
-| **Product Vat Amount**              |             | Amount of VAT applied to the product.                                    |
-| **Product Net Price**               |             | Net price of the product before taxes.                                   |
-| **Product External Prepaid Price**  |             | External prepaid price of the product.                                   |
-| **Customer Type**                   |             | Type of customer involved in the transaction.                            |
-| **Product Group Code**              |             | Code of the product group.                                               |
-| **Product Group Sub Code**          |             | Sub-code of the product group.                                           |
-| **Product Retail Price**            |             | Retail price of the product.                                             |
-| **Product Discount Percentage**     |             | Percentage of discount applied to the product.                           |
-| **Product Discount Amount**         |             | Discount amount applied to the product.                                  |
-| **Product Bruto**                   |             | Gross value of the product.                                              |
-| **Product Catalog Number**          |             | Catalog number of the product.                                           |
-| **Client Id**                       |             | Unique ID for the client.                                                |
-| **Contract Name**                   |             | Name of the contract associated with the transaction.                    |
-| **Payout Day**                      |             | Day when the payout is scheduled.                                        |
-| **Contract Id**                     |             | ID of the contract associated with the transaction.                      |
-| **Airport Id**                      | `Integer`   | Unique ID of the airport, if applicable.                                 |
-| **Member Type**                     |             | Type of membership associated with the transaction.                      |
-| **Is Refund Card**                  | `Boolean`   | Indicates if the card used is a refund card.                             |
-| **Contract Number**                 |             | Number of the contract associated with the transaction.                  |
-| **Airport Code**                    | `string`    | Code of the airport, if applicable.                                      |
-| **Payed Value**                     | `Decimal`   | Value paid in the transaction.                                           |
-| **Consumer ID**                     | `Integer`   | Unique ID for the consumer.                                              |
-| **Discount Card ID**                | `Integer`   | Unique ID for the discount card used.                                    |
-| **Discount Card Number**            | `string`    | Number of the discount card used.                                        |
-| **Discount Card User Identity**     | `string`    | Identity of the discount card user.                                      |
-| **Discount Card Physical Type ID**  | `string`    | Physical type ID of the discount card.                                   |
-| **Discount Card Activation Date**   | `string`    | Activation date of the discount card.                                    |
-| **Discount Card Expiration Date**   | `string`    | Expiration date of the discount card.                                    |
+| **Field Name** | **Type** | **Description** |
+| --- | --- | --- |
+| **Machine Name** | `String` | Machine / POS Name as defined under Operations > Machines > Machine Name |
+| **Machine Model** | `String` | Model of the machine used. |
+| **Operator Identifier** | `String` | Machine / POS Number as defined under Operations > Machines > Machine Number |
+| **Machine AuTime** | `Date Time` | Machine Authorization Date and Time based on Machine Time Zone |
+| **Machine SeTime** | `Date Time` | Machine Settlement Date and Time based on Machine Time Zone |
+| **Currency** | `String` | Transaction Currency Based on Machine Configuration |
+| **Card String** | `String` | First 4 and Last 4 digits of the payment card |
+| **Brand** | `String` | Credit Card Brand Name |
+| **CLI** | `String` | Consumer Phone Number, applicable when transaction made through Mobile |
+| **SeValue** | `Decimal` | Settlement Value, the amount charged |
+| **Extra Charge** | `Decimal` | Extra Charge Convenience fee |
+| **Payment Service (Mobile using Credit Card)** | `String` | Payment service used, e.g., mobile payment via credit card. |
+| **Payment Method ID (1)** | `Integer` | Payment Method ID (Nayax Internal Identifier) |
+| **Recognition Method ID (3)** | `Integer` | Recognition Method ID (Nayax Internal Identifier) |
+| **Catalog Number** | `String` | Product Catalog Number as defined under Administration > Products > Product ID |
+| **Product (Product Name(MDB Code, PA Code=Price))** | `String` | Sold Product Name with MDB Code and PA Code identifiers as defined in Machine Product Map and Price of Sold Item |
+| **Device Number** | `String` | Nayax Device Serial Number |
+| **Actor Hierarchy** | `String` | Actor Hierarchy as Breadcrumbs |
+| **Payment Method Description** | `String` | Payment Method Name |
+| **Recognition Description** | `String` | Recognition Name |
+| **Card First 4 Digits** | `String` | Credit Card First 4 digits |
+| **Card Last 4 Digits** | `String` | Credit Card Last 4 digits |
+| **Card Type** | `String` | Description of Card Type used in current transaction |
+| **Machine Group** | `String` | Machine Group Name as defined on Machine |
+| **Product Group** | `String` | Sold Item Product Group Name |
+| **Transaction ID** | `Integer` | Transaction ID (Nayax Internal Identifier) |
+| **Site ID** | `Integer` | Nayax Servers Site ID |
+| **Authorization Time** | `Date Time` | Transaction Authorization Date and Time (GMT) |
+| **Authorization Value** | `Decimal` | Transaction Authorization Amount |
+| **PayServTransid** | `String` | Payment Service Provider Transaction ID |
+| **sePayServTransId** | `String` | Payment Service Provider Settlement Transaction ID |
+| **Settlement Time** | `Date Time` | Transaction Settlement Date and Time (GMT) |
+| **Product Code in Map** | `Integer` | Product Selection Item Number (MDB Code) |
+| **Cancel Type** | `Integer` | Transaction Cancel Type Value stored on transaction level to indicate cancel reason if transaction was canceled (e.g. Product Selection Timeout); value 255 means successfully settled transaction |
+| **Is Revalue Transaction** | `Boolean` | Bit indicating if transaction is a Revalue Transaction |
+| **Preselection Status** | `Integer` | Transaction Preselection Status, Server value to indicate transaction status on server side (internal use for transaction processing options) |
+| **Is Phone Registration** | `Boolean` | Bit indicating if transaction is part of Phone Registration (Old Deprecated functionality) |
+| **Is Multivend** | `Boolean` | Bit indicating if transaction is a Multivend (Multi selection sale/vend) |
+| **Settlment Failed** | | Indicates if the settlement process failed. |
+| **Sale ID** | `Integer` | Sale/Discount ID, holds value if transaction had a discount applied on it |
+| **Sale Value** | `Decimal` | Sale/Discount Amount |
+| **Updated DT** | `Date Time` | Transaction Update Date and Time (GMT) |
+| **Constant Preauthorization Value** | `Decimal` | Authorization Amount as defined under Operations > Machines > Machine Payment Tab > Constant Preauthorization Field |
+| **Is Partial Confirmation** | `Boolean` | Bit indicating if a transaction is a partial confirmation (applicable only when Credit Call is the defined billing provider) |
+| **Authorization Code** | `String` | Code for authorization. |
+| **Authorization Date and Time** | `Date Time` | Authorization Date and Time (GMT) |
+| **Authorization RRN** | `String` | Authorization Retrieval Reference Number – Reference number for transaction |
+| **Event Code** | `Integer` | Code associated with the event. |
+| **Guest Name** | `String` | Name of the guest, if applicable. |
+| **Token** | `String` | Token associated with the transaction. |
+| **Zip Code** | `String` | ZIP code of the location, if applicable. |
+| **Billing Provider ID** | `Integer` | Identifier for the billing provider. |
+| **AVS Only** | `Boolean` | Indicates if the transaction was AVS-only. |
+| **BOD Transaction Key** | | Key for the BOD transaction. |
+| **Disable Debit Cards** | `Boolean` | Indicates if debit cards are disabled. |
+| **Force Transactions Terminal** | `String` | Indicates if transactions are forced on the terminal. |
+| **Use Phone Transaction** | `Boolean` | Indicates if phone-based transactions are used. |
+| **License ID** | `Integer` | Identifier for the license. |
+| **Merchant ID** | `String` | Identifier for the merchant. |
+| **Billing Site ID** | `Integer` | Identifier for the billing site. |
+| **Terminal ID** | `Integer` | Unique identifier for the terminal. |
+| **User Name** | `String` | User name associated with the transaction. |
+| **User Password** | `String` | Password of the user. |
+| **With ZIP** | `Boolean` | Indicates if ZIP verification was performed. |
+| **Use Phone Contactless** | `Boolean` | Indicates if contactless phone transactions are used. |
+| **Use Phone Contact** | `Boolean` | Indicates if phone contact transactions are used. |
+| **Debit Card Prefix** | `String` | Prefix for debit cards. |
+| **Actor Description** | `String` | Actor Hierarchy Entity Name of Machine's Direct Actor |
+| **Institute Description** | `String` | Institute / Customer Name |
+| **Location Code** | `Integer` | Institute Location Code |
+| **Location Description** | `String` | Institute Location Name |
+| **Operator Institute Code** | `Integer` | Operator Institute Code as defined under Administration > Operator > Operator Institutes > Code Column |
+| **Area Description** | `String` | Description of the area where the transaction occurred. |
+| **Product PA Code** | `String` | Product PA Code as defined under Operations > Machines > Machine Product Map > PA Code column |
+| **OP Button Code** | `String` | Product OP Button Code as defined under Operations > Machines > Machine Product Map > OP Button Code column |
+| **Product Volume Type** | `String` | Product Volume Type as defined under Administration > Products > Product Volume Type field |
+| **Barcode** | `String` | Product Barcode as defined under Administration > Products > Product Barcode Field |
+| **Cost Price** | `Decimal` | Product Cost Price as defined under Administration > Products > Product Cost Price Field |
+| **Card Price** | `Decimal` | Product Credit Card Price as defined under Operations > Machines > Machine Product Map > Credit Card Price Column |
+| **Prepaid Price** | `Decimal` | Product Prepaid Card Price as defined under Operations > Machines > Machine Product Map > Credit Card Price Column |
+| **Machine Price** | `Decimal` | Product Machine Price as displayed under Operations > Machines > Machine Product Map > Machine Price Column |
+| **Cash Price** | `Decimal` | Product Cash Display Price as defined under Operations > Machines > Machine Product Map > Cash Display Price Column |
+| **Default Price** | `Decimal` | Product Default Retail Price as Defined under Operations > Machines > Machine Product Map > Default Retail Price Column |
+| **Product Name** | `String` | Product Name as defined under Administration > Products > Product Name field |
+| **Actor Code** | `Integer` | Operator Internal Code Fields as defined under Administration > Operator > Operator Internal Code |
+| **Display Card Number** | `String` | Nayax Prepaid Card Display Card Number |
+| **Card Holder Name** | `String` | Nayax Prepaid Card Holder Name |
+| **User Identity** | `String` | Nayax Prepaid Card Holder User Identity |
+| **Billing Provider Name** | `String` | Billing Provider Name as defined on Machine's Actor Hierarchy |
+| **Is Offline Transaction** | `Boolean` | Bit indicating if this is an EMV Offline Transaction |
+| **Is EMV Transaction** | `Boolean` | Bit indicating if this is an EMV Transaction |
+| **Machine AuTime (Date only)** | `Date` | Machine Authorization Date based on Machine Time Zone |
+| **Machine AuTime (Time only)** | `Time` | Machine Authorization Time based on Machine Time Zone |
+| **Machine SeTime (Date only)** | `Date` | Machine Settlement Date based on Machine Time Zone |
+| **Machine SeTime (Time only)** | `Time` | Machine Settlement Time based on Machine Time Zone |
+| **Settlement Time (Date only)** | `Date` | Machine Settlement Date (GMT) |
+| **Settlement Time (Time only)** | `Time` | Machine Settlement Time (GMT) |
+| **Updated DT (Date only)** | `Date` | Transaction Update Date (GMT) |
+| **Updated DT (Time only)** | `Time` | Transaction Update Time (GMT) |
+| **Raw ENI Loyalty Num** | `String` | Raw ENI loyalty number. |
+| **Parsed ENI Loyalty Num** | `String` | Parsed ENI loyalty number. |
+| **Products** | `Object` | By checking this box, no column with Product prefix will be presented on the report. |
+| **Product VAT Id** | `Integer` | VAT identifier for the product. |
+| **Product Tax Value** | `Decimal` | Product Tax Value as defined under Administration > Products > Product Group VAT Info > Tax Value Field |
+| **Product Tax Code** | `Integer` | Product Tax Code as defined under Administration > Products > Product Group VAT Info > Tax Code Field |
+| **Product Vat Amount** | `Decimal` | Product VAT Amount calculated based on the Tax Value as defined on Product Group |
+| **Product Net Price** | `Decimal` | Product NET Price calculated by reducing Extra Charge and Product VAT Amounts from Settlement Value |
+| **Product External Prepaid Price** | `Decimal` | Product External Prepaid Price as defined under Operations > Machines > Machine Product Map > External Prepaid Price Column |
+| **Customer Type** | `Integer` | Type of customer involved in the transaction. |
+| **Product Group Code** | `Integer` | Product Group Code as defined under Administration > Products > Product Group Info > Code Field |
+| **Actor ID** | `Integer` | Actor Hierarchy Entity ID of Machine's Direct Actor |
+| **Product Group Sub Code** | `Integer` | Product Group Sub Code as defined under Administration > Products > Product Group Info > Sub Code Field |
+| **Product Retail Price** | `Decimal` | Product Retail Price as defined under Operations > Machines > Machine Product Map > Retail Price Column |
+| **Product Discount Percentage** | `Decimal` | Percentage of discount applied to the product. |
+| **Product Discount Amount** | `Decimal` | Discount amount applied to the product. |
+| **Product Bruto** | `Decimal` | Gross value of the product. |
+| **Product Catalog Number** | `String` | Product Catalog Number as defined under Administration > Products > Product ID Field |
+| **Client Id** | `String` | Unique ID for the client. |
+| **Contract Name** | `String` | Name of the contract associated with the transaction. |
+| **Payout Day** | `Integer` | Day when the payout is scheduled. |
+| **Contract Id** | `String` | ID of the contract associated with the transaction. |
+| **Airport Id** | `Integer` | Unique ID of the airport, if applicable. |
+| **Member Type** | `String` | Type of membership associated with the transaction. |
+| **Is Refund Card** | `Boolean` | Bit indicating if this is a Nayax Refund Card |
+| **Contract Number** | `String` | Number of the contract associated with the transaction. |
+| **Airport Code** | `String` | Actor Airport Code as defined under Administration > Operator > Operator Airport Code Field |
+| **Payed Value** | `Decimal` | Transaction Charge Amount |
+| **Consumer ID** | `Integer` | Unique Consumer Identifier |
+| **Discount Card ID** | `Integer` | Discount Count Card ID (Nayax Internal Unique Identifier) |
+| **Discount Card Number** | `String` | Discount Card Number – Card Unique Identifier |
+| **Discount Card User Identity** | `String` | Discount Card User Identity as defined under Consumers > Cards Management > Discount Card User Identity Field |
+| **Discount Card Physical Type ID** | `String` | Discount Card Physical Type Lut Value ID, example: 30000531 - Contactless Sticker |
+| **Discount Card Activation Date** | `Date Time` | Discount Card Activation Date as defined under Consumers > Cards Management > Discount Card Activation Date Field |
+| **Discount Card Expiration Date** | `Date Time` | Discount Card Expiration Date as defined under Consumers > Cards Management > Discount Card Expiration Date Field |
+| **Is Money** | | |
+| **Prepaid Card Current Regular Credit** | | |
+| **Prepaid Credit Amount Charge** | | |
+| **Prepaid Credit Transaction Charge** | | |
+| **Prepaid Card Current Revalue Credit** | | |
+| **Prepaid Revalue Credit Amount Charge** | | |
+| **Is Revalue Reward Transaction** | | |
+| **Prepaid Card Monthly Amount Credit Usage** | | |
+| **Prepaid Card Monthly Transactions Credit Usage** | | |
+| **Loyalty Card Number** | | |
+| **Product Unit Of Measure** | | |
+| **Product Quantity** | | |
+| **Campaign ID** | | Campaign ID used in current transaction (Nayax Internal Identifier) |
+| **Campaign Type** | | Description of Campaign Type used in current transaction (1-Punch card, 2-Discount) |
+| **Product ID** | | Product ID (Nayax Internal Identifier) |
+| **Card ID** | | Card ID used in current transaction (Nayax Internal Identifier) |
+| **Machine Serial Number** | `String` | Machine Serial Number as provided by the Machine Operator |
+| **Machine ID** | `Integer` | Machine ID, automatically generated Nayax internal ID for machine |
+| **Transaction Status ID** | `Integer` | Transaction Status ID, indicating transaction status with a numeric value |
+| **Transaction Status Name** | `String` | Transaction Status Name, indicating transaction status name |
+| **Device Transaction ID (DTID)** | `Integer` | Device transaction ID generated by the device |
+| **Vendor Transaction UID (VUID)** | `String` | Transaction ID generated by the Payment Provider |
+| **Card BIN** | `Integer` | Credit Card BIN (Bank Identification Number) 6-8 digit number used to identify Card Issuer and Bank |
+| **Batch Ref Number** | `String` | Batch Reference Number |
+| **operator transaction id** | `String` | The operator transaction ID as received in the device authorization command using a Marshal request |
+| **Retail Store Id** | `String` | Data coming from Operator and shown in Nayax reports |
+| **Retail Pos Id** | `String` | Data coming from Operator and shown in Nayax reports |
+| **Operator Data 1** | `String` | Data coming from Operator and shown in Nayax reports |
+| **Credit Card Type** | `String` | Credit Card Type indicating if this is a Debit or Credit Card |
+| **original authorization time** | `Date Time` | Original authorization time |
+| **Is Offline Payment** | `Boolean` | Bit indicating if a deferred transaction |
+| **Energy Consumed (kWh)** | `Decimal` | Energy Consumed (kWh) |
+| **Product Provider** | `String` | Product Provider as defined under Administration > Products > Provider field |
+| **Original Transaction ID** | `Integer` | Original Transaction ID (Nayax Internal Identifier) |
+| **Processing Fee Sum** | `Decimal` | Processing Fee Sum |
+| **Net Price Excluding GST and Processing Fee Sum** | `Decimal` | Net Price Excluding GST (VAT) and Processing Fee Sum |
+| **Revalue Type** | `String` | Revalue type - can be Cash revalue or Credit card revalue |
 
 
 
