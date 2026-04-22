@@ -4,13 +4,41 @@ metadata:
   og:description: "This page provides a reference of error codes. Errors are universal across all API methods. They are returned by the terminal's JSON parser before."
 ---
 
-This page provides a reference of error codes. Errors are universal across all API methods. They are returned by the terminal's JSON parser before the requested command is even executed.
+This page provides a reference of error codes. All errors share the same response structure and are returned in the `errorCode` and `errorMessage` fields.
 
-| Code | Meaning | Description |
-| :--- | :--- | :--- |
-| **1001** | **Invalid JSON** | The system could not parse the message payload because it has an invalid JSON structure. |
-| **1002** | **Unknown Command** | The terminal doesn't recognize the `command` name. |
-| **1003** | **Required Parameter Missing** | The request is missing a mandatory field (such as `requestId`). |
+### Protocol Errors
+
+| Code | Meaning |
+| :--- | :--- |
+| **1001** | Invalid JSON |
+| **1002** | Unknown command |
+| **1003** | Required parameter missing |
+| **1004** | Parameter invalid value |
+| **1005** | Invalid `displayInput` prompt signature |
+
+### Payment Errors
+
+| Code | Meaning |
+| :--- | :--- |
+| **2001** | Try another card |
+| **2002** | Use magnetic reader |
+| **2003** | Please check your phone |
+| **2004** | Use contact reader |
+| **2005** | Card blocked |
+| **2006** | Present one card only |
+| **2007** | Transaction canceled |
+| **2008** | General payment error |
+| **2009** | Remove card |
+| **2010** | Remove card beep |
+| **2011** | Card removed |
+| **2012** | Use smart card reader |
+
+### General Errors
+
+| Code | Meaning |
+| :--- | :--- |
+| **3001** | FuelApp error |
+| **3002** | VPOS service error |
 
 ### Error Handling Best Practices
 

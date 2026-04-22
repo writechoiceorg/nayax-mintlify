@@ -17,9 +17,9 @@ Example of the authorization prompt on a Nayax device:
 
 ## Requests
 
-This command relies on the card data stored in the terminal's session buffer from the preceding detection phase. Consequently, a `data` object is not required in the request.
+This command relies on the card data stored in the terminal's session buffer from the preceding detection phase. A `data` object is not required, but optional fields can be included to pass product and user context to the terminal.
 
-The following example shows a typical request:
+The following example shows a minimal request:
 ```json
 {
 "command": "authorize",
@@ -27,14 +27,28 @@ The following example shows a typical request:
 }
 ```
 
+The following example shows a request with optional data fields:
+```json
+{
+"command": "authorize",
+"requestId": "req-002",
+"data": {
+"products": ["Diesel", "Unleaded", "CNG"],
+"userData": ["NYX-1234", "932747"]
+}
+}
+```
+
 ### Parameter Definitions
 
-The table below describes the required fields for the authorization request:
+The table below describes the fields for the authorization request:
 
 | Name | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
 | **command** | string | Yes | Set to `"authorize"`. |
 | **requestId** | string | Yes | A unique identifier for tracking the response. |
+| **products** | array of strings | No | List of allowed product names (e.g., `["Diesel", "Unleaded"]`). |
+| **userData** | array of strings | No | Arbitrary user data to associate with the transaction, such as plate number or odometer reading. |
 
 ## Responses
 
