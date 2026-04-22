@@ -14,7 +14,7 @@ Use this method to:
 * Accept Contactless (CTLS), Chip (EMV), Magnetic Stripe (Swipe), and QR code scanning.
 
 Example of the card detection prompt on a Nayax device:
-![cardDetect](/images/approved.jpg)
+![cardDetect](/images/approved.png)
 
 ## Requests
 
@@ -42,6 +42,7 @@ The table below describes the parameters available for the detection request:
 | **amount** | integer | Yes | The amount to display on the screen during detection (refer to `decimalPlace`). |
 | **tranType** | integer | No | `1`: Pre-authorization, `2`: Pre-selection (Default is `1`). |
 | **channels** | array | No | Defines allowed payment methods: `CTLS`, `CHIP`, `SWIPE`, or `QR`. Defaults to all if omitted. |
+| **buttonMediaId** | string | No | Optional button displayed below the channels image. Currently supported value: `useQR`. |
 
 ## Responses
 
@@ -72,8 +73,19 @@ The following example shows a typical **QR code** response:
 }
 }
 ```
+
+The following example shows a **button press** response:
+```json
+{
+"requestId": "req-005",
+"data": {
+"state": "BUTTON_PRESS"
+}
+}
+```
+
 <Info>
-  **Note:** When using `cardDetect` for non-credit card methods (such as proprietary QR codes), the client system is responsible for any subsequent authorization or settlement logic.
+  **Note:** When using `cardDetect` for non-credit card methods (such as proprietary QR codes) or when a button is pressed, the client system is responsible for any subsequent authorization or settlement logic. The reader is automatically disabled after a QR code scan or button press.
 </Info>
 
 ### Response Parameters
@@ -82,8 +94,8 @@ The response data is categorized by the entry mode used by the customer:
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| **state** | string | Returns `CARD_READ` upon a successful detection event. |
-| **cardEntryMode** | string | The method used to capture the data: `CTLS`, `CHIP`, `SWIPE`, or `QR`. |
+| **state** | string | `CARD_READ` upon a successful card or QR detection; `BUTTON_PRESS` when the optional button is pressed. |
+| **cardEntryMode** | string | The method used to capture the data: `CTLS`, `CHIP`, `SWIPE`, or `QR`. Not present for `BUTTON_PRESS`. |
 | **cardBrand** | string | The brand of the detected card (e.g., VISA, MASTERCARD). |
 | **maskedPan** | string | The masked Primary Account Number for identification purposes. |
 | **aid** | string | The Application Identifier for EMV-based transactions. |
