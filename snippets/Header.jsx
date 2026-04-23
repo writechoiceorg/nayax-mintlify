@@ -3,9 +3,9 @@ export const Header = () => {
     <header className="relative min-h-[320px] bg-gradient-to-b from-gray-100 to-white dark:from-[#262626] dark:to-[#1B1B1B] py-10 px-6 md:px-12 lg:px-20 overflow-hidden flex items-center border-b border-gray-200 dark:border-gray-800">
       <div className="relative max-w-[1400px] mx-auto w-full">
         
-        {/* Top Row: Title and Logo */}
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mb-12">
-          <div className="flex-1 max-w-2xl">
+        {/* Title and Description */}
+        <div className="mb-12">
+          <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4">
               Nayax API Suite
             </h1>
@@ -13,11 +13,6 @@ export const Header = () => {
               Leverage robust integrations to support your organization's business requirements.
               For more information, <a href="https://www.nayax.com/contact/" target="_blank" className="text-blue-600 dark:text-blue-400 hover:underline">contact us</a>.
             </p>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <img noZoom src="/images/home/logo_light.svg" alt="Nayax Logo" className="h-12 md:h-16 w-auto dark:hidden" />
-            <img noZoom src="/images/home/logo_dark.svg" alt="Nayax Logo" className="h-12 md:h-16 w-auto hidden dark:block" />
           </div>
         </div>
 
