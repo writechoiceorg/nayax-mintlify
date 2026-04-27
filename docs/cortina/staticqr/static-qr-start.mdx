@@ -210,6 +210,22 @@ The following table describes the parameters included in the request body:
   </tbody>
 </table>
 
+### Remote Vend: Product Selection
+
+The following applies to the **PreSelection flow** only. To specify which product to vend, include a `"code"` field inside the `"Products"` array with the corresponding product index.
+
+**Pulse machine code numbering**
+
+For Pulse array machines (any Pulse configuration except Pulse Line), the `"code"` numbering starts from 0:
+
+- **"Ultimate"** product → `"Code": 0`
+- **"Superior"** product → `"Code": 1`
+- **"Regular"** product → `"Code": 2`
+
+If you send a number outside the scope of the virtual machine's array, our servers will select the first item in the list (`Code: 0`).
+
+For Pulse 1–6 configurations (Pulse Line), use `"PulseLineNumber"` instead of `"code"`, and the counting starts from 1 (not 0).
+
 ## Response
 
 The `Start` Response that Nayax's servers would send to the payment method.\
