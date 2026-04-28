@@ -458,9 +458,15 @@
                     "root": "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/index"
                   },
                   {
-                    "group": "Set Up Nayax Core",
+                    "group": "Nayax Core Setup",
                     "pages": [
-                      "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-transaction-delivery",
+                      {
+                        "group": "Set Up Transaction Delivery",
+                        "root": "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-transaction-delivery",
+                        "pages": [
+                          "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/transaction-json-reference"
+                        ]
+                      },
                       "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-eva-dts-dexddcmp-audit-file-delivery",
                       "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-events-delivery",
                       "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-encryption-on-amazon-sqs-delivery"
