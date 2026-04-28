@@ -1,0 +1,46 @@
+---
+title: "Country-Specific Requirements"
+metadata:
+  og:description: "FIS FisCortina handles country-specific fiscalization requirements, including special response data and POS receipt display rules."
+---
+
+FIS FisCortina is designed to handle country-specific fiscalization requirements. Fiscalization laws vary widely, and the requirements can change, ranging from online reporting before product dispensing to batch reporting at the end of the day.
+
+## Special Data in the Response
+
+Due to variations in fiscalization laws across countries, the FIS Cortina platform must be flexible enough to accommodate specific regulatory requirements. The service includes generic parameters in the response intended to hold many possible values according to each country's specific requirements.
+
+For example, the following field carries ZKI data for Croatia:
+
+```json
+"FiscalProtectionCode": "ZKI-98AFB231C"
+```
+
+## POS Receipt Requirements
+
+In fiscalized transactions, it is sometimes required to display a fiscal ID issued by the fiscal provider and approved by the authorities at the end of the payment process.
+
+FIS FisCortina supports two implementations:
+
+1. **Dynamic receipt** — displaying a QR code with a link to the receipt from the fiscal provider.
+2. **POS display** — a dedicated class in the register response used to display receipt data directly on the POS terminal. This is required in some regions, such as Poland.
+
+For Poland, the POS display includes the following fields according to local regulation:
+
+| Field | Description |
+|---|---|
+| numer unikatowy | Unique fiscal unit number |
+| numer identyfikacji podatkowej (NIP) podatnika | Tax ID |
+| datę sprzedaży | Time of sale |
+| numer kolejny paragonu | E-receipt number |
+| łączną wartość sprzedaży brutto | Total value |
+| łączną wysokość podatku należnego | VAT value |
+| typ formy płatności | Payment method |
+
+**Example of a valid POS display for Poland:**
+
+```json
+"Data": {
+  "POSDisplay": "Sprzedaż:5.00 PLN;Nr p. 12345:PTU 0.23;ECJ1112223334:8889999011;12.12.2026: 13:42:53;Karta;OK - nowa sprzedaż;"
+}
+```

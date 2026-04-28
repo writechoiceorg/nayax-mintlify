@@ -1,0 +1,20 @@
+---
+title: "Special Fiscal Configurations"
+metadata:
+  og:description: "Configuration options for handling fiscal timeouts in FIS Cortina."
+---
+
+## Timeout Handling
+
+The FIS Cortina API manages timeouts differently depending on the transaction type and state. A timeout occurs when no response is received from the fiscal provider within the configured time period.
+
+There are two main configuration options for dealing with a timeout:
+
+- **Ignore and Proceed** — The service ignores the issue and treats the case as a successful registration.
+- **Cancel the Transaction** — When a timeout occurs before the product is dispensed, the transaction is canceled and the product is not dispensed.
+
+<Warning>
+**Timeout Result**
+
+Although the timeout may originate externally (Tax Authority or Fiscal Integrator), the status recorded in the Nayax Engine is always a Timeout.
+</Warning>
