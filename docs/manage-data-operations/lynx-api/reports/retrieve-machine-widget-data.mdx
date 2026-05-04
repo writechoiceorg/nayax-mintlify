@@ -12,7 +12,7 @@ Before making calls to the Widget API, you need to have:
 
 * Access to the Lynx QA or Production environment
 * A valid API token (See [Security & Token](/docs/manage-data-operations/lynx-api/security))
-* [Machines](/reference/lynx/machines/get-machine-basic-info) or [Operator](/docs/manage-data-operations/lynx-api/operator/index) IDs
+* [Machines](/reference/lynx/machines/get-specific-machine-basic-info) or [Operator](/docs/manage-data-operations/lynx-api/operator/index) IDs
 
 ## Base URL
 
@@ -43,11 +43,11 @@ See [Security & Token](/docs/manage-data-operations/lynx-api/security) for detai
 The following endpoints are available. Select a card to view the full API reference.
 
 <Columns cols={3}>
-  <Card icon="link" title="List Widgets for a Screen" href="/reference/lynx/report/get-dashboard-widgets">
+  <Card icon="link" title="List Widgets for a Screen" href="/reference/lynx/report/get-available-widgets">
     Returns all widgets configured for a given screen type, including their IDs, names, and configurations.
   </Card>
 
-  <Card icon="link" title="Retrieve Widget Data (POST)" href="/reference/lynx/report/get-widget-data">
+  <Card icon="link" title="Retrieve Widget Data (POST)" href="/reference/lynx/report/retrieve-widget-data">
     Fetches data for a specific widget with full filter support (date range, machine ID, etc.). **Recommended for most use cases.**
   </Card>
 
