@@ -3441,6 +3441,49 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                example-1:
+                  value:
+                    NayaxProductID: 782421696235197
+                    ProductGroupID: 1695927814
+                    ActorID: 2000860606
+                    ProductManufacturerID: null
+                    ProductName: test product
+                    ProductCatalogNumber: ''
+                    ProductBarcode: ''
+                    ProductPackageQuantity: null
+                    ProductDescription: ''
+                    ProductVolumeTypeID: null
+                    DEXProductName: ''
+                    ProductCostPrice: null
+                    ProductDefaultRetailPrice: null
+                    ProductMinimumPickQTY: null
+                    ProductStatus: 1
+                    ProductCashPrice: null
+                    ProductCreditCardPrice: null
+                    ProductPrepaidCardPrice: null
+                    ProductExternalPrepaidCardPrice: null
+                    ProductMemberTypePriceBit: null
+                    ProductPictureURL: null
+                    CaloriesPer100g: null
+                    CaloriesPerServing: null
+                    EANCode: ''
+                    ProductCreatedBy: 280281922
+                    ProductCreationDate: '2026-05-06T09:24:47.97'
+                    ProductUpdatedBy: 280281922
+                    ProductLastUpdated: '2026-05-06T09:24:47.97'
+                    SequenceNumber: null
+                    AgeVerificationEnableBit: false
+                    VatId: null
+                    DepositTypeID: 90002
+                    DepositFee: 0.5
+                    DepositTax: 0.3
+                    Refs:
+                      product: v1/products/782421696235197
+                      productGroup: v1/productGroups/1695927814
+                      productVolume: v1/lookups/values/
+                      create: v1/operators/2000860606/products
+                      edit: v1/products/782421696235197
     put:
       tags:
         - Products
@@ -12159,6 +12202,33 @@ components:
           format: int32
           nullable: true
           description: The VAT (Value Added Tax) identifier associated with the product.
+        SequenceNumber:
+          type: integer
+          format: int32
+          nullable: true
+          description: The sequence number of the product.
+        AgeVerificationEnableBit:
+          type: boolean
+          nullable: true
+          description: Indicates whether age verification is required for this product.
+        DepositTypeID:
+          type: integer
+          format: int32
+          nullable: true
+          description: >-
+            The type of container for deposit/return schemes. Can be one of the
+            following values: Plastic bottle - 90001, Can - 90002, Reusable
+            Glass bottle - 90003.
+        DepositFee:
+          type: number
+          format: double
+          nullable: true
+          description: Deposit amount for bottle/can return schemes (max 100.00).
+        DepositTax:
+          type: number
+          format: double
+          nullable: true
+          description: Tax percentage applied to the deposit amount (0-100).
         Refs:
           type: object
           additionalProperties:
