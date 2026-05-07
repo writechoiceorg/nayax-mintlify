@@ -449,6 +449,22 @@
                 "pages": [
                   "docs/manage-data-operations/amazon-sqs/overview",
                   {
+                    "group": "Nayax Core Setup",
+                    "pages": [
+                      {
+                        "group": "Set Up Transaction Delivery",
+                        "root": "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-transaction-delivery",
+                        "pages": [
+                          "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/transaction-json-reference"
+                        ]
+                      },
+                      "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-eva-dts-dexddcmp-audit-file-delivery",
+                      "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-events-delivery",
+                      "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-encryption-on-amazon-sqs-delivery"
+                    ],
+                    "root": "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/nayax-back-office-setup"
+                  },
+                                    {
                     "group": "Amazon Queue Setup",
                     "pages": [
                       "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/create-new-queue",
@@ -456,16 +472,6 @@
                       "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/create-user-for-queue-access"
                     ],
                     "root": "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/index"
-                  },
-                  {
-                    "group": "Set Up Nayax Core",
-                    "pages": [
-                      "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-transaction-delivery",
-                      "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-eva-dts-dexddcmp-audit-file-delivery",
-                      "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-events-delivery",
-                      "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-encryption-on-amazon-sqs-delivery"
-                    ],
-                    "root": "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/nayax-back-office-setup"
                   }
                 ]
               }
