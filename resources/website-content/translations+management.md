@@ -1,0 +1,521 @@
+<!-- source: resources/files/Translations+Management.txt processed: 2026-05-06 -->
+
+# Translations Management
+
+## Overview
+
+The App Framework uses a custom translation system that combines runtime translation loading with build-time text extraction. This enables multi-language support for applications hosted within Nayax Core.
+
+## Architecture
+
+The translation system consists of three main components:
+
+| Component | Purpose |
+|---|---|
+| TranslationContext | Runtime translation provider and React hook |
+| extractTextsPlugin | Build-time text extraction Vite plugin |
+| texts.json | Generated file containing all translatable strings |
+
+## How It Works
+
+### 1. Runtime Translation Loading
+
+At application startup, the `TranslationProvider` fetches translations from the backend.
+
+Integration in `main.tsx`:
+
+```typescript
+import { TranslationProvider } from './i18n'
+
+createRoot(document.getElementById('root')!).render(
+  <TranslationProvider model="Apps/YourAppName">
+    <App />
+  </TranslationProvider>
+)
+```
+
+Provider implementation (`TranslationContext.tsx`):
+
+```typescript
+// Fetches from: /core/apps/translate?model=Apps/YourAppName
+// Returns: { "text": "translated text", ... }
+```
+
+### 2. Using Translations in Components
+
+Import and use the translation hook:
+
+```typescript
+import { useTranslation } from '../../i18n'
+
+function MyComponent() {
+  const { t } = useTranslation()
+
+  return (
+    <div>
+      <h1>{t('Welcome')}</h1>
+      <p>{t('No data available')}</p>
+    </div>
+  )
+}
+```
+
+**Hook API:**
+
+| Property | Type | Description |
+|---|---|---|
+| `t(text: string)` | Function | Translation function — returns translated text or original if not found |
+| `isLoading` | boolean | Indicates if translations are being fetched |
+| `isReady` | boolean | Indicates if translations are ready to use |
+
+Example usage:
+
+```typescript
+const { t } = useTranslation()
+// Later in JSX:
+<span>{t('Search')}</span>
+```
+
+### 3. Build-Time Text Extraction
+
+During the build process, a Vite plugin automatically extracts translatable texts.
+
+`extractTextsPlugin` (`scripts/vite-plugin-extract-texts.ts`):
+
+- Scans all `.ts` and `.tsx` files (excluding `node_modules` and `i18n` directory)
+- Finds all `t('...')` or `t("...")` calls using regex pattern
+- Extracts unique texts and outputs to `texts.json` in build directory
+- This file is used by backend/translation teams to know what needs translation
+
+Generated output (`texts.json`):
+
+```json
+[
+  "Action",
+  "Cancel",
+  "Loading...",
+  "No data available",
+  "Search"
+]
+```
+
+## Translation Flow
+
+**Development:**
+
+```
+Component uses t('text')
+     ↓
+Developer writes code
+     ↓
+Build runs
+     ↓
+extractTextsPlugin scans files
+     ↓
+texts.json generated
+     ↓
+Backend/Translation team uses texts.json
+     ↓
+Translations added to backend system
+```
+
+**Runtime:**
+
+```
+App starts
+     ↓
+TranslationProvider fetches from /core/apps/translate
+     ↓
+Translations loaded into context
+     ↓
+Components call t('text')
+     ↓
+Translated text displayed (or fallback to original)
+```
+
+## Critical Configuration
+
+### Model Name Must Match Exactly
+
+The model name in `TranslationProvider` must exactly match the model registered in Nayax Core. This determines the API call path.
+
+```typescript
+// main.tsx
+<TranslationProvider model="Apps/YourAppName">
+```
+
+This resolves to:
+
+```
+GET /core/apps/translate?model=Apps/YourAppName
+```
+
+If the model doesn't match the Nayax Core registration, the endpoint returns `{}` (empty) with status 200 — no error, just no translations.
+
+**How to verify:** Check browser console for `[Translation] Loaded 0 translations for model=...`. If 0 translations, the model name is likely wrong.
+
+**Common mistakes:**
+
+| Wrong | Correct |
+|---|---|
+| `App/MyApp` | `Apps/MyApp` |
+| `apps/myappview` | `Apps/MyAppView` |
+| `MyApp` | `Apps/MyApp` |
+
+The model name must be consistent across all files:
+
+- `TranslationProvider` (`main.tsx`)
+- `UIVisibilityProvider` (`main.tsx`)
+- `translationApi.ts` (default parameter)
+- `uiElementsApi.ts` (default parameter)
+
+### UI Elements Model Name
+
+The same model name applies to UI Elements for role management:
+
+```typescript
+<UIVisibilityProvider model="Apps/YourAppName">
+```
+
+If you change the model name, all UI elements disappear from role management until re-registered under the new name.
+
+## Case Sensitivity — Critical Pitfall
+
+The Nayax Core backend lowercases all translation keys when storing them.
+
+Your code calls:
+
+```typescript
+t('Across all items')   // Mixed case
+```
+
+Backend returns:
+
+```json
+{ "across all items": "בכל הפריטים" }   // Lowercase key
+```
+
+Direct lookup fails: `translations['Across all items']` → `undefined`
+
+**Required fix:** The `TranslationContext` must normalize both stored keys and lookups to lowercase:
+
+```typescript
+// When loading translations
+const loadTranslations = async () => {
+  const data = await getTranslations(model)
+
+  // Normalize keys to lowercase
+  const normalizedData = {}
+  for (const key of Object.keys(data)) {
+    normalizedData[key.toLowerCase()] = data[key]
+  }
+  setTranslations(normalizedData)
+}
+
+// When looking up
+const t = (text: string): string => {
+  return translations[text.toLowerCase()] || text
+}
+```
+
+This normalization is required for translations to work correctly.
+
+## Wrapping Text — Complete Checklist
+
+### What to Wrap
+
+Every user-visible text string must use `t()`:
+
+```typescript
+import { useTranslation } from '@/i18n'
+
+function MyComponent() {
+  const { t } = useTranslation()
+
+  return <button>{t('Save')}</button>
+}
+```
+
+### Commonly Missed Locations
+
+| Location | Before | After |
+|---|---|---|
+| Table column headers | `<th>Distributor</th>` | `<th>{t('Distributor')}</th>` |
+| Pagination text | `Showing 1 to 25` | `{t('Showing')} 1 {t('to')} 25` |
+| Chart labels (Recharts) | `{ name: 'Failed' }` | `{ name: t('Failed') }` |
+| Recharts Bar/Line name | `<Bar name="Completed" />` | `<Bar name={t('Completed')} />` |
+| Empty states | `No data found` | `{t('No data found')}` |
+| Action menus | `Start` | `{t('Start')}` |
+| Dropdown options | `<SelectItem>All</SelectItem>` | `<SelectItem>{t('All')}</SelectItem>` |
+| Placeholders | `placeholder="Search..."` | `placeholder={t('Search...')}` |
+| Error messages | `Failed to load` | `{t('Failed to load')}` |
+
+### What NOT to Wrap
+
+```typescript
+// Don't wrap status values used in comparisons
+if (r.status === 'completed')  // This is data, not UI text
+
+// Don't wrap CSS classes
+className="bg-green-500"
+
+// Don't wrap console messages
+console.log('Debug info')
+
+// Don't wrap dynamic values
+t(`Machine ${id}`)  // Won't be extracted by the build plugin
+
+// Don't wrap template literals
+t(`Search for ${type}`)  // Use separate t() calls instead
+```
+
+### Module-Level Constants
+
+Text defined outside components (module level) cannot use `t()` directly because hooks only work inside components. Move them inside the component:
+
+```typescript
+// Won't work - outside component
+const options = [
+  { value: "all", label: "All Time" },
+]
+
+// Move inside component
+function MyComponent() {
+  const { t } = useTranslation()
+  const options = [
+    { value: "all", label: t('All Time') },
+  ]
+}
+```
+
+## texts.json — Import Workflow
+
+### How It Works
+
+1. Developer wraps text in `t('...')` in code
+2. `npm run build` runs the `extractTextsPlugin`
+3. Plugin scans all `.ts`/`.tsx` files for `t('...')` patterns
+4. Generates `texts.json` with all unique strings
+5. `texts.json` deploys to `wwwroot/texts.json`
+6. Nayax Core automatically imports new texts from the deployed file
+
+### Nayax Core Auto-Imports from texts.json
+
+When you add new `t()` calls and deploy:
+
+- The `texts.json` in `wwwroot/` is updated with new keys
+- Nayax Core automatically picks up new texts from the deployed `texts.json`
+- New texts appear in the translation management page after deployment
+- New texts show in English until translations are added for each language
+
+If new texts don't appear, the most likely cause is a model name mismatch — verify the model name in the code matches the Nayax Core registration exactly (case-sensitive).
+
+### Verifying Text Count
+
+```bash
+# Run build to see current count
+npm run build
+
+# Output example:
+# Extracted 133 translatable texts to src/i18n/texts.json
+
+# After deployment, the same count should appear in the
+# Nayax Core translation management page for this model.
+# If the count doesn't match, check the model name.
+```
+
+### Configuration
+
+The plugin is configured in `vite.config.ts`:
+
+```typescript
+import { extractTextsPlugin } from './scripts/vite-plugin-extract-texts'
+
+export default defineConfig({
+  plugins: [
+    react(),
+    extractTextsPlugin()
+  ]
+})
+```
+
+## Best Practices
+
+**1. Always use `t()` for user-facing text:**
+
+```typescript
+// Good
+<button>{t('Save')}</button>
+
+// Avoid
+<button>Save</button>
+```
+
+**2. Use descriptive text as keys (not generic IDs):**
+
+```typescript
+// Good — self-documenting
+t('No machines found')
+
+// Avoid — requires lookup
+t('error.404.machines')
+```
+
+**3. Keep text strings simple and atomic:**
+
+```typescript
+// Good
+{t('Search')}
+
+// Avoid — difficult to translate
+{t('Search for machines by name, number, or serial')}
+```
+
+**4. Check for loading state when needed:**
+
+```typescript
+const { t, isReady } = useTranslation()
+
+if (!isReady) {
+  return <div>Loading translations...</div>
+}
+```
+
+**5. Avoid template literals or variables in `t()` calls:**
+
+```typescript
+// Good — will be extracted
+t('Machine status')
+
+// Avoid — won't be extracted
+t(`Machine ${status}`)
+t(dynamicKey)
+```
+
+## Adding New Translatable Text
+
+1. Use `t('Your new text')` in your component
+2. Run build: `npm run build`
+3. The text is automatically added to `texts.json`
+4. After deployment, Nayax Core auto-imports new texts from `texts.json`
+
+## Reverse Proxy Requirement
+
+The translation endpoint uses an absolute path:
+
+```
+GET /core/apps/translate?model=Apps/YourAppName
+```
+
+This resolves against the iframe's origin:
+
+| Access Method | Origin | URL Resolves To | Works? |
+|---|---|---|---|
+| Via reverse proxy | dev.nayax.com | dev.nayax.com/core/apps/translate | Yes |
+| Direct access | your-app-api.dev-eks.nayax.net | your-app-api.dev-eks.nayax.net/core/apps/translate | No — 404 |
+
+**Symptoms of missing reverse proxy:**
+
+- `/core/apps/translate` returns 404
+- `/core/apps/auth` returns 404
+- `/core/apps/ui-elements` returns 404
+- Auth token only arrives via postMessage (not from auth endpoint)
+
+## Files Overview
+
+| File | Purpose |
+|---|---|
+| `src/i18n/TranslationContext.tsx` | React context for translation provider and hook |
+| `src/i18n/index.ts` | Public exports for translation system |
+| `src/i18n/texts.json` | Extracted translatable texts (generated during build) |
+| `scripts/vite-plugin-extract-texts.ts` | Vite plugin to extract `t()` calls |
+| `vite.config.ts` | Vite configuration with translation plugins |
+
+## Backend Integration
+
+### Translation API Endpoint
+
+**Endpoint:** `GET /core/apps/translate?model=Apps/{AppName}`
+
+**Response format:**
+
+```json
+{
+  "Welcome": "ברוכים הבאים",
+  "Save": "שמור",
+  "Cancel": "ביטול",
+  "No data available": "אין נתונים זמינים"
+}
+```
+
+The backend should:
+
+1. Read the user's preferred language from their profile or session
+2. Look up translations for the specified app model
+3. Return a key-value map of original text to translated text
+4. For missing translations, omit the key (frontend falls back to original)
+
+### Managing Translations
+
+1. **Extract texts:** Build the app to generate `texts.json`
+2. **Deploy:** `texts.json` is deployed to `wwwroot/texts.json`
+3. **Auto-import:** Nayax Core picks up new texts automatically
+4. **Add translations:** Add translations for each supported language
+5. **Available:** Translations are available on next app load
+
+## Debugging Translation Issues
+
+### Console Log Messages
+
+| Message | Meaning | Action |
+|---|---|---|
+| `[Translation] Loaded 0 translations` | Model name mismatch or no translations imported | Check model name matches Nayax Core registration |
+| `[Translation] Loaded 101 translations` | Fewer translations than expected | Check model name or wait for auto-import after deployment |
+| `[t] Missing translation for: "search"` | Text wrapped in `t()` but no translation in backend | Add translation in Nayax Core for this key |
+| `Translation API returned 404` | Endpoint not found | App not served through reverse proxy |
+| No `[Translation]` log at all | `TranslationProvider` not wrapping the app | Check `main.tsx` has `<TranslationProvider>` |
+
+### Step-by-Step Debugging
+
+1. Open browser console — look for `[Translation]` logs
+2. Check text count — does it match what you expect?
+3. Check model name — does the URL in the fetch match the Nayax Core registration?
+4. Check a specific key — in console: `translations['search']` (lowercase)
+5. Check the endpoint directly — visit `/core/apps/translate?model=Apps/YourAppName` in browser
+
+### Quick Debug Code
+
+Add temporarily to any component to see all available translations:
+
+```typescript
+const { t } = useTranslation()
+
+useEffect(() => {
+  console.log('[Debug] Translation keys:', Object.keys(translations))
+}, [])
+```
+
+## Troubleshooting Quick Reference
+
+| Issue | Cause | Fix |
+|---|---|---|
+| 0 translations loaded | Wrong model name | Match `TranslationProvider` model to Nayax Core registration |
+| Translations loaded but UI shows English | Case sensitivity mismatch | Normalize keys to lowercase in `TranslationContext` |
+| Some components not translating | Missing `useTranslation` in component | Add import and `const { t } = useTranslation()` |
+| New texts not in translation page | Model name mismatch | Verify model name matches Nayax Core registration exactly |
+| UI elements missing from role management | Model name changed | Re-register UI elements under new model name |
+| `translate` endpoint returns 404 | Direct access (not through reverse proxy) | Access app through Nayax Core reverse proxy |
+| Chart labels not translating | String in data array, not JSX | Use `t()` in data: `{ name: t('Completed') }` |
+| Module-level text not translating | `t()` used outside component | Move text definition inside component body |
+| `extractTextsPlugin` shows 0 texts | No `t()` calls in code | Wrap user-visible text in `t()` calls |
+| Build shows fewer texts than expected | Some components not wrapped | Search for hardcoded English strings in `.tsx` files |
+| `isReady` always false | Translation API not responding | Check network tab; verify CORS if app is on different domain |
+
+## Performance Considerations
+
+| Aspect | Implementation |
+|---|---|
+| Single Fetch | Translations fetched once on app startup |
+| Context Caching | Translations stored in React context, available to all components |
+| Fallback Behavior | Missing translations gracefully fall back to original text |
+| Build-Time Extraction | No runtime overhead for text collection |

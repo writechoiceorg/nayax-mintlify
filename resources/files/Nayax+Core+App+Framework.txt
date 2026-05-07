@@ -1,0 +1,148 @@
+﻿Nayax Core App Framework
+Introduction
+The App Framework enables integration of both internal and external applications into Nayax Core. This provides a unified way to extend the platform's functionality while maintaining security and access control.
+Why Use the App Framework?
+* Unified Experience: Apps integrate seamlessly into the Nayax Core navigation and UI
+* Centralized Access Control: App access is managed through the menu system and role permissions
+* Secure Authentication: Apps receive JWT tokens with user identity and scoped permissions
+* Context Sharing: Apps can receive context from parent screens (e.g., selected machine)
+* Multi-Language Support: Built-in translation system for internationalization
+* Role-Based UI Control: Dynamic UI element visibility based on user permissions
+How Apps Are Managed
+Apps are added through Menu Management (Settings → Menu). Each app menu item can be assigned to specific Roles, controlling which users can access the app. This allows administrators to:
+* Add new apps without code changes
+* Control access per user role
+* Configure app permissions via scopes
+* Organize apps within the menu hierarchy
+
+Related Documentation
+TopicDescriptionRole-Based UI Visibility ControlDynamic hiding/showing of UI elements based on user roles and permissionsTranslations ManagementMulti-language support with build-time text extraction and runtime translation loading
+Integration Types
+Integration TypeDescriptionExampleExternal AppThird-party apps hosted outside NayaxFuelPointInternal React AppApps in the ReactApps repositoryDevice Logs, GTraceGenie
+Menu Types
+Menu TypeUse CaseAppFull page apps (Screen or Fullscreen)App PluginApps hosted inside an existing screen (Button with Popup, Tab)
+Display Types
+Display TypeMenu TypeDescriptionScreenAppFull page with Nayax Core menu visibleFullscreenAppFull page without menu (app implements its own navigation). Note: Cannot receive token via postMessageButton with PopupApp PluginOpens in a modal over current screenTabApp PluginOpens as an application tab within Nayax Core
+Configuration Examples
+Example 1: External App as Screen (FuelPoint)
+Full page external app with Nayax Core menu visible.
+FieldValueDescriptionTitle*FuelPointDisplay name in menuMenu Type*AppFor full page displayParent MenuOperationsParent menuModelapp/fuelpointModel for permissionsIconabt_commuters.pngIcon fileURLhttps://fuelpoint.roseman.co.il/External URLTypeScreenFull page with menuContainer(empty)Not neededScopes(optional)Limits permissionsExample 2: Internal React App as Popup (Device Logs)
+React app opening as popup with machine context from parent screen.
+FieldValueDescriptionTitle*Device LogsButton labelMenu Type*App PluginFor popup displayParent MenuMachinesScreen where button appearsModelApps/GTraceGenieAuth modelIcondump_parameter.pngButton iconURL../Apps/ReactApps/GTraceGenie/index.htmlRelative path (via proxy)TypeButton with PopupOpens as popupContainerbtn_infoContainer for buttonScopes(optional)Limits permissionsAvailable Containers
+Container IDLocationbtn_infoInfo section buttonsbtn_actionsAction section buttons
+Authentication Token (JWT)
+Apps receive a JWT token for authentication. The token is signed with RS256 and contains user identity, permissions, and scope information.
+Token Delivery
+Display TypeToken Delivery MethodScreenpostMessage from parent frameFullscreenAuth endpoint only (no postMessage)Button with PopuppostMessage from parent frameTabpostMessage from parent frameToken Payload Example
+{
+  "id": "22",
+  "name": "nayaxvend\\User",
+  "actor": "27594",
+  "OperatorId": "27594",
+  "DistributorId": "27594",
+  "IsAdmin": "True",
+  "ActorHierarchy": "27594",
+  "AppName": "cortex",
+  "realUserId": "22",
+  "email": "user@nayax.com",
+  "nbf": 1768379518,
+  "exp": 1768469518,
+  "iat": 1768379518,
+  "iss": "NayaxMomaApi",
+  "aud": "moma2"
+}
+Token Claims
+ClaimDescriptionidUser IDnameUsername with domainactorActor IDOperatorIdOperator IDDistributorIdDistributor IDIsAdminAdmin flagActorHierarchyActor hierarchy chainAppNameApplication namerealUserIdReal user IDemailUser emailnbfNot before (Unix timestamp)expExpiration (Unix timestamp)iatIssued at (Unix timestamp)issIssueraudAudienceToken Validation (Public Keys)
+Apps should validate the JWT signature using the appropriate RSA public key:
+QA/Development:
+MIIBCgKCAQEApd1+J2fE9kmt354EKyTqFLhPRgfzBU2vqpzZ5A2BAkhxcBs5/X5pB50Q6XVxibErAofqvv+zyEsPOnfAOKVu+s/mguYMiHuCJJ8Eu7X4VyaT/USYTA1sUI+cY+821RJ8zKhme+vDMStVE668C8Vwn7fZEPm7GU34HN1A+YQEe007ItwIx7tQtnrXql7gzlYU2zcHVrBToC3FaOdkrFX3zgzrJ+RCucAiAAjiK7TKc0YV+/uS8aXeQZD71TDGEcdbPYXogrZjIDudis4tmCLnqHC9m2ePdpjnpnVE/Vs56yK1ExOjkIlJ+kCR5WC3PZyVWv+oS7VMuFS4QaXsRSbHWQIDAQAB
+Production:
+MIIBCgKCAQEAyUVRih9bb22lCTu/FEviqfJgPv3jwzWsXYDCdr+pz0i/BOAVAWUoA2xSBDbbmyUOT2KsEn1/WHhxpUS/ybi81VnhGkRocLuGxAV0LvvPOO774iAygRhlgzSedbt2z1qdgEs7d2c12Ae4LtCxQ2WV3Aaa1YVLWpeT8ZCdekgonzYFXvEK0ES+KFOaifnspMIQA7ek5K1BnojmjHQ7qI3DbYNydSOFqvhbnItFcXSqo+oiBx82HHqr0jAR6DatOfiV3zVXRbsJLaFK0pQFZPV9Ip6uarYofQV2mhlCudB5o+M/axYjnPf0wK4b3P6To9aM+lKpGq9LBnb8IyvpbSgVVQIDAQAB
+
+Scopes
+Scopes control what resources an app can access. They are injected into the JWT token, limiting or overriding the user's normal permissions.
+Scope Types
+ValueTypeDescriptionscopeLimitingRestricts app access to specified scopes only (intersection with user permissions)appScopeOverridingGrants app the specified scopes regardless of user's normal permissionsHow Scopes Work
+Limiting (scope):
+* App can only access resources within both the user's permissions AND the specified scopes
+* Use to restrict an app's access even if the user has broader permissions
+Overriding (appScope):
+* App receives the specified scopes regardless of user's normal permissions
+* Use to grant an app specific access that users might not normally have
+
+Receiving Token and Context
+Apps receive authentication tokens and context through the following methods:
+1. postMessage (External and Internal Apps)
+Note: Not available for Fullscreen display type
+useEffect(() => {
+  const handleMessage = (event: MessageEvent) => {
+    const { token, cortexUrl, selection } = event.data;
+
+    if (token) {
+      setToken(token);
+      setCortexUrl(cortexUrl);
+
+      if (selection?.machineId) {
+        setMachineId(selection.machineId);
+      }
+    }
+  };
+
+  window.addEventListener("message", handleMessage);
+  return () => window.removeEventListener("message", handleMessage);
+}, []);
+2. URL Hash Parameter (External and Internal Apps)
+/GTraceGenie/index.html#machineId=12345
+3. Auth Endpoint (Internal Apps Only)
+Internal apps can fetch token from the auth endpoint:
+⚠️ Required Header: When calling the Apps/Auth endpoint, you must include the following header:
+x-app-type: internal
+const resp = await fetch("/core/apps/auth?model=Apps/GTraceGenie", {
+  headers: {
+    "x-app-type": "internal"
+  }
+});
+const { token, cortexUrl } = await resp.json();
+
+Internal React Apps
+App Proxy
+Internal apps are served through a proxy endpoint:
+/Core/Apps/[serviceName]
+This proxy routes to predefined internal service URLs. For example:
+* /Core/Apps/ReactApps/GTraceGenie/index.html routes to the react-apps-api service
+This abstraction allows internal service URLs to change without affecting menu configurations.
+Creating a New Internal React App
+Step 1: Copy Template
+cd src
+cp -r TemplateApp MyNewApp
+cd MyNewApp
+Step 2: Configure Files
+package.json:
+{ "name": "my-new-app" }
+metadata.json:
+{
+  "name": "My New App",
+  "description": "What your app does",
+  "requestFramePermissions": []
+}
+App.tsx:
+const resp = await fetch("/core/apps/auth?model=Apps/MyNewApp", {
+  headers: {
+    "x-app-type": "internal"
+  }
+});
+Step 3: Add Menu Item
+Create menu item in Settings → Menu with appropriate configuration.
+Step 4: Assign Roles
+Configure which roles can access the app via the Roles tab in menu management.
+Step 5: Configure Translations & Permissions (Optional)
+For apps requiring multi-language support and role-based UI control:
+* See Translations Management for internationalization setup
+* See Role-Based UI Visibility Control for dynamic UI element visibility
+Step 6: Deploy
+Build and deploy via CI/CD pipeline.
+
+Quick Reference
+I want to...Menu TypeDisplay TypeAdd full page app with menuAppScreenAdd full page app without menuAppFullscreenAdd app as popup buttonApp PluginButton with PopupAdd app as application tabApp PluginTab
+Troubleshooting
+IssueSolutionApp not appearingCheck menu item saved, verify user's role has accessButton not visibleVerify Container matches existing container on parent screenNo token receivedCheck if using Fullscreen (use auth endpoint instead)Token invalidEnsure using correct public key for environmentAccess deniedCheck scope type (Limiting vs Overriding) and valuesMissing x-app-type headerEnsure x-app-type: internal header is included in auth endpoint requestsTranslations not loadingSee Translations Management troubleshootingUI elements not hidingSee Role-Based UI Visibility Control troubleshooting
