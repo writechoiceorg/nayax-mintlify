@@ -449,15 +449,6 @@
                 "pages": [
                   "docs/manage-data-operations/amazon-sqs/overview",
                   {
-                    "group": "Amazon Queue Setup",
-                    "pages": [
-                      "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/create-new-queue",
-                      "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/set-up-queue-permissions",
-                      "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/create-user-for-queue-access"
-                    ],
-                    "root": "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/index"
-                  },
-                  {
                     "group": "Nayax Core Setup",
                     "pages": [
                       {
@@ -472,6 +463,15 @@
                       "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-encryption-on-amazon-sqs-delivery"
                     ],
                     "root": "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/nayax-back-office-setup"
+                  },
+                                    {
+                    "group": "Amazon Queue Setup",
+                    "pages": [
+                      "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/create-new-queue",
+                      "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/set-up-queue-permissions",
+                      "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/create-user-for-queue-access"
+                    ],
+                    "root": "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/index"
                   }
                 ]
               }
