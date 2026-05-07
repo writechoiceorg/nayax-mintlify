@@ -123,12 +123,12 @@ We highly recommend that, even if customers plan to use the ETH connection, they
 The Decimal place is a parameter in Nayax Core that is forwarded to the device.
 In Marshall, said value is forwarded to the peripheral via the Marshall command "Config," which is sent as part of the Pairing process.
 On its end, the machine should calculate the following value:
-X = 10 ^ "Decimal place"   (i.e. 10 power "Decimal place")
+X = 10 ^ "Decimal place" (i.e. 10 power "Decimal place")
 For each transaction, multiply the price set in the SDK by this value and send the result to the device.
 For example:
 Decimal place = 2
 Price = 30 Euros
-Price to be sent to device:  30 *(10 ^ 2) = 30* 100 = 3000
+Price to be sent to device: 30 *(10 ^ 2) = 30* 100 = 3000
 
 •	FYI, Credorax accepts transactions from 10 cents and above only. So, if you send one as a price with a 2 decimal places, we will eventually send to Credorax: 1 / 100 = 0.01 Euro, and the transaction will be declined.
 
