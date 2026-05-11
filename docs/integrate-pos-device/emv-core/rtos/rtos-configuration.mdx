@@ -4,7 +4,7 @@ metadata:
   og:description: "EMV Core configuration parameters for the RTOS SDK: network, payment, security, closed-loop, logging, and reader message settings."
 ---
 
-The configuration file contains parameters and initial settings that are managed from the Nayax backend server (Nayax Core). Settings may vary between customers and machines.
+Configuration parameters are managed centrally from Nayax Core and may vary by customer and machine.
 
 ## Location
 
@@ -87,7 +87,7 @@ These parameters control open-loop (credit/debit) payment behavior, timeouts, an
 | `PAYMENT_SVC_CONFIRM_TIMEOUT` | Server timeout when sending Confirm or Void requests (seconds) | U32 | 60 | — |
 | `PAYMENT_SVC_USER_WAITING_MAX_TIME` | Max waiting time for online authorization (seconds) | U16 | 30 | — |
 | `MAESTRO_LIMIT_CENTS` | Transactions above this limit with Maestro card will be declined without fallback | U32 | 2500 | — |
-| `PAYMENT_SVC_SYNCHRONOUS` | Don't start a new transaction before the previous one is closed on the server. Note: for asynchronous after unexpected reset, also set `PMT_KIOSK_AUTOCONFIRM=0`. | Bool (1/0) | 0 | — |
+| `PAYMENT_SVC_SYNCHRONOUS` | Wait for the current transaction to close on the server before starting a new one. Note: for asynchronous mode after an unexpected reset, also set `PMT_KIOSK_AUTOCONFIRM=0`. | Bool (1/0) | 0 | — |
 | `OPEN_LOOP_ENABLED` | Enable/disable open-loop payment | Bool (1/0) | 1 | 0.7 |
 | `PRE_AUTH_AMOUNT` | Default pre-authorization amount in cents if no amount is provided by the API | Int | 0 | 0.7 |
 | `CURRENCY_CODE` | ISO 4217 code (e.g., 840 = USD). v1.0 takes it from Nayax Core automatically after any machine attribute change or 'Reload configuration' action. | String | 840 | 0.7 / 1.0 |

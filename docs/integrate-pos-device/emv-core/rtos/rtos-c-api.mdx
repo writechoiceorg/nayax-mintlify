@@ -12,7 +12,7 @@ The EMV Core provides the POS application with two API layers:
 1. **C functions** implemented in `libecodsdk`. See `ecod_sdk.h` and `ecod_sdk_types.h` in the SDK.
 2. **JSON-RPC messages** with Datalink wrapper over Serial or USB. See [JSON-RPC API](/docs/integrate-pos-device/emv-core/rtos/rtos-json-rpc-api).
 
-The User Interface is managed by the POS application. The POS uses Reader state events from the EMV Core to synchronize UI with the Core payment status (idle, authorizing, declined, approved, etc.).
+The POS application manages the user interface, using reader state events from EMV Core to keep the display in sync with the current payment status (idle, authorizing, declined, approved, etc.).
 
 ## Supported Functionality
 
@@ -306,5 +306,5 @@ The SDK resolves the currency code from multiple sources in priority order:
 
 * From SDK v1.0 onward, the currency code is taken from the `CURRENCY_CODE` attribute in the EMV Core configuration.
 * If `CURRENCY_CODE` is missing from the configuration, the `currency` parameter sent by the host in `PreAuthorize` is used (backward compatibility).
-* If neither is provided, the EMV Core SW default (840 / USD) is used and an alert is sent to the Nayax Core server.
+* If neither is provided, the EMV Core software default (840 / USD) is used and an alert is sent to the Nayax Core server.
 * When the device is managed from Nayax Core, the currency code is automatically taken from the machine settings.

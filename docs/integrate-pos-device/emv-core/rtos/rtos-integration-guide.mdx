@@ -4,7 +4,7 @@ metadata:
   og:description: "Configure serial communication, threads, callbacks, error handling, and SDK settings for the EMV Core RTOS SDK."
 ---
 
-This guide covers serial interface configuration, threading requirements, callback registration, error handling, and SDK configuration options for the EMV Core RTOS SDK.
+Use this page to configure serial communication, set up threads and callbacks, handle errors, and tune SDK settings for the EMV Core RTOS SDK.
 
 <Note>
   Check device status regularly, even when not performing transactions, to keep the UI in sync and surface error states. You cannot call any SDK API from within a callback.
@@ -188,7 +188,7 @@ Configure the memory allocation strategy in `ecod_sdk_configs.h`:
 
 ### Buffer Sizes
 
-Buffer sizes are defined in `ecod_sdk_setup.h` with sensible defaults:
+Buffer sizes are defined in `ecod_sdk_setup.h`:
 
 ```c
 // JSON-RPC communication buffer (default: 2048)
