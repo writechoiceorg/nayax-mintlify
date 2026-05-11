@@ -28,6 +28,8 @@ A Screen extension loads as a full page inside Nayax Core with the platform's na
 
 **Token delivery:** postMessage from the parent frame. Your app receives `token` and `cortexUrl`. No `selection` context is passed.
 
+<Frame>![The Screen extension type loads as a full page with the Nayax Core menu visible](/images/docs/core-extension/core-extension-screen.png)</Frame>
+
 ## Fullscreen
 
 **Menu type:** App
@@ -48,6 +50,8 @@ A Button with Popup extension adds a button to an existing Nayax Core screen. Cl
 
 **Token delivery:** postMessage from the parent frame. Your app receives `token`, `cortexUrl`, and a `selection` object containing context about the focused element.
 
+<Frame>![The Button with Popup extension type opens your app in a modal overlay](/images/docs/core-extension/core-extension-pop-up.png)</Frame>
+
 **Container required:** You must specify a container ID to position the button on the parent screen. See [Available containers](#available-containers) below.
 
 ## Tab
@@ -59,6 +63,8 @@ A Tab extension adds a tab to an existing Nayax Core screen. Your app loads insi
 **When to use:** Your app is a view or panel that logically belongs alongside existing tabs on a screen (for example, a custom report tab on the machine detail screen).
 
 **Token delivery:** postMessage from the parent frame. Your app receives `token`, `cortexUrl`, and a `selection` object containing context about the focused element.
+
+<Frame>![The Tab extension type loads your app as a tab within an existing Nayax Core screen](/images/docs/core-extension/core-extension-tab.png)</Frame>
 
 ## Configuration fields
 
