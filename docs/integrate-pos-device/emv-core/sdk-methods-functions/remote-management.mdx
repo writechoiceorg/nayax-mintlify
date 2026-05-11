@@ -106,7 +106,7 @@ See the `GetAttribute` API signature in the code below:
 
 ## `GetKioskID`
 
-Called by the POS application to retrieve the device identification number. This ID is critical for identifying the device on the Nayax server and linking it to transactions, configurations, and monitoring systems.
+Returns the device's unique identification number, which the Nayax server uses to link transactions, configurations, and monitoring to this device.
 
 See the `GetKioskID` API signature in the code below:
 
@@ -194,7 +194,7 @@ The possible result values are: `NotReady`, `Ready`, `PaymentTransaction`, `Upda
 </Note>
 
 <Warning>
-  If the `GetStatus` request times out, the host application should retry three times with a five-second interval between attempts. If no response is received after these retries, assume the EMV Core service is unresponsive and restart the process.
+  If `GetStatus` times out, retry up to three times with a five-second interval. If there is still no response, assume EMV Core is unresponsive and restart the process.
 </Warning>
 
 ***
@@ -244,7 +244,7 @@ Fetches the reader's firmware version and the EMV Core SDK version. This is used
 
 ## `Initialize`
 
-Initializes the EMV Core SDK and prepares it for operation by establishing initial settings and connections. This should be called during application startup to establish a session with the reader. It is essential to set up the environment before performing any transactions or management tasks.
+Initializes the EMV Core SDK and establishes a session with the reader. Call this once during application startup before performing any transactions or management tasks.
 
 See the `Initialize` API signature in the code below:
 
@@ -316,7 +316,7 @@ boolean isEmvCoreConnected();
   This method is only available for the Android SDK.
 </Warning>
 
-Registers callbacks called by the EMV Core regarding the operation of the EMV Core service itself. This includes the `SystemStatusChanged` event, allowing the application to monitor the health and maintenance status of the SDK.
+Registers callbacks for system-level EMV Core events. This includes the `SystemStatusChanged` event, which lets your application monitor the health and maintenance status of the SDK.
 
 See the `SetManagementCallbacks` API signature in the code below:
 
@@ -415,9 +415,7 @@ See the `ShowMessage` API signature in the code below:
   This method is only available for the Android SDK.
 </Warning>
 
-Called by the POS application to set the host machine attributes values in Nayax Core. These
-values are for information only and would not affect the Nayax machine operation. It may help to get
-reports or diagnostics based on these host machine parameters.
+Updates host machine attributes in Nayax Core. These values are informational only and do not affect payment processing. They are available in Nayax Core for reporting and diagnostics.
 
 <Tabs>
   <Tab title="JSON">

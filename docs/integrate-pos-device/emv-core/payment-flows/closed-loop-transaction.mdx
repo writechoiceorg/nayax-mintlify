@@ -4,12 +4,12 @@ metadata:
   og:description: "Closed-loop transactions refer to operations using MIFARE cards. In this case, the merchant usually needs to obtain the MIFARE card UID to process."
 ---
 
-Closed-loop transactions refer to operations using MIFARE cards. In this case, the merchant usually needs to obtain the MIFARE card UID to process the operations in their application server, which does not involve bank transactions.
+Closed-loop transactions use MIFARE cards. The merchant reads the card UID and processes the transaction on their own application server, without involving bank networks.
 
-Since no bank operations are required, closed-loop transactions do not use the Nayax servers. Instead, the host machine will use the Nayax EMV Reader to read the card and the EMV Core to interact with it.
+Since no bank operations are required, closed-loop transactions do not use the Nayax servers. Instead, your host machine uses the EMV reader to read the card and EMV Core to interact with it.
 
 <Warning>
-  The host machine does not know if the client will use an open loop (credit or debit cards) or a closed loop (MIFARE cards) transaction. This information is only available after the Nayax EMV Reader actually reads the client card. Therefore, the host machine must be prepared to process both operations after the Nayax EMV Core identifies the operation type.
+  Your application does not know whether the user will present an open-loop (credit or debit) or closed-loop (MIFARE) card until the reader scans it. Your application must be prepared to handle both.
 </Warning>
 
 ## Transaction Flow
@@ -22,16 +22,16 @@ Where:
 
 1. The host machine calls the [`PreAuthorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#preauthorize) method using the EMV Core API. This is the only action performed by the host machine.
 2. The EMV Core sends the amount to the Reader.
-3. The Host Application should instruct the Buyer or Shopper to tap the card.
+3. Your application prompts the user to tap their card.
 4. The shopper taps the card into the EMV reader.
 5. The Nayax EMV Reader pulls the Response with the encrypted card data to the Nayax EMV Core.
 6. Nayax EMV Core identifies it as a MIFARE card (closed-loop transaction) and informs the host application that the transaction is complete, returning the card UID and optional card data.
 
 <Note>
-  Normally, the MIFARE card data is shared locally with the host machine. However, you also have the option to change this configuration and send the information to Nayax Servers and use Nayax Prepaid to process the transaction.
+  By default, MIFARE card data is shared locally with your host machine. You can also configure the SDK to send the data to Nayax servers for processing through Nayax Prepaid.
 </Note>
 
-7. The host application uses a UID card to authorize the transaction with its application server.
+7. Your application uses the card UID to authorize the transaction with your application server.
 8. Once approved, the transaction is complete.
 9. The product is successfully delivered to the buyer.
 10. EMV Core allows transactions to be reported to the Nayax server, which sends the proprietary payment amount and UUID.
