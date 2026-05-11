@@ -1,12 +1,12 @@
 ---
 title: "Linux Sample Application"
 metadata:
-  og:description: "Build and run the portable C Linux Sample Application included with the EMV-Core RTOS SDK."
+  og:description: "Build and run the portable C Linux Sample Application included with the EMV Core RTOS SDK."
 ---
 
 The Linux Sample Application ships with the RTOS SDK as portable C (C99) source code. It provides a working reference implementation for the platform abstraction layer and a demo application for testing the SDK.
 
-The sample code was developed and tested on Ubuntu (x86\_64). When porting to other operating systems, you must adapt the Platform Abstraction Layer — see [Platform Porting](/docs/integrate-pos-device/emv-core/rtos/rtos-platform-porting).
+The sample code was developed and tested on Ubuntu (x86\_64). When porting to other operating systems, you must adapt the Platform Abstraction Layer. See [Platform Porting](/docs/integrate-pos-device/emv-core/rtos/rtos-platform-porting).
 
 **Notes:**
 
@@ -15,6 +15,8 @@ The sample code was developed and tested on Ubuntu (x86\_64). When porting to ot
 * It is highly recommended **not** to modify code outside the `platform/` folder.
 
 ## Directory Structure
+
+The sample application sources are organized as follows:
 
 ```
 ecod_sdk/          # Core SDK headers and sources
@@ -31,6 +33,8 @@ demo/              # Example / demo application
 Obtain the SDK package from your Nayax account manager and extract the `Linux Sample Application` folder.
 
 ### Install Build Dependencies (Ubuntu Linux)
+
+Run these commands to install the required tools:
 
 ```bash
 sudo apt-get update
@@ -50,6 +54,8 @@ make                 # Build SDK library and demo
 The build generates static libraries and the demo binary.
 
 ### Clean build artifacts
+
+Use these targets to remove compiled output:
 
 ```bash
 make clean              # Remove build objects
@@ -75,25 +81,25 @@ The SDK supports various build-time configurations through `ecod_sdk_configs.h`:
 ```
 
 <Note>
-  Computed defaults are in `ecod_sdk_setup.h` — do not modify that file directly.
+  Computed defaults are in `ecod_sdk_setup.h`. Do not modify that file directly.
 </Note>
 
 ## Run the Demo
 
 After building, run the included demo application to test the SDK:
 
-**Manual mode** — user selects operations using the keyboard:
+**Manual mode:** user selects operations using the keyboard:
 
 ```bash
 ./demo/ecodSdkDemo
 ```
 
-**Automatic mode** — performs a payment transaction in a loop:
+**Automatic mode:** performs a payment transaction in a loop:
 
 ```bash
 ./demo/ecodSdkDemo --auto
 ```
 
-In `--auto` mode, transactions run in a loop. If authorized, one out of two is confirmed and the other is voided — demonstrating both use cases.
+In `--auto` mode, transactions run in a loop. If authorized, one out of two is confirmed and the other is voided, demonstrating both use cases.
 
 Review `demo/main.c` for example code and usage patterns.

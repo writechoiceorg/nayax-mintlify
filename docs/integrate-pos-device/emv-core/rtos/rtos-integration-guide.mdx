@@ -1,18 +1,22 @@
 ---
 title: "Integration Guide"
 metadata:
-  og:description: "Configure serial communication, threads, callbacks, error handling, and SDK settings for the EMV-Core RTOS SDK."
+  og:description: "Configure serial communication, threads, callbacks, error handling, and SDK settings for the EMV Core RTOS SDK."
 ---
 
+This guide covers serial interface configuration, threading requirements, callback registration, error handling, and SDK configuration options for the EMV Core RTOS SDK.
+
 <Note>
-  The host application should check device status regularly, even when not performing transactions (to update UI and notify error states). It is **not** possible to call any SDK API from within a callback.
+  Check device status regularly, even when not performing transactions, to keep the UI in sync and surface error states. You cannot call any SDK API from within a callback.
 </Note>
 
 ## Serial Interface Configuration
 
-The SDK supports two serial communication modes:
+The SDK supports two serial communication modes. Select the one that matches your hardware connection.
 
 ### UART Mode (Default)
+
+Connect the UNO-mini via RS-232/TTL serial. Configure the device path and baud rate in the platform layer to match your hardware.
 
 ```c
 // In platform/linux/ecod_platform_linux.c
@@ -26,6 +30,8 @@ The SDK supports two serial communication modes:
 ```
 
 ### HID Mode
+
+Connect the UNO-mini via USB HID. Each 64-byte report uses the first byte as a length indicator; remaining bytes carry the actual data.
 
 ```c
 // In platform/linux/ecod_platform_linux.c
@@ -240,6 +246,8 @@ EcodSdk_SetLogLevel(EC_LOG_LEVEL_DEBUG);
 
 ### Device Not Detected
 
+Use these commands to check device visibility and permissions:
+
 ```bash
 # Check if device is connected
 ls -la /dev/ttyUSB* /dev/hidraw*
@@ -253,6 +261,8 @@ sudo usermod -a -G dialout $USER
 
 ### Serial Communication Failures
 
+Check the following common causes:
+
 * Verify correct device path (`/dev/ttyUSB0` vs `/dev/hidraw0`)
 * Check if another process is using the serial port
 * Ensure proper HID/UART mode selection in platform code
@@ -260,12 +270,16 @@ sudo usermod -a -G dialout $USER
 
 ### Threading Issues
 
+Check the following when threads are not behaving as expected:
+
 * Ensure the maintenance thread is running continuously
 * Check for mutex deadlocks in callback functions
 * Avoid blocking operations in callback handlers
 * Verify proper thread cleanup on application exit
 
 ### Memory Issues
+
+Check the following when experiencing memory-related failures:
 
 * Monitor buffer overflow with `EC_MAX_BUFFER_SIZE`
 * Check for memory leaks if using heap allocation
@@ -288,6 +302,8 @@ EcodSdk_SetLogLevel(EC_LOG_LEVEL_DEBUG);
 
 ### Performance Tuning
 
+Apply these adjustments to improve SDK responsiveness:
+
 * Keep maintenance thread sleep interval at 1 ms
 * Use static allocation for memory-constrained environments
 * Minimize callback processing time
@@ -295,6 +311,8 @@ EcodSdk_SetLogLevel(EC_LOG_LEVEL_DEBUG);
 * Consider network bridge settings for socket-heavy applications
 
 ## Migration Checklist (from SDK v0.9)
+
+If upgrading from SDK v0.9, apply the following changes to your integration:
 
 1. **Update `emvCorePaymentParameters` usage:**
    * Remove `fee_cents` and `currency_code` fields.

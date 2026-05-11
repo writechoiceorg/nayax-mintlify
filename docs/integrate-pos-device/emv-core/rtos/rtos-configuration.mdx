@@ -1,7 +1,7 @@
 ---
 title: "Configuration File Reference"
 metadata:
-  og:description: "EMV-Core configuration parameters for the RTOS SDK — network, payment, security, closed-loop, logging, and reader message settings."
+  og:description: "EMV Core configuration parameters for the RTOS SDK: network, payment, security, closed-loop, logging, and reader message settings."
 ---
 
 The configuration file contains parameters and initial settings that are managed from the Nayax backend server (Nayax Core). Settings may vary between customers and machines.
@@ -30,15 +30,19 @@ Configuration is managed centrally through **Nayax Core**. To adjust settings:
 
 ## Network & System Settings
 
+These parameters control network interface selection and system-level behavior:
+
 | Parameter | Description | Type | Default | Since Ver. |
 | :-------- | :---------- | :--- | :------ | :--------- |
 | `ETH_INTERFACE` | Network interface; empty = autodetect with fallback to eth0 | String | empty | — |
 | `KIOSK_USE_TCP_SOCKETS` | Use TCP ports 10000 (commands) and 10001 (events) instead of domain sockets | Bool (1/0) | 0 | — |
 | `DAILY_RESTART_HOUR` | Hour for automatic daily reboot (0–23, 0 = disabled). Actual reboot within 30 min of set hour. | U8 | 0 | — |
-| `CONFIG_VERSION` | Version of the config file — sent to TMS, not used by the device | String | — | — |
-| `KIOSK_TCP_LOCALHOST` | Limit EMV-Core sockets to localhost interface | Bool (1/0) | 0 | 0.7 |
+| `CONFIG_VERSION` | Version of the config file; sent to TMS, not used by the device | String | — | — |
+| `KIOSK_TCP_LOCALHOST` | Limit EMV Core sockets to localhost interface | Bool (1/0) | 0 | 0.7 |
 
 ## TMS & Payment Service Settings
+
+These parameters configure the URLs and polling behavior for the TMS and payment server:
 
 | Parameter | Description | Type | Default | Since Ver. |
 | :-------- | :---------- | :--- | :------ | :--------- |
@@ -47,6 +51,8 @@ Configuration is managed centrally through **Nayax Core**. To adjust settings:
 | `SERVER_POLL_INTERVAL` | Seconds between server calls for updates. Lower value = better responsiveness but more data usage. | U16 | 600 | — |
 
 ## Reader Settings
+
+These parameters control initialization commands, button behavior, and reader display messages:
 
 | Parameter | Description | Type | Default | Since Ver. |
 | :-------- | :---------- | :--- | :------ | :--------- |
@@ -59,6 +65,8 @@ Configuration is managed centrally through **Nayax Core**. To adjust settings:
 
 ## Security Settings
 
+These parameters control SSL and encryption settings for server connections:
+
 | Parameter | Description | Type | Default | Since Ver. |
 | :-------- | :---------- | :--- | :------ | :--------- |
 | `TMS_USE_SSL` | Switch SSL for TMS service on or off | Bool (1/0) | 0 | — |
@@ -67,9 +75,11 @@ Configuration is managed centrally through **Nayax Core**. To adjust settings:
 
 ## Open Loop Payment Settings
 
+These parameters control open-loop (credit/debit) payment behavior, timeouts, and authorization flow:
+
 | Parameter | Description | Type | Default | Since Ver. |
 | :-------- | :---------- | :--- | :------ | :--------- |
-| `PMT_ACCEPT_OFFLINE` | Store & Forward: automatically approve when network is unavailable. **Note:** Risk of unapproved transactions — operator responsibility. | Bool (1/0) | 0 | — |
+| `PMT_ACCEPT_OFFLINE` | Store & Forward: automatically approve when network is unavailable. **Note:** Risk of unapproved transactions; operator responsibility. | Bool (1/0) | 0 | — |
 | `PMT_KIOSK_AUTOCONFIRM` | Automatically confirms with pre-auth amount if session is interrupted. Supports long sessions with possible resets (e.g., EV chargers). | Bool (1/0) | 1 | — |
 | `PMT_CONFIRMATION_INTERVAL` | Seconds between attempts to execute pending Confirm or Void operations | U32 | 5 | — |
 | `PAYMENT_SVC_SERVER_RETRIES` | How many times online authorization will be retried on error | Int | 3 | — |
@@ -84,6 +94,8 @@ Configuration is managed centrally through **Nayax Core**. To adjust settings:
 
 ## Closed-Loop Payment Settings
 
+These parameters enable and configure closed-loop (prepaid) card support, including Mifare:
+
 | Parameter | Description | Type | Default | Since Ver. |
 | :-------- | :---------- | :--- | :------ | :--------- |
 | `CLP_PROPRIATARY_TRACKS_ENABLED` | Enable detection of proprietary tracks as Closed Loop during EMV payment. Requires proper reader configuration. | Bool (1/0) | 0 | — |
@@ -91,6 +103,8 @@ Configuration is managed centrally through **Nayax Core**. To adjust settings:
 | `CLP_MIFARE_ENABLED` | Enable Mifare cards as Closed Loop during payment. 0 = disabled; 1 = enabled via server; 2 = enabled via local host API (UID returned immediately in `TransactionComplete`). | Int | 0 | 0.7 |
 
 ## Logging Settings
+
+These parameters control log file size, retention, and per-module verbosity:
 
 | Parameter | Description | Type | Default | Since Ver. |
 | :-------- | :---------- | :--- | :------ | :--------- |
@@ -116,11 +130,11 @@ These parameters customize the text displayed on the Saturn Reader for various s
 | `SAT_MSG_DECLINED2` | Line 2 of "Declined" message | String (16) | — |
 | `SAT_MSG_ERROR1` | Line 1 of "Error" message | String (16) | — |
 | `SAT_MSG_ERROR2` | Line 2 of "Error" message | String (16) | — |
-| `SAT_MSG_CARD_NOT_RECOGNIZED1` | Line 1 — used by Closed-Loop Payment | String (16) | Card not |
-| `SAT_MSG_CARD_NOT_RECOGNIZED2` | Line 2 — used by Closed-Loop Payment | String (16) | recognized |
-| `SAT_MSG_CLP_AUTHORIZING1` | Line 1 — used by Closed-Loop Payment | String (16) | Authorizing... |
-| `SAT_MSG_CLP_APPROVED1` | Line 1 — used by Closed-Loop Payment | String (16) | Approved |
-| `SAT_MSG_CLP_APPROVED2` | Line 2 — used by Closed-Loop Payment | String (16) | Balance: |
+| `SAT_MSG_CARD_NOT_RECOGNIZED1` | Line 1, used by Closed-Loop Payment | String (16) | Card not |
+| `SAT_MSG_CARD_NOT_RECOGNIZED2` | Line 2, used by Closed-Loop Payment | String (16) | recognized |
+| `SAT_MSG_CLP_AUTHORIZING1` | Line 1, used by Closed-Loop Payment | String (16) | Authorizing... |
+| `SAT_MSG_CLP_APPROVED1` | Line 1, used by Closed-Loop Payment | String (16) | Approved |
+| `SAT_MSG_CLP_APPROVED2` | Line 2, used by Closed-Loop Payment | String (16) | Balance: |
 | `SAT_MSG_SWIPE_ALL1` | Message for retrying transaction in all channels | String (16) | Insert or Swipe |
 | `SAT_MSG_SWIPE_ALL2` | — | String (16) | Or Change Card |
 | `SAT_MSG_DEFAULT_MSGSWIPE1` | Message for retrying transaction via Mag Stripe | String (16) | Please Swipe |

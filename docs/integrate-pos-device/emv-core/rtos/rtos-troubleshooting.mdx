@@ -1,25 +1,23 @@
 ---
 title: "Error Handling & Troubleshooting"
 metadata:
-  og:description: "Log file access, troubleshooting sequence, and common problems for the EMV-Core RTOS SDK."
+  og:description: "Log file access, troubleshooting sequence, and common problems for the EMV Core RTOS SDK."
 ---
 
-<Note>
-  This page covers system-level issues: terminal registration, configuration, and log collection. For SDK-level integration issues (serial setup, threading, callbacks, memory), see [Integration Guide](/docs/integrate-pos-device/emv-core/rtos/rtos-integration-guide#integration-troubleshooting).
-</Note>
+This page covers system-level issues: terminal registration, configuration, and log collection. For SDK-level integration issues (serial setup, threading, callbacks, memory), see [Integration Guide](/docs/integrate-pos-device/emv-core/rtos/rtos-integration-guide#integration-troubleshooting).
 
 When encountering errors or unexpected behavior, provide the following to Nayax support:
 
 1. **Device ID** (Reader Serial Number)
-2. **EMV-Core FW version** in use
-3. **EMV-Core configuration file**
-4. **EMV-Core log files**
+2. **EMV Core FW version** in use
+3. **EMV Core configuration file**
+4. **EMV Core log files**
 5. **Transaction data** (if applicable): date/time, amount, transaction ID, error received
 6. **Reader configuration** (retrievable with the Saturn Management Utility)
 
 ## Log Files
 
-The EMV-Core saves information in log files for debugging purposes.
+The EMV Core saves information in log files for debugging purposes.
 
 Log files can be obtained by:
 
@@ -32,9 +30,11 @@ Log files can be obtained by:
 
 ## Troubleshooting Sequence
 
+When encountering an issue, work through these steps in order:
+
 1. **Check SDK version**: Uninstall old versions and install the latest.
 2. **Check and update configuration**:
-   * EMV-Core configuration
+   * EMV Core configuration
    * Reader configuration
 3. **Verify correct registration**:
    * OTI TMS
@@ -46,6 +46,8 @@ Log files can be obtained by:
 ## Common Problems
 
 ### Error Code Overview
+
+Error codes fall into two categories depending on their source:
 
 * **Positive error codes** (e.g., `99`): From the PSP system.
 * **Negative error codes** (e.g., `-997`): From the OTI system.
@@ -65,10 +67,10 @@ Note: Minus-sign errors such as `-995 declined by reader` can also indicate an o
 
 **Suggested steps:**
 
-* Confirm your terminal ID appears in TMS under the correct operator — consult Nayax support if needed.
-* Check the EMV-Core configuration file for:
-  * `TMS_SVC_URL=tms.otiglobal.com` — for management from TMS
-  * `TMS_SVC_URL=tms-c.otiglobal.com` — for management from Nayax Core
+* Confirm your terminal ID appears in TMS under the correct operator; consult Nayax support if needed.
+* Check the EMV Core configuration file for:
+  * `TMS_SVC_URL=tms.otiglobal.com` (for management from TMS)
+  * `TMS_SVC_URL=tms-c.otiglobal.com` (for management from Nayax Core)
 
 ---
 
@@ -85,4 +87,4 @@ Note: Minus-sign errors such as `-995 declined by reader` can also indicate an o
   ```
   PAYMENT_SVC_URL=payment-nayax-p.otiglobal.com
   ```
-* Verify the terminal ID is properly registered at Nayax backend — consult the Nayax support team.
+* Verify the terminal ID is properly registered at Nayax backend; consult the Nayax support team.

@@ -2,14 +2,16 @@
 title: "JSON-RPC API"
 mode: wide
 metadata:
-  og:description: "JSON-RPC API reference for the EMV-Core RTOS SDK — protocol rules, payment commands, events, and network protocol."
+  og:description: "JSON-RPC API reference for the EMV Core RTOS SDK: protocol rules, payment commands, events, and network protocol."
 ---
 
-While integrators should use the [C API](/docs/integrate-pos-device/emv-core/rtos/rtos-c-api) provided by `libecodsdk`, the JSON-RPC API is used by the EMV-Core logs and is very useful during integration debugging.
+While integrators should use the [C API](/docs/integrate-pos-device/emv-core/rtos/rtos-c-api) provided by `libecodsdk`, the JSON-RPC API is used by the EMV Core logs and is very useful during integration debugging.
 
 ## Protocol Rules
 
 ### Syntax Rules
+
+All commands follow these formatting conventions:
 
 * All commands and events use the **JSON-RPC 2.0** protocol with named parameters.
 * All commands and events require a response, **except** `log()` and `ReaderMessageEvent()`, which have no `id`.
@@ -20,7 +22,7 @@ While integrators should use the [C API](/docs/integrate-pos-device/emv-core/rto
 ```
 
 * Use a different `id` for each command (e.g., a running counter) to aid synchronization.
-* An illegal command returns a `"Not existing command"` response from the EMV-Core.
+* An illegal command returns a `"Not existing command"` response from the EMV Core.
 
 ### Send & Receive
 
@@ -35,26 +37,28 @@ While integrators should use the [C API](/docs/integrate-pos-device/emv-core/rto
 1. Wait for incoming data.
 2. Once data starts arriving, wait for complete JSON, or a 1-second timeout.
 3. Parse and process the message as JSON-RPC.
-4. Send a JSON-RPC response — no response needed for `ReaderMessageEvent`; no response is sent for `socket_data_received`.
+4. Send a JSON-RPC response (no response needed for `ReaderMessageEvent`; no response is sent for `socket_data_received`).
 
 ## Payment Flow
 
+A typical payment session follows this sequence:
+
 1. POS sends `PreAuthorize`.
-2. EMV-Core responds (after card tap and authorization) with `TransactionComplete`.
+2. EMV Core responds (after card tap and authorization) with `TransactionComplete`.
 3. POS sends either `ConfirmTransaction` (product delivered) or `VoidTransaction` (otherwise).
 4. POS may send `CancelTransaction` at any time; `TransactionComplete` will return with status `Cancelled`.
 
 **Important notes:**
 
 * Always close a `PreAuthorize` session with Confirm or Void/Cancel. An unclosed session will be reversed by the processor after some time, which may incur higher fees.
-* Once `ConfirmTransaction` has been acknowledged by the EMV-Core, do not re-send it.
+* Once `ConfirmTransaction` has been acknowledged by the EMV Core, do not re-send it.
 * To force synchronous processing, set `PAYMENT_SVC_SYNCHRONOUS=1`.
 
 ## Commands
 
 ### PreAuthorize
 
-Pre-authorize a card with the payment processor. The EMV-Core waits for a card, reads it, processes it, then sends `TransactionComplete`.
+Pre-authorize a card with the payment processor. The EMV Core waits for a card, reads it, processes it, then sends `TransactionComplete`.
 
 **Example:**
 
@@ -71,7 +75,7 @@ Pre-authorize a card with the payment processor. The EMV-Core waits for a card, 
 | :-------- | :---------- |
 | `amount` | Amount to charge in full units (dollars, not cents) |
 | `currency` | ISO 4217 code (e.g., 840 = USD) |
-| `productID` | Optional: product ID selected by consumer — saved in server for reports |
+| `productID` | Optional: product ID selected by consumer, saved in server for reports |
 | `continuous` | If `true`, poll for card restarts immediately after timeout; `TransactionComplete` returns `PollContinuous` |
 | `timeout` | Maximum seconds to wait for a card. Returns `Timeout` status if no card arrives. |
 
@@ -79,7 +83,7 @@ Pre-authorize a card with the payment processor. The EMV-Core waits for a card, 
 
 ### ConfirmTransaction
 
-Second stage of the authorization flow — confirms the authorization so settlement can take place.
+Second stage of the authorization flow: confirms the authorization so settlement can take place.
 
 **Example:**
 
@@ -96,15 +100,15 @@ Second stage of the authorization flow — confirms the authorization so settlem
 | :-------- | :---------- |
 | `Amount` | Actual amount to charge in minor units (cents) |
 | `transactionReference` | `TransactionDbID` from the `TransactionComplete` event |
-| `productID` | Optional: product ID — saved in server for reports |
-| `terminal_data` | Optional: `terminal_data=(key1=value1,key2=value2)` — passed to PSP in online requests |
+| `productID` | Optional: product ID, saved in server for reports |
+| `terminal_data` | Optional: `terminal_data=(key1=value1,key2=value2)`; passed to PSP in online requests |
 
 ---
 
 ### VoidTransaction
 
 Void a transaction in two cases:
-* Transaction was pre-authorized but not confirmed — to release reserved funds.
+* Transaction was pre-authorized but not confirmed, to release reserved funds.
 * Transaction was completed but needs to be canceled (e.g., product not vended).
 
 **Example:**
@@ -127,7 +131,7 @@ Void a transaction in two cases:
 
 Cancels the last transaction started by `PreAuthorize`:
 
-* **Card not yet presented:** Stops the reader poll sequence. The display shows "Cancelling" — the host application must update the display.
+* **Card not yet presented:** Stops the reader poll sequence. The display shows "Cancelling"; the host application must update the display.
 * **Card already presented but not completed:** Returns `CannotCancel`. `TransactionComplete` arrives after the online authorization result.
 * **Transaction already completed:** Returns `NoTransaction`.
 * For `CannotCancel` or `NoTransaction`, use `VoidTransaction` to undo a successful transaction.
@@ -169,7 +173,7 @@ Returns a card token without performing a payment transaction. Returns `CardToke
 
 ### GetStatus
 
-Returns the current EMV-Core status.
+Returns the current EMV Core status.
 
 **Example:**
 
@@ -214,7 +218,7 @@ Returns the version of components in the system.
 
 | Parameter | Values |
 | :-------- | :----- |
-| `component` | `otiKiosk` (for EMV-Core version) or `Reader` |
+| `component` | `otiKiosk` (for EMV Core version) or `Reader` |
 
 ---
 
@@ -233,7 +237,7 @@ Returns the Kiosk identification number.
 
 ### GetAttribute
 
-Returns the value of an EMV-Core configuration attribute.
+Returns the value of an EMV Core configuration attribute.
 
 **Example:**
 
@@ -251,9 +255,9 @@ Returns the value of an EMV-Core configuration attribute.
 
 ### TransactionComplete
 
-Sent by the EMV-Core when a transaction completes (success or failure). Contains all data needed for receipts and dispute resolution.
+Sent by the EMV Core when a transaction completes (success or failure). Contains all data needed for receipts and dispute resolution.
 
-**Note:** If no acknowledgment is received, the EMV-Core resends up to 2 times (3 total). If still no answer, it assumes the message was received and does not cancel the transaction.
+**Note:** If no acknowledgment is received, the EMV Core resends up to 2 times (3 total). If still no answer, it assumes the message was received and does not cancel the transaction.
 
 **Example (open loop):**
 
@@ -284,7 +288,7 @@ Sent by the EMV-Core when a transaction completes (success or failure). Contains
 | :---- | :---------- |
 | `status` | `OK`, `Declined`, `Error`, `Timeout`, `Cancelled`, `LocalCLP` |
 | `errorCode` | Numeric error code (0 = no error; positive = PSP errors; negative = OTI system errors) |
-| `errorDescription` | Technical error description for developers — do not display to users |
+| `errorDescription` | Technical error description for developers; do not display to users |
 | `transactionId` | Use for `ConfirmTransaction` or `VoidTransaction` |
 
 **Authorization Details fields:**
@@ -440,7 +444,7 @@ Returns network channel, operator, technology (3G/4G), signal strength, and BER.
 
 #### resolve\_host\_name
 
-DNS resolution — returns list of IP addresses and TTL.
+DNS resolution: returns list of IP addresses and TTL.
 
 ```json
 >> {"jsonrpc":"2.0", "method":"resolve_host_name",

@@ -1,12 +1,16 @@
 ---
 title: "Get Started"
 metadata:
-  og:description: "Install the EMV-Core RTOS SDK, set up the UNO-mini reader firmware, and obtain your Device ID."
+  og:description: "Install the EMV Core RTOS SDK, set up the UNO-mini reader firmware, and obtain your Device ID."
 ---
+
+Verify your hardware and build requirements, install the reader firmware, and obtain the Device ID needed for terminal registration.
 
 ## Requirements
 
 ### Hardware
+
+Your setup requires the following hardware:
 
 | Requirement | Details |
 | :---------- | :------ |
@@ -22,16 +26,16 @@ The host platform must support IPv4 TCP networking with the following characteri
 * Up to 3 sockets in parallel
 * DNS resolution
 * Network status indication
-* Client only — no server functionality needed
+* Client only (no server functionality needed)
 * Low latency of sending and receiving packets (up to 10 ms)
 * **Socket usage:**
   * 1 constantly open socket exchanging small amounts of data (Keep-alive) every 2–30 minutes. May receive data at any moment.
-  * 2 short-lived sockets (few seconds, one or more request/response cycles) — may work in parallel.
-  * Download of 1.5 MB at a time; upload of ~1 MB at a time — through a single socket in chunks of 1.5 KB.
+  * 2 short-lived sockets (few seconds, one or more request/response cycles), which may work in parallel.
+  * Download of 1.5 MB at a time; upload of ~1 MB at a time, through a single socket in chunks of 1.5 KB.
 
 #### Transport Layer
 
-* The channel between EMV-Core and Host is either a Serial or a USB channel.
+* The channel between EMV Core and Host is either a Serial or a USB channel.
 * Messages should be sent without breaks between the bytes (RS-232/TTL) or blocks (USB).
 * A break in the sequence indicates message completion. A break is defined as 11 ETU on RS-232/TTL:
   * 1.15 ms at 9600 BAUD
@@ -54,25 +58,26 @@ The host sample code requires:
 
 ## SDK Delivery
 
-The SDK package includes the following folders and files:
+The SDK package is organized into three top-level folders:
 
+```text
+SDK Package/
+├── Linux Sample Application/      Portable C sources and demo application
+│   ├── ecod_sdk/                  Core SDK headers and sources
+│   │   ├── platform/              Platform abstraction layer
+│   │   ├── src/                   SDK implementation
+│   │   └── include/               Internal and public headers
+│   └── demo/                      Example demo application
+├── Firmware and Configuration/    Reader firmware and config files
+│   ├── Reader Firmware/           EMV Core FW file (EMVSC_v0xxxxx.oef)
+│   └── Reader Configuration/      Regional configuration files
+└── Utilities/
+    └── UNO-8 Manager/             Tool for local firmware and configuration updates
 ```
-Linux Sample Application/     # Portable C sources and demo application
-  ecod_sdk/                   # Core SDK headers and sources
-    platform/                 # Platform abstraction layer
-    src/                      # SDK implementation
-    include/                  # Internal and public headers
-  demo/                       # Example demo application
-Firmware and Configuration/
-  Reader Firmware/            # EMV-Core FW file (EMVSC_v0xxxxx.oef)
-  Reader Configuration/       # Regional configuration files
-Utilities/
-  UNO-8 Manager/              # Tool for local firmware and configuration updates
-```
 
-### EMV-Core Communication Protocols
+### EMV Core Communication Protocols
 
-The EMV-Core FW running on the UNO Reader automatically adapts to two protocols based on the host application:
+The EMV Core FW running on the UNO Reader automatically adapts to two protocols based on the host application:
 
 | Protocol | Used By |
 | :------- | :------ |
@@ -85,9 +90,9 @@ The EMV-Core FW running on the UNO Reader automatically adapts to two protocols 
 
 ## Firmware Installation on UNO-mini
 
-### EMV-Core Installation
+### EMV Core Installation
 
-The EMV-Core module is provided with the UNO Reader firmware.
+The EMV Core module is provided with the UNO Reader firmware.
 
 * **First-time installation** is performed using the **UNO-8 Manager**.
 * **Future updates** may be done remotely using the Nayax Terminal Management System (TMS).
@@ -102,9 +107,9 @@ The firmware file (`EMVSC_v0xxxxx.oef`) can be found in the SDK `Firmware and Co
 
 The Kiosk ID is taken from the Reader Serial Number (SN) and can be obtained by:
 
-**a) Reading the SN from the back of the reader** — scan the barcode to prevent errors.
+**a) Reading the SN from the back of the reader:** scan the barcode to prevent errors.
 
-**b) Using the EMV-Core Test application on Linux:**
+**b) Using the EMV Core Test application on Linux:**
 
 1. Run the Linux test application.
 2. Select option **8** and press **Enter** to display the Device ID.

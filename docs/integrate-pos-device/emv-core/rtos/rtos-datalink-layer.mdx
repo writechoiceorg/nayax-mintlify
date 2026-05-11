@@ -1,14 +1,14 @@
 ---
 title: "Datalink Layer"
 metadata:
-  og:description: "Datalink framing protocol for the EMV-Core RTOS SDK — data frames, ACK/NAK, and protocol rules."
+  og:description: "Datalink framing protocol for the EMV Core RTOS SDK: data frames, ACK/NAK, and protocol rules."
 ---
 
-The channel between EMV-Core and Host is either a serial or USB channel.
+The channel between EMV Core and Host is either a serial or USB channel.
 
 **In USB:**
 * The device uses the HID Protocol Class with 64-byte blocks (Reports in HID terminology).
-* The first byte of every 64-byte block is a length byte — indicating how many of the following 63 bytes are actually used.
+* The first byte of every 64-byte block is a length byte, indicating how many of the following 63 bytes are actually used.
 * If the length byte is less than 63, the remaining bytes should be discarded.
 * If it is 63 or more, all following 63 bytes are used.
 
@@ -16,20 +16,22 @@ The channel between EMV-Core and Host is either a serial or USB channel.
 
 ### Command Sequence Example (GetKioskId)
 
+The following exchange shows the full ACK/NAK flow for a `GetKioskID` command:
+
 ```
 →  Host sends data:
    <A0|0065{"jsonrpc":"2.0","method":"GetKioskID","params":{},"id":7}5C>
 
-←  EMV-Core sends ACK:
+←  EMV Core sends ACK:
    <+0>
 
-←  EMV-Core sends data response:
+←  EMV Core sends data response:
    <A1|0054{"jsonrpc":"2.0","result":"1234567890123456","id":7}6D>
 
 →  Host sends NAK (e.g., LRC error):
    <-1|8>
 
-←  EMV-Core sends data response (retry):
+←  EMV Core sends data response (retry):
    <A1|0054{"jsonrpc":"2.0","result":"1234567890123456","id":7}6D>
 
 →  Host sends ACK:
@@ -51,9 +53,9 @@ The channel between EMV-Core and Host is either a serial or USB channel.
 | :---- | :---------- |
 | `<` | Start of frame |
 | `>` | End of frame |
-| `A` | Protocol version A — fixed value |
+| `A` | Protocol version A; fixed value |
 | `[Frame-ID]` | ID of the frame: `0` or `1`, toggled by the sender on every new frame. On retry (after NAK or timeout), Frame-ID stays the same. ACK/NAK use the same Frame-ID. |
-| `[Length]` | 4 decimal digits — length of the `[Data]` field in bytes |
+| `[Length]` | 4 decimal digits: length of the `[Data]` field in bytes |
 | `[Data]` | Higher-level data being transported, typically a JSON-RPC message |
 | `[LRC]` | 2-character hex LRC (XOR of all bytes from `<` through the last byte of `[Data]`) |
 
@@ -107,15 +109,17 @@ Sent when the receiving side fails to parse a Data Frame.
 | `5` | LRC field invalid (characters not hex A-F, 0-9) |
 | `6` | LRC wrong |
 | `7` | ETX invalid |
-| `8` | Timeout — frame not fully received after timeout expired |
+| `8` | Timeout: frame not fully received after timeout expired |
 
-The transmitting party does not change its behavior based on the error codes — they are for debugging only.
+The transmitting party does not change its behavior based on the error codes; they are for debugging only.
 
 ---
 
 ## Protocol Rules
 
+The datalink layer follows these timing and sequencing rules:
+
 * ACK/NAK are expected within **30 milliseconds**.
 * If ACK is not received, or if a NAK is received, the sending party may resend the frame with the same Frame-ID.
 * While waiting for ACK/NAK, the sending party must not send another frame.
-* When receiving a frame — if the first bytes are not `<A0` or `<A1`, do not send a NAK. Instead, keep reading until receiving a valid start of frame.
+* When receiving a frame: if the first bytes are not `<A0` or `<A1`, do not send a NAK. Instead, keep reading until receiving a valid start of frame.

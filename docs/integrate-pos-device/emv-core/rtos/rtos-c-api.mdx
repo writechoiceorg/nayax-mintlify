@@ -2,19 +2,21 @@
 title: "C API Reference"
 mode: wide
 metadata:
-  og:description: "Complete C API reference for the EMV-Core RTOS SDK, including initialization, device status, transaction operations, callbacks, and data types."
+  og:description: "Complete C API reference for the EMV Core RTOS SDK, including initialization, device status, transaction operations, callbacks, and data types."
 ---
 
 ## Overview
 
-The EMV-Core provides the POS application with two API layers:
+The EMV Core provides the POS application with two API layers:
 
-1. **C functions** implemented in `libecodsdk` — see `ecod_sdk.h` and `ecod_sdk_types.h` in the SDK.
-2. **JSON-RPC messages** with Datalink wrapper over Serial or USB — see [JSON-RPC API](/docs/integrate-pos-device/emv-core/rtos/rtos-json-rpc-api).
+1. **C functions** implemented in `libecodsdk`. See `ecod_sdk.h` and `ecod_sdk_types.h` in the SDK.
+2. **JSON-RPC messages** with Datalink wrapper over Serial or USB. See [JSON-RPC API](/docs/integrate-pos-device/emv-core/rtos/rtos-json-rpc-api).
 
-The User Interface is managed by the POS application. The POS uses Reader state events from the EMV-Core to synchronize UI with the Core payment status (idle, authorizing, declined, approved, etc.).
+The User Interface is managed by the POS application. The POS uses Reader state events from the EMV Core to synchronize UI with the Core payment status (idle, authorizing, declined, approved, etc.).
 
 ## Supported Functionality
+
+The SDK supports the following payment and device management operations:
 
 * **Credit / Debit / Pre-paid Cards Sale:**
   * EMV Contactless (NO CVM only)
@@ -26,13 +28,15 @@ The User Interface is managed by the POS application. The POS uses Reader state 
   * `VoidTransaction` reverses a transaction that was already approved.
 * **User Interface (UI):** Managed by the POS application using Reader state events.
 * **Terminal Management:** Firmware and configuration updates, status and version queries, Device ID.
-* **Network API:** The host must implement the Network API to enable EMV-Core communication with Nayax servers.
+* **Network API:** The host must implement the Network API to enable EMV Core communication with Nayax servers.
 
 ## API Reference
 
 ### Initialization and Lifecycle
 
 ### Get SDK version string
+
+Returns the SDK version as a null-terminated string:
 
 ```c
 const char* EcodSdk_GetSdkVersion(void);
@@ -66,6 +70,8 @@ When `EC_USE_DATALINK_PROTOCOL` is enabled, a second thread is required to proce
 
 ### Set logging verbosity
 
+Call to control the detail level of SDK log output:
+
 ```c
 EC_RET EcodSdk_SetLogLevel(EC_LOG_LEVEL max_level);
 ```
@@ -76,11 +82,15 @@ EC_RET EcodSdk_SetLogLevel(EC_LOG_LEVEL max_level);
 
 ### Get current device status
 
+Call to query the current device state:
+
 ```c
 EC_RET EcodSdk_GetStatus(EC_STATUS* out_status);
 ```
 
 ### Get device identification (serial number) and versions
+
+Call to retrieve the device serial number and firmware version strings:
 
 ```c
 EC_RET EcodSdk_GetKioskId(char* out_id, int max_out_size);
@@ -89,6 +99,8 @@ EC_RET EcodSdk_GetReaderVersion(char* out_version, int max_out_size);
 ```
 
 ### Read configuration attribute
+
+Returns the value of a named key from the active configuration file:
 
 ```c
 EC_RET EcodSdk_GetAttribute(char* attribute_name, char* out_value, int max_out_size);
@@ -100,7 +112,7 @@ EC_RET EcodSdk_GetAttribute(char* attribute_name, char* out_value, int max_out_s
 
 ### Start pre-authorization
 
-Reserves amount — must confirm or void later:
+Reserves the amount; must be confirmed or voided later:
 
 ```c
 EC_RET EcodSdk_PreAuthorize(emvCorePaymentParameters* params);
@@ -108,11 +120,15 @@ EC_RET EcodSdk_PreAuthorize(emvCorePaymentParameters* params);
 
 ### Request card token without charging
 
+Starts card polling without initiating a payment:
+
 ```c
 EC_RET EcodSdk_GetCardToken(emvCorePaymentParameters* params);
 ```
 
 ### Confirm a pre-authorized transaction
+
+Call after the product or service has been delivered:
 
 ```c
 EC_RET EcodSdk_ConfirmTransaction(uint32_t amount_cents, uint32_t product_id,
@@ -121,11 +137,15 @@ EC_RET EcodSdk_ConfirmTransaction(uint32_t amount_cents, uint32_t product_id,
 
 ### Void a pre-authorized transaction
 
+Call to release a pre-authorized hold without charging the card:
+
 ```c
 EC_RET EcodSdk_VoidTransaction(char* transaction_reference);
 ```
 
 ### Cancel ongoing payment process
+
+Call to stop an active card poll before authorization completes:
 
 ```c
 EC_RET EcodSdk_CancelTransaction(void);
@@ -139,17 +159,23 @@ These functions are called by the platform layer to notify the SDK of network ev
 
 ### Notify EmvCore of socket data arrival
 
+Call from the platform layer when data is available on a socket:
+
 ```c
 EC_RET EcodSdk_NotifySocketDataReceived(int socket_id, int available_bytes);
 ```
 
 ### Notify EmvCore that socket was closed
 
+Call from the platform layer when a socket connection has been closed:
+
 ```c
 EC_RET EcodSdk_NotifySocketClosed(int socket_id);
 ```
 
 ### Notify EmvCore of network connectivity change
+
+Call from the platform layer when the network becomes available or unavailable:
 
 ```c
 EC_RET EcodSdk_NotifyNetworkStatusChanged(bool available);
@@ -161,11 +187,15 @@ EC_RET EcodSdk_NotifyNetworkStatusChanged(bool available);
 
 ### Transaction completion (success, decline, error, cancel, timeout)
 
+Register a handler to receive the result of every `PreAuthorize` call:
+
 ```c
 void EcodSdk_Register_TransactionComplete_Callback(TransactionCompleteCb_t cb);
 ```
 
 ### Reader display events (customer prompts)
+
+Register a handler to receive the current message displayed on the reader:
 
 ```c
 void EcodSdk_Register_ReaderEvent_Callback(RdrEventCb_t cb);
@@ -176,6 +206,8 @@ void EcodSdk_Register_ReaderEvent_Callback(RdrEventCb_t cb);
 ## Key Data Types
 
 ### Payment Parameters
+
+Pass this struct to `EcodSdk_PreAuthorize` and `EcodSdk_GetCardToken`:
 
 ```c
 typedef struct {
@@ -190,6 +222,8 @@ typedef struct {
 ```
 
 ### Transaction Response
+
+This struct is passed to the `TransactionComplete` callback:
 
 ```c
 typedef struct {
@@ -258,15 +292,19 @@ typedef enum {
 
 ## Amount Field Details
 
-* **C API** — `amount_cents` in `emvCorePaymentParameters` and the amount argument in `EcodSdk_ConfirmTransaction` are always in **cents** (e.g., 450 = $4.50).
-* **JSON-RPC `PreAuthorize`** — amount is in **major units** (e.g., 4.50 = $4.50).
-* **JSON-RPC `ConfirmTransaction`** — amount is in **cents** (e.g., 450 = $4.50).
+Amount fields use different units depending on the API method:
+
+* **C API:** `amount_cents` in `emvCorePaymentParameters` and the amount argument in `EcodSdk_ConfirmTransaction` are always in **cents** (e.g., 450 = $4.50).
+* **JSON-RPC `PreAuthorize`:** amount is in **major units** (e.g., 4.50 = $4.50).
+* **JSON-RPC `ConfirmTransaction`:** amount is in **cents** (e.g., 450 = $4.50).
 * The `amount` fields in the `TransactionComplete` event are returned in **major units** (e.g., 4.50 USD) as received from the PSP.
-* The `fee` parameter is **deprecated** — set it to `0`. It will be removed in the next SDK version.
+* The `fee` parameter is **deprecated**. Set it to `0`. It will be removed in the next SDK version.
 
 ## Currency Code Management
 
-* From SDK v1.0 onward, the currency code is taken from the `CURRENCY_CODE` attribute in the EMV-Core configuration.
+The SDK resolves the currency code from multiple sources in priority order:
+
+* From SDK v1.0 onward, the currency code is taken from the `CURRENCY_CODE` attribute in the EMV Core configuration.
 * If `CURRENCY_CODE` is missing from the configuration, the `currency` parameter sent by the host in `PreAuthorize` is used (backward compatibility).
-* If neither is provided, the EMV-Core SW default (840 / USD) is used and an alert is sent to the Nayax Core server.
+* If neither is provided, the EMV Core SW default (840 / USD) is used and an alert is sent to the Nayax Core server.
 * When the device is managed from Nayax Core, the currency code is automatically taken from the machine settings.

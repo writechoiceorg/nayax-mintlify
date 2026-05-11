@@ -1,7 +1,7 @@
 ---
 title: "Platform Porting"
 metadata:
-  og:description: "Port the EMV-Core RTOS SDK to a new embedded platform by implementing the platform abstraction layer."
+  og:description: "Port the EMV Core RTOS SDK to a new embedded platform by implementing the platform abstraction layer."
 ---
 
 The SDK is designed for portability across embedded platforms and operating systems. To port the SDK to a new platform, follow these steps.
@@ -36,12 +36,16 @@ Implement all functions declared in `ecod_sdk_platform.h`. They are grouped into
 
 ### Initialization
 
+Implement the startup function to allocate platform resources:
+
 ```c
 // Called once at startup. Initialize platform resources (e.g., signal handling, log files).
 EC_SDK_STATUS ecod_platform_init(void);
 ```
 
 ### Clock & Timing
+
+Implement these functions to provide the SDK with a monotonic clock and blocking delay:
 
 ```c
 // Return current time in milliseconds (must be monotonic / always increasing)
@@ -52,6 +56,8 @@ void ecod_platform_delay(u32 delay_ms);
 ```
 
 ### Logging
+
+Implement these functions to route SDK log output to your platform's logging system:
 
 ```c
 // printf-style log output, filtered by level and tagged with module name
@@ -67,12 +73,16 @@ void ecod_log_buf(EC_LOG_LEVEL level, const char* module, const char* msg,
 
 ### Memory (only when `EC_USE_HEAP` is enabled)
 
+Implement `malloc` and `free` wrappers when heap allocation is enabled:
+
 ```c
 void* ecod_malloc(u32 size);
 void  ecod_free(void* ptr);
 ```
 
 ### Mutex
+
+Implement these functions using your platform's mutual-exclusion primitives:
 
 ```c
 EC_SDK_STATUS ecod_mutex_init(ecod_mutex_t* out_mutex);
@@ -93,6 +103,8 @@ EC_SDK_STATUS ecod_event_signal(ecod_event_t* p_event);
 
 ### Serial Communication
 
+Implement these functions to handle raw serial or USB HID I/O:
+
 ```c
 // Open and configure the serial port (UART or HID). Called once.
 bool ecod_serial_init(void);
@@ -105,6 +117,8 @@ u32 ecod_serial_receive(u8* data, u32 max_length, u32 timeout_ms);
 ```
 
 ### Network (only if using the network bridge)
+
+Implement these functions to give the SDK access to TCP sockets:
 
 ```c
 EC_SDK_STATUS ecod_network_init(void);

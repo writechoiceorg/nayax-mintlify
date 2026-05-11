@@ -27,7 +27,7 @@ The Nayax EMV Core SDK supports a wide range of Linux-based platforms. Each deli
 
 Each platform folder contains four primary components:
 
-* **`otiKiosk`**: The primary EMV-Core service executable.
+* **`otiKiosk`**: The primary EMV Core service executable.
 * **`otiKioskDemo`**: The client Test Application executable.
 * **`kiosk-client-library-xxx.zip`**: Eclipse project containing the C source code and sample app.
 * **`otikiosk-xxx.zip`**: Package for remote updates via TMS (using the `CON_PROG` command).
@@ -37,7 +37,7 @@ You can see a folder structure sample below:
 ```
 Linux/
 └── x86_64/
-    ├── otiKiosk/            # EMV-Core Service
+    ├── otiKiosk/            # EMV Core Service
     ├── otiKioskDemo/        # Test App
     ├── Sources/             # Client library & source code
     └── TMS Update/          # Remote update package
@@ -57,7 +57,7 @@ The EMV Core SDK for Linux provides a set of APIs to control payment processes o
 
 Follow these steps to install the SDK on Linux:
 
-1. Copy the EMV-Core binary (`otiKiosk`) to the target device. Note that the file must not be renamed.
+1. Copy the EMV Core binary (`otiKiosk`) to the target device. Note that the file must not be renamed.
 2. Build the sample application:
    * Install build essentials: `sudo apt-get install build-essential automake`.
    * Extract the source code zip file (e.g., `Emv-Core-client-x86_64-1.4-97.zip`).

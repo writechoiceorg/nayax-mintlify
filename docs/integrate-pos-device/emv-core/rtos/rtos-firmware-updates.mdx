@@ -1,21 +1,23 @@
 ---
 title: "Firmware & Configuration Updates"
 metadata:
-  og:description: "Update the EMV-Core reader firmware and configuration remotely via Nayax Core or TMS, or locally via UNO-8 Manager."
+  og:description: "Update the EMV Core reader firmware and configuration remotely via Nayax Core or TMS, or locally via UNO-8 Manager."
 ---
 
 The cashless reader firmware and configuration can be updated:
 
-* **Remotely** — via Nayax Core or OTI Terminal Management System (TMS)
-* **Locally** — from a Windows PC using the UNO-8 Manager
+* **Remotely:** via Nayax Core or OTI Terminal Management System (TMS)
+* **Locally:** from a Windows PC using the UNO-8 Manager
 
 ## Remote Update from Nayax Core
 
 ### Update Reader (POS) Firmware
 
+Follow these steps in Nayax Core:
+
 1. Select the required machine.
 2. Select **Actions | Update Device Version**.
-3. On **Main Requested FW Version**, select **EMV-Core v1.x**.
+3. On **Main Requested FW Version**, select **EMV Core v1.x**.
 4. On **POS Requested FW Version**, select the required firmware:
    * **For UNO-mini:**
      * RTOS SDK firmware starts with `EMVSC_` (e.g., `EMVSC_v07652`)
@@ -26,7 +28,7 @@ The cashless reader firmware and configuration can be updated:
 
 ### Reader (POS) Kernel Configuration
 
-The kernel configuration is automatically selected by Nayax Core based on Country, Billing Provider, and Device type.
+The kernel configuration is automatically selected by Nayax Core based on Country, Billing Provider, and Device type. Follow these steps to trigger the update:
 
 1. Ensure the correct **Country** is set in the machine's General settings.
 2. Ensure the correct **Billing Provider** is set in the machine's Payment settings.
@@ -43,6 +45,8 @@ Expected configuration names:
 | Other countries | Stubb billing (test only) | `FIN_` | FIN\_14 |
 
 ### Machine Configuration
+
+To push a new configuration to the device:
 
 1. Update any machine attribute in the **Embedded** or **Embedded Advanced** section.
 2. Press **Save** to add the changed attributes to the Queue.
@@ -61,7 +65,7 @@ Expected configuration names:
 2. Select the terminals you wish to update.
 3. Open the **Command builder**.
 4. Select the **SAT\_PROG** command.
-5. Select the firmware file (`*.Oef`) — found in `.\Firmware and Configuration`.
+5. Select the firmware file (`*.Oef`), found in `.\Firmware and Configuration`.
 6. Press **Send** and wait for the process to complete, or use **Add Command to batch** for additional commands.
 
 ### Update Reader Configuration
