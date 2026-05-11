@@ -4,21 +4,19 @@ metadata:
   og:description: "The Nayax EMV Core SDK for RTOS provides a lightweight, portable C library for integrating EMV payment into embedded devices and MCU/RTOS systems."
 ---
 
-The Nayax EMV Core SDK for RTOS provides a lightweight, modular, and portable C library for integrating EMV payment functionality into embedded devices, terminals, and custom MCU/RTOS hardware. It lets Kiosk or POS developers add pre-certified EMV payment capabilities while focusing on the user interface and business logic, without dealing with the complexity of EMV transaction processing.
+The EMV Core RTOS SDK is a portable C99 library for adding EMV payment to MCU and RTOS-based hardware. Your application calls the SDK APIs; the SDK handles card reading, authorization, and server communication.
 
 <Note>
-  **RTOS SDK: Version 1.0**
-
-  This documentation covers the EMV Core SDK for MCUs and RTOS platforms (SDK v1.0). For Android or Linux binary SDK integration, see [Android Installation](/docs/integrate-pos-device/emv-core/get-started/emv-core-android-installation) or [Linux Installation](/docs/integrate-pos-device/emv-core/get-started/emv-core-linux-installation).
+  This documentation covers SDK v1.0 for MCU and RTOS platforms. For the Android or Linux SDK, see [Android Installation](/docs/integrate-pos-device/emv-core/get-started/emv-core-android-installation) or [Linux Installation](/docs/integrate-pos-device/emv-core/get-started/emv-core-linux-installation).
 </Note>
 
 ## SDK Highlights
 
-* **Modular C codebase** (C99) designed for embedded systems
-* **EMV command processing** and full transaction support
-* **Platform abstraction layer** for portability across RTOS environments
-* **Portable C sources** with a Linux reference implementation
-* **Example demo application** for rapid evaluation
+* **C99 source code** designed for embedded systems
+* **Complete EMV transaction processing**, including command handling and authorization
+* **Platform abstraction layer** to run on any RTOS without code changes
+* **Linux reference implementation** included with the SDK
+* **Example application** to test your setup quickly
 
 ## System Overview
 
@@ -26,17 +24,17 @@ The Nayax Embedded solution includes three elements:
 
 <Columns cols={3}>
   <Card title="Cashless Reader Hardware">
-    Nayax UNO-mini with standard EMV Kernels and the EMV Core client module, exposing a JSON Payment API and Network Socket API.
+    The UNO-mini reader running EMV Core firmware, exposing a JSON Payment API and network socket interface.
   </Card>
   <Card title="SDK Sample Code">
-    Portable C (C99) client application sample code implementing Network Socket and Payment functions.
+    C99 sample code implementing the network socket and payment API calls.
   </Card>
   <Card title="Nayax Servers (Nayax Core)">
-    Pre-integrated cloud service for remote terminal management (firmware and configuration) and worldwide transaction clearing.
+    Cloud service for remote terminal management and transaction clearing.
   </Card>
 </Columns>
 
-## Hardware and SW Architecture
+## Hardware and Software Architecture
 
 The UNO-mini reader running EMV Core connects to the Host platform (MCU/RTOS) via UART TTL or USB HID.
 
