@@ -1,0 +1,142 @@
+---
+title: "Platform Porting"
+metadata:
+  og:description: "Port the EMV-Core RTOS SDK to a new embedded platform by implementing the platform abstraction layer."
+---
+
+The SDK is designed for portability across embedded platforms and operating systems. To port the SDK to a new platform, follow these steps.
+
+<Tip>
+  Use the Linux reference implementation in `platform/linux/` as a working starting point. For RTOS-based platforms, map mutexes and events to your RTOS primitives (e.g., FreeRTOS `SemaphoreHandle_t`, Zephyr `k_mutex`).
+</Tip>
+
+## Step 1: Implement the Platform Layer
+
+### Folder & Files Preparation
+
+Create a new directory under `platform/` (e.g., `platform/my_platform/`) with two files:
+
+#### 1. Platform Types (`ecod_platform_types.h`)
+
+Define the platform-specific types used by the SDK:
+
+```c
+typedef /* platform-specific */ ecod_socket_t;  // Socket handle
+typedef /* platform-specific */ ecod_mutex_t;   // Mutex primitive
+typedef struct {
+    /* platform-specific fields for a waitable event */
+} ecod_event_t;
+```
+
+The Linux reference uses `pthread_mutex_t` for mutexes and a struct wrapping `pthread_mutex_t` + `pthread_cond_t` + `bool` flag for events. Adapt these to your platform's RTOS or OS primitives.
+
+#### 2. Platform Implementation (`ecod_platform_<name>.c`)
+
+Implement all functions declared in `ecod_sdk_platform.h`. They are grouped into these categories:
+
+### Initialization
+
+```c
+// Called once at startup. Initialize platform resources (e.g., signal handling, log files).
+EC_SDK_STATUS ecod_platform_init(void);
+```
+
+### Clock & Timing
+
+```c
+// Return current time in milliseconds (must be monotonic / always increasing)
+u32 ecod_platform_get_tick_ms(void);
+
+// Blocking delay for the given number of milliseconds
+void ecod_platform_delay(u32 delay_ms);
+```
+
+### Logging
+
+```c
+// printf-style log output, filtered by level and tagged with module name
+void ecod_log(EC_LOG_LEVEL level, const char* module, const char* format, ...);
+
+// Set the maximum log level that will be output
+void ecod_set_log_level(EC_LOG_LEVEL max_level);
+
+// Log a data buffer as hex (useful for protocol debugging)
+void ecod_log_buf(EC_LOG_LEVEL level, const char* module, const char* msg,
+                  u8* data, u32 data_len);
+```
+
+### Memory (only when `EC_USE_HEAP` is enabled)
+
+```c
+void* ecod_malloc(u32 size);
+void  ecod_free(void* ptr);
+```
+
+### Mutex
+
+```c
+EC_SDK_STATUS ecod_mutex_init(ecod_mutex_t* out_mutex);
+void          ecod_mutex_lock(ecod_mutex_t* p_mutex);
+void          ecod_mutex_unlock(ecod_mutex_t* p_mutex);
+```
+
+### Event
+
+Waitable signal used for inter-thread synchronization:
+
+```c
+EC_SDK_STATUS ecod_event_init(ecod_event_t* out_event);
+EC_SDK_STATUS ecod_event_clear(ecod_event_t* p_event);
+EC_SDK_STATUS ecod_event_wait(ecod_event_t* p_event, u32 timeout_ms);  // 0xFFFFFFFF = infinite
+EC_SDK_STATUS ecod_event_signal(ecod_event_t* p_event);
+```
+
+### Serial Communication
+
+```c
+// Open and configure the serial port (UART or HID). Called once.
+bool ecod_serial_init(void);
+
+// Synchronous send. Returns number of bytes actually sent.
+u32 ecod_serial_send(u8* data, u32 length);
+
+// Receive up to max_length bytes, waiting up to timeout_ms. Returns bytes received.
+u32 ecod_serial_receive(u8* data, u32 max_length, u32 timeout_ms);
+```
+
+### Network (only if using the network bridge)
+
+```c
+EC_SDK_STATUS ecod_network_init(void);
+void          ecod_network_cleanup(void);
+bool          ecod_network_is_ready(void);
+
+EC_SDK_STATUS ecod_socket_connect(char* host, u16 port, u16 timeout_sec,
+                                   ecod_socket_t* out_socket);
+EC_SDK_STATUS ecod_socket_close(ecod_socket_t socket);
+EC_SDK_STATUS ecod_socket_send(ecod_socket_t socket, u8* data, u32 data_len,
+                                bool last_part, u32* out_sent_data_len);
+EC_SDK_STATUS ecod_socket_recv(ecod_socket_t socket, u8* out_data, u32 max_size,
+                                u32* out_received_size);
+```
+
+## Step 2: Update the Build System
+
+Modify `configure.ac` and `Makefile.am` to include your platform:
+
+```makefile
+# In ecod_sdk/Makefile.am
+if TARGET_MY_PLATFORM
+libecodsdk_a_SOURCES += platform/my_platform/ecod_platform_my_platform.c
+endif
+```
+
+## Step 3: Test
+
+Use the demo application to verify functionality on your target platform:
+
+```bash
+./demo/ecodSdkDemo
+```
+
+For detailed porting guidance, see `platform/ecod_sdk_platform.h`.

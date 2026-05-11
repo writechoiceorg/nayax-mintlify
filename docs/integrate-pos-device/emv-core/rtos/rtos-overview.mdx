@@ -1,0 +1,77 @@
+---
+title: "RTOS SDK Overview"
+metadata:
+  og:description: "The Nayax EMV-Core SDK for RTOS provides a lightweight, portable C library for integrating EMV payment into embedded devices and MCU/RTOS systems."
+---
+
+The Nayax EMV-Core SDK for RTOS provides a lightweight, modular, and portable C library for integrating EMV payment functionality into embedded devices, terminals, and custom MCU/RTOS hardware. It lets Kiosk or POS developers add pre-certified EMV payment capabilities while focusing on the user interface and business logic — without dealing with the complexity of EMV transaction processing.
+
+<Note>
+  **RTOS SDK — Version 1.0**
+
+  This documentation covers the EMV-Core SDK for MCUs and RTOS platforms (SDK v1.0). For Android or Linux binary SDK integration, see [Android Installation](/docs/integrate-pos-device/emv-core/get-started/emv-core-android-installation) or [Linux Installation](/docs/integrate-pos-device/emv-core/get-started/emv-core-linux-installation).
+</Note>
+
+## SDK Highlights
+
+* **Modular C codebase** (C99) designed for embedded systems
+* **EMV command processing** and full transaction support
+* **Platform abstraction layer** for portability across RTOS environments
+* **Portable C sources** with a Linux reference implementation
+* **Example demo application** for rapid evaluation
+
+## System Overview
+
+The Nayax Embedded solution includes three elements:
+
+<Columns cols={3}>
+  <Card title="Cashless Reader Hardware">
+    Nayax UNO-mini with standard EMV Kernels and the EMV-Core client module — exposes a JSON Payment API and Network Socket API.
+  </Card>
+  <Card title="SDK Sample Code">
+    Portable C (C99) client application sample code implementing Network Socket and Payment functions.
+  </Card>
+  <Card title="Nayax Servers (Nayax Core)">
+    Pre-integrated cloud service for remote terminal management (firmware and configuration) and worldwide transaction clearing.
+  </Card>
+</Columns>
+
+## Hardware and SW Architecture
+
+The UNO-mini reader running EMV-Core connects to the Host platform (MCU/RTOS) via UART TTL or USB HID.
+
+### Application Layers
+
+Communication flows through the following layers:
+
+| Layer | Description |
+| :---- | :---------- |
+| **Application Layer** | Your code calls SDK APIs (e.g., `EcodSdk_PreAuthorize()`) |
+| **JSON-RPC Layer** | Converts API calls to JSON-RPC messages with datalink framing |
+| **Serial Transport** | Sends framed messages via UART (`/dev/ttyUSB0`) or HID (`/dev/hidraw0`) |
+| **EMV-Core Device** | Processes payment requests and returns responses |
+| **Callback System** | Async responses delivered via registered callbacks |
+
+## Requirements Summary
+
+| Requirement | Details |
+| :---------- | :------ |
+| **Device connection** | USB HID or UART TTL |
+| **Minimum RAM** | 64 KB (configurable for smaller systems) |
+| **Reader power** | 5–12 VDC, 0.7 W idle / 3 W peak |
+| **Network** | IPv4 TCP sockets, DNS resolution, client-only |
+| **Compiler** | GCC 4.8+ or Clang 3.5+ with C99 support |
+
+## Next Steps
+
+<Columns cols={3}>
+  <Card icon="link" title="Get Started" href="/docs/integrate-pos-device/emv-core/rtos/rtos-get-started">
+    SDK delivery, firmware installation, and obtaining your Device ID.
+  </Card>
+  <Card icon="link" title="Integration Guide" href="/docs/integrate-pos-device/emv-core/rtos/rtos-integration-guide">
+    Threading, callbacks, error handling, and configuration.
+  </Card>
+  <Card icon="link" title="C API Reference" href="/docs/integrate-pos-device/emv-core/rtos/rtos-c-api">
+    Complete C API function reference and key data types.
+  </Card>
+</Columns>

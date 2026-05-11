@@ -1,0 +1,304 @@
+---
+title: "Integration Guide"
+metadata:
+  og:description: "Configure serial communication, threads, callbacks, error handling, and SDK settings for the EMV-Core RTOS SDK."
+---
+
+<Note>
+  The host application should check device status regularly, even when not performing transactions (to update UI and notify error states). It is **not** possible to call any SDK API from within a callback.
+</Note>
+
+## Serial Interface Configuration
+
+The SDK supports two serial communication modes:
+
+### UART Mode (Default)
+
+```c
+// In platform/linux/ecod_platform_linux.c
+// Comment out USE_HID_INTERFACE to enable UART mode
+// #define USE_HID_INTERFACE
+
+// Linux reference implementation settings:
+// Device: /dev/ttyUSB0
+// Baud: 115200
+// Data bits: 8, Stop bits: 1, Parity: None
+```
+
+### HID Mode
+
+```c
+// In platform/linux/ecod_platform_linux.c
+#define USE_HID_INTERFACE
+
+// Linux reference implementation settings:
+// Device: /dev/hidraw0
+// Report size: 64 bytes
+// First byte contains actual data length
+```
+
+## Threading Requirements
+
+The SDK requires dedicated background threads for communication. When `EC_USE_DATALINK_PROTOCOL=1`, two threads are required:
+
+```c
+#include <pthread.h>
+#include <unistd.h>
+
+volatile int keep_running = 1;
+
+// Thread 1: Datalink layer maintenance (serial I/O, framing, ACK/NAK)
+void* maintenance_thread(void* arg) {
+    while (keep_running) {
+        EcodSdk_Maintain();
+        usleep(1000);  // 1ms sleep recommended
+    }
+    return NULL;
+}
+
+// Thread 2: JSON-RPC message processing (when EC_USE_DATALINK_PROTOCOL enabled)
+void* message_thread(void* arg) {
+    while (keep_running) {
+        // Process one message, wait up to 100ms if queue empty
+        EcodSdk_ProcessMessages(100);
+    }
+    return NULL;
+}
+
+int main() {
+    if (!EcodSdk_Init()) {
+        printf("Failed to initialize SDK\n");
+        return 1;
+    }
+
+    // Register callbacks before starting threads
+    EcodSdk_Register_TransactionComplete_Callback(on_transaction_complete);
+    EcodSdk_Register_ReaderEvent_Callback(on_reader_event);
+
+    // Start maintenance thread (required)
+    pthread_t maintain_tid;
+    pthread_create(&maintain_tid, NULL, maintenance_thread, NULL);
+
+    // Start message processing thread (required when EC_USE_DATALINK_PROTOCOL=1)
+    pthread_t message_tid;
+    pthread_create(&message_tid, NULL, message_thread, NULL);
+
+    // Your application logic here
+
+    keep_running = 0;
+    pthread_join(maintain_tid, NULL);
+    pthread_join(message_tid, NULL);
+    return 0;
+}
+```
+
+<Note>
+  When `EC_USE_DATALINK_PROTOCOL` is disabled, only the maintenance thread is needed.
+</Note>
+
+## Callback Registration
+
+All SDK operations are asynchronous. Register callbacks before initiating operations:
+
+```c
+// Transaction completion callback — called when payment finishes
+void on_transaction_complete(emvCorePaymentResponse* resp) {
+    printf("Transaction %s: %s\n",
+           resp->is_transaction_approved ? "approved" : "declined",
+           resp->transaction_reference);
+    // Copy any data you need — resp is only valid during callback
+}
+
+// Reader display events (prompts shown to customer)
+void on_reader_event(uint8_t msg_index, char* line1, char* line2) {
+    printf("Reader: %s / %s\n", line1, line2);
+}
+
+// Token operation completion
+void on_token_response(emvCoreGetTokenResponse* resp) {
+    if (resp->status == emvCoreTransStatus_OK) {
+        printf("Token: %s\n", resp->card_token);
+    }
+}
+
+// Incremental authorization response (for variable-amount sessions, e.g. EV chargers)
+void on_incremental_auth(emvCorePaymentResponse* resp) {
+    printf("Incremental auth: %s\n",
+           resp->is_transaction_approved ? "approved" : "declined");
+}
+
+// Register all callbacks
+EcodSdk_Register_TransactionComplete_Callback(on_transaction_complete);
+EcodSdk_Register_ReaderEvent_Callback(on_reader_event);
+EcodSdk_Register_GetTokenResponse_Callback(on_token_response);
+EcodSdk_Register_IncrementalAuthorizationResponse_Callback(on_incremental_auth);
+```
+
+## Error Handling
+
+Check return values and implement proper error handling:
+
+```c
+EC_RET result = EcodSdk_PreAuthorize(&params);
+if (result != EC_RET_OK) {
+    switch (result) {
+    case EC_RET_GENERAL_ERROR:  printf("General error\n");                    break;
+    case EC_RET_MEMORY_ERROR:   printf("Memory allocation failed\n");         break;
+    case EC_RET_PARSING_ERROR:  printf("Failed to parse response\n");         break;
+    case EC_RET_COMM_ERROR:     printf("Communication error with device\n");  break;
+    case EC_RET_NEGATIVE_RESP:  printf("Device returned error response\n");   break;
+    default:                    printf("Unknown error: %d\n", result);
+    }
+}
+
+// Also check device status before operations
+EC_STATUS status;
+if (EcodSdk_GetStatus(&status) == EC_RET_OK) {
+    switch (status) {
+    case EC_READY:         /* Ready for transactions */       break;
+    case EC_TRANSACTION:   /* Transaction in progress */      break;
+    case EC_UNCONFIRMED:   /* Pending confirmation */         break;
+    case EC_NO_EMVCORE:    /* Device not connected */         break;
+    case EC_NO_READER:     /* Reader not connected */         break;
+    case EC_DISABLED:      /* Device disabled */              break;
+    default: break;
+    }
+}
+```
+
+## Configuration
+
+### Memory Management
+
+Configure the memory allocation strategy in `ecod_sdk_configs.h`:
+
+```c
+// Heap allocation (recommended for desktop/server applications)
+#define EC_USE_HEAP 1
+
+// Static allocation (recommended for embedded systems)
+#define EC_USE_HEAP 0
+```
+
+### Buffer Sizes
+
+Buffer sizes are defined in `ecod_sdk_setup.h` with sensible defaults:
+
+```c
+// JSON-RPC communication buffer (default: 2048)
+// Affects maximum message size; socket data uses hex encoding (2x expansion)
+#define EC_MAX_BUFFER_SIZE 2048
+
+// Per-socket receive buffer (default: 4096)
+#define EC_SOCKET_BUFFER_SIZE 4096
+
+// Maximum concurrent socket connections (default: 10)
+#define EC_MAX_SOCKETS 10
+```
+
+<Note>
+  JSON-RPC overhead reduces usable payload by ~64 bytes. Socket data is hex-encoded, so effective throughput is halved.
+</Note>
+
+### Timeouts and Timing
+
+Configure communication timeouts in `ecod_sdk_configs.h`:
+
+```c
+// Incomplete frame timeout (default: 500ms)
+#define EC_INCOMPLETE_FRAME_TIMEOUT_MS 500
+
+// ACK timeout (default: 1000ms)
+#define EC_ACK_TIMEOUT_MS 1000
+
+// Socket idle timeout (default: 10 seconds)
+#define EC_SOCKET_IDLE_TIMEOUT_MS 10000
+```
+
+### Logging
+
+Enable debug logging during development:
+
+```c
+// Set log level (default is EC_LOG_LEVEL_INFO)
+EcodSdk_SetLogLevel(EC_LOG_LEVEL_DEBUG);
+
+// Available log levels:
+// EC_LOG_LEVEL_ERROR (1) — Only errors
+// EC_LOG_LEVEL_INFO  (3) — Errors + informational messages
+// EC_LOG_LEVEL_DEBUG (5) — Errors + info + debug details
+// EC_LOG_LEVEL_TRACE (7) — All messages including protocol traces
+
+// Log modules in debug output:
+// "SERIAL" — Serial communication and framing
+// "JRPC"   — JSON-RPC protocol messages
+// "NET"    — Network bridge operations
+// "SOCK"   — Socket management
+```
+
+## Integration Troubleshooting
+
+### Device Not Detected
+
+```bash
+# Check if device is connected
+ls -la /dev/ttyUSB* /dev/hidraw*
+
+# Check permissions
+sudo chmod 666 /dev/ttyUSB0  # or /dev/hidraw0
+
+# Add user to dialout group (requires logout/login)
+sudo usermod -a -G dialout $USER
+```
+
+### Serial Communication Failures
+
+* Verify correct device path (`/dev/ttyUSB0` vs `/dev/hidraw0`)
+* Check if another process is using the serial port
+* Ensure proper HID/UART mode selection in platform code
+* Verify baud rate settings match device configuration
+
+### Threading Issues
+
+* Ensure the maintenance thread is running continuously
+* Check for mutex deadlocks in callback functions
+* Avoid blocking operations in callback handlers
+* Verify proper thread cleanup on application exit
+
+### Memory Issues
+
+* Monitor buffer overflow with `EC_MAX_BUFFER_SIZE`
+* Check for memory leaks if using heap allocation
+* Ensure proper cleanup of SDK resources
+* Consider static allocation for embedded systems
+
+### Debug Logging
+
+Enable comprehensive logging to diagnose issues:
+
+```c
+EcodSdk_SetLogLevel(EC_LOG_LEVEL_DEBUG);
+
+// Example debug output:
+// [DEBUG] SERIAL: Opening /dev/ttyUSB0
+// [DEBUG] JRPC: Sending frame: <A0|0042{"method":"preauth",...}E3>
+// [DEBUG] NET: Socket 1 connected to 192.168.1.100:8080
+// [DEBUG] SOCK: Received 1024 bytes on socket 1
+```
+
+### Performance Tuning
+
+* Keep maintenance thread sleep interval at 1 ms
+* Use static allocation for memory-constrained environments
+* Minimize callback processing time
+* Configure appropriate buffer sizes for your use case
+* Consider network bridge settings for socket-heavy applications
+
+## Migration Checklist (from SDK v0.9)
+
+1. **Update `emvCorePaymentParameters` usage:**
+   * Remove `fee_cents` and `currency_code` fields.
+   * Add `is_final_amount` and `additional_receipt_data` as needed. `is_deferred` is reserved for future use (RFU).
+2. **Handle new Status code:** Check for `EC_DISABLED` in status handling.
+3. **Dual-thread mode:** If using datalink protocol, implement a second thread calling `EcodSdk_ProcessMessages()`.
+4. **Update response handling:** Take advantage of new fields in `emvCorePaymentResponse`.

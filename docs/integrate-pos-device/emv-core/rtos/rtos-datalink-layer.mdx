@@ -1,0 +1,121 @@
+---
+title: "Datalink Layer"
+metadata:
+  og:description: "Datalink framing protocol for the EMV-Core RTOS SDK — data frames, ACK/NAK, and protocol rules."
+---
+
+The channel between EMV-Core and Host is either a serial or USB channel.
+
+**In USB:**
+* The device uses the HID Protocol Class with 64-byte blocks (Reports in HID terminology).
+* The first byte of every 64-byte block is a length byte — indicating how many of the following 63 bytes are actually used.
+* If the length byte is less than 63, the remaining bytes should be discarded.
+* If it is 63 or more, all following 63 bytes are used.
+
+## Datalink Protocol
+
+### Command Sequence Example (GetKioskId)
+
+```
+→  Host sends data:
+   <A0|0065{"jsonrpc":"2.0","method":"GetKioskID","params":{},"id":7}5C>
+
+←  EMV-Core sends ACK:
+   <+0>
+
+←  EMV-Core sends data response:
+   <A1|0054{"jsonrpc":"2.0","result":"1234567890123456","id":7}6D>
+
+→  Host sends NAK (e.g., LRC error):
+   <-1|8>
+
+←  EMV-Core sends data response (retry):
+   <A1|0054{"jsonrpc":"2.0","result":"1234567890123456","id":7}6D>
+
+→  Host sends ACK:
+   <+1>
+```
+
+---
+
+## Data Frame
+
+**Example:**
+```
+<A1|0065{"jsonrpc":"2.0","method":"GetKioskID","params":{},"id":7}5C>
+```
+
+**Structure:** `<A[Frame-ID]|[Length][Data][LRC]>`
+
+| Field | Description |
+| :---- | :---------- |
+| `<` | Start of frame |
+| `>` | End of frame |
+| `A` | Protocol version A — fixed value |
+| `[Frame-ID]` | ID of the frame: `0` or `1`, toggled by the sender on every new frame. On retry (after NAK or timeout), Frame-ID stays the same. ACK/NAK use the same Frame-ID. |
+| `[Length]` | 4 decimal digits — length of the `[Data]` field in bytes |
+| `[Data]` | Higher-level data being transported, typically a JSON-RPC message |
+| `[LRC]` | 2-character hex LRC (XOR of all bytes from `<` through the last byte of `[Data]`) |
+
+### LRC and Length Calculation Example
+
+```
+Message:
+<A1|0065{"jsonrpc":"2.0","result":"4207012624000108","id":6}63>
+
+Part for LRC:
+<A1|0065{"jsonrpc":"2.0","result":"4207012624000108","id":6}
+
+Hex: 3C 41 31 7C 30 30 36 35 7B 22 6A 73 6F 6E 72 70 63 22 3A 22 32
+     2E 30 22 2C 20 22 72 65 73 75 6C 74 22 3A 22 34 32 30 37 30 31
+     32 36 32 34 30 30 30 31 30 38 22 2C 20 22 69 64 22 3A 36 7D
+
+LRC: 63
+
+Length: 65 bytes → encoded as "0065"
+```
+
+---
+
+## ACK Frame
+
+Sent to acknowledge a successfully received and validated Data Frame.
+
+**Examples:** `<+0>`, `<+1>`
+
+**Structure:** `<+[Frame-ID]>`
+
+The `[Frame-ID]` matches the Data Frame being acknowledged.
+
+---
+
+## NAK Frame
+
+Sent when the receiving side fails to parse a Data Frame.
+
+**Examples:** `<-0|1>`, `<-1|7>`
+
+**Structure:** `<-[Frame-ID]|[Err]>`
+
+| Error Code | Meaning |
+| :--------- | :------ |
+| `0` | Unspecified |
+| `1` | Unsupported protocol (first byte after `<` is not `A`) |
+| `2` | Length field invalid (contains non-digits) |
+| `3` | Length field too large |
+| `4` | Data field invalid (not JSON-RPC) |
+| `5` | LRC field invalid (characters not hex A-F, 0-9) |
+| `6` | LRC wrong |
+| `7` | ETX invalid |
+| `8` | Timeout — frame not fully received after timeout expired |
+
+The transmitting party does not change its behavior based on the error codes — they are for debugging only.
+
+---
+
+## Protocol Rules
+
+* ACK/NAK are expected within **30 milliseconds**.
+* If ACK is not received, or if a NAK is received, the sending party may resend the frame with the same Frame-ID.
+* While waiting for ACK/NAK, the sending party must not send another frame.
+* When receiving a frame — if the first bytes are not `<A0` or `<A1`, do not send a NAK. Instead, keep reading until receiving a valid start of frame.
