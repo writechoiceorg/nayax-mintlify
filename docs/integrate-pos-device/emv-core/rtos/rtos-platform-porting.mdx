@@ -10,13 +10,13 @@ The SDK is designed for portability across embedded platforms and operating syst
   Use the Linux reference implementation in `platform/linux/` as a working starting point. For RTOS-based platforms, map mutexes and events to your RTOS primitives (e.g., FreeRTOS `SemaphoreHandle_t`, Zephyr `k_mutex`).
 </Tip>
 
-## Step 1: Implement the Platform Layer
+## Implement the Platform Layer
 
 ### Folder & Files Preparation
 
 Create a new directory under `platform/` (e.g., `platform/my_platform/`) with two files:
 
-#### 1. Platform Types (`ecod_platform_types.h`)
+### Platform Types (`ecod_platform_types.h`)
 
 Define the platform-specific types used by the SDK:
 
@@ -30,7 +30,7 @@ typedef struct {
 
 The Linux reference uses `pthread_mutex_t` for mutexes and a struct wrapping `pthread_mutex_t` + `pthread_cond_t` + `bool` flag for events. Adapt these to your platform's RTOS or OS primitives.
 
-#### 2. Platform Implementation (`ecod_platform_<name>.c`)
+### Platform Implementation (`ecod_platform_<name>.c`)
 
 Implement all functions declared in `ecod_sdk_platform.h`. They are grouped into these categories:
 
@@ -120,7 +120,7 @@ EC_SDK_STATUS ecod_socket_recv(ecod_socket_t socket, u8* out_data, u32 max_size,
                                 u32* out_received_size);
 ```
 
-## Step 2: Update the Build System
+## Update the Build System
 
 Modify `configure.ac` and `Makefile.am` to include your platform:
 
@@ -131,7 +131,7 @@ libecodsdk_a_SOURCES += platform/my_platform/ecod_platform_my_platform.c
 endif
 ```
 
-## Step 3: Test
+## Test the Integration
 
 Use the demo application to verify functionality on your target platform:
 

@@ -32,13 +32,13 @@ The User Interface is managed by the POS application. The POS uses Reader state 
 
 ### Initialization and Lifecycle
 
-#### Get SDK version string
+### Get SDK version string
 
 ```c
 const char* EcodSdk_GetSdkVersion(void);
 ```
 
-#### Initialize SDK
+### Initialize SDK
 
 Call once at startup:
 
@@ -46,7 +46,7 @@ Call once at startup:
 bool EcodSdk_Init(void);
 ```
 
-#### Maintenance loop
+### Maintenance loop
 
 Call continuously from a dedicated thread:
 
@@ -54,7 +54,7 @@ Call continuously from a dedicated thread:
 void EcodSdk_Maintain(void);
 ```
 
-#### Process JSON-RPC messages
+### Process JSON-RPC messages
 
 Call from a second thread when `EC_USE_DATALINK_PROTOCOL=1`:
 
@@ -64,7 +64,7 @@ int EcodSdk_ProcessMessages(uint32_t timeout_ms);
 
 When `EC_USE_DATALINK_PROTOCOL` is enabled, a second thread is required to process JSON-RPC messages. Call `EcodSdk_Maintain()` for datalink operations and `EcodSdk_ProcessMessages()` for message processing.
 
-#### Set logging verbosity
+### Set logging verbosity
 
 ```c
 EC_RET EcodSdk_SetLogLevel(EC_LOG_LEVEL max_level);
@@ -74,13 +74,13 @@ EC_RET EcodSdk_SetLogLevel(EC_LOG_LEVEL max_level);
 
 ### Device Status
 
-#### Get current device status
+### Get current device status
 
 ```c
 EC_RET EcodSdk_GetStatus(EC_STATUS* out_status);
 ```
 
-#### Get device identification (serial number) and versions
+### Get device identification (serial number) and versions
 
 ```c
 EC_RET EcodSdk_GetKioskId(char* out_id, int max_out_size);
@@ -88,7 +88,7 @@ EC_RET EcodSdk_GetEmvCoreVersion(char* out_version, int max_out_size);
 EC_RET EcodSdk_GetReaderVersion(char* out_version, int max_out_size);
 ```
 
-#### Read configuration attribute
+### Read configuration attribute
 
 ```c
 EC_RET EcodSdk_GetAttribute(char* attribute_name, char* out_value, int max_out_size);
@@ -98,7 +98,7 @@ EC_RET EcodSdk_GetAttribute(char* attribute_name, char* out_value, int max_out_s
 
 ### Transaction Operations
 
-#### Start pre-authorization
+### Start pre-authorization
 
 Reserves amount — must confirm or void later:
 
@@ -106,26 +106,26 @@ Reserves amount — must confirm or void later:
 EC_RET EcodSdk_PreAuthorize(emvCorePaymentParameters* params);
 ```
 
-#### Request card token without charging
+### Request card token without charging
 
 ```c
 EC_RET EcodSdk_GetCardToken(emvCorePaymentParameters* params);
 ```
 
-#### Confirm a pre-authorized transaction
+### Confirm a pre-authorized transaction
 
 ```c
 EC_RET EcodSdk_ConfirmTransaction(uint32_t amount_cents, uint32_t product_id,
                                    char* transaction_reference);
 ```
 
-#### Void a pre-authorized transaction
+### Void a pre-authorized transaction
 
 ```c
 EC_RET EcodSdk_VoidTransaction(char* transaction_reference);
 ```
 
-#### Cancel ongoing payment process
+### Cancel ongoing payment process
 
 ```c
 EC_RET EcodSdk_CancelTransaction(void);
@@ -137,19 +137,19 @@ EC_RET EcodSdk_CancelTransaction(void);
 
 These functions are called by the platform layer to notify the SDK of network events:
 
-#### Notify EmvCore of socket data arrival
+### Notify EmvCore of socket data arrival
 
 ```c
 EC_RET EcodSdk_NotifySocketDataReceived(int socket_id, int available_bytes);
 ```
 
-#### Notify EmvCore that socket was closed
+### Notify EmvCore that socket was closed
 
 ```c
 EC_RET EcodSdk_NotifySocketClosed(int socket_id);
 ```
 
-#### Notify EmvCore of network connectivity change
+### Notify EmvCore of network connectivity change
 
 ```c
 EC_RET EcodSdk_NotifyNetworkStatusChanged(bool available);
@@ -159,13 +159,13 @@ EC_RET EcodSdk_NotifyNetworkStatusChanged(bool available);
 
 ### Callback Registration
 
-#### Transaction completion (success, decline, error, cancel, timeout)
+### Transaction completion (success, decline, error, cancel, timeout)
 
 ```c
 void EcodSdk_Register_TransactionComplete_Callback(TransactionCompleteCb_t cb);
 ```
 
-#### Reader display events (customer prompts)
+### Reader display events (customer prompts)
 
 ```c
 void EcodSdk_Register_ReaderEvent_Callback(RdrEventCb_t cb);

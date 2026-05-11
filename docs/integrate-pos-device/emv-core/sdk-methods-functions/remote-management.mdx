@@ -265,19 +265,19 @@ See the `Initialize` API signature in the code below:
     bool success = LibOtiKiosk_Init("/tmp/kiosk_sockets", true);
     ```
 
-    #### Parameters
+    ### Parameters
 
     | Parameter        | Description                                                                                                                                    |
     | :--------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- |
     | `server_address` | **Unix Domain Sockets:** Path to the folder containing sockets (can be NULL). **TCP Sockets:** IP address or hostname (defaults to localhost). |
     | `is_local`       | Set to `true` for Unix domain sockets, or `false` for TCP sockets.                                                                             |
 
-    #### Returns
+    ### Returns
 
     * **`true`**: Initialization was successful.
     * **`false`**: Initialization failed.
 
-    #### Example Usage
+    ### Example Usage
 
     ```c C
     // TCP connection to localhost
@@ -402,13 +402,6 @@ See the `ShowMessage` API signature in the code below:
     ```
   </Tab>
 </Tabs>
-
-See the list of parameters below:
-
-| Parameter | Description                                                      |
-| :-------- | :--------------------------------------------------------------- |
-| `line1`   | Text for the 1st line of the reader display (max 16 characters). |
-| `line2`   | Text for the 2nd line of the reader display (max 16 characters). |
 
 <Warning>
   This method is exclusive to the **UNO-PLUS** reader.
