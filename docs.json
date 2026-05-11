@@ -331,8 +331,13 @@
                 "group": "Android & Linux SDK",
                 "root": "docs/integrate-pos-device/emv-core/get-started/emv-core-get-started-1",
                 "pages": [
-                  "docs/integrate-pos-device/emv-core/get-started/emv-core-android-installation",
-                  "docs/integrate-pos-device/emv-core/get-started/emv-core-linux-installation",
+                  {
+                    "group": "Installation",
+                    "pages": [
+                      "docs/integrate-pos-device/emv-core/get-started/emv-core-android-installation",
+                      "docs/integrate-pos-device/emv-core/get-started/emv-core-linux-installation"
+                    ]
+                  },
                   "docs/integrate-pos-device/emv-core/get-started/emv-core-device-id",
                   {
                     "group": "Payment Flows",
@@ -361,8 +366,7 @@
                     ],
                     "root": "docs/integrate-pos-device/emv-core/demo-applications/emv-core-demo-applications"
                   },
-                  "docs/integrate-pos-device/emv-core/emv-core-configuration",
-                  "docs/integrate-pos-device/emv-core/emv-core-release-notes"
+                  "docs/integrate-pos-device/emv-core/emv-core-configuration"
                 ]
               },
               {
@@ -384,6 +388,13 @@
                   "docs/integrate-pos-device/emv-core/rtos/rtos-configuration",
                   "docs/integrate-pos-device/emv-core/rtos/rtos-firmware-updates",
                   "docs/integrate-pos-device/emv-core/rtos/rtos-troubleshooting"
+                ]
+              },
+              {
+                "group": "Release Notes",
+                "pages": [
+                  "docs/integrate-pos-device/emv-core/emv-core-release-notes",
+                  "docs/integrate-pos-device/emv-core/rtos/rtos-release-notes"
                 ]
               }
             ]

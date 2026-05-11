@@ -32,9 +32,9 @@ Each platform folder contains four primary components:
 * **`kiosk-client-library-xxx.zip`**: Eclipse project containing the C source code and sample app.
 * **`otikiosk-xxx.zip`**: Package for remote updates via TMS (using the `CON_PROG` command).
 
-You can see a folder structure sample below:
+The package is organized as follows:
 
-```
+```text
 Linux/
 └── x86_64/
     ├── otiKiosk/            # EMV Core Service
@@ -49,13 +49,13 @@ The EMV Core SDK for Linux provides a set of APIs to control payment processes o
 
 ### Prerequisites and Environment
 
+Verify these requirements before deploying the SDK:
+
 * **System Dependencies**: Requires `libcurl` for secured internet access with TLS 1.2 or higher.
 * **Permissions**: The user running the service must have read/write access to the executable folder and the reader device (e.g., `/dev/hidrawX` for USB or `/dev/ttyXXX` for Serial).
 * **Architecture**: Ensure you are using the correct binary for your target platform (e.g., Ubuntu x86\_64, armhf, or armv8a).
 
 ### Installation Steps
-
-Follow these steps to install the SDK on Linux:
 
 1. Copy the EMV Core binary (`otiKiosk`) to the target device. Note that the file must not be renamed.
 2. Build the sample application:
