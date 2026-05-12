@@ -53,7 +53,7 @@ Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) 
 Use the [Create Pick List](/reference/lynx/machine-inventory/generate-pick-list) endpoint to create a list for a specified machine based on its current stock levels and sales data.
 
 ```bash
-curl -X POST "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/pickLists" \
+curl -X POST "https://qa-lynx.nayax.com/operational/v1/machines/<MACHINE_ID>/pickLists" \
 -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
 -H "Content-Type: application/json" 
 ```

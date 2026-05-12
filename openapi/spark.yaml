@@ -8,7 +8,7 @@ servers:
     variables:
       domain:
         default: nayax-spark-dmz.nayax.com
-        description: Service URL
+        description: Your Nayax-assigned domain (e.g., nayax-spark-dmz.nayax.com). Nayax provides a QA domain during sandbox onboarding and a production domain after certification.
 tags:
   - name: Transactions
 paths:
