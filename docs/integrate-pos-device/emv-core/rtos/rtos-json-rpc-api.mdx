@@ -56,6 +56,14 @@ A typical payment session follows this sequence:
 
 <Frame><img src="/images/docs/rtos-integration-guide/transaction-flow.png" /></Frame>
 
+<Frame><img src="/images/docs/rtos-integration-guide/transaction-flow-2.png" /></Frame>
+
+### Closed Loop (CLP) Flow
+
+For pre-paid cards, EMV Core immediately returns the card UID to the host application via `TransactionComplete` without sending to the Nayax server.
+
+<Frame><img src="/images/docs/rtos-json-rpc-api/clp-transaction-flow.png" /></Frame>
+
 ## Commands
 
 ### PreAuthorize
