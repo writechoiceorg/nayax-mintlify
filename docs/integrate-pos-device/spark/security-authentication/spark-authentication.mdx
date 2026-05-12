@@ -42,8 +42,14 @@ Once you have the required resources, you can start authenticating your API requ
 
 See an example request for the `/StartAuthentication` endpoint:
 
+<Note>
+**Base URL and Domain**
+
+The Spark API base URL is `https://{domain}/api`, where `{domain}` is your Nayax-assigned hostname. Nayax provides a QA domain during sandbox setup and a production domain after certification. Contact your Nayax integration engineer if you have not received your domain.
+</Note>
+
 ```bash
-curl --location 'https://api.nayax.com/StartAuthentication' \
+curl --location 'https://{your-domain}/api/StartAuthentication' \
 --header 'IntegratorId: 927' \
 --header 'TransactionSignature: 1b7dd1c4010698824de66f13e1387efc28a4bba00b720d4be8cdb3b598b9603e' \
 --header 'Content-Type: application/json' \

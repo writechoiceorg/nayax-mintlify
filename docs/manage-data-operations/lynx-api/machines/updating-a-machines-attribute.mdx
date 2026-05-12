@@ -33,7 +33,7 @@ Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) 
 Use the [Bulk Update Machine Attributes](/reference/lynx/machine-attribute/bulk-update-machine-attributes) endpoint to update specific machine attributes. Provide the `MachineID` as a path parameter, along with the attributes you want to change as body parameters, as exemplified below:
 
 ```sh Request
-curl -X PUT "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/attributes" \
+curl -X PUT "https://qa-lynx.nayax.com/operational/v1/machines/<MACHINE_ID>/attributes" \
 -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
 -H "Content-Type: application/json" \
 -d '{
