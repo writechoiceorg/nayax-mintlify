@@ -13,20 +13,29 @@ You can update the cashless reader firmware and configuration:
 
 ### Update Reader (POS) Firmware
 
-Follow these steps in Nayax Core:
+<Steps>
+  <Step title="Select the required machine">
+  </Step>
+  <Step title="Select Actions | Update Device Version">
+  </Step>
+  <Step title="Select the Main Requested FW Version">
+    Select **EMV Core v1.x**.
+  </Step>
+  <Step title="Select the POS Requested FW Version">
+    Select the required firmware:
 
-1. Select the required machine.
-2. Select **Actions | Update Device Version**.
-3. On **Main Requested FW Version**, select **EMV Core v1.x**.
-4. On **POS Requested FW Version**, select the required firmware:
-   * **For UNO-mini:**
-     * RTOS SDK firmware starts with `EMVSC_` (e.g., `EMVSC_v07652`)
-     * The first RTOS SDK version is named `EMVS_v071558_ec`
-     * Linux or Android SDK firmware starts with `EMVS_`
-   * If more than one firmware is available for your device, take the latest one.
-5. Select **Apply** to add the action to the Queue.
+    * **For UNO-mini:**
+      * RTOS SDK firmware starts with `EMVSC_` (e.g., `EMVSC_v07652`)
+      * The first RTOS SDK version is named `EMVS_v071558_ec`
+      * Linux or Android SDK firmware starts with `EMVS_`
+    * If more than one firmware is available for your device, take the latest one.
 
-<Frame><img src="/images/docs/rtos-firmware-updates/nayax-core-fw-update.png" /></Frame>
+    <Frame><img src="/images/docs/rtos-firmware-updates/nayax-core-fw-update.png" /></Frame>
+  </Step>
+  <Step title="Select Apply">
+    This adds the action to the Queue.
+  </Step>
+</Steps>
 
 ### Reader (POS) Kernel Configuration
 
@@ -50,14 +59,20 @@ Expected configuration names:
 
 To push a new configuration to the device:
 
-1. Update any machine attribute in the **Embedded** or **Embedded Advanced** section.
-2. Press **Save** to add the changed attributes to the Queue.
+<Steps>
+  <Step title="Update a machine attribute">
+    Open the **Embedded** or **Embedded Advanced** section and update the relevant attribute.
 
-<Note>
-  Any attribute change causes a complete update of all machine attributes.
-</Note>
+    <Frame><img src="/images/docs/rtos-firmware-updates/nayax-core-ui.png" /></Frame>
+  </Step>
+  <Step title="Press Save">
+    This adds the changed attributes to the Queue.
 
-<Frame><img src="/images/docs/rtos-firmware-updates/nayax-core-ui.png" /></Frame>
+    <Note>
+      Any attribute change causes a complete update of all machine attributes.
+    </Note>
+  </Step>
+</Steps>
 
 ---
 
