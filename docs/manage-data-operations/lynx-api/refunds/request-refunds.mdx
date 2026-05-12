@@ -75,9 +75,9 @@ Below, you can see a description of each of the parameters:
 | **SiteId**          | `int32`          | The unique identifier of the site where the transaction occurred.           |
 | **MachineAuTime**   | `date-time`      | The machine's authorization time is associated with the transaction.        |
 
-#### How to obtain TransactionID and SiteID
+### How to obtain TransactionID and SiteID
 
-The `TransactionId` and `SiteId` can be retrieved in the Lynx API using the [ Get Last Sales for Machine ](/reference/lynx/machines/get-last-sales-for-machine) endpoint to retrieve the last sales using the `MachineID` and the response object should have the necessary data.
+Retrieve `TransactionId` and `SiteId` from the Lynx API using the [Get Last Sales for Machine](/reference/lynx/machines/get-last-sales-for-machine) endpoint with the `MachineID`. The response object includes both values.
 
 ## Request Status
 

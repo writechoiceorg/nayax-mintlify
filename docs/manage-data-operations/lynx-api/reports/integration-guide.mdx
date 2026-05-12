@@ -3,9 +3,11 @@ title: "Revenue Per Machine: Integration Guide"
 description: "A step-by-step guide to retrieving revenue data broken down per machine, per day, and per month using the Widgets Dashboard API."
 ---
 
-This guide walks through retrieving revenue data using the Widgets Dashboard API. For filter and field reference, see [Widget Filters Reference](/docs/manage-data-operations/lynx-api/reports/widget-filters).
+The Widgets Dashboard API lets you retrieve revenue data broken down per machine, per day, and per month. For filter and field reference, see [Widget Filters Reference](/docs/manage-data-operations/lynx-api/reports/widget-filters).
 
-## Step 1: Discover widget IDs
+## Discover Widget IDs
+
+Call the list-widgets endpoint to see all available widgets and their IDs:
 
 ```bash
 curl -X GET "https://<host>/operational/v1/dashboard/widgets?screenTypeId=1" \
@@ -14,7 +16,7 @@ curl -X GET "https://<host>/operational/v1/dashboard/widgets?screenTypeId=1" \
 
 From the response, identify the `widgetTypeId` values for revenue-related widgets (look for names containing "Revenue", "Sales", or similar).
 
-## Step 2: Revenue per machine per day
+## Revenue Per Machine Per Day
 
 Use the `groupBy: day` filter with a date range to retrieve daily revenue totals:
 
@@ -34,7 +36,7 @@ curl -X POST "https://<host>/operational/v1/dashboard/get-widget-data" \
   }'
 ```
 
-## Step 3: Revenue per machine per month
+## Revenue Per Machine Per Month
 
 Switch `groupBy` to `month` and widen the date range to retrieve monthly revenue totals:
 
@@ -54,7 +56,7 @@ curl -X POST "https://<host>/operational/v1/dashboard/get-widget-data" \
   }'
 ```
 
-## Step 4: Revenue for a specific machine
+## Revenue for a Specific Machine
 
 Pass the machine ID via `entityId` (if the widget is machine-scoped) or via the `MachineId` filter:
 

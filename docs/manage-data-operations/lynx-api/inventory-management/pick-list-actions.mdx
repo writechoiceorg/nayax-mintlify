@@ -89,55 +89,10 @@ curl --request PUT \
 
 Where:
 
-<table align={["left","left","left"]}>
-  <thead>
-    <tr>
-      <th>
-        Parameter
-      </th>
-
-      <th>
-        Type
-      </th>
-
-      <th>
-        Description
-      </th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        **MachineId**
-      </td>
-
-      <td>
-        `int64`
-      </td>
-
-      <td>
-        The unique identifier of the machine whose pick list is being updated.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        **Products**
-      </td>
-
-      <td>
-        `array of objects`
-      </td>
-
-      <td>
-        A list of products to be updated in the pick list:
-        `MachineProductId`: The unique identifier of the product in the machine.
-        `PickQty`: The updated quantity of the product to be picked.
-      </td>
-    </tr>
-  </tbody>
-</table>
+| Parameter | Type | Description |
+| :-------- | :--- | :---------- |
+| `MachineId` | `int64` | The unique identifier of the machine whose pick list is being updated. |
+| `Products` | `array of objects` | A list of products to update. Each object contains `MachineProductId` (unique identifier of the product in the machine) and `PickQty` (updated quantity to be picked). |
 
 A successful response will return the pick list with the updated pick quantities.
 
