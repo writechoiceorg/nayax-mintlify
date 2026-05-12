@@ -16,14 +16,14 @@ Before making calls to the Widget API, you need to have:
 
 ## Base URL
 
-```
+```text
 https://<host>/v1/dashboard
 ```
 
 <Note>
   If the server is configured with `UseBasePath: true`, all routes are prefixed with `/operational`:
 
-  ```
+  ```text
   https://<host>/operational/v1/dashboard
   ```
 </Note>
@@ -32,7 +32,7 @@ https://<host>/v1/dashboard
 
 All endpoints require authentication via JWT bearer token. Include the token in every request:
 
-```
+```text
 Authorization: Bearer <token>
 ```
 
@@ -64,7 +64,7 @@ The following endpoints are available. Select a card to view the full API refere
 
 A standard integration follows three steps: discover available widgets, fetch their data with optional filters, then parse the response payload.
 
-```
+```text
 1. GET /v1/dashboard/widgets?screenTypeId=1
        → Discover available widgets and their widgetTypeId values
 
