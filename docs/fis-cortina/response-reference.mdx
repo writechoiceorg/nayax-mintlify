@@ -1,0 +1,120 @@
+---
+title: "Request & Response Reference"
+description: "Request and response schemas, field definitions, and response codes for FisCortina."
+---
+
+This page covers the request and response structure shared across FisCortina endpoints, including field definitions and the complete list of approved response codes.
+
+For country-specific parameters and POS display requirements, see [Regional Requirements](/docs/fis-cortina/regional-requirements).
+
+## Request envelope
+
+All three transaction endpoints (`Register`, `Void`, `Refund`) share a single outer request schema: `ExternalFisCortinaRequest`. Only one inner request object should be populated per call.
+
+```json
+{
+  "registerRequest": { /* populated for /Register */ },
+  "voidRequest":     { /* populated for /Void */ },
+  "refundRequest":   { /* not yet supported */ }
+}
+```
+
+## Response envelope
+
+All responses return an `ExternalFisCortinaResponse` containing a `fiscalResponse` object.
+
+<Tabs>
+  <Tab title="Success">
+    ```json
+    {
+      "fiscalResponse": {
+        "Result": {
+          "ResponseCode": 0,
+          "Verdict": "Success",
+          "StatusMessage": "Success",
+          "ProviderErrorCode": 0
+        },
+        "FiscalInfo": {
+          "FiscalDateTime": "20240303124456",
+          "FiscalRrn": "d6e35283-eb1f-4e15-8899-e30d65636f5a",
+          "FiscalId": 5208211,
+          "FiscalReceiptUrl": "https://example.com/receipt"
+        }
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="Declined">
+    ```json
+    {
+      "fiscalResponse": {
+        "Result": {
+          "ResponseCode": 1,
+          "Verdict": "Declined",
+          "StatusMessage": "Registration declined by tax authority",
+          "ProviderErrorCode": 4201
+        }
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## Result object
+
+The `Result` object is **mandatory in every response**. A missing `Verdict` field causes a parsing error that fails the action.
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `Verdict` | string | Mandatory | `"Success"` or `"Declined"`. Missing field causes a parse error. |
+| `ResponseCode` | integer | Mandatory | Must be from the approved list. See [Response Codes](#response-codes) below. |
+| `StatusMessage` | string (255) | Optional | Free-text status description for declined responses. |
+| `ProviderErrorCode` | integer | Optional | Your own internal error code for declined responses. |
+| `Errors` | string[] | Optional | Array of error messages, e.g. `["invalid TotalAmount"]`. |
+
+---
+
+## FiscalInfo object
+
+Returned in the `Register` response. The `FiscalId` and `FiscalRrn` values are echoed back in all subsequent [`Void`](/docs/fis-cortina/void) requests for the same transaction.
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| [`FiscalRrn`](/docs/fis-cortina/glossary) | string (100) | Mandatory | Reference Retrieval Number. Echoed in Void. |
+| [`FiscalId`](/docs/fis-cortina/glossary) | int64 | Optional | Unique Fiscalization ID on your system. Echoed in Void. |
+| `FiscalDateTime` | string (14) | Optional | Format: `YYYYMMDDhhmmss` |
+| `FiscalReceiptUrl` | string (255) | Optional | URL presented to the cardholder as a QR code on the device screen after the transaction. |
+| `FiscalInvoice` | string | Optional | Unique invoice or receipt number, e.g. `0001-2025-000123`. |
+| `FiscalSignature` | string | Optional | Unique fiscal response code, e.g. `JIR-ABC123`. |
+| `FiscalProtectionCode` | string | Optional | Regulatory protection code, e.g. `ZKI-98AFB231C`. |
+| `FiscalCompanyTaxId` | string | Optional | Tax authority company registration ID, e.g. `12345678901`. |
+
+---
+
+## Response codes
+
+The `ResponseCode` in the `Result` object must be one of the following Nayax-approved values. Returning any other value is invalid.
+
+| Code | Name | Notes |
+|---|---|---|
+| `0` | Success | — |
+| `1` | Registration Declined | Include additional detail in `StatusMessage` and `ProviderErrorCode`. Triggers retry if retry policy is enabled. |
+| `992` | Time-Out Error | Triggers retry if retry policy is enabled. |
+| `995` | Token ID Unknown | — |
+| `996` | Transaction ID Unknown or Duplicate | — |
+| `997` | Missing Mandatory Parameters | — |
+| `998` | Invalid Request | Validation or request parse failure. |
+| `999` | General Error | Triggers retry if retry policy is enabled. |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Regional Requirements" href="/docs/fis-cortina/regional-requirements">
+    Country-specific FiscalInfo field mappings for Croatia, Poland, and other regions.
+  </Card>
+  <Card title="Retry & Timeout Handling" href="/docs/fis-cortina/reliability">
+    Configure retry behavior and timeout handling for failed registrations.
+  </Card>
+</CardGroup>

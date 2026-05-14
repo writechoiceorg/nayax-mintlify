@@ -1,0 +1,1690 @@
+---
+openapi: 3.0.1
+info:
+  title: NAYAX FisCortina API
+  description: |
+    Nayax API for Fiscalization.
+    Welcome to FisCortina API Payment Solution. The FisCortina is a collection of API methods that allows a fiscalization gateway (an Integrator) to process fiscal transactions via Nayax systems.
+  version: v1.2.5
+servers:
+- url: https://{domain}:{port}/v1
+  variables:
+    domain:
+      default: example.com
+      description: Customer ID assigned by the service provider.
+    port:
+      enum:
+      - '443'
+      - '8443'
+      default: '443'
+tags:
+- name: Transaction Registration
+  description: Register, Void or Refund a transaction in the Tax Authority.
+- name: FisCortina
+  description: General FisCortina API operations (Session, Version, ReFiscalization)
+paths:
+  "/FisCortina/Register":
+    post:
+      tags:
+      - Transaction Registration
+      summary: Register Transaction
+      description: Registers a new fiscal transaction with the tax authority. This
+        endpoint is called by FisCortina to notify the integrator to process and register
+        a transaction containing payment information, tax details, and product data
+        for fiscal compliance.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ExternalFisCortinaRequest"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/ExternalFisCortinaRequest"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/ExternalFisCortinaRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/ExternalFisCortinaResponse"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ExternalFisCortinaResponse"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/ExternalFisCortinaResponse"
+  "/FisCortina/Refund":
+    post:
+      tags:
+      - Transaction Registration
+      summary: Refund Transaction
+      description: Processes a refund for a previously registered fiscal transaction.
+        This endpoint is called by FisCortina to notify the integrator to initiate
+        a refund operation, including the original fiscal information and refund reason
+        details.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ExternalFisCortinaRequest"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/ExternalFisCortinaRequest"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/ExternalFisCortinaRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/ExternalFisCortinaResponse"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ExternalFisCortinaResponse"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/ExternalFisCortinaResponse"
+  "/FisCortina/Void":
+    post:
+      tags:
+      - Transaction Registration
+      summary: Void Transaction
+      description: Cancels or voids a previously registered fiscal transaction. This
+        endpoint is called by FisCortina to notify the integrator to initiate the
+        cancellation of a transaction, providing the original fiscal information and
+        cancellation reason.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ExternalFisCortinaRequest"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/ExternalFisCortinaRequest"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/ExternalFisCortinaRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                "$ref": "#/components/schemas/ExternalFisCortinaResponse"
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ExternalFisCortinaResponse"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/ExternalFisCortinaResponse"
+  "/FisCortina/StartSession":
+    post:
+      tags:
+      - FisCortina
+      summary: Post Start Session
+      description: Initiates a new fiscal session with the integrator. This endpoint
+        establishes a secure connection using machine credentials, hardware serial
+        numbers, and encrypted tokens to begin fiscal transaction processing for a
+        specific fiscal provider.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/StartSessionRequest"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/StartSessionRequest"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/StartSessionRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StartSessionResponse"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/StartSessionResponse"
+  "/FisCortina/Version":
+    get:
+      tags:
+      - FisCortina
+      summary: Get Version
+      description: Retrieves the current version information of the FisCortina API.
+        This endpoint returns the product version, API version, and copyright details
+        for system compatibility verification and troubleshooting purposes.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/VersionResponse"
+            text/json:
+              schema:
+                "$ref": "#/components/schemas/VersionResponse"
+  "/FisCortina/ReFiscalization":
+    post:
+      tags:
+      - FisCortina
+      summary: ReFiscalization
+      description: Requests re-processing of fiscal transactions for a specified date
+        range and provider configuration. This endpoint allows the integrator to re-fiscalize
+        transactions that may have failed or need to be resubmitted to the tax authority,
+        filtering by VAS provider, billing provider, site, and optionally specific
+        transaction IDs.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ReFiscalizationRequest"
+          text/json:
+            schema:
+              "$ref": "#/components/schemas/ReFiscalizationRequest"
+          application/*+json:
+            schema:
+              "$ref": "#/components/schemas/ReFiscalizationRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: boolean
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      nullable: true
+      properties:
+        PaymentInfo:
+          "$ref": "#/components/schemas/PaymentInfo"
+        TaxInfo:
+          "$ref": "#/components/schemas/TaxInfo"
+        BasicInfo:
+          "$ref": "#/components/schemas/BasicInfo"
+          nullable: true
+        DeviceInfo:
+          "$ref": "#/components/schemas/DeviceInfo"
+          nullable: true
+        MachineInfo:
+          "$ref": "#/components/schemas/MachineInfo"
+          nullable: true
+        ActorInfo:
+          "$ref": "#/components/schemas/ActorInfo"
+          nullable: true
+        CustomData:
+          "$ref": "#/components/schemas/CustomData"
+          nullable: true
+        CardData:
+          "$ref": "#/components/schemas/CardData"
+          nullable: true
+        Products:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Product"
+    VoidRequest:
+      type: object
+      nullable: true
+      properties:
+        FiscalInfo:
+          "$ref": "#/components/schemas/FiscalInfo"
+        Reason:
+          "$ref": "#/components/schemas/Reason"
+        PaymentInfo:
+          "$ref": "#/components/schemas/PaymentInfo"
+        TaxInfo:
+          "$ref": "#/components/schemas/TaxInfo"
+        BasicInfo:
+          "$ref": "#/components/schemas/BasicInfo"
+          nullable: true
+        DeviceInfo:
+          "$ref": "#/components/schemas/DeviceInfo"
+          nullable: true
+        MachineInfo:
+          "$ref": "#/components/schemas/MachineInfo"
+          nullable: true
+        ActorInfo:
+          "$ref": "#/components/schemas/ActorInfo"
+          nullable: true
+        CustomData:
+          "$ref": "#/components/schemas/CustomData"
+          nullable: true
+        CardData:
+          "$ref": "#/components/schemas/CardData"
+          nullable: true
+        Products:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Product"
+    RefundRequest:
+      type: object
+      nullable: true
+      properties:
+        FiscalInfo:
+          "$ref": "#/components/schemas/FiscalInfo"
+        Reason:
+          "$ref": "#/components/schemas/Reason"
+        PaymentInfo:
+          "$ref": "#/components/schemas/PaymentInfo"
+        TaxInfo:
+          "$ref": "#/components/schemas/TaxInfo"
+        BasicInfo:
+          "$ref": "#/components/schemas/BasicInfo"
+          nullable: true
+        DeviceInfo:
+          "$ref": "#/components/schemas/DeviceInfo"
+          nullable: true
+        MachineInfo:
+          "$ref": "#/components/schemas/MachineInfo"
+          nullable: true
+        ActorInfo:
+          "$ref": "#/components/schemas/ActorInfo"
+          nullable: true
+        CustomData:
+          "$ref": "#/components/schemas/CustomData"
+          nullable: true
+        CardData:
+          "$ref": "#/components/schemas/CardData"
+          nullable: true
+        Products:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Product"
+    ExternalFisCortinaRequest:
+      type: object
+      properties:
+        registerRequest:
+          "$ref": "#/components/schemas/RegisterRequest"
+        voidRequest:
+          "$ref": "#/components/schemas/VoidRequest"
+        refundRequest:
+          "$ref": "#/components/schemas/RefundRequest"
+      additionalProperties: false
+    ExternalFisCortinaResponse:
+      type: object
+      properties:
+        fiscalResponse:
+          "$ref": "#/components/schemas/FiscalResponse"
+      additionalProperties: false
+    FiscalResponse:
+      type: object
+      nullable: true
+      properties:
+        Result:
+          "$ref": "#/components/schemas/Result"
+        FiscalInfo:
+          "$ref": "#/components/schemas/FiscalInfo"
+        Data:
+          "$ref": "#/components/schemas/Data"
+    StartSessionRequest:
+      type: object
+      required:
+      - MachineId
+      - HwSerial
+      - TokenId
+      - RandomNumber
+      - StartSessionToken
+      - FiscalProviderId
+      properties:
+        MachineId:
+          type: integer
+          format: int64
+          nullable: false
+          description: |
+            * **Mandatory**
+            * Machine entity unique ID allocated in the Nayax backoffice.
+          example: 106791869
+        HwSerial:
+          type: string
+          nullable: false
+          description: Nayax Device Hardware serial number as embedded on the device
+          example: '0434324119376526'
+        TokenId:
+          type: string
+          nullable: false
+          description: 3rd party Secret Token reference number
+        RandomNumber:
+          type: string
+          nullable: false
+          description: Nayax will create 27 char Random Number
+        DynamicURL:
+          type: string
+          nullable: true
+          description: |
+            * Optional, supports different URLs.
+            * Length: **255**
+            * Actor level URL configuration
+        StartSessionToken:
+          type: string
+          nullable: false
+          description: StartSessionToken key
+        FiscalProviderId:
+          type: integer
+          nullable: false
+          description: |
+            * **Mandatory**
+            * The unique identifier for this FiscalProvider.
+          example: 101
+        IsUsedVasToken:
+          type: boolean
+          nullable: true
+          description: |
+            * Boolean
+            * Indicates whether we use a token from VAS collection, and therefore treat it as non-base64 string.
+            * Optional
+      additionalProperties: false
+    StartSessionResponse:
+      type: object
+      required:
+      - TranIDCipher
+      - Status
+      properties:
+        TranId:
+          type: string
+          nullable: true
+          description: |
+            * Optional
+            * Start session tranId result
+        TranIDCipher:
+          type: string
+          nullable: false
+          description: |
+            * **Mandatory**
+            * The Integrator Generates transaction ID of **36 *Numeric*** Chars (or 288 bits).
+            * The Integrator then appends the char `=` and `RandomNumber` to create the ciphertext of **64 chars**.
+            * **Format**: `TransactionId=RandomNumber`
+            * The integrator encrypts the ciphertexts with the Secret Token in **AES ECB**.
+            * The AES key will be the last (right most) **256 bits (or 32 chars)** of the Secret Token that matches the `TokenID` provided in the request.
+            * Nayax will AES ECB decrypt and extract transaction id.
+            * The transaction Id value will then be used for all further requests.
+        Status:
+          "$ref": "#/components/schemas/Status"
+      additionalProperties: false
+    ReFiscalizationRequest:
+      type: object
+      required:
+      - StartDate
+      - EndDate
+      - VasProviderId
+      - BillingProviderId
+      - SiteId
+      properties:
+        StartDate:
+          type: string
+          nullable: false
+          description: auTime
+          example: 2025/05/18 12:00
+        EndDate:
+          type: string
+          nullable: false
+          description: auTime
+          example: 2025/05/19 15:45
+        VasProviderId:
+          type: integer
+          nullable: false
+          description: VasProviderId
+          example: 2782
+        BillingProviderId:
+          type: integer
+          format: int16
+          nullable: false
+          description: BillingProviderId
+          example: 32
+        SiteId:
+          type: integer
+          format: int16
+          nullable: false
+          description: SiteId
+          example: 2
+        TransactionId:
+          type: integer
+          format: int64
+          nullable: true
+          description: TransactionId
+          example: 3584697384
+      additionalProperties: false
+    ReceiptDetails:
+      type: object
+      description: Products and costs
+      nullable: true
+      properties:
+        Description:
+          type: string
+          nullable: true
+          description: |
+            * String
+            * Optional
+            * Actor geo state code as defined in the Nayax backoffice
+        ProductCode:
+          type: string
+          nullable: true
+          description: |
+            * String(255)
+            * Optional
+            * City as defined in the Nayax backoffice
+        TaxGroup:
+          type: string
+          nullable: true
+          description: |
+            * String
+            * Optional
+            * Country code (ISO3) as defined in the Nayax backoffice
+        Amount:
+          type: string
+          nullable: true
+          description: |
+            * String(255)
+            * Optional
+            * Zip code defined in the Nayax backoffice
+      additionalProperties: false
+    TaxInfo:
+      type: object
+      nullable: true
+      description: Tax information.
+      required:
+      - TaxPrecent
+      - Amount
+      - TaxAmount
+      - TotalAmount
+      properties:
+        TaxPrecent:
+          type: number
+          format: double
+          nullable: true
+          description: |
+            * Tax Percentage from the price
+            * **Mandatory**
+        Amount:
+          type: number
+          format: double
+          nullable: true
+          description: |
+            * Amount without tax
+            * **Mandatory**
+        TaxAmount:
+          type: number
+          format: double
+          nullable: true
+          description: |
+            * Tax amount
+            * **Mandatory**
+        TotalAmount:
+          type: number
+          format: double
+          nullable: true
+          description: |
+            * Amount including tax
+            * **Mandatory**
+      additionalProperties: false
+    Result:
+      type: object
+      nullable: true
+      description: |
+        This object is sent in the response by the integrator to indicate the result of the action requested.
+        This is a **mandatory** object. Response missing this object will fail with a parsing error.
+      required:
+      - Verdict
+      properties:
+        ResponseCode:
+          type: integer
+          format: int32
+          enum:
+          - 0
+          - 2
+          - 3
+          - 4
+          - 5
+          - 6
+          - 7
+          - 8
+          - 9
+          - 40
+          - 50
+          - 990
+          - 991
+          - 992
+          - 994
+          - 996
+          - 997
+          - 998
+          - 999
+          - 1010
+          - 1011
+          description: |
+            * Num
+            * **Reason for declined request.** Conditional – Send only if `Verdict` is `Declined`.
+            | Code | Description |
+            |---|---|
+            | 0 | Success |
+            | 2 | Transaction ID unknown |
+            | 3 | Cardholder exceeded daily/weekly/monthly transaction count limit |
+            | 4 | Cardholder exceeded transaction amount limit |
+            | 5 | Suspected Fraud |
+            | 6 | General system failure |
+            | 7 | Invalid amount |
+            | 8 | Request cannot be parsed (format error) |
+            | 9 | Transaction not allowed to cardholder |
+            | 40 | Request cannot be parsed (format error) |
+            | 50 | Unknown machine Id |
+            | 990 | CertificateFileName not found |
+            | 991 | Failed to decipher message body |
+            | 992 | Timeout |
+            | 994 | Card Brand Not supported |
+            | 996 | Transaction ID unknown / Duplicate Transaction ID |
+            | 997 | Missing mandatory parameters |
+            | 998 | Validation/request cannot be parsed |
+            | 999 | General system failure |
+            | 1010 | Public Key Certificate not found |
+            | 1011 | Method not Implemented |
+        Verdict:
+          type: string
+          nullable: false
+          description: |
+            * **Mandatory**
+            * Allowed string values: `Approved`, `Declined`.
+          enum:
+          - Approved
+          - Declined
+        StatusMessage:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Transaction status message free text field for the error code that was sent in `ResponseCode`.
+            * Optional
+        Errors:
+          type: array
+          nullable: true
+          items:
+            type: string
+          description: |
+            * String
+            * An open list of the errors occurred.
+            * Format: `[ invalid TotalAmount, invalid Products ]`
+            * Optional
+        ProviderErrorCode:
+          type: integer
+          format: int32
+          description: |
+            * String (255)
+            * Transaction status message on the integrator side. You may send any text in any language.
+            * Optional
+      additionalProperties: false
+    Reason:
+      type: object
+      nullable: true
+      description: This object is included in a void and refund request, to identify
+        the reason the void or refund was requested.
+      properties:
+        ReasonCode:
+          type: integer
+          format: int16
+          description: |
+            * Num
+            * Reason code
+            * Optional
+        ReasonText:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Reason text
+            * Optional
+      additionalProperties: false
+    FiscalInfo:
+      type: object
+      nullable: true
+      description: Information about the original Fiscalization registration
+      required:
+      - FiscalRrn
+      properties:
+        FiscalDateTime:
+          type: string
+          nullable: true
+          description: |
+            * String (14)
+            * Format: `YYYYMMDDhhmmss`
+            * In Registration response, this value is received from the integrator.
+            * In Void and Refund, this valued will be echoed.
+            * Optional
+          example: 20240306123748
+        FiscalRrn:
+          type: string
+          nullable: true
+          description: |
+            * String (100)
+            * Reference Retrieval Number, Used as External Transaction Identification for external parties.
+            * In Registration response, this value is received from the integrator.
+            * In Void and Refund, this valued will be echoed.
+            * **Mandatory**
+        FiscalId:
+          type: integer
+          format: int64
+          nullable: true
+          description: |
+            * Int
+            * The unique Fiscalization ID on the integrator system
+            * In Registration response, this value is received from the integrator.
+            * In Void and Refund, this valued will be echoed.
+            * Optional
+        FiscalReceiptUrl:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * If required, an integrator may send a URL for the Fiscalization receipt.
+            * This URL will be presented to the cardholder as a QR on the device screen, at the end of the transaction.
+            * In Registration response, this value is received from the integrator.
+            * Optional
+        FiscalInvoice:
+          type: string
+          nullable: true
+          description: |
+            * String
+            * Unique Invoice/Receipt Number per transaction
+          example: 0001-2025-000123
+        FiscalSignature:
+          type: string
+          nullable: true
+          description: |
+            * String
+            * Unique fiscal response code
+          example: JIR-ABC123
+        FiscalProtectionCode:
+          type: string
+          nullable: true
+          description: |
+            * String
+            * Unique regulatory protection code
+          example: ZKI-98AFB231C
+        FiscalCompanyTaxId:
+          type: string
+          nullable: true
+          description: |
+            * String
+            * Unique ID used for tax registration by the tax authorities
+          example: 12345678901
+    Data:
+      type: object
+      description: Additional Data
+      properties:
+        POSDisplay:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * A text, that if received will be presented on the device screen at the end of the transaction.
+            * **Format**:
+                * String in encoding format UTF8.
+                * Every element consists of label and value with a `:` to separate. Complete values may arrive empty: `str0{label}:str0{value};str1{label}:str1{value};...;str5{label}:str5{value};`
+                * `str0` is special - it holds the value that will be presented in the headline of the POS Device screen. Not mandatory. If `str0` is not provided, the default headline is Tariff.
+                * `str1` is special - it holds a value that will be propagated in the next UI slide when payment presentment is requested. Not mandatory. If `str1` is not provided, the strings are moved one line up.
+                * Example 1 (no title str0): `;Fiscalization Data;EBU0000000000;21/09/2024 12:54pm;`
+                * Example 2 (no string 0 and 1): `;;EBU0000000000;21/09/2024 12:54pm;`
+            * Optional
+          example: ";Fiscalization Data;EBU0000000000;21/09/2024 12:54pm;"
+      additionalProperties: false
+    ResponseCode:
+      type: integer
+      format: int32
+      enum:
+      - 0
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 40
+      - 50
+      - 990
+      - 991
+      - 992
+      - 994
+      - 996
+      - 997
+      - 998
+      - 999
+      - 1010
+      - 1011
+      - 80
+      - 81
+      - 82
+      - 83
+      - 84
+      - 85
+      - 993
+      - 1021
+      description: |
+        **Error Description**
+        | Code | Description |
+        |---|---|
+        | 0 | Success |
+        | 4 | Insufficient funds |
+        | 80 | AgeVerification approved |
+        | 81 | AgeVerification declined |
+        | 82 | AgeVerification data not available on client side (For ex. card not recognized) |
+        | 83 | AgeVerification provider not responding |
+        | 84 | AgeVerification data invalid (The requested age cannot be verified because it does not match any age group) |
+        | 85 | AgeVerification command data invalid |
+        | 990 | CertificateFileName not found |
+        | 991 | Failed to decipher message body |
+        | 992 | Timeout |
+        | 993 | Keep polling |
+        | 994 | Card Brand Not supported |
+        | 996 | Transaction ID unknown / Duplicate Transaction ID (Start Session Error) |
+        | 997 | Missing mandatory parameters |
+        | 998 | Validation/request cannot be parsed |
+        | 999 | General system failure |
+        | 1010 | Public Key Certificate not found |
+        | 1011 | Method not Implemented |
+        | 1021 | Switch Interface |
+    Status:
+      type: object
+      description: |
+        This object is sent in the response by the integrator to indicate the result of the action requested.
+        This is a **mandatory** object. Response missing this object will fail with a parsing error.
+      required:
+      - Verdict
+      properties:
+        Verdict:
+          type: string
+          nullable: false
+          description: |
+            * **Mandatory**
+            * Allowed string values: `Approved`, `Declined`.
+          enum:
+          - Approved
+          - Declined
+        Code:
+          type: integer
+          format: int32
+          nullable: true
+          description: |
+            * Num
+            * **Reason for Approved request (Mandatory value):** `0` - anything else even if null will result a declined verdict.
+            * **Reason for declined request (Optional values):**
+            | Code | Description |
+            |---|---|
+            | 2 | Transaction ID unknown |
+            | 3 | Cardholder exceeded daily/weekly/monthly transaction count limit |
+            | 4 | Cardholder exceeded transaction amount limit |
+            | 5 | Suspected Fraud |
+            | 6 | General system failure |
+            | 7 | Invalid amount |
+            | 8 | Request cannot be parsed (format error) |
+            | 9 | Transaction not allowed to cardholder |
+            | 40 | Request cannot be parsed (format error) |
+            | 50 | Unknown machine Id |
+            | 990 | CertificateFileName not found |
+            | 991 | Failed to decipher message body |
+            | 992 | Timeout |
+            | 994 | Card Brand Not supported |
+            | 996 | Transaction ID unknown / Duplicate Transaction ID |
+            | 997 | Missing mandatory parameters |
+            | 998 | Validation/request cannot be parsed |
+            | 999 | General system failure |
+            | 1010 | Public Key Certificate not found |
+            | 1011 | Method not Implemented |
+            * Conditional – Send only if verdict value is declined
+        StatusMessage:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Transaction status message free text field for the error code that was sent in `Code`.
+            * Optional
+        CustomDeclineCode:
+          type: string
+          nullable: true
+          description: Not in use
+        Errors:
+          type: array
+          nullable: true
+          items:
+            type: string
+      additionalProperties: false
+    Product:
+      type: object
+      nullable: true
+      description: |
+        List of product purchased and their information.
+        This object will only send for calls triggered by Sale, Settlement.
+      required:
+      - Group
+      properties:
+        TaxId:
+          type: string
+          nullable: true
+          description: |
+            * String (100)
+            * Tax configuration ID of the selected item as defined in the Nayax Backoffice
+            * Conditional, if configure for product
+        TaxValue:
+          type: number
+          format: double
+          nullable: true
+          description: |
+            * Double
+            * Tax percentage value of the selected item as defined in the Nayax Backoffice
+            * Conditional, if configure for product
+        Code:
+          type: integer
+          format: int32
+          nullable: true
+          description: |
+            * Short (int16)
+            * The selected item product code as defined in the Nayax Backoffice or vending machine.
+            * Conditional, if configure for product
+        CatalogProductId:
+          type: string
+          nullable: true
+          description: |
+            * String (100)
+            * External unique identifier of the selected item (the product catalog number) as defined in the Nayax Backoffice
+            * Conditional, if configure for product
+        Name:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Product name as defined in the Nayax Backoffice
+            * Optional
+        Price:
+          type: number
+          format: double
+          nullable: true
+          description: |
+            * Double
+            * Product price in the machine's currency.
+            * The product price may vary from the transaction amount in cases of multiple product purchase or if surcharges or and discounts applied to the transaction.
+            * Optional
+        UnitOfMeasurement:
+          type: string
+          nullable: true
+          description: |
+            * String (64)
+            * Product's unit of measurement (e.g 'unit' or 'Liter')
+            * Conditional, if configure for product
+        Measurement:
+          type: number
+          format: double
+          nullable: true
+          description: |
+            * Decimal
+            * Product's quantity in the unit of measurement
+            * Optional
+        Group:
+          type: string
+          nullable: false
+          description: |
+            * String (255)
+            * Product's group as existing in the product map
+            * **Mandatory**
+        ProductGroupId:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Product's group code as existing in the product map
+            * Optional
+        PulseLineNumber:
+          type: integer
+          format: int32
+          nullable: true
+          description: |
+            * Int
+            * Extending remote vend capability to support multiple machines via pulse.
+            * `PulseLineNumber` `>= 0`
+            * Conditional, if configure for product
+        TaxGroup:
+          type: string
+          nullable: true
+          description: |
+            * String (100)
+            * Indicates the tax group of the product
+            * Conditional, if configure for product
+      additionalProperties: false
+    CustomData:
+      type: object
+      nullable: true
+      description: Custom Fields Information. Contact Nayax TPOC to define.
+      properties:
+        Actor:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Json Format
+            * Additional fields for the integration
+            * Optional
+          example: String
+        Machine:
+          type: string
+          nullable: true
+          description: |
+            * String
+            * Json Format
+            * For Internal Nayax use only
+            * Optional
+      additionalProperties: false
+    BasicInfo:
+      type: object
+      nullable: true
+      description: Basic Information about the FisCortina request
+      required:
+      - FiscalProviderId
+      - TimeoutMS
+      properties:
+        FiscalCommandType:
+          type: integer
+          nullable: true
+          format: int16
+          description: |
+            * Int
+            * Nayax Fiscalization commandType.
+            * **Command Types**:
+                * `0`: PREAUTHORIZATION
+                * `1`: SETTLEMENT
+                * `2`: CANCEL
+                * `3`: REFUND
+                * `4`: PRESELECTION
+                * `8`: Cash
+            * Optional
+          example: 1
+        SnapshotId:
+          type: integer
+          nullable: true
+          format: int64
+          description: |
+            * Int
+            * Nayax Internal SnapshotId of tranInfo and termailInfo
+            * For Internal Nayax use only
+            * Optional
+          example: 3584697366
+        FiscalProviderUrl:
+          type: string
+          nullable: true
+          description: |
+            * String
+            * The fiscal Integrator URL
+            * Optional
+          example: https://test.com
+        FiscalProviderId:
+          type: integer
+          nullable: false
+          description: |
+            * Int
+            * The fiscal Integrator unique identifier (assigned by Nayax)
+            * **Mandatory**
+          example: 101
+        TransactionId:
+          type: string
+          nullable: true
+          description: |
+            * String (40)
+            * The unique identifier for this transaction:
+                * If `/StartSession` has been used then this field will echo the transaction ID encrypted in 'TranIDCipher'.
+                * If `/StartSession` was not used - Nayax will generate a the transaction ID.
+            * Optional
+          example: N99O4XURDQYJZIK4OTCAWF1RHHA40TZWVCRB
+        NayaxTransactionId:
+          type: integer
+          nullable: true
+          format: int64
+          description: |
+            * Int
+            * Nayax Internal unique transaction identifier.
+            * **Mandatory**
+          example: 3584697384
+        Amount:
+          type: number
+          format: double
+          nullable: true
+          description: |
+            * Decimal (max 3 digits for cents)
+            * The transaction amount of the payment
+            * Example: `1 cent = 0.01`, `20 cents = 0.20`
+            * Note: Currencies with no Decimal Place shall be represented as double as well. Example: `234 JYN = 234.0`
+            * Optional
+          example: 5
+        CurrencyCode:
+          type: string
+          nullable: true
+          description: |
+            * String(3)
+            * Currency according to ISO4217
+            * Attribute format: Alpha-3
+            * Optional
+          example: ILS
+        CurrencyNumeric:
+          type: string
+          nullable: true
+          description: |
+            * Num(3)
+            * Currency according to ISO4217
+            * Attribute format: Numeric-3
+            * Optional
+          example: '376'
+        SiteId:
+          type: integer
+          format: int16
+          nullable: true
+          description: |
+            * Int
+            * Nayax Internal Server ID that initiated the request
+            * For Internal Nayax use only
+            * Optional
+          example: 1
+        MachineAuTime:
+          type: string
+          nullable: true
+          description: |
+            * String, allowed format: `ddMMyyHHmmss`
+            * The date and time of when the authorization was initiated by the terminal in the terminal timezone.
+            * Optional
+          example: '071221132914'
+        MachineSeTime:
+          type: string
+          nullable: true
+          description: |
+            * String, allowed format: `ddMMyyHHmmss`
+            * The date and time of when the settlement was initiated by the terminal, in the terminal timezone.
+            * Conditional, on cases where the fiscal request in sent during the settlement.
+          example: '071221132914'
+        TimeoutMS:
+          type: integer
+          format: int32
+          nullable: false
+          description: |
+            * Int
+            * Nayax Server T/O configuration in milliseconds
+            * **Mandatory**
+          example: 15000
+        IsProductSelected:
+          type: boolean
+          nullable: true
+          description: |
+            * Boolean
+            * Indicate if the product was pre-selected
+            * Optional
+          example: true
+        PaymentMethodID:
+          type: integer
+          format: int32
+          nullable: true
+          description: |
+            * Int
+            * Not in use
+          example: 1
+        AuditNumber:
+          type: integer
+          format: int64
+          nullable: true
+          description: |
+            * Int
+            * Not in use
+          example: 342
+        NayaxRRN:
+          type: string
+          description: |
+            * String (12)
+            * Reference to generate Nayax Number, Used as External Transaction Identification for external.
+            * Optional
+          example: '123456789123'
+        TransactionType:
+          type: string
+          nullable: true
+          description: |
+            * String
+            * Topup Cash / Topup CreditCard
+      additionalProperties: false
+    MachineInfo:
+      type: object
+      nullable: true
+      description: Machine Information
+      properties:
+        Id:
+          type: integer
+          format: int64
+          nullable: true
+          description: |
+            * Num (up to 10)
+            * Machine entity unique ID allocated in the Nayax Backoffice.
+            * Optional
+          example: 106791869
+        Name:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Machine Name as defined in the Nayax Backoffice
+            * Optional
+          example: Machine Name
+        ExternalId:
+          type: string
+          nullable: true
+          description: |
+            * String (200)
+            * Machine External ID as it has been provided by the operator in the Nayax back-office system (Machine number - operator)
+            * Optional
+          example: OperatorExternalID
+        Type:
+          type: string
+          nullable: true
+          description: |
+            * String (50)
+            * Machine Type as defined in the Nayax Backoffice
+            * Optional
+          example: Alcohol
+        TerminalId:
+          type: string
+          nullable: true
+          description: Not in use
+          example: '8888888844'
+        DecimalPlace:
+          type: integer
+          format: int64
+          nullable: true
+          description: |
+            * Int
+            * Decimal point location for amounts used on this machine
+            * Example: for a 12345 amount, a decimal point value of '2' refers to possible amounts such as 123.45, while a decimal point value of '0' refers to amount 12345.00
+            * Optional
+          example: 2
+        Offset:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * UTC timezone offset on the machine.
+            * Optional
+          example: '3.00'
+        GroupId:
+          type: string
+          nullable: true
+          description: Not in use
+          example: String
+        OperatorId:
+          type: string
+          nullable: true
+          description: Not in use
+          example: 2001537302
+        Region:
+          type: string
+          nullable: true
+          description: Not in use
+          example: EU
+        City:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Legacy machine city name as defined in the Nayax Backoffice.
+            * If GeoLocation object received, this should be taken for the GeoLocation fields. If not, use this value instead.
+            * Optional
+          example: Abbeville
+        ZipCode:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Legacy machine zip-code as defined in the Nayax Backoffice.
+            * If GeoLocation object received, this should be taken for the GeoLocation fields. If not, use this value instead.
+            * Optional
+          example: 22448Z
+        Country:
+          "$ref": "#/components/schemas/CountryInfo"
+        GeoLocation:
+          "$ref": "#/components/schemas/GeoLocation"
+      additionalProperties: false
+    DeviceInfo:
+      type: object
+      nullable: true
+      description: Nayax Device Information
+      properties:
+        HwSerial:
+          type: string
+          nullable: true
+          description: |
+            * String (16)
+            * Nayax Device Hardware serial number.
+            * Conditional, **Mandatory** for all card present transactions.
+          example: '0434324119376526'
+        FWVersion:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Device Firmware version
+            * Conditional, **Mandatory** for all card present transactions.
+          example: 4.0.0.22-RC01 - Aug 25 2021
+        Type:
+          type: string
+          nullable: true
+          description: |
+            * String (100)
+            * Nayax Device Type name
+            * Conditional, **Mandatory** for all card present transactions.
+          example: Onyx
+      additionalProperties: false
+    ActorInfo:
+      type: object
+      nullable: true
+      description: Merchant (aka Actor) Information.
+      properties:
+        Id:
+          type: integer
+          format: int64
+          nullable: true
+          description: |
+            * Num (10)
+            * Actor unique ID as defined in the Nayax Backoffice
+            * Optional
+          example: 2001537302
+        Name:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Direct Actor name as defined in the Nayax Backoffice
+            * Optional
+          example: TestPayCC V2 OP
+        OperatorId:
+          type: integer
+          format: int64
+          nullable: true
+          description: |
+            * Num (10)
+            * Operator ID as defined in the Nayax Backoffice.
+            * May be different than the Actor ID, depending on the actor hierarchy.
+            * Optional
+          example: 2001537302
+        OperatorName:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Operator name as defined in the Nayax Backoffice.
+            * May be different than the Actor ID, depending on the actor hierarchy.
+            * Optional
+          example: TestPayCC V2 OP _ Sub Merchant
+        MerchantId:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Billing Provider actor’s assigned Merchant ID as defined in the Nayax Backoffice
+            * Optional
+          example: 999999888885
+        Country:
+          "$ref": "#/components/schemas/CountryInfo"
+        GeoLocation:
+          "$ref": "#/components/schemas/GeoLocation"
+        MCC:
+          type: integer
+          format: int32
+          nullable: true
+          description: |
+            * Num (4)
+            * Merchant Category Code. A classification of merchants and businesses by the type of goods or services provided.
+            * Optional
+          example: 455
+        SubMerchantId:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Billing Provider actor’s assigned Sub Merchant ID as defined in the Nayax Backoffice
+            * Optional
+          example: 999999888886
+        TaxId:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Id at the tax authority, if assigned.
+            * Optional
+          example: 999999888886
+      additionalProperties: false
+    CountryInfo:
+      type: object
+      nullable: true
+      description: Actor and Machine Country information
+      properties:
+        Name:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Country Name
+            * Optional
+          example: UNITED STATES
+        NumericCode:
+          type: string
+          nullable: true
+          description: |
+            * Num(3)
+            * Currency according to ISO4217
+            * Attribute format: Numeric-3
+            * Optional
+          example: '840'
+        Alpha2Code:
+          type: string
+          nullable: true
+          description: |
+            * String(2)
+            * ISO-3166-1 format: Alpha-2 code
+            * Optional
+          example: US
+        Alpha3Code:
+          type: string
+          nullable: true
+          description: |
+            * String(3)
+            * ISO-3166-1 format: Alpha-3 code
+            * Optional
+          example: USA
+        Intra:
+          type: string
+          nullable: true
+          description: |
+            * String (100)
+            * An Intra Region refers to a geographical diversification across countries within a single 'Intra region'. E.g. 'France' is country within the 'European Union' Intra Region.
+            * Optional
+          example: Europe
+      additionalProperties: false
+    GeoLocation:
+      type: object
+      description: Geo location information
+      nullable: true
+      properties:
+        State:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Actor/Machine geo state code as defined in the Nayax Backoffice
+            * Optional
+          example: Alabama
+        City:
+          type: string
+          nullable: true
+          description: |
+            * String (255)
+            * Actor/Machine city name as defined in the Nayax Backoffice
+            * Optional
+          example: Zambezi
+        CountryCode:
+          type: string
+          nullable: true
+          description: |
+            * String (2)
+            * Actor/Machine country code (ISO3) as defined in the Nayax Backoffice
+            * ISO-3166-1 format: Alpha-2 code
+            * Optional
+          example: ZM
+        ZipCode:
+          type: string
+          nullable: true
+          description: |
+            * String (2)
+            * Actor/Machine Zip Code as defined in the Nayax Backoffice
+            * Optional
+          example: '234234'
+      additionalProperties: false
+    PaymentInfo:
+      type: object
+      nullable: true
+      description: |
+        This Object includes all the relevant transaction information and references (RRNs, Transaction IDs, AUTH Code, amounts etc..).
+        The Object is included in all request messages.
+      required:
+      - AuthAmount
+      - Token
+      - AuthDateTime
+      properties:
+        SrvTranId:
+          type: string
+          nullable: true
+          description: |
+            * String (64)
+            * The Payment Provider's internal transaction id.
+            * Conditional, only if exist for the transaction.
+          example: '3584697388'
+        AuthCode:
+          type: string
+          nullable: true
+          description: |
+            * String (40)
+            * External (usually Card issuer's) Authorization Code
+            * Conditional, only if exist for the transaction.
+          example: '333333'
+        AuthAmount:
+          type: number
+          format: double
+          nullable: true
+          description: |
+            * The original amount requested in the Authorization or Sale request. May be different than the settlement value in cases of pre-authorization transactions.
+            * **Mandatory** for all transactions.
+          example: 5.5
+        PaymentType:
+          type: integer
+          format: int32
+          nullable: true
+          description: |
+            * The Payment Type of the transaction
+            | Value | Description |
+            |---|---|
+            | 0 | Cash |
+            | 1 | Cashless |
+            * **Mandatory** for Register transactions.
+          example: 1
+        SettAmount:
+          type: number
+          format: double
+          nullable: true
+          description: |
+            * The final amount of the transaction.
+            * Conditional, will only be sent on registration that are trigger after settlement, Void or Refund.
+          example: 5.5
+        RRN:
+          type: string
+          nullable: true
+          description: |
+            * Reference Retrieval Number, Used as External Transaction Identification for external parties (Usually Card schemes)
+            * Conditional, only if exist for the transaction.
+          example: '111111'
+        Token:
+          type: string
+          nullable: true
+          description: |
+            * String(256)
+            * A unique token for the transaction
+            * For Internal Nayax use only
+            * **Mandatory** for all transactions
+          example: string
+        AuthDateTime:
+          type: string
+          nullable: true
+          description: |
+            * String, allowed format: `ddMMyyHHmmss`
+            * The date time string of when the transaction was authorized
+            * **Mandatory** for all transactions
+          example: '071221133300'
+        SettDateTime:
+          type: string
+          nullable: true
+          description: |
+            * String, allowed format: `ddMMyyHHmmss`
+            * The date time string of when the transaction was settled
+            * Conditional, will only be sent on registration that are trigger after settlement, Void or Refund
+          example: '071221133330'
+        TraceNumber:
+          type: string
+          nullable: true
+          description: |
+            * String (40)
+            * Transaction trace number
+            * Conditional, only if exist for the transaction.
+          example: '4444'
+        AuthSource:
+          type: string
+          nullable: true
+          description: |
+            * String(5)
+            * For Internal Nayax use only
+            * Conditional, only if exist for the transaction.
+          example: string
+        AdditionalData:
+          type: string
+          nullable: true
+          description: |
+            * String, JSON format.
+            * Optional, Contact Nayax TPOC in order to define.
+          example: string
+        TransactionFlow:
+          type: string
+          description: TransactionFlow
+          enum:
+          - PreAuth
+          - Settlement
+          - Cancel
+          - Refund
+          - PreSelection
+          - Cash
+        PaymentMethodId:
+          type: integer
+          format: int32
+          description: PaymentMethodId
+          example: 1
+        RecognitionId:
+          type: integer
+          format: int32
+          description: RecognitionId
+          example: 1
+      additionalProperties: false
+    CardData:
+      type: object
+      nullable: true
+      description: |
+        Additional card data.
+        Will be sent for credit card transactions only.
+      properties:
+        CardNumber:
+          type: string
+          nullable: true
+          description: |
+            * String (19)
+            * Masked card PAN
+          example: 4********1234
+        EntryMode:
+          type: string
+          nullable: true
+          description: |
+            * String (4)
+            * **The way the card was read by the terminal. Optional Values:**
+                * `MSR`: Swipe; Card PAN read from card magnetic stripe.
+                * `CON`: Contact; Card PAN read by chip insert.
+                * `CLS`: TAP; Card PAN read BY CHIP TAP.
+            * Optional
+          example: MCR
+        BrandInfo:
+          "$ref": "#/components/schemas/CardBrandInfo"
+        IsDebitCard:
+          type: boolean
+          nullable: true
+          description: |
+            * Boolean
+            * Indication if card is Debit card, according to the card BIN
+            * MandatoryBI
+          example: true
+      additionalProperties: false
+    CardBrandInfo:
+      type: object
+      required:
+      - PrimaryId
+      properties:
+        PrimaryId:
+          type: string
+          nullable: true
+          description: |
+            * String (2)
+            * Card brand ID (internal Nayax ID)
+            * **Mandatory**
+            * **Possible Values (Major Brands):**
+            | ID | Brand |
+            |---|---|
+            | 1 | JCB |
+            | 6 | VISA |
+            | 7 | CHINA UNIONPAY |
+            | 8 | MASTERCARD |
+            | 9 | MAESTRO |
+            | 10 | DINERS CLUB |
+            | 11 | AMEX |
+            | 12 | DISCOVER |
+            * The above list includes only the major brands. Additional IDs are also possible, please contact your integration engineer for the full list.
+          example: '6'
+        PrimaryDescription:
+          type: string
+          nullable: true
+          description: |
+            * String (100)
+            * Brand name
+            * Optional
+          example: VISA
+        SecondaryId:
+          type: string
+          nullable: true
+          description: |
+            * String (2)
+            * Card brand ID (internal Nayax ID)
+            * **Possible Values (Major Brands):** (Same as PrimaryId)
+            | ID | Brand |
+            |---|---|
+            | 1 | JCB |
+            | 6 | VISA |
+            | 7 | CHINA UNIONPAY |
+            | 8 | MASTERCARD |
+            | 9 | MAESTRO |
+            | 10 | DINERS CLUB |
+            | 11 | AMEX |
+            | 12 | DISCOVER |
+            * The above list includes only the major brands. Additional IDs are also possible, please contact your integration engineer for the full list.
+            * Optional, only if a secondary ID exists.
+          example: '0'
+        SecondaryDesrciption:
+          type: string
+          nullable: true
+          description: |
+            * String (100)
+            * Brand name
+            * Optional, only if a secondary ID exists.
+          example: string
+      additionalProperties: false
+    VersionResponse:
+      type: object
+      required:
+      - ProductVersion
+      - Copyright
+      properties:
+        ProductVersion:
+          type: string
+          nullable: false
+        Copyright:
+          type: string
+          nullable: false
+        ApiVersion:
+          type: string
+          nullable: true
+      additionalProperties: false

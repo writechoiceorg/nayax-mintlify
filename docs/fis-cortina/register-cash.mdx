@@ -1,0 +1,69 @@
+---
+title: "Cash"
+description: "How Register works for cash transactions, including the reduced field set and failure handling."
+---
+
+Cash transaction registration is **optional and disabled by default**. When enabled, a `Register` call fires after a confirmed cash sale.
+
+## Flow
+
+The following sequence shows how `Register` fits into the cash sale flow:
+
+1. Cash payment is confirmed; Nayax Engine processes the sale (`PaymentInfo.PaymentMethodId` is set to `3`)
+2. Nayax Engine sends `POST /FisCortina/Register` to your server (with reduced field set; see [Cash field behavior](#cash-field-behavior) below)
+3. Your server registers the transaction and returns a response (must include `Verdict` and `FiscalRrn`)
+4. Product is dispensed
+
+## Exception handling
+
+Cash registration failures never block dispensing and "Cancel on fiscal fail" does not apply. Failed registrations are always queued for retry:
+
+| Scenario | Step | Resolution |
+|---|---|---|
+| Registration declined | 2–3 | Product dispensed. Registration is retried within the configured window. |
+| Registration timeout | 2–3 | Same as above. Retries continue until success or window expiry. |
+
+## Cash field behavior
+
+Cash requests (`PaymentMethodId=3`) send a reduced field set compared to card transactions:
+
+| Field | Card (`PaymentMethodId=1`) | Cash (`PaymentMethodId=3`) |
+|---|---|---|
+| `DeviceInfo.FWVersion` | Present | Not sent |
+| `DeviceInfo.Type` | Present | Not sent |
+| `MachineInfo.Name` | Present | Not sent |
+| `MachineInfo.ExternalId` | Present | Not sent |
+| `MachineInfo.Type` | Present | Not sent |
+| `MachineInfo.City` / `ZipCode` | Present | Not sent |
+| `MachineInfo.Country` | Populated object | Empty object `{}` |
+| `MachineInfo.GeoLocation` | Populated object | Empty object `{}` |
+| `ActorInfo.Country` | Populated object | Empty object `{}` |
+| `ActorInfo.GeoLocation` | Populated object | Empty object `{}` |
+| `Products.CatalogProductId` | Typically absent | May be sent as empty string |
+
+## Request field notes
+
+`PaymentInfo.AuthDateTime` uses a 17-digit format for cash transactions, unlike the 12-digit format used for card. `MachineAuTime` and `MachineSeTime` always use 17 digits:
+
+| Field | Format | Digits | Example |
+|---|---|---|---|
+| `PaymentInfo.AuthDateTime` | `YYYYMMDDHHmmssfff` | 17 | `20260223083549900` |
+| `BasicInfo.MachineAuTime` | `YYYYMMDDHHmmssfff` | 17 | `20260223093406383` |
+| `BasicInfo.MachineSeTime` | `YYYYMMDDHHmmssfff` | 17 | `20260223093550020` |
+
+`BasicInfo.TransactionId` may be absent or present for cash transactions. When present, it uses the 36-digit format:
+
+| Presence | Format | Example |
+|---|---|---|
+| May be absent or present | 36 digits | `000000389301458723021290910416291057` |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Request & Response Reference" href="/docs/fis-cortina/response-reference">
+    Full field definitions and response codes for all endpoints.
+  </Card>
+  <Card title="Retry & Timeout Handling" href="/docs/fis-cortina/reliability">
+    Configure retry behavior and timeout handling for failed registrations.
+  </Card>
+</CardGroup>

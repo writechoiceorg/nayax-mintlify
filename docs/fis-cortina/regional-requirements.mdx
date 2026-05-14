@@ -1,0 +1,86 @@
+---
+title: "Regional Requirements"
+description: "Country-specific FiscalInfo fields and deposit fee handling."
+---
+
+FisCortina is designed to accommodate the fiscal requirements of multiple tax jurisdictions. The `FiscalInfo` object provides flexible fields that map to region-specific tax authority identifiers. Additionally, some regions require fiscal data to be displayed on the device screen at the end of a transaction.
+
+## Country-specific parameters
+
+Croatia and Poland are shown here as examples of how regional tax authority identifiers map to `FiscalInfo` fields. FisCortina supports additional regions not listed here. Contact your Nayax Integration Engineer for guidance on your specific region.
+
+<AccordionGroup>
+  <Accordion title="Croatia (CIS): Fiscalization Act, Porezna uprava" icon="flag">
+    | FiscalInfo Field | Croatian Identifier | Description |
+    |---|---|---|
+    | `FiscalProtectionCode` | ZKI | Zaštitni kod izdavatelja (issuer protection code) |
+    | `FiscalSignature` | JIR | Jedinstveni identifikator računa (unique invoice identifier) |
+    | `FiscalCompanyTaxId` | OIB | Personal Identification Number of the issuer |
+    | `FiscalInvoice` | — | Invoice designation in format: `number/business unit/register` |
+
+    **Example: Full FiscalInfo response for Croatia**
+    ```json
+    {
+      "fiscalResponse": {
+        "Result": {
+          "ResponseCode": 0,
+          "Verdict": "Approved",
+          "StatusMessage": "Success",
+          "ProviderErrorCode": 0
+        },
+        "FiscalInfo": {
+          "FiscalDateTime": "20250506143508",
+          "FiscalRrn": "d6e35283-eb1f-4e15-8899-e30d65636f5a",
+          "FiscalId": 5208211,
+          "FiscalReceiptUrl": "https://porezna.hr/racun/d6e35283",
+          "FiscalInvoice": "101/1/1",
+          "FiscalSignature": "JIR-4f2c8a3e1b9d6f7c2e4a8b3d5f1e9c7a",
+          "FiscalProtectionCode": "ZKI-98AFB231C4D2E5F6A7B8C9D0E1F2A3B",
+          "FiscalCompanyTaxId": "12345678901"
+        }
+      }
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="Poland (KSeF): Krajowy System e-Faktur" icon="flag">
+    | FiscalInfo Field | Polish Identifier | Description |
+    |---|---|---|
+    | `FiscalInvoice` | KSeF reference number | Reference number for the e-invoice |
+    | `FiscalCompanyTaxId` | NIP | Numer Identyfikacji Podatkowej (tax ID) |
+    | `Data.POSDisplay` | — | Polish tax law requires fiscal data to be shown on the device screen. See [POS Display](/docs/fis-cortina/pos-display). |
+  </Accordion>
+
+  <Accordion title="Other regions" icon="globe">
+    | FiscalInfo Field | Description |
+    |---|---|
+    | `FiscalSignature` | Any authority-issued digital signature or verification code |
+    | `FiscalProtectionCode` | Any regulatory protection or hash code |
+    | `FiscalCompanyTaxId` | Merchant's tax registration number in local format |
+
+    Contact your Nayax Integration Engineer for guidance on any region not listed here.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Deposit fee handling
+
+Some regions and transaction types include a deposit fee component: a surcharge collected at the point of sale and tied to the fiscal record.
+
+<Note>
+**Coming soon.** Full documentation for deposit fee handling is currently in progress. This section will cover how deposit fees are represented in the fiscal request, how they interact with the `Products` array, and any region-specific requirements. (Ref: NCS-126984)
+
+If your integration involves deposit fees, coordinate with your Nayax Integration Engineer directly for interim guidance.
+</Note>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="POS Display" href="/docs/fis-cortina/pos-display">
+    Format and send fiscal data for display on the device screen.
+  </Card>
+  <Card title="Request & Response Reference" href="/docs/fis-cortina/response-reference">
+    Full field definitions and response codes for all endpoints.
+  </Card>
+</CardGroup>

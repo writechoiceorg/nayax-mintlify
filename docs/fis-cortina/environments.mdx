@@ -1,0 +1,35 @@
+---
+title: "Environments"
+description: "Sandbox and production environments, and device firmware requirements."
+---
+
+FisCortina has two environments. URLs are not publicly published and are shared directly by your Integration Engineer.
+
+| Environment | Purpose | Access |
+|---|---|---|
+| Sandbox | Development and integration testing | URL provided by your Integration Engineer at kickoff |
+| Production | Live fiscal registration | Provisioned after certification approval |
+
+Both environments require HTTPS. URLs use port `443` (default) or `8443`.
+
+## Device Requirements
+
+To use FisCortina, your Nayax device must meet the following minimum firmware versions:
+
+| Component | Minimum Version | Release Date |
+|---|---|---|
+| MAIN | 4.8.24.1-RC02 | Dec 12, 2023 |
+| POS | 2.4.9.8-rc01 | — |
+
+Contact your Nayax Sales representative to procure a device with the required hardware and firmware.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Integration Lifecycle" href="/docs/fis-cortina/integration-lifecycle">
+    Follow the full onboarding process from kickoff to production launch.
+  </Card>
+  <Card title="Authentication" href="/docs/fis-cortina/authentication">
+    Implement the StartSession challenge-response before sending fiscal requests.
+  </Card>
+</CardGroup>

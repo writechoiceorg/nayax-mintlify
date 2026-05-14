@@ -691,20 +691,47 @@
         ]
       },
       {
-        "tab": "Fis Cortina",
+        "tab": "FisCortina",
         "icon": "credit-card",
         "groups": [
           {
-            "group": "Fis Cortina Guides",
+            "group": "Get Started",
             "pages": [
-              "docs/fis-cortina/overview-fis-cortina",
-              "docs/fis-cortina/fis-cortina-auth",
-              "docs/fis-cortina/payment-flows",
-              "docs/fis-cortina/register-fis-cortina",
-              "docs/fis-cortina/void-fis-cortina",
-              "docs/fis-cortina/country-specific-requirements",
-              "docs/fis-cortina/special-fiscal-configurations"
+              "docs/fis-cortina/overview",
+              "docs/fis-cortina/integration-lifecycle",
+              "docs/fis-cortina/environments",
+              "docs/fis-cortina/transaction-types"
             ]
+          },
+          {
+            "group": "Build Your Integration",
+            "pages": [
+              "docs/fis-cortina/authentication",
+              "docs/fis-cortina/register",
+              "docs/fis-cortina/register-single-sale",
+              "docs/fis-cortina/register-auth-settlement",
+              "docs/fis-cortina/register-cash",
+              "docs/fis-cortina/void"
+            ]
+          },
+          {
+            "group": "Configuration & Reference",
+            "pages": [
+              "docs/fis-cortina/regional-requirements",
+              "docs/fis-cortina/pos-display",
+              "docs/fis-cortina/reliability",
+              "docs/fis-cortina/glossary"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "docs/fis-cortina/response-reference"
+            ],
+            "openapi": {
+              "source": "/openapi/fiscortina.yaml",
+              "directory": "reference/fiscortina"
+            }
           }
         ]
       },

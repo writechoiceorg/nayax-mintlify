@@ -4,11 +4,11 @@ metadata:
   og:description: "The Register flow is a critical compliance step in the transaction lifecycle, ensuring that a sale is formally recorded with the relevant."
 ---
 
-The **Register** flow is a critical compliance step in the transaction lifecycle, ensuring that a sale is formally recorded with the relevant governmental body for tax purposes. This process is generally initiated by the system's Engine (or backend server) immediately after a payment method has been successfully authorized.
+The **Register** flow records a completed sale with the relevant tax authority. It is a required compliance step in the transaction lifecycle. The Nayax Engine (or backend server) generally initiates this process immediately after authorizing a payment.
 
 ## Register Flow
 
-This diagram illustrates the end-to-end flow for a transaction, from the initial payment authorization through to the final settlement and required fiscal/tax registration:
+This diagram shows the full transaction flow, from payment authorization through final settlement and fiscal registration:
 
 <Frame><img src="/images/docs/register-fis-cortina/image1.png" /></Frame>
 
@@ -26,4 +26,3 @@ Where:
 10. Nayax Device sends a command to the Nayax Engine to finalize the transaction.
 11. Nayax Engine confirms the settlement and provides the transaction receipt back to the Nayax Device.
 
-This process successfully integrates payment authorization with fiscal registration, completing the sales lifecycle from approval to final device confirmation.

@@ -1,0 +1,150 @@
+---
+title: "Authentication"
+description: "How to implement the StartSession challenge-response to authenticate each fiscal session."
+---
+
+Before any fiscal transaction, Nayax initiates a `StartSession` exchange with your server to establish a trusted session. The process uses a pre-shared **Secret Token** and AES-256-ECB encryption to bind a unique Transaction ID to each session.
+
+## How it works
+
+Nayax and each integrator share a unique [**Secret Token**](/docs/fis-cortina/glossary): a 66-character string provided by Nayax at kickoff. The last 32 characters of this token serve as the AES-256 encryption key.
+
+The exchange works as a challenge-response:
+
+1. Nayax sends a random challenge string to your `StartSession` endpoint
+2. You generate a Transaction ID, encrypt it together with the challenge, and return the cipher
+3. Nayax decrypts the cipher to extract and verify the Transaction ID
+4. That Transaction ID is used in all subsequent `Register` and `Void` calls in the session
+
+<Note>
+**Validate Transaction IDs on your end.** When Nayax sends a `Register`, `Void`, or `Refund` request, verify that the `BasicInfo.TransactionId` was issued by your server in a prior `StartSession` call and has not expired. Transaction IDs should remain valid for no longer than **10 minutes**.
+</Note>
+
+## Step-by-step process
+
+The following uses example values at each stage to illustrate the full flow.
+
+<Steps>
+  <Step title="Nayax sends the StartSession request">
+    Nayax sends a `POST` to your `/FisCortina/StartSession` endpoint. The request body contains the `TokenId` reference number and a 27-character random string (`RandomNumber`).
+
+    **Example `RandomNumber` (27 characters):**
+    ```text
+    123456789qwertyuioasdfghjkl
+    ```
+  </Step>
+
+  <Step title="Generate a Transaction ID">
+    Generate a Transaction ID consisting of exactly **36 numeric characters**. This ID must be unique per session and stored for later validation.
+
+    **Example Transaction ID (36 numeric characters):**
+    ```text
+    123456789012345678901234567890123456
+    ```
+  </Step>
+
+  <Step title="Build the plaintext">
+    Create a 64-character plaintext by concatenating the Transaction ID, a literal `=` separator, and the `RandomNumber` from Step 1.
+
+    **Format:** `{TransactionId}={RandomNumber}`
+
+    **Example (64 characters):**
+    ```text
+    123456789012345678901234567890123456=123456789qwertyuioasdfghjkl
+    ```
+  </Step>
+
+  <Step title="Derive the AES encryption key">
+    Extract the **last 32 characters** of the Secret Token matching the `TokenId` from the request. These 32 characters form the 256-bit AES key.
+
+    **Full Secret Token:**
+    ```text
+    mrV3U3nsgGFrE3w5-wnBo_WCLPce-pZ1awRvTVTkungMIKThTVbj_fiXdfoGclhn0
+    ```
+    **Derived AES-256 key (last 32 characters):**
+    ```text
+    RvTVTkungMIKThTVbj_fiXdfoGclhn0
+    ```
+  </Step>
+
+  <Step title="Encrypt and return TranIDCipher">
+    Encrypt the 64-character plaintext using **AES in ECB mode with PKCS5 padding**. Base64-encode the result and return it as `TranIDCipher` in your `StartSession` response.
+
+    **Resulting `TranIDCipher`:**
+    ```text
+    a0Qnxm4fWMskzFXiMivn8BDiQVSL6be/NXIICC9HBoAiry6DUdKYPQh/YS1G8nObE6/0o9N4MFuYA7CTAxAnphuNJwBEjgBzKhhgpJ5ggnw=
+    ```
+  </Step>
+
+  <Step title="Nayax decrypts and validates">
+    Nayax decrypts the `TranIDCipher` using the same AES key and validates that:
+    - The `RandomNumber` in the decrypted plaintext matches what was sent in the request
+    - The overall format is as expected (64 characters, correct separator)
+
+    If validation fails, the session is rejected.
+  </Step>
+
+  <Step title="Transaction ID used in subsequent calls">
+    Nayax uses the decrypted Transaction ID in all subsequent [`Register`](/docs/fis-cortina/register), [`Void`](/docs/fis-cortina/void), and `Refund` requests for the session. It appears in the `BasicInfo.TransactionId` field.
+
+    Your server must validate this ID against your own records on every incoming request.
+  </Step>
+</Steps>
+
+## Code example
+
+Use this Python snippet to verify your `StartSession` implementation produces the correct `TranIDCipher` before testing with Nayax.
+
+```python
+# pip install pycryptodome
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
+import base64
+
+# Pre-shared Secret Token (66 characters, provided by Nayax)
+secret_token = "mrV3U3nsgGFrE3w5-wnBo_WCLPce-pZ1awRvTVTkungMIKThTVbj_fiXdfoGclhn0"
+
+# Values from the StartSession request
+token_id      = "123456"
+random_number = "123456789qwertyuioasdfghjkl"  # 27 characters from Nayax
+
+# Step 2: Generate a 36-digit numeric Transaction ID
+transaction_id = "123456789012345678901234567890123456"
+
+# Step 3: Build plaintext (64 characters)
+plaintext = f"{transaction_id}={random_number}"
+
+# Step 4: Derive AES key — last 32 characters of the Secret Token
+aes_key = secret_token[-32:].encode("utf-8")
+
+# Step 5: Encrypt using AES-ECB with PKCS5 padding
+cipher    = AES.new(aes_key, AES.MODE_ECB)
+padded    = pad(plaintext.encode("utf-8"), AES.block_size)
+encrypted = cipher.encrypt(padded)
+
+tran_id_cipher = base64.b64encode(encrypted).decode("utf-8")
+print(f"TranIDCipher: {tran_id_cipher}")
+# Output: a0Qnxm4fWMskzFXiMivn8BDiQVSL6be/NXIICC9HBoAiry6DUdKYPQh/YS1G8nObE6/0o9N4MFuYA7CTAxAnphuNJwBEjgBzKhhgpJ5ggnw=
+```
+
+## Verifying your encryption
+
+Use the [devglan.com AES decryption tool](https://www.devglan.com/online-tools/aes-encryption-decryption) to confirm your output is correct before testing with Nayax:
+
+- **Mode:** ECB
+- **Key size:** 256-bit
+- **Key:** last 32 characters of your Secret Token
+- **Input:** `{TransactionId}={RandomNumber}`
+
+Decrypt the output and confirm it matches the plaintext you built in [Step 3](#build-the-plaintext).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Register" href="/docs/fis-cortina/register">
+    Send your first fiscal registration request after authenticating.
+  </Card>
+  <Card title="Void" href="/docs/fis-cortina/void">
+    Un-register a transaction when a product is not dispensed.
+  </Card>
+</CardGroup>
