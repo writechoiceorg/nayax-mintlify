@@ -17,15 +17,6 @@ If you choose to perform the card comparison, Nayax will send a `StopNotify` req
 
 Rejecting a `StopNotify` request will result in a rejection message displayed on the Nayax terminal for the consumer. However, this rejection does not impact the actual session status, as Nayax does not manage the session. You still need to perform the necessary actions to stop the session on your end.
 
-Learn more about this endpoint on the following page:
-
-<Card
-  icon="link"
-  title="StopNotify"
-  href="/docs/integrate-pos-device/spark/deprecated/stopnotify"
-  arrow
-/>
-
 ## `StopCallback`
 
 If you prefer Nayax to perform the card comparison, Nayax will send a `StopCallback`. In this scenario, Nayax searches for an unsettled transaction associated with the card used for the stop request. If a match is found, Nayax will notify you with the relevant Spark and Nayax transaction IDs, indicating which session needs to be stopped.
@@ -46,6 +37,6 @@ Learn more about this endpoint on the following page:
 <Card
   icon="link"
   title="Security & Authentication"
-  href="/docs/integrate-pos-device/spark/deprecated/spark-security-authentication"
+  href="/docs/integrate-pos-device/spark/security-authentication/spark-authentication"
   arrow
 />

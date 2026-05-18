@@ -8,23 +8,23 @@ Here's a comprehensive list of response codes, their descriptions, and the relev
 
 | Response Code | Description                               | Relevant API Methods                                                                         |
 | ------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `20`          | Machine Has No Device                     | [`/TriggerTransaction`](/docs/integrate-pos-device/spark/deprecated/triggertransaction)                                              |
-| `21`          | Device Not Connected to MQTT Server       | [`/TriggerTransaction`](/docs/integrate-pos-device/spark/deprecated/triggertransaction)                                              |
-| `22`          | Missing Device IP                         | [`/TriggerTransaction`](/docs/integrate-pos-device/spark/deprecated/triggertransaction)                                              |
-| `23`          | IP Is Non-VPN                             | [`/TriggerTransaction`](/docs/integrate-pos-device/spark/deprecated/triggertransaction)                                              |
-| `24`          | Machine Not Responding                    | [`/TriggerTransaction`](/docs/integrate-pos-device/spark/deprecated/triggertransaction)                                              |
-| `25`          | Unknown Machine ID                        | [`/TriggerTransaction`](/docs/integrate-pos-device/spark/deprecated/triggertransaction)                                              |
-| `26`          | Validation Error                          | [`/StartAuthentication`](/docs/integrate-pos-device/spark/deprecated/startauthentication)                                            |
-| `27`          | Unknown Transaction ID                    | [`/Settlement`](/docs/integrate-pos-device/tweezercomm/deprecated/settlement), [`/CancelTransaction`](/docs/integrate-pos-device/spark/deprecated/canceltransaction)               |
-| `28`          | Already Cancelled                         | [`/CancelTransaction`](/docs/integrate-pos-device/spark/deprecated/canceltransaction)                                                |
-| `29`          | Not Allowed to Wake Device                | [`/TriggerTransaction`](/docs/integrate-pos-device/spark/deprecated/triggertransaction)                                              |
-| `30`          | Spark Integrator Not Active               | [`/StartAuthentication`](/docs/integrate-pos-device/spark/deprecated/startauthentication)                                            |
-| `31`          | Cancellation Failed                       | [`/CancelTransaction`](/docs/integrate-pos-device/spark/deprecated/canceltransaction)                                                |
-| `32`          | Transaction Not Found or Old              | [`/Settlement`](/docs/integrate-pos-device/tweezercomm/deprecated/settlement), [`/CancelTransaction`](/docs/integrate-pos-device/spark/deprecated/canceltransaction)             |
-| `33`          | Fail To Authenticate                      | [`/StartAuthentication`](/docs/integrate-pos-device/spark/deprecated/startauthentication)                                            |
-| `34`          | Missing Amount                            | [`/TriggerTransaction`](/docs/integrate-pos-device/spark/deprecated/triggertransaction), [`/Settlement`](/docs/integrate-pos-device/tweezercomm/deprecated/settlement)             |
-| `35`          | Settlement Failed                         | [`/Settlement`](/docs/integrate-pos-device/tweezercomm/deprecated/settlement)                                                              |
-| `36`          | Site ID Not Found                         | [`/Settlement`](/docs/integrate-pos-device/tweezercomm/deprecated/settlement), [`/CancelTransaction`](/docs/integrate-pos-device/spark/deprecated/canceltransaction)              |
+| `20`          | Machine Has No Device                     | `/TriggerTransaction`                                              |
+| `21`          | Device Not Connected to MQTT Server       | `/TriggerTransaction`                                              |
+| `22`          | Missing Device IP                         | `/TriggerTransaction`                                              |
+| `23`          | IP Is Non-VPN                             | `/TriggerTransaction`                                              |
+| `24`          | Machine Not Responding                    | `/TriggerTransaction`                                              |
+| `25`          | Unknown Machine ID                        | `/TriggerTransaction`                                              |
+| `26`          | Validation Error                          | `/StartAuthentication`                                            |
+| `27`          | Unknown Transaction ID                    | `/Settlement`, `/CancelTransaction`               |
+| `28`          | Already Cancelled                         | `/CancelTransaction`                                                |
+| `29`          | Not Allowed to Wake Device                | `/TriggerTransaction`                                              |
+| `30`          | Spark Integrator Not Active               | `/StartAuthentication`                                            |
+| `31`          | Cancellation Failed                       | `/CancelTransaction`                                                |
+| `32`          | Transaction Not Found or Old              | `/Settlement`, `/CancelTransaction`             |
+| `33`          | Fail To Authenticate                      | `/StartAuthentication`                                            |
+| `34`          | Missing Amount                            | `/TriggerTransaction`, `/Settlement`             |
+| `35`          | Settlement Failed                         | `/Settlement`                                                              |
+| `36`          | Site ID Not Found                         | `/Settlement`, `/CancelTransaction`              |
 | `37`          | Authorization Failed                      | [`/TransactionCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback)                                            |
 | `38`          | Transaction Callback Failed               | [`/TransactionCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback), [`/DeclineCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/declinecallback) |
 | `40`          | Timeout Callback Failed                   | [`/TimeoutCallback`](/reference/spark/transactions/timeoutcallback)                                               |
