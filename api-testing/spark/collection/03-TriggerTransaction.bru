@@ -1,0 +1,33 @@
+meta {
+  name: TriggerTransaction
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/TriggerTransaction
+  body: json
+  auth: none
+}
+
+headers {
+  IntegratorId: {{sign_key_id}}
+  TransactionSignature: {{transaction_signature}}
+}
+
+body:json {
+  {
+    "SparkTransactionId": "{{spark_transaction_id}}",
+    "TerminalId": "{{terminal_id}}",
+    "TerminalIdType": {{terminal_id_type}},
+    "Amount": 15,
+    "PosDisplay": "Amount: $15.00",
+    "TransactionTimeout": 60
+  }
+}
+
+docs {
+  Requires SparkTransactionId from a successful StartAuthentication response.
+  Wakes up the physical terminal and prompts for card presentation.
+  TransactionTimeout must be > 0.
+}

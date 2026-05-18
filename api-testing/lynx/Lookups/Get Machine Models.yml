@@ -1,0 +1,52 @@
+﻿info:
+  name: Get Machine Models
+  type: http
+  seq: 3
+
+http:
+  method: GET
+  url: https://qa-lynx.nayax.com/operational/v1/lookupTypes/machineModels
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  params:
+    - name: MachineModeID
+      value: ""
+      type: query
+      enabled: true
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/lookupTypes/machineModels
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          [{"MachineModelID":180033285635513,"MachineTypeID":5,"ProviderID":47,"ProtocolTypeID":14,"LastUpdated":"2020-06-22T07:12:52.573","MachineModelName":"BDV - A.V.M - ","ActorID":null,"CreationDateTime":"2020-06-22T07:12:52.573","CreatedBy":773132866,"UpdatedBy":773132866,"MachineModelStatus":1},{"MachineModelID":257529233892425,"MachineTypeID":5,"ProviderID":47,"ProtocolTypeID":14,"LastUpdated":"2019-04-18T14:55:34.28","MachineModelName":"BDV - A.V.M - ","ActorID":null,"CreationDateTime":"2019-04-18T14:55:34.28","CreatedBy":373479869,"UpdatedBy":373479869,"MachineModelStatus":1},{"MachineModelID":270708270021187,"MachineTypeID":6,"ProviderID":47,"ProtocolTypeID":14,"LastUpdated":"2022-05-03T12:43:44.547","MachineModelName":"BDV - A.V.M - Agamento | Balamuth","ActorID":null,"CreationDateTime":"2022-05-03T12:43:44.547","CreatedBy":765895501,"UpdatedBy":765895501,"MachineModelStatus":1}]
+  - name: 401 Unauthorized — expired or invalid token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/lookupTypes/machineModels
+      method: GET
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Unauthorized","isUserError":false,"errorKey":null}

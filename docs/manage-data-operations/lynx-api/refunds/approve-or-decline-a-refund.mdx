@@ -21,6 +21,12 @@ When a refund is successfully requested, the transaction will remain in the **Pe
 
 This process can be done through the Lynx API using the endpoints below.
 
+<Warning>
+**Elevated Permissions Required**
+
+`POST /v1/payment/refund-approve` and `POST /v1/payment/refund-decline` require a role with financial permissions. A standard operator token returns `403 Insufficient Permissions`. Contact your Nayax account manager to enable refund permissions for your account.
+</Warning>
+
 <Columns cols={2}>
 <EndpointCard
   title="Approve a Payment Refund"

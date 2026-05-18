@@ -1,0 +1,46 @@
+meta {
+  name: StartAuthentication
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/StartAuthentication
+  body: json
+  auth: none
+}
+
+headers {
+  IntegratorId: {{sign_key_id}}
+  TransactionSignature: {{transaction_signature}}
+}
+
+body:json {
+  {
+    "TokenId": {{token_id}},
+    "TerminalId": "{{terminal_id}}",
+    "TerminalIdType": {{terminal_id_type}},
+    "Random": "{{random_string}}",
+    "Cipher": "{{cipher}}"
+  }
+}
+
+// Note: SparkTransactionId is NOT a separate body field — it is embedded inside the Cipher.
+// The cipher plaintext is: SparkTransactionId(36) + "=" + Random(17) + UTC_YYMMDDhhmm(10)
+
+docs {
+  ## Auth headers
+  - IntegratorId: your Sign Key ID (numeric)
+  - TransactionSignature: SHA-256(SparkTransactionId + ";" + SignKey)
+
+  ## Cipher construction
+  Build a 64-char plaintext: {SparkTransactionId (36)}{=}{Random (17)}{YYMMDDhhmm (10)}
+  Encrypt with AES-256 ECB using last 32 chars of Secret Token as key.
+  Base64-encode the result.
+
+  ## Prerequisites
+  - TokenId and Secret Token from Nayax
+  - Sign Key and Sign Key ID from Nayax
+  - A valid TerminalId (hardware serial of a configured Nayax device)
+  - SparkTransactionId: a fresh UUID you generate per session
+}

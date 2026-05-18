@@ -1,0 +1,27 @@
+meta {
+  name: CreditCard Settlement
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/Cortina/CreditCard/Settlement
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "Amount": 5.00,
+      "CurrencyCode": "ILS",
+      "SiteId": 1,
+      "TransactionId": "{{transaction_id}}"
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Captures a previously authorized transaction. Integrator settles the funds with the payment processor.
+}

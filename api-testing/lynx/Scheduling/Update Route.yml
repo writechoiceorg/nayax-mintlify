@@ -1,0 +1,49 @@
+﻿info:
+  name: Update Route
+  type: http
+  seq: 7
+
+http:
+  method: PUT
+  url: https://qa-lynx.nayax.com/operational/v1/Scheduling/routes
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  params:
+    - name: routeId
+      value: ""
+      type: query
+      enabled: true
+  body:
+    type: json
+    data: |
+      {
+        "OperatorId": 0,
+        "RouteName": "",
+        "RouteCode": "",
+        "DriverId": "00000000-0000-0000-0000-000000000000",
+        "RouteRemarks": "",
+        "RouteStatusId": 1
+      }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 403 Forbidden — permissions not granted for sandbox token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/routes
+      method: PUT
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}

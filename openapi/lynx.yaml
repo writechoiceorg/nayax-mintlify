@@ -425,7 +425,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ActorHirarchyDto'
-  /v1/actors/GenarateEncKey:
+  /v1/actors/GenerateEncKey:
     put:
       tags:
         - Actors

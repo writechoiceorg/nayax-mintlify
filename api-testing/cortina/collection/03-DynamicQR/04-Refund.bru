@@ -1,0 +1,39 @@
+meta {
+  name: DynamicQR Refund
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/Cortina/DynamicQR/Refund
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "TransactionId": "{{transaction_id}}",
+      "SiteId": 12,
+      "Amount": 0.10,
+      "RefundAmount": 0.10,
+      "CurrencyCode": "USD"
+    },
+    "ActorInfo": {
+      "Id": 2001102296,
+      "MerchantId": "10011",
+      "Name": "Far East Dev Zone"
+    },
+    "MachineInfo": {
+      "Id": 869761713,
+      "Name": "TestPayDynamicQR V2",
+      "TerminalId": "987654321"
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Refunds a settled dynamic QR payment. Credits funds back to the consumer's payment source.
+  RefundAmount may be partial (less than or equal to the original Amount).
+}

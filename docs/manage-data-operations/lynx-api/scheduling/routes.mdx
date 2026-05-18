@@ -1,0 +1,107 @@
+---
+title: "Routes"
+description: "Create and manage service routes, assign machines, and organise field operations."
+metadata:
+  og:description: "Use the Lynx API to create routes, assign machines to routes, and manage your field service operations."
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+A route groups machines together for regular service visits. Once a route is created, machines are assigned to it and drivers are scheduled to carry out the visits.
+
+<Warning>
+**Elevated permissions required**
+
+Route management endpoints require permissions beyond a standard operator token. Refer to [Error Handling](/docs/manage-data-operations/lynx-api/error-handling) for the full list of permission-gated endpoints.
+</Warning>
+
+## Retrieve routes
+
+<EndpointCard
+  title="Get Routes"
+  href="/reference/lynx/scheduling/get-routes"
+  method="get"
+/>
+
+The `GET /v1/Scheduling/routes` endpoint accepts several optional filter parameters:
+
+| Parameter | Description |
+|-----------|-------------|
+| `OperatorId` | Filter by operator |
+| `DriverId` | Filter by assigned driver |
+| `Status` | Filter by route status |
+| `Search` | Free-text search across route name, code, notes, or ID |
+
+## Create a route
+
+<EndpointCard
+  title="Create New Route"
+  href="/reference/lynx/scheduling/create-route"
+  method="post"
+/>
+
+Use the following example to create a route:
+
+```sh
+curl --request POST \
+     --url "https://qa-lynx.nayax.com/operational/v1/Scheduling/routes?OperatorId={OperatorId}" \
+     --header 'Authorization: Bearer <YOUR_TOKEN>' \
+     --header 'Content-Type: application/json' \
+     --data '{
+       "OperatorId": 0,
+       "RouteName": "Monday Route",
+       "RouteCode": "MON-01",
+       "DriverId": 0,
+       "RouteRemarks": "",
+       "RouteStatusId": 1
+     }'
+```
+
+## Update a route
+
+<EndpointCard
+  title="Update Route"
+  href="/reference/lynx/scheduling/update-route"
+  method="put"
+/>
+
+Pass `routeId` as a query parameter and include the updated route fields in the request body.
+
+## Assign machines to a route
+
+<Columns cols={2}>
+<EndpointCard
+  title="Assign Machine to Route"
+  href="/reference/lynx/scheduling/assign-machine-to-route"
+  method="post"
+/>
+<EndpointCard
+  title="Get Route Machines"
+  href="/reference/lynx/scheduling/get-route-machines"
+  method="get"
+/>
+</Columns>
+
+<EndpointCard
+  title="Remove Machine from Route"
+  href="/reference/lynx/scheduling/remove-machine-from-route"
+  method="delete"
+/>
+
+To assign one or more machines, pass the `RouteId` as a query parameter and provide an array of `MachineIds` in the request body:
+
+```json
+[1002511581, 1002511582]
+```
+
+## Next steps
+
+<CardGroup cols={1}>
+  <Card
+    title="Drivers and Tasks"
+    icon="users"
+    href="/docs/manage-data-operations/lynx-api/scheduling/drivers-and-tasks"
+  >
+    Add drivers and schedule machine tasks and visit orders for the routes you created.
+  </Card>
+</CardGroup>

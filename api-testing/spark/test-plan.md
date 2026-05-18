@@ -1,98 +1,150 @@
 # API Test Plan — Spark (Nayax)
 
-**Date:** {/* YYYY-MM-DD */}  
-**Tester:** Anayse Benedito  
-**Product scope:** Spark — RemoteStart V2  
-**OpenAPI spec:** `openapi/spark.yaml`  
-**Bruno collection:** `api-testing/spark/collection/`  
-**Bruno environment:** `api-testing/spark/collection/environments/sandbox.bru`  
-
-## Objective
-
-{/*
-One sentence: what flow or behavior you are verifying in this run.
-Example: "Verify that the Spark payment flow (StartSession → TriggerTransaction → Settlement)
-returns the correct response codes and fields as defined in openapi/spark.yaml."
-*/}
-
-## Prerequisites checklist
-
-- [ ] Sandbox API key filled in `sandbox.bru`
-- [ ] Sandbox base URL confirmed (replace default `nayax-spark-dmz.nayax.com` if different)
-- [ ] `SITE_ID` filled in `sandbox.bru`
-- [ ] Confirmed with Marcos which endpoints can be tested without a physical device
-- [ ] Reviewed onboarding doc from Nayax
-
-## Available endpoints (Spark spec)
-
-| Endpoint | Method | Needs device? | Notes |
-|----------|--------|---------------|-------|
-| `/Version` | GET | No | Simple health check — good first test |
-| `/InfoQuery` | POST | TBC | Query machine/site info |
-| `/AvailabilityCheck` | POST | TBC | Check if site is available |
-| `/StartAuthentication` | POST | TBC | Authenticate before session |
-| `/StartSession` | POST | Likely yes | Opens session on device |
-| `/TriggerTransaction` | POST | Likely yes | Triggers payment on device |
-| `/TransactionCallback` | POST | Callback | Nayax calls your server |
-| `/TransactionNotify` | POST | Callback | Nayax calls your server |
-| `/ExternalCancel` | POST | Needs tx ID | Cancels authorized transaction |
-| `/ExternalSettlement` | POST | Needs tx ID | Settles a transaction |
-| `/CancelTransaction` | POST | Likely yes | |
-| `/Settlement` | POST | Needs tx ID | |
-| `/StopNotify` | POST | Callback | |
-| `/StopCallback` | POST | Callback | |
-| `/DeclineCallback` | POST | Callback | |
-| `/TimeoutCallback` | POST | Callback | |
-
-> Callback endpoints (`*Callback`, `*Notify`) are called **by Nayax** to your server — they cannot be directly tested outbound. Exclude from this run.
-
-## Test cases for this run
-
-{/* Fill in the specific endpoints you will test. Start simple: /Version first, then build up. */}
-
-| # | Endpoint | Method | Objective | Expected status | Expected key fields |
-|---|----------|--------|-----------|-----------------|---------------------|
-| 1 | /Version | GET | Confirm API is reachable and returns version | 200 | `version`, `build` (or similar) |
-| 2 | | | | | |
-| 3 | | | | | |
-
-## Flow sequence (if endpoints depend on each other)
-
-{/*
-If testing a multi-step flow, list the sequence and what to capture between steps.
-Example:
-1. POST /StartAuthentication → capture `token` from response
-2. POST /StartSession using captured `token` → capture `sessionId`
-3. POST /TriggerTransaction using `sessionId`
-4. POST /ExternalCancel using `NayaxTransactionID` from step 3
-*/}
-
-1. 
-
-## Success criteria
-
-{/*
-What does "this run passed" mean?
-Example: "All tested endpoints return the status code in the spec.
-Field names in responses match the schema in openapi/spark.yaml.
-No unexpected 4xx or 5xx errors."
-*/}
+**Date:** 2026-05-15
+**Tester:** Anayse Benedito
+**Product scope:** Spark — RemoteStart V2
+**OpenAPI spec:** `openapi/spark.yaml`
+**Bruno collection:** `api-testing/spark/collection/`
+**Bruno environment:** `api-testing/spark/collection/environments/sandbox.bru`
 
 ---
 
-## How to run
+## Architecture
 
-Open Claude Code in this repo and use this prompt:
+Spark is a **bidirectional** API. The spec defines both sides:
 
+**Integrator calls Nayax** (`nayax-spark-dmz.nayax.com/api`):
+- `GET /Version` — no auth, confirmed working
+- `POST /StartAuthentication` — requires AES cipher + Sign Key
+- `POST /TriggerTransaction` — requires active SparkTransactionId + physical device
+- `POST /ExternalCancel` — requires NayaxTransactionId from a live transaction
+- `POST /ExternalSettlement` — requires NayaxTransactionId from a live transaction
+- `POST /CancelTransaction` — requires active SparkTransactionId
+- `POST /Settlement` — requires active SparkTransactionId
+
+**Nayax calls the integrator** (your server — implement these):
+- `POST /StartSession`
+- `POST /InfoQuery`
+- `POST /AvailabilityCheck`
+- `POST /TransactionCallback`
+- `POST /TransactionNotify`
+- `POST /TimeoutCallback`
+- `POST /StopNotify`
+- `POST /StopCallback`
+- `POST /DeclineCallback`
+
+---
+
+## Authentication
+
+Two HTTP headers required on all POST requests:
+
+| Header | Value |
+|--------|-------|
+| `IntegratorId` | Your Sign Key ID (numeric) |
+| `TransactionSignature` | SHA-256(`{SparkTransactionId};{SignKey}`, UTF-8) |
+
+### Cipher for /StartAuthentication
+
+Build a 64-character plaintext string:
+
+| Part | Characters | Value |
+|------|-----------|-------|
+| SparkTransactionId | 1–36 | Fresh UUID per session |
+| Separator | 37 | `=` |
+| Random string | 38–54 | 17-char alphanumeric |
+| Timestamp | 55–64 | Current UTC in `YYMMDDhhmm` |
+
+Encrypt with **AES-256 ECB** using the **last 32 characters** of the Secret Token as the key. Base64-encode the result.
+
+The timestamp has a **5-minute validity window** — sync your server clock to UTC.
+
+**PowerShell helper for TransactionSignature:**
+
+```powershell
+function Get-SparkSignature($sparkTransactionId, $signKey) {
+    $payload = "$sparkTransactionId;$signKey"
+    $bytes = [System.Text.Encoding]::UTF8.GetBytes($payload)
+    $sha256 = [System.Security.Cryptography.SHA256]::Create()
+    $hash = $sha256.ComputeHash($bytes)
+    return ($hash | ForEach-Object { "{0:x2}" -f $_ }) -join ""
+}
+
+$sig = Get-SparkSignature "12c7cec2-c690-4425-9a1f-db0db60e2d8c" "YourSignKey"
+Write-Host "TransactionSignature: $sig"
 ```
-Follow the API testing instructions in CLAUDE.md.
-Test plan: api-testing/spark/test-plan.md
-OpenAPI spec: openapi/spark.yaml
-Bruno collection: api-testing/spark/collection/
-Bruno environment: api-testing/spark/collection/environments/sandbox.bru
 
-Test each endpoint in the sequence defined in the test plan, one at a time.
-Save each result as a Bruno example. Write the final report to api-testing/spark/reports/api-test-report.md.
-```
+---
 
-> Start this in off-hours — a full run takes 30+ minutes and is heavy on Claude token usage.
+## Base URL
+
+| Environment | URL |
+|-------------|-----|
+| Sandbox / integration | `https://nayax-spark-dmz.nayax.com/api` |
+| Production | `https://api.nayax.com` (do not use for testing) |
+
+Note: The docs show `api.nayax.com` in curl examples — confirm which host is correct for sandbox with Nayax.
+
+---
+
+## Prerequisites checklist
+
+- [ ] Sign Key (16 chars) received from Nayax
+- [ ] Sign Key ID (numeric) received from Nayax
+- [ ] Secret Token (66 chars) received from Nayax
+- [ ] Token ID (numeric) received from Nayax
+- [ ] `sandbox.bru` filled in with credentials
+- [ ] A physical Nayax terminal configured for Spark (HW serial number known)
+- [ ] Integrator server running to receive inbound callbacks (`/TransactionCallback`, `/StartSession`, etc.)
+- [ ] Nayax has the integrator's callback URL configured
+
+---
+
+## Test sequence (once credentials are available)
+
+Step 1 and 2 only require credentials. Steps 3+ require a physical device.
+
+1. **GET /Version** — confirm sandbox is reachable (confirmed — no credentials needed)
+2. **POST /StartAuthentication** — authenticate; capture `SparkTransactionId` from response
+3. **POST /TriggerTransaction** — wake physical terminal; wait for card tap
+4. **(Inbound) /TransactionCallback** — Nayax sends card auth result to your server; capture `NayaxTransactionId`
+5. **POST /Settlement** — settle using `SparkTransactionId` + `NayaxTransactionId`
+   — or —
+   **POST /ExternalCancel** — if cancelling instead of settling
+
+For ExternalCancel/ExternalSettlement (alternative flow without a full Spark session):
+- These only need a `NayaxTransactionId` and `SiteId` from any prior real transaction
+- Can be tested in isolation once you have a live transaction from another source
+
+---
+
+## Available endpoints
+
+| # | Endpoint | Method | Direction | Needs device? |
+|---|----------|--------|-----------|---------------|
+| 1 | /Version | GET | → Nayax | No — confirmed working |
+| 2 | /StartAuthentication | POST | → Nayax | No (but needs credentials) |
+| 3 | /TriggerTransaction | POST | → Nayax | Yes |
+| 4 | /ExternalCancel | POST | → Nayax | Needs NayaxTransactionId |
+| 5 | /ExternalSettlement | POST | → Nayax | Needs NayaxTransactionId |
+| 6 | /CancelTransaction | POST | → Nayax | Yes |
+| 7 | /Settlement | POST | → Nayax | Yes |
+| 8 | /StartSession | POST | Nayax → | Implement on your server |
+| 9 | /InfoQuery | POST | Nayax → | Implement on your server |
+| 10 | /AvailabilityCheck | POST | Nayax → | Implement on your server |
+| 11 | /TransactionCallback | POST | Nayax → | Implement on your server |
+| 12 | /TransactionNotify | POST | Nayax → | Implement on your server |
+| 13 | /TimeoutCallback | POST | Nayax → | Implement on your server |
+| 14 | /StopNotify | POST | Nayax → | Implement on your server |
+| 15 | /StopCallback | POST | Nayax → | Implement on your server |
+| 16 | /DeclineCallback | POST | Nayax → | Implement on your server |
+
+---
+
+## Reference docs
+
+- `docs/integrate-pos-device/spark/security-authentication/spark-authentication.mdx` — auth header details
+- `docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark.mdx` — full flow diagrams
+- `docs/integrate-pos-device/spark/payment-flows/external-cancel.mdx` — ExternalCancel flow
+- `docs/integrate-pos-device/spark/payment-flows/external-settlement.mdx` — ExternalSettlement flow
+- `docs/integrate-pos-device/spark/sample-codes/spark-authentication-code-sample.mdx` — cipher code examples

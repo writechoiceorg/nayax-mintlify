@@ -102,6 +102,22 @@ In the body parameters, fill in the following:
 
 A successful request will return a response with the created operator details.
 
+### Create Operator — v2
+
+A v2 endpoint is also available at `POST /operational/v2/actors/{ParentActorID}`. The v2 request body differs from v1 in the following ways:
+
+<Warning>
+**v2 Field Differences**
+
+| v1 field | v2 equivalent | Notes |
+|----------|--------------|-------|
+| `ActorStatus` | `StatusID` | Field was renamed in v2 |
+| *(not present)* | `ActorBillingPlanID` | **Required** in v2. An invalid or missing value returns `400 Bad Request`. Contact your Nayax distributor to obtain valid billing plan IDs for your account. |
+| *(not present)* | `ActorBillingGateways` | Array of billing gateway objects. |
+
+Use the v1 endpoint unless you specifically need billing plan or gateway configuration at creation time.
+</Warning>
+
 ## Verify Creation
 
 You can check if your operator was correctly created in Nayax Core in the `Operators` menu.

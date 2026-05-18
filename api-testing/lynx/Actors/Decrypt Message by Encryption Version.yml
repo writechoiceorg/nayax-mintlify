@@ -1,0 +1,46 @@
+﻿info:
+  name: Decrypt Message by Encryption Version
+  type: http
+  seq: 14
+
+http:
+  method: PUT
+  url: https://qa-lynx.nayax.com/operational/v1/actors/DecryptionMessageByVer
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  params:
+    - name: actorID
+      value: ""
+      type: query
+      enabled: true
+    - name: encVer
+      value: ""
+      type: query
+      enabled: true
+  body:
+    type: json
+    data: |
+      ""
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 403 Forbidden — permissions not granted for sandbox token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/actors/DecryptionMessageByVer
+      method: PUT
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}

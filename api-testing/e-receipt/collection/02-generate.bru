@@ -1,0 +1,69 @@
+meta {
+  name: Generate Receipt
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/v1/eReceiptPlatform/Generate
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "paymentInfo": {
+      "nayaxTransactionId": 0,
+      "authCode": "",
+      "settAmount": 0.00,
+      "currencyCode": "USD",
+      "siteId": 0,
+      "paymentType": 0
+    },
+    "receiptDetails": {
+      "totalAmount": 0.00,
+      "totalProductCount": 1
+    },
+    "machineInfo": {
+      "hwSerial": "DEVICE_HW_SERIAL",
+      "nayaxMachineId": 0,
+      "nayaxMachineName": "Machine Name",
+      "machineType": 0
+    },
+    "actorInfo": {
+      "nayaxActorId": 0,
+      "actorName": "Merchant Name",
+      "ereceiptProviderId": 0
+    },
+    "cardData": {
+      "cardLast4Digits": "1111",
+      "cardBrand": "VISA"
+    },
+    "products": [
+      {
+        "productCode": "PROD001",
+        "productName": "Test Product",
+        "price": 0.00,
+        "unitOfMeasurement": "each",
+        "measurement": 1
+      }
+    ]
+  }
+}
+
+docs {
+  Direction: Integrator → Nayax
+  Auth: None declared in spec.
+
+  Note: Lynx eReceipt (403-gated) uses field names TrasactionID / TrasactionSiteID (typo).
+  This spec uses nayaxTransactionId and siteId — confirm with Nayax which is correct.
+
+  paymentType enum: 0-7 (values undocumented in spec)
+  machineType enum: 0-48 (values undocumented in spec)
+
+  Spec path: POST /v1/eReceiptPlatform/Generate
+}

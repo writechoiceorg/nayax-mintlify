@@ -1,0 +1,45 @@
+meta {
+  name: Get Card Token
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/get-card-token
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "basicInfo": {
+      "merchantRequestId": "REQ_GETTOKEN_001"
+    },
+    "machineInfo": {
+      "machineId": "{{machine_id}}"
+    },
+    "cardHolderInfo": {
+      "cardHolderUniqId": "unique_customer_id_123"
+    },
+    "tokenInfo": {
+      "nayaxTokenId": "NAYAX_TOKEN_ID"
+    },
+    "validationKey": "{{validation_key}}"
+  }
+}
+
+docs {
+  Direction: Integrator → Nayax
+  Auth: validationKey from /validate-merchant.
+
+  Retrieves metadata for a saved card token: last 4 digits, expiry, brand, token status.
+  tokenStatus enum: 0=Active, 1=Expired, 2=Suspended, 3=Deleted
+
+  Prerequisite: must have a nayaxTokenId from a prior COF /initialize response.
+
+  Spec path: POST /get-card-token
+}

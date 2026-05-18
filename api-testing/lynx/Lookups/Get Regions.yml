@@ -1,0 +1,42 @@
+﻿info:
+  name: Get Regions
+  type: http
+  seq: 18
+
+http:
+  method: GET
+  url: https://qa-lynx.nayax.com/operational/v1/regions
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  params:
+    - name: CountryID
+      value: ""
+      type: query
+      enabled: true
+    - name: RegionID
+      value: ""
+      type: query
+      enabled: true
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 403 Forbidden
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/regions
+      method: GET
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}

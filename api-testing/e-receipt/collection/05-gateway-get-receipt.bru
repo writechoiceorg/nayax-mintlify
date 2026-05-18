@@ -1,0 +1,50 @@
+meta {
+  name: Gateway Get Receipt
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/v1/Gateway/GetReceipt
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "paymentInfo": {
+      "nayaxTransactionId": 0,
+      "authCode": "",
+      "settAmount": 0.00,
+      "currencyCode": "USD",
+      "siteId": 0,
+      "paymentType": 0
+    },
+    "machineInfo": {
+      "hwSerial": "DEVICE_HW_SERIAL",
+      "nayaxMachineId": 0,
+      "machineType": 0
+    },
+    "actorInfo": {
+      "nayaxActorId": 0,
+      "actorName": "Merchant Name",
+      "ereceiptProviderId": 0
+    }
+  }
+}
+
+docs {
+  Direction: Integrator → Nayax
+  Auth: None declared in spec.
+
+  Retrieves receipt information via the gateway using payment and machine details.
+  Returns receiptDetails including receiptUrl and receiptId.
+
+  Prerequisite: must have a valid nayaxTransactionId from a completed transaction.
+
+  Spec path: POST /v1/Gateway/GetReceipt
+}

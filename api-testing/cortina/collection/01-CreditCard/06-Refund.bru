@@ -1,0 +1,38 @@
+meta {
+  name: CreditCard Refund
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/Cortina/CreditCard/Refund
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "TransactionId": "{{transaction_id}}",
+      "SiteId": 1,
+      "Amount": 5.00,
+      "RefundAmount": 5.00,
+      "CurrencyCode": "ILS"
+    },
+    "ActorInfo": {
+      "Id": 2001537302,
+      "MerchantId": "999999888885",
+      "Name": "TestPayCC V2 OP"
+    },
+    "MachineInfo": {
+      "Id": 106791869,
+      "Name": "Test Machine",
+      "TerminalId": "8888888844"
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Refunds a previously settled transaction. RefundAmount may be partial (less than or equal to original Amount).
+}

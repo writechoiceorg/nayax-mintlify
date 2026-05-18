@@ -1,0 +1,48 @@
+﻿info:
+  name: Create Product Group Tax
+  type: http
+  seq: 8
+
+http:
+  method: POST
+  url: https://qa-lynx.nayax.com/operational/v1/productGroups/{ProductGroupID}/tax
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  body:
+    type: json
+    data: |
+      [
+        {
+          "CountryID": 0,
+          "CityID": 0,
+          "RegionID": 0,
+          "TaxValue": 0,
+          "TaxCode": 0,
+          "VatName": "",
+          "TaxId": "",
+          "TaxIncluded": false
+        }
+      ]
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 403 Forbidden — permissions not granted for sandbox token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/productGroups/{ProductGroupID}/tax
+      method: POST
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}

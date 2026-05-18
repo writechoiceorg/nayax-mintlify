@@ -1,0 +1,41 @@
+﻿info:
+  name: Validate Card for Machine
+  type: http
+  seq: 10
+
+http:
+  method: GET
+  url: https://qa-lynx.nayax.com/operational/v1/cards/validate-machine/{machineId}
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  params:
+    - name: cardId
+      value: ""
+      type: query
+      enabled: true
+    - name: cardUniqueIdentifier
+      value: ""
+      type: query
+      enabled: true
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK — response not yet captured, re-run to save
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/cards/validate-machine/{machineId}
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: text
+        data: ""

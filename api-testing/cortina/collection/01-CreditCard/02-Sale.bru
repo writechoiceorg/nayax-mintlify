@@ -1,0 +1,47 @@
+meta {
+  name: CreditCard Sale
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/Cortina/CreditCard/Sale
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "Amount": 5.00,
+      "CurrencyCode": "ILS",
+      "SiteId": 1,
+      "TransactionId": "N99O4XURDQYJZIK4OTCAWF1RHHA40TZWVCRB"
+    },
+    "CardData": {
+      "CardNumber": "411111111111",
+      "ExpMonth": "12",
+      "ExpYear": "27",
+      "EntryMode": "CON"
+    },
+    "ActorInfo": {
+      "Id": 2001537302,
+      "MerchantId": "999999888885",
+      "Name": "TestPayCC V2 OP"
+    },
+    "MachineInfo": {
+      "Id": 106791869,
+      "Name": "Test Machine",
+      "TerminalId": "8888888844"
+    },
+    "DeviceInfo": {
+      "HwSerial": "434324119376526",
+      "FWVersion": "4.0.0.22"
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Combined authorization and capture in a single call. Integrator calls payment processor and returns Approved/Declined.
+}

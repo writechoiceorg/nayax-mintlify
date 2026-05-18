@@ -1,0 +1,17 @@
+meta {
+  name: Version
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/Version
+  body: none
+  auth: none
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Retrieves the version of the integrator's Cortina implementation.
+  Nayax uses this to verify compatibility before onboarding or transacting.
+}

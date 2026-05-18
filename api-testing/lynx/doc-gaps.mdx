@@ -1,0 +1,211 @@
+# Lynx API — Documentation Gaps
+
+**Prepared by:** Anayse Benedito
+**Based on:** API testing rounds, May 2026
+**Status:** Working document — share with Nayax team before next review cycle
+
+---
+
+## How to read this document
+
+Each gap is rated **High**, **Medium**, or **Low** based on how likely it is to block a developer mid-integration. Items marked **Pending Nayax** require a fix on the server or account side before they can be closed.
+
+---
+
+## 1. Authentication
+
+**Priority: High**
+
+The authentication story is the first thing a developer encounters and currently contains a misleading signal.
+
+The Bruno collection and the API reference both include a `POST /v1/signin` endpoint. A developer's natural assumption is: *call sign-in, receive a token, use the token*. That is not how the Lynx API works. `POST /v1/signin` returns `{"ok": true}` — no token, no session identifier, nothing the developer can use. The actual bearer token is a static credential that must be retrieved manually from the Nayax Core back office (Account Settings → Security and Login → User Tokens).
+
+**What's missing:**
+
+- An explicit statement that `POST /v1/signin` does **not** issue tokens, and an explanation of what it actually does
+- A clear "before you start" checklist at the top of the authentication page:
+  1. You need a Nayax Core account
+  2. An operator must be configured in Core
+  3. A token must be retrieved from Core UI before any API call will work
+- No mention of token lifetime — do they expire? Can you have multiple tokens? Can they be revoked?
+- The `curl` example in `security.mdx` uses `lynx.nayax.com` with no mention of the sandbox base URL (`qa-lynx.nayax.com`) — developers in the integration phase will not know which host to use and will either hit production or get confused
+
+---
+
+## 2. Permission tiers
+
+**Priority: High**
+
+Testing discovered at least three distinct permission levels. None of them are documented anywhere. Developers who hit a `403 Insufficient Permissions` response have no guidance on what it means or what to do about it.
+
+The three tiers observed:
+
+| Tier | What it covers | How to get it |
+|------|---------------|---------------|
+| Standard operator token | Most read operations, machines, cards, inventory, products, reports, payment methods | Retrieved from Core UI by default |
+| Elevated permission | Encryption keys, eReceipt generation, Metadata event rules and image upload, Refund workflow (all four endpoints), Regions lookup | Unknown — must be requested from Nayax |
+| Scheduling permission | All 16 endpoints under `/v1/Scheduling/` | Unknown — separate from elevated permission above |
+
+**What's missing:**
+
+- Any mention that certain endpoint groups require elevated permissions
+- Instructions on how a developer requests elevated access — who to contact and what to ask for
+- The `error-handling.mdx` page now lists which endpoints return 403, which is a good start, but it stops short of telling the developer how to get those permissions
+
+---
+
+## 3. Cards
+
+**Priority: High**
+
+### 3a. GET /v1/cards — response format changed without documentation
+
+The `GET /v1/cards` endpoint now returns a **nested** response structure:
+
+```json
+{
+  "CardDetails": { "CardID": ..., "CardType": ... },
+  "CardHolderDetails": { ... },
+  "CardCreditAttributes": { ... }
+}
+```
+
+The docs and all existing examples show the old **flat** format with `CardID`, `CardType`, and `CardPhysicalType` at the top level. Any integration code written against the documented response will break. There is no changelog entry or deprecation notice.
+
+The v1 endpoint (`GET /v1/cards`) and v2 endpoint (`GET /v2/cards`) currently return the same nested structure. It is unclear whether the flat v1 format is deprecated or whether this is an unintentional change.
+
+**Action needed:** Confirm with the Nayax team whether the v1 response format change is intentional. Update the docs and YAML examples to reflect the current response.
+
+### 3b. Update Prepaid Card — undocumented required fields
+
+`PUT /v1/cards/{CardId}/prepaid` requires three fields that are not marked as required in the spec and not mentioned in any guide page:
+
+- `CreditAmountDailyLimit`
+- `CreditAmountMonthlyLimit`
+- `CreditAmountMonthlyReload`
+
+The endpoint returns a cascading series of 400 errors until all three are included. A developer following the documented request body will fail on every attempt.
+
+### 3c. CardPhysicalType required but not marked as required
+
+Both `POST /v1/cards` (create) and `PUT /v1/cards` (update) fail with `400 "The field CardPhysicalType is not valid"` when this field is missing. The OpenAPI spec marks the field as `nullable: true`, giving no indication it is required. The valid values are also undocumented — only the value `2` has been confirmed to work.
+
+### 3d. Cards v2 field names differ from v1, undocumented
+
+The v2 card endpoints use different field names. The docs and collection examples do not reflect this:
+
+| v1 field name | v2 field name |
+|--------------|--------------|
+| `CardType` | `CardTypeID` |
+| `CardStatus` | `Status` |
+| *(not present)* | `PhysicalTypeID` |
+
+### 3e. Get Credit Card Latest Transactions — body format undocumented
+
+`POST /v1/cards/query` requires the request body to be the **SHA1 hash of the card number, encoded as base64**, wrapped as a JSON string. This is mentioned in the OpenAPI spec but not in any guide page. Developers sending a standard JSON body will receive a cryptic 500 error ("Invalid Hex String").
+
+**Note:** As of the most recent test (2026-05-15) this endpoint returns 405 Method Not Allowed, suggesting it may have been removed or its method changed. Needs confirmation from the Nayax team.
+
+---
+
+## 4. Machine creation — enum values
+
+**Priority: Medium**
+
+`POST /v1/machines` requires `SalesSourceID`, `MachineTypeID`, and `MachineModelID`. All three are integer fields. The OpenAPI spec defines them as `int32` with no enum values and no reference to a lookup endpoint. There is no way for a developer to discover valid values without calling support.
+
+Valid values confirmed from sandbox testing:
+
+| Field | Confirmed value | Description |
+|-------|----------------|-------------|
+| `SalesSourceID` | `30000512` | Standard vending |
+| `MachineTypeID` | `30000515` | Standard machine type |
+| `MachineModelID` | `499349689` | Test model used in sandbox |
+
+**Action needed:** Either add these values to the Create Machine guide as examples, or confirm whether a lookup endpoint exists that returns valid `SalesSourceID` and `MachineTypeID` values (none was found during testing).
+
+---
+
+## 5. Payment methods on machines — no guide page
+
+**Priority: Medium**
+
+The four payment method endpoints for machines all work correctly:
+
+- `GET /v1/machines/{id}/paymentMethods`
+- `POST /v1/machines/{id}/paymentMethods`
+- `PUT /v1/machines/{id}/paymentMethods`
+- `DELETE /v1/machines/{id}/paymentMethods/{paymentMethodID}`
+
+But there is no guide page for them. The existing machines documentation covers machine CRUD and attributes but does not mention payment method management at all.
+
+A guide page (or section within an existing machine page) should cover:
+
+1. How to list payment methods available on your operator account — `GET /v1/paymentMethods`
+2. How to assign a payment method to a machine — `POST` with `PaymentMethodID`
+3. What `create_payment_method_not_available` means and how to resolve it (the payment method must first be enabled at operator level in Nayax Core before it can be assigned to a machine)
+4. How to update convenience fee settings — `PUT` with `ConvenienceFeeValue`
+5. How to remove a payment method — `DELETE`
+
+---
+
+## 6. CountryID — two different systems, no warning
+
+**Priority: Medium**
+
+There are two different `CountryID` formats in the Lynx API and no documentation that explains the difference:
+
+- **Actor endpoints** (create/update actor) use the **ISO 3166-1 numeric code** — for example, `840` for the United States
+- **Lookup endpoints** for states and cities use Nayax's **internal ID** — for example, `225` for the United States
+
+Passing the ISO code to `GET /v1/states?CountryID=840` returns 404. A developer who copies `CountryID` from an actor record and uses it in a lookup call will get a silent failure with no explanation.
+
+A note was added to `reference-data.mdx` during this testing cycle, which is a good start. The same warning should appear inline in the States and Cities endpoint reference pages, as that is where a developer is most likely to make this mistake.
+
+---
+
+## 7. Other gaps
+
+**Priority: Low**
+
+### 7a. ProductGroupCode silently ignored
+
+`ProductGroupCode` can be submitted in the request body for both `POST /v1/productGroups` and `PUT /v1/productGroups/{id}`. It is accepted without error but returns `null` in the response — the value is never persisted. This should be marked `readOnly: true` in the spec, or documented as internally managed, so developers don't waste time debugging why the field never takes.
+
+### 7b. Move Devices — empty array on no match
+
+`PUT /v1/devices/move/{actorId}` returns `200 OK` with an empty array `[]` when the submitted serial numbers don't match any device. A developer may interpret the 200 as success and not realise no devices were moved. The empty array case should be documented with a note that it indicates no matching devices were found.
+
+### 7c. Create Pick List — empty response body
+
+`POST /v1/machines/{MachineID}/pickList` returns 200 with an empty body. There is no way to confirm what was created without a subsequent GET call. The expected response should be documented — either explicitly noting that the body is empty by design, or flagging it as a server-side issue if a response object was intended.
+
+### 7d. v2 Actor creation — BillingPlanID with no lookup
+
+`POST /v2/actors/{ParentActorID}` fails with `400 "Billing plan ID invalid"` unless a valid `ActorBillingPlanID` is provided. There is no lookup endpoint that returns available billing plan IDs, and no guidance in the docs on how to find one. This should either have a lookup endpoint documented or be called out as requiring setup via Nayax Core before the endpoint can be used.
+
+### 7e. eReceipt field name typos
+
+The `TrasactionID` and `TrasactionSiteID` fields in the eReceipt endpoint body (and in the OpenAPI spec) are misspelled — the `n` is missing from `Transaction`. The API accepts the misspelled variants. Any developer who types the correctly-spelled `TransactionID` will send a field the server silently ignores. This needs a server-side fix with a deprecation path for the misspelled names.
+
+---
+
+## Items confirmed fixed in this testing cycle
+
+These were gaps at the start of testing and are now resolved:
+
+| Gap | Resolution |
+|-----|-----------|
+| `POST /v1/signin` response not explained | Note added to `security.mdx` |
+| Encryption key endpoints — 403 with no explanation | `security.mdx` updated with elevated permission warning |
+| All 403 permission-gated endpoints not documented | `error-handling.mdx` page added listing all affected endpoints |
+| Scheduling section — no docs at all | `scheduling/index.mdx`, `routes.mdx`, `drivers-and-tasks.mdx` added |
+| CountryID mismatch between actor and lookup endpoints | Warning added to `reference-data.mdx` |
+| CardPhysicalType required, missing from YAML templates | Fixed in collection |
+| Cards v2 wrong field names in collection | Fixed in collection |
+| SalesSourceID invalid example in Update Machine YAML | Fixed in collection |
+| Get Cards — no search param causes 400 | Fixed in collection |
+| Update Prepaid Card — missing credit limit fields | Fixed in collection and confirmed passing |
+| Create New Machine — missing valid field values | Fixed in collection; confirmed passing |
+| Payment methods endpoints — all 4 blocked | Resolved by Nayax enabling methods on sandbox operator account |
+| Internal URL leaked in Reports error response | Logged as security issue for Nayax team |

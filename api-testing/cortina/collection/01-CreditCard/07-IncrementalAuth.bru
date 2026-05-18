@@ -1,0 +1,37 @@
+meta {
+  name: CreditCard IncrementalAuth
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{base_url}}/Cortina/CreditCard/IncrementalAuth
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "Amount": 2.00,
+      "CurrencyCode": "ILS",
+      "SiteId": 1,
+      "TransactionId": "{{transaction_id}}"
+    },
+    "ActorInfo": {
+      "Id": 2001537302,
+      "MerchantId": "999999888885",
+      "Name": "TestPayCC V2 OP"
+    },
+    "MachineInfo": {
+      "Id": 106791869,
+      "Name": "Test Machine",
+      "TerminalId": "8888888844"
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Increases the authorized amount on an existing authorization. Amount is the incremental amount to add.
+}

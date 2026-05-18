@@ -5,6 +5,18 @@ info:
   description: >-
     API for managing the lifecycle of digital receipts, including generation,
     status retrieval, refunds, and voids.
+
+
+    **Integration direction:** The `/eReceiptPlatform/` endpoints (`/Generate`,
+    `/Refund`, `/Void`, `/StartSession`) are implemented on the eReceipt
+    provider's server. Nayax calls these endpoints when a transaction occurs.
+    The base URL Nayax uses is configured per actor via the `ereceiptProviderUrl`
+    field; there is no single fixed server URL for these endpoints.
+
+
+    The `/Gateway/GetReceipt`, `/GetReceipt`, and `/Retry` endpoints may be
+    hosted by Nayax. Contact your Nayax integration engineer for the applicable
+    base URL.
 paths:
   /v1/eReceiptPlatform/Generate:
     post:
@@ -13,6 +25,8 @@ paths:
       summary: Generate Digital Receipt
       x-mint:
         content: |
+          **Direction: Nayax calls your server.** Implement this endpoint on your eReceipt provider server. Nayax sends a POST request to `{ereceiptProviderUrl}/v1/eReceiptPlatform/Generate` after a transaction completes.
+
           Generates a new digital receipt using transaction, machine, and product data.
       requestBody:
         content:
@@ -48,6 +62,8 @@ paths:
       summary: Refund Transaction
       x-mint:
         content: |
+          **Direction: Nayax calls your server.** Implement this endpoint on your eReceipt provider server.
+
           Processes a refund for a transaction and generates an updated or
           specific refund receipt.
       requestBody:
@@ -83,7 +99,10 @@ paths:
         - Operations
       summary: Void Transaction
       x-mint:
-        content: Voids a transaction and its associated digital receipt.
+        content: |
+          **Direction: Nayax calls your server.** Implement this endpoint on your eReceipt provider server.
+
+          Voids a transaction and its associated digital receipt.
       requestBody:
         content:
           application/json-patch+json:
@@ -118,6 +137,8 @@ paths:
       summary: Start Session
       x-mint:
         content: |
+          **Direction: Nayax calls your server.** Implement this endpoint on your eReceipt provider server. Nayax sends the session token and a `dynamicURL`, which it will use as the base URL for all subsequent calls (`/Generate`, `/Refund`, `/Void`) within this transaction session.
+
           Initiates a session between the device and the platform to prepare for
           receipt generation.
       requestBody:

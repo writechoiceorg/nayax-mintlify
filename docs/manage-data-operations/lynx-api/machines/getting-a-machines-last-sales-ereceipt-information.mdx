@@ -351,6 +351,12 @@ You can also find the Machine's Last Sales in Nayax Core in the machine's detail
 
 ## Generating eReceipt
 
+<Warning>
+**Elevated Permissions Required**
+
+`POST /v1/ereceipt/generate` requires permissions beyond those granted to a standard operator token. Requests with a standard token return `403 Insufficient Permissions`. Contact your Nayax account manager to have eReceipt permissions enabled for your account.
+</Warning>
+
 To generate a transaction's eReceipt, you need to use the [Generate eReceipt](/reference/lynx/ereceipt/generate-ereceipt) endpoint. By providing the following information in the request:
 
 * TransactionID, MachineAuthorizationTime, SiteID - all 3 fields' values are retrieved via the Last Sales method mentioned above

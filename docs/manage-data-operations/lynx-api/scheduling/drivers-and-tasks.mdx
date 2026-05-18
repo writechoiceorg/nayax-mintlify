@@ -1,0 +1,136 @@
+---
+title: "Drivers and Tasks"
+description: "Add drivers, create machine service tasks, and manage visit orders through the Lynx API."
+metadata:
+  og:description: "Use the Lynx API to manage field service drivers, schedule machine tasks, and create visit orders."
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+Drivers are field service users who carry out machine visits. Machine tasks and visit orders define what needs to be done at each machine, combining driver, route, date, and task into a single scheduled work item.
+
+<Warning>
+**Elevated permissions required**
+
+Driver and task management endpoints require permissions beyond a standard operator token. See [Error Handling](/docs/manage-data-operations/lynx-api/error-handling) for details.
+</Warning>
+
+## Drivers
+
+<Columns cols={2}>
+<EndpointCard
+  title="Get Drivers"
+  href="/reference/lynx/scheduling/get-drivers"
+  method="get"
+/>
+<EndpointCard
+  title="Add New Driver"
+  href="/reference/lynx/scheduling/add-driver"
+  method="post"
+/>
+</Columns>
+
+<Columns cols={2}>
+<EndpointCard
+  title="Update Driver"
+  href="/reference/lynx/scheduling/update-driver"
+  method="put"
+/>
+<EndpointCard
+  title="Delete Driver"
+  href="/reference/lynx/scheduling/delete-driver"
+  method="delete"
+/>
+</Columns>
+
+When creating a driver, provide the following fields:
+
+| Field | Description |
+|-------|-------------|
+| `UserId` | The Nayax user ID to associate with this driver |
+| `OperatorId` | The operator under which the driver is registered |
+| `DriverStatusId` | `1` = Active, `2` = Inactive |
+| `StartDate` | Driver start date in ISO 8601 format |
+| `DriverLicense` | Driver license number |
+| `IdNumber` | National ID or employee number |
+| `Skills` | Array of skill IDs assigned to this driver |
+| `WorkingHours` | Array of working hour slot objects |
+
+## Machine Tasks
+
+Machine tasks represent a scheduled service action at a specific machine on a specific date.
+
+<Columns cols={2}>
+<EndpointCard
+  title="Get Machine Tasks"
+  href="/reference/lynx/scheduling/get-machine-tasks"
+  method="get"
+/>
+<EndpointCard
+  title="Create Machine Tasks"
+  href="/reference/lynx/scheduling/create-machine-tasks"
+  method="post"
+/>
+</Columns>
+
+<Columns cols={2}>
+<EndpointCard
+  title="Update Machine Tasks"
+  href="/reference/lynx/scheduling/update-machine-tasks"
+  method="put"
+/>
+<EndpointCard
+  title="Delete Machine Tasks"
+  href="/reference/lynx/scheduling/delete-machine-tasks"
+  method="delete"
+/>
+</Columns>
+
+Key fields when creating a machine task:
+
+| Field | Description |
+|-------|-------------|
+| `MachineId` | The machine to schedule a task for |
+| `TaskLutId` | The type of task (lookup value) |
+| `DriverId` | The driver assigned to this task |
+| `ScheduleDate` | When the task is scheduled (ISO 8601) |
+| `StatusId` | Task status |
+| `GeneratePickList` | `true` to auto-generate a pick list for this visit |
+| `TimezoneOffset` | UTC offset in minutes for the scheduled time |
+| `Pattern` | Recurrence pattern for recurring tasks |
+
+## Visit Orders
+
+Visit orders combine a machine, driver, route, and date into a single actionable work order.
+
+<Columns cols={2}>
+<EndpointCard
+  title="Get Visit Orders"
+  href="/reference/lynx/scheduling/get-visit-orders"
+  method="get"
+/>
+<EndpointCard
+  title="Create Visit Orders"
+  href="/reference/lynx/scheduling/create-visit-orders"
+  method="post"
+/>
+</Columns>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Routes"
+    icon="route"
+    href="/docs/manage-data-operations/lynx-api/scheduling/routes"
+  >
+    Create and manage the routes that drivers and tasks are assigned to.
+  </Card>
+  <Card
+    title="Machine Inventory"
+    icon="boxes-stacked"
+    href="/docs/manage-data-operations/lynx-api/inventory-management/machine-inventory"
+  >
+    Manage pick lists and inventory for the machines on your routes.
+  </Card>
+</CardGroup>

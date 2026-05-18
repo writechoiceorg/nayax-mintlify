@@ -1,0 +1,71 @@
+﻿info:
+  name: Create New Machine
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: https://qa-lynx.nayax.com/operational/v1/machines
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  body:
+    type: json
+    data: |
+      {
+        "ActorID": 2009586082,
+        "CountryID": 30,
+        "CurrencyID": 3,
+        "MachineGroupID": 1002880251,
+        "MachineModelID": 499349689,
+        "MachineName": "Test Machine API",
+        "MachineNumber": "",
+        "MachineStatusBit": 1,
+        "LanguageID": 7,
+        "SalesSourceID": 30000512,
+        "MachineTypeID": 30000515
+      }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK — created successfully (sandbox may return 500)
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/machines
+      method: POST
+      body:
+        type: json
+        data: |
+          {"ActorID":2009586082,"CountryID":30,"CurrencyID":3,"MachineGroupID":1002880251,"MachineModelID":499349689,"MachineName":"Test Machine API","MachineNumber":"","MachineStatusBit":1,"LanguageID":7,"SalesSourceID":30000512,"MachineTypeID":30000515}
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"MachineID":1002524581,"ActorID":2009586082,"CountryID":30,"CurrencyID":3,"LocationID":null,"MachineGroupID":1002880251,"MachineModelID":499349689,"MachineName":"Test Machine API","MachineNumber":"","MachineStatusBit":1,"LanguageID":7,"OperatorActorID":2009586082,"DistributorActorID":2001312062,"SerialNumber":null,"DexType":650,"DexMidnightReadsEnableBit":false,"DexReadInterval":16,"LastUpdated":"2026-05-14T23:24:14.26","AlertRuleSetId":204204101,"CreatedBy":1000294591,"CreatedOn":"2026-05-14T23:24:14.087","Refs":{"machine":"v1/machines/1002524581","actor":"v1/actors/2009586082","country":"v1/countries/30"}}
+  - name: 500 Internal Server Error — known sandbox bug, Nayax investigating
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/machines
+      method: POST
+      body:
+        type: json
+        data: |
+          {"ActorID":2009586082,"CountryID":30,"CurrencyID":3,"MachineGroupID":1002880251,"MachineModelID":499349689,"MachineName":"Test Machine API","MachineNumber":"","MachineStatusBit":1,"LanguageID":7,"SalesSourceID":30000512,"MachineTypeID":30000515}
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"An unexpected error occurred.","isUserError":false,"errorKey":null}

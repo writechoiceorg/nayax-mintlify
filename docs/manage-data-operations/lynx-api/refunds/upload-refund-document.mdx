@@ -16,6 +16,12 @@ In Nayax Core, this is set when accepting or declining a refund by selecting **R
 
 With Lynx API you can also upload the refund documentation to get the `RefundedDocumentUrl`. The endpoint below is used for this:
 
+<Warning>
+**Elevated Permissions Required**
+
+`POST /v1/payment/upload-refund` requires a role with financial permissions. A standard operator token returns `403 Insufficient Permissions`. Contact your Nayax account manager to enable refund permissions for your account.
+</Warning>
+
 <EndpointCard
   title="Upload Refund Documentation"
   href="/reference/lynx/payment/upload-refund-documentation"

@@ -1,0 +1,25 @@
+meta {
+  name: Prepaid Void
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/Cortina/Prepaid/Void
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "TransactionId": "{{transaction_id}}",
+      "SiteId": 1
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Voids a previously authorized prepaid transaction. Releases the reserved funds back to the prepaid account.
+}

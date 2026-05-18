@@ -1,0 +1,37 @@
+meta {
+  name: Prepaid Sale
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/Cortina/Prepaid/Sale
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "Amount": 5.00,
+      "CurrencyCode": "ILS",
+      "SiteId": 1,
+      "TransactionId": "{{transaction_id}}"
+    },
+    "ActorInfo": {
+      "Id": 2001537302,
+      "MerchantId": "999999888885",
+      "Name": "TestPayPrepaid V2 OP"
+    },
+    "MachineInfo": {
+      "Id": 106791869,
+      "Name": "Test Machine",
+      "TerminalId": "8888888844"
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Combined authorization and capture for prepaid. Deducts funds from the prepaid account immediately.
+}

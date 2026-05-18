@@ -1,0 +1,39 @@
+meta {
+  name: DynamicQR GenerateQR
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/Cortina/DynamicQR/GenerateQR
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "ActorInfo": {
+      "Id": 2001102296,
+      "MerchantId": "10011",
+      "Name": "Far East Dev Zone"
+    },
+    "BasicInfo": {
+      "Amount": 0.10,
+      "CurrencyCode": "USD",
+      "SiteId": 12,
+      "TransactionId": "236584335969834429321847829253667359"
+    },
+    "MachineInfo": {
+      "Id": 869761713,
+      "Name": "TestPayDynamicQR V2",
+      "TerminalId": "987654321"
+    },
+    "ChannelId": 19
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Requests the integrator to generate a dynamic QR code for the given transaction amount.
+  The integrator returns a QR code payload that the machine displays to the consumer.
+}

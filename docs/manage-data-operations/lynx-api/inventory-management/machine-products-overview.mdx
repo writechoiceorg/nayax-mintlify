@@ -49,6 +49,12 @@ With Lynx API, you can add one or multiple products to the Machine's Product Map
 Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
 </Warning>
 
+<Note>
+**NayaxProductID must be created first**
+
+The `NayaxProductID` field in the request body must reference an existing product in the system. You cannot use `0` or `null`. Create a product first using `POST /v1/operators/{OperatorID}/products` (see [Create Products](/docs/manage-data-operations/lynx-api/inventory-management/create-products)) and use the returned `NayaxProductID` in your machine product request.
+</Note>
+
 ### Add Machine Product
 
 The Create Machine Products endpoint allows you to create the product map for a machine and add products to it by providing the `MachineID` in the path param of the request. See the example request in the code block below:
@@ -61,20 +67,20 @@ curl --request POST \
      --data '
 [
   {
-    "NayaxProductID": 0,
-    "MDBCode": 0,
-    "PAR": 0,
-    "CashPrice": 0,
-    "CreditCardPrice": 0,
-    "MachinePrice": 0,
-    "RetailPrice": 0,
-    "DEXProductName": "string",
-    "PACode": "string",
-    "PCCode": "string",
+    "NayaxProductID": 999998535696561,
+    "MDBCode": 1,
+    "PAR": 10,
+    "CashPrice": 2.50,
+    "CreditCardPrice": 2.50,
+    "MachinePrice": 2.50,
+    "RetailPrice": 2.50,
+    "DEXProductName": "Product Name",
+    "PACode": "A1",
+    "PCCode": "01",
     "ProductMinimumPickQTY": 0,
     "VendOutAlertThreshold": 0,
-    "PrePaidCardPrice": 0,
-    "OperatorButtonCode": "string",
+    "PrePaidCardPrice": 2.50,
+    "OperatorButtonCode": "1",
     "CommissionValue": 0,
     "ExternalPrepaidPrice": 0
   }
@@ -94,7 +100,7 @@ In the body parameters, fill in the following:
 
 | Parameter               | Description                                                                |
 | ----------------------- | -------------------------------------------------------------------------- |
-| `NayaxProductID`        | A unique identifier for the product in the Nayax system.                   |
+| `NayaxProductID`        | A unique identifier for the product in the Nayax system. Must be a valid product ID — see note above. |
 | `MDBCode`               | The MDB (Multi-Drop Bus) code associated with the product.                 |
 | `PAR`                   | The price adjustment ratio for the product.                                |
 | `CashPrice`             | The price of the product when purchased with cash.                         |
@@ -110,4 +116,3 @@ In the body parameters, fill in the following:
 | `OperatorButtonCode`    | The code used by the operator to select the product manually.              |
 | `CommissionValue`       | The commission value associated with the product.                          |
 | `ExternalPrepaidPrice`  | The price of the product when purchased with an external prepaid solution. |
-

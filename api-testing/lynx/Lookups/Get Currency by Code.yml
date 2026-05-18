@@ -1,0 +1,47 @@
+﻿info:
+  name: Get Currency by Code
+  type: http
+  seq: 11
+
+http:
+  method: GET
+  url: https://qa-lynx.nayax.com/operational/v1/currencies/{CurrencyCode}
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/currencies/USD
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"CurrencyID":1,"CurrencyCode":"USD","CurrencySign":"$","LastUpdated":"2007-06-10T17:10:55.803","ShvaValue":"USD","ShvaCode":2,"CurrencyISONumerical":"840"}
+  - name: 401 Unauthorized — expired or invalid token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/currencies/USD
+      method: GET
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Unauthorized","isUserError":false,"errorKey":null}

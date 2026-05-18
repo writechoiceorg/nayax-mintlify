@@ -1,0 +1,90 @@
+---
+title: "Error Handling"
+description: "Common error codes, permission requirements, and troubleshooting guidance for the Lynx API."
+metadata:
+  og:description: "A reference for Lynx API error codes, permission-gated endpoints, and how to handle common failure scenarios."
+---
+
+## HTTP Status Codes
+
+The Lynx API uses standard HTTP status codes to indicate the result of each request.
+
+| Status | Meaning | Common cause |
+|--------|---------|--------------|
+| `200 OK` | Request succeeded | — |
+| `400 Bad Request` | Invalid request body or parameters | Missing required field, invalid enum value, empty search params |
+| `403 Forbidden` | Insufficient permissions | Standard operator token lacks access to this endpoint |
+| `404 Not Found` | Resource does not exist | Invalid path parameter or record deleted |
+| `415 Unsupported Media Type` | Wrong `Content-Type` header | POST/PUT requests must include `Content-Type: application/json` |
+| `500 Internal Server Error` | Unexpected server failure | Server bug, proxy error, or misconfigured field |
+
+## Permission-Gated Endpoints
+
+Several Lynx API features require permissions beyond those granted to a standard operator token. Requests made with a standard token to these endpoints return `403 Insufficient Permissions`.
+
+Contact your Nayax account manager or distributor to request access.
+
+| Feature | Affected endpoints |
+|---------|-------------------|
+| Encryption keys | `GET /v1/actors/{id}/EncryptionKeys`, `PUT /v1/actors/GenerateEncKey`, `PUT /v1/actors/DecryptionMessageByVer` |
+| eReceipt generation | `POST /v1/ereceipt/generate` |
+| Payment refunds | `POST /v1/payment/refund-request`, `POST /v1/payment/refund-approve`, `POST /v1/payment/refund-decline`, `POST /v1/payment/upload-refund` |
+| Product group taxes | `GET/POST/PUT/DELETE /v1/productGroups/{id}/tax` |
+| Metadata | `GET /v1/metadata/v1/event-rules`, `POST /v1/metadata/upload-picture` |
+| Scheduling | All `/v1/Scheduling/*` endpoints |
+| Regions lookup | `GET /v1/regions` |
+
+## Common Errors by Endpoint Type
+
+### Create / Update endpoints
+
+**400 — Missing or invalid field**
+
+Most create and update endpoints require fields not always obvious from the OpenAPI spec. Common patterns:
+
+- `CardPhysicalType` is required on card create and update despite being marked `nullable` in the spec.
+- `SalesSourceID` and `MachineTypeID` on machine create/update require internal Nayax enum values. Use the values returned from `GET /v1/machines/{MachineID}` on an existing machine as a reference.
+- `NayaxProductID` must reference an existing product created via `POST /v1/operators/{OperatorID}/products`. Passing `0` or `null` returns 400.
+
+### Search / List endpoints
+
+**400 — Search fields are missing**
+
+`GET /v1/cards` requires at least one non-empty search parameter. Calling it with no parameters or with all parameters set to empty strings returns `400 "Search fields are missing"`.
+
+### Lookup endpoints
+
+**404 — CountryID mismatch**
+
+`GET /v1/states?CountryID=840` returns 404 because `840` is an ISO numeric code, not the internal Nayax `CountryID`. Use the internal ID from `GET /v1/countries` instead. For the United States, the internal `CountryID` is `225`.
+
+## Authentication
+
+All Lynx API requests require an `Authorization: Bearer <token>` header. Tokens are static and are obtained from Nayax Core (not via the API itself).
+
+See the [Security & Token](/docs/manage-data-operations/lynx-api/security) page for instructions on retrieving your token.
+
+<Note>
+**POST /v1/signin does not return a token**
+
+The `POST /v1/signin` endpoint authenticates a user session and returns `{"ok":true}`. It does not generate or return a bearer token. Tokens must be obtained from Nayax Core via **Account Settings > Security and Login > User Tokens**.
+</Note>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Security & Token"
+    icon="key"
+    href="/docs/manage-data-operations/lynx-api/security"
+  >
+    Retrieve your bearer token and understand authentication requirements.
+  </Card>
+  <Card
+    title="Reference Data"
+    icon="table"
+    href="/docs/manage-data-operations/lynx-api/reference-data"
+  >
+    Look up valid IDs for countries, currencies, actor types, and other required fields.
+  </Card>
+</CardGroup>

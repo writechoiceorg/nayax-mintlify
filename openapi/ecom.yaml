@@ -31,6 +31,8 @@ paths:
 
           **Timeout Recommendation:** It is highly recommended to implement a timeout of 60 seconds on the client side. If no callback or response is received, retry the same `/InitializeTransaction` request. The `EcomTransactionId` is valid for 5 minutes from the `/StartAuthentication` response.
 
+          **400 Error Formats:** The API may return two different structures for `400 Bad Request` responses. Business-level validation failures return the standard `Status` schema (`verdict`, `code`, `statusMessage`). Schema-level validation failures — for example, a missing required field — return an ASP.NET ProblemDetails object with the shape `{type, title, status, traceId, errors}`.
+
           Initiates an e-commerce transaction by sending a request to the Nayax Ecom SDK. This call initiates a transaction and either displays a payment page or prepares for a token-based charge.
 
           <Note>
@@ -141,11 +143,21 @@ paths:
                 $ref: "#/components/schemas/Status"
               examples:
                 badRequest:
-                  summary: Bad Request Example
+                  summary: Business validation failure (Status format)
                   value:
                     verdict: Declined
                     code: 997
                     statusMessage: Did not receive mandatory parameters.
+                badRequestProblemDetails:
+                  summary: Schema validation failure (ProblemDetails format)
+                  value:
+                    type: https://tools.ietf.org/html/rfc7231#section-6.5.1
+                    title: One or more validation errors occurred.
+                    status: 400
+                    traceId: 00-abc123def456abc1-def456abc1def456-00
+                    errors:
+                      MachineInfo:
+                        - The MachineInfo field is required.
         "401":
           description: Unauthorized
           content:
@@ -905,8 +917,7 @@ paths:
               examples:
                 testConnectionResponse:
                   summary: Example Test Connection Response
-                  value: Connection Successful
-  /initialize-1: {}
+                  value: OK
 components:
   securitySchemes:
     BearerAuth:
@@ -1013,7 +1024,7 @@ components:
         tokenModel:
           $ref: "#/components/schemas/TokenModel"
           description: >-
-            Conditional (mandatory if EntryMode is COF). Indicates the desired
+            Required when EntryMode is MIT, CIT, or COF. Indicates the desired
             token model. **Note on Token Behaviour**: A token's type
             (subscription/COF/top-up) is set during its initial creation and
             stored in our system. If a subsequent [Charge

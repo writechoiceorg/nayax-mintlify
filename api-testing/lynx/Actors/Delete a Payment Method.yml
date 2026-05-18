@@ -1,0 +1,29 @@
+﻿info:
+  name: Delete a Payment Method
+  type: http
+  seq: 9
+
+http:
+  method: DELETE
+  url: https://qa-lynx.nayax.com/operational/v1/actors/{ActorID}/paymentMethods/{paymentMethodID}
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: SKIP — not run during testing to avoid side effects
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/actors/{ActorID}/paymentMethods/{paymentMethodID}
+      method: DELETE
+    response:
+      status: 200
+      statusText: OK
+      body:
+        type: text
+        data: ""

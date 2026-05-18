@@ -1,0 +1,34 @@
+meta {
+  name: ExternalCancel
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/ExternalCancel
+  body: json
+  auth: none
+}
+
+headers {
+  IntegratorId: {{sign_key_id}}
+  TransactionSignature: {{transaction_signature}}
+}
+
+body:json {
+  {
+    "NayaxTransactionId": 0,
+    "SparkTransactionId": "{{spark_transaction_id}}",
+    "SiteId": 0,
+    "MachineAuTime": ""
+  }
+}
+
+docs {
+  Cancels a transaction that has been authorized but not yet settled.
+  NayaxTransactionId and SiteId come from the TransactionCallback.
+  MachineAuTime is optional but recommended (not available for Marshall devices).
+
+  Pre-Authorization Flow = "Cancel"
+  Pre-Selection Flow = "Void"
+}

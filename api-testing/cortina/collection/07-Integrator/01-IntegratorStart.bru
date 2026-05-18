@@ -1,0 +1,42 @@
+meta {
+  name: IntegratorStart
+  type: http
+  seq: 1
+}
+
+post {
+  url: https://lynx.nayax.com/payment/v2/transactions/Cortina/{{integrator_name}}/start
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "AppUserId": "USER_ID_FROM_APP",
+    "SecretToken": "{{secret_token}}",
+    "TerminalId": "TERMINAL_HW_SERIAL",
+    "TransactionId": "UNIQUE_TXN_ID_MIN_8_CHARS",
+    "Balance": 0
+  }
+}
+
+docs {
+  Direction: Integrator → Nayax (EXCEPTION — this is the only Cortina endpoint on Nayax's server).
+  Server: https://lynx.nayax.com/payment/v2/transactions (override from spec)
+  Sandbox: https://qa-lynx.nayax.com/payment/v2/transactions/Cortina/{integratorName}/start
+
+  Called by the integrator when a user scans a Static QR code. Notifies Nayax that
+  a user is at the machine and ready to pay.
+
+  SecretToken: 64-char key provided by Nayax — registered per integrator name.
+  TerminalId: HW serial of the vending machine (printed on sticker / encoded in QR).
+  TransactionId: Unique per transaction, minimum 8 chars.
+  AppUserId: Unique consumer ID in the Mobile App provider's system.
+
+  Live test 2026-05-15:
+  - Both lynx.nayax.com and qa-lynx.nayax.com are reachable
+  - All requests with unregistered SecretToken return: {"Status":{"Verdict":"Declined","Code":13}}
+  - Code 13 = NOT listed in StaticQR decline reasons table (doc gap — likely Invalid SecretToken)
+  - Field validation does not fire before SecretToken check
+}
+

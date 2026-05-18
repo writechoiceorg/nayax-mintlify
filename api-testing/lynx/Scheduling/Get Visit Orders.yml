@@ -1,0 +1,54 @@
+﻿info:
+  name: Get Visit Orders
+  type: http
+  seq: 11
+
+http:
+  method: GET
+  url: https://qa-lynx.nayax.com/operational/v1/Scheduling/schedule/visit-order
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  params:
+    - name: VisitDate
+      value: ""
+      type: query
+      enabled: true
+    - name: MachineId
+      value: ""
+      type: query
+      enabled: true
+    - name: DriverId
+      value: ""
+      type: query
+      enabled: true
+    - name: RouteId
+      value: ""
+      type: query
+      enabled: true
+    - name: ActorId
+      value: ""
+      type: query
+      enabled: true
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 403 Forbidden — permissions not granted for sandbox token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/schedule/visit-order
+      method: GET
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}

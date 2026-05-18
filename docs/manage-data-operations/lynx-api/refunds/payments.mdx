@@ -4,6 +4,12 @@ metadata:
   og:description: "The refund mechanism within Lynx API is a 2-step process: 1. Request refund. 2. Approve or Decline the refund. This section contains guides that will."
 ---
 
+<Warning>
+**Elevated Permissions Required**
+
+All Lynx API refund endpoints require a role with financial permissions. Requests made with a standard operator bearer token return `403 Insufficient Permissions`. Contact your Nayax account manager to have refund permissions enabled for your account.
+</Warning>
+
 The refund mechanism within Lynx API is a 2-step process:
 
 1. Request refund.

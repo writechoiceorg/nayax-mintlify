@@ -1,0 +1,37 @@
+meta {
+  name: Start Session
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/v1/eReceiptPlatform/StartSession
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "hwSerial": "DEVICE_HW_SERIAL",
+    "nayaxMachineId": 0,
+    "ereceiptProviderId": 0,
+    "startSessionToken": "",
+    "nayaxTransactionId": 0,
+    "randomNumber": "",
+    "dynamicURL": ""
+  }
+}
+
+docs {
+  Direction: Integrator → Nayax (or device → platform)
+  Auth: None declared in spec (security: - {}).
+
+  Initiates a session between the device and the eReceipt platform.
+  Returns tranId and tranIDCipher used in subsequent requests.
+
+  Spec path: POST /v1/eReceiptPlatform/StartSession
+}

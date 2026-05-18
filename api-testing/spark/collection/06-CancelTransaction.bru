@@ -1,0 +1,37 @@
+meta {
+  name: CancelTransaction
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/CancelTransaction
+  body: json
+  auth: none
+}
+
+headers {
+  IntegratorId: {{sign_key_id}}
+  TransactionSignature: {{transaction_signature}}
+}
+
+body:json {
+  {
+    "NayaxTransactionId": 0,
+    "SparkTransactionId": "{{spark_transaction_id}}",
+    "SiteId": 0,
+    "MachineAuTime": "",
+    "TerminalId": "{{terminal_id}}",
+    "TerminalIdType": {{terminal_id_type}},
+    "CancellationType": 1,
+    "ReasonCode": 75,
+    "ReasonText": "Service not provided",
+    "CancelAmount": 0
+  }
+}
+
+docs {
+  Cancels a transaction currently in progress.
+  CancellationType: 1 = Pre-Authorization Cancel, 2 = Pre-Selection Void
+  All fields required. NayaxTransactionId and SiteId from TransactionCallback.
+}

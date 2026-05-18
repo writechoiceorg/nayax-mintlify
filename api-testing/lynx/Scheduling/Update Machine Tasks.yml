@@ -1,0 +1,50 @@
+﻿info:
+  name: Update Machine Tasks
+  type: http
+  seq: 15
+
+http:
+  method: PUT
+  url: https://qa-lynx.nayax.com/operational/v1/Scheduling/schedule/machine-tasks
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  body:
+    type: json
+    data: |
+      [
+        {
+          "SchedulingId": 0,
+          "MachineId": 0,
+          "TaskLutId": "",
+          "DriverId": "00000000-0000-0000-0000-000000000000",
+          "ScheduleDate": "2024-01-01T00:00:00Z",
+          "StatusId": 1,
+          "Notes": "",
+          "GeneratePickList": false,
+          "ScheduleNextWorkingDay": false,
+          "TimezoneOffset": 0
+        }
+      ]
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 403 Forbidden — permissions not granted for sandbox token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/schedule/machine-tasks
+      method: PUT
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}

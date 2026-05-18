@@ -1,0 +1,47 @@
+﻿info:
+  name: Get Lookup Values by LutTypeID
+  type: http
+  seq: 4
+
+http:
+  method: GET
+  url: https://qa-lynx.nayax.com/operational/v1/lookupTypes/{LutTypeID}/values
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/lookupTypes/1/values
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          [{"LutTypeRef":"/v1/lookupTypes/?LutTypeID=1","LutID":29,"LutTypeID":1,"LutValue":"big text","LastUpdated":"2007-02-12T18:32:31.48","OrderKey":null,"LutCode":29,"Ckey":"big_text_type","ServiceLutId":null,"Created DT":"2007-02-12T18:32:31.48","Created BT":null,"Updated By":null,"LinkedLutId":null},{"LutTypeRef":"/v1/lookupTypes/?LutTypeID=1","LutID":2,"LutTypeID":1,"LutValue":"binary","LastUpdated":"2007-01-24T20:25:30.997","OrderKey":null,"LutCode":2,"Ckey":"binary_type","ServiceLutId":null,"Created DT":"2007-01-24T20:25:30.997","Created BT":null,"Updated By":null,"LinkedLutId":null},{"LutTypeRef":"/v1/lookupTypes/?LutTypeID=1","LutID":30000622,"LutTypeID":1,"LutValue":"bitmap","LastUpdated":"2015-06-21T05:50:56.727","OrderKey":null,"LutCode":7,"Ckey":"bitmap_type","ServiceLutId":null,"Created DT":"2015-06-21T05:50:56.727","Created BT":null,"Updated By":null,"LinkedLutId":null}]
+  - name: 401 Unauthorized — expired or invalid token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/lookupTypes/1/values
+      method: GET
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Unauthorized","isUserError":false,"errorKey":null}

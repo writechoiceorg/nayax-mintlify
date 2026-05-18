@@ -1,10 +1,11 @@
 ---
 title: "Security & Token"
+description: "How to retrieve and use bearer tokens for authenticating Lynx API requests."
 metadata:
   og:description: "Authentication using an access token is required to interact securely with the Lynx API. This guide provides an overview of generating and using."
 ---
 
-Authentication using an access token is required to interact securely with the Lynx API. This guide provides an overview of generating and using access tokens and best practices for ensuring API security.
+Authentication using a bearer token is required for every Lynx API request. Tokens are static credentials retrieved from Nayax Core; you do not generate them via the API.
 
 ## Access Token
 
@@ -46,3 +47,36 @@ curl -X GET "https://lynx.nayax.com/operational/api/v1/devices" \
 ```
 
 * Replace `<YOUR_ACCESS_TOKEN>` with your actual token retrieved from Nayax Core.
+
+## Encryption Key Endpoints
+
+The Lynx API includes endpoints for managing encryption keys and decrypting messages:
+
+* `GET /v1/actors/{actorID}/EncryptionKeys` — retrieve encryption keys for an actor
+* `PUT /v1/actors/GenerateEncKey` — generate a new encryption key for an actor
+* `PUT /v1/actors/DecryptionMessageByVer` — decrypt a message using a specific encryption version
+
+<Warning>
+**Elevated Permissions Required**
+
+These endpoints require permissions beyond those granted to a standard operator token. Requests made with a standard bearer token will return `403 Insufficient Permissions`. Contact your Nayax account manager or distributor to have the necessary permissions added to your account before using these endpoints.
+</Warning>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Error Handling"
+    icon="triangle-exclamation"
+    href="/docs/manage-data-operations/lynx-api/error-handling"
+  >
+    Understand permission-gated endpoints and common error codes.
+  </Card>
+  <Card
+    title="Reference Data"
+    icon="table"
+    href="/docs/manage-data-operations/lynx-api/reference-data"
+  >
+    Retrieve valid IDs for countries, currencies, actor types, and other required fields.
+  </Card>
+</CardGroup>

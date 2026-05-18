@@ -1,0 +1,45 @@
+﻿info:
+  name: Create Visit Orders
+  type: http
+  seq: 12
+
+http:
+  method: POST
+  url: https://qa-lynx.nayax.com/operational/v1/Scheduling/schedule/visit-order
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  body:
+    type: json
+    data: |
+      [
+        {
+          "MachineId": 0,
+          "VisitDate": "2024-01-01T00:00:00Z",
+          "DriverId": "00000000-0000-0000-0000-000000000000",
+          "RouteId": 0,
+          "OrderKey": 1
+        }
+      ]
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 403 Forbidden — permissions not granted for sandbox token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/schedule/visit-order
+      method: POST
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}

@@ -1,0 +1,35 @@
+meta {
+  name: ExternalSettlement
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/ExternalSettlement
+  body: json
+  auth: none
+}
+
+headers {
+  IntegratorId: {{sign_key_id}}
+  TransactionSignature: {{transaction_signature}}
+}
+
+body:json {
+  {
+    "NayaxTransactionId": 0,
+    "SparkTransactionId": "{{spark_transaction_id}}",
+    "SiteId": 0,
+    "MachineAuTime": "",
+    "TerminalId": "{{terminal_id}}",
+    "TerminalIdType": {{terminal_id_type}},
+    "Amount": 15.00
+  }
+}
+
+docs {
+  Finalizes a transaction after service/product has been provided.
+  Must be sent within 48 hours of authorization.
+  NayaxTransactionId and SiteId come from TransactionCallback.
+  MachineAuTime: optional, not available for Marshall devices.
+}

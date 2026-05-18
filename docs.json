@@ -486,6 +486,8 @@
                 "pages": [
                   "docs/manage-data-operations/lynx-api/lynx-overview",
                   "docs/manage-data-operations/lynx-api/security",
+                  "docs/manage-data-operations/lynx-api/error-handling",
+                  "docs/manage-data-operations/lynx-api/reference-data",
                   {
                     "group": "Cards",
                     "pages": [
@@ -540,7 +542,7 @@
                       "docs/manage-data-operations/lynx-api/inventory-management/inventory-workflow",
                       "docs/manage-data-operations/lynx-api/inventory-management/create-product-group",
                       "docs/manage-data-operations/lynx-api/inventory-management/create-products",
-                      "docs/manage-data-operations/lynx-api/inventory-management/machine-products-1",
+                      "docs/manage-data-operations/lynx-api/inventory-management/machine-products-overview",
                       "docs/manage-data-operations/lynx-api/inventory-management/pick-lists",
                       "docs/manage-data-operations/lynx-api/inventory-management/pick-list-actions"
                     ]
@@ -570,6 +572,14 @@
                           "docs/manage-data-operations/lynx-api/reports/integration-guide"
                         ]
                       }
+                    ]
+                  },
+                  {
+                    "group": "Scheduling",
+                    "root": "docs/manage-data-operations/lynx-api/scheduling/index",
+                    "pages": [
+                      "docs/manage-data-operations/lynx-api/scheduling/routes",
+                      "docs/manage-data-operations/lynx-api/scheduling/drivers-and-tasks"
                     ]
                   }
                 ]
@@ -1612,7 +1622,7 @@
     },
     {
       "source": "/docs/machine-products-1",
-      "destination": "/docs/manage-data-operations/lynx-api/inventory-management/machine-products-1"
+      "destination": "/docs/manage-data-operations/lynx-api/inventory-management/machine-products-overview"
     },
     {
       "source": "/docs/pick-lists",

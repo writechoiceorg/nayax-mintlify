@@ -1,0 +1,118 @@
+﻿info:
+  name: Get Actor by ActorCode
+  type: http
+  seq: 3
+
+http:
+  method: GET
+  url: https://qa-lynx.nayax.com/operational/v1/actors?ActorCode=1222
+  params:
+    - name: ActorCode
+      value: "1222"
+      type: query
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/actors?ActorCode=1222
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-length
+          value: "1627"
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {
+            "ParentActorID": 2001312062,
+            "ActorID": 2009586082,
+            "ActorDescription": "Writechoice.io",
+            "ActorCode": 1222,
+            "ActorAddress": "",
+            "ActorContact": "",
+            "ActorTypeID": 2,
+            "ActorStatus": 1,
+            "ActorHierarchyLevel": 2,
+            "CurrencyID": 3,
+            "LastUpdated": "2026-05-12T18:50:31.017",
+            "RouteManagerName": "",
+            "RouteManagerMobile": "",
+            "TimeZoneKey": 15,
+            "DayLightSavingsBit": false,
+            "CountryID": 225,
+            "DailyCCTransLimitPerCard": null,
+            "DailyPPTransLimitPerCard": null,
+            "DailyExternalPPTransLimitPerCard": null,
+            "DailyCCTransLimitPerCardPerOperator": null,
+            "OperatorActorID": 2009586082,
+            "DistributorActorID": 2001312062,
+            "AreaActorID": null,
+            "RouteActorID": null,
+            "ActorHierarchy": "Nayax Integrations / Writechoice.io /",
+            "ActorHasChildrenBit": false,
+            "ActorHasMachinesBit": true,
+            "ActorImageURL": null,
+            "ActorContractInfo": "",
+            "ActorSQSID": null,
+            "UseProductGroupVATBit": false,
+            "EreceiptTransactionEndEnableBit": false,
+            "MaximumRevalueAmountLimit": null,
+            "ActorCreatedBy": 47725128,
+            "ActorCreationDate": "2026-05-10T05:16:05.18",
+            "UpdateBy": 47725128,
+            "CultureID": 50,
+            "RevaluePayoutByDistributor": false,
+            "FiscalizationBit": false,
+            "GeoCountryID": null,
+            "GeoState": "",
+            "GeoCity": "",
+            "GeoAddress": "",
+            "GeoStreetNumber": "",
+            "GeoLongitude": null,
+            "GeoLatitude": null,
+            "GeoZipCode": "",
+            "GeoZoom": null,
+            "ActorLanguageID": null,
+            "ActorMerchantBit": "False",
+            "ActorMerchantNameForDescriptor": null,
+            "OverrideGeoInherritcanceBit": true,
+            "AirportID": null,
+            "VerticalCustomJSON": null,
+            "FiscalizationActorID": null,
+            "SupportIncrementalAuth": false,
+            "MaximumDefaultCredit": null,
+            "Refs": {
+              "parentActor": "v1/actors/2001312062",
+              "timeZone": "v1/timeZones/15",
+              "country": "v1/countries/225",
+              "currency": "v1/currencies/3",
+              "actorType": "v1/actorTypes?ActorTypeID=3"
+            }
+          }
+  - name: 401 Unauthorized — expired or invalid token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/actors?ActorCode=1222
+      method: GET
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Unauthorized","isUserError":false,"errorKey":null}

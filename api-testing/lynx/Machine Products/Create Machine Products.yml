@@ -1,0 +1,64 @@
+﻿info:
+  name: Create Machine Products
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: https://qa-lynx.nayax.com/operational/v1/machines/{MachineID}/machineProducts
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  body:
+    type: json
+    data: |
+      [
+        {
+          "NayaxProductID": 0,
+          "MDBCode": 0,
+          "PAR": 0,
+          "CashPrice": 0,
+          "CreditCardPrice": 0,
+          "MachinePrice": 0,
+          "RetailPrice": 0,
+          "DEXProductName": "",
+          "PACode": "",
+          "PCCode": ""
+        }
+      ]
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/machines/1002511581/machineProducts
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          [{"DexPrice":0.00,"ProductRef":"v1/products/999998535696561","MachineProductRef":"v1/machines/1002511581/machineProducts/4856281603790672070","MachineRef":"/v1/machines/1002511581","MachineProductID":"4856281603790672070","NayaxProductID":999998535696561,"MachineID":1002511581,"MDBCode":3,"PAR":5,"CashPrice":2.5000,"CreditCardPrice":2.5000,"RetailPrice":2.5000,"DEXProductName":"TestProd","PACode":"C1","PCCode":"03","LastUpdated":"2026-05-14T23:24:14.657","ProductGroupID":2147111052,"slow_mover":false}]
+  - name: 401 Unauthorized — expired or invalid token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/machines/1002511581/machineProducts
+      method: POST
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Unauthorized","isUserError":false,"errorKey":null}

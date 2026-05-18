@@ -205,6 +205,32 @@ These are the mandatory fields when using the V2 option:
 * `CardCreditAttributes`
   * `CurrencyID`: Currency code.
 
+<Warning>
+**Prepaid cards require additional credit limit fields**
+
+When creating a prepaid card (`CardTypeID: 33`), the `CardCreditLimits` object must include three additional fields not required for other card types:
+
+```json
+"CardCreditLimits": {
+  "AmountDailyLimit": 100,
+  "AmountMonthlyLimit": 1000,
+  "CreditAmountDailyLimit": 100,
+  "CreditAmountMonthlyLimit": 1000,
+  "CreditAmountMonthlyReload": 0
+}
+```
+
+Omitting any of these fields returns `400 Field CreditAmountDailyLimit is required` (or the next missing field).
+</Warning>
+
+<Warning>
+**GroupLocationLimits behavior**
+
+When **creating** a card, set `GroupLocationLimits` to `null`. Sending an empty array `[]` causes a `500` error.
+
+When **updating** a card, the array must exactly match the card's current groups. Fetch the card first with `GET /v1/cards` and pass the same `GroupLocationLimits` array back. Adding or removing groups via this field is not supported.
+</Warning>
+
 A successful request will return a JSON object with the details of the created card, providing flexibility and control over card features.
 
 ## Verifying the card in Nayax Core

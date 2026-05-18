@@ -1,0 +1,180 @@
+---
+title: "Reference Data"
+description: "Lookup endpoints for actor types, countries, currencies, time zones, and other reference values used across the Lynx API."
+metadata:
+  og:description: "Use the Lynx API lookup endpoints to retrieve reference data including actor types, countries, currencies, payment methods, time zones, and more."
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+Several Lynx API fields, including `CountryID`, `CurrencyID`, `ActorTypeID`, and `TimeZoneKey`, require specific numeric identifiers from the Nayax system. Use the reference data endpoints below to retrieve the valid values before making create or update requests.
+
+<Warning>
+**CountryID is not the ISO numeric code**
+
+The `CountryID` values returned by `GET /v1/countries` are internal Nayax identifiers, not ISO 3166 numeric codes. For example, the United States has `CountryID: 225` in the lookup table, but `840` (the ISO code) appears in some actor fields. When passing `CountryID` to lookup endpoints for states, cities, or regions, always use the internal ID from `GET /v1/countries`, not the ISO code.
+</Warning>
+
+## Actor Types
+
+Retrieve all actor types available in the system, such as Operator, Distributor, or Institute.
+
+<EndpointCard
+  title="Get All Actor Types"
+  href="/reference/lynx/actors/get-actor-types"
+  method="get"
+/>
+
+## Countries, States, and Cities
+
+<Columns cols={2}>
+<EndpointCard
+  title="Get Countries"
+  href="/reference/lynx/countries/get-countries"
+  method="get"
+/>
+<EndpointCard
+  title="Get Country by Code"
+  href="/reference/lynx/countries/get-country-by-code"
+  method="get"
+/>
+</Columns>
+
+<Columns cols={2}>
+<EndpointCard
+  title="Get States"
+  href="/reference/lynx/states/get-states"
+  method="get"
+/>
+<EndpointCard
+  title="Get Cities"
+  href="/reference/lynx/cities/get-cities"
+  method="get"
+/>
+</Columns>
+
+<Note>
+**States and Cities require CountryID**
+
+`GET /v1/states` and `GET /v1/cities` return an empty response without a `CountryID` parameter. Pass the internal `CountryID` from `GET /v1/countries` — not the ISO numeric code.
+</Note>
+
+## Currencies
+
+Use `CurrencyID` when creating or updating actors and machines.
+
+<Columns cols={2}>
+<EndpointCard
+  title="Get Currencies"
+  href="/reference/lynx/currencies/get-currencies"
+  method="get"
+/>
+<EndpointCard
+  title="Get Currency by Code"
+  href="/reference/lynx/currencies/get-currency-by-code"
+  method="get"
+/>
+</Columns>
+
+## Time Zones
+
+Use `TimeZoneKey` when configuring scheduling or time-based settings.
+
+<Columns cols={2}>
+<EndpointCard
+  title="Get Time Zones"
+  href="/reference/lynx/time-zones/get-time-zones"
+  method="get"
+/>
+<EndpointCard
+  title="Get Time Zone by Key"
+  href="/reference/lynx/time-zones/get-time-zone-by-key"
+  method="get"
+/>
+</Columns>
+
+## Payment Methods
+
+Use `PaymentMethodID` when assigning payment methods to machines.
+
+<EndpointCard
+  title="Get Payment Methods"
+  href="/reference/lynx/payment-methods/get-payment-methods"
+  method="get"
+/>
+
+## Machine Models
+
+Use `MachineModelID` when creating or updating machine records.
+
+<EndpointCard
+  title="Get Machine Models"
+  href="/reference/lynx/machine-models/get-machine-models"
+  method="get"
+/>
+
+## Billing Providers
+
+Use `BillingProviderId` when configuring billing settings for an actor.
+
+<EndpointCard
+  title="Get Billing Providers"
+  href="/reference/lynx/billing/get-billing-providers"
+  method="get"
+/>
+
+## Regions
+
+Use `RegionId` to filter machines or actors by geographic region.
+
+<EndpointCard
+  title="Get Regions"
+  href="/reference/lynx/regions/get-regions"
+  method="get"
+/>
+
+<Warning>
+**Elevated permissions required**
+
+`GET /v1/regions` requires elevated permissions beyond a standard operator token. Requests with a standard token return `403 Insufficient Permissions`.
+</Warning>
+
+## Groups and Roles
+
+Use group and role IDs when managing actor group membership and access control.
+
+<Columns cols={2}>
+<EndpointCard
+  title="Get Groups"
+  href="/reference/lynx/groups/get-groups"
+  method="get"
+/>
+<EndpointCard
+  title="Get Group Roles"
+  href="/reference/lynx/groups/get-group-roles"
+  method="get"
+/>
+</Columns>
+
+## Generic Lookups
+
+Use these endpoints to retrieve values for configurable lookup types used across the system.
+
+<Columns cols={2}>
+<EndpointCard
+  title="Get Lookup Types"
+  href="/reference/lynx/lookups/get-lookup-types"
+  method="get"
+/>
+<EndpointCard
+  title="Get Lookup Values by Type"
+  href="/reference/lynx/lookups/get-lookup-values-by-type"
+  method="get"
+/>
+</Columns>
+
+<EndpointCard
+  title="Get Lookup Value by ID"
+  href="/reference/lynx/lookups/get-lookup-value-by-id"
+  method="get"
+/>

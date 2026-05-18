@@ -1,0 +1,92 @@
+﻿info:
+  name: Get Operator EV Meter Dashboard
+  type: http
+  seq: 10
+
+http:
+  method: GET
+  url: https://qa-lynx.nayax.com/operational/v1/actors/2009586082/evDashboard
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  params:
+    - name: StartDate
+      value: ""
+      type: query
+      enabled: true
+    - name: EndDate
+      value: ""
+      type: query
+      enabled: true
+    - name: MachineID
+      value: ""
+      type: query
+      enabled: true
+    - name: TimePeriod
+      value: ""
+      type: query
+      enabled: true
+    - name: MachineNumber
+      value: ""
+      type: query
+      enabled: true
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 400 Bad Request — invalid TimePeriod
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/actors/2009586082/evDashboard?TimePeriod=1
+      method: GET
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: content-type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "message": "TimePeriod:1 is not valid",
+            "stack": null,
+            "isUserError": false,
+            "errorKey": null,
+            "error": null,
+            "details": null,
+            "correlationId": "9a5a0UcfzE01q0kz",
+            "isTranslatedError": false,
+            "errorName": null,
+            "errorCode": null,
+            "errorMessage": null
+          }
+  - name: 500 Server Error — date range
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/actors/2009586082/evDashboard?StartDate=2026-01-01&EndDate=2026-05-13
+      method: GET
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: content-type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "message": "Oops, an error has occurred",
+            "stack": null,
+            "isUserError": false,
+            "errorKey": null,
+            "error": null,
+            "details": null,
+            "correlationId": "AqSz5qibuUuE2cWY",
+            "isTranslatedError": false,
+            "errorName": null,
+            "errorCode": null,
+            "errorMessage": null
+          }

@@ -1,0 +1,44 @@
+meta {
+  name: Get Receipt
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{base_url}}/v1/GetReceipt
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "returnOnlySuccess": true,
+    "paymentInfo": {
+      "nayaxTransactionId": 0,
+      "authCode": "",
+      "settAmount": 0.00,
+      "currencyCode": "USD",
+      "siteId": 0,
+      "paymentType": 0
+    }
+  }
+}
+
+docs {
+  Direction: Integrator → Nayax
+  Auth: None declared in spec.
+
+  Standard endpoint to retrieve receipt details based on payment data.
+  returnOnlySuccess: true — return only if receipt generation succeeded.
+  returnOnlySuccess: false — return regardless of receipt status.
+
+  Returns receiptDetails including receiptUrl and status.
+
+  Prerequisite: must have a valid nayaxTransactionId.
+
+  Spec path: POST /v1/GetReceipt
+}

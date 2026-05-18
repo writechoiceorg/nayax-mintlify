@@ -1,0 +1,56 @@
+meta {
+  name: Void Transaction
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/v1/eReceiptPlatform/Void
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "paymentInfo": {
+      "nayaxTransactionId": 0,
+      "authCode": "",
+      "settAmount": 0.00,
+      "currencyCode": "USD",
+      "siteId": 0,
+      "paymentType": 0
+    },
+    "machineInfo": {
+      "hwSerial": "DEVICE_HW_SERIAL",
+      "nayaxMachineId": 0,
+      "machineType": 0
+    },
+    "actorInfo": {
+      "nayaxActorId": 0,
+      "actorName": "Merchant Name",
+      "ereceiptProviderId": 0
+    },
+    "cardData": {
+      "cardLast4Digits": "1111",
+      "cardBrand": "VISA"
+    },
+    "receiptDetails": {
+      "totalAmount": 0.00
+    }
+  }
+}
+
+docs {
+  Direction: Integrator → Nayax
+  Auth: None declared in spec.
+
+  Voids a transaction and its associated receipt record.
+
+  Prerequisite: must have a valid nayaxTransactionId from an authorized (not yet settled) transaction.
+
+  Spec path: POST /v1/eReceiptPlatform/Void
+}

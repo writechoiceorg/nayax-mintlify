@@ -1,0 +1,47 @@
+﻿info:
+  name: Get Time Zone by Key
+  type: http
+  seq: 7
+
+http:
+  method: GET
+  url: https://qa-lynx.nayax.com/operational/v1/timeZones/{TimeZoneKey}
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/timeZones/73
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"TimeZoneKey":73,"TimeZoneID":"SA Pacific Standard Time","TimeZoneDisplayName":"(GMT-05:00) Bogota, Lima, Quito, Rio Branco","TimeZoneStandardName":"SA Pacific Standard Time","TimeZoneDayLightName":"SA Pacific Daylight Time","TimeZoneOffset":-5.00,"CreatedDate":"2008-11-23T18:03:41.907","LastUpdated":null,"DaylightSavingsBit":false,"Latitude":4.59805560,"Longitude":-74.07583330}
+  - name: 401 Unauthorized — expired or invalid token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/timeZones/73
+      method: GET
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Unauthorized","isUserError":false,"errorKey":null}

@@ -1,0 +1,38 @@
+meta {
+  name: OnboardActor
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/Cortina/Onboarding/OnboardActor
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "OnboardingBasicInfo": {
+      "BillingProviderID": 1,
+      "OnboardingOperation": 1,
+      "PaymentMethodID": 1,
+      "SiteId": 1
+    },
+    "ActorInfo": {
+      "Id": 0,
+      "Name": "",
+      "MerchantId": ""
+    },
+    "OperatorInfo": {
+      "ApiKey": "",
+      "MerchantId": "",
+      "Name": ""
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Registers or updates an actor (operator/merchant) with the integrator's payment processor.
+  OnboardingOperation: 1 = Create, 2 = Update, 3 = Delete.
+}

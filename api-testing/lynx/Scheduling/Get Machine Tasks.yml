@@ -1,0 +1,74 @@
+﻿info:
+  name: Get Machine Tasks
+  type: http
+  seq: 13
+
+http:
+  method: GET
+  url: https://qa-lynx.nayax.com/operational/v1/Scheduling/schedule/machine-tasks
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  params:
+    - name: StartDate
+      value: ""
+      type: query
+      enabled: true
+    - name: EndDate
+      value: ""
+      type: query
+      enabled: true
+    - name: SchedulingId
+      value: ""
+      type: query
+      enabled: true
+    - name: ActorId
+      value: ""
+      type: query
+      enabled: true
+    - name: MachineId
+      value: ""
+      type: query
+      enabled: true
+    - name: DriverId
+      value: ""
+      type: query
+      enabled: true
+    - name: RouteId
+      value: ""
+      type: query
+      enabled: true
+    - name: TimePeriod
+      value: ""
+      type: query
+      enabled: true
+    - name: IsForlist
+      value: ""
+      type: query
+      enabled: true
+    - name: IsStatic
+      value: ""
+      type: query
+      enabled: true
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 403 Forbidden — permissions not granted for sandbox token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/schedule/machine-tasks
+      method: GET
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}

@@ -1,0 +1,52 @@
+﻿info:
+  name: Get Currencies
+  type: http
+  seq: 10
+
+http:
+  method: GET
+  url: https://qa-lynx.nayax.com/operational/v1/currencies
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  params:
+    - name: CurrencyID
+      value: ""
+      type: query
+      enabled: true
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/currencies
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          [{"CurrencyID":1,"CurrencyCode":"USD","CurrencySign":"$","LastUpdated":"2007-06-10T17:10:55.803","ShvaValue":"USD","ShvaCode":2,"CurrencyISONumerical":"840"},{"CurrencyID":2,"CurrencyCode":"ILS","CurrencySign":"₪","LastUpdated":"2016-04-13T15:27:02.883","ShvaValue":"ILS","ShvaCode":1,"CurrencyISONumerical":"376"},{"CurrencyID":3,"CurrencyCode":"EUR","CurrencySign":"€","LastUpdated":"2016-06-21T11:20:43.873","ShvaValue":"EUR","ShvaCode":7,"CurrencyISONumerical":"978"}]
+  - name: 401 Unauthorized — expired or invalid token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/currencies
+      method: GET
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Unauthorized","isUserError":false,"errorKey":null}

@@ -1,0 +1,42 @@
+﻿info:
+  name: Get Route Machines
+  type: http
+  seq: 8
+
+http:
+  method: GET
+  url: https://qa-lynx.nayax.com/operational/v1/Scheduling/route-machines
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  params:
+    - name: RouteId
+      value: ""
+      type: query
+      enabled: true
+    - name: MachineId
+      value: ""
+      type: query
+      enabled: true
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 403 Forbidden — permissions not granted for sandbox token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/route-machines
+      method: GET
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}

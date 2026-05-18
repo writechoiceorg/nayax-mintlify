@@ -220,3 +220,41 @@ Change `{ActorID}` with the actual Operator ID to update.
 
 The response will have the updated details of the requested operator.
 
+## Machine Groups
+
+Machine groups allow you to organise machines within an operator for reporting and management purposes. The following endpoints manage machine groups:
+
+<Columns cols={2}>
+<EndpointCard
+  title="List Machine Groups for Actor"
+  href="/reference/lynx/actors/list-machine-groups"
+  method="get"
+/>
+
+<EndpointCard
+  title="Add Machine Group"
+  href="/reference/lynx/actors/add-machine-group"
+  method="post"
+/>
+</Columns>
+
+<Columns cols={2}>
+<EndpointCard
+  title="Update Machine Group"
+  href="/reference/lynx/actors/update-machine-group"
+  method="put"
+/>
+
+<EndpointCard
+  title="Delete Machine Group"
+  href="/reference/lynx/actors/delete-machine-group"
+  method="delete"
+/>
+</Columns>
+
+<Warning>
+**All Fields Are Required**
+
+The Add Machine Group endpoint does not enforce field validation server-side — requests with empty or missing field values will return `200 OK` but create invalid records that cannot be used. Always provide all required fields when creating a machine group.
+</Warning>
+

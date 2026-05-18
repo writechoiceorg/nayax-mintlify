@@ -1,0 +1,86 @@
+﻿info:
+  name: Update Card by ID v2
+  type: http
+  seq: 20
+
+http:
+  method: PUT
+  url: https://qa-lynx.nayax.com/operational/v2/cards/{CardID}
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  body:
+    type: json
+    data: |
+      {
+        "CardDetails": {
+          "ActorID": 0,
+          "CardTypeID": 33,
+          "Status": 1,
+          "PhysicalTypeID": 30000528
+        },
+        "CardHolderDetails": {
+          "CardHolderName": "",
+          "UserIdentity": "",
+          "CountryID": 0,
+          "Email": ""
+        },
+        "CardCreditAttributes": {
+          "CurrencyID": 0,
+          "CreditTypeMoneyBit": true,
+          "Credit": 0,
+          "RevalueCredit": 0,
+          "RevalueCashBit": true,
+          "AmountMonthlyReload": 0
+        },
+        "CardCreditLimits": {
+          "AmountDailyLimit": 0,
+          "AmountMonthlyLimit": 0,
+          "CreditAmountDailyLimit": 0,
+          "CreditAmountMonthlyLimit": 0,
+          "CreditAmountMonthlyReload": 0
+        },
+        "CardDateRules": {},
+        "CardRevalueRewardRules": [],
+        "GroupLocationLimits": []
+      }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK
+    request:
+      url: https://qa-lynx.nayax.com/operational/v2/cards/999998796252601
+      method: PUT
+      body:
+        type: json
+        data: |
+          {"CardDetails":{"ActorID":2009586082,"CardTypeID":33,"Status":1,"PhysicalTypeID":30000528},"CardHolderDetails":{"CardHolderName":"Test V2 Prepaid Updated","UserIdentity":"testv2-001","CountryID":225,"Email":"testv2@example.com"},"CardCreditAttributes":{"CurrencyID":3,"CreditTypeMoneyBit":true,"Credit":0.02,"RevalueCredit":0.02,"RevalueCashBit":true,"AmountMonthlyReload":0},"CardCreditLimits":{"AmountDailyLimit":200,"AmountMonthlyLimit":2000,"CreditAmountDailyLimit":200,"CreditAmountMonthlyLimit":2000,"CreditAmountMonthlyReload":0},"CardDateRules":{},"CardRevalueRewardRules":[],"GroupLocationLimits":[{"CardGroupEnabledBit":true,"GroupName":"APITest","CardGroupId":1002880251,"GroupDailyLimit":null}]}
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"CardDetails":{"CardID":999998796252601,"ActorID":2009586082,"CardUniqueIdentifier":"TEST-CARD-V2-001","CardDisplayNumber":null,"CardTypeID":33,"PhysicalTypeID":30000528,"Notes":null,"Status":1,"ExternalApplicationUserID":null,"CreatedBy":1000294591,"CreatedDT":"2026-05-15T18:09:52.19","UpdatedBy":1000294591,"UpdatedDT":"2026-05-15T18:12:35.63"},"CardHolderDetails":{"CardHolderName":"Test V2 Prepaid Updated","UserIdentity":"testv2-001","CountryID":225,"MobileNumber":null,"Email":"testv2@example.com","MemberTypeID":null,"ImageUrl":null}}
+  - name: 401 Unauthorized — expired or invalid token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v2/cards/999998796252601
+      method: PUT
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Unauthorized","isUserError":false,"errorKey":null}

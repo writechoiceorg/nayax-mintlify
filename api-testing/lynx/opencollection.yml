@@ -1,0 +1,52 @@
+﻿opencollection: 1.0.0
+
+info:
+  name: Nayax Lynx
+config:
+  proxy:
+    inherit: true
+    config:
+      protocol: http
+      hostname: ""
+      port: ""
+      auth:
+        username: ""
+        password: ""
+      bypassProxy: ""
+
+request:
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+
+docs:
+  content: |-
+    # Nayax Lynx API
+
+    This collection covers the Nayax Lynx API — a pure REST API integration (no hardware required).
+
+    ## Getting started
+
+    1. Open the **Environments** panel and select **Nayax Lynx Sandbox**.
+    2. Fill in your `client_id` and `client_secret` (mark them as secrets so they are not committed).
+    3. Run **01-Authentication / Get Token** first. The post-response script will save `access_token` automatically.
+    4. All subsequent requests use `{{access_token}}` via the `Authorization: Bearer` header.
+
+    ## Developer zone
+
+    Full API reference: https://developerhub.nayax.com/
+
+    ## Folder structure
+
+    | Folder | Purpose |
+    | --- | --- |
+    | 01-Authentication | Token generation and refresh |
+    | 02-Refunds | Create full and partial refunds |
+    | 03-Product-Map | Update product map on a device |
+  type: text/markdown
+bundled: false
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git

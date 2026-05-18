@@ -1,0 +1,74 @@
+﻿info:
+  name: Create a New Actor v2
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: https://qa-lynx.nayax.com/operational/v2/actors/{ParentActorID}
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  body:
+    type: json
+    data: |
+      {
+        "ActorDetails": {
+          "ActorDescription": "",
+          "ActorTypeID": 0,
+          "StatusID": 1,
+          "CurrencyID": 0,
+          "CountryID": 0,
+          "TimeZoneKey": 0
+        },
+        "ActorBillingGateways": [],
+        "ActorBillingPlanID": null
+      }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 400 Bad Request — Billing plan ID invalid
+    request:
+      url: https://qa-lynx.nayax.com/operational/v2/actors/2009586082
+      method: POST
+      body:
+        type: json
+        data: |
+          {
+            "ActorDetails": {
+              "ActorDescription": "APITest-Area-v2",
+              "ActorTypeID": 5,
+              "StatusID": 1,
+              "CurrencyID": 3,
+              "CountryID": 225,
+              "TimeZoneKey": 15
+            },
+            "ActorBillingGateways": []
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: content-type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "message": "Billing plan ID invalid",
+            "stack": null,
+            "isUserError": false,
+            "errorKey": null,
+            "error": null,
+            "details": null,
+            "correlationId": "yYAAxCxZH0CViC7o",
+            "isTranslatedError": false,
+            "errorName": null,
+            "errorCode": null,
+            "errorMessage": null
+          }

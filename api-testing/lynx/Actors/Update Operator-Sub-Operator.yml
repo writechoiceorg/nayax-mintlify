@@ -1,0 +1,142 @@
+﻿info:
+  name: Update Operator-Sub-Operator
+  type: http
+  seq: 2
+
+http:
+  method: PUT
+  url: https://qa-lynx.nayax.com/operational/v1/actors/2009586082
+  body:
+    type: json
+    data: |
+      {
+        "ParentActorID": 0,
+        "ActorDescription": "Test",
+        "ActorCode": 0,
+        "ActorAddress": "",
+        "ActorContact": "",
+        "ActorTypeID": 0,
+        "ActorStatus": 0,
+        "CurrencyID": 0,
+        "CountryID": 0,
+        "TimeZoneKey": 0,
+        "DayLightSavingsBit": false
+      }
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/actors/2009614982
+      method: PUT
+      body:
+        type: json
+        data: |
+          {
+            "ParentActorID": 2009586082,
+            "ActorDescription": "APITest",
+            "ActorCode": 123456,
+            "ActorTypeID": 22,
+            "ActorStatus": 1,
+            "CurrencyID": 3,
+            "CountryID": 225,
+            "TimeZoneKey": 15,
+            "DayLightSavingsBit": true
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {
+            "ParentActorID": 2009586082,
+            "ActorID": 2009614982,
+            "ActorDescription": "APITest",
+            "ActorCode": 123456,
+            "ActorTypeID": 22,
+            "ActorStatus": 1,
+            "ActorHierarchyLevel": 3,
+            "CurrencyID": 3,
+            "CountryID": 225,
+            "TimeZoneKey": 15,
+            "DayLightSavingsBit": true,
+            "ActorHierarchy": "Nayax Integrations / Writechoice.io / APITest /",
+            "ActorHasChildrenBit": false,
+            "ActorHasMachinesBit": false,
+            "OperatorActorID": 2009586082,
+            "DistributorActorID": 2001312062,
+            "ActorMerchantBit": "False",
+            "Refs": {
+              "parentActor": "v1/actors/2009586082",
+              "timeZone": "v1/timeZones/15",
+              "country": "v1/countries/225",
+              "currency": "v1/currencies/3",
+              "actorType": "v1/actorTypes?ActorTypeID=3"
+            }
+          }
+  - name: 400 Bad Request
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/actors/2009586082
+      method: PUT
+      body:
+        type: json
+        data: |
+          {
+            "ParentActorID": 0,
+            "ActorDescription": "Test",
+            "ActorCode": 0,
+            "ActorAddress": "",
+            "ActorContact": "",
+            "ActorTypeID": 0,
+            "ActorStatus": 0,
+            "CurrencyID": 0,
+            "CountryID": 0,
+            "TimeZoneKey": 0,
+            "DayLightSavingsBit": false
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: content-type
+          value: application/json
+        - name: x-log-context
+          value: cTd65E4s90OjjIii
+        - name: date
+          value: Wed, 13 May 2026 12:32:16 GMT
+        - name: x-envoy-upstream-service-time
+          value: "775"
+        - name: x-volterra-location
+          value: sp4-sao
+        - name: server
+          value: volt-adc
+        - name: transfer-encoding
+          value: chunked
+      body:
+        type: json
+        data: |-
+          {
+            "message": "ParentActorID is not exists",
+            "stack": null,
+            "isUserError": false,
+            "errorKey": null,
+            "error": null,
+            "details": null,
+            "correlationId": "cTd65E4s90OjjIii",
+            "isTranslatedError": false,
+            "errorName": null,
+            "errorCode": null,
+            "errorMessage": null
+          }

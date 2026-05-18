@@ -1,0 +1,68 @@
+﻿info:
+  name: Create Payment Methods for Machine
+  type: http
+  seq: 13
+
+http:
+  method: POST
+  url: https://qa-lynx.nayax.com/operational/v1/machines/{MachineID}/paymentMethods
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  body:
+    type: json
+    data: |
+      [
+        {
+          "MachineID": 0,
+          "PaymentMethodID": 0,
+          "ConvenienceFeePercentageBit": false,
+          "ConvenienceFeeValue": 0,
+          "LastUpdated": "2024-01-01T00:00:00Z",
+          "ConvenienceFeeBackupValue": 0
+        }
+      ]
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/machines/1002511581/paymentMethods
+      method: POST
+      body:
+        type: json
+        data: |
+          [{"MachineID":1002511581,"PaymentMethodID":1,"ConvenienceFeePercentageBit":false,"ConvenienceFeeValue":0,"ConvenienceFeeBackupValue":0}]
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          [{"MachineID":1002511581,"PaymentMethodID":1,"ConvenienceFeePercentageBit":false,"ConvenienceFeeValue":0.0,"LastUpdated":"2026-05-15T21:40:31.0885831Z","ExternalPaymentProviderUsername":null,"ExternalPaymentProviderPassword":null,"ExternalPaymentProviderTerminalID":null,"ExternalPaymentProviderLocationIdentifier":null,"PaymentMethodWorkingDays":null,"PaymentMethodCustomData":"{\"use_phone_contact\":false,\"use_phone_contactless\":false,\"use_phone_transaction\":false}","ConvenienceFeeBackupValue":0.0,"PaymentMethodQRString":null}]
+  - name: 400 Bad Request — no payment methods enabled for sandbox
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/machines/1002511581/paymentMethods
+      method: POST
+      body:
+        type: json
+        data: |
+          [{"MachineID":1002511581,"PaymentMethodID":1,"ConvenienceFeePercentageBit":false,"ConvenienceFeeValue":0,"ConvenienceFeeBackupValue":0}]
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"create_payment_method_not_available","isUserError":false,"errorKey":"create_payment_method_not_available"}

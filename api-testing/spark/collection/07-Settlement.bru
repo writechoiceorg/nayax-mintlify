@@ -1,0 +1,34 @@
+meta {
+  name: Settlement
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{base_url}}/Settlement
+  body: json
+  auth: none
+}
+
+headers {
+  IntegratorId: {{sign_key_id}}
+  TransactionSignature: {{transaction_signature}}
+}
+
+body:json {
+  {
+    "NayaxTransactionId": 0,
+    "SparkTransactionId": "{{spark_transaction_id}}",
+    "SiteId": 0,
+    "TerminalId": "{{terminal_id}}",
+    "TerminalIdType": {{terminal_id_type}},
+    "Amount": 12.25
+  }
+}
+
+docs {
+  Finalizes a pre-authorized transaction after session ends and final amount is known.
+  Only relevant for Pre-Authorization flow.
+  Differs from ExternalSettlement: this is called after a Spark-managed session.
+  ExternalSettlement is for externally-managed transactions.
+}

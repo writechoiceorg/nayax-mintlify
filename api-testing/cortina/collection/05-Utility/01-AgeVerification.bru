@@ -1,0 +1,30 @@
+meta {
+  name: AgeVerification
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/Cortina/Utility/AgeVerification
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "TransactionId": "{{transaction_id}}",
+      "SiteId": 1
+    },
+    "CardData": {
+      "CardNumber": "411111111111",
+      "EntryMode": "CON"
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Requests the integrator to verify the cardholder's age using card data.
+  Used for age-restricted vending machines. Returns a verification result (e.g., Approved/Declined) indicating whether the consumer meets the minimum age requirement.
+}

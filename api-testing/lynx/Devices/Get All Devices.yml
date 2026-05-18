@@ -1,0 +1,96 @@
+﻿info:
+  name: Get All Devices
+  type: http
+  seq: 3
+
+http:
+  method: GET
+  url: https://qa-lynx.nayax.com/operational/v1/devices
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  params:
+    - name: ActorId
+      value: ""
+      type: query
+      enabled: true
+    - name: isConnected
+      value: ""
+      type: query
+      enabled: true
+    - name: pageNumber
+      value: ""
+      type: query
+      enabled: true
+    - name: pageSize
+      value: ""
+      type: query
+      enabled: true
+    - name: nayaxDeviceSerial
+      value: ""
+      type: query
+      enabled: true
+    - name: orderId
+      value: ""
+      type: query
+      enabled: true
+    - name: statusId
+      value: ""
+      type: query
+      enabled: true
+    - name: createdDt
+      value: ""
+      type: query
+      enabled: true
+    - name: updatedDt
+      value: ""
+      type: query
+      enabled: true
+    - name: boardSerial
+      value: ""
+      type: query
+      enabled: true
+    - name: imei
+      value: ""
+      type: query
+      enabled: true
+    - name: chipId
+      value: ""
+      type: query
+      enabled: true
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/devices
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          [{"VposChipId":null,"IsDeviceExists":true,"FWVersionNumber":"4.0.0.12-RC1 - Sep 22 2020","VposVersionNumber":"2.0.2.3-rc08","CapacitorStatus":100,"CustomerShipmentDt":null,"FirstCustomerAliveDt":"2021-01-24T14:09:38.523","FirstAliveDt":"2021-01-24T14:09:38.523","DeviceID":0,"ActorID":0,"DeviceTypeLutID":139,"DeviceSerial":"1999999999999999","IMEI":"353463071043668","DeviceDescription":"","SimCardID":3001738141,"FWVersionID":410766397276740,"RequestedFwID":410766397276740,"PollInterval":null,"StatusID":1,"LastUpdated":"2026-05-12T13:17:53.667","IsCollectMultipleParameters":true,"IsLogged":true,"FRequestedNewVersionDate":"2020-10-15T08:25:59.583","FTookNewVersionDate":"2020-10-15T11:08:43.593","HardwareVersion":"4.13","IsRental":null,"RentalEndMonth":null,"RentalEndYear":null,"IsToBeReturned":null,"FeeCommunicationThreshold":null,"BillingPlanID":null,"BillingPlanActivationDate":null,"DeviceCreationDate":"2020-08-19T13:32:42.853","CreatedBy":350748742,"UpdatedBy":94936642,"DistributorBillingPlanID":null,"ChipID":null,"OrderID":null,"ExternalFlashSize":33554432,"BoardSerial":null,"FlashSize":null,"DeviceFamily":null,"ModemModel":"UE910-EU","TrialEndDate":null,"VerticalTypeID":null,"VerticalProductTypeID":null,"VerticalTypeLutID":null,"VerticalProductTypeLutID":null,"Refs":{"actor":"v1/actors/0","machine":"/v1/machine/11957"}},{"VposChipId":null,"IsDeviceExists":true,"FWVersionNumber":"4.0.0.12-RC1 - Sep 22 2020","VposVersionNumber":"2.0.2.3-rc08","CapacitorStatus":100,"CustomerShipmentDt":null,"FirstCustomerAliveDt":"2021-01-24T14:09:38.523","FirstAliveDt":"2021-01-24T14:09:38.523","DeviceID":0,"ActorID":0,"DeviceTypeLutID":139,"DeviceSerial":"1999999999999999","IMEI":"353463071043668","DeviceDescription":"","SimCardID":3001738141,"FWVersionID":410766397276740,"RequestedFwID":410766397276740,"PollInterval":null,"StatusID":1,"LastUpdated":"2026-05-12T13:17:53.667","IsCollectMultipleParameters":true,"IsLogged":true,"FRequestedNewVersionDate":"2020-10-15T08:25:59.583","FTookNewVersionDate":"2020-10-15T11:08:43.593","HardwareVersion":"4.13","IsRental":null,"RentalEndMonth":null,"RentalEndYear":null,"IsToBeReturned":null,"FeeCommunicationThreshold":null,"BillingPlanID":null,"BillingPlanActivationDate":null,"DeviceCreationDate":"2020-08-19T13:32:42.853","CreatedBy":350748742,"UpdatedBy":94936642,"DistributorBillingPlanID":null,"ChipID":null,"OrderID":null,"ExternalFlashSize":33554432,"BoardSerial":null,"FlashSize":null,"DeviceFamily":null,"ModemModel":"UE910-EU","TrialEndDate":null,"VerticalTypeID":null,"VerticalProductTypeID":null,"VerticalTypeLutID":null,"VerticalProductTypeLutID":null,"Refs":{"actor":"v1/actors/0","machine":"/v1/machine/323532608"}},{"VposChipId":null,"IsDeviceExists":true,"FWVersionNumber":null,"VposVersionNumber":"0.0.0.1","CapacitorStatus":null,"CustomerShipmentDt":"2021-11-24T13:28:29.147","FirstCustomerAliveDt":null,"FirstAliveDt":null,"DeviceID":72,"ActorID":2001537302,"DeviceTypeLutID":15,"DeviceSerial":"0000000000000100","IMEI":"0000000000000100","DeviceDescription":"","SimCardID":null,"FWVersionID":null,"RequestedFwID":683719272657231,"PollInterval":900,"StatusID":1,"LastUpdated":"2023-02-16T19:32:03.92","IsCollectMultipleParameters":true,"IsLogged":true,"FRequestedNewVersionDate":null,"FTookNewVersionDate":null,"HardwareVersion":null,"IsRental":null,"RentalEndMonth":null,"RentalEndYear":null,"IsToBeReturned":null,"FeeCommunicationThreshold":null,"BillingPlanID":null,"BillingPlanActivationDate":null,"DeviceCreationDate":null,"CreatedBy":null,"UpdatedBy":66667,"DistributorBillingPlanID":null,"ChipID":null,"OrderID":null,"ExternalFlashSize":null,"BoardSerial":null,"FlashSize":null,"DeviceFamily":null,"ModemModel":null,"TrialEndDate":null,"VerticalTypeID":null,"VerticalProductTypeID":null,"VerticalTypeLutID":null,"VerticalProductTypeLutID":null,"Refs":{"actor":"v1/actors/2001537302","machine":"/v1/machine/106791869"}}]
+  - name: 401 Unauthorized — expired or invalid token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/devices
+      method: GET
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Unauthorized","isUserError":false,"errorKey":null}

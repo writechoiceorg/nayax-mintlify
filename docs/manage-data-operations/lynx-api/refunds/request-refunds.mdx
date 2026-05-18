@@ -31,6 +31,12 @@ In Nayax Core, refunds can be requested through the **Dynamic Transactions Monit
 
 This process can be performed programmatically through the Lynx API. The following endpoint is used to process the refund.
 
+<Warning>
+**Elevated Permissions Required**
+
+`POST /v1/payment/refund-request` requires a role with financial permissions. A standard operator token returns `403 Insufficient Permissions`. Contact your Nayax account manager to enable refund permissions for your account.
+</Warning>
+
 <EndpointCard
   title="Request a Payment Refund"
   href="/reference/lynx/payment/request-payment-refund"

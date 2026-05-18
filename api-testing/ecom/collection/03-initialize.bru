@@ -1,0 +1,63 @@
+meta {
+  name: Initialize Transaction
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/initialize
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "basicInfo": {
+      "sessionExpiration": "2026-12-31T23:59:59Z",
+      "redirectURL": "https://your-merchant.com/callback",
+      "amount": 15,
+      "currency": "USD",
+      "countryCode": "US",
+      "requestType": 0,
+      "entryMode": 0,
+      "tokenModel": 0,
+      "platform": 0,
+      "isStoredCard": false,
+      "merchantRequestId": "MERCHANT_REQ_001"
+    },
+    "machineInfo": {
+      "machineId": "{{machine_id}}"
+    },
+    "cardHolderInfo": {
+      "cardholderEmail": "test@example.com"
+    },
+    "validationKey": "{{validation_key}}"
+  }
+}
+
+// Live results 2026-05-15:
+// Missing validationKey → 200 Declined 997 "InitializeRequestValidator No ValidationKey"
+// UUID validationKey without validate-merchant → 200 Declined 998 "GetSdkTransactionKey Failed"
+// Missing machineInfo entirely → 400 ProblemDetails {"errors":{"MachineInfo":["The MachineInfo field is required."]}}
+// Note: 400 format is ASP.NET ProblemDetails, NOT the Status schema documented in the spec
+
+docs {
+  Direction: Integrator → Nayax
+  Auth: No explicit auth header — validationKey from /validate-merchant is the session credential.
+
+  From live testing (2026-05-15):
+  - Returned Declined code 997 with missing validationKey
+  - Returned Declined code 998 with invalid validationKey format
+  - validationKey must be a pre-registered UUID from /validate-merchant, not a crypto key
+
+  requestType enum: 0=Sale, 1=Auth, 2=Settlement, 3=Void, 4=Refund, 5=PartialRefund, 6=IncrementalAuth, 7=CancelAuth, 8=PartialCapture
+  entryMode enum: 0=ECOM, 1=MIT, 2=CIT, 3=COF, 4=MOTO
+  tokenModel enum: 0=StoredCard, 1=Subscription, 2=TopUp
+  platform enum: 0=iOS, 1=Android, 2=Web
+
+  Spec path: POST /initialize
+}

@@ -1,0 +1,55 @@
+meta {
+  name: Charge Token
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/charge-token
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "basicInfo": {
+      "amount": 25.50,
+      "currency": "USD",
+      "countryCode": "US",
+      "requestType": 0,
+      "entryMode": 1,
+      "tokenModel": 0,
+      "token": "NAYAX_TOKEN_ID_FROM_INITIALIZE",
+      "merchantRequestId": "MERCHANT_MIT_001",
+      "isSaveTokenWithoutConsent": false
+    },
+    "machineInfo": {
+      "machineId": "{{machine_id}}"
+    },
+    "cardHolderInfo": {
+      "cardHolderUniqId": "unique_customer_id_123"
+    },
+    "validationKey": "{{validation_key}}"
+  }
+}
+
+// Live results 2026-05-15:
+// Missing tokenModel → 200 Declined 997 "ChargeTokenRequestValidator No BasicInfo.TokenModel"
+// tokenModel required for MIT/CIT even though spec marks it conditional (COF only) — spec gap
+// With tokenModel present → 200 Declined 998 "GetSdkTransactionKey Failed" (blocked on credentials)
+
+docs {
+  Direction: Integrator → Nayax
+  Auth: validationKey from /validate-merchant.
+
+  Used for recurring payments (MIT or CIT). Requires a previously saved card token.
+  entryMode: 1=MIT, 2=CIT (not ECOM — this is server-to-server)
+
+  Prerequisite: must have a nayaxTokenId from a prior /initialize response (COF flow).
+
+  Spec path: POST /charge-token
+}

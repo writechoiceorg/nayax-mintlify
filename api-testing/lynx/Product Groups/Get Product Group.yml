@@ -1,0 +1,47 @@
+﻿info:
+  name: Get Product Group
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: https://qa-lynx.nayax.com/operational/v1/productGroups/{ProductGroupID}
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/productGroups/2147111052
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"ProductGroupRef":"v1/productGroups/2147111052","ActorRef":"/v1/actors/2009586082","ProductGroupID":2147111052,"ActorID":2009586082,"ProductGroupName":"Test Group API Updated","ProductGroupCode":null,"ProductGroupSubCode":2,"ProductGroupCreatedBy":1000294591,"ProductGroupCreationDate":"2026-05-14T22:19:52.497","ProductGroupUpdatedBy":1000294591,"ProductGroupLastUpdated":"2026-05-14T22:20:05.28","ProductGroupPictureURL":null,"ProductGroupCategoryCode":"CAT2"}
+  - name: 401 Unauthorized — expired or invalid token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/productGroups/2147111052
+      method: GET
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Unauthorized","isUserError":false,"errorKey":null}

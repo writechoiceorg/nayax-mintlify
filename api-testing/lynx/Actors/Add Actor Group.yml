@@ -1,0 +1,40 @@
+﻿info:
+  name: Add Actor Group
+  type: http
+  seq: 19
+
+http:
+  method: POST
+  url: https://qa-lynx.nayax.com/operational/v1/actors/{ActorID}/roleGroups
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  body:
+    type: json
+    data: |
+      [
+        {
+          "RoleGroupId": 0
+        }
+      ]
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK — response not yet captured, re-run to save
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/actors/{ActorID}/roleGroups
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: text
+        data: ""

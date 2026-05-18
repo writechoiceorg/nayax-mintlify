@@ -1,0 +1,48 @@
+meta {
+  name: Get Transaction by Session
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{base_url}}/get-transaction-by-session
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "basicInfo": {
+      "merchantRequestId": "REQ_GETTRANS_001"
+    },
+    "machineInfo": {
+      "machineId": "{{machine_id}}"
+    },
+    "sessionInfo": {
+      "nayaxSessionId": "SESSION_ID_FROM_INITIALIZE"
+    },
+    "transactionIdentifyerType": 0,
+    "validationKey": "{{validation_key}}"
+  }
+}
+
+docs {
+  Direction: Integrator → Nayax
+  Auth: validationKey from /validate-merchant.
+
+  Retrieves transaction status and receipt URL using a session ID.
+  transactionIdentifyerType: 0=NayaxSessionId, 1=ExternalSessionId
+
+  externalTransactionStatus values:
+  12=Approved, 19=PartialApproval, 22=Declined, 53=Pending, 62=Voided,
+  64=Refunded, 113=Cancelled, 250=GeneralDecline, 5000=ProviderError,
+  5001=Timeout, 5002=UnknownStatus
+
+  Prerequisite: must have a nayaxSessionId from an /initialize response.
+
+  Spec path: POST /get-transaction-by-session
+}

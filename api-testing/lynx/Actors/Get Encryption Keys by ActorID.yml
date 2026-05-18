@@ -1,0 +1,50 @@
+﻿info:
+  name: Get Encryption Keys by ActorID
+  type: http
+  seq: 11
+
+http:
+  method: GET
+  url: https://qa-lynx.nayax.com/operational/v1/actors/GetEncKeys
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  params:
+    - name: actorID
+      value: "2009586082"
+      type: query
+      enabled: true
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 403 Forbidden
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/actors/GetEncKeys?actorID=2009586082
+      method: GET
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: content-type
+          value: application/json
+      body:
+        type: json
+        data: |-
+          {
+            "message": "Insufficient permissions to perform this action.",
+            "stack": null,
+            "isUserError": false,
+            "errorKey": null,
+            "error": null,
+            "details": null,
+            "correlationId": "YtRm781vbkePbp50",
+            "isTranslatedError": false,
+            "errorName": null,
+            "errorCode": null,
+            "errorMessage": null
+          }

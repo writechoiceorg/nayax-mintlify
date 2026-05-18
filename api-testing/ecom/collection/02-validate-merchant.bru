@@ -1,0 +1,41 @@
+meta {
+  name: Validate Merchant
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/validate-merchant
+  body: json
+  auth: none
+}
+
+headers {
+  IntegratorId: {{sign_key_id}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "tokenId": 0,
+    "actorId": "YOUR_ACTOR_ID",
+    "machineId": "{{machine_id}}",
+    "random": "RANDOM_STRING_FROM_NAYAX_27CHARS",
+    "cipher": "BASE64_AES_ECB_CIPHER"
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator (Nayax calls this on your server — or you call Nayax to initiate auth)
+  Auth: IntegratorId header. The cipher is AES-256 ECB encrypted using last 32 chars of Secret Token.
+
+  Cipher construction:
+  - plaintext = EcomTransactionId (UUID) + "=" + random string (27 chars from Nayax)
+  - key = last 32 chars of Secret Token (66 chars total)
+  - encrypt with AES-256 ECB, base64-encode result
+
+  On success: returns customDeclineCode = HashedEcomTransactionId
+  Use that HashedEcomTransactionId as the validationKey in /initialize.
+
+  Spec path: POST /validate-merchant
+}

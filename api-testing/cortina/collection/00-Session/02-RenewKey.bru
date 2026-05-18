@@ -1,0 +1,26 @@
+meta {
+  name: RenewKey
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/Cortina/RenewKey
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "TransactionId": "{{transaction_id}}",
+      "SiteId": 1
+    },
+    "CustomData": {}
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Called by Nayax to rotate the session encryption key mid-transaction.
+}

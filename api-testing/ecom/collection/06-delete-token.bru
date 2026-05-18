@@ -1,0 +1,45 @@
+meta {
+  name: Delete Token
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/delete-token
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "basicInfo": {
+      "merchantRequestId": "REQ_DELTOKEN_001"
+    },
+    "machineInfo": {
+      "machineId": "{{machine_id}}"
+    },
+    "cardHolderInfo": {
+      "cardHolderUniqId": "unique_customer_id_123"
+    },
+    "tokenInfo": {
+      "nayaxTokenId": "NAYAX_TOKEN_ID"
+    },
+    "validationKey": "{{validation_key}}"
+  }
+}
+
+docs {
+  Direction: Integrator → Nayax
+  Auth: validationKey from /validate-merchant.
+
+  Permanently deletes a saved card token. Alternative: set expiry date instead of deleting.
+  On success returns status.verdict = "Approved", tokenInfo = null.
+
+  Prerequisite: must have a valid nayaxTokenId.
+
+  Spec path: POST /delete-token
+}

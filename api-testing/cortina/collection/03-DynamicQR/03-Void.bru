@@ -1,0 +1,30 @@
+meta {
+  name: DynamicQR Void
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/Cortina/DynamicQR/Void
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "TransactionId": "{{transaction_id}}",
+      "SiteId": 12
+    },
+    "MachineInfo": {
+      "Id": 869761713,
+      "Name": "TestPayDynamicQR V2",
+      "TerminalId": "987654321"
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Voids a dynamic QR payment before it is settled. Cancels the QR code and releases any held funds.
+}

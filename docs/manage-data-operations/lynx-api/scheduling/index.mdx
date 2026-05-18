@@ -1,0 +1,41 @@
+---
+title: "Scheduling"
+description: "Route planning, driver management, and machine task scheduling through the Lynx API."
+metadata:
+  og:description: "Use the Lynx API Scheduling endpoints to manage routes, drivers, and machine service tasks."
+---
+
+The Scheduling section of the Lynx API provides tools for planning and managing field service operations. It covers route creation, driver assignment, machine task scheduling, and visit order management.
+
+<Warning>
+**Elevated permissions required**
+
+All Scheduling endpoints require permissions beyond those granted to a standard operator token. Requests with a standard token return `403 Insufficient Permissions`. Contact your Nayax account manager to request scheduling access for your account.
+</Warning>
+
+## Key concepts
+
+**Routes:** A route is a collection of machines grouped for regular servicing by a driver. Machines are assigned to routes, and tasks are scheduled per visit.
+
+**Drivers:** A driver is a user with a field service role. Drivers are assigned to routes and associated with machine tasks.
+
+**Machine Tasks:** A machine task is a scheduled service action for a specific machine on a specific date, such as a restocking visit or maintenance check.
+
+**Visit Orders:** A visit order represents a planned visit to a machine or route, combining the machine, driver, date, and task into a single actionable record.
+
+## Available guides
+
+<Columns cols={2}>
+<Card
+  icon="route"
+  title="Routes"
+  href="/docs/manage-data-operations/lynx-api/scheduling/routes"
+  arrow
+/>
+<Card
+  icon="users"
+  title="Drivers and Tasks"
+  href="/docs/manage-data-operations/lynx-api/scheduling/drivers-and-tasks"
+  arrow
+/>
+</Columns>

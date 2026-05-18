@@ -1,0 +1,52 @@
+meta {
+  name: Close Transaction
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{base_url}}/close-transaction
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "basicInfo": {
+      "requestType": 2,
+      "entryMode": 1,
+      "amount": 25.50,
+      "currency": "USD",
+      "countryCode": "US",
+      "merchantRequestId": "CLOSE_TXN_001",
+      "transactionId": "ORIGINAL_NAYAX_TRX_ID",
+      "transactionTimeUtc": "2026-05-15T00:00:00Z"
+    },
+    "machineInfo": {
+      "machineId": "{{machine_id}}"
+    },
+    "cardHolderInfo": {},
+    "paymentInfo": {},
+    "additionalInfo": {},
+    "validationKey": "{{validation_key}}"
+  }
+}
+
+docs {
+  Direction: Integrator → Nayax
+  Auth: validationKey from /validate-merchant.
+
+  Single endpoint for all second-step operations. Set requestType to control operation:
+  2=Settlement(Capture), 3=Void, 4=Refund, 5=PartialRefund,
+  6=IncrementalAuth, 7=Cancel, 8=PartialSettlement
+
+  transactionId and transactionTimeUtc must come from the original Auth response.
+
+  Prerequisite: must have a live authorized transaction (transactionId from /initialize or /charge-token).
+
+  Spec path: POST /close-transaction
+}

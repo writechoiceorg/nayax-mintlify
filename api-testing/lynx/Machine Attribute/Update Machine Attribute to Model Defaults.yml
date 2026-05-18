@@ -1,0 +1,29 @@
+﻿info:
+  name: Update Machine Attribute to Model Defaults
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: https://qa-lynx.nayax.com/operational/v1/machines/{MachineID}/attributes/defaults
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: SKIP — not run during testing to avoid side effects
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/machines/{MachineID}/attributes/defaults
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      body:
+        type: text
+        data: ""

@@ -1,0 +1,46 @@
+meta {
+  name: CreditCard Inquiry3DS
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{base_url}}/Cortina/CreditCard/Inquiry3DS
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "Amount": 5.00,
+      "CurrencyCode": "ILS",
+      "SiteId": 1,
+      "TransactionId": "{{transaction_id}}"
+    },
+    "CardData": {
+      "CardNumber": "411111111111",
+      "ExpMonth": "12",
+      "ExpYear": "27",
+      "EntryMode": "CON"
+    },
+    "ECom3DSInfo": {
+      "ECom3DSData": ""
+    },
+    "ActorInfo": {
+      "Id": 2001537302,
+      "MerchantId": "999999888885",
+      "Name": "TestPayCC V2 OP"
+    },
+    "MachineInfo": {
+      "Id": 106791869,
+      "Name": "Test Machine",
+      "TerminalId": "8888888844"
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Performs a 3D Secure inquiry for the card. ECom3DSData contains the 3DS authentication data.
+}

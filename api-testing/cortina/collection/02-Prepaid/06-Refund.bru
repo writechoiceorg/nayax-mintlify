@@ -1,0 +1,38 @@
+meta {
+  name: Prepaid Refund
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/Cortina/Prepaid/Refund
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "TransactionId": "{{transaction_id}}",
+      "SiteId": 1,
+      "Amount": 5.00,
+      "RefundAmount": 5.00,
+      "CurrencyCode": "ILS"
+    },
+    "ActorInfo": {
+      "Id": 2001537302,
+      "MerchantId": "999999888885",
+      "Name": "TestPayPrepaid V2 OP"
+    },
+    "MachineInfo": {
+      "Id": 106791869,
+      "Name": "Test Machine",
+      "TerminalId": "8888888844"
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Refunds a previously settled prepaid transaction. Credits funds back to the prepaid account. RefundAmount may be partial.
+}

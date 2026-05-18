@@ -1,0 +1,50 @@
+﻿info:
+  name: Delete Machine Tasks
+  type: http
+  seq: 16
+
+http:
+  method: DELETE
+  url: https://qa-lynx.nayax.com/operational/v1/Scheduling/schedule/machine-tasks
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  params:
+    - name: SchedulingIds
+      value: ""
+      type: query
+      enabled: true
+    - name: MachineID
+      value: ""
+      type: query
+      enabled: true
+    - name: isStatic
+      value: ""
+      type: query
+      enabled: true
+    - name: date
+      value: ""
+      type: query
+      enabled: true
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 403 Forbidden — permissions not granted for sandbox token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/schedule/machine-tasks
+      method: DELETE
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}

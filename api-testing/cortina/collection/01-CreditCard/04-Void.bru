@@ -1,0 +1,25 @@
+meta {
+  name: CreditCard Void
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/Cortina/CreditCard/Void
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "TransactionId": "{{transaction_id}}",
+      "SiteId": 1
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Voids a previously authorized or settled transaction before it is batched.
+}

@@ -1,0 +1,37 @@
+﻿info:
+  name: Upload Refund Documentation
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: https://qa-lynx.nayax.com/operational/v1/payment/upload-refund
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  body:
+    type: json
+    data: |
+      {}
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 403 Forbidden
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/payment/upload-refund
+      method: POST
+    response:
+      status: 403
+      statusText: Forbidden
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}

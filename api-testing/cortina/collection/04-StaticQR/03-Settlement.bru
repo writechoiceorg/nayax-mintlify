@@ -1,0 +1,27 @@
+meta {
+  name: StaticQR Settlement
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/Cortina/StaticQR/Settlement
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "Amount": 5.00,
+      "CurrencyCode": "USD",
+      "SiteId": 1,
+      "TransactionId": "{{transaction_id}}"
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Captures a previously authorized static QR payment. Finalizes the payment with the processor.
+}

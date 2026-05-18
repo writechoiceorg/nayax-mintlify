@@ -1,0 +1,58 @@
+﻿info:
+  name: Insert-Update Machine Attributes v2
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: https://qa-lynx.nayax.com/operational/v2/machines/attributes
+  auth:
+    type: bearer
+    token: {{NAYAX_TOKEN}}
+  body:
+    type: json
+    data: |
+      [
+        {
+          "MachineIds": [0],
+          "Attributes": [],
+          "UpdateQueue": true,
+          "UpdateValues": true
+        }
+      ]
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 OK
+    request:
+      url: https://qa-lynx.nayax.com/operational/v2/machines/attributes
+      method: POST
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"Ok":true,"Message":"Machines attributes update was successful","SystemMessage":null,"code":null}
+  - name: 401 Unauthorized — expired or invalid token
+    request:
+      url: https://qa-lynx.nayax.com/operational/v2/machines/attributes
+      method: POST
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"Unauthorized","isUserError":false,"errorKey":null}

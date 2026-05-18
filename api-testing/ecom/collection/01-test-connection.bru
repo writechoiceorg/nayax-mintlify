@@ -1,0 +1,27 @@
+meta {
+  name: Test Connection
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/test/connection
+  body: none
+  auth: none
+}
+
+docs {
+  Direction: Integrator → Nayax
+  Auth: None required.
+  Tests basic API reachability. Returns plain text "OK" on 200.
+  Note: Spec example says "Connection Successful" but actual response is "OK".
+  Spec path: GET /test/connection
+}
+
+tests {
+  test("status is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+}
+
+// Live result 2026-05-15: 200 OK, body: "OK"

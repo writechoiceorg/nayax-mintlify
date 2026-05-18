@@ -1,0 +1,27 @@
+meta {
+  name: Prepaid Settlement
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/Cortina/Prepaid/Settlement
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "Amount": 5.00,
+      "CurrencyCode": "ILS",
+      "SiteId": 1,
+      "TransactionId": "{{transaction_id}}"
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Captures a previously authorized prepaid transaction. Finalizes the deduction from the prepaid account.
+}

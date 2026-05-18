@@ -1,0 +1,25 @@
+meta {
+  name: CreditCard Cancel
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/Cortina/CreditCard/Cancel
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "TransactionId": "{{transaction_id}}",
+      "SiteId": 1
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Cancels a transaction that is in progress or pending. Distinct from Void which applies to completed authorizations.
+}

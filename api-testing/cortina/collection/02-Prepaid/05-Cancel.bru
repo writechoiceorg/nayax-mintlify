@@ -1,0 +1,25 @@
+meta {
+  name: Prepaid Cancel
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/Cortina/Prepaid/Cancel
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "BasicInfo": {
+      "TransactionId": "{{transaction_id}}",
+      "SiteId": 1
+    }
+  }
+}
+
+docs {
+  Direction: Nayax → Integrator.
+  Cancels a prepaid transaction in progress or pending. Restores any reserved funds to the prepaid account.
+}
