@@ -1,0 +1,92 @@
+---
+title: "Pre-Authorization with External Settlement"
+metadata:
+  og:description: "The EMV Core implementation of ExternalSettlement separates the authorization and settlement phases of a transaction, allowing a 3rd-party server to control when and how much is charged."
+---
+
+The EMV Core implementation of [ExternalSettlement](/reference/spark/transactions/externalsettlement) separates the authorization and settlement phases of a transaction.
+
+While the EMV Core manages the initial interaction with the consumer and the payment card, the final financial settlement is performed by a 3rd-party server that sends the settlement request to Nayax's servers.
+
+<Note>
+  **Prerequisite**
+
+  For this flow to function, the [ExternalSettlement](/reference/spark/transactions/externalsettlement) setting must be enabled by Nayax.
+</Note>
+
+## Configuration & Device Behavior
+
+Once enabled, the Nayax Engine changes how the device handles transactions:
+
+- The device will not send its own settlement command after a successful authorization.
+- The transaction remains unsettled until an external request is received.
+- The only way to settle a transaction is via the [ExternalSettlement](/reference/spark/transactions/externalsettlement) command.
+- The settlement amount can be less than or equal to the authorized amount.
+
+This provides integrators the flexibility to trigger the settlement stage externally according to their own business logic.
+
+The following table has the technical requirements based on the feature:
+
+| Feature | Requirement |
+| :-- | :-- |
+| **Settlement Window** | Transactions must be settled within **60 hours** of initiation by default. This window can be adjusted for specific cases by Nayax support. |
+| **Expiry** | Settlement attempts performed after the settlement window will fail. |
+| **Auto-Cleanup** | Transactions unsettled past the settlement window are automatically canceled via card scheme regulations (this should not be relied upon). |
+| **Settlement Amount** | The final settlement price must not exceed the authorized amount. |
+
+## Managing Unsettled Transactions
+
+When no product or service is provided, proactive management of the transaction is required to maintain a good user experience.
+
+- **External Cancel:** If it is known that no settlement will occur, you must send an **External Cancel** immediately.
+- **Consumer Impact:** If a transaction remains authorized without being canceled or settled, the consumer's funds will stay captured on their payment method, leading to potential disputes.
+
+### External Settlement Flow
+
+#### Initiation of transaction
+
+Below is a breakdown of the Pre-Authorization and External Settlement flow:
+
+<Frame>
+  <img src="/images/docs/external-settlement-emv/image1.png" />
+</Frame>
+
+1. The host machine calls the [`PreAuthorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#preauthorize) method using the EMV Core API.
+2. EMV Core begins polling the reader. The host application should prompt the buyer to tap their card.
+3. The buyer taps their card on the reader.
+4. EMV Core reads the card data and sends an authorization request to the Nayax Servers.
+5. Nayax Servers perform authorization with the Billing Provider.
+6. The Billing Provider sends an authorization response to the Nayax Servers.
+7. Nayax Servers return the authorization response to EMV Core.
+8. EMV Core sends a `TransactionComplete` event to the host application. The event contains the transaction ID and transaction data, including `NayaxTransactionId` and `SiteId` in the `authorizationDetails.Additional_Parameters` field.
+
+At this point, the host application must retain the `NayaxTransactionId` and `SiteId` for later use in the External Settlement or External Cancel request.
+
+9. The host application proceeds with providing the service (for example, starts an EV charging session or dispenses a product).
+
+#### Settling the transaction (External Settlement)
+
+If the service was provided:
+
+<Frame>
+  <img src="/images/docs/external-settlement-emv/image2.png" />
+</Frame>
+
+10. The 3rd-party server initiates communication by calling the `StartAuthentication` method with an encrypted cipher to authenticate.
+11. The Nayax Server decrypts the cipher and validates the credentials to confirm authenticity.
+12. The 3rd-party server sends an [ExternalSettlement](/reference/spark/transactions/externalsettlement) request. It must contain the `NayaxTransactionId` and `SiteId` retrieved from the `TransactionComplete` event, and must be sent within the settlement window.
+13. Nayax Servers process the settlement with the Billing Provider.
+14. Nayax Servers send an [ExternalSettlement](/reference/spark/transactions/externalsettlement) response to the 3rd-party server confirming the settlement outcome.
+
+If the service was not provided:
+
+<Frame>
+  <img src="/images/docs/external-settlement-emv/image3.png" />
+</Frame>
+
+10. The 3rd-party server initiates communication by calling the `StartAuthentication` method.
+11. The Nayax Server validates the credentials.
+12. The 3rd-party server sends an [ExternalCancel](/reference/spark/transactions/externalcancel) request. It must contain the `NayaxTransactionId` and `SiteId` retrieved from the `TransactionComplete` event, and must be sent within the settlement window.
+13. Nayax Servers initiate the cancellation process with the Billing Provider.
+14. Nayax Servers receive the response from the Billing Provider.
+15. Nayax Servers send an [ExternalCancel](/reference/spark/transactions/externalcancel) response to the 3rd-party server.
