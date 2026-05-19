@@ -848,7 +848,7 @@ components:
           type: number
           format: double
           description: |
-            The transaction amount in the smallest currency unit (e.g., cents).
+            The transaction amount in the main currency unit (decimal place 0, e.g., 15 for $15.00).
       example:
         NayaxTransactionId: 2004545072
         SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
