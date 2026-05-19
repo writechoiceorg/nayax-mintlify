@@ -43,6 +43,8 @@ When no product or service is provided, you must proactively manage the transact
 
 ### Initiation of transaction
 
+The steps below cover the authorization phase, from card tap through session completion.
+
 1. The host machine calls the [`PreAuthorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#preauthorize) method using the EMV Core API.
 2. EMV Core begins polling the reader. The host application should prompt the buyer to tap their card.
 3. The buyer taps their card on the reader.
@@ -57,6 +59,8 @@ At this point, the host application must retain the `NayaxTransactionId` and `Si
 9. The host application proceeds with providing the service (for example, starts an EV charging session or dispenses a product).
 
 ### Settling the transaction
+
+After service delivery, a 3rd-party server handles either settlement or cancellation depending on the outcome.
 
 If the service was provided:
 
