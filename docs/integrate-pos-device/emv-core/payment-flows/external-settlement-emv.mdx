@@ -47,10 +47,6 @@ When no product or service is provided, proactive management of the transaction 
 
 Below is a breakdown of the Pre-Authorization and External Settlement flow:
 
-<Frame>
-  <img src="/images/docs/external-settlement-emv/image1.png" />
-</Frame>
-
 1. The host machine calls the [`PreAuthorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#preauthorize) method using the EMV Core API.
 2. EMV Core begins polling the reader. The host application should prompt the buyer to tap their card.
 3. The buyer taps their card on the reader.
@@ -68,10 +64,6 @@ At this point, the host application must retain the `NayaxTransactionId` and `Si
 
 If the service was provided:
 
-<Frame>
-  <img src="/images/docs/external-settlement-emv/image2.png" />
-</Frame>
-
 10. The 3rd-party server initiates communication by calling the `StartAuthentication` method with an encrypted cipher to authenticate.
 11. The Nayax Server decrypts the cipher and validates the credentials to confirm authenticity.
 12. The 3rd-party server sends an [ExternalSettlement](/reference/spark/transactions/externalsettlement) request. It must contain the `NayaxTransactionId` and `SiteId` retrieved from the `TransactionComplete` event, and must be sent within the settlement window.
@@ -79,10 +71,6 @@ If the service was provided:
 14. Nayax Servers send an [ExternalSettlement](/reference/spark/transactions/externalsettlement) response to the 3rd-party server confirming the settlement outcome.
 
 If the service was not provided:
-
-<Frame>
-  <img src="/images/docs/external-settlement-emv/image3.png" />
-</Frame>
 
 10. The 3rd-party server initiates communication by calling the `StartAuthentication` method.
 11. The Nayax Server validates the credentials.
