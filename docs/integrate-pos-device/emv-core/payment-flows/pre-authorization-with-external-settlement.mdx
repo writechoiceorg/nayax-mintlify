@@ -16,10 +16,8 @@ While EMV Core manages the initial interaction with the consumer and the payment
 
 ## Configuration & Device Behavior
 
-Once enabled, the Nayax Engine changes how the device handles transactions:
+Once enabled, settlement is handled externally rather than by the host application:
 
-- The device will not send its own settlement command after a successful authorization.
-- The transaction remains unsettled until an external request is received.
 - The only way to settle a transaction is via the [ExternalSettlement](/reference/spark/transactions/externalsettlement) command.
 - The settlement amount can be less than or equal to the authorized amount.
 
@@ -47,7 +45,7 @@ The flow consists of two phases: payment authorization handled by EMV Core, and 
 
 The steps below cover the authorization phase, from card tap through session completion.
 
-1. The host machine calls the [`PreAuthorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#preauthorize) method using the EMV Core API.
+1. The host machine calls the [`PreAuthorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#preauthorize) method using the EMV Core SDK.
 2. EMV Core begins polling the reader. The host application should prompt the buyer to tap their card.
 3. The buyer taps their card on the reader.
 4. EMV Core reads the card data and sends an authorization request to the Nayax Servers.
