@@ -1,4 +1,4 @@
----
+﻿---
 title: "Response Codes"
 metadata:
   og:description: "Here's a comprehensive list of response codes, their descriptions, and the relevant Spark API methods. This table helps you understand the outcomes."
@@ -8,23 +8,23 @@ Here's a comprehensive list of response codes, their descriptions, and the relev
 
 | Response Code | Description                               | Relevant API Methods                                                                         |
 | ------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `20`          | Machine Has No Device                     | [`/TriggerTransaction`](/docs/triggertransaction)                                              |
-| `21`          | Device Not Connected to MQTT Server       | [`/TriggerTransaction`](/docs/triggertransaction)                                              |
-| `22`          | Missing Device IP                         | [`/TriggerTransaction`](/docs/triggertransaction)                                              |
-| `23`          | IP Is Non-VPN                             | [`/TriggerTransaction`](/docs/triggertransaction)                                              |
-| `24`          | Machine Not Responding                    | [`/TriggerTransaction`](/docs/triggertransaction)                                              |
-| `25`          | Unknown Machine ID                        | [`/TriggerTransaction`](/docs/triggertransaction)                                              |
-| `26`          | Validation Error                          | [`/StartAuthentication`](/docs/startauthentication)                                            |
-| `27`          | Unknown Transaction ID                    | [`/Settlement`](/docs/settlement), [`/CancelTransaction`](/docs/canceltransaction)               |
-| `28`          | Already Cancelled                         | [`/CancelTransaction`](/docs/canceltransaction)                                                |
-| `29`          | Not Allowed to Wake Device                | [`/TriggerTransaction`](/docs/triggertransaction)                                              |
-| `30`          | Spark Integrator Not Active               | [`/StartAuthentication`](/docs/startauthentication)                                            |
-| `31`          | Cancellation Failed                       | [`/CancelTransaction`](/docs/canceltransaction)                                                |
-| `32`          | Transaction Not Found or Old              | [`/Settlement`](/docs/settlement), [`/CancelTransaction`](/docs/canceltransaction)             |
-| `33`          | Fail To Authenticate                      | [`/StartAuthentication`](/docs/startauthentication)                                            |
-| `34`          | Missing Amount                            | [`/TriggerTransaction`](/docs/triggertransaction), [`/Settlement`](/docs/settlement)             |
-| `35`          | Settlement Failed                         | [`/Settlement`](/docs/settlement)                                                              |
-| `36`          | Site ID Not Found                         | [`/Settlement`](/docs/settlement), [`/CancelTransaction`](/docs/canceltransaction)              |
+| `20`          | Machine Has No Device                     | `/TriggerTransaction`                                              |
+| `21`          | Device Not Connected to MQTT Server       | `/TriggerTransaction`                                              |
+| `22`          | Missing Device IP                         | `/TriggerTransaction`                                              |
+| `23`          | IP Is Non-VPN                             | `/TriggerTransaction`                                              |
+| `24`          | Machine Not Responding                    | `/TriggerTransaction`                                              |
+| `25`          | Unknown Machine ID                        | `/TriggerTransaction`                                              |
+| `26`          | Validation Error                          | `/StartAuthentication`                                            |
+| `27`          | Unknown Transaction ID                    | `/Settlement`, `/CancelTransaction`               |
+| `28`          | Already Cancelled                         | `/CancelTransaction`                                                |
+| `29`          | Not Allowed to Wake Device                | `/TriggerTransaction`                                              |
+| `30`          | Spark Integrator Not Active               | `/StartAuthentication`                                            |
+| `31`          | Cancellation Failed                       | `/CancelTransaction`                                                |
+| `32`          | Transaction Not Found or Old              | `/Settlement`, `/CancelTransaction`             |
+| `33`          | Fail To Authenticate                      | `/StartAuthentication`                                            |
+| `34`          | Missing Amount                            | `/TriggerTransaction`, `/Settlement`             |
+| `35`          | Settlement Failed                         | `/Settlement`                                                              |
+| `36`          | Site ID Not Found                         | `/Settlement`, `/CancelTransaction`              |
 | `37`          | Authorization Failed                      | [`/TransactionCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback)                                            |
 | `38`          | Transaction Callback Failed               | [`/TransactionCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback), [`/DeclineCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/declinecallback) |
 | `40`          | Timeout Callback Failed                   | [`/TimeoutCallback`](/reference/spark/transactions/timeoutcallback)                                               |
