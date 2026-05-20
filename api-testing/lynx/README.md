@@ -8,7 +8,7 @@ This is a Bruno collection for testing the Nayax Lynx API. The goal is to valida
 
 | Product | Status | Collection location |
 | --- | --- | --- |
-| **Lynx** | Complete (May 2026) — 85/147 pass, 46 fail, 8 skip | `api-testing/lynx/` |
+| **Lynx** | Updated 2026-05-20 — 96/146 pass (66%), 29 fail, 9 skip | `api-testing/lynx/` |
 | Cortina | Scaffolded — blocked pending sandbox credentials | `api-testing/cortina/` |
 | ecom | Scaffolded — blocked pending JWT RSA token | `api-testing/ecom/` |
 | e-receipt | Scaffolded — blocked, no server URL provided | `api-testing/e-receipt/` |
@@ -100,24 +100,24 @@ Some endpoints depend on each other and must be run in order.
 
 ## What each folder contains
 
-| Folder | Endpoints | Status (May 2026) |
+| Folder | Endpoints | Status (2026-05-20) |
 | --- | --- | --- |
 | `Sign In` | 2 | 2/2 pass |
-| `Actors` | 20 | 13 pass, 4 fail (403), 3 other |
-| `Cards` | 20 | 13 pass, 6 fail, 1 skip — see `Cards/README.md` |
-| `Devices` | 4 | 2 pass, 2 fail |
-| `EReceipt` | 1 | 0 pass — 403 |
-| `Lookups` | 18 | 17 pass, 1 fail (403) |
+| `Actors` | 20 | 13 pass, 5 fail (3× encryption 403, EV Meter 500, Create v2 billing), 2 skip |
+| `Cards` | 20 | 18 pass, 2 skip — see `Cards/README.md` |
+| `Devices` | 4 | 2 pass, 2 fail (DeviceID=0, Move Devices) |
+| `EReceipt` | 1 | Permission open; 400 `transaction_not_found` — no sandbox transactions |
+| `Lookups` | 18 | 17 pass, 1 fail (Regions 403) |
 | `Machine Attribute` | 7 | 6 pass, 1 skip |
-| `Machine Inventory` | 6 | 3 pass, 1 fail (500), 2 skip |
-| `Machine Products` | 5 | 2 pass, 2 fail, 1 skip |
-| `Machines` | 15 | 10 pass, 3 fail, 1 skip — see `Machines/README.md` |
-| `Metadata` | 2 | 0 pass — 403 |
-| `Payment` | 4 | 0 pass — all 403 — see `Payment/README.md` |
-| `Product Groups` | 9 | 4 pass, 4 fail (403 on tax endpoints) |
+| `Machine Inventory` | 6 | 4 pass, 2 skip |
+| `Machine Products` | 5 | 5/5 pass |
+| `Machines` | 15 | 13 pass, 2 skip — see `Machines/README.md` |
+| `Metadata` | 2 | 0 pass — both 403 |
+| `Payment` | 4 | 1 pass (Upload), 2 partial (Request + Decline = logical-200 bug), 1 fail (Approve = 500) |
+| `Product Groups` | 9 | 4 pass, 4 fail (tax endpoints 403) |
 | `Products` | 4 | 4/4 pass |
 | `Report` | 2 | 2/2 pass |
-| `Scheduling` | 16 | 0 pass — all 403 |
+| `Scheduling` | 16 | 5 pass (GETs), 10 fail (writes 403/500), 1 partial (Delete = dummy response) |
 
 Folders with a `README.md` have run-order notes and known-behavior details.
 
@@ -147,8 +147,12 @@ Collected during testing — use these values when building requests. Do not gue
 | Valid SalesSourceID | `30000512` | Required for machine creation |
 | Valid CardTypeID (prepaid) | `33` | Use in Create Virtual Card and Create New Card v2 |
 | Valid CardPhysicalType | `2` | Required for card creation |
-| Valid PaymentMethodIDs | `1` (Credit Card), `2` (NFC), `3` (QR) | Reference only — sandbox has no payment methods enabled |
-| Test MachineID | `1002524581` | Created during testing; use for machine-specific reads |
+| Valid PaymentMethodIDs | `1` (Credit Card), `2` (NFC), `3` (QR) | Sandbox operator account has payment methods enabled |
+| Test MachineID | `1002529791` | Created 2026-05-15; use for all machine-specific operations |
+| Test Card (prepaid) | `TEST-CARD-004` | CardID: 999998796245511; `RevalueCashBit: null` — cannot use revalue endpoints |
+| Test Card (revalue-capable) | `TEST-CARD-V2-RETEST-001` | CardID: 999998796299591; `RevalueCashBit: true` — use for revalue tests |
+| Valid TaskLutId (Machine Fill) | `996231359` | From `GET /v1/lookupTypes/675347903/values` (scheduler task type) |
+| Valid TaskLutId (Cash Collection) | `996231358` | From same lookup type |
 
 ---
 

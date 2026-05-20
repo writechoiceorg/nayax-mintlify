@@ -1,6 +1,6 @@
 # Nayax Lynx API — Test Report
 
-**Dates:** 2026-05-13 to 2026-05-15
+**Dates:** 2026-05-13 to 2026-05-20
 **Tester:** Anayse (WriteChoice)
 **Sandbox:** https://qa-lynx.nayax.com
 **Collection:** Bruno YAML collection at `api-testing/lynx/`
@@ -10,124 +10,132 @@
 
 ## 1. Summary
 
-| Folder | Endpoints | Passed | Failed | Skipped |
-|--------|-----------|--------|--------|---------|
-| Actors | 20 | 13 | 4 | 2 |
-| Sign In | 2 | 2 | 0 | 0 |
-| Lookups | 18 | 17 | 1 | 0 |
-| Devices | 4 | 2 | 2 | 0 |
-| EReceipt | 1 | 0 | 1 | 0 |
-| Cards | 20 | 13 | 6 | 1 |
-| Machine Attribute | 7 | 6 | 0 | 1 |
-| Machine Inventory | 6 | 3 | 1 | 2 |
-| Machine Products | 5 | 2 | 2 | 1 |
-| Machines | 15 | 10 | 3 | 1 |
-| Metadata | 2 | 0 | 2 | 0 |
-| Payment / Refunds | 4 | 0 | 4 | 0 |
-| Product Groups | 9 | 4 | 4 | 0 |
-| Products | 4 | 4 | 0 | 0 |
-| Report | 2 | 2 | 0 | 0 |
-| Scheduling | 16 | 0 | 16 | 0 |
-| Cards V2 / follow-up | 5 | 3 | 0 | 0 |
-| **TOTAL** | **155** | **85** | **46** | **8** |
+| Folder | Endpoints | Passed | Failed | Skipped | Notes |
+|--------|-----------|--------|--------|---------|-------|
+| Sign In | 2 | 2 | 0 | 0 | |
+| Actors | 20 | 13 | 5 | 2 | 3× encryption 403, EV Meter 500, Create v2 billing |
+| Lookups | 18 | 17 | 1 | 0 | Regions 403 |
+| Devices | 4 | 2 | 2 | 0 | DeviceID=0, Move Devices silent fail |
+| EReceipt | 1 | 0 | 1 | 0 | Permission open; no sandbox transactions |
+| Cards | 20 | 18 | 0 | 2 | Transfer Revalue (2nd card), Validate (no machine/card pair) |
+| Machine Attribute | 7 | 6 | 0 | 1 | Update Model Defaults skipped (sandbox risk) |
+| Machine Inventory | 6 | 4 | 0 | 2 | Empty Inventory + Set Bins skipped (sandbox risk) |
+| Machine Products | 5 | 5 | 0 | 0 | |
+| Machines | 15 | 13 | 0 | 2 | Get by Device/VPOS skipped (no serials in sandbox) |
+| Metadata | 2 | 0 | 2 | 0 | Both 403 |
+| Payment / Refunds | 4 | 1 | 3 | 0 | Upload passes; Request + Decline = logical-200 bug; Approve = 500 |
+| Product Groups | 9 | 4 | 4 | 0 | Tax endpoints 403 |
+| Products | 4 | 4 | 0 | 0 | |
+| Report | 2 | 2 | 0 | 0 | |
+| Scheduling | 16 | 5 | 11 | 0 | 5 GETs pass; writes mostly 403/500 |
+| **TOTAL** | **155** | **96** | **29** | **9** | |
 
-**Overall pass rate:** 85/147 tested = **58%** (excluding skipped)
-
----
-
-## 2. What Worked
-
-The following areas returned correct responses matching the documented structure:
-
-- **Actors (reads):** Get Actor Hierarchy, Get Actor by ID, Get Actor by ActorCode, Get Actor Types, Search Actors, Get Machine Groups, Get Payment Methods, Get Sign-In Methods, Actor Groups (most), Actor Users — all returning expected 200 with correct shape
-- **Sign In:** POST sign-in returns `{"ok":true}` and GET returns HTML page (both behave as expected once the intent of each endpoint was understood)
-- **Lookups (17/18):** All reference data endpoints pass — countries, states, cities, currencies, time zones, languages, machine types, actor types, roles. Comprehensive and reliable reference layer.
-- **Products (4/4):** Full CRUD works. Created test product NayaxProductID `999998535696561` in sandbox.
-- **Machine Attribute (6/7):** Read and write defaults work; Update Model Defaults skipped to avoid sandbox reset.
-- **Machine Inventory (reads):** Get pick lists, bins, and inventory history pass.
-- **Machines (reads):** Get machines, get machine details, get machine statistics, get machine alerts, get machine logs — all pass with correct response shape.
-- **Product Groups (creates/reads):** Create and get product groups pass. Delete works.
-- **Cards (most reads):** Get card details, get card history, card search (with at least one param) all pass.
-- **Report (2/2):** Dashboard widgets and report data pass once `screenTypeId` parameter was corrected.
-- **Cards V2:** Create and Update pass with corrected field names and required credit limit fields.
-- **Machine Products (reads):** Get machine products passes.
+**Overall pass rate:** 96 / 146 tested = **66%** (up from 58% at 2026-05-15)
 
 ---
 
-## 3. What Failed
+## 2. What Changed Since Last Report (2026-05-15)
 
-### Category A — Permission-gated (403): Nayax team action required
+### Resolved by Nayax
 
-These endpoints return `403 Insufficient permissions` with the sandbox token. The sandbox account does not have the required role or scope. **Nothing can be done on our side — Nayax must grant elevated permissions or configure the sandbox account.**
+| Endpoint | Was | Now |
+|----------|-----|-----|
+| POST /v2/cards (Create New Card v2) | 500 — empty body, no diagnostic | 200 — full card object returned |
+| Scheduling GET endpoints (×4) | 403 — all blocked | 200 — Drivers, Routes, Visit Orders, Machine Tasks all pass |
+| Machine payment methods (×4) | 400/500 — no payment methods enabled | 200 — Nayax enabled payment methods for sandbox |
+| POST /v1/ereceipt/generate | 403 — permission denied | 400 `transaction_not_found` — permission open, needs real transaction |
 
-| Endpoint | Folder | Specific ask |
-|----------|--------|-------------|
-| Get Encryption Keys by ActorID | Actors | Grant encryption role to sandbox token |
-| Generate Encryption Key | Actors | Grant encryption role to sandbox token |
-| Decrypt Message by Encryption Version | Actors | Grant encryption role to sandbox token |
-| Get Regions | Lookups | Grant region access or clarify minimum role |
-| Generate eReceipt | EReceipt | Grant eReceipt permission to sandbox |
-| GET/POST metadata/event-rules | Metadata | Grant metadata permission |
-| POST metadata/upload-picture | Metadata | Grant metadata permission |
-| Request Refund | Payment | Grant refund workflow permission |
-| Approve Refund | Payment | Grant refund workflow permission |
-| Decline Refund | Payment | Grant refund workflow permission |
-| Upload Refund Documentation | Payment | Grant refund workflow permission |
-| GET/POST/PUT/DELETE product group tax | Product Groups | Grant tax management permission |
-| All 16 Scheduling endpoints | Scheduling | Grant scheduling/routing permission |
+### Resolved by collection fixes
 
-**Total blocked by permissions: 26 endpoints**
+| Endpoint | Was | Now |
+|----------|-----|-----|
+| POST /v1/payment/upload-refund | 500 — empty body | 200 — returns `FileURL` with correct body |
+| GET /v1/cards/{id}/revalue | 400 (empty body) | 200 — works with `RevalueCashBit: true` card |
+| POST /v1/cards/{id}/revalue/add | 400 (empty body) | 200 — works with `RevalueCashBit: true` card |
+| POST /v1/cards/query | 405 Method Not Allowed | 200 — endpoint restored; returns `[]` |
+| GET /v1/Scheduling/route-machines | 400 — empty params | 200 — works with `MachineId` param |
+| POST /v1/machines | 500 — no diagnostic | 200 — passes with correct enum values |
+| PUT /v1/machines/{id}/paymentMethods | 500 | 200 — resolved with payment methods enabled |
+| Update Prepaid Card | 400 — missing required fields | 200 — credit limit fields added |
+| Create/Update Machine Products | 400 — NayaxProductID null | 200 — valid product ID set |
 
 ---
 
-### Category B — Server bugs: Nayax team investigation required
+## 3. Current Failures
 
-These endpoints return server errors (500/400) that are caused by bugs or missing sandbox configuration, not by incorrect requests.
+### Category A — Permission-gated (403)
+*Nayax must grant sandbox token access. Nothing to fix on our side.*
+
+| Endpoint | Folder | Ask |
+|----------|--------|-----|
+| GET Encryption Keys by ActorID | Actors | Grant encryption role |
+| PUT Generate Encryption Key | Actors | Grant encryption role |
+| PUT Decrypt Message by Encryption Version | Actors | Grant encryption role |
+| GET Regions | Lookups | Clarify minimum role |
+| GET Event Rules (`/v1/metadata/v1/event-rules`) | Metadata | Grant metadata permission |
+| POST Upload Picture | Metadata | Grant metadata permission |
+| GET/POST/PUT/DELETE Product Group Tax | Product Groups | Grant tax management permission |
+| POST Create New Route | Scheduling | Full write permission not granted |
+| PUT Update Route | Scheduling | Full write permission not granted |
+| DELETE Delete Driver | Scheduling | Full write permission not granted |
+| DELETE Remove Machine from Route | Scheduling | Full write permission not granted |
+| POST Create Visit Orders | Scheduling | Full write permission not granted |
+| PUT Update Machine Tasks | Scheduling | Full write permission not granted |
+
+**Total blocked by permissions: 13 endpoints**
+
+---
+
+### Category B — Server bugs
+*Valid request causes a server error or incorrect response. Nayax engineering must investigate.*
 
 | Endpoint | Error | Details |
 |----------|-------|---------|
-| Get Operator EV Meter Dashboard | 500 on date range params | Null reference when StartDate/EndDate provided; also `TimePeriod=1` returns 400 with no valid value documented |
-| Create New Machine | 500, no diagnostic | Even with values copied from existing machine; no structured error body to diagnose |
-| Create/Update Payment Method for Machine | 400 `create_payment_method_not_available` | No payment methods enabled for sandbox operator |
-| Update Pick List | 500 null reference | Crashes when `Products` array is empty; should return 400 |
-| Get Available Widgets | 500 leaks internal URL | Response body contains `http://qailapi01.nayaxvend.int:6009` — internal hostname exposed (security issue) |
-| eReceipt field names | API-level typo | `TrasactionID` / `TrasactionSiteID` — missing 'n' in both field names across spec and API |
+| POST Create Machine Tasks | 500 "Oops something went wrong" | Fails server-side with fully valid payload (`MachineId=1002529791`, `TaskLutId=996231359`). No diagnostic body. |
+| POST Approve Refund | 500 + internal URL leak | Response exposes `http://qailapi01.nayaxvend.int:5064` — security issue. Downstream returns 400 but gateway wraps it as 500. |
+| POST Request Refund | 200 wrapping failure | Body: `{"Result":"You are not allowed...","Status":"failed"}`. Should be 403 or 400. |
+| POST Decline Refund | 200 wrapping failure | Same pattern — HTTP 200 masks a logical rejection. |
+| DELETE Machine Tasks | 200 with dummy object | Returns `[{"MachineId":0,...all nulls}]` instead of `[]` when no tasks match. |
+| GET Operator EV Meter Dashboard | 400/500 | `TimePeriod=1` returns 400 with no valid values documented; date range params trigger 500 null reference. |
+| GET Available Widgets | 500 leaks internal URL | `screenTypeId=0` exposes `http://qailapi01.nayaxvend.int:6009` in error body. |
 
 ---
 
-### Category C — Sandbox data/configuration gaps: Nayax team setup required
+### Category C — Sandbox data / configuration gaps
+*Endpoint logic is correct but sandbox lacks the data needed to complete a request.*
 
 | Issue | Blocked endpoint(s) | Ask |
 |-------|--------------------|----|
-| No `ActorBillingPlanID` configured for sandbox | Create New Actor v2 | Configure at least one billing plan for the sandbox account |
-| DeviceID returns 0 for all records in listing | Get/Update Device by ID | Clarify: is DeviceID populated in production? Is DeviceSerial the intended lookup key? |
-| No payment methods enabled for sandbox operator | Create/Update Machine Payment Methods | Enable at least one payment method (credit card or NFC) for sandbox |
+| No real transactions in sandbox | POST /v1/ereceipt/generate | Need at least one real transaction on any machine |
+| No `ActorBillingPlanID` configured | POST /v2/actors/{ParentActorID} | Configure at least one billing plan for sandbox |
+| `DeviceID: 0` on all device records | GET/PUT /v1/devices/{DeviceID} | Clarify: is DeviceID populated in production? Is DeviceSerial the intended key? |
+| No valid `UserId` for driver creation | POST /v1/Scheduling/drivers | Provide a valid UserId from the sandbox account |
+| No routes in sandbox | POST /v1/Scheduling/route-machines | Need a route created before route-machine assignment can be tested |
 
 ---
 
-### Category D — Spec vs. API discrepancies: Fixed during this test run
+### Category D — Spec / collection gaps fixed during testing
 
-These issues were found and fixed locally. The collection and/or documentation have been updated on the `api-test` branch.
-
-| # | Endpoint | What spec/docs said | What API actually requires/returns | Fix applied |
-|---|----------|---------------------|------------------------------------|-------------|
-| 1 | Get Actor by ActorCode | Example used `ActorID` value `2009586082` | Correct value is `ActorCode` = `1222` | Fixed: collection |
-| 2 | Create Actor v2 | Field named `ActorStatus` | API requires `StatusID` | Fixed: collection |
-| 3 | User Sign In | Credentials were hardcoded in YAML | Should use env vars | Fixed: collection |
-| 4 | Get Cards | No params — request would always 400 | At least one query param required; spec does not state this | Fixed: collection + note in docs |
-| 5 | Create Virtual Card | `CardType` and `CardStatus` field names | API uses `CardTypeID` = `33`, `CardPhysicalType` = `2`; both required but undocumented | Fixed: collection |
-| 6 | Create New Card v2 / Update Card by ID v2 | Wrong field names `CardType`, `CardStatus`; no credit limit fields shown | API requires `CreditAmountDailyLimit`, `CreditAmountMonthlyLimit`, `CreditAmountMonthlyReload` | Fixed: collection |
-| 7 | Get Credit Card Latest Transactions | Body format not specified | Body must be SHA1/base64 encoded string, not plain text | Fixed: collection |
-| 8 | Create New Machine | `SalesSourceID` example value was `1` | `1` is invalid; valid value is `30000512` | Fixed: collection |
-| 9 | Upload Refund Documentation | Body was empty in collection YAML | Body required | Fixed: collection |
-| 10 | Report — Get Available Widgets | `screenTypeId=0` used in collection | `0` triggers 500; valid value is `1` | Fixed: collection |
-| 11 | Create/Update Machine Products | `NayaxProductID` was null | Valid sandbox ID is `999998535696561` | Fixed: collection |
-| 12 | Sign In — GET | Appeared as REST endpoint | Returns HTML web UI page, not an API response | Fixed: docs (note added to security.mdx) |
-| 13 | Actors + Lookups | `CountryID` for actor endpoints vs. lookup endpoints | Actor endpoints use ISO numeric (`840`); lookup endpoints use internal ID (`225`) for same country | Fixed: docs (reference-data.mdx) |
-| 14 | Scheduling | No documentation existed | Full scheduling section added | Fixed: docs (scheduling/ folder on api-test branch) |
-| 15 | Error responses | No error handling reference | Error format documented | Fixed: docs (error-handling.mdx on api-test branch) |
-| 16 | Reference data | No guide for enum values | Reference data guide added | Fixed: docs (reference-data.mdx on api-test branch) |
-| 17 | Generate Encryption Key | URL in spec: `GenarateEncKey` | Correct URL is `GenerateEncKey` (typo in spec) | Fixed: openapi/lynx.yaml |
+| # | Endpoint | What was wrong | Fix applied |
+|---|----------|----------------|-------------|
+| 1 | Get Actor by ActorCode | Example used ActorID value instead of ActorCode | Fixed: collection |
+| 2 | Create Actor v2 | Field named `ActorStatus`; API requires `StatusID` | Fixed: collection |
+| 3 | User Sign In | Hardcoded credentials in YAML | Fixed: collection (env vars) |
+| 4 | Get Cards | No params sent — always 400; at-least-one rule undocumented | Fixed: collection + docs |
+| 5 | Create Virtual Card | Wrong field names; `CardPhysicalType` missing | Fixed: collection |
+| 6 | Create New Card v2 / Update Card by ID v2 | Wrong field names; credit limit fields missing | Fixed: collection |
+| 7 | Get Credit Card Latest Transactions | Body format undocumented (SHA1/base64) | Fixed: collection |
+| 8 | Create New Machine | `SalesSourceID: 1` invalid; correct value is `30000512` | Fixed: collection |
+| 9 | Upload Refund Documentation | Body was `{}` | Fixed: collection |
+| 10 | Get Available Widgets | `screenTypeId=0` triggers 500; correct value is `1` | Fixed: collection |
+| 11 | Create/Update Machine Products | `NayaxProductID` was null | Fixed: collection |
+| 12 | Update Pick List | `Products` array was empty — server 500 | Fixed: collection |
+| 13 | Update Prepaid Card | Required credit limit fields missing | Fixed: collection |
+| 14 | CountryID mismatch | Actor endpoints use ISO numeric; lookup endpoints use internal ID | Fixed: docs |
+| 15 | Generate Encryption Key | URL typo: `GenarateEncKey` → `GenerateEncKey` | Fixed: openapi spec |
+| 16 | Get Card Revalue / Add to Card Revalue | Example card not configured as revalue (`RevalueCashBit: null`) | Fixed: collection (card → TEST-CARD-V2-RETEST-001) |
+| 17 | Get Route Machines | Both params empty — always 400; at-least-one rule undocumented | Fixed: collection |
+| 18 | Create Machine Tasks | `MachineId: 0`, `TaskLutId: ""` — always 400 | Fixed: collection |
 
 ---
 
@@ -135,55 +143,63 @@ These issues were found and fixed locally. The collection and/or documentation h
 
 ### Blocking — cannot test without these
 
-1. **Grant elevated permissions for sandbox token**: encryption endpoints (3), eReceipt (1), Metadata (2), Payment/Refunds (4), Scheduling (16), Regions (1) — 27 endpoints total blocked
-2. **Enable at least one payment method** for the sandbox operator account (needed for machine payment method endpoints)
-3. **Configure a valid `ActorBillingPlanID`** for the sandbox — currently blocks all v2 Actor creation
-4. **Clarify DeviceID=0**: Is this a sandbox data quality issue or an API bug? If DeviceSerial is the intended key for single-device operations, document that
+1. **Full Scheduling write permissions** — Create Route, Update Route, Create Visit Orders, Update Machine Tasks, Delete Driver, Remove Machine from Route still return 403
+2. **Fix Create Machine Tasks (POST /v1/Scheduling/schedule/machine-tasks)** — returns 500 with fully valid payload; no diagnostic body
+3. **Sandbox transaction data** — eReceipt endpoint is unblockable without at least one real transaction in the sandbox
+4. **Billing plan for sandbox** — Create New Actor v2 blocked until a valid `ActorBillingPlanID` is configured
+5. **Provide valid UserId** — needed for Add New Driver / Update Driver in Scheduling
 
 ### Server bugs to fix
 
-5. **Create New Machine (POST /v1/machines)**: Returns 500 with no diagnostic body; structured error response needed
-6. **Update Pick List (PUT /v1/machines/inventory/picklists/update)**: Null reference on empty `Products` array — should return 400 with a clear message
-7. **Get Operator EV Meter Dashboard**: 500 on date range params; document valid `TimePeriod` enum values
-8. **Get Available Widgets**: Error response leaks internal hostname `qailapi01.nayaxvend.int` — strip internal URLs from error bodies (**security issue**)
+6. **Approve Refund (POST /v1/payment/refund-approve)** — returns 500; response body leaks `qailapi01.nayaxvend.int` internal hostname (security issue)
+7. **Request/Decline Refund** — return HTTP 200 with `{"Status":"failed"}` body; should return 4xx
+8. **Delete Machine Tasks** — returns a dummy zeroed task object instead of `[]` when no tasks match
+9. **EV Meter Dashboard** — 500 on `StartDate`/`EndDate` params; `TimePeriod` valid values not documented
+10. **Get Available Widgets** — `screenTypeId=0` leaks internal hostname in error body (security issue)
 
 ### API correctness
 
-9. **Fix field name typos in eReceipt API**: `TrasactionID` → `TransactionID` and `TrasactionSiteID` → `TransactionSiteID` (missing 'n' in both)
-10. **Clarify `ProductGroupCode`**: Is it writable via API or managed internally? If read-only, mark as `readOnly: true` in the OpenAPI spec and remove from request body examples
-11. **Confirm Metadata URL**: Is `/v1/metadata/v1/event-rules` (double version prefix) intentional or a bug that happens to work?
-12. **Document enum values** for: `TimePeriod`, `SalesSourceID`, `MachineTypeID`, `CardType`, `CardPhysicalType` — currently none have valid value lists in the spec or docs
+11. **Fix eReceipt field name typos** — `TrasactionID` and `TrasactionSiteID` (missing 'n') in spec and API
+12. **Confirm `ProductGroupCode`** — silently ignored on POST/PUT; if read-only, mark `readOnly: true` in spec
+13. **Confirm Metadata URL** — `/v1/metadata/v1/event-rules` (double version prefix) intentional or bug?
+14. **Document `DeviceID = 0`** — all sandbox device records return DeviceID as 0; is this a data issue or is DeviceSerial the intended key?
+15. **Document enum values** — `TimePeriod`, `CardPhysicalType` full enum, `TaskLutId` (LutTypeID 675347903) — none have values in spec
 
 ---
 
-## 5. What Still Needs Attention (Our Side)
+## 5. Our Open Items (docs)
 
-These are open items that were not yet fixed in this test round:
-
-- `cards/create-cards.mdx`: Document v2 prepaid card required fields (`CreditAmountDailyLimit`, `CreditAmountMonthlyLimit`, `CreditAmountMonthlyReload`) and the `GroupLocationLimits` rule
-- `cards/`: Add usage note for Get Credit Card Latest Transactions explaining SHA1/base64 body format
-- `devices/`: Document empty array response on Move Devices (silent failure when serial doesn't match)
-- `inventory-management/`: Document empty response body on Create Pick List
-- Product Groups: Add note that `ProductGroupCode` may be silently ignored (pending Nayax clarification)
-- Sign In GET endpoint: Remove from collection or clearly comment it is a web UI URL, not a REST endpoint
+| Item | File | What's needed |
+|------|------|---------------|
+| `RevalueCashBit: true` required for revalue endpoints | `cards/create-cards.mdx` | Note: must set at card creation time |
+| v2 prepaid required fields | `cards/create-cards.mdx` | `CreditAmountDailyLimit`, `CreditAmountMonthlyLimit`, `CreditAmountMonthlyReload` + `GroupLocationLimits` rule |
+| SHA1/base64 body for credit card query | Cards guide | Explain body format for `POST /v1/cards/query` |
+| `TaskLutId` enum source | Scheduling docs | Valid values from `GET /v1/lookupTypes/675347903/values` |
+| Get Route Machines at-least-one-param rule | Scheduling docs | RouteId, MachineId, or OperatorId required |
+| Move Devices empty array = silent fail | `devices/` | Note: empty response means no devices matched |
+| Create Pick List empty response body | `inventory-management/` | Note: 200 with no body is expected |
+| `ProductGroupCode` may be silently ignored | Product Groups | Pending Nayax clarification |
 
 ---
 
 ## 6. Sandbox Reference Data
 
-Collected during testing for use in future test runs:
-
-| Field | Value |
-|-------|-------|
-| Sandbox base URL | https://qa-lynx.nayax.com |
-| Sandbox ActorID | 2009586082 |
-| Sandbox ActorCode | 1222 |
-| Parent Distributor ActorID | 2001312062 (Nayax Integrations) |
-| CountryID (actor endpoint format) | 840 (United States, ISO numeric) |
-| CountryID (lookup endpoint format) | 225 (United States, internal Nayax ID) |
-| CurrencyID | 3 |
-| Test NayaxProductID | 999998535696561 |
-| Valid SalesSourceID | 30000512 |
-| Valid CardTypeID (prepaid) | 33 |
-| Valid CardPhysicalType | 2 |
-| Valid PaymentMethodIDs | 1 (Credit Card), 2 (NFC), 3 (QR) |
+| Field | Value | Notes |
+|-------|-------|-------|
+| Sandbox base URL | `https://qa-lynx.nayax.com` | Already in env |
+| Sandbox ActorID | `2009586082` | Use in all actor-scoped requests |
+| Sandbox ActorCode | `1222` | Shorter reference for the same actor |
+| Parent Distributor ActorID | `2001312062` | Nayax Integrations |
+| CountryID — actor endpoints | `840` | United States, ISO numeric format |
+| CountryID — lookup endpoints | `225` | United States, internal Nayax ID |
+| CurrencyID | `3` | USD |
+| Test NayaxProductID | `999998535696561` | Created in sandbox; use for machine product assignments |
+| Valid SalesSourceID | `30000512` | Required for machine creation and update |
+| Valid CardTypeID (prepaid) | `33` | Use in Create Virtual Card and Create New Card v2 |
+| Valid CardPhysicalType | `2` | Required for card creation (v1); `PhysicalTypeID: 30000528` for v2 |
+| Valid PaymentMethodIDs | `1` (Credit Card), `2` (NFC), `3` (QR) | Sandbox operator account has payment methods enabled |
+| Test MachineID | `1002529791` | Created 2026-05-15; use for machine-specific operations |
+| Test Card (prepaid) | `TEST-CARD-004` | CardID: 999998796245511; `RevalueCashBit: null` — cannot use revalue endpoints |
+| Test Card (revalue-capable) | `TEST-CARD-V2-RETEST-001` | CardID: 999998796299591; `RevalueCashBit: true` — use for revalue endpoint tests |
+| Valid TaskLutId (Machine Fill) | `996231359` | From LutTypeID 675347903 (scheduler task type) |
+| Valid TaskLutId (Cash Collection) | `996231358` | From LutTypeID 675347903 |
