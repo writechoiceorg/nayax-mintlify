@@ -5,7 +5,7 @@
 
 http:
   method: GET
-  url: https://qa-lynx.nayax.com/operational/v1/cards/{CardUniqueIdentifier}/revalue
+  url: https://qa-lynx.nayax.com/operational/v1/cards/TEST-CARD-V2-RETEST-001/revalue
   auth:
     type: bearer
     token: {{NAYAX_TOKEN}}

@@ -12,7 +12,13 @@ http:
   body:
     type: json
     data: |
-      {}
+      {
+        "FileName": "refund-evidence.pdf",
+        "FileData": "dGVzdA==",
+        "TransactionId": 0,
+        "SiteId": 0,
+        "MachineAuTime": "2024-01-01T00:00:00Z"
+      }
 
 settings:
   encodeUrl: true

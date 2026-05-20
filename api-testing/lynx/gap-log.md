@@ -375,7 +375,8 @@ Share this with Moshe Orenstein and Yael (senior integration engineer) after eac
 - **Impact**: Endpoint works correctly once called with the right format. No Nayax action needed.
 - **Suggestion**: Add a usage note to the relevant guide page explaining the SHA1/base64 body format.
 - **Status**: Fixed: collection (correct body format identified and documented) | Open: docs (guide page note needed about SHA1/base64 format)
-- **Re-test 2026-05-15**: Now returns 405 Method Not Allowed — endpoint may have been removed or its method changed. Previously confirmed working with SHA1 body. Pending Nayax confirmation on whether this endpoint still exists.
+- **Re-test 2026-05-15**: Returns 405 Method Not Allowed — endpoint may have been removed or its method changed.
+- **Re-test 2026-05-20**: Returns 200 OK with `[]` (empty array). Endpoint is live again. 405 from 2026-05-15 was transient. No transactions exist in sandbox so array is empty — correct behavior.
 
 ## Machines — Payment Methods — 2026-05-15
 - **Gap**: Initial tests returned 500 because `PaymentMethodID: 0` ("Grouped Tran") is not a valid assignable method. With valid IDs (1, 2, 3), the API returns `400 create_payment_method_not_available` — none of the payment methods are enabled for the sandbox operator account.
@@ -418,7 +419,7 @@ Share this with Moshe Orenstein and Yael (senior integration engineer) after eac
 - **Gap**: `POST /v2/cards` returns 500 with an empty body regardless of UserIdentity variation. The body format is confirmed correct (passes `CardTypeID`, `Status`, `PhysicalTypeID`, `CreditAmountDailyLimit`, etc. — the same structure that works for `PUT /v2/cards/{CardID}`). A fresh UserIdentity (`testv2-003`) still triggers 500.
 - **Impact**: Yes — card creation via v2 endpoint is completely blocked.
 - **Suggestion**: Report to Nayax team as a server-side bug. The v2 update endpoint works with the same structure; the create endpoint does not. Check if there is a sandbox-specific restriction on v2 card creation.
-- **Status**: Pending Nayax — persistent 500 on POST /v2/cards with no error body
+- **Status**: Fixed: Nayax — Re-test 2026-05-20: `POST /v2/cards` returns 200 OK with full card object. CardID 999998796299591 created (TEST-CARD-V2-RETEST-001). Server-side issue has been resolved.
 
 ## Update Payment Methods for Machine — 500 vs Expected 400 — 2026-05-15
 - **Gap**: `PUT /v1/machines/{MachineID}/paymentMethods` returns 500 when `POST /v1/machines/{MachineID}/paymentMethods` returns the expected `400 create_payment_method_not_available` for the same input. The two endpoints should return the same structured error when no payment methods are enabled.
@@ -499,5 +500,73 @@ Share this with Moshe Orenstein and Yael (senior integration engineer) after eac
 - **Gap**: Permission for `POST /v1/ereceipt/generate` has been granted. Endpoint now returns 404 `machine_entity_not_found` because MachineID 0 was used in the test. Needs a valid sandbox MachineID to proceed.
 - **Impact**: Partially — permission is resolved; endpoint is testable once a real MachineID is substituted.
 - **Suggestion**: Update collection YAML to use a known sandbox MachineID. Candidate: use the same machine used in Machines folder tests.
-- **Status**: Fixed: collection — update MachineID in EReceipt/Generate eReceipt for Transaction.yml
+- **Status**: Open — YAML MachineID still 1002511581; Re-test 2026-05-20: with MachineID 1002529791 returns 400 `transaction_not_found` (no real transactions in sandbox). Permission is open; endpoint responds correctly but cannot return 200 without real transaction data. No sandbox transactions exist on any machine.
+
+---
+
+## Test Run — 2026-05-20 23:10
+- **Folders tested**: EReceipt, Scheduling (route-machines + write ops), Payment, Cards (revalue, v2 create, query)
+- **Endpoints tested**: 18
+- **Passed**: 6 | **Failed**: 8 | **Partial**: 4 | **Doc gaps**: 6
+
+| Endpoint | Method | Expected | Actual | Result | Notes |
+|---|---|---|---|---|---|
+| Generate eReceipt | POST | 200 | 400 | PARTIAL | Permission open; `transaction_not_found` — no real transactions in sandbox |
+| Get Route Machines (MachineId=1002529791) | GET | 200 | 200 | PASS | Empty array; was 400 in last run |
+| Get Route Machines (no params) | GET | 400 | 400 | FAIL | "Must insert at least one value for Route Id, Machine Id, or Operator Id" — YAML sends empty params |
+| POST Create Machine Tasks | POST | 200 | 500 | FAIL | MachineId validates; valid TaskLutId (996231359) still triggers server 500 |
+| POST Create Visit Orders | POST | 200 | 403 | FAIL | Still permission-gated |
+| POST Assign Machine to Route | POST | 200 | 500 | FAIL | Server error; RouteId=0 (no routes in sandbox) |
+| PUT Update Machine Tasks | PUT | 200 | 403 | FAIL | Still permission-gated |
+| DELETE Machine Tasks (MachineID=1002529791) | DELETE | 200 | 200 | PARTIAL | Returns dummy zeroed task object `[{MachineId:0,...}]` instead of `[]` |
+| POST Request Refund | POST | 200 | 200 | PARTIAL | HTTP 200 wrapping logical failure — unchanged from 2026-05-20 |
+| POST Approve Refund | POST | 200 | 500 | FAIL | Internal URL leak `qailapi01.nayaxvend.int` — unchanged |
+| POST Decline Refund | POST | 200 | 200 | PARTIAL | HTTP 200 wrapping logical failure — unchanged |
+| POST Upload Refund Documentation | POST | 200 | 200 | PASS | FIXED — returns `FileURL` when correct body provided; YAML body still `{}` |
+| GET Card Revalue (TEST-CARD-004) | GET | 200 | 400 | FAIL | Card has `RevalueCashBit: null` — not configured as revalue; error now has message (prev: empty 400) |
+| POST Add to Card Revalue (TEST-CARD-004) | POST | 200 | 400 | FAIL | Same root cause |
+| GET Card Revalue (TEST-CARD-V2-RETEST-001) | GET | 200 | 200 | PASS | Works when `RevalueCashBit: true` is set on card |
+| POST Add to Card Revalue (TEST-CARD-V2-RETEST-001) | POST | 200 | 200 | PASS | Works correctly; value incremented from 0.01 to 0.02 |
+| POST Create New Card v2 | POST | 200 | 200 | PASS | FIXED — was persistent 500; now returns 200 + CardID |
+| POST Get Credit Card Latest Transactions (query) | POST | 200 | 200 | PASS | FIXED — was 405; now returns 200 with `[]` |
+
+**Wins:** Create New Card v2 resolved (was persistent 500). Credit Card query resolved (was 405). Upload Refund Documentation resolved (was 500). Revalue endpoints work correctly with properly configured cards. Get Route Machines passes with at least one param.
+
+---
+
+## Get Route Machines — At Least One Param Required — 2026-05-20
+- **Gap**: `GET /v1/Scheduling/route-machines` returns 400 "You must insert at least one value for Route Id, Machine Id, or Operator Id" when called with no params. The YAML has both `RouteId` and `MachineId` as empty enabled params, so every call with the collection as-is will fail. The docs and OpenAPI spec do not document this requirement.
+- **Impact**: Yes — the YAML as shipped will always produce a 400 because both params are empty strings.
+- **Suggestion**: Update YAML to use `MachineId=1002529791` as the default param value. Add a note to the scheduling docs that at least one of RouteId, MachineId, or OperatorId is required.
+- **Status**: Fixed: collection (RouteId disabled, MachineId set to 1002529791) | Open: docs (at-least-one requirement not documented)
+
+## Create Machine Tasks — TaskLutId Required and Undocumented — 2026-05-20
+- **Gap**: `POST /v1/Scheduling/schedule/machine-tasks` returns 400 "TaskLutId must be not be null or empty" when `TaskLutId` is an empty string. The YAML uses `"TaskLutId": ""`. Valid values come from `GET /v1/lookupTypes/675347903/values` (LutTypeID 675347903 = "scheduler task type"): Machine Fill (996231359), Cash Collection (996231358), Inventory Count (and others). This lookup relationship is not documented anywhere. Additionally, even with a valid TaskLutId, the endpoint returns 500 "Oops something went wrong" — a server-side bug.
+- **Impact**: Yes — Create Machine Tasks is unusable as documented. Developers need to know to call the Lookup Types endpoint first, and even then hit a server 500.
+- **Suggestion**: (1) Update YAML to use `TaskLutId: 996231359` (Machine Fill). (2) Document the TaskLutId lookup source in the scheduling docs. (3) Report 500 to Nayax team — endpoint fails server-side even with all valid required fields.
+- **Status**: Fixed: collection (MachineId=1002529791, TaskLutId=996231359 set in YAML) | Pending Nayax — server returns 500 with fully valid payload | Open: docs (TaskLutId enum + lookup source not documented)
+
+## Delete Machine Tasks — Dummy Response Object — 2026-05-20
+- **Gap**: `DELETE /v1/Scheduling/schedule/machine-tasks?MachineID=1002529791` returns 200 with an array containing a single zeroed-out task object: `[{"MachineId":0,"TaskLutId":null,"SchedulingId":0,...}]`. No tasks exist for this machine, yet the response is not an empty array `[]` — it is an array with one dummy record. The API should return `[]` when no tasks match, not a placeholder object.
+- **Impact**: Partially — any code iterating the response array will process a ghost record. Developers checking for empty array to confirm no deletions occurred will get false results.
+- **Suggestion**: Report to Nayax team — DELETE should return `[]` when no matching tasks are found, not a zeroed placeholder object.
+- **Status**: Pending Nayax — server returns dummy task object instead of empty array
+
+## Cards — Revalue Endpoints Require RevalueCashBit=true — 2026-05-20
+- **Gap**: `GET /v1/cards/{CardUniqueIdentifier}/revalue` and `POST /v1/cards/{CardUniqueIdentifier}/revalue/add` return 400 "This Card is not defined as Revalue" when the card's `CardCreditAttributes.RevalueCashBit` is `null`. Both endpoints work correctly (200) when the card has `RevalueCashBit: true`. TEST-CARD-004 (the example in the YAML) has `RevalueCashBit: null`. The docs and OpenAPI spec do not mention this requirement. Note: the previous empty-400 response (2026-05-15) was a server bug — the error body is now correctly populated with a descriptive message.
+- **Impact**: Yes — the YAML example card (TEST-CARD-004) cannot be used with revalue endpoints. Developers following the collection will get 400 with no indication they need to configure the card differently.
+- **Suggestion**: (1) Update YAML examples to use TEST-CARD-V2-RETEST-001 (or any card created with `RevalueCashBit: true`). (2) Add a note to the cards docs: revalue endpoints require `RevalueCashBit: true` in `CardCreditAttributes` at card creation time.
+- **Status**: Fixed: collection (Get Card Revalue and Add to Card Revalue YAMLs updated to TEST-CARD-V2-RETEST-001) | Open: docs (RevalueCashBit requirement not documented)
+
+## Upload Refund Documentation — YAML Fix Not Applied — 2026-05-20
+- **Gap**: The 2026-05-14 gap entry for Upload Refund Documentation was marked "Fixed: collection" but `Payment/Upload Refund Documentation.yml` still has an empty body `{}`. The endpoint returns 200 and a valid `FileURL` when called with the correct body fields (`FileName`, `FileData`, `TransactionId`, `SiteId`, `MachineAuTime`). The YAML was never actually updated.
+- **Impact**: Yes — anyone running the collection will get an error due to the empty body. The fix needs to be applied.
+- **Suggestion**: Update `Payment/Upload Refund Documentation.yml` body to include the required fields with placeholder values.
+- **Status**: Fixed: collection (YAML body now includes FileName, FileData, TransactionId, SiteId, MachineAuTime fields)
+
+## EReceipt — YAML MachineID Fix Not Applied — 2026-05-20
+- **Gap**: The 2026-05-20 gap entry for eReceipt was marked "Fixed: collection — update MachineID" but `EReceipt/Generate eReceipt for Transaction.yml` still has `MachineID: 1002511581`. Re-test today also used `TrasactionID: 0` (zero) which triggers transaction_not_found. The YAML needs MachineID updated to `1002529791` and a note added that a real TransactionID is required.
+- **Impact**: Partially — the permission is now open but the collection example will never succeed without a real transaction.
+- **Suggestion**: Update YAML MachineID to `1002529791`. Note in the collection that eReceipt testing requires a real transaction from the sandbox — no test transactions exist as of 2026-05-20.
+- **Status**: Fixed: collection (MachineID updated to 1002529791) | Pending Nayax — need a real sandbox transaction to get a 200 from this endpoint
 

@@ -5,7 +5,7 @@
 
 http:
   method: POST
-  url: https://qa-lynx.nayax.com/operational/v1/cards/{CardUniqueIdentifier}/revalue/add
+  url: https://qa-lynx.nayax.com/operational/v1/cards/TEST-CARD-V2-RETEST-001/revalue/add
   auth:
     type: bearer
     token: {{NAYAX_TOKEN}}
