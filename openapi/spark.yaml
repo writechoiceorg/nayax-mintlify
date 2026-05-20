@@ -848,7 +848,7 @@ components:
           type: number
           format: double
           description: |
-            The transaction amount in the smallest currency unit (e.g., cents).
+            The transaction amount in the main currency unit (decimal place 0, e.g., 15 for $15.00).
       example:
         NayaxTransactionId: 2004545072
         SparkTransactionId: 12c7cec2-c690-4425-9a1f-db0db60e2d8c
@@ -865,7 +865,7 @@ components:
         CardHash: 7f2082ba5dbccf706b6987e75b62083f65b5695bc2d8c827c3e46769d007a9e6
         CardUid: '1288528281124927'
         MachineAuTime: '20240205194122328'
-        Amount: 1500
+        Amount: 15.0
     TransactionCallbackOutcome:
       type: object
       nullable: true

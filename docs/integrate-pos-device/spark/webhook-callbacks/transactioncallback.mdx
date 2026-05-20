@@ -30,7 +30,7 @@ The Spark platform sends a POST request to your configured `TransactionCallback`
   "CardHash": "7f2082ba5dbccf706b6987e75b62083f65b5695bc2d8c827c3e46769d007a9e6",
   "CardUid": "1288528281124927",
   "MachineAuTime": "20240205194122328",
-  "Amount": 1500,
+  "Amount": 15.0,
   "CardBrand": "MASTERCARD",
   "CardFirst6Digits": "555561",
   "AuthCode": "3494297",
@@ -63,7 +63,7 @@ The table below describes all the parameters of the request:
 | `CardHash`                    | String  | Yes      | One-way hash of the full card number.                                                                            |
 | `CardUid`                     | String  | Yes      | UID of the card (for prepaid cards). See a more detailed explanation on the [SMC Support](/docs/integrate-pos-device/spark/additional-resources/smc-support) page. |
 | `MachineAuTime`               | String  | Yes      | Timestamp from the machine in the format `yyyyMMddHHmmssSSS`.                                                   |
-| `Amount`                      | Integer | Yes      | Transaction amount in the smallest currency unit (e.g., cents)                                                   |
+| `Amount`                      | Number  | Yes      | Transaction amount in the main currency unit (decimal place 0, e.g., 15.0 for $15.00)                           |
 | `CardBrand`                   | String  | No       | Card brand used (e.g., Visa, MasterCard).                                                                        |
 | `CardFirst6Digits`            | String  | No       | The first 6 digits of the credit card (card BIN).                                                                |
 | `AuthCode`                    | String  | No       | Authorization code returned by the payment provider.                                                             |
