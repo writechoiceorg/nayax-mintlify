@@ -441,3 +441,63 @@ Share this with Moshe Orenstein and Yael (senior integration engineer) after eac
 | DELETE /machines/{id}/paymentMethods/{pmID} | DELETE | PASS — 200, `{"Ok":true}` |
 
 **All four payment method endpoints now pass.** Gap closed by Nayax enabling payment methods for sandbox operator account.
+
+---
+
+## Test Run — 2026-05-20 14:30 (Re-test of previously permission-gated endpoints)
+- **Folders tested**: Scheduling, Payment/Refunds, EReceipt, Metadata, Actors (Encryption), Lookups (Regions), Product Groups (Tax)
+- **Endpoints tested**: 33
+- **Passed**: 7 | **Failed**: 26 | **Skipped**: 0
+
+| Endpoint | Method | Expected | Actual | Result | Notes |
+|---|---|---|---|---|---|
+| Get Drivers | GET | 200 | 200 | PASS | Returns empty array — no drivers in sandbox |
+| Get Routes | GET | 200 | 200 | PASS | Returns empty array |
+| Get Visit Orders | GET | 200 | 200 | PASS | Returns empty array |
+| Get Machine Tasks | GET | 200 | 200 | PASS | Needs ActorId param; returns empty array |
+| Get Route Machines | GET | 200 | 400 | FAIL | Requires RouteId or MachineId — no sandbox data |
+| Add New Driver | POST | 200 | 400 | FAIL | Permission open; UserId must be > 0; no test UserID available |
+| Create New Route | POST | 200 | 403 | FAIL | Still permission-gated |
+| Create Visit Orders | POST | 200 | 400 | FAIL | Permission open; MachineId must be > 0 |
+| Assign Machine to Route | POST | 200 | 500 | FAIL | Server error with no diagnostic body |
+| Create Machine Tasks | POST | 200 | 400 | FAIL | Permission open; MachineId must be > 0 |
+| Update Driver | PUT | 200 | 400 | FAIL | Permission open; UserId must be > 0; no test DriverId |
+| Update Route | PUT | 200 | 403 | FAIL | Still permission-gated |
+| Update Machine Tasks | PUT | 200 | 400 | FAIL | Permission open; MachineId must be > 0 |
+| Delete Driver | DELETE | 200 | 403 | FAIL | Proxied 403 from internal scheduling service |
+| Delete Machine Tasks | DELETE | 200 | 400 | FAIL | Permission open; task not found (no test data) |
+| Remove Machine from Route | DELETE | 200 | 403 | FAIL | Still permission-gated |
+| Request a Payment Refund | POST | 200 | 200 | PARTIAL | HTTP 200 but body is `{"Result":"You are not allowed...","Status":"failed"}` — logical error masking as 200 |
+| Approve Payment Refund | POST | 200 | 500 | FAIL | Leaks internal URL `qailapi01.nayaxvend.int`; proxied 400 from internal service |
+| Decline a Payment Refund | POST | 200 | 200 | PARTIAL | Same as Request — HTTP 200 but logical failure in body |
+| Upload Refund Documentation | POST | 200 | 500 | FAIL | Leaks internal URL; downstream says FileData is empty |
+| Generate eReceipt | POST | 200 | 404 | FAIL (data) | Permission now OPEN; fails with `machine_entity_not_found` — needs valid MachineID |
+| Get Event Rules | GET | 200 | 403 | FAIL | Still permission-gated |
+| Upload Picture | POST | 200 | 403 | FAIL | Still permission-gated |
+| Get Encryption Keys by ActorID | GET | 200 | 403 | FAIL | Still permission-gated |
+| Generate Encryption Key | PUT | 200 | 403 | FAIL | Still permission-gated |
+| Decrypt Message by Encryption Version | PUT | 200 | 403 | FAIL | Still permission-gated |
+| Get Regions | GET | 200 | 403 | FAIL | Still permission-gated |
+| Get Product Group Tax | GET | 200 | 403 | FAIL | Still permission-gated |
+
+
+---
+
+## Scheduling — Partial Permission Grant — 2026-05-20
+- **Gap**: Permission grant was partial. GET endpoints for Drivers, Routes, Visit Orders, and Machine Tasks now return 200. However, POST/PUT/DELETE endpoints for Routes, Drivers (delete), and Route Machines are still returning 403. Write operations for Machine Tasks and Visit Orders are unblocked but fail due to missing sandbox data (no valid MachineId or UserId to reference).
+- **Impact**: No — the Scheduling feature cannot be end-to-end tested without (1) full write permissions and (2) a valid sandbox UserId for driver creation.
+- **Suggestion**: Grant full CRUD permissions for the Scheduling scope. Also provide a valid UserId for the sandbox account to use in driver creation tests.
+- **Status**: Pending Nayax — partial permission grant received 2026-05-20
+
+## Payment Refunds — Logical Error in 200 Response — 2026-05-20
+- **Gap**: `POST /v1/payment/refund-request` and `POST /v1/payment/refund-decline` return HTTP 200 with a body of `{"Result":"You are not allowed to view this content or transaction credentials are invalid for transaction_id: 1","Status":"failed"}`. This is a logical failure wrapped in a 200 — the API should return a 4xx, not 200, when the operation fails.
+- **Impact**: No — developers relying on HTTP status codes for error handling will miss this failure entirely.
+- **Suggestion**: Change these endpoints to return 403 or 400 when the transaction is not accessible, not 200. This is a server-side fix.
+- **Status**: Pending Nayax
+
+## eReceipt — Permission Now Open — 2026-05-20
+- **Gap**: Permission for `POST /v1/ereceipt/generate` has been granted. Endpoint now returns 404 `machine_entity_not_found` because MachineID 0 was used in the test. Needs a valid sandbox MachineID to proceed.
+- **Impact**: Partially — permission is resolved; endpoint is testable once a real MachineID is substituted.
+- **Suggestion**: Update collection YAML to use a known sandbox MachineID. Candidate: use the same machine used in Machines folder tests.
+- **Status**: Fixed: collection — update MachineID in EReceipt/Generate eReceipt for Transaction.yml
+

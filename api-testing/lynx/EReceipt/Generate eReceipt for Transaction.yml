@@ -1,4 +1,4 @@
-﻿info:
+info:
   name: Generate eReceipt for Transaction
   type: http
   seq: 1
@@ -16,7 +16,7 @@ http:
         "TrasactionID": 0,
         "TransactionDateTime": "2024-01-01T00:00:00Z",
         "TrasactionSiteID": 0,
-        "MachineID": 0,
+        "MachineID": 1002511581,
         "FullName": "",
         "Email": ""
       }
@@ -28,17 +28,17 @@ settings:
   maxRedirects: 5
 
 examples:
-  - name: 403 Forbidden
+  - name: 400 — Transaction not found
     request:
       url: https://qa-lynx.nayax.com/operational/v1/ereceipt/generate
       method: POST
     response:
-      status: 403
-      statusText: Forbidden
+      status: 400
+      statusText: Bad Request
       headers:
         - name: content-type
           value: application/json; charset=utf-8
       body:
         type: json
         data: |-
-          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}
+          {"message":"{\"error\":\"Couldnt find the following transaction on DCS: Id: 0. Site:0.\"}","isUserError":false,"errorKey":null}
