@@ -70,3 +70,16 @@ Replace `<MACHINE_ID>` with the actual identifier of the machine for which you w
 A successful `POST` to this endpoint returns `200 OK` with no response body. To confirm the pick list was created, follow up with `GET /v1/machines/{MachineID}/pickList`.
 </Note>
 
+<Note>
+**curl requires an explicit Content-Length header**
+
+When using curl with an empty body, add `-H "Content-Length: 0"` to avoid a `411 Length Required` error:
+
+```bash
+curl -X POST "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/pickLists" \
+-H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+-H "Content-Type: application/json" \
+-H "Content-Length: 0"
+```
+</Note>
+

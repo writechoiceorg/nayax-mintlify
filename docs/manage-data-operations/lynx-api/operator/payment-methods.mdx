@@ -64,11 +64,20 @@ curl --request POST \
      --header 'Content-Type: application/json' \
      --data '[
        {
+         "ActorID": 2009586082,
          "PaymentMethodID": 2,
-         "ConvenienceFeeValue": 0
+         "ExtraChargePercentageBit": false,
+         "ExtraChargeValue": 0,
+         "ExtraChargeBackupValue": 0
        }
      ]'
 ```
+
+<Warning>
+**ActorID required in each array item**
+
+Each object in the request array must include the `ActorID` field matching the actor in the URL path. Omitting it returns `400` with error key `update_actor_payment_multiple_specifications` and message `"The following payment methods dont match the actor id {id}"`.
+</Warning>
 
 <Note>
 **Duplicate payment methods**

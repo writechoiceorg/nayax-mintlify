@@ -23,7 +23,7 @@ Each entry records: what you'd expect, what actually happens, and the doc implic
 | Behavior | Detail |
 |----------|--------|
 | **ActorID and ActorCode are not interchangeable** | ActorID is a large numeric value (`2009586082`). ActorCode is a short identifier (`1222`). Each endpoint declares exactly one of these in its path or params — sending the wrong one returns 404 or wrong data silently. |
-| **CountryID has two formats** | Actor endpoints use ISO numeric CountryID (`840` for US). Lookup endpoints use Nayax internal CountryID (`225` for US). Check which format each endpoint expects before sending. |
+| **CountryID has two formats** | Actor endpoints use ISO numeric CountryID (`840` for US). Lookup, card, and most other endpoints use Nayax internal CountryID (`225` for US). Confirmed: `POST /v1/cards` rejects `CountryID: 840` with `country_id_not_valid` — must use `225`. When in doubt, use internal format (225) except for actor-specific endpoints. |
 | **Create Actor v2 field name** | The `ActorStatus` field name shown in some docs and collections is wrong. The API requires `StatusID`. Sending `ActorStatus` is silently ignored and the actor is created with a default status. |
 | **Billing plan required for Create Actor v2** | `ActorBillingPlanID` must be a valid, configured billing plan ID for the sandbox. No valid value is available in current sandbox — endpoint is Category C blocked. |
 
