@@ -12,6 +12,7 @@ Latest Lynx API version: **v1**.
 | --- | --- | --- |
 | Discover available dashboard widget types | `GET /v1/report/widgetsTypes` | <references/widgets.md> |
 | Get dashboard widget data | `POST /v1/report/widgetsData` | <references/widgets.md> |
+| Get widget data (dashboard endpoint) | `POST /v1/dashboard/get-widget-data` | <references/widgets.md> |
 | Get last sales for a machine | `GET /v1/machines/{MachineID}/lastSales` | <references/machine-data.md> |
 | Get machine statistics | `GET /v1/machines/{MachineID}/statistics` | <references/machine-data.md> |
 | Get machine change log | `GET /v1/machines/{MachineID}/changeLogs` | <references/machine-data.md> |

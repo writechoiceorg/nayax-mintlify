@@ -17,9 +17,12 @@ Minimum required fields:
   "CardTypeID": 33,
   "CardPhysicalType": 2,
   "CardUniqueIdentifier": "YOUR-UNIQUE-STRING-HERE",
-  "Status": 1
+  "Status": 1,
+  "CountryID": 225
 }
 ```
+
+`CountryID` must be `225` (Nayax internal format for United States). Using the ISO numeric value `840` causes a 500 `country_id_not_valid` error.
 
 Optional but recommended — include `CardCreditAttributes` with `RevalueCashBit: true` if you want to use revalue endpoints later:
 
@@ -29,6 +32,7 @@ Optional but recommended — include `CardCreditAttributes` with `RevalueCashBit
   "CardPhysicalType": 2,
   "CardUniqueIdentifier": "YOUR-UNIQUE-STRING-HERE",
   "Status": 1,
+  "CountryID": 225,
   "CardCreditAttributes": {
     "RevalueCashBit": true
   }
@@ -39,14 +43,19 @@ Optional but recommended — include `CardCreditAttributes` with `RevalueCashBit
 
 `POST /v2/cards`
 
-The v2 endpoint requires a `CardCreditAttributes` block with three limit fields that are not documented as required but will cause failures if omitted:
+The v2 endpoint requires a `CardCreditAttributes` block and a `CardDateRules` block. Both are undocumented as required but will cause failures if omitted. The field name for physical type is `PhysicalTypeID` (not `CardPhysicalType`) and uses a different value.
 
 ```json
 {
   "CardTypeID": 33,
-  "CardPhysicalType": 2,
+  "PhysicalTypeID": 30000528,
   "CardUniqueIdentifier": "YOUR-UNIQUE-STRING-HERE",
   "Status": 1,
+  "CountryID": 225,
+  "CardDateRules": {
+    "ActivationDate": "2026-01-01T00:00:00Z",
+    "ExpirationDate": "2028-12-31T00:00:00Z"
+  },
   "CardCreditAttributes": {
     "CreditAmountDailyLimit": 100.00,
     "CreditAmountMonthlyLimit": 500.00,
@@ -81,12 +90,16 @@ Use the numeric `CardID`. Supports updating `CardCreditAttributes` limits and ot
 | CardUniqueIdentifier | CardID | RevalueCashBit | Notes |
 | --- | --- | --- | --- |
 | `TEST-CARD-V2-RETEST-001` | `999998796299591` | `true` | Works with all endpoints including revalue |
+| `TEST-CARD-V2-005` | `999998796306431` | unknown | Created v1 endpoint with CountryID 225 fix |
 | `TEST-CARD-004` | `999998796245511` | `null` | Cannot use revalue endpoints |
 
 ## Traps to avoid
 
 - **Wrong CardTypeID**: `CardTypeID` must be `33` for prepaid cards. Using `1`, `31`, or any other value will result in the wrong card type or an error. Valid values: 31=Technician, 33=Prepaid, 34=Refund, 30000616=Discount.
-- **Missing CardPhysicalType**: The spec does not mark `CardPhysicalType` as required, but omitting it causes a `400` error. Always include `"CardPhysicalType": 2`.
+- **Wrong CountryID**: Card creation endpoints require CountryID `225` (Nayax internal format), not `840` (ISO numeric). Using `840` causes 500 `country_id_not_valid`. Note this differs from actor endpoints, which use `840`.
+- **Missing CardPhysicalType (v1)**: The spec does not mark `CardPhysicalType` as required, but omitting it causes a `400` error. Always include `"CardPhysicalType": 2` for v1 card creation.
+- **Wrong physical type field for v2**: The v2 endpoint uses `PhysicalTypeID` (not `CardPhysicalType`) with value `30000528`. Using the v1 field name will cause the request to fail.
+- **Missing CardDateRules for v2**: `POST /v2/cards` requires a `CardDateRules` object with `ActivationDate` and `ExpirationDate`. If omitted, the API returns 400 with a misleading message "CardDetails cant be null" — the real issue is `CardDateRules` (check `errorKey: null_CardDateRules` in the response for confirmation).
 - **Missing v2 credit limit fields**: `POST /v2/cards` silently requires `CreditAmountDailyLimit`, `CreditAmountMonthlyLimit`, and `CreditAmountMonthlyReload` inside `CardCreditAttributes`. These are not flagged as required in the documentation but the request will fail without them.
 - **Forgetting RevalueCashBit**: If a developer asks why revalue endpoints return 400 "This Card is not defined as Revalue", the card was created without `RevalueCashBit: true`. The only fix is to create a new card — this flag cannot be updated after creation.
 - **Using CardUniqueIdentifier in PUT requests**: Status and detail update endpoints use the numeric `CardID`, not the `CardUniqueIdentifier` string. Check which identifier the endpoint expects before constructing the URL.

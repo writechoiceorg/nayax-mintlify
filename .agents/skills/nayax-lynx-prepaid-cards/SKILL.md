@@ -25,7 +25,9 @@ Latest Lynx API version: **v1/v2** (v2 card endpoints available for card creatio
 ## Critical rules
 
 - **CardTypeID must be 33**: For prepaid cards, always set `CardTypeID: 33`. Valid values are 31=Technician, 33=Prepaid, 34=Refund, 30000616=Discount. Using 1 or any other value will fail.
-- **CardPhysicalType is required but undocumented**: Always include `CardPhysicalType: 2` in card creation requests. The spec does not mark it as required, but omitting it causes a 400 error.
+- **CardPhysicalType is required but undocumented**: Always include `CardPhysicalType: 2` in v1 card creation requests. The spec does not mark it as required, but omitting it causes a 400 error. For v2, the field name is `PhysicalTypeID` and the value is `30000528`.
+- **CountryID for card creation is 225, not 840**: Card creation endpoints use Nayax internal CountryID format. `225` = United States. Using the ISO numeric format (`840`) causes 500 `country_id_not_valid`. Actor endpoints use `840`; card endpoints use `225`.
+- **CardDateRules is required for v2 but undocumented**: `POST /v2/cards` requires a `CardDateRules` object with at least `ActivationDate` and `ExpirationDate`. The error message "CardDetails cant be null" is misleading — the actual `errorKey` is `null_CardDateRules`. Without this block the request will fail with a confusing 400.
 - **RevalueCashBit must be set at creation**: If you want to use any revalue endpoints, you must set `CardCreditAttributes.RevalueCashBit: true` when creating the card. This cannot be changed after creation.
 - **GET /v1/cards requires at least one filter**: All query parameters are marked optional in the spec, but sending a request with no parameters (or all empty) causes a 400 "Search fields are missing" error.
 - **v2 CardCreditAttributes fields are required but undocumented**: When using `POST /v2/cards`, the `CardCreditAttributes` block must include `CreditAmountDailyLimit`, `CreditAmountMonthlyLimit`, and `CreditAmountMonthlyReload`. These are required but not documented as such.

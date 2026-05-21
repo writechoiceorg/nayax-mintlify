@@ -42,9 +42,10 @@ See `references/approve-decline.md`.
 
 ## Traps to avoid
 
-- **HTTP 200 does not mean success.** Both Request Refund and Decline Refund return HTTP 200 even when the operation fails due to missing permissions. Always read the response body. If it contains `"Status":"failed"`, the operation did not succeed — for example: `{"Result":"You are not allowed to view this content or transaction credentials are invalid for transaction_id: X","Status":"failed"}`.
+- **HTTP 200 does not mean success.** Both Request Refund and Decline Refund return HTTP 200 even when the operation fails. Always read the response body — if it contains `"Status":"failed"`, the operation did not succeed. Observed failure body: `{"Result":"Refund update failed. Please try again later or contact support.","Status":"failed"}`.
 - **Missing permissions return a 200 logical failure.** The `refund` permission scope is not included in the standard sandbox token. If you receive a `"Status":"failed"` body on what looks like a well-formed request, the token lacks the required scope. Contact Moshe Orenstein at Nayax to have the `refund` scope added.
 - **Do not call Approve before uploading documentation.** The approve endpoint expects evidence to be attached to the refund. Skipping the Upload Documentation step will cause the approve call to fail.
 - **Empty body on Upload returns 500.** All five fields (`FileName`, `FileData`, `TransactionId`, `SiteId`, `MachineAuTime`) are required. Omitting any field or sending an empty body returns a 500 error.
+- **`FileURL` is not accepted — use `FileData`.** The Upload endpoint expects `FileData` containing the base64-encoded file content. Sending a `FileURL` field instead causes the downstream service to return "FileData is empty" wrapped in a 500. There is no URL-based upload path.
 - **FileData must be base64-encoded.** Sending raw binary content in the `FileData` field will fail. Encode the file to base64 before including it in the request body.
 - **Store the RefundID immediately.** The `RefundID` returned by the Request step is the key that links all subsequent calls. If it is lost there is no other way to retrieve it from this endpoint — you would need to look it up through a separate transaction query.

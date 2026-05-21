@@ -62,9 +62,23 @@ The response is a widget-specific data array. The shape varies by widget type â€
 - Base URL: `https://qa-lynx.nayax.com`
 - ActorID: `2009586082`
 
+**Alternative dashboard endpoint**
+
+There is a second widget data endpoint at `POST /v1/dashboard/get-widget-data`. It requires `screenTypeId` in the request body (value must be > 0). An empty body or `screenTypeId: 0` causes 500 with downstream error "screenTypeId can't be zero". Use the same `screenTypeId: 1` minimum as with `widgetsData`.
+
+```
+POST https://qa-lynx.nayax.com/v1/dashboard/get-widget-data
+Content-Type: application/json
+
+{
+  "screenTypeId": 1
+}
+```
+
 ## Traps to avoid
 
-- **`screenTypeId: 0` causes a 500 error.** The API will return a 500 server error with no useful message. Always use `screenTypeId: 1` or higher. This is not documented.
+- **`screenTypeId: 0` causes a 500 error.** Both `/v1/report/widgetsData` and `/v1/dashboard/get-widget-data` will return a 500 server error. Always use `screenTypeId: 1` or higher. This is not documented.
+- **Empty body on get-widget-data causes 500.** The `/v1/dashboard/get-widget-data` endpoint requires a body with at least `{"screenTypeId": 1}`. Sending an empty body `{}` or omitting the body triggers a 500 with the message "screenTypeId can't be zero".
 - **Do not hardcode `widgetTypeId`.** Widget type IDs are account-specific. Always call `GET /v1/report/widgetsTypes` first and read the IDs from the response. A hardcoded ID that works in one account will silently return no data or error in another.
 - **Response shape varies by widget type.** Do not assume a fixed schema for the widgetsData response â€” inspect the actual response for the specific `widgetTypeId` you are using before writing any parsing logic.
 - **Both endpoints require authentication.** Include the Lynx API bearer token on both requests; unauthenticated calls return 401.
