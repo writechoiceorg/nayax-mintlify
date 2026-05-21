@@ -56,9 +56,13 @@ Each entry records: what you'd expect, what actually happens, and the doc implic
 | Behavior | Detail |
 |----------|--------|
 | **TaskLutId is a required lookup** | Must be a value from LutTypeID `675347903`. Machine Fill = `996231359`, Cash Collection = `996231358`. Retrieve the full list with `GET /v1/lookupTypes/675347903/values`. |
-| **Get Route Machines requires at least one param** | The endpoint returns 400 if no query params are sent. At least one of `RouteId`, `MachineId`, or `OperatorId` is required. Undocumented. |
+| **Get Route Machines requires RouteId or MachineId** | `OperatorId` is not accepted as a standalone param. Use `RouteId` or `MachineId`. Returns 400 with "You must insert at least one value for Route Id, Machine Id, or Operator Id" if params are missing. Returns 404 "Route is not fount" [sic] when the Route doesn't exist. |
 | **Delete Machine Tasks returns a zeroed object on no-match** | When no tasks match the provided `MachineID`, the response is `[{"MachineId": 0, ...all fields null}]` instead of `[]`. Treat `MachineId === 0` as a no-match result. |
 | **Create Machine Tasks 500 is a server bug** | Fails server-side with a fully valid payload (`MachineId=1002529791`, `TaskLutId=996231359`). Category B — no workaround. |
+| **Add New Driver requires WorkingHours array** | `WorkingHours` must contain at least one element. Each element requires at minimum a `Day` field (1–7). UserId must also reference a valid Nayax user account. Server returns 500 if UserId is invalid. |
+| **Update Machine Group: ID in body, not path** | `PUT /v1/actor/{ActorID}/machineGroups` expects `MachineGroupId` inside the request body. Appending the ID to the path (e.g., `/machineGroups/1002953511`) returns 404. |
+| **Visit Orders endpoint returns 404** | Both `GET` and `POST /v1/Scheduling/visit-orders` return 404. The endpoint may not be deployed in the sandbox. |
+| **Scheduling permissions changed** | As of V3 run: `GET /v1/Scheduling/drivers`, `GET /v1/Scheduling/routes`, `GET /v1/Scheduling/schedule/machine-tasks`, `DELETE /v1/Scheduling/schedule/machine-tasks` now return 200 with empty arrays (previously 403). CREATE routes, UPDATE routes, DELETE driver, and ASSIGN machine to route remain restricted. |
 
 ---
 

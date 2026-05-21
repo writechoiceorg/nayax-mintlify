@@ -26,17 +26,17 @@ settings:
   maxRedirects: 5
 
 examples:
-  - name: 403 Forbidden — permissions not granted for sandbox token
+  - name: 400 Bad Request — no route/machine assignment exists to remove
     request:
-      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/route-machines
+      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/route-machines?RouteId=1&MachineId=1002511581
       method: DELETE
     response:
-      status: 403
-      statusText: Forbidden
+      status: 400
+      statusText: Bad Request
       headers:
         - name: content-type
           value: application/json; charset=utf-8
       body:
         type: json
         data: |-
-          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}
+          {"message":"Oops, an error has occurred","isUserError":false,"errorKey":null}

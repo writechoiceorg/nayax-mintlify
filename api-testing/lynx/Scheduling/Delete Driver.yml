@@ -22,17 +22,16 @@ settings:
   maxRedirects: 5
 
 examples:
-  - name: 403 Forbidden — permissions not granted for sandbox token
+  - name: 404 Not Found — no driver with this DriverId exists in sandbox
     request:
-      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/drivers
+      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/drivers/1
       method: DELETE
     response:
-      status: 403
-      statusText: Forbidden
+      status: 404
+      statusText: Not Found
       headers:
-        - name: content-type
-          value: application/json; charset=utf-8
+        - name: content-length
+          value: "0"
       body:
-        type: json
-        data: |-
-          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}
+        type: text
+        data: ""

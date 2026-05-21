@@ -17,13 +17,17 @@ settings:
   maxRedirects: 5
 
 examples:
-  - name: SKIP — not run during testing to avoid side effects
+  - name: 200 OK
     request:
-      url: https://qa-lynx.nayax.com/operational/v1/machines/{MachineID}/attributes/defaults
+      url: https://qa-lynx.nayax.com/operational/v1/machines/1002511581/attributes/defaults
       method: POST
     response:
       status: 200
       statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
       body:
-        type: text
-        data: ""
+        type: json
+        data: |-
+          {"Ok":true,"Message":null,"SystemMessage":null,"code":null}

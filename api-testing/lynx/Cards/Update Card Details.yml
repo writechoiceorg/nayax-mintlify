@@ -13,17 +13,18 @@ http:
     type: json
     data: |
       {
-        "CardID": 0,
-        "ActorID": 0,
-        "CardUniqueIdentifier": "",
-        "CardDisplayNumber": "",
-        "CardHolderName": "",
-        "CardStatus": 0,
-        "CardType": 0,
-        "CardUserIdentity": "",
-        "CountryID": 0,
-        "Email": "",
-        "MobileNumber": ""
+        "CardID": 999998796245511,
+        "ActorID": 2009586082,
+        "CardUniqueIdentifier": "TEST-CARD-004",
+        "CardDisplayNumber": "9990000004",
+        "CardHolderName": "Test User Updated",
+        "CardStatus": 1,
+        "CardType": 33,
+        "CardUserIdentity": "test004",
+        "CountryID": 225,
+        "Email": "test@example.com",
+        "MobileNumber": "",
+        "CardPhysicalType": 2
       }
 
 settings:

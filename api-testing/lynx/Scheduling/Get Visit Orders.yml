@@ -38,17 +38,17 @@ settings:
   maxRedirects: 5
 
 examples:
-  - name: 403 Forbidden — permissions not granted for sandbox token
+  - name: 200 OK — no visit orders in sandbox
     request:
-      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/schedule/visit-order
+      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/schedule/visit-order?ActorId=2009586082
       method: GET
     response:
-      status: 403
-      statusText: Forbidden
+      status: 200
+      statusText: OK
       headers:
         - name: content-type
           value: application/json; charset=utf-8
       body:
         type: json
         data: |-
-          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}
+          []

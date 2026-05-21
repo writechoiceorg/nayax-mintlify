@@ -32,17 +32,20 @@ settings:
   maxRedirects: 5
 
 examples:
-  - name: 403 Forbidden — permissions not granted for sandbox token
+  - name: 200 wrapping 403 — "not allowed" response from authorization layer
     request:
-      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/routes
+      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/routes?OperatorId=2009586082
       method: POST
+      body:
+        type: json
+        data: '{"RouteName": "Test Route", "Notes": "API test route"}'
     response:
-      status: 403
-      statusText: Forbidden
+      status: 200
+      statusText: OK
       headers:
         - name: content-type
           value: application/json; charset=utf-8
       body:
         type: json
         data: |-
-          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}
+          {"message":"You are not allowed to view this content","isUserError":false,"errorKey":null}

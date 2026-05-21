@@ -88,7 +88,7 @@ These are the mandatory fields when using the V1 option:
   * Technician Card: `31`
   * Refund Card: `34`
   * Discount Card: `30000616`
-* `CountryID`: Country code based on ISO standards (viewable in the "Lookups" section).
+* `CountryID`: Nayax internal country ID. Use `GET /v1/lookups/countries` to retrieve the correct value for your region. Note: card endpoints use Nayax internal IDs, not ISO numeric codes.
 * `Currency`: Currency code.
 * `CardPhysicalType`: The physical type of the card, options are:
   * `0000528`: Swipe Card
@@ -238,6 +238,16 @@ The card revalue endpoints (`GET /v1/cards/{id}/revalue` and `POST /v1/cards/{id
 </Warning>
 
 A successful request will return a JSON object with the details of the created card, providing flexibility and control over card features.
+
+## Updating a card
+
+Use `PUT /v1/cards/{CardID}` to update an existing card's details.
+
+<Note>
+**CardPhysicalType is required when updating**
+
+`PUT /v1/cards/{CardID}` requires `CardPhysicalType` in the request body even when you are not changing it. Omitting this field returns `400 "The field CardPhysicalType is not valid"`. Fetch the card first with `GET /v1/cards` to read the current value, then include it in your update request.
+</Note>
 
 ## Verifying the card in Nayax Core
 

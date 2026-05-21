@@ -26,17 +26,31 @@ settings:
   maxRedirects: 5
 
 examples:
-  - name: 403 Forbidden — permissions not granted for sandbox token
+  - name: 200 OK — machine not assigned to any route
     request:
-      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/route-machines
+      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/route-machines?MachineId=1002529791
       method: GET
     response:
-      status: 403
-      statusText: Forbidden
+      status: 200
+      statusText: OK
       headers:
         - name: content-type
           value: application/json; charset=utf-8
       body:
         type: json
         data: |-
-          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}
+          []
+  - name: 400 — OperatorId alone is not accepted; use MachineId or RouteId
+    request:
+      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/route-machines?OperatorId=2009586082
+      method: GET
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+      body:
+        type: json
+        data: |-
+          {"message":"You must insert at least one value for Route Id, Machine Id, or Operator Id","isUserError":false,"errorKey":null}

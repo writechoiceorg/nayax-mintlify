@@ -597,3 +597,68 @@ Track gaps found in the Nayax developer zone (https://developerhub.nayax.com/) d
 - **Suggestion**: Add the delete response schema (`{"Ok": boolean}`) to the OpenAPI spec. Document the `create_actor_payment_not_recognized` error key in the payment methods guide or error reference page.
 - **Status**: Open — doc update needed in OpenAPI spec and guides
 
+---
+
+## Test Run — 2026-05-21 (V3 session)
+- **Folders tested**: Actors, Cards, Machine Attribute, Machine Inventory, Scheduling (full re-run)
+- **Endpoints tested**: 30+
+- **Passed (new)**: 13 | **Fixed (collection)**: 7 | **Doc gaps**: 5
+
+| Endpoint | Method | Expected | Actual | Result | Notes |
+|---|---|---|---|---|---|
+| PUT /v1/cards (Update Card Details) | PUT | 200 | 200 | PASS | Fixed: added `CardPhysicalType: 2` to body |
+| POST /v1/cards/{from}/revalue/send/{to} | POST | 200 | 200 | PASS | Fixed: use `CreditChangeRemarks` param; destination must have RevalueCashBit=true |
+| PUT /v1/actors/{id} | PUT | 200 | 200 | PASS | Fixed: send existing ActorTypeID (not 0) |
+| POST /v1/actor/{id}/machineGroups | POST | 200 | 200 | PASS | New: creates group, returns full group object |
+| PUT /v1/actor/{id}/machineGroups | PUT | 200 | 200 | PASS | Fixed: MachineGroupId in body, not path |
+| POST /v1/machines/{id}/attributes/defaults | POST | 200 | 200 | PASS | Unblocked from SKIP; returns `{"Ok":true}` |
+| PUT /v1/machines/inventory/picklists/update | PUT | 200 | 200 | PASS | Fixed: use valid MachineId; `Products: []` accepted |
+| GET /v1/Scheduling/drivers | GET | 200 | 200 | PASS | Was 403 in YAML examples; token now has access |
+| GET /v1/Scheduling/routes | GET | 200 | 200 | PASS | Was 403 in YAML examples; returns `[]` |
+| GET /v1/Scheduling/schedule/machine-tasks | GET | 200 | 200 | PASS | Was 403; returns `[]` |
+| DELETE /v1/Scheduling/schedule/machine-tasks | DELETE | 200 | 200 | PASS | Was 403; returns zeroed object on no-match |
+| GET /v1/Scheduling/route-machines | GET | 200 | 200 | PASS | Was 403; use MachineId param |
+| GET /v1/Scheduling/schedule/visit-order | GET | 200 | 200 | PASS | Was 403 (and tested with wrong path) |
+| POST /v1/actors/{id}/roleGroups | POST | 200 | 400 | FAIL | `create_actor_groups_not_allowed` — Category C |
+| POST /v1/Scheduling/drivers | POST | 200 | 500 | FAIL | WorkingHours required; UserId causes downstream 500 |
+| PUT /v1/Scheduling/routes (Update Route) | PUT | 200 | 404 | FAIL | No routes in sandbox |
+| PUT /v1/Scheduling/drivers (Update Driver) | PUT | 200 | 404 | FAIL | No drivers in sandbox |
+| DELETE /v1/Scheduling/drivers | DELETE | 200 | 404 | FAIL | No drivers in sandbox |
+| POST /v1/Scheduling/routes (Create New Route) | POST | 200 | 200 | FAIL | HTTP 200 wrapping "not allowed" |
+| PUT /v1/Scheduling/schedule/machine-tasks | PUT | 200 | 400 | FAIL | `Task {0} is not found` — no tasks in sandbox |
+| POST /v1/Scheduling/route-machines | POST | 200 | 500 | FAIL | Server error — no valid routes in sandbox |
+| DELETE /v1/Scheduling/route-machines | DELETE | 200 | 400 | FAIL | No route-machine assignment to remove |
+
+---
+
+## Update Machine Group — ID Must Be in Body — 2026-05-21
+- **Gap**: `PUT /v1/actor/{ActorID}/machineGroups` documentation implied the group ID would be a path segment (consistent with REST conventions). However, the endpoint returns 404 when the ID is appended to the path. The `MachineGroupId` must be included in the request body to identify which group to update.
+- **Impact**: Yes — any developer following REST conventions or API docs will send the ID in the path and get 404.
+- **Suggestion**: Add a note to the machine groups documentation clarifying that `MachineGroupId` is provided in the request body, not in the URL path. Update YAML collection example to include `MachineGroupId` in body.
+- **Status**: Fixed: collection (YAML body now includes MachineGroupId) | Open: docs (note needed)
+
+## Add Actor Group — Role Groups Must Be Pre-Configured — 2026-05-21
+- **Gap**: `POST /v1/actors/{ActorID}/roleGroups` returns 400 `create_actor_groups_not_allowed` ("The following groups are not available for actor id X: Y") when trying to assign any role group (tested with RoleGroupId 3 = "Vending Operator - VMO"). Role groups appear to be whitelisted per actor by Nayax, not freely assignable by the operator.
+- **Impact**: No — role group assignment is not self-service; requires Nayax configuration. The docs do not mention this restriction.
+- **Suggestion**: Add a note to the operator/hierarchy docs clarifying that role group assignments must be configured by Nayax. Document the `create_actor_groups_not_allowed` error key.
+- **Status**: Open — Pending Nayax: configure assignable role groups for sandbox actor OR clarify the permission model
+
+## Scheduling — Route Machines OperatorId Param Not Effective — 2026-05-21
+- **Gap**: `GET /v1/Scheduling/route-machines?OperatorId=2009586082` returns 400 "You must insert at least one value for Route Id, Machine Id, or Operator Id" despite having `OperatorId` populated. The error message lists `Operator Id` as valid but the API does not accept it. Only `RouteId` or `MachineId` are effective.
+- **Impact**: Partially — developers trying to list all route-machines for their operator will get a misleading 400.
+- **Suggestion**: Update docs to specify only `RouteId` or `MachineId` are accepted. If `OperatorId` is intended to be supported, file a bug with Nayax.
+- **Status**: Fixed: collection (RouteId disabled, MachineId set) | Open: docs/Nayax — OperatorId param behavior is incorrect
+
+## Route Error Message Typo — "Route is not fount" — 2026-05-21
+- **Gap**: When a RouteId that does not exist is used in `/v1/Scheduling/route-machines`, the API returns 400 `{"message":"Route is not fount"}`. The word "fount" is a typo for "found". This typo is consistent across all route-not-found responses.
+- **Impact**: Minor — typo in API response message; could confuse developers or break string-matching error handling.
+- **Suggestion**: Report to Nayax team to fix the error message string to "Route is not found".
+- **Status**: Pending Nayax — typo in API error message
+
+## Add New Driver — WorkingHours Format Required — 2026-05-21
+- **Gap**: `POST /v1/Scheduling/drivers` body requires a `WorkingHours` array with at least one element. Each element requires a `Day` field (integer 1-7; field must be named `Day`, not `DayOfWeek`). The endpoint returns progressive errors revealing these requirements: first "WorkingHours must contains at least one element", then "Day must be between 1 to 7". These requirements are not documented anywhere. Additionally, the UserId provided must be a valid Nayax user account associated with the operator — invalid UserId causes a downstream 500 from `qailapi01.nayaxvend.int:5057`.
+- **Impact**: Yes — the Bruno YAML template has `"WorkingHours": []` which will always fail. Developers have no way to know the required format.
+- **Suggestion**: Update YAML template with a WorkingHours example entry. Document the `Day` (1-7) and time fields in the scheduling docs. Add a note that UserId must be a valid Nayax account user ID.
+- **Status**: Fixed: collection (YAML updated with WorkingHours example) | Open: docs (Add Driver guide needs WorkingHours format documented)
+
+

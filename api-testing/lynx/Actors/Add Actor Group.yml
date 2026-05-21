@@ -25,16 +25,20 @@ settings:
   maxRedirects: 5
 
 examples:
-  - name: 200 OK — response not yet captured, re-run to save
+  - name: 400 — role groups must be configured by Nayax for this actor
     request:
-      url: https://qa-lynx.nayax.com/operational/v1/actors/{ActorID}/roleGroups
+      url: https://qa-lynx.nayax.com/operational/v1/actors/2009586082/roleGroups
       method: POST
+      body:
+        type: json
+        data: '[{"RoleGroupId": 3}]'
     response:
-      status: 200
-      statusText: OK
+      status: 400
+      statusText: Bad Request
       headers:
         - name: content-type
           value: application/json; charset=utf-8
       body:
-        type: text
-        data: ""
+        type: json
+        data: |-
+          {"message":"The following groups are not available for actor id 2009586082: 3","isUserError":false,"errorKey":"create_actor_groups_not_allowed"}

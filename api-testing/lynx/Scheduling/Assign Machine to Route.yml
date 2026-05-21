@@ -28,17 +28,20 @@ settings:
   maxRedirects: 5
 
 examples:
-  - name: 403 Forbidden — permissions not granted for sandbox token
+  - name: 500 Server Error — no valid routes exist in sandbox to assign to
     request:
-      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/route-machines
+      url: https://qa-lynx.nayax.com/operational/v1/Scheduling/route-machines?RouteId=1
       method: POST
+      body:
+        type: json
+        data: '{"MachineIds": [1002511581]}'
     response:
-      status: 403
-      statusText: Forbidden
+      status: 500
+      statusText: Internal Server Error
       headers:
         - name: content-type
           value: application/json; charset=utf-8
       body:
         type: json
         data: |-
-          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}
+          {"message":"Oops, an error has occurred","isUserError":false,"errorKey":null}

@@ -30,17 +30,20 @@ settings:
   maxRedirects: 5
 
 examples:
-  - name: 403 Forbidden — permissions not granted for sandbox token
+  - name: 500 — UserId must be a valid Nayax user account; WorkingHours required
     request:
       url: https://qa-lynx.nayax.com/operational/v1/Scheduling/drivers
       method: POST
+      body:
+        type: json
+        data: '{"UserId": 1000294591, "OperatorId": 2009586082, "DriverStatusId": 1, "StartDate": "2026-01-01", "DriverLicense": "DL123", "IdNumber": "ID456", "Skills": [], "WorkingHours": [{"Day": 1, "StartTime": "08:00", "EndTime": "17:00"}]}'
     response:
-      status: 403
-      statusText: Forbidden
+      status: 500
+      statusText: Internal Server Error
       headers:
         - name: content-type
           value: application/json; charset=utf-8
       body:
         type: json
         data: |-
-          {"message":"Insufficient permissions to perform this action.","isUserError":false,"errorKey":null}
+          {"message":"The HTTP status code for url http://qailapi01.nayaxvend.int:5057/v1/drivers was not expected (Status code: 500) after 8ms.\r\nResponse: {\"message\":\"Oops something went wrong\",\"params\":null,\"errorKey\":\"Correlation id: TRNNVfJftUm4cGzF\",\"info\":null}","isUserError":false,"errorKey":null}

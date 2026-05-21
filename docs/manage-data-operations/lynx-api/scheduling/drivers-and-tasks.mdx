@@ -10,9 +10,9 @@ import {EndpointCard} from "/snippets/EndpointCard.jsx";
 Drivers are field service users who carry out machine visits. Machine tasks and visit orders define what needs to be done at each machine, combining driver, route, date, and task into a single scheduled work item.
 
 <Warning>
-**Elevated permissions required**
+**Write endpoints require elevated permissions**
 
-Driver and task management endpoints require permissions beyond a standard operator token. See [Error Handling](/docs/manage-data-operations/lynx-api/error-handling) for details.
+Read endpoints (Get Drivers, Get Machine Tasks, Get Visit Orders, Delete Machine Tasks) are accessible with a standard operator token and return `200` with an empty array when no data exists. Write endpoints (Add Driver, Update Driver, Delete Driver, Create Machine Tasks, Update Machine Tasks, Create Visit Orders) require elevated permissions. See [Error Handling](/docs/manage-data-operations/lynx-api/error-handling) for details.
 </Warning>
 
 ## Drivers
@@ -54,7 +54,23 @@ When creating a driver, provide the following fields:
 | `DriverLicense` | Driver license number |
 | `IdNumber` | National ID or employee number |
 | `Skills` | Array of skill IDs assigned to this driver |
-| `WorkingHours` | Array of working hour slot objects |
+| `WorkingHours` | Required. Array of working hour slot objects (see format below) |
+
+<Note>
+**WorkingHours format**
+
+Each entry in the `WorkingHours` array requires three fields:
+
+```json
+{
+  "Day": 1,
+  "StartTime": "08:00",
+  "EndTime": "17:00"
+}
+```
+
+`Day` is an integer from `1` (Monday) to `7` (Sunday). The array must contain at least one entry — omitting it or sending an empty array returns a validation error. `UserId` must reference an active Nayax user account linked to the operator; an unrecognized `UserId` causes a downstream server error.
+</Note>
 
 ## Machine Tasks
 
