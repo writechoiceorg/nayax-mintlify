@@ -231,6 +231,12 @@ When **creating** a card, set `GroupLocationLimits` to `null`. Sending an empty 
 When **updating** a card, the array must exactly match the card's current groups. Fetch the card first with `GET /v1/cards` and pass the same `GroupLocationLimits` array back. Adding or removing groups via this field is not supported.
 </Warning>
 
+<Warning>
+**Revalue endpoints require RevalueCashBit set at creation**
+
+The card revalue endpoints (`GET /v1/cards/{id}/revalue` and `POST /v1/cards/{id}/revalue/add`) only work on cards where `CardCreditAttributes.RevalueCashBit` is `true`. This must be set when the card is created — it cannot be enabled after the fact. Cards created without `RevalueCashBit: true` return `400 "This Card is not defined as Revalue"` on all revalue endpoint calls.
+</Warning>
+
 A successful request will return a JSON object with the details of the created card, providing flexibility and control over card features.
 
 ## Verifying the card in Nayax Core

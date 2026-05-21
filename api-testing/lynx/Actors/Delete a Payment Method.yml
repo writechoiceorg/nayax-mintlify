@@ -5,7 +5,7 @@
 
 http:
   method: DELETE
-  url: https://qa-lynx.nayax.com/operational/v1/actors/{ActorID}/paymentMethods/{paymentMethodID}
+  url: https://qa-lynx.nayax.com/operational/v1/actors/2009586082/paymentMethods/2
   auth:
     type: bearer
     token: {{NAYAX_TOKEN}}
@@ -17,13 +17,17 @@ settings:
   maxRedirects: 5
 
 examples:
-  - name: SKIP — not run during testing to avoid side effects
+  - name: 200 OK
     request:
-      url: https://qa-lynx.nayax.com/operational/v1/actors/{ActorID}/paymentMethods/{paymentMethodID}
+      url: https://qa-lynx.nayax.com/operational/v1/actors/2009586082/paymentMethods/2
       method: DELETE
     response:
       status: 200
       statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
       body:
-        type: text
-        data: ""
+        type: json
+        data: |-
+          {"Ok":true,"Message":null,"SystemMessage":null,"code":null}

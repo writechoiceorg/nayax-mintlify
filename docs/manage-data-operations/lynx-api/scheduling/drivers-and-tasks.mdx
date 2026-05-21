@@ -91,13 +91,34 @@ Key fields when creating a machine task:
 | Field | Description |
 |-------|-------------|
 | `MachineId` | The machine to schedule a task for |
-| `TaskLutId` | The type of task (lookup value) |
+| `TaskLutId` | The type of task — see lookup table below |
 | `DriverId` | The driver assigned to this task |
 | `ScheduleDate` | When the task is scheduled (ISO 8601) |
 | `StatusId` | Task status |
 | `GeneratePickList` | `true` to auto-generate a pick list for this visit |
 | `TimezoneOffset` | UTC offset in minutes for the scheduled time |
 | `Pattern` | Recurrence pattern for recurring tasks |
+
+### TaskLutId values
+
+`TaskLutId` is required and must be a valid lookup value from LutTypeID `675347903`. Retrieve the full list with:
+
+```sh
+GET /v1/lookupTypes/675347903/values
+```
+
+Common values:
+
+| TaskLutId | Task type |
+|-----------|-----------|
+| `996231359` | Machine Fill |
+| `996231358` | Cash Collection |
+
+<Note>
+**Delete Machine Tasks response**
+
+`DELETE /v1/Scheduling/schedule/machine-tasks` returns a zeroed-out task object when no tasks match the provided `MachineID`, rather than an empty array. Treat a response where `MachineId` is `0` as a no-match result.
+</Note>
 
 ## Visit Orders
 

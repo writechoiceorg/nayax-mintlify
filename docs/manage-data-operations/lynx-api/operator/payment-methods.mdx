@@ -1,0 +1,90 @@
+---
+title: "Actor Payment Methods"
+description: "Manage the payment methods available to an operator, including credit card, NFC, and QR."
+metadata:
+  og:description: "Use the Lynx API to assign, update, and remove payment methods for an operator account."
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+Payment methods define the transaction types an operator's machines can accept. You can manage these assignments programmatically using the Lynx API.
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page to learn how to retrieve your token and authenticate requests.
+</Warning>
+
+## Available endpoints
+
+<Columns cols={2}>
+<EndpointCard
+  title="Get Payment Methods"
+  href="/reference/lynx/actors/get-actor-payment-methods"
+  method="get"
+/>
+<EndpointCard
+  title="Create Payment Method"
+  href="/reference/lynx/actors/create-actor-payment-method"
+  method="post"
+/>
+</Columns>
+
+<Columns cols={2}>
+<EndpointCard
+  title="Update Payment Method"
+  href="/reference/lynx/actors/update-actor-payment-method"
+  method="put"
+/>
+<EndpointCard
+  title="Delete Payment Method"
+  href="/reference/lynx/actors/delete-actor-payment-method"
+  method="delete"
+/>
+</Columns>
+
+## PaymentMethodID values
+
+Use the following IDs when creating or updating payment methods:
+
+| PaymentMethodID | Method |
+|----------------|--------|
+| `1` | Credit Card |
+| `2` | NFC |
+| `3` | QR |
+
+For the full list, call `GET /v1/lookups/paymentMethods`.
+
+## Create a payment method
+
+```sh
+curl --request POST \
+     --url "https://qa-lynx.nayax.com/operational/v1/actors/{ActorID}/paymentMethods" \
+     --header 'Authorization: Bearer <YOUR_TOKEN>' \
+     --header 'Content-Type: application/json' \
+     --data '[
+       {
+         "PaymentMethodID": 2,
+         "ConvenienceFeeValue": 0
+       }
+     ]'
+```
+
+<Note>
+**Duplicate payment methods**
+
+Creating a payment method that already exists on the actor returns `400` with error key `create_actor_payment_not_recognized` and message `"The following payment methods already exist: {id}"`. Retrieve the current list first with `GET /v1/actors/{ActorID}/paymentMethods` before adding.
+</Note>
+
+## Delete a payment method
+
+`DELETE /v1/actors/{ActorID}/paymentMethods/{PaymentMethodID}` returns the following on success:
+
+```json
+{
+  "Ok": true,
+  "Message": null,
+  "SystemMessage": null,
+  "code": null
+}
+```

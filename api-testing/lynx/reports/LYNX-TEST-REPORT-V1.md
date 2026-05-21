@@ -99,6 +99,98 @@
 | GET Operator EV Meter Dashboard | 400/500 | `TimePeriod=1` returns 400 with no valid values documented; date range params trigger 500 null reference. |
 | GET Available Widgets | 500 leaks internal URL | `screenTypeId=0` exposes `http://qailapi01.nayaxvend.int:6009` in error body. |
 
+#### Key Findings — Category B
+
+---
+
+**Key Finding: Refund endpoints wrap logical failure in HTTP 200**
+
+**What happens:**
+```
+POST /v1/payment/refund-request
+HTTP 200 OK
+{
+  "Result": "You are not allowed to perform this action",
+  "Status": "failed"
+}
+```
+Same pattern for `POST /v1/payment/refund-decline`.
+
+**Expected:** HTTP 403 or 400
+**Actual:** HTTP 200 with `"Status": "failed"` in body
+**Doc implication:** Add Warning to the payment/refunds guide page. Users cannot rely on HTTP status — must check `Status` field in the response body.
+
+---
+
+**Key Finding: Approve Refund leaks internal hostname**
+
+**What happens:**
+```
+POST /v1/payment/refund-approve
+HTTP 500 Internal Server Error
+{
+  "message": "Error calling http://qailapi01.nayaxvend.int:5064/...",
+  ...
+}
+```
+
+**Expected:** HTTP 200 with approval confirmation
+**Actual:** 500 exposing internal service URL `qailapi01.nayaxvend.int`
+**Doc implication:** Add Warning: endpoint is non-functional in sandbox; the error body leaks an internal hostname. Do not expose this response to end users. Nayax must fix before this endpoint can be documented as usable.
+
+---
+
+**Key Finding: Delete Machine Tasks returns zeroed object on no-match**
+
+**What happens:**
+```
+DELETE /v1/Scheduling/schedule/machine-tasks
+HTTP 200 OK
+[
+  {
+    "MachineId": 0,
+    "TaskLutId": null,
+    "DriverId": null,
+    "ScheduleDate": null,
+    "StatusId": null
+  }
+]
+```
+
+**Expected:** `[]` when no tasks match the provided MachineID
+**Actual:** Array with one object where all fields are null/zero
+**Doc implication:** Add Note to scheduling guide: treat a response where `MachineId` is `0` as a no-match result, not a deleted task.
+
+---
+
+**Key Finding: Create Pick List returns empty 200 on success**
+
+**What happens:**
+```
+POST /v1/machines/{MachineID}/pickLists
+HTTP 200 OK
+(empty body)
+```
+
+**Expected:** Response body confirming creation
+**Actual:** 200 with no body — this is the success state, not an error
+**Doc implication:** Add Note to pick lists guide: empty response body is expected. Confirm the list was created with `GET /v1/machines/{id}/pickList`.
+
+---
+
+**Key Finding: Move Devices empty array is a silent fail**
+
+**What happens:**
+```
+PUT /v1/devices/move/{actorId}
+HTTP 200 OK
+[]
+```
+
+**Expected:** Array of moved device objects, or a 404 if none matched
+**Actual:** 200 with empty array when no serial numbers matched
+**Doc implication:** Add Note to devices guide: empty array means no devices matched — not a success. Always check that the returned array contains entries.
+
 ---
 
 ### Category C — Sandbox data / configuration gaps

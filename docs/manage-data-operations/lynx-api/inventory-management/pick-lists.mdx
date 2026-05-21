@@ -64,3 +64,9 @@ curl -X POST "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/pi
 Replace `<MACHINE_ID>` with the actual identifier of the machine for which you want to generate the pick list.
 </Note>
 
+<Note>
+**Empty response body is expected**
+
+A successful `POST` to this endpoint returns `200 OK` with no response body. To confirm the pick list was created, follow up with `GET /v1/machines/{MachineID}/pickList`.
+</Note>
+

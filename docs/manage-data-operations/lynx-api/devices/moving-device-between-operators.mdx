@@ -67,5 +67,11 @@ Where:
 | `actor_id`     | Confirms the new `actorId` to which the device was moved                                 |
 | `is_connected` | Indicates whether or not the device was connected to a virtual machine before moving it. |
 
+<Note>
+**Empty response means no devices matched**
+
+If the returned array is empty (`[]`), no devices matching the provided serial numbers were found on your account. The endpoint returns `200 OK` in both cases — check the response array to confirm devices were actually moved.
+</Note>
+
 <br />
 

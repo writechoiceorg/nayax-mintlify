@@ -1,8 +1,6 @@
 # Nayax Lynx — Documentation Gap Log
 
 Track gaps found in the Nayax developer zone (https://developerhub.nayax.com/) during API testing.
-Share this with Moshe Orenstein and Yael (senior integration engineer) after each testing round.
-
 ---
 
 ## Template
@@ -569,4 +567,33 @@ Share this with Moshe Orenstein and Yael (senior integration engineer) after eac
 - **Impact**: Partially — the permission is now open but the collection example will never succeed without a real transaction.
 - **Suggestion**: Update YAML MachineID to `1002529791`. Note in the collection that eReceipt testing requires a real transaction from the sandbox — no test transactions exist as of 2026-05-20.
 - **Status**: Fixed: collection (MachineID updated to 1002529791) | Pending Nayax — need a real sandbox transaction to get a 200 from this endpoint
+
+---
+
+## Test Run — 2026-05-21 01:35
+- **Folders tested**: Actors (payment methods), Actors (evDashboard)
+- **Endpoints tested**: 5
+- **Passed**: 4 | **Failed**: 1 | **Skipped**: 0 | **Doc gaps**: 3
+
+| Endpoint | Method | Expected | Actual | Result | Notes |
+|---|---|---|---|---|---|
+| GET /v1/actors/{id}/paymentMethods | GET | 200 | 200 | PASS | Returns 9 existing methods (collection example was stale `[]`) |
+| POST /v1/actors/{id}/paymentMethods | POST | 200 | 200 | PASS | Created NFC (PaymentMethodID 2); 400 if method already exists |
+| PUT /v1/actors/{id}/paymentMethods | PUT | 200 | 200 | PASS | Updated Credit Card (PaymentMethodID 1) |
+| DELETE /v1/actors/{id}/paymentMethods/{id} | DELETE | 200 | 200 | PASS | Deleted NFC (PaymentMethodID 2); returns `{"Ok":true}` |
+| GET /v1/actors/{id}/evDashboard | GET | 200 | 400/500 | FAIL | All TimePeriod values 0–365 invalid; date range triggers 500 |
+
+---
+
+## Get Operator EV Meter Dashboard — Retest 2026-05-21
+- **Gap** (updated): Retested with TimePeriod values 0 through 365 and a selection of others (6, 7, 8, 9, 10, 14, 28, 90) — every integer returns `"TimePeriod:X is not valid"`. No valid value could be found by trial. Calling with no params confirms the rule: `"Please provide one of the parameters: TimePeriod or EndDate,StartDate. But not both"`. This at-least-one constraint is not documented in the spec or guides. Date range with ISO datetime format (`StartDate=2026-01-01T00:00:00Z`) still returns 500 — likely a null reference when querying an account with no EV meter data.
+- **Impact**: No — the endpoint is completely unusable. Both input methods fail: TimePeriod has no discoverable valid values; date range crashes the server.
+- **Suggestion**: (1) Document valid `TimePeriod` enum values in the OpenAPI spec and the guide page. (2) Document the at-least-one rule (TimePeriod OR StartDate+EndDate, mutually exclusive). (3) Fix the 500 on date range — should return `[]` when no EV data exists, not a null reference error. (4) Add EV meter data to the sandbox so the endpoint can be end-to-end tested.
+- **Status**: Pending Nayax — TimePeriod enum undocumented + server 500 on date range (unchanged from 2026-05-13)
+
+## Actor Payment Methods — Undocumented Response Shapes — 2026-05-21
+- **Gap**: Two response shapes are not documented in the spec or guides: (1) `DELETE /v1/actors/{id}/paymentMethods/{paymentMethodID}` returns `{"Ok":true,"Message":null,"SystemMessage":null,"code":null}` — the spec shows no response schema for this endpoint. (2) `POST /v1/actors/{id}/paymentMethods` returns `400` with error key `create_actor_payment_not_recognized` and message `"The following payment methods already exist: X"` when a duplicate PaymentMethodID is submitted — this error key is not listed in the docs.
+- **Impact**: Partially — developers cannot handle the delete response or the duplicate-creation error correctly without knowing the expected shapes.
+- **Suggestion**: Add the delete response schema (`{"Ok": boolean}`) to the OpenAPI spec. Document the `create_actor_payment_not_recognized` error key in the payment methods guide or error reference page.
+- **Status**: Open — doc update needed in OpenAPI spec and guides
 

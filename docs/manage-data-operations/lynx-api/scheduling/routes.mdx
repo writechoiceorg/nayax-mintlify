@@ -88,6 +88,12 @@ Pass `routeId` as a query parameter and include the updated route fields in the 
   method="delete"
 />
 
+<Warning>
+**At least one parameter required**
+
+`GET /v1/Scheduling/route-machines` returns `400` if called with no parameters. Provide at least one of `RouteId`, `MachineId`, or `OperatorId`.
+</Warning>
+
 To assign one or more machines, pass the `RouteId` as a query parameter and provide an array of `MachineIds` in the request body:
 
 ```json
