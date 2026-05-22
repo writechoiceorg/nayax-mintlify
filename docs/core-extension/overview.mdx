@@ -1,0 +1,57 @@
+---
+title: "Overview"
+description: "Learn how Core Extension lets you embed your 
+application inside the Nayax back-office."
+---
+
+Core Extension is the Nayax App Framework for external developers. 
+It lets you build an application that loads directly inside the Nayax back-office (Nayax Core), giving your users a seamless experience without leaving the platform.
+
+## How it works
+
+When a Nayax administrator adds your app to the menu, it appears 
+to their users as a native part of Nayax Core. When a user opens it, Nayax passes your app a signed JWT token containing the user's identity and permissions. Your app uses that token to make Nayax API calls on behalf of the logged-in user.
+
+Nayax handles:
+
+- Registering your app in the menu
+- Delivering the authentication token
+- Routing API calls through the reverse proxy
+- Managing translations across languages
+- Controlling which user roles can see which parts of your UI
+
+You handle:
+
+- Building and hosting your application
+- Receiving the token and using it for API calls
+- Exposing your UI strings for translation
+- Declaring which UI elements are role-controllable
+
+## Extension types
+
+How your app appears in Nayax Core depends on the display type 
+configured by the Nayax administrator. Each type controls the layout, navigation, and how your app receives its token.
+
+- **Screen** — Full page with the Nayax Core navigation menu visible. No screen context passed.
+- **Fullscreen** — Full page without the Nayax menu; your app provides its own navigation. No screen context passed.
+- **Button with Popup** — A button in an existing screen that opens your app in a modal. Includes screen context (e.g. selected machine ID).
+- **Tab** — Your app loads as a tab within an existing Nayax Core screen. Includes screen context (e.g. selected machine ID).
+
+**Screen** and **Fullscreen** use the **App** menu type. **Button with Popup** and **Tab** use the **App Plugin** menu type.
+
+<Note>
+Fullscreen extensions cannot receive the token via postMessage. If your app uses the Fullscreen display type, contact Nayax to confirm the token delivery method. See [Authentication](/docs/core-extension/authentication) for details.
+</Note>
+
+## What you implement
+
+Each of the four areas below has a dedicated guide:
+
+- [Authentication](/docs/core-extension/authentication) — Receive and validate the JWT token Nayax passes at load time.
+- [Extension Types](/docs/core-extension/extension-types) — Choose the right display type for your use case.
+- [Translations](/docs/core-extension/translations) — Expose your UI strings so Nayax Core can serve them in the user's language.
+- [Role-Based Visibility](/docs/core-extension/role-based-visibility) — Declare which UI elements admins can show or hide by role.
+
+## Getting started
+
+To start building, follow the [Get Started guide](/docs/core-extension/get-started). It walks you through the developer journey from sandbox access to production deployment.

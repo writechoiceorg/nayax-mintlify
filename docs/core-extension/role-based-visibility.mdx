@@ -1,0 +1,181 @@
+---
+title: "How to Implement Role-Based UI Visibility"
+description: "Let Nayax Core administrators show or hide parts of your Core Extension based on user roles."
+---
+
+Nayax Core has a role management system that lets administrators control what users can see and do based on their role. You can connect your Core Extension to this system so that specific UI elements in your app (tabs, buttons, widgets, settings sections) are automatically shown or hidden based on the logged-in user's role.
+
+Your app fetches the list of hidden elements from Nayax at startup, then applies visibility throughout your UI.
+
+## Prerequisites
+
+- Your Core Extension is registered with Nayax and has a model name (for example, `Apps/YourAppName`)
+- You have identified the UI elements in your app that should be role-controllable
+
+<Steps>
+  <Step title="Define your UI element IDs">
+    Assign a string ID to each UI element you want to make role-controllable. Use this naming convention:
+
+    ```text
+    {category}.{name}
+    ```
+
+    - **Category:** one of `tab`, `widget`, `action`, `settings`, `sidebar`, `topMenu`
+    - **Name:** camelCase identifier for the element
+
+    Examples:
+
+    ```text
+    tab.overview
+    tab.settings
+    action.restartDevice
+    action.exportReport
+    widget.salesSummary
+    settings.notifications
+    ```
+
+    Keep a list of all element IDs you define. You will provide this list to Nayax so administrators can configure role permissions for each one.
+
+    <Note>
+    Element IDs are case-sensitive. Use consistent casing throughout your app and in the list you submit to Nayax.
+    </Note>
+  </Step>
+
+  <Step title="Fetch hidden elements at startup">
+    When your app loads, call the Nayax UI elements endpoint to get the list of elements that should be hidden for the current user:
+
+    ```bash
+    GET /core/apps/ui-elements?model=Apps/YourAppName
+    ```
+
+    The endpoint returns a JSON object with a `hide` array:
+
+    ```json
+    {
+      "hide": [
+        "action.restartDevice",
+        "tab.settings",
+        "widget.communication"
+      ]
+    }
+    ```
+
+    Store the result as a set for fast lookup:
+
+    ```typescript
+    async function fetchHiddenElements(model: string): Promise<Set<string>> {
+      try {
+        const response = await fetch(
+          `/core/apps/ui-elements?model=${model}`,
+          { credentials: "include" }
+        );
+
+        if (!response.ok) {
+          return new Set();
+        }
+
+        const data: { hide: string[] } = await response.json();
+        return new Set(data.hide);
+      } catch {
+        return new Set();
+      }
+    }
+    ```
+
+    <Note>
+    The endpoint returns an empty `hide` array for users who can see everything (for example, administrators). An empty array is a valid response, not an error.
+    </Note>
+  </Step>
+
+  <Step title="Apply visibility in your UI">
+    Create a helper function that checks whether an element should be visible, then use it throughout your UI before rendering each role-controllable element:
+
+    ```typescript
+    let hiddenElements: Set<string> = new Set();
+
+    function isVisible(elementId: string): boolean {
+      return !hiddenElements.has(elementId);
+    }
+    ```
+
+    Call `fetchHiddenElements` at app startup and store the result before rendering:
+
+    ```typescript
+    hiddenElements = await fetchHiddenElements("Apps/YourAppName");
+    ```
+
+    Then apply visibility checks in your UI:
+
+    ```typescript
+    // Filter a tab list
+    const visibleTabs = allTabs.filter(tab => isVisible(tab.elementId));
+
+    // Conditionally render a widget
+    {isVisible("widget.salesSummary") && <SalesSummaryWidget />}
+
+    // Filter an actions dropdown
+    const visibleActions = allActions.filter(action => isVisible(action.elementId));
+    ```
+  </Step>
+
+  <Step title="Handle the loading state">
+    The API call takes time. Decide how your app behaves while permissions are loading. The safest approach is to render nothing until the API call resolves, then apply visibility:
+
+    ```typescript
+    let permissionsLoaded = false;
+
+    async function initApp() {
+      hiddenElements = await fetchHiddenElements("Apps/YourAppName");
+      permissionsLoaded = true;
+      renderApp();
+    }
+    ```
+
+    Alternatively, you can render all elements immediately and re-render after permissions load. Either approach is valid, but the first avoids a flash of visible content.
+  </Step>
+
+  <Step title="Provide your element IDs to Nayax">
+    Nayax administrators configure role permissions using your element IDs. You must provide Nayax with the complete list of element IDs your app exposes so they can be added to the role management system.
+  </Step>
+</Steps>
+
+## Element ID naming reference
+
+Use these categories when defining your element IDs:
+
+| Category | Use for |
+|---|---|
+| `tab` | Tabs in a tabbed view (for example, `tab.overview`, `tab.reports`) |
+| `action` | Buttons or menu items that trigger an operation (for example, `action.export`, `action.delete`) |
+| `widget` | Dashboard cards or data panels (for example, `widget.salesChart`) |
+| `settings` | Sections within a settings screen (for example, `settings.notifications`) |
+| `sidebar` | Sidebar navigation items (for example, `sidebar.filters`) |
+| `topMenu` | Items in a top navigation bar (for example, `topMenu.userMenu`) |
+
+## Error handling
+
+The UI elements endpoint is designed to fail open. If the request fails for any reason (network error, authentication issue, server error), your app should show all elements rather than hiding everything. Hiding elements when you cannot confirm permissions would lock users out of your app.
+
+The example in [Step 2](#fetch-hidden-elements-at-startup) implements this behavior by returning an empty `Set` on any error.
+
+## Troubleshooting
+
+If role-based visibility is not behaving as expected, use the table below to identify the cause.
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| All elements visible despite role configuration | API returned empty array or request failed | Check browser DevTools network tab for the `/core/apps/ui-elements` response |
+| Specific element not hiding | Element ID not in the `hide` array | Verify your element ID matches exactly what Nayax configured (case-sensitive) |
+| API returns 404 | App not served through reverse proxy | Access your app through Nayax Core, not directly |
+| Element IDs not available in role management | IDs not submitted to Nayax | Provide your element ID list to Nayax for registration |
+
+## What's next
+
+<CardGroup cols={2}>
+  <Card title="Translations" icon="language" href="/docs/core-extension/translations">
+    Expose your UI strings for multi-language support.
+  </Card>
+  <Card title="Authentication" icon="key" href="/docs/core-extension/authentication">
+    Understand the JWT token your app receives from Nayax.
+  </Card>
+</CardGroup>

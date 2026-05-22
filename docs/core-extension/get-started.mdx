@@ -1,0 +1,94 @@
+---
+title: "Get Started"
+description: "Walk through the full developer journey from sandbox access to a live Core Extension in production."
+---
+
+This guide walks you through the end-to-end journey for building and deploying a Core Extension: from getting sandbox access, through building and testing your app, to certification and production deployment.
+
+By the end, you will have a working extension that loads inside Nayax Core and authenticates your users.
+
+## What you'll need
+
+- A Nayax developer account with sandbox access (provided by Nayax after onboarding)
+- A hosted web application you control (your extension runs in an iframe inside Nayax Core)
+- Familiarity with the [Core Extension overview](/docs/core-extension/overview) and the [extension types](/docs/core-extension/extension-types)
+
+<Note>
+Core Extension is not available for self-registration. Nayax provisions your sandbox access and manually registers your app in Nayax Core. Contact your Nayax representative to begin the onboarding process.
+</Note>
+
+<Steps>
+  <Step title="Get sandbox access">
+    Nayax sends you a welcome email with your sandbox credentials and environment details. The sandbox is a full Nayax Core environment where you can test your extension end-to-end before submitting for certification.
+
+    Once you have access, verify that you can log in to the sandbox Nayax Core instance at the URL provided in the welcome email.
+  </Step>
+
+  <Step title="Choose your hosting approach">
+    Your extension runs as a web application hosted at a URL that Nayax Core loads in an iframe. You can host it on your own infrastructure or, in some cases, on Nayax-provided infrastructure.
+
+    Host your application at a publicly accessible HTTPS URL. You will provide this URL to Nayax when your app is registered in the sandbox menu.
+  </Step>
+
+  <Step title="Implement the required integrations">
+    Before you can test your extension end-to-end, implement the four areas the App Framework requires.
+
+    **[Authentication](/docs/core-extension/authentication):** Receive the JWT token Nayax passes to your app at load time and use it for all Nayax API calls.
+
+    **[Extension Types](/docs/core-extension/extension-types):** Choose the display type that fits your use case (Screen, Fullscreen, Button with Popup, or Tab) and implement the matching token delivery method.
+
+    **[Translations](/docs/core-extension/translations):** Wrap all user-visible text in the translation function so Nayax Core can serve your UI in the user's language.
+
+    **[Role-Based UI Visibility](/docs/core-extension/role-based-visibility):** Register the UI elements your app exposes so Nayax Core administrators can control visibility by role.
+  </Step>
+
+  <Step title="Register your app in the sandbox">
+    Once your application is hosted and the integrations are in place, provide Nayax with:
+
+    - The URL of your hosted application
+    - The display type you are using (Screen, Fullscreen, Button with Popup, or Tab)
+    - The menu location where your app should appear
+    - The scopes your app requires (if any)
+
+    Nayax registers your app in the Nayax Core sandbox menu manually. You will receive confirmation once your app is visible in the sandbox environment.
+  </Step>
+
+  <Step title="Test in sandbox">
+    With your app registered, log in to the sandbox Nayax Core as a user who has access to your menu item. Verify:
+
+    - Your extension loads at the correct URL
+    - You receive a valid JWT token (check your browser console or network tab)
+    - API calls made with the token return the expected data
+    - UI text displays in the correct language when you switch the Nayax Core language setting
+    - Role-controlled elements show and hide correctly based on the user's role
+  </Step>
+
+  <Step title="Submit for certification">
+    When your extension passes testing in the sandbox, contact Nayax to request certification. Nayax reviews your app before approving it for production.
+  </Step>
+
+  <Step title="Deploy to production">
+    After certification, Nayax registers your app in the production Nayax Core environment. Deploy your application to your production hosting infrastructure and verify that it loads correctly with the production JWT public key.
+
+    See [Authentication](/docs/core-extension/authentication) for the production public key and token validation details.
+  </Step>
+</Steps>
+
+## Summary
+
+You have walked through the full Core Extension lifecycle: sandbox access, implementation, sandbox registration and testing, certification, and production deployment. The next steps are to implement each technical area in detail using the guides below.
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/docs/core-extension/authentication">
+    Receive and validate the JWT token.
+  </Card>
+  <Card title="Extension Types" icon="window-restore" href="/docs/core-extension/extension-types">
+    Choose and implement the right display type.
+  </Card>
+  <Card title="Translations" icon="language" href="/docs/core-extension/translations">
+    Expose your UI strings for multi-language support.
+  </Card>
+  <Card title="Role-Based Visibility" icon="shield-halved" href="/docs/core-extension/role-based-visibility">
+    Declare which UI elements are role-controllable.
+  </Card>
+</CardGroup>
