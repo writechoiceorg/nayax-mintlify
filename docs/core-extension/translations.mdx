@@ -1,0 +1,152 @@
+---
+title: "How to Support Translations"
+description: "Expose your Core Extension's UI strings to Nayax so users see your app in their language."
+---
+
+Nayax Core serves your extension to users in multiple languages. To participate in this system, your app calls the Nayax translation API at startup, retrieves the translated strings for the current user's language, and uses them throughout your UI. You do not manage language files: Nayax manages translations for all registered apps centrally.
+
+## Prerequisites
+
+- Your Core Extension is registered with Nayax and has a model name (for example, `Apps/YourAppName`)
+- Your app is served through the Nayax Core reverse proxy (required for the translation API to be reachable; see [Reverse proxy requirement](#reverse-proxy-requirement))
+
+<Steps>
+  <Step title="Call the translation API at startup">
+    When your app loads, fetch translations from the Nayax Core translation endpoint:
+
+    ```bash
+    GET /core/apps/translate?model=Apps/YourAppName
+    ```
+
+    The endpoint returns a JSON object mapping original English strings to their translations in the user's language:
+
+    ```json
+    {
+      "Welcome": "ברוכים הבאים",
+      "Save": "שמור",
+      "Cancel": "ביטול",
+      "No data available": "אין נתונים זמינים"
+    }
+    ```
+
+    If no translation exists for a string, the key is omitted. Your app falls back to the original string in that case.
+
+    Here is an example implementation that fetches and stores translations at startup:
+
+    ```typescript
+    async function loadTranslations(model: string): Promise<Record<string, string>> {
+      const response = await fetch(`/core/apps/translate?model=${model}`);
+      const data: Record<string, string> = await response.json();
+
+      const normalized: Record<string, string> = {};
+      for (const key of Object.keys(data)) {
+        normalized[key.toLowerCase()] = data[key];
+      }
+      return normalized;
+    }
+    ```
+
+    <Warning>
+    The Nayax backend stores translation keys in lowercase, even if your original strings are mixed case. Always normalize stored keys and lookups to lowercase, or translations will not match.
+    </Warning>
+  </Step>
+
+  <Step title="Implement a translation function">
+    Create a function that looks up a string in the loaded translations and falls back to the original if no translation is found:
+
+    ```typescript
+    let translations: Record<string, string> = {};
+
+    function t(text: string): string {
+      return translations[text.toLowerCase()] ?? text;
+    }
+    ```
+
+    Call `loadTranslations` at app startup and store the result so `t` can use it:
+
+    ```typescript
+    translations = await loadTranslations("Apps/YourAppName");
+    ```
+  </Step>
+
+  <Step title="Wrap your UI strings">
+    Every user-visible string in your UI must go through `t()`. This includes labels, buttons, table headers, placeholders, empty states, and error messages.
+
+    ```typescript
+    t('Welcome')
+    t('No data available')
+    t('Save')
+    t('Cancel')
+    t('Search...')
+    ```
+
+    **Wrap:**
+
+    - Labels and headings: `t('Welcome')`, `t('No data available')`
+    - Button text: `t('Save')`, `t('Cancel')`
+    - Placeholders, empty states, and error messages: `t('Search...')`
+
+    **Do not wrap:**
+
+    - Status values used in code comparisons: `if (status === 'completed')`
+    - CSS class names: `className="bg-green-500"`
+    - Console or debug messages: `console.log('Debug info')`
+    - Template literals with variables: `t(\`Machine ${id}\`)` — dynamic keys cannot be matched reliably
+  </Step>
+
+  <Step title="Use your model name consistently">
+    The model name in your API call must exactly match the model registered with Nayax. If it does not match, the API still returns HTTP 200 but with an empty object — no error, no translations, and no indication of what went wrong.
+
+    ```typescript
+    await loadTranslations("Apps/YourAppName");
+    ```
+
+    **Common mistakes:**
+
+    | Wrong | Correct |
+    |---|---|
+    | `App/MyApp` | `Apps/MyApp` |
+    | `apps/myapp` | `Apps/MyApp` |
+    | `MyApp` | `Apps/MyApp` |
+
+    If your app loads but all text shows in English, verify that your model name matches the one Nayax registered exactly, including capitalization.
+  </Step>
+
+  <Step title="Provide your strings to Nayax">
+    Nayax needs a list of all translatable strings from your app in order to add translations for each supported language. Provide this list to Nayax when you register your app or when you add new strings.
+  </Step>
+</Steps>
+
+## Reverse proxy requirement
+
+The translation endpoint uses an absolute path that resolves against your app's origin. Your app must be served through the Nayax Core reverse proxy for this to work.
+
+| How your app is accessed | Origin | Translation API resolves to | Works |
+|---|---|---|---|
+| Through Nayax Core reverse proxy | `dev.nayax.com` | `dev.nayax.com/core/apps/translate` | Yes |
+| Directly via your own domain | `your-app.example.com` | `your-app.example.com/core/apps/translate` | No, 404 |
+
+If the translation endpoint returns 404, the most likely cause is that your app is being accessed directly rather than through the Nayax Core reverse proxy. Contact Nayax to verify your reverse proxy configuration.
+
+## Troubleshooting
+
+If translations are not working as expected, use the table below to identify the cause:
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| API returns 404 | App not served through reverse proxy | Access your app through Nayax Core, not directly |
+| API returns empty object (`{}`) | Model name mismatch | Verify model name matches Nayax registration exactly |
+| Translations loaded but UI shows original language | Key case mismatch | Normalize keys and lookups to lowercase |
+| Some strings not translating | Strings not wrapped in `t()` | Audit your UI for hardcoded text |
+| Template literal strings not translating | Dynamic keys cannot be statically matched | Use static string arguments in `t()` |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Role-Based Visibility" icon="shield-halved" href="/docs/core-extension/role-based-visibility">
+    Declare which UI elements admins can show or hide by role.
+  </Card>
+  <Card title="Authentication" icon="key" href="/docs/core-extension/authentication">
+    Understand how your app receives the JWT token from Nayax.
+  </Card>
+</CardGroup>

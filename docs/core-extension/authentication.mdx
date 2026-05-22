@@ -1,0 +1,123 @@
+---
+title: "Authentication"
+description: "Understand how Nayax delivers a JWT token to your Core Extension and how to use it for API calls."
+---
+
+When a user opens your Core Extension, Nayax passes it a signed JWT token containing the user's identity and permissions. Your app uses this token to make Nayax API calls on behalf of the logged-in user. You do not manage login or sessions: Nayax handles authentication and hands your app a ready-to-use token at load time. For Screen, Button with Popup, and Tab extensions, the token arrives via `postMessage` from the parent frame. If you are building a Fullscreen extension, contact Nayax to confirm the delivery method.
+
+## Receiving the token via postMessage
+
+For Screen, Button with Popup, and Tab extensions, listen for a `message` event on the window. Nayax posts an object containing the token, the Cortex base URL, and (for Button with Popup and Tab) the selection context.
+
+```typescript
+useEffect(() => {
+  const handleMessage = (event: MessageEvent) => {
+    const { token, cortexUrl, selection } = event.data;
+
+    if (token) {
+      setToken(token);
+      setCortexUrl(cortexUrl);
+
+      if (selection?.machineId) {
+        setMachineId(selection.machineId);
+      }
+    }
+  };
+
+  window.addEventListener("message", handleMessage);
+  return () => window.removeEventListener("message", handleMessage);
+}, []);
+```
+
+The `selection` object is only present for Button with Popup and Tab extensions. Screen extensions receive `token` and `cortexUrl` only. Nayax can also pass context via the URL hash (for example, `/YourApp/index.html#machineId=12345`).
+
+## Token payload
+
+The token is signed with RS256. Here is an example payload:
+
+```json
+{
+  "id": "22",
+  "name": "nayaxvend\\User",
+  "actor": "27594",
+  "OperatorId": "27594",
+  "DistributorId": "27594",
+  "IsAdmin": "True",
+  "ActorHierarchy": "27594",
+  "AppName": "cortex",
+  "realUserId": "22",
+  "email": "user@nayax.com",
+  "nbf": 1768379518,
+  "exp": 1768469518,
+  "iat": 1768379518,
+  "iss": "NayaxMomaApi",
+  "aud": "moma2"
+}
+```
+
+## Token claims
+
+| Claim | Description |
+|---|---|
+| `id` | User ID |
+| `name` | Username with domain |
+| `actor` | Actor ID |
+| `OperatorId` | Operator ID |
+| `DistributorId` | Distributor ID |
+| `IsAdmin` | Admin flag |
+| `ActorHierarchy` | Actor hierarchy chain |
+| `AppName` | Application name |
+| `realUserId` | Real user ID |
+| `email` | User email |
+| `nbf` | Not before (Unix timestamp) |
+| `exp` | Expiration (Unix timestamp) |
+| `iat` | Issued at (Unix timestamp) |
+| `iss` | Issuer |
+| `aud` | Audience |
+
+## Validating the token
+
+Validate the JWT signature using the RSA public key for your environment.
+
+<Tabs>
+  <Tab title="QA / Development">
+    ```text
+    -----BEGIN PUBLIC KEY-----
+    MIIBCgKCAQEApd1+J2fE9kmt354EKyTqFLhPRgfzBU2vqpzZ5A2BAkhxcBs5/X5pB50Q6XVxibErAofqvv+zyEsPOnfAOKVu+s/mguYMiHuCJJ8Eu7X4VyaT/USYTA1sUI+cY+821RJ8zKhme+vDMStVE668C8Vwn7fZEPm7GU34HN1A+YQEe007ItwIx7tQtnrXql7gzlYU2zcHVrBToC3FaOdkrFX3zgzrJ+RCucAiAAjiK7TKc0YV+/uS8aXeQZD71TDGEcdbPYXogrZjIDudis4tmCLnqHC9m2ePdpjnpnVE/Vs56yK1ExOjkIlJ+kCR5WC3PZyVWv+oS7VMuFS4QaXsRSbHWQIDAQAB
+    -----END PUBLIC KEY-----
+    ```
+  </Tab>
+  <Tab title="Production">
+    ```text
+    -----BEGIN PUBLIC KEY-----
+    MIIBCgKCAQEAyUVRih9bb22lCTu/FEviqfJgPv3jwzWsXYDCdr+pz0i/BOAVAWUoA2xSBDbbmyUOT2KsEn1/WHhxpUS/ybi81VnhGkRocLuGxAV0LvvPOO774iAygRhlgzSedbt2z1qdgEs7d2c12Ae4LtCxQ2WV3Aaa1YVLWpeT8ZCdekgonzYFXvEK0ES+KFOaifnspMIQA7ek5K1BnojmjHQ7qI3DbYNydSOFqvhbnItFcXSqo+oiBx82HHqr0jAR6DatOfiV3zVXRbsJLaFK0pQFZPV9Ip6uarYofQV2mhlCudB5o+M/axYjnPf0wK4b3P6To9aM+lKpGq9LBnb8IyvpbSgVVQIDAQAB
+    -----END PUBLIC KEY-----
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+Use the QA key during sandbox development. Switch to the production key when you deploy to production.
+</Note>
+
+## Scopes
+
+Scopes control which Nayax resources your app can access. Nayax injects them into the JWT token when your app is registered. There are two scope types:
+
+| Value | Type | Behavior |
+|---|---|---|
+| `scope` | Limiting | Your app can only access resources within both the user's permissions and the specified scopes. Use this to restrict access even when the user has broader permissions. |
+| `appScope` | Overriding | Your app receives the specified scopes regardless of the user's normal permissions. Use this to grant your app access that users might not otherwise have. |
+
+Scopes are configured by Nayax when your app is registered. Contact your Nayax representative to request the scopes your app requires.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Extension Types" icon="window-restore" href="/docs/core-extension/extension-types">
+    See which display type is right for your app and how each one works.
+  </Card>
+  <Card title="Translations" icon="language" href="/docs/core-extension/translations">
+    Expose your UI strings so Nayax Core can serve them in the user's language.
+  </Card>
+</CardGroup>

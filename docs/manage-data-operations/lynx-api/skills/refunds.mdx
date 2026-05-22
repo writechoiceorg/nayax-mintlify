@@ -1,0 +1,100 @@
+---
+title: "Refund Workflow"
+description: "Request a refund, attach evidence, and approve or decline it using the Lynx API."
+---
+
+The Lynx API refund workflow spans four endpoints that must be called in sequence. A refund begins with a request, requires documentation to be uploaded before it can be approved, and ends with either an approval or a decline.
+
+<Warning>
+**Elevated permissions required**
+
+All four refund endpoints require the `refund` permission scope, which is not included in a standard sandbox token. Without it, the request and decline endpoints return HTTP 200 with a failure body, and the approve endpoint returns 500. Contact Moshe Orenstein at Nayax to have the scope added to your token before testing any refund endpoint.
+</Warning>
+
+## Request a refund
+
+`POST /v1/payment/refund-request`
+
+Submit the transaction details and the amount to refund. On success, the response body contains a `RefundID`. Save this value; it is required for every subsequent step.
+
+```json
+{
+  "TransactionId": 1234567,
+  "RefundAmount": 10.00,
+  "Reason": "Customer request"
+}
+```
+
+<Warning>
+**HTTP 200 does not mean success**
+
+This endpoint returns HTTP 200 even when the operation fails. Always read the response body. A body of `{"Status":"failed"}` means the refund was not created, despite the 200 status code. Check that your token has the `refund` scope before debugging anything else.
+</Warning>
+
+To obtain the `TransactionId` and `SiteId` values, use [Get Last Sales for Machine](/reference/lynx/machines/get-last-sales-for-machine).
+
+## Upload refund documentation
+
+`POST /v1/payment/refund-documentation`
+
+Attach supporting evidence to the refund before it can be approved. All five fields are required. Sending an empty body or omitting any field returns 500.
+
+```json
+{
+  "FileName": "evidence.pdf",
+  "FileData": "<base64-encoded file content>",
+  "TransactionId": 1234567,
+  "SiteId": 42,
+  "MachineAuTime": "2026-05-22T10:00:00.000Z"
+}
+```
+
+`FileData` must contain the base64-encoded content of the file. There is no URL-based upload path. Sending a `FileURL` field instead causes the downstream service to return a "FileData is empty" error wrapped in a 500.
+
+On success, the response body contains a `FileURL` confirming the file was stored. The refund is now ready to be approved or declined.
+
+## Approve or decline
+
+Call exactly one of these two endpoints per `RefundID`. They are mutually exclusive: once a refund is approved it cannot be declined, and vice versa.
+
+**Approve**
+
+`POST /v1/payment/refund-approve`
+
+```json
+{
+  "RefundID": "<refund_id>"
+}
+```
+
+**Decline**
+
+`POST /v1/payment/refund-decline`
+
+```json
+{
+  "RefundID": "<refund_id>",
+  "Reason": "Duplicate request"
+}
+```
+
+<Warning>
+**Decline returns HTTP 200 on logical failure**
+
+Like the request endpoint, `refund-decline` returns HTTP 200 even when the operation fails due to missing permissions. Inspect the response body for `"Status":"failed"` before treating a 200 as confirmation.
+</Warning>
+
+## Sandbox behavior
+
+The approve endpoint (`POST /v1/payment/refund-approve`) returns 500 in the sandbox environment even when the `RefundID` is valid and the `refund` scope is present. The error body leaks an internal hostname (`qailapi01.nayaxvend.int`). This is a Nayax-side sandbox infrastructure issue, not a problem with your integration. Contact Moshe Orenstein at Nayax to resolve it before testing the approval flow end-to-end.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Request Refunds" href="/docs/manage-data-operations/lynx-api/refunds/request-refunds">
+    Full endpoint reference for initiating a refund request.
+  </Card>
+  <Card title="Approve or Decline a Refund" href="/docs/manage-data-operations/lynx-api/refunds/approve-or-decline-a-refund">
+    Full endpoint reference for the approve and decline operations.
+  </Card>
+</CardGroup>

@@ -31,7 +31,7 @@ To install the demo application, follow the steps below:
 
 ## Using the Demo Application
 
-To start using the test application, you can follow the steps below:
+Follow these steps to run your first transaction in the demo application:
 
 1. Connect your UNO reader to your Android device. If you get a system message saying, “Allow EmvCore Service to access Saturn 8700,” press **OK**.
 
@@ -42,15 +42,15 @@ To start using the test application, you can follow the steps below:
 
      * Whitelist the Nayax Reader in your Android OS settings.
      * On your mobile device, check the **Always open EmvCore service when Saturn 8700 is connected** option and press **OK**.
-     * It’s also recommended to allow the **Stop optimizing battery usage** option when prompted.
+     * Allow the **Stop optimizing battery usage** option when prompted.
    </Warning>
 2. The application will automatically attempt to connect to the EMV Core service and the UNO Reader. Once the connection is successful, the status line at the top of the screen will display **Ready**.
 
 ### Navigating the Application
 
-The demo application includes multiple pages for performing specific actions. Below is a breakdown of their functionality:
+The demo application has four pages. Each page covers a specific area of the integration.
 
-#### Maintenance Page
+### Maintenance Page
 
 <Frame><img src="/images/docs/android-demo-application/image2.png" /></Frame>
 
@@ -59,7 +59,7 @@ On the **Maintenance** page, you can perform the following actions:
 * **Get Data:** Retrieves the version information and status from the EMV Core service and Reader.
 * **Show Message (UNO-PLUS readers only):** Allows you to edit and send two lines of text to the Reader's display.
 
-#### Settings Page
+### Settings Page
 
 <Frame><img src="/images/docs/android-demo-application/image3.png" /></Frame>
 
@@ -70,7 +70,7 @@ On the **Settings** page, you can configure the following options:
 * **Timeout:** Set a timeout duration (in seconds) for transactions. The maximal time is `60` seconds, for unlimited polling use 'continuous=true'.
 * **Continuous:** Automatically renew the transaction polling when a timeout occurs, allowing unlimited polling. It can be stopped with the `CancelTransaction` command.
 
-#### Payment Page
+### Payment Page
 
 On the **Payment** page, you may run payment transactions by following the steps below:
 
@@ -85,7 +85,7 @@ On the **Payment** page, you may run payment transactions by following the steps
    <Frame><img src="/images/docs/android-demo-application/image5.png" /></Frame>
 6. You can also continue to run another authorization. The previous transaction may be kept open (Authorized) or automatically confirmed according to the `PMT_KIOSK_AUTOCONFIRM` configuration option.
 
-#### Config Page
+### Config Page
 
 <Frame><img src="/images/docs/android-demo-application/image6.png" /></Frame>
 
@@ -96,4 +96,13 @@ On the Config page, you can test the `GetAttribute` command:
 
 
 
-<br />
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Linux App" href="/docs/integrate-pos-device/emv-core/demo-applications/linux-demo-application">
+    Install and run the demo application on a Linux-based device.
+  </Card>
+  <Card title="EMV Core Overview" href="/docs/integrate-pos-device/emv-core/overview">
+    Learn about the EMV Core architecture and integration model.
+  </Card>
+</CardGroup>

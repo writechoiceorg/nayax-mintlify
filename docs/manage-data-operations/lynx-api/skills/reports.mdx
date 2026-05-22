@@ -1,0 +1,101 @@
+---
+title: "Transactional Reports"
+description: "Query dashboard widget data and per-machine sales statistics using the Lynx API."
+---
+
+The Lynx API provides two reporting surfaces: operator-level dashboard widgets for aggregated views across an account, and per-machine endpoints for transaction feeds and statistics scoped to a single machine.
+
+## Dashboard widgets
+
+Widget endpoints return pre-shaped data for specific visualization types such as sales totals, trends, and breakdowns. Always call the discovery endpoint first to get the valid `widgetTypeId` values for your account before requesting data.
+
+### Discover widget types
+
+Call `GET /v1/report/widgetsTypes` with no body to get the full list of widget types available for the authenticated account.
+
+```http
+GET /v1/report/widgetsTypes
+```
+
+The response is an array of widget type objects:
+
+```json
+[
+  {
+    "widgetTypeId": 3,
+    "widgetName": "Total Sales"
+  }
+]
+```
+
+Save the `widgetTypeId` values from this response. Widget type IDs are account-specific and cannot be hardcoded. An ID that works in one account may return no data or an error in another.
+
+### Fetch widget data
+
+Use a `widgetTypeId` from the discovery call in the request body.
+
+```http
+POST /v1/report/widgetsData
+Content-Type: application/json
+
+{
+  "widgetTypeId": 3,
+  "screenTypeId": 1,
+  "actorId": "2009586082",
+  "startDate": "2026-01-01",
+  "endDate": "2026-05-21"
+}
+```
+
+<Warning>
+**`screenTypeId` minimum value is 1**
+
+Passing `screenTypeId: 0` causes a 500 server error on both widget data endpoints. Always use `1` or higher. This constraint is not documented in the official API reference.
+</Warning>
+
+The response shape varies by widget type. Inspect the actual response for the specific `widgetTypeId` you are using before writing any parsing logic.
+
+An alternative dashboard endpoint is available at `POST /v1/dashboard/get-widget-data`. It accepts the same `screenTypeId` constraint and requires at minimum `{"screenTypeId": 1}` in the body. An empty body or `screenTypeId: 0` causes a 500 with the message "screenTypeId can't be zero".
+
+## Machine data
+
+Machine data endpoints return data scoped to a single machine identified by its `MachineID` in the URL path. For cross-machine or operator-level reporting, use the widget endpoints above instead.
+
+All three endpoints accept optional `startDate` and `endDate` query parameters in `YYYY-MM-DD` format. They return `[]` when no data exists in the requested range; an empty array is a valid response, not an error.
+
+Sandbox MachineID: `1002529791`.
+
+### Last sales
+
+`GET /v1/machines/{MachineID}/lastSales` returns a list of recent transactions for the machine.
+
+```http
+GET /v1/machines/1002529791/lastSales?startDate=2026-01-01&endDate=2026-05-21
+```
+
+### Statistics
+
+`GET /v1/machines/{MachineID}/statistics` returns aggregated sales metrics for the machine, including totals, averages, and counts computed over the date range.
+
+```http
+GET /v1/machines/1002529791/statistics
+```
+
+### Change log
+
+`GET /v1/machines/{MachineID}/changeLogs` returns a history of configuration changes made to the machine.
+
+```http
+GET /v1/machines/1002529791/changeLogs
+```
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Last Sales" href="/docs/manage-data-operations/lynx-api/machines/getting-a-machines-last-sales">
+    Full endpoint reference for machine-level transaction queries.
+  </Card>
+  <Card title="Prepaid Card Operations" href="/docs/manage-data-operations/lynx-api/skills/prepaid-cards">
+    Create prepaid cards, load credit and revalue balances, and search card data.
+  </Card>
+</CardGroup>

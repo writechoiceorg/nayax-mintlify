@@ -40,8 +40,6 @@ To install the SDK, follow these steps:
 
 ## Using the Demo Application
 
-To start using the test application, you can follow the steps below:
-
 The zip contains a project with make files, a library, and a sample application with C source code:
 
 * The library named `libotikiosk` is used to convert the Socket JSON API to C functions.
@@ -49,7 +47,7 @@ The zip contains a project with make files, a library, and a sample application 
 
 ### Single API flow
 
-See the flow for the single API mode below:
+In single API mode, you select and run commands one at a time from a menu:
 
 1. The application starts in an idle state and presents a simple menu allowing the user to select the
    required command using the keyboard.
@@ -61,7 +59,7 @@ See the flow for the single API mode below:
 
 ### Auto Mode flow
 
-See the flow for the Auto Mode below:
+In auto mode, the application runs a continuous authorize-and-return cycle without manual input:
 
 1. Run the sample application with the command option: `--auto` :
    `$ ./otiKioskDemo --auto`
@@ -74,10 +72,12 @@ See the flow for the Auto Mode below:
 
 ### Build the Sample Application from Source Code
 
+These steps apply to Ubuntu Linux x86\_64 with GCC and automake.
+
 1. Get the sources to your target system. On Ubuntu, unzip the following file:
 
-```
-`EMV-Core Linux SDK v1.4\Linux\x86_64\Sources\Emv-Core-client-x86_64-1.4-97.zip`
+```text
+EMV-Core Linux SDK v1.4\Linux\x86_64\Sources\Emv-Core-client-x86_64-1.4-97.zip
 ```
 
 This will extract a folder named `Emv-Core-client` containing the application sources and makefiles.
@@ -110,7 +110,7 @@ To run the test application executable on Ubuntu:
 
 3. For example, if your folder structure is as follows:
 
-```
+```text
 sdk/
 ├── nayax-emb
 ├── otiKiosk                 <-- File provided with SDK
@@ -132,22 +132,22 @@ You should execute the applications using these commands:
 
 <Tabs>
   <Tab title="Terminal 1 (Start EMV Core)">
-    ```
+    ```bash
     cd sdk
     sudo ./otiKiosk
     ```
   </Tab>
 
   <Tab title="Terminal 2 (Start Sample Application)">
-    ```
+    ```bash
     cd sdk
     sudo ./Emv-Core-client/demo/otiKioskDemo
     ```
   </Tab>
 
   <Tab title="Run Automatically">
-    ```
-    sudo ./Emv-Core-client/demo/otiKioskDemo –auto
+    ```bash
+    sudo ./Emv-Core-client/demo/otiKioskDemo --auto
     ```
   </Tab>
 </Tabs>
@@ -156,4 +156,14 @@ You should execute the applications using these commands:
   The Reader must be registered to the Nayax Core system to complete payment transactions. To register your device, provide the Device ID (Reader serial number) to your Nayax account manager.
 </Note>
 
-<br />
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Android App" href="/docs/integrate-pos-device/emv-core/demo-applications/android-demo-application">
+    Install and run the demo application on an Android device.
+  </Card>
+  <Card title="EMV Core Overview" href="/docs/integrate-pos-device/emv-core/overview">
+    Learn about the EMV Core architecture and integration model.
+  </Card>
+</CardGroup>
