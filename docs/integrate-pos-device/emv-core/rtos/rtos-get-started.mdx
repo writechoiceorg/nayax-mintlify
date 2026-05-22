@@ -1,0 +1,119 @@
+---
+title: "Get Started"
+metadata:
+  og:description: "Install the EMV Core RTOS SDK, set up the UNO-mini reader firmware, and obtain your Device ID."
+---
+
+Verify your hardware and build requirements, install the reader firmware, and obtain the Device ID needed for terminal registration.
+
+## Requirements
+
+### Hardware
+
+Your setup requires the following hardware:
+
+| Requirement | Details |
+| :---------- | :------ |
+| **Device connection** | USB HID or UART TTL |
+| **Memory** | Minimum 64 KB RAM (configurable for smaller systems) |
+| **Reader power** | 5–12 VDC; 0.7 W idle, 3 W peak |
+
+### Network Requirements
+
+The host platform must support IPv4 TCP networking with the following characteristics:
+
+* IPv4 TCP sockets only
+* Up to 3 sockets in parallel
+* DNS resolution
+* Network status indication
+* Client only (no server functionality needed)
+* Low latency of sending and receiving packets (up to 10 ms)
+* **Socket usage:**
+  * 1 constantly open socket exchanging small amounts of data (Keep-alive) every 2–30 minutes. May receive data at any moment.
+  * 2 short-lived sockets (few seconds, one or more request/response cycles), which may work in parallel.
+  * Download of 1.5 MB at a time; upload of ~1 MB at a time, through a single socket in chunks of 1.5 KB.
+
+#### Transport Layer
+
+* The channel between EMV Core and Host is either a Serial or a USB channel.
+* Messages should be sent without breaks between the bytes (RS-232/TTL) or blocks (USB).
+* A break in the sequence indicates message completion. A break is defined as 11 ETU on RS-232/TTL:
+  * 1.15 ms at 9600 BAUD
+  * 0.1 ms at 115200 BAUD
+
+### Build System
+
+The host sample code requires:
+
+| Requirement | Details |
+| :---------- | :------ |
+| **Compiler** | GCC 4.8+ or Clang 3.5+ with C99 support |
+| **Build Tools** | GNU Autotools (`autoconf`, `automake`, `libtool`) |
+| **Operating System** | Linux (primary), or other systems with platform layer implementation |
+| **Dependencies** | POSIX threads (`pthread`) for the Linux reference platform implementation |
+
+<Note>
+  Use the sample host implementation included with the SDK rather than writing one from scratch.
+</Note>
+
+## SDK Delivery
+
+The SDK package is organized into three top-level folders:
+
+```text
+SDK Package/
+├── Linux Sample Application/      Portable C sources and demo application
+│   ├── ecod_sdk/                  Core SDK headers and sources
+│   │   ├── platform/              Platform abstraction layer
+│   │   ├── src/                   SDK implementation
+│   │   └── include/               Internal and public headers
+│   └── demo/                      Example demo application
+├── Firmware and Configuration/    Reader firmware and config files
+│   ├── Reader Firmware/           EMV Core FW file (EMVSC_v0xxxxx.oef)
+│   └── Reader Configuration/      Regional configuration files
+└── Utilities/
+    └── UNO-8 Manager/             Tool for local firmware and configuration updates
+```
+
+### EMV Core Communication Protocols
+
+The EMV Core FW running on the UNO Reader automatically adapts to two protocols based on the host application:
+
+| Protocol | Used By |
+| :------- | :------ |
+| JSON with Datalink wrapper | Linux Sample Application (Portable C code) |
+| Low-level TLV reader protocol | UNO-8 Manager tool |
+
+<Warning>
+  When switching from one protocol to another, you must restart the UNO Reader.
+</Warning>
+
+## Firmware Installation on UNO-mini
+
+### EMV Core Installation
+
+The EMV Core module is provided with the UNO Reader firmware.
+
+* **First-time installation** is performed using the **UNO-8 Manager**.
+* **Future updates** may be done remotely using the Nayax Terminal Management System (TMS).
+
+The firmware file (`EMVSC_v0xxxxx.oef`) can be found in the SDK `Firmware and Configuration\Reader Firmware` folder.
+
+<Warning>
+  The Reader must be registered to the Nayax Core system. If it is not registered, you will not be able to complete payment transactions. To register your device, provide its Device ID (Reader serial number) to your Nayax account manager.
+</Warning>
+
+## Getting a Device ID
+
+The Kiosk ID is the Reader Serial Number (SN). Obtain it by:
+
+**a) Reading the SN from the back of the reader:** scan the barcode to prevent errors.
+
+**b) Using the EMV Core Test application on Linux:**
+
+1. Run the Linux test application.
+2. Select option **8** and press **Enter** to display the Device ID.
+
+<Note>
+  Keep a record of your Device ID. You will need to provide it to your Nayax account manager for terminal registration before processing live transactions.
+</Note>

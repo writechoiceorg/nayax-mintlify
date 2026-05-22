@@ -1,0 +1,143 @@
+---
+title: "Configuration File Reference"
+metadata:
+  og:description: "EMV Core configuration parameters for the RTOS SDK: network, payment, security, closed-loop, logging, and reader message settings."
+---
+
+Configuration parameters are managed centrally from Nayax Core and may vary by customer and machine.
+
+## Location
+
+Configuration files are saved on the reader file system in the `E:\ETC` folder.
+
+<Frame><img src="/images/docs/rtos-configuration/config-file-location.png" /></Frame>
+
+## Format
+
+```
+<Parameter Name>=<Value>
+```
+
+**Example:** `TMS_SVC_URL=tms.otiglobal.com`
+
+## Managing Settings
+
+Configuration is managed centrally through **Nayax Core**. To adjust settings:
+
+1. Navigate to **Operations** > **Machines**.
+2. Locate the **Embedded** and **Embedded Advanced** sections.
+3. Update the relevant attributes and press **Save**. The server generates a configuration file and pushes it to the device automatically.
+
+---
+
+## Network & System Settings
+
+These parameters control network interface selection and system-level behavior:
+
+| Parameter | Description | Type | Default | Since Ver. |
+| :-------- | :---------- | :--- | :------ | :--------- |
+| `ETH_INTERFACE` | Network interface; empty = autodetect with fallback to eth0 | String | empty | — |
+| `KIOSK_USE_TCP_SOCKETS` | Use TCP ports 10000 (commands) and 10001 (events) instead of domain sockets | Bool (1/0) | 0 | — |
+| `DAILY_RESTART_HOUR` | Hour for automatic daily reboot (0–23, 0 = disabled). Actual reboot within 30 min of set hour. | U8 | 0 | — |
+| `CONFIG_VERSION` | Version of the config file; sent to TMS, not used by the device | String | — | — |
+| `KIOSK_TCP_LOCALHOST` | Limit EMV Core sockets to localhost interface | Bool (1/0) | 0 | 0.7 |
+
+## TMS & Payment Service Settings
+
+These parameters configure the URLs and polling behavior for the TMS and payment server:
+
+| Parameter | Description | Type | Default | Since Ver. |
+| :-------- | :---------- | :--- | :------ | :--------- |
+| `TMS_SVC_URL` | URL of TMS service. Use `tms.otiglobal.com` for OTI TMS or `tms-c.otiglobal.com` for Nayax Core. | URL String | tms.otiglobal.com | 0.7 / 1.0 |
+| `PAYMENT_SVC_URL` | Payment server URL, name only (e.g., `payment-nayax-p.otiglobal.com`) | URL String (max 256) | empty | — |
+| `SERVER_POLL_INTERVAL` | Seconds between server calls for updates. Lower value = better responsiveness but more data usage. | U16 | 600 | — |
+
+## Reader Settings
+
+These parameters control initialization commands, button behavior, and reader display messages:
+
+| Parameter | Description | Type | Default | Since Ver. |
+| :-------- | :---------- | :--- | :------ | :--------- |
+| `INIT_CMD` | Commands to send to the Saturn Reader on initialization. Hex strings of TLV tags, separated by `\|`. Example: `DF0A0100\|DF7A0100` | Hex strings | empty | — |
+| `STOP_BUTTON_ID` | ID of the STOP/CANCEL button: 1 = Right, 2 = Left | U8 | 1 | — |
+| `STOP_BUTTON_LED_PRESENT` | 0 = disable button blinking (if LED is not on the STOP button) | Bool (1/0) | 1 | — |
+| `R_COUNTRY_CODE` | Sets the Terminal Country Code value in the reader. v1.0 takes it from Nayax Core machine country. | String (4 chars) | N/A | 0.7 / 1.0 |
+| `R_DO` | Sends DO commands to the reader on device start. Executed only once, unlike `INIT_CMD`. Multiple `R_DO` lines are all executed. | Hex string | N/A | — |
+| `R_MSG_X_Y` | Sets reader message (index X, line Y) when the device starts | ASCII string | N/A | — |
+
+## Security Settings
+
+These parameters control SSL and encryption settings for server connections:
+
+| Parameter | Description | Type | Default | Since Ver. |
+| :-------- | :---------- | :--- | :------ | :--------- |
+| `TMS_USE_SSL` | Switch SSL for TMS service on or off | Bool (1/0) | 0 | — |
+| `PMT_DUKPT_KEY_VARIANT` | DUKPT key variant depending on PSP. Use decimal format (e.g., 17 decimal = 0x11). Set to 0 to disable DUKPT (testing only). | U8 | 17 | — |
+| `PAYMENT_SVC_USE_SSL` | Switch SSL for payment service on or off | Bool (1/0) | — | — |
+
+## Open Loop Payment Settings
+
+These parameters control open-loop (credit/debit) payment behavior, timeouts, and authorization flow:
+
+| Parameter | Description | Type | Default | Since Ver. |
+| :-------- | :---------- | :--- | :------ | :--------- |
+| `PMT_ACCEPT_OFFLINE` | Store & Forward: automatically approve when network is unavailable. **Note:** Risk of unapproved transactions; operator responsibility. | Bool (1/0) | 0 | — |
+| `PMT_KIOSK_AUTOCONFIRM` | Automatically confirms with pre-auth amount if session is interrupted. Supports long sessions with possible resets (e.g., EV chargers). | Bool (1/0) | 1 | — |
+| `PMT_CONFIRMATION_INTERVAL` | Seconds between attempts to execute pending Confirm or Void operations | U32 | 5 | — |
+| `PAYMENT_SVC_SERVER_RETRIES` | How many times online authorization will be retried on error | Int | 3 | — |
+| `PAYMENT_SVC_SERVER_TIMEOUT` | HTTP timeout for payment server requests (seconds) | Int | 20 | — |
+| `PAYMENT_SVC_CONFIRM_TIMEOUT` | Server timeout when sending Confirm or Void requests (seconds) | U32 | 60 | — |
+| `PAYMENT_SVC_USER_WAITING_MAX_TIME` | Max waiting time for online authorization (seconds) | U16 | 30 | — |
+| `MAESTRO_LIMIT_CENTS` | Transactions above this limit with Maestro card will be declined without fallback | U32 | 2500 | — |
+| `PAYMENT_SVC_SYNCHRONOUS` | Wait for the current transaction to close on the server before starting a new one. Note: for asynchronous mode after an unexpected reset, also set `PMT_KIOSK_AUTOCONFIRM=0`. | Bool (1/0) | 0 | — |
+| `OPEN_LOOP_ENABLED` | Enable/disable open-loop payment | Bool (1/0) | 1 | 0.7 |
+| `PRE_AUTH_AMOUNT` | Default pre-authorization amount in cents if no amount is provided by the API | Int | 0 | 0.7 |
+| `CURRENCY_CODE` | ISO 4217 code (e.g., 840 = USD). v1.0 takes it from Nayax Core automatically after any machine attribute change or 'Reload configuration' action. | String | 840 | 0.7 / 1.0 |
+
+## Closed-Loop Payment Settings
+
+These parameters enable and configure closed-loop (prepaid) card support, including Mifare:
+
+| Parameter | Description | Type | Default | Since Ver. |
+| :-------- | :---------- | :--- | :------ | :--------- |
+| `CLP_PROPRIATARY_TRACKS_ENABLED` | Enable detection of proprietary tracks as Closed Loop during EMV payment. Requires proper reader configuration. | Bool (1/0) | 0 | — |
+| `CLP_MIFARE_READ` | Specify Mifare blocks to read. Format: `K[A|B][key_num]B[block_num],...` Example: `KA01B10B14,KB05B20B30` | String | — | — |
+| `CLP_MIFARE_ENABLED` | Enable Mifare cards as Closed Loop during payment. 0 = disabled; 1 = enabled via server; 2 = enabled via local host API (UID returned immediately in `TransactionComplete`). | Int | 0 | 0.7 |
+
+## Logging Settings
+
+These parameters control log file size, retention, and per-module verbosity:
+
+| Parameter | Description | Type | Default | Since Ver. |
+| :-------- | :---------- | :--- | :------ | :--------- |
+| `LOG_HOURS_TO_UPLOAD` | Hours of logs to include in UPLOAD_LOG command | U16 | 10 | — |
+| `LOG_NO_OF_FILES` | Number of log files kept. Oldest file is overridden when all reach `LOG_FILE_SIZE`. | Int | 6 | — |
+| `LOG_FILE_SIZE` | Max size in KB of each log file | Int | 256 | — |
+| `LOG_GLOBAL` | Default log level for all modules (1–5) | 1–5 | 3 | — |
+| `LOG_READER` | Log level for Reader | 1–5 | 3 | — |
+| `LOG_ETH` | Log level for Ethernet (errors only; use LOG_NET for data) | 1–5 | 3 | — |
+| `LOG_NET` | Log level for oT_Net (network) | 1–5 | 3 | — |
+| `LOG_SYSTEM` | Log level for SYSTEM or common functions | 1–5 | 3 | — |
+| `LOG_APP_3` | Log level for Open Loop | 1–5 | 3 | — |
+| `LOG_APP_4` | Log level for TMS | 1–5 | 3 | — |
+| `LOG_USBH2` | Log level for USB Host | 1–5 | 3 | — |
+
+## Reader Message Customization
+
+These parameters customize the text displayed on the Saturn Reader for various states:
+
+| Parameter | Description | Type | Default |
+| :-------- | :---------- | :--- | :------ |
+| `SAT_MSG_DECLINED1` | Line 1 of "Declined" message | String (16) | — |
+| `SAT_MSG_DECLINED2` | Line 2 of "Declined" message | String (16) | — |
+| `SAT_MSG_ERROR1` | Line 1 of "Error" message | String (16) | — |
+| `SAT_MSG_ERROR2` | Line 2 of "Error" message | String (16) | — |
+| `SAT_MSG_CARD_NOT_RECOGNIZED1` | Line 1, used by Closed-Loop Payment | String (16) | Card not |
+| `SAT_MSG_CARD_NOT_RECOGNIZED2` | Line 2, used by Closed-Loop Payment | String (16) | recognized |
+| `SAT_MSG_CLP_AUTHORIZING1` | Line 1, used by Closed-Loop Payment | String (16) | Authorizing... |
+| `SAT_MSG_CLP_APPROVED1` | Line 1, used by Closed-Loop Payment | String (16) | Approved |
+| `SAT_MSG_CLP_APPROVED2` | Line 2, used by Closed-Loop Payment | String (16) | Balance: |
+| `SAT_MSG_SWIPE_ALL1` | Message for retrying transaction in all channels | String (16) | Insert or Swipe |
+| `SAT_MSG_SWIPE_ALL2` | — | String (16) | Or Change Card |
+| `SAT_MSG_DEFAULT_MSGSWIPE1` | Message for retrying transaction via Mag Stripe | String (16) | Please Swipe |
+| `SAT_MSG_DEFAULT_MSGSWIPE2` | — | String (16) | Card |

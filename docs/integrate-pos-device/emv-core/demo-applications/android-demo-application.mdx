@@ -16,13 +16,13 @@ The SDK includes the following files:
 
 | File Name                                             | Description                                                                     |
 | ----------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `com.nayax.emvCore-release-v.v-bbb.apk`               | The EMV-Core service package.                                                   |
+| `com.nayax.emvCore-release-v.v-bbb.apk`               | The EMV Core service package.                                                   |
 | `com.nayax.emv_core_android_test-release-v.v-bbb.apk` | The SDK sample application.                                                     |
 | `emv-core-test-v.v-bbb.zip`                           | Android Studio project with library and sample application source code in Java. |
 
 To install the demo application, follow the steps below:
 
-1. Install the EMV-Core Service `com.nayax.emvCore-release-x.x-xxx.apk` on your Android device.
+1. Install the EMV Core Service `com.nayax.emvCore-release-x.x-xxx.apk` on your Android device.
 2. Install the Test application `com.nayax.emv_core_android_test-release-x.x.x.apk`.
 
 <Note>
@@ -48,9 +48,9 @@ To start using the test application, you can follow the steps below:
 
 ### Navigating the Application
 
-The demo application includes multiple pages for performing specific actions. Below is a breakdown of their functionality:
+The demo application includes multiple pages for performing specific actions.
 
-#### Maintenance Page
+### Maintenance Page
 
 <Frame><img src="/images/docs/android-demo-application/image2.png" /></Frame>
 
@@ -59,7 +59,7 @@ On the **Maintenance** page, you can perform the following actions:
 * **Get Data:** Retrieves the version information and status from the EMV Core service and Reader.
 * **Show Message (UNO-PLUS readers only):** Allows you to edit and send two lines of text to the Reader's display.
 
-#### Settings Page
+### Settings Page
 
 <Frame><img src="/images/docs/android-demo-application/image3.png" /></Frame>
 
@@ -70,9 +70,9 @@ On the **Settings** page, you can configure the following options:
 * **Timeout:** Set a timeout duration (in seconds) for transactions. The maximal time is `60` seconds, for unlimited polling use 'continuous=true'.
 * **Continuous:** Automatically renew the transaction polling when a timeout occurs, allowing unlimited polling. It can be stopped with the `CancelTransaction` command.
 
-#### Payment Page
+### Payment Page
 
-On the **Payment** page, you may run payment transactions by following the steps below:
+Run a payment transaction:
 
 1. Select **Authorize** for a two-step transaction or **Pay** for a single-step transaction.
 2. Enter the transaction **Amount**.
@@ -85,7 +85,7 @@ On the **Payment** page, you may run payment transactions by following the steps
    <Frame><img src="/images/docs/android-demo-application/image5.png" /></Frame>
 6. You can also continue to run another authorization. The previous transaction may be kept open (Authorized) or automatically confirmed according to the `PMT_KIOSK_AUTOCONFIRM` configuration option.
 
-#### Config Page
+### Config Page
 
 <Frame><img src="/images/docs/android-demo-application/image6.png" /></Frame>
 
@@ -94,6 +94,3 @@ On the Config page, you can test the `GetAttribute` command:
 1. Insert the Attribute name, such as `CONFIG_VERSION`.
 2. Press `GET ATTRIBUTE` to get the attribute value from the Config file.
 
-
-
-<br />

@@ -1,0 +1,105 @@
+---
+title: "Linux Sample Application"
+metadata:
+  og:description: "Build and run the portable C Linux Sample Application included with the EMV Core RTOS SDK."
+---
+
+The Linux Sample Application ships with the RTOS SDK as portable C (C99) source code. It provides a working reference implementation for the platform abstraction layer and a demo application for testing the SDK.
+
+The sample code was developed and tested on Ubuntu (x86\_64). When porting to other operating systems, you must adapt the Platform Abstraction Layer. See [Platform Porting](/docs/integrate-pos-device/emv-core/rtos/rtos-platform-porting).
+
+**Notes:**
+
+* All source code is in standard C (C99).
+* Platform-specific code is under `platform/`.
+* It is highly recommended **not** to modify code outside the `platform/` folder.
+
+## Directory Structure
+
+The sample application sources are organized as follows:
+
+```
+ecod_sdk/          # Core SDK headers and sources
+  platform/        # Platform abstraction layer
+  src/             # SDK implementation
+  include/         # Internal and public headers
+demo/              # Example / demo application
+```
+
+## Build
+
+### Get the Sources
+
+Obtain the SDK package from your Nayax account manager and extract the `Linux Sample Application` folder.
+
+### Install Build Dependencies (Ubuntu Linux)
+
+Run these commands to install the required tools:
+
+```bash
+sudo apt-get update
+sudo apt-get install build-essential automake
+```
+
+### Build the SDK and Demo
+
+The provided sources and demo are ready to build on Ubuntu Linux x86\_64 with GCC and automake:
+
+```bash
+autoreconf -fi       # Generate autotools configuration
+./configure          # Configure build (respects CONFIGURE_FLAGS)
+make                 # Build SDK library and demo
+```
+
+The build generates static libraries and the demo binary.
+
+### Clean build artifacts
+
+Use these targets to remove compiled output:
+
+```bash
+make clean              # Remove build objects
+make maintainer-clean   # Remove all generated files
+```
+
+## Configuration Options
+
+The SDK supports various build-time configurations through `ecod_sdk_configs.h`:
+
+```c
+// Memory allocation strategy
+#define EC_USE_HEAP 1                    // Use malloc/free (0 = static allocation)
+
+// Protocol settings
+#define EC_USE_DATALINK_PROTOCOL 1       // Enable datalink framing with ACK/NAK
+#define EC_INCOMPLETE_FRAME_TIMEOUT_MS 500  // Timeout for incomplete frames
+#define EC_ACK_TIMEOUT_MS 1000           // Timeout waiting for ACK
+#define EC_ACK_MAX_RETRIES 0             // Max retransmissions on missing ACK
+
+// Network bridge settings
+#define EC_SUPPORT_LONG_LIVED_SOCKETS 1  // Support persistent connections
+```
+
+<Note>
+  Computed defaults are in `ecod_sdk_setup.h`. Do not modify that file directly.
+</Note>
+
+## Run the Demo
+
+After building, run the included demo application to test the SDK:
+
+**Manual mode:** user selects operations using the keyboard:
+
+```bash
+./demo/ecodSdkDemo
+```
+
+**Automatic mode:** performs a payment transaction in a loop:
+
+```bash
+./demo/ecodSdkDemo --auto
+```
+
+In `--auto` mode, transactions run in a loop. If authorized, one out of two is confirmed and the other is voided, demonstrating both use cases.
+
+Review `demo/main.c` for example code and usage patterns.

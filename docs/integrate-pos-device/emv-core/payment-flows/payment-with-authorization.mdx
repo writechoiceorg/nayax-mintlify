@@ -4,20 +4,18 @@ metadata:
   og:description: "Payment with pre-authorization is the recommended approach by Nayax due to its more robust process, which makes it safer. It is composed of two steps."
 ---
 
-Payment with pre-authorization is the recommended approach by Nayax due to its more robust process, which makes it safer. It is composed of two steps:
+Nayax recommends the pre-authorization approach. It splits payment into two steps:
 
 1. Pre-authorization
 2. Settlement
-
-The following sections will detail each step.
 
 <Note>
   If you prefer, you can perform the authorization and settlement in just one step. To learn more about this process, visit the [Single Step Payment](/docs/integrate-pos-device/emv-core/payment-flows/single-step-payment) page.
 </Note>
 
-### Step 1: Pre-Authorization
+## Pre-Authorization
 
-In the first step, the host machine uses the EMV Core to authorize a specified amount for the payment operation with the buyer's card. See the following diagram:
+In the first step, the host machine uses the EMV Core to authorize a specified amount for the payment operation with the buyer's card.
 
 The following diagram shows the transaction flow for a **pre-authorization**:
 
@@ -26,49 +24,42 @@ The following diagram shows the transaction flow for a **pre-authorization**:
 Where:
 
 1. The host machine calls the [`PreAuthorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#preauthorize) method using the EMV Core API. This is the only action performed by the host machine.
-2. The EMV Core Polls to the Reader. In the meantime, the Host Application should instruct the Buyer or Shopper to tap the card.
-3. Request the card from the buyer.
-4. The shopper or buyer taps the card.
-5. The Nayax EMV Reader pulls the Response with the encrypted card data to the Nayax EMV Core.
-6. Nayax EMV Core gets the data and sends it to the Nayax Servers to authorize the amount defined in Step 1.
-7. Nayax Servers will return the authorized response containing the transaction ID and data.
-8. Nayax EMV Core will use the event or callback to inform the host application that the transaction was completed, including the transaction ID and transaction data.
+2. EMV Core polls the reader. Your application should prompt the user to tap their card.
+3. The reader prompts the user to present their card.
+4. The user taps their card.
+5. The reader sends the encrypted card data to EMV Core.
+6. EMV Core sends the data to the Nayax servers to authorize the amount from step 1.
+7. The Nayax servers return the authorization response with the transaction ID and data.
+8. EMV Core triggers the `TransactionComplete` event with the transaction ID and result.
 
 <Note>
-  The transaction complete callback is used independently of the transaction result. Meaning that if the transaction was approved, declined, or expired due to timeout, the EMV Core will inform you that it was completed.
-
-  The host machine should check the transaction data to identify the transaction result and manage how to proceed.
+  The `TransactionComplete` callback fires regardless of the result — approved, declined, or timed out. Check the transaction data to determine the result and decide how to proceed.
 </Note>
 
-After receiving the transaction approval, the vendor can proceed with their selling flow. They can provide the product, start charging the vehicle, or perform any other operation. The vendor can also keep the transaction id and transaction data on their servers.
+After the transaction is approved, proceed with your selling flow: deliver the product, start charging, or perform any other operation. You can also store the transaction ID and data on your server.
 
-### Step 2: Settlement
+## Settlement
 
-The settlement step is when the final amount is defined and charged to the buyer's card. The settlement starts after the product is sold or the operation, such as EV charging, is completed. At this moment, the host machine can confirm the transactions. See the diagram below:
+Settlement defines the final amount and charges it to the buyer's card. It starts after the product is delivered or the operation (such as EV charging) is complete.
 
 <Frame><img src="/images/docs/payment-with-authorization/image2.png" /></Frame>
 
-The detailed steps are described below:
-
-1. The selling operation is concluded. For example, the product is delivered to the buyer.
-2. The host application can report the sale to the application server.
-3. The application server closes the operation section.
-4. The Host application can now confirm the transaction. The [`ConfirmTransaction`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#confirmtransaction) operation must be used to inform the transaction ID and the amount to be charged.
+1. The selling operation completes. For example, the product is delivered to the buyer.
+2. Your application reports the sale to your application server.
+3. The application server closes the session.
+4. Your application calls [`ConfirmTransaction`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#confirmtransaction) with the transaction ID and the final amount to charge.
 
 <Note>
-  The final amount can differ from the amount informed in the pre-authorization. To avoid problems, Nayax suggests using the maximum value at the authorization phase if the final amount related to your selling process may vary.
+  The final amount can differ from the pre-authorized amount. To avoid problems, use the maximum expected amount at authorization if the final amount may vary.
 </Note>
 
-5. Immediately, Nayax EMV Core will confirm and be responsible for the settlement process with the Nayax servers. However, it does not mean that the settlement process has been concluded.
-6. EMV Core will use the Transaction ID and the amount to confirm the transaction and send them to Nayax servers.
-7. Nayax servers will immediately return an acknowledgment confirmation to EMV Core. This is necessary to ensure that EMV Core does not need to resend the confirmation message.
+5. EMV Core confirms the amount and initiates settlement with the Nayax servers. Settlement is not yet complete at this point.
+6. EMV Core sends the transaction ID and amount to the Nayax servers.
+7. The Nayax servers return an acknowledgment so EMV Core does not need to resend the confirmation.
 
-Nayax will handle the settlement transaction to ensure the funds are transferred correctly.
+Nayax processes the settlement and transfers the funds.
 
 <Note>
-  If you need to cancel a previously pre-authorized transaction, instead of the host application sending a confirm transaction operation to EMV Core, it needs to send a void operation.
+  To cancel a pre-authorized transaction, send a void operation instead of a confirm.
 </Note>
 
-
-
-<br />

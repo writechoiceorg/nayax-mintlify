@@ -6,7 +6,7 @@ metadata:
 
 import McpNote from '/snippets/mcp-server-note.mdx';
 
-Nayax Embedded Solution enables OEM manufacturers to integrate secure, affordable, and global payment capabilities into their machines. This solution includes a robust hardware reader, flexible software SDK, and powerful payment processing services. Whether you're developing Android or Linux applications, Nayax provides the tools to streamline integration and ensure smooth transactions.
+Nayax Embedded Solution enables OEM manufacturers to integrate secure, affordable, and global payment capabilities into their machines. This solution includes a robust hardware reader, flexible software SDK, and powerful payment processing services. Whether you're developing Android or Linux applications or building on an MCU or RTOS embedded platform, Nayax provides the tools to streamline integration and ensure smooth transactions.
 
 <McpNote />
 
@@ -29,7 +29,7 @@ The Nayax Embedded solution is composed of the following components:
   <Card
     title="Nayax EMV Core"
   >
-    An SDK installed on the host machine (Android or Linux) that handles communication between the EMV Reader and Nayax servers.
+    An SDK installed on the host machine (Android, Linux, or RTOS embedded platform) that handles communication between the EMV Reader and Nayax servers.
   </Card>
   <Card
     title="Host Application"
@@ -47,19 +47,22 @@ When you choose to use the Nayax Embedded solution, Nayax will provide the follo
 * **Hardware**:
   * **UNO-8/mini**: EMV-certified reader with L1, L2, TQM certifications.
 * **Software**:
-  * Nayax EMV Core SDK with sample code for Android and Linux.
+  * Nayax EMV Core SDK with sample code for Android, Linux, and RTOS embedded platforms.
   * Support for EMV payments, prepaid payments, and remote firmware updates.
 * **Gateway Services**:
   * Secure processing for all major card brands and mobile payments.
   * Redundant PCI-certified servers with 99.9% uptime.
   * Remote management with customizable alerts and reporting tools.
 
-## Next Steps
+## Choose Your SDK
 
-This documentation will help you understand EMV Core SDK and how it works. Below are some key areas to explore:
+Select your integration path based on your target platform:
 
-<Columns cols={3}>
-  <Card icon="link" title="Transaction Flows" href="/docs/integrate-pos-device/emv-core/payment-flows/transaction-flow" />
-
-  <Card icon="link" title="EMV Core SDK" href="/docs/integrate-pos-device/emv-core/sdk-methods-functions/emv-core-apis" />
+<Columns cols={2}>
+  <Card title="Android & Linux SDK" href="/docs/integrate-pos-device/emv-core/get-started/emv-core-get-started-1">
+    Java and native binary SDK for Android and Linux applications. Includes pre-built payment flows, a full Java API, and demo applications.
+  </Card>
+  <Card title="RTOS SDK" href="/docs/integrate-pos-device/emv-core/rtos/rtos-overview">
+    Portable C library (C99) for MCU and RTOS embedded platforms. Communicates with the UNO-mini reader over UART or USB HID.
+  </Card>
 </Columns>

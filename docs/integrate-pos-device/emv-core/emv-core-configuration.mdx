@@ -4,9 +4,9 @@ metadata:
   og:description: "The EMV Core configuration determines how your terminal functions, handles transactions, and interacts with external systems. To ensure compatibility."
 ---
 
-The EMV Core configuration determines how your terminal functions, handles transactions, and interacts with external systems. To ensure compatibility across various hardware and regional requirements, settings are defined using a standard `<Parameter Name>=<Value>` format (e.g., `TMS_SVC_URL=tms.otiglobal.com`).
+The EMV Core configuration determines how your terminal functions, handles transactions, and interacts with external systems. Settings use a standard `<Parameter Name>=<Value>` format (e.g., `TMS_SVC_URL=tms.otiglobal.com`).
 
-### Managing Settings
+## Managing Settings
 
 Configuration is handled centrally through the **Nayax Core** server. To adjust these settings:
 
@@ -25,7 +25,7 @@ The table below lists the primary configuration keys available for both platform
 | **Network & System**  | `ETH_INTERFACE`         | Network interface for reporting; autodetects if empty.              | String     | empty                         | Fallback to eth0.                                |
 |                       | `KIOSK_USE_TCP_SOCKETS` | Set to 1 to use TCP ports 10000 (cmd) and 10001 (events).           | Bool (1/0) | 0                             | Disables domain sockets if set.                  |
 |                       | `DAILY_RESTART_HOUR`    | Automatic daily reboot hour (0-23); 0 is disabled.                  | U8         | 0                             | Reboot occurs within 30 minutes of the set hour. |
-|                       | `KIOSK_TCP_LOCALHOST`   | Limits EMV-Core sockets to the localhost interface.                 | Bool (1/0) | 0                             | Introduced in SDK v0.7.                          |
+|                       | `KIOSK_TCP_LOCALHOST`   | Limits EMV Core sockets to the localhost interface.                 | Bool (1/0) | 0                             | Introduced in SDK v0.7.                          |
 | **TMS & Payment**     | `TMS_SVC_URL`           | URL for Terminal Management System.                                 | URL String | tms.otiglobal.com             | Use tms-c.otiglobal.com for Nayax Core.          |
 |                       | `PAYMENT_SVC_URL`       | URL for payment processing server.                                  | URL String | payment-nayax-p.otiglobal.com | Max 256 characters.                              |
 |                       | `SERVER_POLL_INTERVAL`  | Seconds between calls to the server for updates.                    | U16        | 600                           | Low values increase data usage.                  |

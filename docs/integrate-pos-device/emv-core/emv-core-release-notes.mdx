@@ -1,5 +1,5 @@
 ---
-title: "Release Notes"
+title: "Android & Linux SDK Release Notes"
 metadata:
   og:description: "This section provides a comprehensive history of updates, enhancements, and stability improvements to EMV Core across our supported platforms."
 ---
@@ -47,7 +47,7 @@ This version includes the following improvements, fixes, and known issues for th
 
   ### **Sample Application Token Reporting (Linux Only)**
 
-  Fixed a logic error in the Sample application where card tokens were not being returned in the `Transaction Complete` event when using open-loop cards.
+  Fixed a logic error in the Sample application that prevented card tokens from being returned in the `TransactionComplete` event for open-loop cards.
 
   ### **Sample Application Resources (Android Only)**
 
@@ -63,7 +63,7 @@ This version includes the following improvements, fixes, and known issues for th
 
   ### **Terminal ID Update Delay (#7211, #7030)**
 
-  Changing readers without performing a manual reset of the EMV Core does not trigger an update to the Terminal ID. We recommend a full reset whenever hardware is swapped to ensure the correct terminal identity is registered.
+  If you swap readers without manually resetting the EMV Core, the Terminal ID will not update. Reset the EMV Core whenever you replace hardware to ensure the correct terminal identity is registered.
 
   ***
 
@@ -93,7 +93,7 @@ This version includes the following improvements and known issues for the SDK:
 
   ### **Nayax Core Managed Closed-Loop Cards**
 
-  Closed-loop and Pre-paid cards can now be managed via the Nayax Core by setting `CLP_MIFARE_ENABLED=1`. This allows the Nayax server to process CLP cards directly.
+  You can now manage closed-loop and pre-paid cards through Nayax Core by setting `CLP_MIFARE_ENABLED=1`. This allows the Nayax server to process CLP cards directly.
 
   > **Note:** The default value for `CLP_MIFARE_ENABLED` has been changed to `2` (Local API) in this version to prioritize local UID delivery by default.
 
@@ -107,11 +107,11 @@ This version includes the following improvements and known issues for the SDK:
 <Accordion title="Fixes" icon="wrench">
   ### **Offline Stability and Display Logic (#7385, #7371)**
 
-  Fixed a UI synchronization issue where a `PreAuthorize` command initiated without a network connection would incorrectly display "DECLINED" before switching to "SUCCESS" once the network recovered. We also resolved a critical crash occurring when calling `PreAuthorize` multiple times while offline.
+  Fixed a UI synchronization issue where a `PreAuthorize` command initiated without a network connection would incorrectly display "DECLINED" before switching to "SUCCESS" once the network recovered. We also fixed a critical crash that occurred when `PreAuthorize` was called multiple times while offline.
 
   ### **Reader Boot and Core Invocations (#7199, #7272)**
 
-  Fixed an issue where the EMV Core would prematurely report a `Ready` status while the reader was still in its boot sequence. Additionally, we implemented protection against multiple simultaneous invocations of the EMV Core to prevent resource conflicts.
+  Fixed a bug where the EMV Core reported `Ready` before the reader finished booting. Additionally, we implemented protection against multiple simultaneous invocations of the EMV Core to prevent resource conflicts.
 
   ### **Enhanced Log Management**
 
@@ -541,7 +541,7 @@ This version includes the following improvements and known issues for the SDK:
 <Accordion title="Known Issues" icon="exclamation-triangle">
   ### **Mifare Routing and UID Limitations**
 
-  Currently, all Mifare closed-loop transactions are routed to the OTI server. In this version, there is no existing configuration to allow the host application to receive the card UID directly through the EMV-Core API.
+  Currently, all Mifare closed-loop transactions are routed to the OTI server. In this version, there is no existing configuration to allow the host application to receive the card UID directly through the EMV Core API.
 
   A future update is planned to include a dedicated configuration setting that will enable the direct transmission of card UIDs to the host API, facilitating easier local management of private loop cards.
 </Accordion>
