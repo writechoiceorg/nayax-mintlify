@@ -699,7 +699,6 @@
             "pages": [
               "docs/fis-cortina/overview",
               "docs/fis-cortina/integration-lifecycle",
-              "docs/fis-cortina/environments",
               "docs/fis-cortina/transaction-types"
             ]
           },
@@ -707,10 +706,15 @@
             "group": "Build Your Integration",
             "pages": [
               "docs/fis-cortina/authentication",
-              "docs/fis-cortina/register",
-              "docs/fis-cortina/register-single-sale",
-              "docs/fis-cortina/register-auth-settlement",
-              "docs/fis-cortina/register-cash",
+              {
+                "group": "Register",
+                "root": "docs/fis-cortina/register",
+                "pages": [
+                  "docs/fis-cortina/register-single-sale",
+                  "docs/fis-cortina/register-auth-settlement",
+                  "docs/fis-cortina/register-cash"
+                ]
+              },
               "docs/fis-cortina/void"
             ]
           },

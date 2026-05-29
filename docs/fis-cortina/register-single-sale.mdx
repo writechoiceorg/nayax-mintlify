@@ -21,9 +21,9 @@ Because `Register` fires before dispensing, a failed fiscal registration can opt
 
 | Scenario | Step | Resolution |
 |---|---|---|
-| Sale failed or declined | 2 | Session aborted. No `Register` call is sent. Cardholder not charged. |
-| Registration declined | 3–4 | Logged. By default the failure is ignored and the transaction proceeds. If "Cancel on fiscal fail" is enabled, the transaction is cancelled and the product is not dispensed. |
-| Registration timeout | 3–4 | If retry is enabled, the registration is queued for async retry. If "Cancel on fiscal fail" is also enabled, the transaction is cancelled immediately with no retries. |
+| Sale failed or declined | 2 | Nayax aborts the session. No `Register` call fires. Nayax does not charge the cardholder. |
+| Registration declined | 3–4 | Nayax logs the failure. By default, the transaction proceeds. If Cancel is enabled, Nayax cancels the transaction and does not dispense the product. |
+| Registration timeout | 3–4 | By default, FisCortina cancels the transaction immediately with no retries. If retry is enabled, FisCortina queues the registration for async retry. |
 | Vend failed (product not dispensed) | 5 | Nayax Engine sends [`POST /FisCortina/Void`](/docs/fis-cortina/void) to un-register the fiscal record. |
 
 ## Request field notes

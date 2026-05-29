@@ -5,8 +5,6 @@ description: "How the Register call works across Pre-Selection and Cash transact
 
 The `Register` call reports an approved transaction to the regional tax authority. The timing of the call and how failures are handled depend on the payment flow.
 
-For request and response field definitions, see [Request & Response Reference](/docs/fis-cortina/response-reference). For retry and timeout behavior, see [Retry & Timeout Handling](/docs/fis-cortina/reliability).
-
 <CardGroup cols={3}>
   <Card title="Single Sale" href="/docs/fis-cortina/register-single-sale">
     Price known at card presentation. Register fires after Sale approval, before dispensing.
@@ -15,7 +13,7 @@ For request and response field definitions, see [Request & Response Reference](/
     Separate authorization and settlement calls. Register fires after Settlement, after dispensing.
   </Card>
   <Card title="Cash" href="/docs/fis-cortina/register-cash">
-    Optional. Register fires after a confirmed cash sale. Requires Integration Engineer to enable.
+    Register fires after a confirmed cash sale.
   </Card>
 </CardGroup>
 
@@ -27,5 +25,8 @@ For request and response field definitions, see [Request & Response Reference](/
   </Card>
   <Card title="Retry & Timeout Handling" href="/docs/fis-cortina/reliability">
     Configure retry behavior and timeout handling for failed registrations.
+  </Card>
+  <Card title="Request & Response Reference" href="/docs/fis-cortina/response-reference">
+    Full field definitions and response codes for all endpoints.
   </Card>
 </CardGroup>

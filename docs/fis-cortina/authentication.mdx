@@ -1,23 +1,23 @@
 ---
 title: "Authentication"
-description: "How to implement the StartSession challenge-response to authenticate each fiscal session."
+description: "Establish a trusted session before any fiscal transaction using the StartSession challenge-response flow."
 ---
 
-Before any fiscal transaction, Nayax initiates a `StartSession` exchange with your server to establish a trusted session. The process uses a pre-shared **Secret Token** and AES-256-ECB encryption to bind a unique Transaction ID to each session.
+Before any fiscal transaction, Nayax initiates a StartSession exchange with your server to establish a trusted session. The process uses a pre-shared Secret Token and AES-256-ECB encryption to bind a unique Transaction ID to each session.
 
 ## How it works
 
-Nayax and each integrator share a unique [**Secret Token**](/docs/fis-cortina/glossary): a 66-character string provided by Nayax at kickoff. The last 32 characters of this token serve as the AES-256 encryption key.
+Nayax and each integrator share a unique **Secret Token**: a 66-character string provided by Nayax at kickoff. The last 32 characters of this token serve as the AES-256 encryption key.
 
 The exchange works as a challenge-response:
 
-1. Nayax sends a random challenge string to your `StartSession` endpoint
+1. Nayax sends a random challenge string to your StartSession endpoint
 2. You generate a Transaction ID, encrypt it together with the challenge, and return the cipher
 3. Nayax decrypts the cipher to extract and verify the Transaction ID
-4. That Transaction ID is used in all subsequent `Register` and `Void` calls in the session
+4. That Transaction ID is used in all subsequent Register and Void calls in the session
 
 <Note>
-**Validate Transaction IDs on your end.** When Nayax sends a `Register`, `Void`, or `Refund` request, verify that the `BasicInfo.TransactionId` was issued by your server in a prior `StartSession` call and has not expired. Transaction IDs should remain valid for no longer than **10 minutes**.
+  **Validate Transaction IDs on your end.** When Nayax sends a Register or Void request, verify that the `BasicInfo.TransactionId` was issued by your server in a prior StartSession call and has not expired. Transaction IDs should remain valid for no longer than **10 minutes**.
 </Note>
 
 ## Step-by-step process
@@ -78,22 +78,21 @@ The following uses example values at each stage to illustrate the full flow.
 
   <Step title="Nayax decrypts and validates">
     Nayax decrypts the `TranIDCipher` using the same AES key and validates that:
+
     - The `RandomNumber` in the decrypted plaintext matches what was sent in the request
     - The overall format is as expected (64 characters, correct separator)
 
-    If validation fails, the session is rejected.
+    If validation fails, Nayax rejects the session.
   </Step>
 
   <Step title="Transaction ID used in subsequent calls">
-    Nayax uses the decrypted Transaction ID in all subsequent [`Register`](/docs/fis-cortina/register), [`Void`](/docs/fis-cortina/void), and `Refund` requests for the session. It appears in the `BasicInfo.TransactionId` field.
-
-    Your server must validate this ID against your own records on every incoming request.
+    Nayax uses the decrypted Transaction ID in all subsequent **Register** and **Void** requests for the session. It appears in the `BasicInfo.TransactionId` field. Your server must validate this ID against your own records on every incoming request.
   </Step>
 </Steps>
 
 ## Code example
 
-Use this Python snippet to verify your `StartSession` implementation produces the correct `TranIDCipher` before testing with Nayax.
+Use this Python snippet to verify your StartSession implementation produces the correct `TranIDCipher` before testing with Nayax.
 
 ```python
 # pip install pycryptodome
@@ -105,7 +104,7 @@ import base64
 secret_token = "mrV3U3nsgGFrE3w5-wnBo_WCLPce-pZ1awRvTVTkungMIKThTVbj_fiXdfoGclhn0"
 
 # Values from the StartSession request
-token_id      = "123456"
+token_id = "123456"
 random_number = "123456789qwertyuioasdfghjkl"  # 27 characters from Nayax
 
 # Step 2: Generate a 36-digit numeric Transaction ID
@@ -118,8 +117,8 @@ plaintext = f"{transaction_id}={random_number}"
 aes_key = secret_token[-32:].encode("utf-8")
 
 # Step 5: Encrypt using AES-ECB with PKCS5 padding
-cipher    = AES.new(aes_key, AES.MODE_ECB)
-padded    = pad(plaintext.encode("utf-8"), AES.block_size)
+cipher = AES.new(aes_key, AES.MODE_ECB)
+padded = pad(plaintext.encode("utf-8"), AES.block_size)
 encrypted = cipher.encrypt(padded)
 
 tran_id_cipher = base64.b64encode(encrypted).decode("utf-8")
@@ -129,14 +128,14 @@ print(f"TranIDCipher: {tran_id_cipher}")
 
 ## Verifying your encryption
 
-Use the [devglan.com AES decryption tool](https://www.devglan.com/online-tools/aes-encryption-decryption) to confirm your output is correct before testing with Nayax:
+Use the [devglan.com AES decryption tool](https://devglan.com) to confirm your output is correct before testing with Nayax:
 
 - **Mode:** ECB
 - **Key size:** 256-bit
 - **Key:** last 32 characters of your Secret Token
 - **Input:** `{TransactionId}={RandomNumber}`
 
-Decrypt the output and confirm it matches the plaintext you built in [Step 3](#build-the-plaintext).
+Decrypt the output and confirm it matches the plaintext you built in Step 3.
 
 ## Next steps
 

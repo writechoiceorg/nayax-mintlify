@@ -1,13 +1,13 @@
 ---
 title: "Overview"
-description: "FisCortina architecture, security requirements, and available API endpoints."
+description: "FisCortina is Nayax's fiscal reporting platform for integrators."
 ---
 
-FisCortina is Nayax's fiscalization platform: a REST API that allows integrators to report transactions to regional tax authorities in real time. It abstracts country-specific compliance requirements behind a single, consistent interface.
+FisCortina is Nayax's fiscalization platform: a REST API that allows integrators to report transactions to regional tax authorities in real time. Rather than managing separate compliance implementations per country, FisCortina gives merchants a single solution covering payment processing and fiscal reporting together, regardless of the underlying regional regulation.
 
 ## Architecture
 
-**Nayax calls your server.** The FisCortina Microservice (FisCortina MS) sends fiscal requests to your endpoints. Your server communicates with the tax authority and returns a structured response, which Nayax relays back to the device. You implement the API; Nayax drives the calls.
+**Nayax calls your server.** Nayax sends fiscal requests to your endpoints. Your server communicates with the tax authority and returns a structured response, which Nayax relays back to the device. You implement the API; Nayax drives the calls.
 
 The following components are involved in a FisCortina integration:
 
@@ -15,31 +15,28 @@ The following components are involved in a FisCortina integration:
 |---|---|
 | **Nayax Device** | POS terminal that initiates payment and receives fiscal confirmation |
 | **Nayax Engine** | Backend that processes payments and orchestrates fiscal calls |
-| **FisCortina MS** | Nayax microservice that routes fiscal requests to your server |
 | **3rd Party Server** | Your server, which implements the FisCortina endpoints |
 | **Tax Authority** | Regional government system that receives and confirms fiscal registrations |
 
 ## Security
 
-All FisCortina communication requires:
+All FisCortina communication requires the following across both sandbox and production environments:
 
 - **HTTPS with TLS 1.2 or higher** for all requests and responses
 - **JSON** as the content format for both request and response bodies
-- These requirements apply to both sandbox and production environments
 
 ## API Endpoints
 
-All FisCortina endpoints use `POST` and accept/return `application/json`, with one exception (`Version` uses `GET`).
+FisCortina exposes three endpoints, all using `POST` with `application/json`:
 
 | Method | Endpoint | Description |
 |---|---|---|
 | `POST` | [/FisCortina/StartSession](/docs/fis-cortina/authentication) | Challenge-response authentication. Must be called before any transaction in a session. Returns `TranIDCipher`. |
 | `POST` | [/FisCortina/Register](/docs/fis-cortina/register) | Registers a transaction with the tax authority. Triggered after Sale approval or Settlement, depending on configuration. |
 | `POST` | [/FisCortina/Void](/docs/fis-cortina/void) | Un-registers a fiscal registration following a transaction void or cancellation. Echoes `FiscalId` and `FiscalRrn` from the original registration. |
-| `GET` | `/FisCortina/Version` | Returns the FisCortina assembly version and build information. |
 
 <Warning>
-**Refund not yet supported.** The `/FisCortina/Refund` endpoint is not available. Do not implement or trigger refund calls in your integration at this time.
+  **Refund not yet supported.** The `/FisCortina/Refund` endpoint is not available. Do not implement or trigger refund calls in your integration at this time.
 </Warning>
 
 ## Next steps

@@ -3,7 +3,7 @@ title: "Authorization + Settlement"
 description: "How Register works in the 2-step Pre-Selection flow, where authorization and settlement are separate calls."
 ---
 
-Authorization and settlement are separate calls. `Register` fires after Settlement is confirmed, **after the product has already been dispensed**. A failed registration cannot cancel the transaction.
+Authorization and settlement are separate calls. `Register` fires after Nayax confirms Settlement, **after the product has already been dispensed**.
 
 ## Flow
 
@@ -21,11 +21,11 @@ Because `Register` fires after dispensing, a failed registration cannot cancel t
 
 | Scenario | Step | Resolution |
 |---|---|---|
-| Authorization failed | 1 | Transaction aborted. No `Register` call. Product not dispensed. Cardholder not charged. |
-| Vend failed (product not dispensed) | 2 | Nayax Engine sends [`POST /FisCortina/Void`](/docs/fis-cortina/void). No `Register` call is sent. |
-| Settlement failed | 3 | Logged for manual reconciliation. `Register` is not triggered if Settlement does not confirm. |
-| Registration declined | 4–5 | Retried within the configured window. Transaction completes normally from the cardholder's perspective. |
-| Registration timeout | 4–5 | Same as above. Retries continue within the configured window. |
+| Authorization failed | 1 | Nayax aborts the transaction. No `Register` call fires. Nayax does not dispense the product or charge the cardholder. |
+| Vend failed (product not dispensed) | 2 | Nayax cancels the transaction. No `Register` call fires. Nayax does not dispense the product or charge the cardholder. |
+| Settlement failed | 3 | Nayax logs for manual reconciliation. `Register` does not fire if Settlement does not confirm. |
+| Registration declined | 4–5 | Registration fails with no fiscal processing unless Retry is enabled. |
+| Registration timeout | 4–5 | Same as above. If Retry is enabled, FisCortina continues retrying within the configured window. |
 
 ## Request field notes
 

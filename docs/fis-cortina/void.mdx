@@ -3,7 +3,7 @@ title: "Void"
 description: "How the Void call un-registers a previously fiscalized transaction from the tax authority."
 ---
 
-The `Void` call un-registers a previously fiscalized transaction from the tax authority. It is triggered when a transaction is cancelled after authorization or sale, typically because the product or service was not delivered to the customer.
+The `Void` call un-registers a previously fiscalized transaction from the tax authority. Nayax triggers it when a transaction cancels after authorization or sale, typically because the product or service was not delivered to the customer.
 
 <Note>
 **Best practice:** Enable Void (cancellation un-registration) for all integrations. It ensures fiscal compliance when products or services cannot be dispensed after a successful authorization.
@@ -19,17 +19,17 @@ Nayax Engine sends a Void fiscal call when it initiates a cancellation command. 
 
 ## Void flow
 
-The Void call is sent after the transaction has been authorized or a sale has been approved, but before settlement. The fiscal registration created by the original `Register` call is removed from the tax authority.
+Nayax sends the Void call after authorization or sale approval, but before settlement. This removes the fiscal registration created by the original `Register` call from the tax authority.
 
 The following sequence shows how the Void call works:
 
 1. Transaction has been authorized or sale approved; fiscal registration already sent via `Register`. Product or service has not yet been dispensed.
-2. Cancellation is triggered by the customer or by a technical failure that prevents dispensing.
+2. The customer or a technical failure triggers cancellation.
 3. Nayax Engine initiates a payment Void with the Payment Provider.
 4. Nayax Engine sends a `POST /FisCortina/Void` request to your server. The request includes the echoed `FiscalId` and `FiscalRrn` from the original [`Register`](/docs/fis-cortina/register) response.
 5. Your server un-registers the transaction with the Tax Authority and returns a response (must include `Verdict`). On success, the fiscal record is removed.
 6. Nayax Engine completes the void and returns the result to the Nayax Device.
-7. Nayax Device informs the Operator that the transaction has been cancelled.
+7. Nayax Device informs the Operator that Nayax cancelled the transaction.
 
 ### Exception handling
 

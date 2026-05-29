@@ -1,51 +1,26 @@
 ---
 title: "Transaction Types"
-description: "Card, cash, and offline fiscal registration flows, and FiscalCommandType reference values."
+description: "Supported payment flows for card and cash fiscal registration."
 ---
 
-FisCortina supports card, cash, and offline fiscal registration. Card transactions are enabled by default. Cash and offline registration are optional and require your Integration Engineer to enable them.
+FisCortina supports card and cash fiscal registration. Both are enabled by default. To disable cash registration, contact your Integration Engineer.
 
 ## Card Transactions
 
-FisCortina supports three card payment flows:
+FisCortina supports two card payment flows:
 
 | Flow | Description | Register Trigger |
 |---|---|---|
-| [Pre-Selection](/docs/fis-cortina/glossary) (1-step) | Product price is known at card presentation. Single sale call. | After Sale is approved |
-| [Pre-Selection](/docs/fis-cortina/glossary) (2-step) | Separate authorization and settlement calls. | After Settlement is confirmed |
-| [Pre-Authorization](/docs/fis-cortina/glossary) | Initial authorization holds a default amount; settled once the final amount is known. | After Settlement with final amount |
+| [Pre-Selection](/docs/fis-cortina/glossary) (1-step) | Product price is known at card presentation. Single sale call. | After Sale approval |
+| [Pre-Selection](/docs/fis-cortina/glossary) (2-step) | Separate authorization and settlement calls. | After Settlement confirmation |
+
+<Note>
+  **Pre-Authorization is not supported.** FisCortina does not support the Pre-Authorization flow (initial hold settled once the final amount is known).
+</Note>
 
 ## Cash Transactions
 
-Cash transaction registration is **optional and disabled by default**. When enabled, a `Register` call is sent after a confirmed cash sale.
-
-<Note>
-**Enabling cash registration.** Contact your Integration Engineer to enable cash transaction fiscal registration. Availability is subject to regional regulatory requirements.
-</Note>
-
-Cash transactions (`PaymentMethodId=3`) send a reduced field set compared to card transactions. These are confirmed production behaviors:
-
-- `DeviceInfo.FWVersion` and `DeviceInfo.Type` are not sent
-- `MachineInfo.Name`, `ExternalId`, `Type`, `City`, and `ZipCode` are not sent
-- `MachineInfo.Country` and `GeoLocation` are sent as empty objects `{}`
-- `Products.CatalogProductId` may be sent as an empty string
-
-## Offline Transactions
-
-Offline transaction registration (EMV/contactless approved without an online authorization) is available for specific regions only. It is **disabled by default**. Contact your Integration Engineer to enable it.
-
-## FiscalCommandType Values
-
-The `BasicInfo.FiscalCommandType` field in each request indicates the type of fiscal operation:
-
-| Value | Name | Description |
-|---|---|---|
-| `0` | PREAUTHORIZATION | Pre-authorization hold. Supported but not in active use. |
-| `1` | SETTLEMENT | Settlement of a pre-authorized or 2-step pre-selection transaction. |
-| `2` | CANCEL | Cancellation or void of a transaction. |
-| `3` | REFUND | Refund. Not yet supported. |
-| `4` | PRESELECTION | Single-step sale. Most common card flow. |
-| `8` | CASH | Cash transaction registration. |
+FisCortina supports cash transaction registration, enabled by default. Cash transactions send a reduced field set compared to card transactions: device and machine details are omitted or sent as empty objects. See [Cash Registration](/docs/fis-cortina/register-cash) for the full field reference.
 
 ## Next steps
 
