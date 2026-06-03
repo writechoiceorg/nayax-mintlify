@@ -1,0 +1,37 @@
+name: Docs checks
+
+# Validates that image references will actually render: every /images/... path
+# resolves to a real file, no transposed [!](...) syntax, and no Markdown image
+# with unescaped spaces in the path (which silently fails to render).
+#
+# Internal *page* links are intentionally NOT checked here -- Mintlify's own CI
+# already runs a link-rot check on every PR, and `mint broken-links` scans the
+# whole repo (choking on non-doc Markdown outside docs.json), so a second link
+# checker here would be both redundant and unreliable.
+
+on:
+  # Runs on every PR (no path filter): a path filter would make this check
+  # never report on PRs that touch only unfiltered paths, which deadlocks a
+  # merge if the check is marked required in branch protection. The script is
+  # fast, so running it unconditionally is cheap.
+  pull_request:
+  # Tripwire on main, to catch anything that slips past PR checks (concurrent
+  # merges that each passed in isolation, or an admin bypass).
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  image-references:
+    name: Validate image references
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check that every referenced image exists and will render
+        run: python3 .github/scripts/check-image-refs.py
