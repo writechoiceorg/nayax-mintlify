@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
-"""Validate that every image referenced in the docs resolves to a real file.
+"""Validate that images referenced in the docs will actually render.
 
-Scans .mdx / .md content for image references and fails (exit 1) if any
-referenced image file does not exist under the repo, or if the malformed
-`[!](...)` syntax (a transposed `![](...)`) is found.
+Scans .mdx / .md content for image references and fails (exit 1) on:
+  1. A referenced image file that does not exist under the repo.
+  2. The malformed `[!](...)` syntax (a transposed `![](...)`).
+  3. A Markdown image `![](...)` whose path contains unescaped spaces. Such
+     paths exist on disk but never render: CommonMark ends the URL at the
+     first space, so no <img> tag is produced. The HTML `<img src="...">`
+     form does not have this problem (the browser encodes the spaces), which
+     is why some pages with spaced filenames render and others do not.
 
 Mintlify serves files in the repo-root `images/` directory at the `/images/`
 URL path, so an absolute reference like `/images/docs/foo/bar.png` maps to the
@@ -51,6 +56,22 @@ def resolve(path, source_file):
     return os.path.normpath(os.path.join(os.path.dirname(source_file), path))
 
 
+TITLE_SUFFIX = re.compile(r'^(.*?)\s+(".*"|\'.*\'|\(.*\))$')
+
+
+def markdown_destination_url(destination):
+    """Return the URL part of a Markdown image destination.
+
+    Handles angle-bracketed `<...>` destinations and an optional
+    `url "title"` / `url 'title'` / `url (title)` suffix.
+    """
+    dest = destination.strip()
+    if dest.startswith("<") and dest.endswith(">"):
+        return dest[1:-1].strip()
+    match = TITLE_SUFFIX.match(dest)
+    return match.group(1).strip() if match else dest
+
+
 def main():
     problems = []
     for path in content_files():
@@ -59,9 +80,18 @@ def main():
                 for match in BAD_IMAGE.finditer(line):
                     problems.append((path, lineno, match.group(1),
                                      "malformed image syntax '[!](...)' -- should be '![](...)'"))
+                # Markdown images: an unescaped space in the URL breaks rendering.
+                for match in MD_IMAGE.finditer(line):
+                    dest = match.group(1).strip()
+                    if not dest.startswith("<") and " " in markdown_destination_url(dest):
+                        problems.append((path, lineno, dest,
+                                         "Markdown image path has unescaped spaces -- will not "
+                                         "render; use <img src=\"...\" /> or %20-encode the spaces"))
+                # File-existence: applies to both Markdown and HTML images.
                 for regex in (MD_IMAGE, HTML_IMAGE):
                     for match in regex.finditer(line):
-                        ref = match.group(1).strip()
+                        ref = (markdown_destination_url(match.group(1))
+                               if regex is MD_IMAGE else match.group(1).strip())
                         if is_external(ref) or not IMAGE_EXT.search(ref):
                             continue
                         if not os.path.isfile(resolve(ref, path)):
