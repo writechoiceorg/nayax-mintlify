@@ -1,0 +1,49 @@
+name: Docs checks
+
+# Prevents broken image references and broken internal links from being merged.
+# - Image assets: a dedicated script verifies every /images/... reference points
+#   at a real file (Mintlify does not validate asset existence).
+# - Internal page links: `mint broken-links` uses Mintlify's own resolver, so it
+#   correctly understands OpenAPI-generated /reference/... pages.
+
+on:
+  pull_request:
+    paths:
+      - "docs/**"
+      - "reference/**"
+      - "snippets/**"
+      - "images/**"
+      - "**/*.mdx"
+      - "**/*.md"
+      - "docs.json"
+      - ".github/workflows/docs-checks.yml"
+      - ".github/scripts/check-image-refs.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  image-references:
+    name: Validate image references
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check that every referenced image exists
+        run: python3 .github/scripts/check-image-refs.py
+
+  internal-links:
+    name: Validate internal links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install Mintlify CLI
+        run: npm install -g mint
+      - name: Check for broken internal links
+        run: mint broken-links
