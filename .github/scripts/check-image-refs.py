@@ -32,6 +32,7 @@ MD_IMAGE = re.compile(r"!\[[^\]]*\]\(\s*([^)]+?)\s*\)")        # ![alt](path)
 BAD_IMAGE = re.compile(r"\[!\]\(\s*([^)]+?)\s*\)")             # [!](path)  <- transposed
 HTML_IMAGE = re.compile(r"<img\b[^>]*?\ssrc\s*=\s*[\"']([^\"']+)[\"']", re.I)
 IMAGE_EXT = re.compile(r"\.(png|jpe?g|gif|svg|webp|avif)$", re.I)
+FENCE = re.compile(r"^\s*(```|~~~)")                            # fenced code block delimiter
 
 
 def content_files():
@@ -75,27 +76,43 @@ def markdown_destination_url(destination):
 def main():
     problems = []
     for path in content_files():
-        with open(path, encoding="utf-8") as handle:
-            for lineno, line in enumerate(handle, 1):
-                for match in BAD_IMAGE.finditer(line):
-                    problems.append((path, lineno, match.group(1),
-                                     "malformed image syntax '[!](...)' -- should be '![](...)'"))
-                # Markdown images: an unescaped space in the URL breaks rendering.
-                for match in MD_IMAGE.finditer(line):
-                    dest = match.group(1).strip()
-                    if not dest.startswith("<") and " " in markdown_destination_url(dest):
-                        problems.append((path, lineno, dest,
-                                         "Markdown image path has unescaped spaces -- will not "
-                                         "render; use <img src=\"...\" /> or %20-encode the spaces"))
-                # File-existence: applies to both Markdown and HTML images.
-                for regex in (MD_IMAGE, HTML_IMAGE):
-                    for match in regex.finditer(line):
-                        ref = (markdown_destination_url(match.group(1))
-                               if regex is MD_IMAGE else match.group(1).strip())
-                        if is_external(ref) or not IMAGE_EXT.search(ref):
-                            continue
-                        if not os.path.isfile(resolve(ref, path)):
-                            problems.append((path, lineno, ref, "image file not found"))
+        try:
+            with open(path, encoding="utf-8") as handle:
+                lines = handle.readlines()
+        except UnicodeDecodeError as exc:
+            problems.append((path, 0, "",
+                             f"file is not valid UTF-8 ({exc}); cannot scan for image references"))
+            continue
+
+        in_fence = False
+        for lineno, line in enumerate(lines, 1):
+            # Skip fenced code blocks: example Markdown/HTML inside ``` or ~~~
+            # is documentation, not a real image reference.
+            if FENCE.match(line):
+                in_fence = not in_fence
+                continue
+            if in_fence:
+                continue
+
+            for match in BAD_IMAGE.finditer(line):
+                problems.append((path, lineno, match.group(1),
+                                 "malformed image syntax '[!](...)' -- should be '![](...)'"))
+            # Markdown images: an unescaped space in the URL breaks rendering.
+            for match in MD_IMAGE.finditer(line):
+                dest = match.group(1).strip()
+                if not dest.startswith("<") and " " in markdown_destination_url(dest):
+                    problems.append((path, lineno, dest,
+                                     "Markdown image path has unescaped spaces -- will not "
+                                     "render; use <img src=\"...\" /> or %20-encode the spaces"))
+            # File-existence: applies to both Markdown and HTML images.
+            for regex in (MD_IMAGE, HTML_IMAGE):
+                for match in regex.finditer(line):
+                    ref = (markdown_destination_url(match.group(1))
+                           if regex is MD_IMAGE else match.group(1).strip())
+                    if is_external(ref) or not IMAGE_EXT.search(ref):
+                        continue
+                    if not os.path.isfile(resolve(ref, path)):
+                        problems.append((path, lineno, ref, "image file not found"))
 
     if problems:
         print(f"Found {len(problems)} broken image reference(s):\n")

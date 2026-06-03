@@ -10,17 +10,15 @@ name: Docs checks
 # checker here would be both redundant and unreliable.
 
 on:
+  # Runs on every PR (no path filter): a path filter would make this check
+  # never report on PRs that touch only unfiltered paths, which deadlocks a
+  # merge if the check is marked required in branch protection. The script is
+  # fast, so running it unconditionally is cheap.
   pull_request:
-    paths:
-      - "docs/**"
-      - "reference/**"
-      - "snippets/**"
-      - "images/**"
-      - "**/*.mdx"
-      - "**/*.md"
-      - "docs.json"
-      - ".github/workflows/docs-checks.yml"
-      - ".github/scripts/check-image-refs.py"
+  # Tripwire on main, to catch anything that slips past PR checks (concurrent
+  # merges that each passed in isolation, or an admin bypass).
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
