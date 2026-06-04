@@ -1,0 +1,86 @@
+---
+title: "Power Supply"
+description: "Power requirements, wiring recommendations, and reset recovery procedure for the UNO-mini."
+metadata:
+  og:description: "UNO-mini power supply requirements: voltage range, wire gauge, grounding, and software-controlled power reset recovery procedure."
+---
+
+The UNO-mini requires a stable, regulated DC power supply. Insufficient or noisy power is the most common cause of intermittent operational failures.
+
+<Warning>
+**Power supply minimum requirements**
+
+- The DC supply voltage must remain within the 5–12 VDC range at all times. The absolute minimum operational voltage is 4.5 V; voltages below this level may cause the device to enter an inconsistent state.
+- Use a well-regulated supply voltage. Do not use unfiltered AC-rectified power sources.
+- Verify supply stability with an oscilloscope during reader installation.
+- Contact the Nayax technical team if you have any uncertainty about your power supply design.
+</Warning>
+
+## Power requirements
+
+The following table lists the power parameters for the UNO-mini.
+
+| Parameter | Value | Notes |
+| :--- | :--- | :--- |
+| **Supply voltage range** | 5–12 VDC | Absolute minimum operational: 4.5 V |
+| **Idle power consumption** | 0.7 W | No active card transaction |
+| **Peak power consumption** | 3 W | During NFC field activation and card read |
+| **Recommended supply** | Regulated DC, filtered | Do not use unfiltered AC-rectified sources |
+| **Reverse polarity protection** | None | Verify correct polarity before connection |
+
+The supply must sustain at least 3 W peak load while keeping the output voltage within the 5–12 VDC range under all load conditions.
+
+## Cable wire gauge
+
+For power supply wiring, observe the following minimum specifications:
+
+- For a 5–6 V supply with cable lengths up to 1 m: use a minimum 26 AWG wire for the Vin (pin 7) and GND (pin 4/5) lines.
+- For cable lengths greater than 1 m: contact Nayax integration support to confirm your design before production.
+
+## Grounding
+
+The UNO-mini connector provides two separate GND pins with distinct functions. Both must be connected correctly.
+
+- **Pin 4 (GND)**: Connect to the signal and communications ground reference of the host system.
+- **Pin 5 (GND_EXT)**: Connect to the power return ground.
+
+## Power reset recovery
+
+In rare cases, the UNO-mini may become unresponsive due to communication failures that cannot be resolved by reinitializing the serial interface alone. The host hardware design should include the ability to cut and restore power to the UNO-mini under software control as a last-resort recovery mechanism.
+
+### Recommended implementation
+
+Include a switchable power rail for the UNO-mini Vin line (pin 7), controlled by the host processor. A common implementation uses a P-channel MOSFET or a load switch IC such as the TPS22965 or MAX14689, driven by a GPIO on the host controller. The switch must be capable of sustaining the 3 W peak load.
+
+### Reset sequence
+
+Follow these steps when the UNO-mini becomes unresponsive, allowing a configurable timeout (recommended: 30–60 seconds) before escalating to a power reset:
+
+1. Attempt normal communication recovery by reconnecting the USB or UART session.
+2. If unresolved, cut power to pin 7.
+3. Hold power off for a minimum of 500 ms to allow internal capacitors to fully discharge.
+4. Restore power and wait 10 seconds for the UNO-mini to complete its boot sequence before resuming communication.
+5. Log the reset event for remote diagnostics.
+
+<Warning>
+Frequent or uncontrolled power cycling may affect device longevity and transaction state consistency. Ensure that any in-flight transaction is voided or resolved before initiating a power reset.
+</Warning>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Connection Interfaces"
+    href="/docs/integrate-pos-device/emv-core/uno-mini/uno-mini-connections"
+    icon="link"
+  >
+    Connect the UNO-mini to your host controller via USB or UART TTL.
+  </Card>
+  <Card
+    title="Get Started with EMV Core"
+    href="/docs/integrate-pos-device/emv-core/get-started/emv-core-get-started-1"
+    icon="link"
+  >
+    Install the EMV Core SDK and connect to the UNO-mini from your host application.
+  </Card>
+</CardGroup>
