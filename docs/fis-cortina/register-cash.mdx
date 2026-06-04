@@ -1,0 +1,104 @@
+---
+title: "Cash"
+description: "How FisCortina handles fiscal registration for cash transactions."
+---
+
+Cash transaction fiscalization is **enabled by default** for all FisCortina integrations. When a consumer pays with cash, Nayax Engine automatically triggers a `POST /FisCortina/Register` call to your server after the product is dispensed, ensuring FisCortina reports the transaction to the tax authority without affecting the payment or dispensing flow.
+
+Unlike cashless flows, cash registration happens post-dispensing. This means the consumer has already received the product before FisCortina sends the fiscal request, so your response cannot block or reverse the sale.
+
+<Note>
+  Cash transaction support can be disabled per integration if your region or use case does not require it. Contact your Nayax Integration Engineer to adjust this setting.
+</Note>
+
+## Cash Registration Flow
+
+The following sequence shows how cash registration fits into the payment flow.
+
+<Steps>
+  <Step title="Cash payment confirmed">
+    The consumer pays with cash; Nayax Engine processes and approves the sale.
+  </Step>
+
+  <Step title="Product is dispensed">
+    The consumer receives the product or service.
+  </Step>
+
+  <Step title="FisCortina sends Register request">
+    Nayax Engine sends `POST /FisCortina/Register` to your server with a reduced field set.
+
+    See [Cash field behavior](#cash-field-behavior) below for details on which fields are included.
+  </Step>
+
+  <Step title="Your server responds">
+    Your server registers the transaction with the tax authority and returns a response.
+
+    The response **must** include `Verdict` and `FiscalRrn`. All other `FiscalInfo` fields are optional but recommended.
+  </Step>
+</Steps>
+
+## Cash Field Behavior
+
+Cash transactions use the same `registerRequest` schema as cashless flows, but several card-specific and payment-specific fields are omitted or carry fixed values.
+
+| Field | Behavior for Cash |
+|---|---|
+| `CardData` | Not included |
+| `PaymentInfo.PaymentType` | `0` (Cash) |
+| `BasicInfo.FiscalCommandType` | `8` (Cash) |
+| `PaymentInfo.AuthCode` | Not included |
+| `PaymentInfo.RRN` | Not included |
+| `PaymentInfo.Token` | Not included |
+| `TaxInfo` | Included if tax is configured |
+| `Products` | Included if product data is configured |
+| `MachineInfo`, `ActorInfo`, `DeviceInfo` | Included as normal |
+
+The `BasicInfo.TransactionId` field is still required and must be validated by your server as a transaction ID produced in a prior `/StartSession` exchange.
+
+## Response Requirements
+
+Your server must return a valid `fiscalResponse` object. At minimum:
+
+```json
+{
+  "fiscalResponse": {
+    "Result": {
+      "ResponseCode": 0,
+      "Verdict": "Approved",
+      "StatusMessage": "Success"
+    },
+    "FiscalInfo": {
+      "FiscalRrn": "your-fiscal-rrn-here",
+      "FiscalId": 1234567,
+      "FiscalDateTime": "20240303124456"
+    }
+  }
+}
+```
+
+- `Verdict` is **mandatory**. A missing or invalid `Verdict` causes the action to fail with a parsing error.
+- `FiscalRrn` is **mandatory** in the registration response. Nayax echoes it in any future Void requests for this transaction.
+- `FiscalReceiptUrl` is optional. If provided, the device presents it to the consumer as a QR code on the screen.
+
+See [Request & Response Reference](/docs/fis-cortina/response-reference) for the full list of accepted `ResponseCode` values.
+
+## Exception Handling
+
+Cash registration failures never block dispensing. The product is always dispensed before the fiscal registration request is sent, so "Cancel on fiscal fail" does not apply and the sale cannot be reversed at this stage.
+
+If retries are enabled for your integration, a failed cash registration (timeout or decline) is queued for asynchronous retry within the configured window (default: 48 hours). Cash transactions continue retry attempts even after product dispensing.
+
+<Note>
+  If retries are not enabled, the failure is either logged and ignored, or handled according to your integration's configuration. Contact your Nayax Integration Engineer to confirm your retry policy.
+</Note>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Request & Response Reference" href="/docs/fis-cortina/response-reference">
+    Full field definitions and response codes for all endpoints.
+  </Card>
+  <Card title="Retry & Timeout Handling" href="/docs/fis-cortina/reliability">
+    Configure retry behavior and timeout handling for failed registrations.
+  </Card>
+</CardGroup>

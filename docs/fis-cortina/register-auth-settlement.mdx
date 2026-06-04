@@ -1,0 +1,56 @@
+---
+title: "Authorization + Settlement"
+description: "How Register works in the 2-step Pre-Selection flow, where authorization and settlement are separate calls."
+---
+
+Authorization and settlement are separate calls. `Register` fires after Nayax confirms Settlement, **after the product has already been dispensed**.
+
+## Flow
+
+The following sequence shows how `Register` fits into the authorization and settlement flow:
+
+1. Consumer presents a card and selects a product; Nayax Engine sends an Authorization request
+2. Authorization approved; product is dispensed
+3. Nayax Device sends a Settlement Command; Nayax Engine confirms Settlement
+4. Nayax Engine sends `POST /FisCortina/Register` to your server
+5. Your server registers the transaction and returns a response (must include `Verdict`, `FiscalRrn`, and `FiscalId`)
+
+## Exception handling
+
+Because `Register` fires after dispensing, a failed registration cannot cancel the transaction. Failures at this stage are queued for retry:
+
+| Scenario | Step | Resolution |
+|---|---|---|
+| Authorization failed | 1 | Nayax aborts the transaction. No `Register` call fires. Nayax does not dispense the product or charge the cardholder. |
+| Vend failed (product not dispensed) | 2 | Nayax cancels the transaction. No `Register` call fires. Nayax does not dispense the product or charge the cardholder. |
+| Settlement failed | 3 | Nayax logs for manual reconciliation. `Register` does not fire if Settlement does not confirm. |
+| Registration declined | 4–5 | Registration fails with no fiscal processing unless Retry is enabled. |
+| Registration timeout | 4–5 | Same as above. If Retry is enabled, FisCortina continues retrying within the configured window. |
+
+## Request field notes
+
+`PaymentInfo.AuthDateTime` uses a 12-digit format for card transactions. `MachineAuTime` and `MachineSeTime` always use 17 digits:
+
+| Field | Format | Digits | Example |
+|---|---|---|---|
+| `PaymentInfo.AuthDateTime` | `YYMMDDHHmmss` | 12 | `230226093406` |
+| `BasicInfo.MachineAuTime` | `YYYYMMDDHHmmssfff` | 17 | `20260223093406383` |
+| `BasicInfo.MachineSeTime` | `YYYYMMDDHHmmssfff` | 17 | `20260223093550020` |
+
+`BasicInfo.TransactionId` is always present for card transactions. It may be short (11 digits) or long (36 digits, zero-padded):
+
+| Format | Example |
+|---|---|
+| Short (11 digits) | `23083406429` |
+| Long (36 digits) | `000000355897454624064012793151470385` |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Void" href="/docs/fis-cortina/void">
+    Un-register a transaction when a product is not dispensed.
+  </Card>
+  <Card title="Request & Response Reference" href="/docs/fis-cortina/response-reference">
+    Full field definitions and response codes for all endpoints.
+  </Card>
+</CardGroup>

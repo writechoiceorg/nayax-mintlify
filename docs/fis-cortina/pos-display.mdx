@@ -1,0 +1,97 @@
+---
+title: "POS Display"
+description: "How to format and send fiscal data for display on the device screen after a transaction."
+---
+
+After a successful fiscalization, you can send a structured text string in the `POSDisplay` field of the `Data` object in your `Register` response. FisCortina forwards this string to the Nayax device, where it is rendered on-screen at the end of the transaction.
+
+<Note>
+**When to use POSDisplay.** Use this field when your fiscal authority or regional regulation requires visible confirmation of fiscal data on the device screen. Poland is a primary example. If omitted, no fiscal data slide is shown on the device.
+</Note>
+
+`POSDisplay` is a child of the `Data` object in `ExternalFisCortinaResponse`:
+
+```json
+{
+  "fiscalResponse": { ... },
+  "Data": {
+    "POSDisplay": "str0label:str0value;str1label:str1value;str2label:str2value;"
+  }
+}
+```
+
+## String format
+
+`POSDisplay` is a UTF-8 encoded, semicolon-delimited string of up to six elements (`str0`–`str5`). Each element is a `label:value` pair. Either the label or the value may be empty, but the colon `:` separator and semicolon `;` terminator are always required.
+
+Each slot maps to a position on the device screen. `str0` and `str1` have special rendering behavior:
+
+| Slot | Role | If omitted |
+|---|---|---|
+| `str0` | Headline at the top of the POS screen | Defaults to "Tariff" |
+| `str1` | Propagated to the payment presentment slide when card presentment is requested | All remaining strings shift up one line |
+| `str2`–`str5` | Additional data rows (label:value pairs) | Line is skipped |
+
+## Examples
+
+The tabs below show how different combinations of empty slots affect the rendered output.
+
+<Tabs>
+  <Tab title="Custom headline">
+    `str0` provides a custom headline. `str1`–`str5` carry fiscal data.
+
+    ```text
+    Fiskal:Potvrđeno;Blagajnik:Ivan K.;Broj računa:EBU0000000423;Datum:06/05/2025 14:35pm;JIR:JIR-4f2c8a3e;ZKI:ZKI-98AFB231;
+    ```
+
+    | Slot | Label | Value |
+    |---|---|---|
+    | str0 | Fiskal | Potvrđeno |
+    | str1 | Blagajnik | Ivan K. |
+    | str2 | Broj računa | EBU0000000423 |
+    | str3 | Datum | 06/05/2025 14:35pm |
+    | str4 | JIR | JIR-4f2c8a3e |
+    | str5 | ZKI | ZKI-98AFB231 |
+  </Tab>
+
+  <Tab title="Default headline (str0 empty)">
+    `str0` is empty so the device defaults the headline to "Tariff". `str1` is present.
+
+    ```text
+    ;Fiscalization Data;EBU0000000000;21/09/2024 12:54pm;
+    ```
+
+    | Slot | Value |
+    |---|---|
+    | str0 | *(empty; device shows "Tariff")* |
+    | str1 | Fiscalization Data |
+    | str2 | EBU0000000000 |
+    | str3 | 21/09/2024 12:54pm |
+  </Tab>
+
+  <Tab title="Both str0 and str1 empty">
+    Both `str0` and `str1` are empty. Remaining strings shift up one line position.
+
+    ```text
+    ;;EBU0000000000;21/09/2024 12:54pm;
+    ```
+
+    | Slot | Value |
+    |---|---|
+    | str0 | *(empty)* |
+    | str1 | *(empty; subsequent strings shift up)* |
+    | str2 | EBU0000000000 |
+    | str3 | 21/09/2024 12:54pm |
+  </Tab>
+</Tabs>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Retry & Timeout Handling" href="/docs/fis-cortina/reliability">
+    Configure retry behavior and timeout handling for failed registrations.
+  </Card>
+  <Card title="Request & Response Reference" href="/docs/fis-cortina/response-reference">
+    Full field definitions and response codes for all endpoints.
+  </Card>
+</CardGroup>

@@ -1,0 +1,55 @@
+---
+title: "Single Sale"
+description: "How Register works in the 1-step Pre-Selection flow, where the price is known at card presentation."
+---
+
+The product price is known at card presentation and the payment is processed in a single Sale call. `Register` fires immediately after Sale approval, **before the product is dispensed**.
+
+## Flow
+
+The following sequence shows how `Register` fits into the single sale flow:
+
+1. Consumer presents a card and selects a product at a known price
+2. Nayax Engine processes the Sale via the Payment Provider
+3. Nayax Engine sends `POST /FisCortina/Register` to your server
+4. Your server registers the transaction and returns a response (must include `Verdict`, `FiscalRrn`, and `FiscalId`)
+5. Product is dispensed
+
+## Exception handling
+
+Because `Register` fires before dispensing, a failed fiscal registration can optionally trigger a transaction cancellation (disabled by default; contact your Integration Engineer to enable):
+
+| Scenario | Step | Resolution |
+|---|---|---|
+| Sale failed or declined | 2 | Nayax aborts the session. No `Register` call fires. Nayax does not charge the cardholder. |
+| Registration declined | 3–4 | Nayax logs the failure. By default, the transaction proceeds. If Cancel is enabled, Nayax cancels the transaction and does not dispense the product. |
+| Registration timeout | 3–4 | By default, FisCortina cancels the transaction immediately with no retries. If retry is enabled, FisCortina queues the registration for async retry. |
+| Vend failed (product not dispensed) | 5 | Nayax Engine sends [`POST /FisCortina/Void`](/docs/fis-cortina/void) to un-register the fiscal record. |
+
+## Request field notes
+
+`PaymentInfo.AuthDateTime` uses a 12-digit format for card transactions. `MachineAuTime` and `MachineSeTime` always use 17 digits:
+
+| Field | Format | Digits | Example |
+|---|---|---|---|
+| `PaymentInfo.AuthDateTime` | `YYMMDDHHmmss` | 12 | `230226093406` |
+| `BasicInfo.MachineAuTime` | `YYYYMMDDHHmmssfff` | 17 | `20260223093406383` |
+| `BasicInfo.MachineSeTime` | `YYYYMMDDHHmmssfff` | 17 | `20260223093550020` |
+
+`BasicInfo.TransactionId` is always present for card transactions. It may be short (11 digits) or long (36 digits, zero-padded):
+
+| Format | Example |
+|---|---|
+| Short (11 digits) | `23083406429` |
+| Long (36 digits) | `000000355897454624064012793151470385` |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Void" href="/docs/fis-cortina/void">
+    Un-register a transaction when a product is not dispensed.
+  </Card>
+  <Card title="Request & Response Reference" href="/docs/fis-cortina/response-reference">
+    Full field definitions and response codes for all endpoints.
+  </Card>
+</CardGroup>

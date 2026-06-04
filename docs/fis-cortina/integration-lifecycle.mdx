@@ -1,0 +1,38 @@
+---
+title: "Integration Lifecycle"
+description: "Phases of the FisCortina onboarding process, from kickoff to production launch."
+---
+
+Every FisCortina integration follows a structured onboarding process, managed by a Nayax Integration Engineer, through these steps:
+
+<Steps>
+  <Step title="Kickoff Call">
+    Your Nayax Integration Engineer shares environment URLs, the API Reference guide, and this integration guide. Your Integration Engineer shares security keys separately.
+  </Step>
+  <Step title="Sandbox Setup">
+    Nayax configures your integrator entity in the sandbox environment. Development and testing begin once setup is complete.
+  </Step>
+  <Step title="Development">
+    Build your integration against the sandbox environment. Implement [StartSession](/docs/fis-cortina/authentication), [Register](/docs/fis-cortina/register), and [Void](/docs/fis-cortina/void) endpoints.
+  </Step>
+  <Step title="Certification">
+    Submit acceptance test results to your Integration Engineer for review. Nayax provisions the production environment upon approval.
+  </Step>
+  <Step title="Pilot">
+    Limited deployment on a small number of devices for a defined period. The Nayax Pilot Manager monitors activity. Nayax resolves any issues before full rollout.
+  </Step>
+  <Step title="Production Launch">
+    Full production deployment. The Nayax Operational and Payment Operations teams handle ongoing support.
+  </Step>
+</Steps>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Transaction Types" href="/docs/fis-cortina/transaction-types">
+    Understand supported payment flows for card and cash fiscal registration.
+  </Card>
+  <Card title="Authentication" href="/docs/fis-cortina/authentication">
+    Implement the StartSession challenge-response before sending fiscal requests.
+  </Card>
+</CardGroup>
