@@ -25,7 +25,7 @@ Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) 
 Use the [Update Device](ref:/update-device-by-deviceid) endpoint to update the device's status. You need to provide the `DeviceID`, `ActorID` (operator ID), and the new status flag. See an example request in the code block below:
 
 ```sh
-curl -X PUT "https://lynx.nayax.com/operational/api/v1/devices/<DEVICE_ID>" \
+curl -X PUT "https://qa-lynx.nayax.com/operational/v1/devices/<DEVICE_ID>" \
 -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
 -H "Content-Type: application/json" \
 -d '{
@@ -42,56 +42,10 @@ Replace `<DEVICE_ID>` with the actual identifier of the device you want to disab
 
 In the Body Parameters, you need to provide the following:
 
-<table align={["left","left","left"]}>
-  <thead>
-    <tr>
-      <th>
-        **Body Parameter**
-      </th>
-
-      <th>
-        **Type**
-      </th>
-
-      <th>
-        **Description**
-      </th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr>
-      <td>
-        `ActorID`
-      </td>
-
-      <td>
-        `int64`
-      </td>
-
-      <td>
-        The identifier of the operator that is associated with the device.
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        `StatusID`
-      </td>
-
-      <td>
-        `int32`
-      </td>
-
-      <td>
-        The status identifier of the device:
-
-        * **1**: Active
-        * **2**: Inactive
-      </td>
-    </tr>
-  </tbody>
-</table>
+| **Body Parameter** | **Type** | **Description** |
+| :----------------- | :------- | :-------------- |
+| `ActorID` | `int64` | The identifier of the operator associated with the device. |
+| `StatusID` | `int32` | The status identifier of the device: **1** = Active, **2** = Inactive. |
 
 So, to disable the device, change the `StatusID` to 2. The response will show details about the device, confirming that the device's status has been disabled.
 
