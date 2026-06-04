@@ -1,0 +1,73 @@
+---
+title: "UNO-mini Overview"
+description: "Hardware overview and specifications for the Nayax UNO-mini contactless EMV reader."
+metadata:
+  og:description: "The Nayax UNO-mini is a compact contactless EMV reader for OEM and kiosk integrators. Review hardware specifications, system architecture, and supported payment methods."
+---
+
+The UNO-mini is Nayax's compact contactless EMV reader for OEM manufacturers and kiosk integrators who need certified EMV payment acceptance in their hardware.
+
+<Frame><img src="/images/docs/uno-mini/overview-product-photo.png" alt="UNO-mini contactless EMV reader" width="200" /></Frame>
+
+## System architecture
+
+The UNO-mini is part of the Nayax OEM POS Solution, a three-component system that handles the full payment stack so you can focus on your application's user interface and business logic.
+
+The three components are:
+
+- **UNO-mini**: The cashless reader hardware. Handles contactless card reading and EMV processing at the device level.
+- **EMV Core**: Client software that runs on the kiosk controller (Android, Linux, or RTOS). Serves as the integration layer between your application, the payment processor gateway, and the UNO-mini.
+- **Nayax Core**: Pre-integrated cloud service for remote management of terminals and clearing transactions worldwide.
+
+Nayax also provides documentation and sample code to support system integrators throughout the integration process.
+
+## Specifications
+
+The following table lists the main hardware specifications.
+
+| Parameter | Value |
+| :--- | :--- |
+| **Power** | 5–12 VDC; 0.7 W idle, 3 W peak |
+| **CPU** | Arm 32-bit Cortex-M33 with TrustZone and enhanced security features |
+| **CPU speed** | 160 MHz |
+| **CPU memory** | Flash: 2 MB; RAM: 786 KB |
+| **External memory** | Flash: 8 MB |
+| **Host communications** | USB 2.0 FS; UART TTL |
+| **Contactless EMV** | EMVCo L1 v3.x compatible; full NFC support including card emulation |
+| **Security** | 2 AES coprocessors (one with DPA resistance); public key accelerator (DPA resistant); true random number generator (NIST SP800-90B compliant) |
+| **SAM interfaces** | 1 x micro SAM |
+| **LEDs** | 4 green (EMV) |
+| **Operating temperature** | -35°C to 70°C |
+| **Humidity** | 10%–90% non-condensing |
+| **Dimensions (H x W x D)** | 49.5 x 49.5 x 10.8/13.4 mm |
+| **Main connector** | Molex 5054330871, 8 pins |
+| **Additional connector** | 1 x micro SIM (3FF) |
+| **Regulatory** | FCC, CE, UL, RoHS, TQM |
+| **EMV certification** | Levels 1, 2, and 3 |
+
+## Supported payment methods
+
+The UNO-mini accepts all major contactless payment methods:
+
+- Debit and credit cards
+- Mobile and NFC contactless payments
+- Prepaid cards and closed-loop payment solutions
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Mechanical Integration"
+    href="/docs/integrate-pos-device/emv-core/uno-mini/uno-mini-mechanical"
+    icon="link"
+  >
+    Mount the UNO-mini in your hardware enclosure and configure serial number display.
+  </Card>
+  <Card
+    title="Get Started with EMV Core"
+    href="/docs/integrate-pos-device/emv-core/get-started/emv-core-get-started-1"
+    icon="link"
+  >
+    Install the EMV Core SDK and connect to the UNO-mini from your host application.
+  </Card>
+</CardGroup>

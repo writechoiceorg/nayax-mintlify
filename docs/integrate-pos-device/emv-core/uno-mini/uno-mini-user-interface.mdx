@@ -1,0 +1,85 @@
+---
+title: "User Interface Requirements"
+description: "EMV logo placement, card scheme branding, and LED and audio requirements for UNO-mini integrations."
+metadata:
+  og:description: "EMVCo certification requirements for the UNO-mini: contactless logo placement, card scheme brand guidelines, and LED and audio state requirements."
+---
+
+Integrating the UNO-mini requires your enclosure and display to meet specific EMVCo certification requirements for logos, LEDs, and audio feedback.
+
+## EMV contactless logo
+
+The EMV contactless logo must appear on your machine panel at the same position as the logo printed on the UNO-mini device: the center of the antenna.
+
+When reproducing the logo, follow the EMVCo sizing, clear space, and color rules. See the [EMVCo Contactless Symbol Reproduction Requirements](/images/docs/uno-mini/EMVCo-Contactless-Symbol-Reproduction-Requirements-Oct-2019.pdf) for the full specification.
+
+## Card scheme brand guidelines
+
+Card scheme logos on the machine panel or display are optional. If you choose to display them, they must comply with each scheme's brand guidelines.
+
+The following table lists the brand guidelines documentation for each major card scheme.
+
+| Card scheme | Brand guidelines |
+| :--- | :--- |
+| Visa | [Visa Merchant Signage](https://www.merchantsignage.visa.com/brandguidelines) |
+| Mastercard | [Mastercard Brand Center](https://www.mastercard.com/brandcenter) |
+| American Express | [American Express Checkout](https://www.americanexpress.com/en-us/business/merchant/supplies/details/?pid=CheckoutDL) |
+| Discover | [Discover Global Network Signage and Logos](https://www.discoverglobalnetwork.com/resources/businesses/signage/) |
+
+## LED and audio requirements
+
+The UNO-mini has 4 green LEDs on its front panel. These LEDs are required by EMVCo for POS devices and must be visible to the end user.
+
+<Frame><img src="/images/docs/uno-mini/user-interface-front-panel.png" alt="UNO-mini front panel showing 4 LED indicators and EMV contactless logo" width="346" /></Frame>
+
+There are two compliant ways to present the LEDs to the end user:
+
+1. Create a transparent area in the machine panel to expose the original device LEDs directly.
+2. Simulate the LED states on the machine display screen, if one is present.
+
+### LED and audio states
+
+The following table lists all LED and audio states as defined in EMVCo Book A v2.10, sections 9.x.
+
+LED legend: ○ Off, ● On. Blinking states are noted in the LED pattern column.
+
+Audio tones:
+- **Success tone**: approximately 1500 Hz sine wave, 500 ms
+- **Alert tone**: approximately 750 Hz double beep (200 ms on / 200 ms off / 200 ms on)
+
+| Status | Msg index | Description | LED pattern | Message display | Audio |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Not Ready** | — | Reader not powered or not communicating | ○ ○ ○ ○ | No message | None |
+| **Idle** | 17 | Powered and connected, not polling for card. First LED blinks approximately 200 ms every 5 s. | ● ○ ○ ○ (blink) | Welcome | None |
+| **Ready to Read** | 1 | Polling for card. Transaction amount may be shown. | ● ○ ○ ○ | € xx.xx / Present card | None |
+| **Card Read Successfully** | 35 | All four LEDs light in sequence over approximately 250 ms, then remain lit for approximately 750 ms, then turn off. Total duration: 1000 ms. | Sequential flash (all 4) | Card read OK / Remove card | Success tone |
+| **Authorizing** | 36 | Online authorization in progress | ○ ○ ○ ○ | Authorizing / Please wait | — |
+| **Approved** | 6 | Transaction approved by issuer or by terminal offline decision | ○ ○ ○ ○ | Approved | None (success tone played at card read) |
+| **Not Approved** | 9 | Transaction declined by issuer | ○ ○ ○ ○ | Not Approved | Optional alert tone |
+| **Declined** | 255 | General decline | ○ ○ ○ ○ | Declined | Optional alert tone |
+| **Read Error** | 39 | Error occurred reading the card | ○ ○ ○ ○ | Read error / Please try again | Optional alert tone |
+| **Conditions Not Satisfied** | 38 | Contactless conditions not met, for example when risk management requires a contact chip | ○ ○ ○ ○ | Please try another card | Optional alert tone |
+| **Contactless Collision** | 5 | Multiple contactless cards detected simultaneously | ○ ○ ○ ○ | Present one card only | Optional alert tone |
+| **Timeout / No Card** | 30 | Transaction timed out with no card presented | ○ ○ ○ ○ | Timeout / No Card | Optional alert tone |
+| **Terminated** | 10 | Transaction terminated by terminal or application | ○ ○ ○ ○ | Terminated | Optional alert tone |
+| **PIN Entry Required** | 11 | Card requires PIN entry, which cannot be performed via contactless | ○ ○ ○ ○ | Please try another card | Optional alert tone |
+| **See Phone** | 12 | Mobile device requires customer action, such as unlocking or approving on the phone | ○ ○ ○ ○ | See Phone | Optional alert tone |
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Power Supply"
+    href="/docs/integrate-pos-device/emv-core/uno-mini/uno-mini-power-supply"
+    icon="link"
+  >
+    Review power requirements and wiring recommendations before connecting the device.
+  </Card>
+  <Card
+    title="Connection Interfaces"
+    href="/docs/integrate-pos-device/emv-core/uno-mini/uno-mini-connections"
+    icon="link"
+  >
+    Connect the UNO-mini to your host controller via USB or UART TTL.
+  </Card>
+</CardGroup>
