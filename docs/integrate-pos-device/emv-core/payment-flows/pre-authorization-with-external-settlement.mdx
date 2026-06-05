@@ -45,6 +45,8 @@ The flow consists of two phases: payment authorization handled by EMV Core, and 
 
 The steps below cover the authorization phase, from card tap through session completion.
 
+<Frame><img src="/images/docs/pre-authorization-with-external-settlement/payment-authorization.png" alt="Sequence diagram of the payment authorization phase, from the PreAuthorize call through the TransactionComplete event and service delivery" /></Frame>
+
 1. The host machine calls the [`PreAuthorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#preauthorize) method using the EMV Core SDK.
 2. EMV Core begins polling the reader. The host application should prompt the buyer to tap their card.
 3. The buyer taps their card on the reader.
@@ -64,6 +66,8 @@ After service delivery, a 3rd-party server handles either settlement or cancella
 
 If the service was provided:
 
+<Frame><img src="/images/docs/pre-authorization-with-external-settlement/external-settlement.png" alt="Sequence diagram of the external settlement flow, from StartAuthentication through the ExternalSettlement response" /></Frame>
+
 10. The 3rd-party server initiates communication by calling the `StartAuthentication` method with an encrypted cipher to authenticate.
 11. The Nayax Server decrypts the cipher and validates the credentials to confirm authenticity.
 12. The 3rd-party server sends an [ExternalSettlement](/reference/spark/transactions/externalsettlement) request. It must contain the `NayaxTransactionId` and `SiteId` retrieved from the `TransactionComplete` event, and must be sent within the settlement window.
@@ -71,6 +75,8 @@ If the service was provided:
 14. Nayax Servers send an [ExternalSettlement](/reference/spark/transactions/externalsettlement) response to the 3rd-party server confirming the settlement outcome.
 
 If the service was not provided:
+
+<Frame><img src="/images/docs/pre-authorization-with-external-settlement/external-cancel.png" alt="Sequence diagram of the external cancel flow, from StartAuthentication through the ExternalCancel response" /></Frame>
 
 10. The 3rd-party server initiates communication by calling the `StartAuthentication` method.
 11. The Nayax Server validates the credentials.
