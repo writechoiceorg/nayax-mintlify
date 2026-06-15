@@ -1,0 +1,38 @@
+---
+title: "Test terminal setup/ using test cards vs real cards"
+---
+
+This page is separated to 2 sections- whether the integration is running in Israel or globally:
+
+# Israel
+
+In Israel, you would have your device have a test terminal configurations:
+
+This is done in order to be able to access the app without activating the device.
+
+## Setting up Test Terminal configurations
+
+You'd click on Agamento's logo a 7 times- you'd see the "Login" page switch from "Login to DCS" to "Login to DCS QA2", as well as having a "Skip" button: you'd click on said "Skip" button.
+
+You'd then go into the Technician menu again, this time into "Payment Services":
+
+Israel's (Ashrait's) test retail number is 0883012
+
+<Note>
+  When using test terminal configurations (<u>only relevant in Israel</u>), **the customer must ensure to issue test cards**: this is something that is unrelated to Nayax as we do not issue cards, and can be done via a few different issuers, such as:\
+  Max, Cal, Isracard etc.\
+  \
+  Should a real credit card be presented when configured to test terminal- it would be declined as the card would be directed to SHVA's test servers (who expect test cards only)
+</Note>
+
+## General settings 
+
+You'd also go into the Technician menu -\> Settings and ensure that the device has the right POS Type (integration type).
+
+We'd remove "Amount dialog"- a screen that pops up prior to the consumer presenting his card regarding whether or not the consumer approves of said transaction (normally customers would like consumer to present their card right away once they initiated a transaction).
+
+# Global
+
+In any country but Israel, you'd have a "stub" (dummy) billing provider instead of test terminal, which would simulate a real billing provider approving of your presented card- yet there would be no actual contact with a real billing provider and you would not charged for your transactions.
+
+In this case, you can use real credit cards without any worries of being charged.
