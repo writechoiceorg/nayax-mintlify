@@ -1,0 +1,127 @@
+---
+title: "Retry & Timeout Handling"
+description: "Retry mechanism, timeout handling, and integration configuration for FisCortina."
+---
+
+FisCortina provides a set of post-transaction capabilities that ensure fiscal obligations are met even when providers are slow, unresponsive, or produce results asynchronously.
+
+## Retry mechanism
+
+FisCortina implements an **asynchronous retry system** for failed fiscal registrations. Rather than blocking the transaction flow, failed attempts are queued and retried in the background within a configurable time window. The customer-facing transaction completes normally while compliance is maintained.
+
+<Note>
+**Opt-in feature.** Retry is disabled by default. Contact your Nayax Integration Engineer to enable it. When retries are not enabled, a failure is either ignored or cancels the transaction, depending on your integration's cancel configuration.
+</Note>
+
+### Timeout retries
+
+When a registration request times out (no response received within `TimeoutMS`):
+
+1. The transaction completes from the customer's perspective.
+2. The failed registration is queued for async retry. The original `FiscalId` and `FiscalRrn` are preserved in the queue.
+3. FisCortina re-attempts at configured intervals. Each attempt is logged.
+4. Retries stop when a success response is received, or when the retry window expires (default: 48 hours).
+
+### Decline retries
+
+For registrations explicitly declined (response code `1`), a fixed number of retry attempts is made within the retry window. Unlike timeout retries, decline retries are not interval-bound: they may be dispatched at any point within the window. Retries stop on success or when the maximum attempt count is reached.
+
+### Business rules
+
+Retry behavior varies depending on the transaction type and whether the product has already been dispensed.
+
+| Scenario | Retry behavior |
+|---|---|
+| Pre-Selection (cashless) + "Cancel on fiscal fail" enabled | No retries. On timeout or decline, the transaction is voided. Product not dispensed. |
+| Pre-Selection (cashless) + product already dispensed | Retries enabled. Cannot void; follows retry configuration. |
+| Settlement (post-dispense) | Retry only. No cancel option since product is already dispensed. |
+| Cash transactions | Retry continues regardless of dispensing state. "Cancel on fiscal fail" does not apply. |
+
+### Retry configuration parameters
+
+All retry settings are configurable per integration. Contact your Integration Engineer to adjust them.
+
+| Parameter | Description | Default |
+|---|---|---|
+| Retry support | Enables or disables retries for the integration | Disabled |
+| Retry timeframe | Duration (hours) of the async retry window | 48 hours |
+| Retry response codes | Response codes that trigger retry (`992`, `999`) | — |
+| Number of retries | Maximum retry attempts for decline cases | — |
+| First retry delay | Interval (seconds) before the first retry | — |
+| Retry interval | Interval (seconds) between subsequent retries | — |
+
+---
+
+## Timeout handling
+
+A timeout occurs when no response is received from your server within the configured `TimeoutMS` period. How FisCortina handles the timeout depends on the transaction type and whether the product has already been dispensed.
+
+### Pre-Selection flow timeouts
+
+The outcome depends on your configuration and whether the product was dispensed before the timeout.
+
+| Configuration | Outcome | Product dispensed? |
+|---|---|---|
+| Retries disabled, ignore enabled | Treat as successful registration | Yes |
+| Retries enabled + "Cancel on fiscal fail" | Void transaction, no dispense | No |
+| Retries enabled, no cancel | Queue for async retry, dispense product | Yes |
+
+### Void (un-registration) timeouts
+
+When a fiscal un-registration ([Void](/docs/fis-cortina/void)) request times out, the **payment void always completes**. The fiscal record outcome depends on configuration:
+
+| Option | Payment void | Fiscal registration |
+|---|---|---|
+| Option 1: Ignore | Completed | Original registration remains. No further retry. |
+| Option 2: Retry | Completed | Un-register queued for retry. Retries include original `FiscalId` and `FiscalRrn`. Window: 48 hours. |
+
+<Note>
+**FiscalId and FiscalRrn echoing.** All void and retry requests echo the `FiscalId` and `FiscalRrn` originally returned in the registration response. Validate these identifiers against your original registration before processing.
+</Note>
+
+---
+
+## Configuration reference
+
+The following settings are configurable per integration. Contact your Integration Engineer to adjust any of these.
+
+<AccordionGroup>
+  <Accordion title="General settings">
+    | Setting | Description | Notes |
+    |---|---|---|
+    | [Start Session](/docs/fis-cortina/authentication) | Enables challenge-response authentication for sessions | Mandatory for all external integrations in production |
+    | Cash Support | Triggers `Register` on cash transactions | Optional, depends on regional regulation |
+    | Offline Transaction Support | Triggers `Register` on offline (EMV offline) transactions | Optional, region-specific |
+  </Accordion>
+
+  <Accordion title="Settlement triggers">
+    | Setting | Description |
+    |---|---|
+    | Settlement Trigger | Triggers `Register` on Settlement or Sale, depending on the configured flow |
+    | Wait for fiscal | If enabled, Nayax waits for the fiscal response (synchronous). If disabled, the register outcome does not affect the transaction result. |
+    | Cancel transaction on fiscal fail | If enabled, the transaction is cancelled when fiscal registration fails. Not applicable to settlement-phase registrations. |
+  </Accordion>
+
+  <Accordion title="Cancel triggers">
+    | Setting | Description |
+    |---|---|
+    | Cancel Trigger | Triggers a `Void` call on transaction cancellation. Best practice: enable for all integrations. |
+    | Wait for fiscal | If enabled, Nayax waits for the Void response (synchronous). |
+  </Accordion>
+</AccordionGroup>
+
+<Warning>
+**Do not enable the Authorization Trigger.** The "Authorization Trigger" option (Register on Pre-Auth authorization) must never be enabled.
+</Warning>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Request & Response Reference" href="/docs/fis-cortina/response-reference">
+    Full field definitions and response codes for all endpoints.
+  </Card>
+  <Card title="Register" href="/docs/fis-cortina/register">
+    Review how registration fits into each transaction flow.
+  </Card>
+</CardGroup>
+
