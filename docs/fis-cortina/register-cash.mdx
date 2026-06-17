@@ -55,33 +55,6 @@ Cash transactions use the same `registerRequest` schema as cashless flows, but s
 
 The `BasicInfo.TransactionId` field is still required and must be validated by your server as a transaction ID produced in a prior `/StartSession` exchange.
 
-## Response Requirements
-
-Your server must return a valid `fiscalResponse` object. At minimum:
-
-```json
-{
-  "fiscalResponse": {
-    "Result": {
-      "ResponseCode": 0,
-      "Verdict": "Approved",
-      "StatusMessage": "Success"
-    },
-    "FiscalInfo": {
-      "FiscalRrn": "your-fiscal-rrn-here",
-      "FiscalId": 1234567,
-      "FiscalDateTime": "20240303124456"
-    }
-  }
-}
-```
-
-- `Verdict` is **mandatory**. A missing or invalid `Verdict` causes the action to fail with a parsing error.
-- `FiscalRrn` is **mandatory** in the registration response. Nayax echoes it in any future Void requests for this transaction.
-- `FiscalReceiptUrl` is optional. If provided, the device presents it to the consumer as a QR code on the screen.
-
-See [Request & Response Reference](/docs/fis-cortina/response-reference) for the full list of accepted `ResponseCode` values.
-
 ## Exception Handling
 
 Cash registration failures never block dispensing. The product is always dispensed before the fiscal registration request is sent, so "Cancel on fiscal fail" does not apply and the sale cannot be reversed at this stage.
