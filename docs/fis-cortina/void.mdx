@@ -60,8 +60,8 @@ The Void request from Nayax includes the `FiscalInfo` object populated with valu
 
 | Field | Source | Description |
 |---|---|---|
-| [`FiscalRrn`](/docs/fis-cortina/glossary) | Register response | Reference Retrieval Number. Mandatory. Identifies the fiscal record at the tax authority. |
-| [`FiscalId`](/docs/fis-cortina/glossary) | Register response | Unique Fiscalization ID on the integrator's system. Echoed in all Void requests for this transaction. |
+| `FiscalRrn` | Register response | Reference Retrieval Number. Mandatory. Identifies the fiscal record at the tax authority. |
+| `FiscalId` | Register response | Unique Fiscalization ID on the integrator's system. Echoed in all Void requests for this transaction. |
 | `FiscalDateTime` | Register response | DateTime of the original registration. Format: `YYYYMMDDhhmmss`. Optional. |
 
 Validate these identifiers against your original registration before processing the un-registration.
