@@ -3,68 +3,38 @@ title: "Void"
 description: "How the Void call un-registers a previously fiscalized transaction from the tax authority."
 ---
 
-The `Void` call un-registers a previously fiscalized transaction from the tax authority. Nayax triggers it when a transaction cancels after authorization or sale, typically because the product or service was not delivered to the customer.
+# Void
 
-<Note>
-**Best practice:** Enable Void (cancellation un-registration) for all integrations. It ensures fiscal compliance when products or services cannot be dispensed after a successful authorization.
-</Note>
+The `Void` call un-registers a previously fiscalized transaction from the tax authority. Nayax triggers it when a transaction cancels after authorization or sale, typically because the product or service was not delivered to the customer.
 
 ## When Void is triggered
 
 Nayax Engine sends a Void fiscal call when it initiates a cancellation command. This occurs when:
 
-- The transaction was cancelled at the customer's request
-- A technical issue prevented the product or service from being supplied
-- The payment is still in-session and has not yet been settled
+* The transaction was cancelled at the customer's request
+* A technical issue prevented the product or service from being supplied
 
 ## Void flow
 
-Nayax sends the Void call after authorization or sale approval, but before settlement. This removes the fiscal registration created by the original `Register` call from the tax authority.
+Nayax sends the Void call after authorization or sale approval. This removes the fiscal registration created by the original `Register` call from the tax authority.
 
 The following sequence shows how the Void call works:
 
 1. Transaction has been authorized or sale approved; fiscal registration already sent via `Register`. Product or service has not yet been dispensed.
 2. The customer or a technical failure triggers cancellation.
-3. Nayax Engine initiates a payment Void with the Payment Provider.
-4. Nayax Engine sends a `POST /FisCortina/Void` request to your server. The request includes the echoed `FiscalId` and `FiscalRrn` from the original [`Register`](/docs/fis-cortina/register) response.
-5. Your server un-registers the transaction with the Tax Authority and returns a response (must include `Verdict`). On success, the fiscal record is removed.
-6. Nayax Engine completes the void and returns the result to the Nayax Device.
-7. Nayax Device informs the Operator that Nayax cancelled the transaction.
+3. Nayax Engine sends a `POST /FisCortina/Void` request to your server.
+4. Your server un-registers the transaction with the Tax Authority and returns a response (must include `Verdict`).
+5. Nayax Engine completes the void and returns the result to the Nayax Device.
+6. Nayax Device informs the Operator that Nayax cancelled the transaction.
 
 ### Exception handling
 
 The payment cancellation always completes even if fiscal un-registration fails:
 
-| Scenario | Step | Resolution |
-|---|---|---|
-| Void declined | 4–5 | Payment void completes. If retry is enabled, the un-registration is queued for async retry within the configured window. |
-| Void timeout | 4–5 | Payment void completes. Handled according to your timeout configuration (see below). |
-
----
-
-## Timeout handling
-
-A timeout occurs when your server does not respond to the Void request within the configured period. The payment void always completes regardless of the fiscal outcome. What happens to the fiscal record depends on your configuration.
-
-### Option 1: Ignore timeout
-
-The service treats the timeout as a successful un-registration. The payment void completes and the original fiscal registration remains in place with no retry.
-
-### Option 2: Retry un-registration
-
-FisCortina queues the failed un-registration for async retry. The payment void completes from the customer's perspective while retries run in the background. See [Retry & Timeout Handling](/docs/fis-cortina/reliability) for retry window, interval, and configuration details.
-
----
-
-The Void request from Nayax includes the `FiscalInfo` object populated with values returned in the original `Register` response. Your server uses these fields to identify the fiscal record to un-register:
-
-| Field | Source | Description |
-|---|---|---|
-| `FiscalRrn` | Register response | Reference Retrieval Number. Mandatory. Identifies the fiscal record at the tax authority. |
-| `FiscalId` | Register response | Unique Fiscalization ID on the integrator's system. Echoed in all Void requests for this transaction. |
-| `FiscalDateTime` | Register response | DateTime of the original registration. Format: `YYYYMMDDhhmmss`. Optional. |
-
-Validate these identifiers against your original registration before processing the un-registration.
+| Scenario      | Step | Resolution                                                                                                               |
+| ------------- | ---- | ------------------------------------------------------------------------------------------------------------------------ |
+| Void declined | 3–4  | Payment void completes. If retry is enabled, the un-registration is queued for async retry within the configured window. |
+| Void timeout  | 3–4  | Payment void completes. Handled according to your timeout configuration.                                                 |
 
 ## Next steps
 
@@ -72,6 +42,7 @@ Validate these identifiers against your original registration before processing 
   <Card title="Request & Response Reference" href="/docs/fis-cortina/response-reference">
     Full field definitions and response codes for all endpoints.
   </Card>
+
   <Card title="Retry & Timeout Handling" href="/docs/fis-cortina/reliability">
     Configure retry behavior and timeout handling for failed registrations.
   </Card>
