@@ -82,8 +82,8 @@ Returned in the `Register` response. The `FiscalId` and `FiscalRrn` values are e
 
 | Field | Type | Required | Notes |
 |---|---|---|---|
-| [`FiscalRrn`](/docs/fis-cortina/glossary) | string (100) | Mandatory | Reference Retrieval Number. Echoed in Void. |
-| [`FiscalId`](/docs/fis-cortina/glossary) | int64 | Optional | Unique Fiscalization ID on your system. Echoed in Void. |
+| `FiscalRrn` | string (100) | Mandatory | Reference Retrieval Number. Echoed in Void. |
+| `FiscalId` | int64 | Optional | Unique Fiscalization ID on your system. Echoed in Void. |
 | `FiscalDateTime` | string (14) | Optional | Format: `YYYYMMDDhhmmss` |
 | `FiscalReceiptUrl` | string (255) | Optional | URL presented to the cardholder as a QR code on the device screen after the transaction. |
 | `FiscalInvoice` | string | Optional | Unique invoice or receipt number, e.g. `0001-2025-000123`. |
