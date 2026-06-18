@@ -14,11 +14,11 @@ To understand the pre-selection transaction flow, consider the following sequenc
 
 Here's a breakdown of each step:
 
-1. After the cardholder selects the product or service, the Machine sends a [`doTransaction`](/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction) Request to the Agamento Application.
+1. After the cardholder selects the product or service, the ECR/POS sends a [`doTransaction`](/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction) Request to the Nayax Device (Agamento App).
 2. The application then displays a prompt for the cardholder, requesting him to insert or swipe a card.
-3. The cardholder inserts, swipes, or taps their card on the Host Machine.
-4. The Agamento Device communicates with the Nayax Server to request payment authorization and settlement.
-5. The Nayax Server responds with the transaction status (approved or declined). The Agamento Application then relays this status back to the Host Machine, completing the process.
+3. The cardholder inserts, swipes, or taps their card on the ECR/POS.
+4. The Nayax Device communicates with the Nayax Server to request payment authorization and settlement.
+5. The Nayax Server responds with the transaction status (approved or declined). The Nayax Device then relays this status back to the ECR/POS, completing the process.
 
 ## See Also
 
