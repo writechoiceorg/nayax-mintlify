@@ -4348,10 +4348,9 @@ paths:
 components:
   securitySchemes:
     Authorization:
-      type: apiKey
-      description: Enter your API key. It's required to authenticate API requests.
-      name: Authorization
-      in: header
+      type: http
+      scheme: bearer
+      description: Enter your Bearer token. It's required to authenticate API requests.
   schemas:
     WidgetDataResponseDto:
       type: object

@@ -55,7 +55,7 @@ Using the [Get Specific Machine Basic Info](/reference/lynx/machines/get-machine
 ```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/machines/{MachineID} \
-     --header 'Authorization: BEARER-TOKEN' \
+     --header 'Authorization: Bearer <token>' \
      --header 'accept: application/json'
 ```
 
@@ -152,7 +152,7 @@ Using the [Get Specific Machine Basic Info by Device](/reference/lynx/machines/g
 ```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/devices/{DeviceSerialNumber}/machine \
-     --header 'Authorization: BEARER-TOKEN' \
+     --header 'Authorization: Bearer <token>' \
      --header 'accept: application/json'
 ```
 
@@ -249,7 +249,7 @@ Using the [Get Specific Machine Basic Info by VPOS](/reference/lynx/machines/get
 ```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/vpos/{VPOSSerial}/machine \
-     --header 'Authorization: BEARER-TOKEN' \
+     --header 'Authorization: Bearer <token>' \
      --header 'accept: application/json'
 ```
 
@@ -345,7 +345,7 @@ Using the [Get All Machine Basic Info](/reference/lynx/machines/get-all-machine-
 ```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/machines \
-     --header 'Authorization: BEARER-TOKEN' \
+     --header 'Authorization: Bearer <token>' \
      --header 'accept: application/json'
 ```
 

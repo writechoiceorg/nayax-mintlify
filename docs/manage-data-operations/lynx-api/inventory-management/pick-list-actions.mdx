@@ -50,7 +50,7 @@ You can retrieve the pick list associated with a specific machine using the [Get
 ```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/machines/{MachineID}/pickList \
-     --header 'Authorization: BEARER-TOKEN' \
+     --header 'Authorization: Bearer <token>' \
      --header 'accept: application/json'
 ```
 
@@ -69,7 +69,7 @@ You can modify the pick list for a specific machine using the [Update Pick List]
 ```sh Request
 curl --request PUT \
      --url https://qa-lynx.nayax.com/operational/v1/machines/inventory/picklists/update \
-     --header 'Authorization: BEARER-TOKEN' \
+     --header 'Authorization: Bearer <token>' \
      --header 'accept: application/json' \
      --header 'Content-Type: application/json' \
      --data '{
@@ -103,7 +103,7 @@ Using the [Delete Pick List](/reference/lynx/machine-inventory/delete-pick-list)
 ```sh Request
 curl --request DELETE \
      --url https://qa-lynx.nayax.com/operational/v1/machines/{MachineID}/pickList \
-     --header 'Authorization: BEARER-TOKEN' \
+     --header 'Authorization: Bearer <token>' \
      --header 'accept: application/json'
 ```
 
