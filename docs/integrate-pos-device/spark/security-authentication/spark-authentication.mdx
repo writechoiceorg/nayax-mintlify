@@ -4,6 +4,8 @@ metadata:
   og:description: "To ensure secure communication, every request sent by the Integrator must include two specific authentication headers. These headers verify your."
 ---
 
+import { SparkAuthTool } from "/snippets/SparkAuthTool.jsx";
+
 To ensure secure communication, every request sent by the Integrator must include two specific authentication headers. These headers verify your identity and ensure the integrity of the transaction data.
 
 ## Interactive Authentication Tool
@@ -11,16 +13,7 @@ To ensure secure communication, every request sent by the Integrator must includ
 Use the tool below to handle Spark authentication without writing any code. Everything runs in your browser, so your token and sign key never leave your machine. 
 Use the tabs at the top to switch between **StartAuthentication**, **StartSession**, and **Header Signature**.
 
-<Frame>
-  <iframe
-    src="/tools/spark-auth-tool.html"
-    title="Spark Auth Tool"
-    loading="lazy"
-    style={{ width: "100%", height: "820px", border: 0 }}
-  />
-</Frame>
-
-Need more room? <a href="/tools/spark-auth-tool.html" target="_blank" rel="noopener">Open the tool in full screen</a>.
+<SparkAuthTool />
 
 The following sections explain what the tool does under the hood.
 
