@@ -55,13 +55,16 @@ const scriptT = script
   )
   .replace(/document\.querySelectorAll/g, "(window.__satRoot||document).querySelectorAll");
 
+// Note: the CSS/BODY/SCRIPT constants are declared INSIDE the component on
+// purpose. Mintlify's production bundler evaluates the exported component in
+// isolation and drops non-exported module-level declarations, so anything the
+// component references must live within its own scope.
 const out = `// AUTO-GENERATED from tools/spark-auth-tool.html by tools/generate-spark-auth-tool.mjs
 // Do not edit by hand. To update, replace the .html and re-run the generator.
-const CSS = ${JSON.stringify(cssT)};
-const BODY = ${JSON.stringify(body)};
-const SCRIPT = ${JSON.stringify(scriptT)};
-
 export const SparkAuthTool = ({ legacy = false }) => {
+  const CSS = ${JSON.stringify(cssT)};
+  const BODY = ${JSON.stringify(body)};
+  const SCRIPT = ${JSON.stringify(scriptT)};
   const mount = (host) => {
     if (!host || typeof window === "undefined") return;
     if (!host.shadowRoot) {
