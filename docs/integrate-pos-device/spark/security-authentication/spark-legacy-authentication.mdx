@@ -11,6 +11,24 @@ Spark uses a two-part security mechanism:
 
 This page will guide you to securely authenticate Spark API requests using Nayax’s custom HMAC signature mechanism. This involves signing each request body with a shared `Sign Key` and attaching two mandatory headers: `Signature` and `IntegratorId`.
 
+## Interactive Authentication Tool
+
+Use the tool below to handle Spark authentication without writing any code. Everything runs in your browser, so your token and sign key never leave your machine. 
+Use the tabs at the top to switch between **StartAuthentication**, **StartSession**, and **Header Signature**.
+
+<Frame>
+  <iframe
+    src="/tools/spark-auth-tool.html?auth=legacy"
+    title="Spark Auth Tool (Legacy)"
+    loading="lazy"
+    style={{ width: "100%", height: "820px", border: 0 }}
+  />
+</Frame>
+
+Need more room? <a href="/tools/spark-auth-tool.html?auth=legacy" target="_blank" rel="noopener">Open the tool in full screen</a>.
+
+The following sections explain what the tool does under the hood.
+
 ## Prerequisites
 
 Before you begin, make sure you have the following resources:
