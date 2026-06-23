@@ -208,22 +208,22 @@ Fetches the reader's firmware version and the EMV Core SDK version. This is used
     Request:
 
     ```json
-    {"jsonrpc": "2.0", "method": "GetVersion", "params":{"component":
-    "Reader"}, "id": 902}
+    {"jsonrpc": "2.0", "method": "GetVersion", "params":{"SoftwareComponent":
+    "Reader"}, "id": 5}
 
     ```
 
     Response:
 
     ```json
-       {"jsonrpc": "2.0", "result": "S8_v054105", "id": 902}
+    {"jsonrpc": "2.0", "result": "EMVS_v071585", "id": 5}
 
     ```
 
-    | Parameter     | Description                                                           |
-    | :------------ | :-------------------------------------------------------------------- |
-    | **id**        | Command ID.                                                           |
-    | **component** | Software component. **Note:** Use `otiKiosk` for "EMV Core" versions. |
+    | Parameter             | Description                                                                                              |
+    | :-------------------- | :------------------------------------------------------------------------------------------------------- |
+    | **id**                | Command ID.                                                                                              |
+    | **SoftwareComponent** | The software component to check. Accepted values: `otiKiosk` (for the EMV Core version) or `Reader`. |
   </Tab>
 
   <Tab title="Android">
