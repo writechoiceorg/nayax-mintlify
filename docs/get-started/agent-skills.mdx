@@ -32,9 +32,9 @@ Before you install a skill, you'll need:
   [Security & Token](/docs/manage-data-operations/lynx-api/security) for how
   to get one.
 
-## Install a skill
+## Install skills
 
-The examples below install `nayax-lynx-inventory`. To install a different skill, swap in its name from the table above. The `skills` CLI works with any compatible agent and is the simplest way to start. If you use Claude Code, you can install skills as a plugin instead, which keeps them updated automatically.
+The `skills` CLI works with any compatible agent and is the simplest way to start. If you use Claude Code, you can install skills as a plugin instead, which keeps them updated automatically.
 
 <Note>
 Skills work on their own. They don't need the Nayax MCP server to be
@@ -44,46 +44,38 @@ connected, and the MCP server doesn't need any skills installed.
 <Tabs>
   <Tab title="skills CLI (recommended)">
     The `skills` CLI installs skills for Claude Code, Cursor, and other
-    compatible agents. Run it in your project folder:
+    compatible agents. Run it in your project folder.
+
+    Choose what to install from an interactive list:
 
 ```bash
-npx skills add writechoiceorg/nayax-ai --skill nayax-lynx-inventory
+npx skills add writechoiceorg/nayax-ai
+```
+
+    Install every Nayax skill at once, with no prompts:
+
+```bash
+npx skills add writechoiceorg/nayax-ai --all
+```
+
+    Install specific skills by repeating the `--skill` flag:
+
+```bash
+npx skills add writechoiceorg/nayax-ai --skill nayax-lynx-inventory --skill nayax-lynx-refunds
 ```
   </Tab>
 
   <Tab title="Claude Code">
-    Add the Nayax plugin marketplace, then install the skill as a plugin:
+    Add the Nayax plugin marketplace, then install the skills you want as plugins:
 
 ```bash
 claude plugin marketplace add writechoiceorg/nayax-ai
 claude plugin install nayax-lynx-inventory@nayax
 ```
 
-    The skill is then available in every Claude Code session.
+    Install additional skills by repeating the last command with their names, for example `nayax-lynx-refunds@nayax`. Installed skills are available in every Claude Code session.
   </Tab>
 </Tabs>
-
-### Install several skills at once
-
-With the `skills` CLI you can install more than one skill in a single command.
-
-Install every Nayax skill, with no prompts:
-
-```bash
-npx skills add writechoiceorg/nayax-ai --all
-```
-
-Install a specific set by repeating the `--skill` flag:
-
-```bash
-npx skills add writechoiceorg/nayax-ai --skill nayax-lynx-inventory --skill nayax-lynx-refunds
-```
-
-Run the command without `--skill` to choose from the full list interactively:
-
-```bash
-npx skills add writechoiceorg/nayax-ai
-```
 
 ## What you can do with a skill
 
