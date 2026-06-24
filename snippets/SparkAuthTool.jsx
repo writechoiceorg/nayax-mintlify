@@ -19,14 +19,22 @@ export const SparkAuthTool = ({ legacy = false }) => {
     } else {
       window.__satRoot = host.shadowRoot;
     }
-    if (legacy) {
-      setTimeout(function () {
-        try {
-          const b = window.__satRoot.querySelector("#tab-auth .stabs .stab:last-child");
+    setTimeout(function () {
+      try {
+        const R = window.__satRoot;
+        if (!R) return;
+        if (legacy) {
+          const b = R.querySelector("#tab-auth .stabs .stab:last-child");
           if (window.showSub) window.showSub("auth", "leg", b);
-        } catch (e) {}
-      }, 0);
-    }
+          return;
+        }
+        // Open a specific tab when linked with a hash (e.g. .../spark-authentication#startsession)
+        const h = (typeof location !== "undefined" ? location.hash : "").toLowerCase().replace("#", "");
+        const navs = R.querySelectorAll(".nav-btn");
+        if ((h === "startsession" || h === "session") && window.showTab) window.showTab("session", navs[1]);
+        else if ((h === "headersignature" || h === "header-signature" || h === "headers") && window.showTab) window.showTab("headers", navs[2]);
+      } catch (e) {}
+    }, 0);
   };
   return <div ref={mount} style={{ width: "100%" }} />;
 };
