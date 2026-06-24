@@ -63,6 +63,28 @@ claude plugin install nayax-lynx-inventory@nayax
   </Tab>
 </Tabs>
 
+### Install several skills at once
+
+With the `skills` CLI you can install more than one skill in a single command.
+
+Install every Nayax skill, with no prompts:
+
+```bash
+npx skills add writechoiceorg/nayax-ai --all
+```
+
+Install a specific set by repeating the `--skill` flag:
+
+```bash
+npx skills add writechoiceorg/nayax-ai --skill nayax-lynx-inventory --skill nayax-lynx-refunds
+```
+
+Run the command without `--skill` to choose from the full list interactively:
+
+```bash
+npx skills add writechoiceorg/nayax-ai
+```
+
 ## What you can do with a skill
 
 Once installed, your agent loads the skill automatically when your prompt
