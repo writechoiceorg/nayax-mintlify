@@ -134,7 +134,7 @@ void onTransactionComplete(TransactionResult result);
 
 ## `TransactionComplete`
 
-The `TransactionComplete` is called by EMV Core when the transaction is complete and either succeeds or fails. Contains the details required by the POS to print a receipt and to link transactions to sale events.
+EMV Core calls `TransactionComplete` when a transaction completes, whether it succeeds or fails. It gives your application the details needed to print a receipt and link transactions to sale events (for example, in a dispute).
 
 <Tabs>
   <Tab title="JSON">
@@ -142,56 +142,92 @@ The `TransactionComplete` is called by EMV Core when the transaction is complete
 
     ```json JSON
     {
-     "jsonrpc": "2.0",
-     "method": "TransactionComplete",
-     "params": {
-       "status": "OK",
-       "errorCode": 0,
-       "errorDescription": "",
-       "transactionId": "2046651064",
-       "authorizationDetails": {
-         "AmountAuthorized": 4.5,
-         "AmountRequested": 4.5,
-         "AuthorizationCode": "",
-         "PartialPan": "541333******4111",
-         "CardType": "MasterCard",
-         "IsTransactionApproved": true,
-         "eReceipt": "[https://s.wee.ai/tr/...eIHT](https://s.wee.ai/tr/...eIHT)",
-         "Card_ID": "",
-         "Card_Balance": 0.0,
-         "RRN": "",
-         "TransactionDbID": "2046651064",
-         "Transaction_Referance": "2046651064",
-         "CardToken": "5VXkNqtUDJBxQj9p/qTGt74jWaPHlRs7xxWa1Yu0gDI=",
-         "Additional_Parameters": {
-           "SiteId": "1",
-           "EntryMode": "4",
-           "MachineAuTime": "2025-09-03T14:12:30.006",
-           "NayaxTransactionId": "2046651064"
-         }
-       }
-     },
-     "id": 701
+      "jsonrpc": "2.0",
+      "method": "TransactionComplete",
+      "params": {
+        "status": "OK",
+        "errorCode": 0,
+        "errorDescription": "",
+        "transactionId": "2046651064",
+        "authorizationDetails": {
+          "AmountAuthorized": 4.50,
+          "AmountRequested": 4.50,
+          "AuthorizationCode": "",
+          "PartialPan": "541333******4111",
+          "CardType": "MasterCard",
+          "IsTransactionApproved": true,
+          "eReceipt": "https://s.wee.ai/tr/...eIHT",
+          "Card_ID": "",
+          "Card_Balance": 0.00,
+          "RRN": "",
+          "TransactionDbID": "2046651064",
+          "Transaction_Referance": "2046651064",
+          "CardToken": "5VXkNqtUDJBxQj9p/qTGt74jWaPHlRs7xxWa1Yu0gDI=",
+          "Additional_Parameters": {
+            "hwSerial": "0207122525168550",
+            "SiteId": "6",
+            "AllowFundsOverAuthAmount": "false",
+            "IncrementalMaxDefaultCredit": "450.0",
+            "EntryMode": "4",
+            "MachineAuTime": "2026-05-10T16:53:39.017",
+            "NayaxTransactionId": "6811150712"
+          }
+        }
+      },
+      "id": 701
     }
     ```
 
-    Closed loop request:
+    Closed loop request with mifare_read:
+
+    To use `mifare_read`, set the **Mifare Blocks to Read** attribute in Nayax Core under **Embedded Advanced**. The following example uses `KA01B10B14` to read block 1 with key A, and blocks 10 and 14.
+
+    ![Mifare Blocks to Read configuration showing KA01B10B14](/images/mifare-blocks-to-read.png)
 
     ```json JSON
-       {"jsonrpc":"2.0", "method": "TransactionComplete", "params":
-    {"status": "LocalCLP", "errorCode": 0, "errorDescription": "",
-    "transactionId": "4701113B", "authorizationDetails":
-    {"CardType": "Mifare", "Card_ID": "4701113B", "Card_Balance": 0.00,
-    "CardToken": "4701113B", "Additional_Parameters": {}}}, "id": 701}
-
+    {
+      "jsonrpc": "2.0",
+      "method": "TransactionComplete",
+      "params": {
+        "status": "LocalCLP",
+        "errorCode": 0,
+        "errorDescription": "",
+        "transactionId": "4701113B",
+        "authorizationDetails": {
+          "CardType": "Mifare",
+          "Card_ID": "4701113B",
+          "Card_Balance": 0.00,
+          "CardToken": "4701113B",
+          "Additional_Parameters": {}
+        }
+      },
+      "mifare_read": {
+        "UID": "4701113B",
+        "B10": "00000000000000000000000000000000",
+        "B14": "00000000000000000000000000000000"
+      },
+      "id": 701
+    }
     ```
 
     Response:
 
     ```json JSON
     {"jsonrpc":"2.0", "result":true, "id":701}
-
     ```
+
+    **Parameters:**
+
+    | Parameter                | Description                                                                                                                                    |
+    | :----------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- |
+    | **id**                   | Command ID.                                                                                                                                    |
+    | **status**               | Transaction result: `OK`, `Declined`, `Error`, `Timeout`, `Cancelled`, or `LocalCLP`.                                                         |
+    | **errorCode**            | Numerical error code. `0` when there is no error.                                                                                             |
+    | **errorDescription**     | Short technical description of the error, for developer and support use. Do not display to users.                                              |
+    | **transactionId**        | Transaction ID. Use this value in `ConfirmTransaction` or `VoidTransaction`.                                                                   |
+    | **authorizationDetails** | Authorization details including amount authorized, amount requested, authorization code, partial PAN, card type, approval status, and card token. |
+    | **Additional_Parameters**| Optional data from the PSP in `{"fieldName": "fieldValue"}` format. Use these values for Nayax External Settlement (Remote Settlement).       |
+    | **mifare_read**          | Block data read from the Mifare card, based on the `CLP_MIFARE_READ` attribute. Empty when absent.                                            |
   </Tab>
 
   <Tab title="Android">
@@ -212,27 +248,31 @@ If EMV Core doesn’t get an answer, it will re-send 2 times (for a total of 3 m
     | `errorDescription`        | A short technical description of the error intended to help developers and tech support personnel identify the problem. It should not be presented to users. |
     | `errorCode`               | A numerical code describing the error if one occurs. See the table below for details on each code.                                                           |
     | `status`                  | Possible statuses: OK, Declined, Error, Timeout, Cancelled, LocalCLP.                                                                                        |
-    | `amountAuthorized`        | The amount approved for the transaction. The amount may be lower than the original request if it is a prepaid card.                                          |
-    | `amountRequested`         | Amount requested for transaction approval.                                                                                                                   |
+    | `amountAuthorized`        | Amount approved for the transaction in major units (for example, dollars, not cents). May be lower than the original request if the card is prepaid.                                          |
+    | `amountRequested`         | Amount requested for transaction approval in major units (for example, dollars, not cents).                                                                                                                   |
     | `authorization_Code`      | PSP Transaction Identifier issued for approved transactions (EVO, Apriva, Traderoot).                                                                        |
     | `partialPan`              | Masked PAN with the card account number's first six and last four digits.                                                                                    |
-    | `cardType`                | Card scheme (MasterCard, Visa, Amex, etc.) or ‘Mifare’ in case of a closed loop.                                                                             |
+    | `cardType`                | Card scheme (MasterCard, Visa, Amex, and others). For closed-loop cards, the card technology type. See the closed loop card types table below.                                                                             |
     | `authID`                  | Approval Code from the processor (for some processors).                                                                                                      |
     | `receiptID`               | Digital receipt ID in the PSP System.                                                                                                                        |
-    | `transaction_Reference`   | Transaction reference. It should be used to confirm or void.                                                                                                 |
+    | `transaction_Reference`   | Deprecated. Use `transactionId` instead.                                                                                                 |
+    | `TransactionDbID`         | Deprecated. Use `transactionId` instead.                                                                                                 |
     | `RRN`                     | Processor reference number for approved transactions.                                                                                                        |
     | `card_ID`                 | Mifare UID in case of a Mifare card and `CLP_MIFARE_ENABLED=2`.                                                                                              |
     | `isTransactionApproved`   | Boolean indicating the transaction approval status.                                                                                                          |
-    | `CardToken`               | A token identifying the card. For payment cards, it returns a Base64 string. For closed-loop cards (e.g., Mifare), it returns the card UID.                  |
-    | `Channel`                 | Channel used for card reading (e.g., Contactless, Magstripe, Contact).                                                                                       |
+    | `eReceipt`                | URL for the Nayax eReceipt. See eReceipt settings in Nayax Core for required configuration.                                                                  |
+    | `CardToken`               | A token identifying the card. For payment cards, it returns a Base64 string. For closed-loop cards (for example, Mifare), it returns the card UID.                  |
+    | `Channel`                 | Channel used for card reading (for example, Contactless, Magstripe, Contact).                                                                                       |
     | `AID, TVR, IAD, TSI, ARC` | Card/Transaction parameters that may be used for the receipt.                                                                                                |
     | `transactionTime`         | Transaction time.                                                                                                                                            |
-    | `application_Label`       | Card scheme (e.g., Visa, MasterCard, American Express).                                                                                                      |
-    | `currency`                | Currency code according to ISO 4217 code (e.g., 840 means $US).                                                                                              |
+    | `application_Label`       | Card scheme (for example, Visa, MasterCard, American Express).                                                                                                      |
+    | `currency`                | Currency code according to ISO 4217 (for example, 840 means US dollars).                                                                                            |
     | `CVM`                     | Card Verification Method.                                                                                                                                    |
-    | `additional_Parameters`   | The payment processor sends optional additional parameters.                                                                                                  |
-    | `entryMode`               | *(No description provided)*                                                                                                                                  |
-    | `card_Balance`            | End-user card hash (NMI).                                                                                                                                    |
+    | `additional_Parameters`   | Optional additional parameters from the payment processor. Used for Nayax External Settlement (Remote Settlement). Includes: `SiteId`, `EntryMode`, `MachineAuTime`, `NayaxTransactionId`, `hwSerial`, `AllowFundsOverAuthAmount`, and `IncrementalMaxDefaultCredit`.                                                                                                  |
+    | `hwSerial`                | Hardware serial number of the terminal.                                                                                                                      |
+    | `AllowFundsOverAuthAmount`| Whether incremental charges above the authorized amount are permitted (`"true"` or `"false"`).                                                               |
+    | `IncrementalMaxDefaultCredit` | Maximum credit amount allowed for incremental authorization.                                                                                             |
+    | `card_Balance`            | Card balance for closed-loop cards managed by Nayax.                                                                                                                                    |
 
     ### `TransactionComplete` Error Codes
 
