@@ -130,7 +130,7 @@ A confirmation request is the second stage of the authorization flow. It confirm
     | :------------------------ | :--------------------------------------------------------------------------------------------------------------------------------- |
     | **id**                    | Command ID.                                                                                                                        |
     | **amount**                | The actual amount to charge – in minor units (cents).                                                                              |
-    | **transactionReference**  | Transaction reference from the PSP. Use the `TransactionDbID` field from the `TransactionComplete` event.                          |
+    | **transactionReference**  | Transaction reference from the PSP. Use the `transactionId` field from the `TransactionComplete` event.                          |
     | **productID**             | Optional parameter: ID of the product selected by the consumer. This number will be saved on the server and available for reports. |
     | **terminal\_data**        | Optional parameter: `terminal_data=(key1=value1,key2=value2)`.                                                                     |
     | **AdditionalReceiptData** | Optional. JSON object with extra receipt data to include at confirmation time.                                                      |
@@ -175,7 +175,7 @@ The `GetCardToken` method initiates the card tokenization process, returning a c
 EMV Core waits for a card to be presented, reads the data, and triggers a `CardTokenReceived` event:
 
 * **Payment Cards:** Returns a Base64 string containing the card token.
-* **CLP Cards (e.g., Mifare):** Returns the card UID.
+* **CLP Cards (for example, Mifare):** Returns the card UID.
 
 ### API Signature
 
@@ -255,8 +255,8 @@ Use `PreAuthorize` to pre-authorize a card with the payment processor. EMV Core 
 
     | Parameter                 | Description                                                                                                                                                                                                                                                                                                                                                    |
     | :------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-    | **amount**                | Amount to charge – in full units (Dollars, not cents).                                                                                                                                                                                                                                                                                                         |
-    | **fee**                   | Deprecated – Not used.                                                                                                                                                                                                                                                                                                                                         |
+    | **amount**                | Amount to charge in full units (Dollars, not cents).                                                                                                                                                                                                                                                                                                         |
+    | **fee**                   | Deprecated. Not used.                                                                                                                                                                                                                                                                                                                                         |
     | **currency**              | Taken from configuration since SDK v1.4.                                                                                                                                                                                                                                                                                                                       |
     | **productID**             | Optional parameter: ID of the product selected by the consumer. This number will be saved in the server and available for reports.                                                                                                                                                                                                                              |
     | **continuous**            | If continuous is true, then poll for card will start immediately after card transaction timeout and `TransactionComplete` event will be sent with status ‘PollContinuous’.                                                                                                                                                                                      |
@@ -275,7 +275,7 @@ Use `PreAuthorize` to pre-authorize a card with the payment processor. EMV Core 
 
     | Parameter          | Description                                                                                                    |
     | ------------------ | -------------------------------------------------------------------------------------------------------------- |
-    | `amountMinorUnits` | Amount to charge in minor units (e.g., cents, not dollars).                                                    |
+    | `amountMinorUnits` | Amount to charge in minor units (for example, cents, not dollars).                                                    |
     | `productID`        | ID of the product selected by the consumer. This number will be saved on the server and available for reports. |
     | `timeoutSeconds`   | Maximum wait time for card presentation.                                                                       |
     | `continuous`       | Whether to enable continuous polling.                                                                          |
@@ -301,7 +301,7 @@ Use `PreAuthorize` to pre-authorize a card with the payment processor. EMV Core 
 
     | Parameter      | Description                                                                                                    |
     | -------------- | -------------------------------------------------------------------------------------------------------------- |
-    | `amount_cents` | Amount to charge in minor units (e.g., cents, not dollars).                                                    |
+    | `amount_cents` | Amount to charge in minor units (for example, cents, not dollars).                                                    |
     | `fee_cents`    | Optional fee amount in minor units.                                                                            |
     | `product_id`   | ID of the product selected by the consumer. This number will be saved on the server and available for reports. |
     | `timeout_sec`  | Maximum wait time for card presentation.                                                                       |
