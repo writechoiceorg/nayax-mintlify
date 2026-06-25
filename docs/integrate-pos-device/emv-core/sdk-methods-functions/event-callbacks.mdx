@@ -274,7 +274,23 @@ If EMV Core doesn’t get an answer, it will re-send 2 times (for a total of 3 m
     | `IncrementalMaxDefaultCredit` | Maximum credit amount allowed for incremental authorization.                                                                                             |
     | `card_Balance`            | Card balance for closed-loop cards managed by Nayax.                                                                                                                                    |
 
-    ### `TransactionComplete` Error Codes
+    ### `TransactionComplete` Closed loop card types
+
+    The following card technology types may be returned in the `cardType` field for closed-loop transactions.
+
+    | Card Type   | Description              |
+    | :---------- | :----------------------- |
+    | `Type A`    | ISO/IEC 14443 Type A     |
+    | `Type B`    | ISO/IEC 14443 Type B     |
+    | `Mifare`    | Mifare                   |
+    | `Mifare-U`  | Mifare Ultralight        |
+    | `DesFire`   | Mifare DESFire           |
+    | `Mifare-P`  | Mifare Plus              |
+    | `Vicinity`  | ISO/IEC 15693            |
+    | `Vicinity-P`| ISO/IEC 15693 HID iClass |
+    | `Felica`    | FeliCa JIS X 6319-4      |
+
+    ### `TransactionComplete` Error codes
 
     These are the possible error codes in the response:
 
@@ -306,3 +322,20 @@ If EMV Core doesn’t get an answer, it will re-send 2 times (for a total of 3 m
     **`cb`**: A callback function of type `void (*)(otiKioskPaymentResponse* resp)`. This function is triggered automatically when a transaction reaches a final state.
   </Tab>
 </Tabs>
+
+### eReceipt settings in Nayax Core
+
+To receive eReceipts, configure the operator in Nayax Core with the following settings.
+
+<Steps>
+  <Step title="Configure VAS Provider settings">
+    In the operator settings, go to the **VAS Provider** tab. Under **eReceipt Platform**, enter the **Provider Name** and **Business ID**.
+
+    ![Operator VAS Provider tab showing eReceipt Platform with Provider Name and Business ID fields](/images/ereceipt1.png)
+  </Step>
+  <Step title="Update machine payment options">
+    In the machine settings, go to the **Payment** tab. Under **Transaction Options**, uncheck **Enable eReceipt on Transaction end**.
+
+    ![Machine Payment tab showing Enable eReceipt on Transaction end checkbox under Transaction Options](/images/ereceipt2.png)
+  </Step>
+</Steps>
