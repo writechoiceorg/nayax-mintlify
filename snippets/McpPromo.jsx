@@ -16,19 +16,19 @@ export const McpPromo = () => {
           </div>
           <div>
             <h2 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
-              Get AI-powered help with our MCP Server
+              Build with AI on Nayax
               <span className="text-xs font-semibold bg-[#FCC705] text-gray-900 px-2 py-0.5 rounded-full">New</span>
             </h2>
             <p className="text-purple-200 text-sm">
-              Give your AI assistant direct access to Nayax documentation and get instant answers about integrations, APIs, and payment flows.
+              Connect your AI assistant to Nayax documentation with our MCP server, or install agent skills that guide it through Nayax API integrations.
             </p>
           </div>
         </div>
         <a
-          href="/docs/get-started/mcp-setup"
+          href="/docs/get-started/build-with-ai"
           className="flex-shrink-0 bg-[#FCC705] hover:bg-yellow-300 text-gray-900 font-semibold py-2 px-6 rounded-lg transition-all no-underline whitespace-nowrap text-sm"
         >
-          Connect Now
+          Set Up Your AI Assistant
         </a>
       </div>
     </section>
