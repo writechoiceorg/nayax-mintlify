@@ -11,7 +11,7 @@ Call the list-widgets endpoint to see all available widgets and their IDs:
 
 ```bash
 curl -X GET "https://<host>/operational/v1/dashboard/widgets?screenTypeId=1" \
-  -H "Authorization: Bearer <token>"
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
 ```
 
 From the response, identify the `widgetTypeId` values for revenue-related widgets (look for names containing "Revenue", "Sales", or similar).
@@ -22,7 +22,7 @@ Use the `groupBy: day` filter with a date range to retrieve daily revenue totals
 
 ```bash
 curl -X POST "https://<host>/operational/v1/dashboard/get-widget-data" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
   -H "Content-Type: application/json" \
   -d '{
     "screenTypeId": 1,
@@ -42,7 +42,7 @@ Switch `groupBy` to `month` and widen the date range to retrieve monthly revenue
 
 ```bash
 curl -X POST "https://<host>/operational/v1/dashboard/get-widget-data" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
   -H "Content-Type: application/json" \
   -d '{
     "screenTypeId": 1,
@@ -62,7 +62,7 @@ Pass the machine ID via `entityId` (if the widget is machine-scoped) or via the 
 
 ```bash
 curl -X POST "https://<host>/operational/v1/dashboard/get-widget-data" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
   -H "Content-Type: application/json" \
   -d '{
     "screenTypeId": 1,
