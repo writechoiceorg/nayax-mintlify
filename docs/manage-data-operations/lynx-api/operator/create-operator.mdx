@@ -51,7 +51,7 @@ The [Create New Actor ](/reference/lynx/actors/create-new-actor)endpoint allows 
 ```sh Request
 curl --request POST \
      --url https://qa-lynx.nayax.com/operational/v1/actors/{ParentActorID} \
-     --header 'Authorization: BEARER-TOKEN' \
+     --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
      --header 'accept: application/json' \
      --header 'Content-Type: application/json' \
      --data '{

@@ -39,7 +39,7 @@ Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) 
 ```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/actors/{ActorID} \
-     --header 'Authorization: BEARER-TOKEN' \
+     --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
      --header 'accept: application/json'
 ```
 
@@ -125,7 +125,7 @@ The [Update Operator/Sub-Operator](/reference/lynx/actors/update-actor) endpoint
 ```sh Request
 curl --request PUT \
      --url https://qa-lynx.nayax.com/operational/v1/actors/{ActorID} \
-     --header 'Authorization: BEARER-TOKEN' \
+     --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
      --header 'accept: application/json' \
      --header 'Content-Type: application/json' \
      --data '{

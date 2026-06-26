@@ -44,7 +44,7 @@ You can add a new product to an operator's catalog using the [Create New Operato
 ```sh Request
 curl --request POST \
      --url https://qa-lynx.nayax.com/operational/v1/operators/{OperatorID}/products \
-     --header 'Authorization: BEARER-TOKEN' \
+     --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
      --header 'accept: application/json' \
      --header 'Content-Type: application/json' \
      --data '{
@@ -267,7 +267,7 @@ You can use the [Update Specific Product](/reference/lynx/products/update-specif
 ```sh Request
 curl --request PUT \
      --url https://qa-lynx.nayax.com/operational/v1/products/{NayaxProductID} \
-     --header 'Authorization: BEARER-TOKEN' \
+     --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
      --header 'accept: application/json' \
      --header 'Content-Type: application/json' \
      --data '{
