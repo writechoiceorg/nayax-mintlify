@@ -3027,30 +3027,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RefundPaymentLynxModelResponse'
-  /v1/payment/refund-decline:
-    post:
-      tags:
-        - Payment
-      summary: Decline a Payment Refund
-      description: >-
-        Submits a request to decline a previously submitted payment refund
-        request. The request body includes details such as the transaction ID
-        and reason for declining the refund.
-      operationId: decline-payment-refund
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PaymentRefundDeclineLynxModel'
-      responses:
-        '200':
-          description: >-
-            The refund decline request was successfully processed, and the
-            response contains the result of the request.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RefundPaymentLynxModelResponse'
   /v1/payment/refund-approve:
     post:
       tags:
@@ -3071,6 +3047,30 @@ paths:
           description: >-
             The refund approval was successfully processed, and the response
             contains the result of the approval.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundPaymentLynxModelResponse'
+  /v1/payment/refund-decline:
+    post:
+      tags:
+        - Payment
+      summary: Decline a Payment Refund
+      description: >-
+        Submits a request to decline a previously submitted payment refund
+        request. The request body includes details such as the transaction ID
+        and reason for declining the refund.
+      operationId: decline-payment-refund
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRefundDeclineLynxModel'
+      responses:
+        '200':
+          description: >-
+            The refund decline request was successfully processed, and the
+            response contains the result of the request.
           content:
             application/json:
               schema:
