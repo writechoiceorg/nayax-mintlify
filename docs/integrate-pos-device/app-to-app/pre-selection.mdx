@@ -1,0 +1,107 @@
+---
+title: "Pre-Selection Payment"
+description: "Run a single-phase pre-selection payment on VPOS Media with payment.pay, which detects the card, authorizes, and settles in one call."
+metadata:
+  og:description: "Run a single-phase pre-selection payment on VPOS Media with payment.pay, which detects the card, authorizes, and settles in one call."
+---
+
+A pre-selection payment is the regular flow: the consumer picks a product or
+amount first, then taps to pay. The authorization and settlement happen
+together, so you run the whole transaction with a single `payment.pay` call.
+
+Use pre-selection when the final amount is known before the consumer pays, such
+as a fixed-price wash cycle or a kiosk item. When you need to authorize first and
+capture a final amount later, use [pre-authorization](/docs/integrate-pos-device/app-to-app/pre-authorization)
+instead.
+
+## The Pay Method
+
+`payment.pay` runs the whole transaction. You pass the amount in minor units
+(for example, cents), a channel bitmask that selects which payment methods to
+accept, and a `payment_listener_i` to receive the result.
+
+```java
+payment.pay(
+    500,                          // amount in minor units (5.00)
+    payment.CHANNEL_CONTACTLESS,  // channel bitmask
+    new payment_listener_i() {
+        @Override
+        public void on_card_detected(transaction_info_t info) {
+            // A card was presented.
+        }
+
+        @Override
+        public void on_authorization(boolean authorized, transaction_info_t info) {
+            // authorized == true means the payment was approved.
+        }
+
+        @Override
+        public void on_settlement(boolean settled, transaction_info_t info) {
+            // settled == true means the funds were captured.
+        }
+
+        @Override
+        public void on_cancel(boolean cancelled, transaction_info_t info) {
+            // The transaction was cancelled.
+        }
+    });
+```
+
+## Payment Channels
+
+The channel parameter is a bitmask that tells the service which payment methods
+to enable while it waits for the consumer. Combine values with a bitwise OR to
+accept more than one, or use `CHANNEL_ALL` to accept all card channels.
+
+| Constant | Value | Method |
+|---|---|---|
+| `CHANNEL_MAGSTRIPE` | `0x01` | Magnetic stripe |
+| `CHANNEL_CONTACTLESS` | `0x02` | Contactless tap |
+| `CHANNEL_CONTACT` | `0x04` | Contact (chip) |
+| `CHANNEL_NFC` | `0x08` | NFC |
+| `CHANNEL_QR` | `0x10` | QR code |
+| `CHANNEL_CREDIT` | `0x20` | Credit |
+| `CHANNEL_DEBIT` | `0x40` | Debit |
+| `CHANNEL_VOUCHER` | `0x80` | Voucher |
+| `CHANNEL_ALL` | — | Magstripe, contactless, contact, NFC, and QR |
+
+## Flow Breakdown
+
+The pre-selection flow runs in one phase. After your app calls `pay`, the
+service drives the card interaction and reports each step through the listener.
+
+{/* TODO: add flow diagram at /images/docs/app-to-app/pre-selection.png */}
+
+<Steps>
+  <Step title="Your App Starts the Payment">
+    The consumer selects a product or amount in your app. Your app calls
+    `payment.pay` with the amount, the channels to accept, and a
+    `payment_listener_i`.
+  </Step>
+  <Step title="The Service Waits for a Card">
+    The VPOS service powers up the reader on the selected channels and waits for
+    the consumer to present a card.
+  </Step>
+  <Step title="The Card Is Detected">
+    When the consumer presents a card, the service calls `on_card_detected`.
+  </Step>
+  <Step title="The Service Authorizes">
+    The service runs the EMV and online authorization and calls
+    `on_authorization`. If `authorized` is `true`, the payment was approved.
+  </Step>
+  <Step title="The Service Settles">
+    For an approved payment, the service captures the funds and calls
+    `on_settlement`. If `settled` is `true`, the transaction is complete.
+  </Step>
+</Steps>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Pre-Authorization Payment" icon="lock" href="/docs/integrate-pos-device/app-to-app/pre-authorization">
+    Add the two-phase flow for when the final amount is not known up front.
+  </Card>
+  <Card title="Certify and Go Live" icon="rocket" href="/docs/integrate-pos-device/app-to-app/getting-started">
+    Run the certification suite and roll your integration out to your fleet.
+  </Card>
+</CardGroup>

@@ -1,0 +1,94 @@
+---
+title: "Connect to the VPOS Service"
+description: "Bind your Android app to the VPOS service, register your application, and wait for the ready callback before you run payments."
+metadata:
+  og:description: "Bind your Android app to the VPOS service, register your application, and wait for the ready callback before you run payments."
+---
+
+Every App to App integration starts with the same connection sequence, and every
+payment flow depends on it. Because the sequence is identical for pre-selection
+and pre-authorization, you build it once and reuse it for every payment.
+
+## Prerequisites
+
+Before you connect, make sure you have:
+
+* The `vpos-media` SDK (AAR) added to your Android project, which provides the
+  `com.nayax.vpos.*` classes.
+* A VPOS Media test device in test mode, with your APK installed alongside
+  Nayax's payment app.
+
+## Connect and Register
+
+Build the connection in four steps.
+
+<Steps>
+  <Step title="Bind to the VPOS Service">
+    Create a `vpos_service_remote_connector`, give it an Android `Context` with
+    `init`, set a connection listener, and call `bind`. Binding is
+    asynchronous, so the result arrives on the listener rather than from the
+    call itself.
+
+    ```java
+    vpos_service_remote_connector connector = new vpos_service_remote_connector();
+    connector.init(context);
+    connector.set_listener(this);
+    connector.bind();
+    ```
+  </Step>
+  <Step title="Handle the Connection Callback">
+    Implement the connector's `Listener`. When `on_vpos_connected` fires, the
+    service is connected and you can register your application. Handle
+    `on_vpos_disconnected` to stop calling the API until you reconnect.
+
+    ```java
+    @Override
+    public void on_vpos_connected() {
+        // Connected. Register your application next.
+    }
+
+    @Override
+    public void on_vpos_disconnected() {
+        // Connection lost. Stop calling the API until reconnected.
+    }
+    ```
+  </Step>
+  <Step title="Register Your Application">
+    Call `general.register_application` with your application name, package
+    name, version, a `force_launch` flag, and a `device_listener_i`.
+    Registration subscribes your app to device events and gives it access to the
+    payment APIs.
+
+    ```java
+    general.register_application(
+        "laundrosmart-app",   // application name
+        "com.laundrosmart.app", // package name
+        "1.0",                // version
+        false,                // force_launch
+        deviceListener);      // device_listener_i
+    ```
+  </Step>
+  <Step title="Wait for the Ready Callback">
+    Implement `device_listener_i` and wait for `on_ready`. It reports when the
+    VPOS service is ready for payment transactions. Do not call any payment
+    method before `on_ready` reports a ready status.
+
+    ```java
+    @Override
+    public void on_ready(int status) {
+        // The service is ready. You can now start a payment.
+    }
+    ```
+  </Step>
+</Steps>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Pre-Selection Payment" icon="credit-card" href="/docs/integrate-pos-device/app-to-app/pre-selection">
+    Run a single-phase payment that authorizes and settles in one call.
+  </Card>
+  <Card title="Pre-Authorization Payment" icon="lock" href="/docs/integrate-pos-device/app-to-app/pre-authorization">
+    Authorize first, deliver the product, then settle the final amount.
+  </Card>
+</CardGroup>
