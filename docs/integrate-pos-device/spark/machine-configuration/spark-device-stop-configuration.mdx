@@ -1,0 +1,61 @@
+---
+title: "Device Stop Configuration"
+description: "Configure a machine in Nayax Core to support Spark Device Stop alongside the Remote Start or Device Start feature."
+---
+
+The settings on this page prepare a machine for Spark Device Stop, where a card
+presented at the terminal stops an active transaction. Device Stop runs alongside
+Remote Start or Device Start on the same machine, so apply these settings on top of the
+configuration for whichever start flow you use.
+
+## Card Readers
+
+The **Transaction Start Method** setting defines what can start a transaction through
+the card reader while it is idle. Set it to **Accept All** so the card reader accepts
+cards in idle mode to trigger the Device Stop flow.
+
+<Note>
+  When you pair Device Stop with Remote Start, this attribute must be **Accept All**,
+  not **Accept Nothing**: Device Stop determines the value when the two run together.
+</Note>
+
+## VPOS Touch
+
+The **VAS configurations** setting informs the server that the machine supports the
+Spark Device Stop feature. Set it based on the start flow you pair with Device Stop:
+
+- **Remote Start with Device Stop**: set **Spark Device Stop**, or both **Spark Device
+  Stop** and **Spark Remote Start**. Both options work.
+- **Device Start with Device Stop**: set **Spark Device Start (V2)** only. The Device
+  Start (V2) value covers both Device Start and Device Stop.
+
+<Frame>
+  ![VAS configurations for Remote Start paired with Device Stop](/images/docs/spark-machine-configuration/device-stop-vas-remote-start.png)
+</Frame>
+
+<Frame>
+  ![VAS configurations for Device Start paired with Device Stop](/images/docs/spark-machine-configuration/device-stop-vas-device-start.png)
+</Frame>
+
+After you finish, click **Save** to store the configuration.
+
+## Configuration Summary
+
+Use this table as a quick reference for Device Stop, depending on the start flow you
+pair it with:
+
+| Group | Property | Remote Start with Device Stop | Device Start with Device Stop |
+| :-- | :-- | :-- | :-- |
+| Card Readers | Transaction Start Method | Accept All | Single station: Button+Contactless+Contact. Multiple stations: Product |
+| VPOS Touch | VAS configurations | Spark Device Stop (or Spark Device Stop and Spark Remote Start) | Spark Device Start (V2) (or Spark Device Stop and Spark Device Start (V2)) |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Device Stop" icon="hand" href="/docs/integrate-pos-device/spark/payment-flows/spark-device-stop">
+    See how the Device Stop transaction flow works at the API level.
+  </Card>
+  <Card title="Additional Features" icon="sliders" href="/docs/integrate-pos-device/spark/machine-configuration/additional-features">
+    Configure POS display timeouts, idle mode images, and other options.
+  </Card>
+</CardGroup>

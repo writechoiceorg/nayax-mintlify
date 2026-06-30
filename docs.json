@@ -443,6 +443,17 @@
                     "root": "docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark"
                   },
                   {
+                    "group": "Machine Configuration",
+                    "pages": [
+                      "docs/integrate-pos-device/spark/machine-configuration/spark-remote-start-configuration",
+                      "docs/integrate-pos-device/spark/machine-configuration/spark-device-start-configuration",
+                      "docs/integrate-pos-device/spark/machine-configuration/spark-device-stop-configuration",
+                      "docs/integrate-pos-device/spark/machine-configuration/spark-external-settlement-configuration",
+                      "docs/integrate-pos-device/spark/machine-configuration/additional-features"
+                    ],
+                    "root": "docs/integrate-pos-device/spark/machine-configuration/index"
+                  },
+                  {
                     "group": "Webhook Callbacks",
                     "pages": [
                       "docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback",
