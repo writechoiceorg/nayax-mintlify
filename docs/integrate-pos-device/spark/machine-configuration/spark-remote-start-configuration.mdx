@@ -48,9 +48,9 @@ The remaining MQTT settings hold default values. Do not change them unless instr
 
 The **MDB Flags** setting tells the server which payment flow the device supports:
 
-- **Pre-Authorization** is the flow used when a transaction must be processed before
-  the consumer chooses a product or service, and before the final amount is known. Set
-  **MDB Flags** to **\* Flags Disabled**.
+- **Pre-Authorization** is used when the transaction starts before the consumer chooses
+  a product or service and before the final amount is known. Set **MDB Flags** to
+  **\* Flags Disabled**.
 - **Pre-Selection** is the flow used when the price is known when the card is
   presented. Set **MDB Flags** to **02 PreSelection Enabled**.
 
@@ -64,19 +64,17 @@ These settings control the authorization amount and how long the device waits fo
 card:
 
 - **Default Credit**: set the authorization amount. This applies to the
-  Pre-Authorization flow only. It sets the credit provided for payment authorization
-  when the `Amount` field in the `TriggerTransaction` request is empty. The value is in
-  cents and is affected by the **Decimal Place** value. The settlement value cannot be
-  higher than this amount.
+  Pre-Authorization flow only. It is the amount authorized when the `Amount` field in
+  the `TriggerTransaction` request is empty. The value is in cents and is affected by
+  the **Decimal Place** value. The settlement value cannot be higher than this amount.
 - **Present Card Timeout**: the time in seconds the device waits for a card after the
   server wakes it. The default is 15 seconds. We recommend 30 to 60 seconds so
   consumers have enough time to reach the terminal and present their card.
 
 <Warning>
   When the device reaches the **Present Card Timeout** and no card is presented, no
-  `TransactionCallback` is sent. Hold a timeout on your side as well, equal to or
-  longer than this value, so your system can handle the case where no callback
-  arrives.
+  `TransactionCallback` is sent. Set your own timeout too, equal to or longer than this
+  value, so your system can handle a missing callback.
 </Warning>
 
 ## Pulse/ccTalk

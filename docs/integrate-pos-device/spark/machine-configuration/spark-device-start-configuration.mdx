@@ -34,9 +34,9 @@ These settings control the device hardware and how a transaction can start:
 ### MDB
 
 The **MDB Flags** setting tells the server which payment flow the device supports.
-Device Start uses the **Pre-Authorization** flow, the flow used when a transaction must
-be processed before the consumer chooses a product or service, and before the final
-amount is known.
+Device Start uses the **Pre-Authorization** flow, which applies when the transaction
+starts before the consumer chooses a product or service and before the final amount is
+known.
 
 Set **MDB Flags** to **\* Flags Disabled**.
 
@@ -102,10 +102,9 @@ value is in cents and is affected by the **Decimal Place** value.
 
 ### Pulse/ccTalk
 
-This section sets up the display for two to six service stations. Treat each pulse line
-as a separate service station for which your Nayax device provides a payment solution.
-The amount shown for each service station is the **Credit per Pulse** multiplied by the
-**Number of Pulses**.
+This section sets up the display for two to six service stations. Each pulse line
+represents one service station the device serves. The amount shown for each service
+station is the **Credit per Pulse** multiplied by the **Number of Pulses**.
 
 The authorization amount can be the same for every service station or set individually:
 
@@ -120,9 +119,9 @@ position of each value to its service station:
 - **Credit per Pulse 1-6 (Cents)**: the amount to display for each service station,
   stations 1 to 6. This is multiplied by **Number of Pulses per Vend 1-6**. To hide the
   prices from the display, set this to `0`.
-- **Number of Pulses per Vend 1-6**: set to `1;1;1;1;1;1`. This multiplies the **Credit
-  per Pulse** value. To avoid multiplication, set the full amount in **Credit per
-  Pulse** and set the number of pulses to `1` for each station.
+- **Number of Pulses per Vend 1-6**: set each station to `1` (`1;1;1;1;1;1`). The amount
+  displayed is **Credit per Pulse** multiplied by this number, so a value of `1` shows
+  the **Credit per Pulse** amount unchanged.
 - **Pulse Identifier 1-6**: the identifier shown in idle mode for each service point.
   The default values are `1` to `6`.
 - **Pulse Title 1-6**: an optional description shown below each identifier. When set,
