@@ -1,0 +1,110 @@
+---
+title: "Pre-Authorization Payment"
+description: "Run a two-phase pre-authorization on VPOS Media: authorize a hold, deliver the product, then settle the final amount, which can be lower."
+metadata:
+  og:description: "Run a two-phase pre-authorization on VPOS Media: authorize a hold, deliver the product, then settle the final amount, which can be lower."
+---
+
+A pre-authorization payment splits into two phases with a pause in between. You
+place a hold on the card, deliver the product or service, and only then capture
+the amount the consumer actually owes.
+
+Use pre-authorization when the final amount is not known until after the service
+is delivered, such as a metered wash or a variable-weight purchase. When the
+amount is fixed before payment, use [pre-selection](/docs/integrate-pos-device/app-to-app/pre-selection)
+instead.
+
+## Authorize, Then Settle
+
+The flow uses two `payment` calls. `payment.authorize` places the hold, and
+`payment.settle` captures the final amount against the transaction the
+authorization returned.
+
+You start with `authorize`, passing the amount, the channels to accept,
+`pre_auth` set to `true`, a `payment_listener_i`, and a `showUI` flag. When the
+hold is approved, `on_authorization` returns a `transaction_info_t` that carries
+the transaction ID you settle against later.
+
+```java
+payment.authorize(
+    1000,                         // amount to hold, in minor units (10.00)
+    payment.CHANNEL_CONTACTLESS,  // channel bitmask
+    true,                         // pre_auth
+    new payment_listener_i() {
+        @Override
+        public void on_authorization(boolean authorized, transaction_info_t info) {
+            if (authorized) {
+                long transactionId = info.transaction_id;
+                // Deliver the product, then settle this transaction.
+            }
+        }
+        // on_card_detected, on_settlement, and on_cancel omitted for brevity.
+    },
+    true);                        // showUI: Nayax draws the payment screens
+```
+
+After you know the final amount, call `payment.settle` with the transaction ID,
+the amount to capture, optional consumer information for a digital receipt, the
+listener, and the `showUI` flag. Pass `null` for the consumer information when
+you do not need it.
+
+```java
+payment.settle(
+    transactionId,   // from on_authorization
+    800,             // final amount to capture (8.00), can be <= the hold
+    null,            // optional transaction_consumer_info_t for the receipt
+    paymentListener,
+    true);           // showUI
+```
+
+<Note>
+The settled amount can be less than or equal to the authorized amount, so you
+can hold a maximum, deliver less, and capture only what the consumer owes.
+</Note>
+
+## Cancel a Transaction
+
+To release a hold or stop an in-progress transaction, call `payment.cancel`
+with the transaction ID, a reason code, a `payment_listener_i`, and the `showUI`
+flag. The service reports the result through `on_cancel`.
+
+```java
+payment.cancel(transactionId, payment.CANCEL_TYPE_CANCELLED_BY_CONSUMER, paymentListener, true);
+```
+
+## Flow Breakdown
+
+The pre-authorization flow runs in two phases, with your app delivering the
+product between them. The service reports each step through the listener.
+
+<Steps>
+  <Step title="Your App Starts the Authorization">
+    The consumer selects a product or service in your app. Your app calls
+    `payment.authorize` with the amount to hold, the channels to accept,
+    `pre_auth` set to `true`, and a `payment_listener_i`.
+  </Step>
+  <Step title="The Service Waits for a Card and Authorizes">
+    The service powers up the reader, calls `on_card_detected` when the consumer
+    presents a card, runs the authorization, and calls `on_authorization`. An
+    approved result carries the transaction ID.
+  </Step>
+  <Step title="Your App Delivers the Product">
+    With the hold approved, your app runs the machine, opens the door, or
+    delivers the service, and determines the final amount.
+  </Step>
+  <Step title="Your App Settles the Final Amount">
+    Your app calls `payment.settle` with the transaction ID and the final
+    amount. The service captures the funds and calls `on_settlement`.
+  </Step>
+</Steps>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Pre-Selection Payment" icon="credit-card" href="/docs/integrate-pos-device/app-to-app/pre-selection">
+    Add the single-phase flow for when the amount is fixed before payment.
+  </Card>
+  <Card title="Certify and Go Live" icon="rocket" href="/docs/integrate-pos-device/app-to-app/getting-started">
+    Run the certification suite and roll your integration out to your fleet.
+  </Card>
+</CardGroup>
