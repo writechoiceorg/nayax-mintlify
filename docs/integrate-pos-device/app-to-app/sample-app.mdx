@@ -1,0 +1,123 @@
+---
+title: "Sample App"
+description: "A minimal Android app that connects to the VPOS service and takes a payment with the built-in UI. Use it to test your VPOS Media setup."
+metadata:
+  og:description: "A minimal Android app that connects to the VPOS service and takes a payment with the built-in UI. Use it to test your VPOS Media setup."
+---
+
+The sample app is a minimal Android application that shows a full App to App
+payment on VPOS Media. It has one screen with a **Start** and a **Cancel**
+button and a fixed amount of $1.00, and it lets the VPOS service draw all of the
+payment screens (tap card, processing, result). Use it to confirm your device
+and SDK setup before you build your own integration.
+
+## Get the sample app
+
+The sample app is available from Nayax Professional Services. Build it and
+install it on a VPOS Media test device alongside Nayax's payment app.
+
+## Set up
+
+The sample depends on the `vpos-api` AAR and needs the same manifest entries as
+any App to App integration: the `SYSTEM_ALERT_WINDOW` permission, the
+`com.nayax.vpos.service` queries entry, and the `payment_ui_activity_t` activity.
+See [Connect to the VPOS Service](/docs/integrate-pos-device/app-to-app/connect-to-the-vpos-service)
+for the full setup.
+
+## How it works
+
+The app connects to the VPOS service, registers itself, and is then ready to
+take a payment.
+
+```java
+vpos_service_remote_connector connector = vpos_service_remote_connector.getInstance();
+
+connector.set_listener(new vpos_service_remote_connector.Listener() {
+    @Override
+    public void on_vpos_connected() {
+        general = connector.general;
+        payment = connector.payment;
+
+        general.register_application(
+                "vpos-sample-app", getPackageName(), "1.0.0",
+                true,   // force_launch
+                null);  // no device_listener_i
+
+        // Ready to take a payment.
+    }
+
+    @Override
+    public void on_vpos_disconnected() { }
+});
+
+connector.init(this);
+connector.bind();
+```
+
+**Start** takes a $1.00 payment with the built-in UI, and **Cancel** stops the
+transaction in progress. The channel value `0x0F` enables the card channels
+(magstripe, contact, contactless, and NFC).
+
+```java
+// Start: amount in minor units, channels, listener, showUI
+payment.pay(100, 0x0F, paymentListener, true);
+
+// Cancel the in-progress transaction
+payment.cancel(transactionId, payment.CANCEL_TYPE_CANCELLED_BY_CONSUMER, paymentListener, true);
+```
+
+The listener receives each step. The app stores the transaction ID from
+`on_card_detected` so it can cancel.
+
+```java
+payment.payment_listener_i paymentListener = new payment.payment_listener_i() {
+    @Override
+    public void on_card_detected(transaction_info_t info) {
+        transactionId = info.transaction_id;
+    }
+
+    @Override
+    public void on_authorization(boolean authorized, transaction_info_t info) {
+        // Service shows the approved or declined screen.
+    }
+
+    @Override
+    public void on_settlement(boolean settled, transaction_info_t info) {
+        // Transaction complete.
+    }
+
+    @Override
+    public void on_cancel(boolean cancelled, transaction_info_t info) {
+        // Transaction cancelled.
+    }
+};
+```
+
+## Run it
+
+Build and install the app, then run a test transaction on the device.
+
+<Steps>
+  <Step title="Install the app">
+    Build the sample and install the APK on a VPOS Media test device that already
+    runs Nayax's payment app.
+  </Step>
+  <Step title="Start a payment">
+    Open the app and tap **Start**. The VPOS service shows its payment screens.
+  </Step>
+  <Step title="Present a card">
+    Tap a test card. The service authorizes and settles, then shows the result
+    and returns to your app.
+  </Step>
+</Steps>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Connect to the VPOS Service" icon="plug" href="/docs/integrate-pos-device/app-to-app/connect-to-the-vpos-service">
+    Wire up the connection and registration in your own app.
+  </Card>
+  <Card title="Pre-Selection Payment" icon="credit-card" href="/docs/integrate-pos-device/app-to-app/pre-selection">
+    Take the same single-phase payment the sample uses.
+  </Card>
+</CardGroup>

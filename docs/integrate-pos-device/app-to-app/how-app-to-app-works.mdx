@@ -68,15 +68,16 @@ order, and the SDK reference lists every callback.
 ## Built-In or Custom Payment UI
 
 During a payment, the screens (present card, processing, result) have to come
-from somewhere. You choose which app draws them, and the choice is per call, so
-different flows in the same app can use different modes.
+from somewhere. You choose with the `showUI` boolean, the last argument on every
+payment call, and the choice is per call.
 
-* **Built-in UI:** Nayax draws the payment screens on top of your app. This is
-  the fastest path to go live, and Nayax owns the screen while the payment runs.
-* **Custom UI:** your app draws every screen, using the `payment_listener_i`
-  callbacks to know what to show. Nayax still handles the card, EMV, and PIN
-  securely. This gives you the most control and suits branded, multi-step
-  experiences.
+* **Built-in UI (`showUI = true`):** Nayax draws the payment screens on top of
+  your app. This is the fastest path to go live, and Nayax owns the screen while
+  the payment runs.
+* **Custom UI (`showUI = false`):** your app draws every screen, using the
+  `payment_listener_i` callbacks to know what to show. Nayax still handles the
+  card, EMV, and PIN securely. This gives you the most control and suits
+  branded, multi-step experiences.
 
 ## See Also
 

@@ -15,7 +15,7 @@ Before you write any code, get these from Nayax:
 
 * **Partner access:** contact your Nayax customer success manager or Professional
   Services team and sign the integration agreement.
-* **The SDK:** download the `vpos-media` SDK (the AAR), the API reference, and the
+* **The SDK:** download the `vpos-api` SDK (the AAR), the API reference, and the
   sample app from DevZone.
 * **A test device:** Nayax ships a VPOS Media 4 or VPOS Media 4 Mini in test mode
   for development.
@@ -33,9 +33,9 @@ one links to the guide with the details.
 
 <Steps>
   <Step title="Add the SDK to Your App">
-    Add the `vpos-media` AAR to your Android project to get the
-    `com.nayax.vpos.*` classes, then install your APK on the test device
-    alongside Nayax's payment app.
+    Add the `vpos-api` AAR and the required manifest entries to your Android
+    project (see [Connect to the VPOS Service](/docs/integrate-pos-device/app-to-app/connect-to-the-vpos-service)),
+    then install your APK on the test device alongside Nayax's payment app.
   </Step>
   <Step title="Connect and Register">
     Bind to the VPOS service, register your application, and wait for the ready

@@ -1,8 +1,8 @@
 ---
 title: "Connect to the VPOS Service"
-description: "Bind your Android app to the VPOS service, register your application, and wait for the ready callback before you run payments."
+description: "Add the vpos-api SDK, bind to the VPOS service, and register your Android app so it can take payments on VPOS Media."
 metadata:
-  og:description: "Bind your Android app to the VPOS service, register your application, and wait for the ready callback before you run payments."
+  og:description: "Add the vpos-api SDK, bind to the VPOS service, and register your Android app so it can take payments on VPOS Media."
 ---
 
 Every App to App integration starts with the same connection sequence, and every
@@ -13,74 +13,84 @@ and pre-authorization, you build it once and reuse it for every payment.
 
 Before you connect, make sure you have:
 
-* The `vpos-media` SDK (AAR) added to your Android project, which provides the
+* The `vpos-api` AAR added to your Android project, which provides the
   `com.nayax.vpos.*` classes.
 * A VPOS Media test device in test mode, with your APK installed alongside
   Nayax's payment app.
 
-## Connect and Register
+## Add the SDK
 
-Build the connection in four steps.
+Place the `vpos-api` AAR in your module's `libs/` folder and add it as a
+dependency.
 
-<Steps>
-  <Step title="Bind to the VPOS Service">
-    Create a `vpos_service_remote_connector`, give it an Android `Context` with
-    `init`, set a connection listener, and call `bind`. Binding is
-    asynchronous, so the result arrives on the listener rather than from the
-    call itself.
+```groovy
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
+}
+```
 
-    ```java
-    vpos_service_remote_connector connector = new vpos_service_remote_connector();
-    connector.init(context);
-    connector.set_listener(this);
-    connector.bind();
-    ```
-  </Step>
-  <Step title="Handle the Connection Callback">
-    Implement the connector's `Listener`. When `on_vpos_connected` fires, the
-    service is connected and you can register your application. Handle
-    `on_vpos_disconnected` to stop calling the API until you reconnect.
+Add three entries to your `AndroidManifest.xml`. The `SYSTEM_ALERT_WINDOW`
+permission lets the VPOS service draw the payment screens over your app, the
+`queries` entry lets your app find the service, and the
+`payment_ui_activity_t` activity is required when you use the built-in payment
+UI. Without that activity, a payment call with `showUI = true` throws
+`ActivityNotFoundException`.
 
-    ```java
+```xml
+<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+<queries>
+    <package android:name="com.nayax.vpos.service" />
+</queries>
+
+<application>
+    <activity
+        android:name="com.nayax.vpos.ui.payment_ui_activity_t"
+        android:exported="false" />
+</application>
+```
+
+## Connect and register
+
+Get the shared connector with `getInstance`, set a listener, then call `init`
+and `bind`. Binding is asynchronous, so the result arrives on the listener. When
+`on_vpos_connected` fires, read the `general` and `payment` interfaces from the
+connector and register your application. After `register_application` returns,
+your app is ready to take payments.
+
+```java
+vpos_service_remote_connector connector = vpos_service_remote_connector.getInstance();
+
+connector.set_listener(new vpos_service_remote_connector.Listener() {
     @Override
     public void on_vpos_connected() {
-        // Connected. Register your application next.
+        general general = connector.general;
+        payment payment = connector.payment;
+
+        general.register_application(
+                "laundrosmart-app",   // your application name
+                getPackageName(),     // your package name
+                "1.0.0",              // your app version
+                true,                 // force_launch: required when your app shows the payment UI
+                null);                // optional device_listener_i
+
+        // Connected and registered. You can now take payments.
     }
 
     @Override
     public void on_vpos_disconnected() {
         // Connection lost. Stop calling the API until reconnected.
     }
-    ```
-  </Step>
-  <Step title="Register Your Application">
-    Call `general.register_application` with your application name, package
-    name, version, a `force_launch` flag, and a `device_listener_i`.
-    Registration subscribes your app to device events and gives it access to the
-    payment APIs.
+});
 
-    ```java
-    general.register_application(
-        "laundrosmart-app",   // application name
-        "com.laundrosmart.app", // package name
-        "1.0",                // version
-        false,                // force_launch
-        deviceListener);      // device_listener_i
-    ```
-  </Step>
-  <Step title="Wait for the Ready Callback">
-    Implement `device_listener_i` and wait for `on_ready`. It reports when the
-    VPOS service is ready for payment transactions. Do not call any payment
-    method before `on_ready` reports a ready status.
+connector.init(context);
+connector.bind();
+```
 
-    ```java
-    @Override
-    public void on_ready(int status) {
-        // The service is ready. You can now start a payment.
-    }
-    ```
-  </Step>
-</Steps>
+Set `force_launch` to `true` when your app displays the built-in payment UI. The
+last argument to `register_application` is an optional `device_listener_i`: pass
+one to receive device readiness and attribute events, or `null` if you do not
+need them.
 
 ## Next Steps
 

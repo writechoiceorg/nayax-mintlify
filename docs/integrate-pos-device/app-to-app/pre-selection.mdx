@@ -18,7 +18,8 @@ instead.
 
 `payment.pay` runs the whole transaction. You pass the amount in minor units
 (for example, cents), a channel bitmask that selects which payment methods to
-accept, and a `payment_listener_i` to receive the result.
+accept, a `payment_listener_i` to receive the result, and a `showUI` flag that
+chooses the built-in or custom screens.
 
 ```java
 payment.pay(
@@ -44,7 +45,8 @@ payment.pay(
         public void on_cancel(boolean cancelled, transaction_info_t info) {
             // The transaction was cancelled.
         }
-    });
+    },
+    true);                        // showUI: Nayax draws the payment screens
 ```
 
 ## Payment Channels
