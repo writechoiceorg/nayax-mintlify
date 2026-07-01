@@ -152,17 +152,18 @@ A confirmation request is the second stage of the authorization flow. It confirm
 
   <Tab title="Linux">
     ```c C
-    KIOSK_RET LibOtiKiosk_ConfirmTransaction(uint32_t amount_cents, uint32_t fee_cents, uint32_t product_id, char* transaction_reference);
+    KIOSK_RET LibOtiKiosk_ConfirmTransaction(uint32_t amount_cents, uint32_t fee_cents, uint32_t product_id, char* transaction_reference, char* additional_receipt_data);
     ```
 
     **Parameters:**
 
-    | Parameter               | Description                                           |
-    | ----------------------- | ----------------------------------------------------- |
-    | `amount_cents`          | Amount to charge in minor units (cents, not dollars). |
-    | `fee_cents`             | Optional fee amount in minor units.                   |
-    | `transaction_reference` | Unique reference from pre-authorization.              |
-    | `product_id`            | Product identifier.                                   |
+    | Parameter                  | Description                                           |
+    | --------------------------- | ----------------------------------------------------- |
+    | `amount_cents`               | Amount to charge in minor units (cents, not dollars). |
+    | `fee_cents`                  | Deprecated. Not used.                                 |
+    | `transaction_reference`      | Unique reference from pre-authorization.              |
+    | `product_id`                 | Product identifier.                                   |
+    | `additional_receipt_data`    | Optional. JSON string with extra receipt data to include at confirmation time. Can be `NULL`. |
   </Tab>
 </Tabs>
 
@@ -285,10 +286,12 @@ Use `PreAuthorize` to pre-authorize a card with the payment processor. EMV Core 
     ```c C
     otiKioskPaymentParameters params = {
         .amount_cents = 1500, // $15.00
-        .fee_cents = 0,
         .product_id = 12345,
         .timeout_sec = 60,
-        .continuous = false
+        .continuous = false,
+        .additional_receipt_data = NULL,
+        .is_deferred = false,
+        .is_final_amount = false
     };
 
     KIOSK_RET result = LibOtiKiosk_PreAuthorize(&params);
@@ -299,13 +302,15 @@ Use `PreAuthorize` to pre-authorize a card with the payment processor. EMV Core 
 
     **Parameters:**
 
-    | Parameter      | Description                                                                                                    |
-    | -------------- | -------------------------------------------------------------------------------------------------------------- |
-    | `amount_cents` | Amount to charge in minor units (for example, cents, not dollars).                                                    |
-    | `fee_cents`    | Optional fee amount in minor units.                                                                            |
-    | `product_id`   | ID of the product selected by the consumer. This number will be saved on the server and available for reports. |
-    | `timeout_sec`  | Maximum wait time for card presentation.                                                                       |
-    | `continuous`   | Whether to enable continuous polling.                                                                          |
+    | Parameter                  | Description                                                                                                    |
+    | --------------------------- | -------------------------------------------------------------------------------------------------------------- |
+    | `amount_cents`               | Amount to charge in minor units (for example, cents, not dollars).                                                    |
+    | `product_id`                 | ID of the product selected by the consumer. This number will be saved on the server and available for reports. |
+    | `timeout_sec`                | Maximum wait time for card presentation.                                                                       |
+    | `continuous`                 | Whether to enable continuous polling.                                                                          |
+    | `additional_receipt_data`    | Optional. JSON string with extra receipt data passed to the PSP and included in the eReceipt. Can be `NULL`.   |
+    | `is_deferred`                | Optional. `true` for Deferred Authorization (Transit mode): the card is read offline and the authorization is queued for settlement. |
+    | `is_final_amount`            | `true`: fixed amount, indicates the pre-selection flow. `false`: amount may change, indicates the pre-authorization flow. |
   </Tab>
 </Tabs>
 
