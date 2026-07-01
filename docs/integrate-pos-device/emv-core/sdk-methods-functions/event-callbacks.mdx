@@ -320,6 +320,58 @@ If EMV Core doesn’t get an answer, it will re-send 2 times (for a total of 3 m
     **Parameters:**
 
     **`cb`**: A callback function of type `void (*)(otiKioskPaymentResponse* resp)`. This function is triggered automatically when a transaction reaches a final state.
+
+    The callback receives a pointer to an `otiKioskPaymentResponse` struct with the full transaction result:
+
+    ```c C
+    typedef struct {
+        otiTransactionStatus status;        // Transaction status
+        int error_code;                      // Error code if failed
+        char error_message[100];             // Error description
+        double amount_requested;             // Requested amount
+        double amount_authorized;            // Authorized amount
+        char transaction_reference[128];     // Unique transaction reference
+        char partial_PAN[20];                // Masked card number
+        char card_type[32];                  // Card type (Visa, MasterCard, etc.)
+        char card_id[32];                     // Card identifier
+        char card_token[128];                // Secure card token
+        char EReceipt[256];                   // Electronic receipt URL
+        char Additional_Parameters[256];      // Additional parameters, used for remote settlement
+        double card_balance;                  // RFU: card balance for closed-loop cards
+        bool is_transaction_approved;         // Approval status
+        char authorization_code[128];         // PSP authorization code
+        char rrn[128];                         // Processor reference number
+        NayaxTransactionIdInfo nayax_info;    // Fields for remote settlement
+        char mifare_read[256];                // Raw JSON of mifare_read params for CLP_MIFARE_READ, empty when absent
+    } otiKioskPaymentResponse;
+    ```
+
+    **Struct fields:**
+
+    | Field                      | Description                                                                                                          |
+    | :------------------------- | :-------------------------------------------------------------------------------------------------------------------- |
+    | `status`                   | Transaction status. Same values as the JSON `status` field.                                                          |
+    | `error_code`                | Numerical error code. `0` when there is no error.                                                                     |
+    | `error_message`             | Short technical description of the error, for developer and support use. Do not display to users.                    |
+    | `amount_requested`          | Amount requested for transaction approval, in major units (for example, dollars, not cents).                          |
+    | `amount_authorized`         | Amount approved for the transaction, in major units. May be lower than the requested amount for prepaid cards.        |
+    | `transaction_reference`     | Transaction ID. Use this value in `ConfirmTransaction` or `VoidTransaction`.                                          |
+    | `partial_PAN`               | Masked PAN with the card account number's first six and last four digits.                                             |
+    | `card_type`                 | Card scheme for open-loop cards, or card technology for closed-loop cards.                                            |
+    | `card_id`                   | Mifare UID when the card is a Mifare card and `CLP_MIFARE_ENABLED=2`.                                                 |
+    | `card_token`                | Token identifying the card. Base64 string for payment cards, or the card UID for closed-loop cards.                   |
+    | `EReceipt`                  | URL for the Nayax eReceipt. See eReceipt settings in Nayax Core below.                                                |
+    | `Additional_Parameters`     | Optional data from the PSP, used for Nayax External Settlement (Remote Settlement).                                   |
+    | `card_balance`              | RFU. Card balance for closed-loop cards managed by Nayax.                                                             |
+    | `is_transaction_approved`   | Whether the transaction was approved.                                                                                  |
+    | `authorization_code`        | PSP transaction identifier issued for approved transactions.                                                          |
+    | `rrn`                       | Processor reference number for approved transactions.                                                                 |
+    | `nayax_info`                | Fields required for Nayax External Settlement (Remote Settlement).                                                    |
+    | `mifare_read`               | Raw JSON of the blocks read from a Mifare card, based on the `CLP_MIFARE_READ` attribute. Empty when absent.          |
+
+    <Note>
+      For the full closed-loop card type list and error code list, see the equivalent fields in the Android tab above.
+    </Note>
   </Tab>
 </Tabs>
 

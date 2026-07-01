@@ -411,10 +411,6 @@ See the `ShowMessage` API signature in the code below:
 
 ## `UpdateMachineAttributes`
 
-<Warning>
-  This method is only available for the Android SDK.
-</Warning>
-
 Updates host machine attributes in Nayax Core. These values are informational only and do not affect payment processing. They are available in Nayax Core for reporting and diagnostics.
 
 <Tabs>
@@ -448,15 +444,34 @@ Updates host machine attributes in Nayax Core. These values are informational on
     String UpdateMachineAttributes(List<NayaxMachineAttribute> attributes) throws EmvCoreException;
     ```
   </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    KIOSK_RET LibOtiKiosk_UpdateMachineAttributes(NayaxMachineAttribute attributes[], int count, char* result, int max_result_size);
+    ```
+  </Tab>
 </Tabs>
 
 **Parameters:**
 
-**`key`**: A list of machine attributes to be updated on Nayax Core. Relevant attribute IDs include:
+**`key`**: A list of machine attributes to be updated on Nayax Core. The relevant attribute IDs are:
 
-* 541 Manufacturer Code
-* 542 Machine Model
-* 543 Serial Number
-* 544 Machine SW Version
-* 551 Type
-* 593 VMC HW Version
+| ID | Attribute | Required |
+| :--- | :--- | :--- |
+| `541` | Manufacturer Code | Yes |
+| `542` | Machine Model | Yes |
+| `543` | Serial Number | Yes |
+| `544` | Machine SW Version | Yes |
+| `551` | Type | No |
+| `593` | VMC HW Version | No |
+
+<Warning>
+  You must send attributes `541`, `542`, `543`, and `544` on every call:
+
+  * **`541` Manufacturer Code**: the manufacturer's English name (for example, `myCompanyName`).
+  * **`542` Machine Model**: the machine model.
+  * **`543` Serial Number**: the machine serial number as it appears on the machine.
+  * **`544` Machine SW Version**: the machine software version.
+
+  Omitting any of these attributes can result in incomplete reporting and diagnostics data in Nayax Core.
+</Warning>
