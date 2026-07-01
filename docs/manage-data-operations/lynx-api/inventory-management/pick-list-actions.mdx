@@ -45,7 +45,7 @@ Use the [Get Pick List](/reference/lynx/machine-inventory/get-pick-list) endpoin
 ```sh Request
 curl --request GET \
      --url https://qa-lynx.nayax.com/operational/v1/machines/{MachineID}/pickList \
-     --header 'Authorization: BEARER-TOKEN' \
+     --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
      --header 'accept: application/json'
 ```
 
@@ -64,7 +64,7 @@ Use the [Update Pick List](/reference/lynx/machine-inventory/update-pick-list) e
 ```sh Request
 curl --request PUT \
      --url https://qa-lynx.nayax.com/operational/v1/machines/inventory/picklists/update \
-     --header 'Authorization: BEARER-TOKEN' \
+     --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
      --header 'accept: application/json' \
      --header 'Content-Type: application/json' \
      --data '{
@@ -98,7 +98,7 @@ Use the [Delete Pick List](/reference/lynx/machine-inventory/delete-pick-list) e
 ```sh Request
 curl --request DELETE \
      --url https://qa-lynx.nayax.com/operational/v1/machines/{MachineID}/pickList \
-     --header 'Authorization: BEARER-TOKEN' \
+     --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
      --header 'accept: application/json'
 ```
 

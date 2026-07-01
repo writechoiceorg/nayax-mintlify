@@ -759,9 +759,18 @@
         ]
       },
       {
-        "tab": "MCP Server",
+        "tab": "Build with AI",
         "icon": "robot",
-        "pages": ["docs/get-started/mcp-setup"]
+        "pages": [
+          {
+            "group": "Build with AI",
+            "root": "docs/get-started/build-with-ai",
+            "pages": [
+              "docs/get-started/mcp-setup",
+              "docs/get-started/agent-skills"
+            ]
+          }
+        ]
       },
       {
         "tab": "Release Notes",
