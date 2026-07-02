@@ -11,6 +11,7 @@ The following methods are used for managing the SDK:
 * [Destroy](#destroy)
 * [GetAttribute](#getattribute)
 * [GetKioskID](#getkioskid)
+* [GetPollStatus](#getpollstatus)
 * [GetStatus](#getstatus)
 * [GetVersion](#getversion)
 * [Initialize](#initialize)
@@ -140,6 +141,38 @@ See the `GetKioskID` API signature in the code below:
 
 ***
 
+## `GetPollStatus`
+
+Returns separate status values for the card-polling state and for reader and network resource availability.
+
+See the `GetPollStatus` API signature in the code below:
+
+<Tabs>
+  <Tab title="JSON">
+    Request:
+
+    ```json
+    {"jsonrpc": "2.0", "method": "GetPollStatus", "params": {}, "id": 14}
+    ```
+
+    Response:
+
+    ```json
+    {"jsonrpc":"2.0", "result":{"Polling":false, "Resources":"Ready"}, "id":14}
+    ```
+
+    The possible values are: `Polling`: `true` or `false`. `Resources`: `Ready`, `NoReader`, or `NoNetwork`.
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    KIOSK_RET LibOtiKiosk_GetPollStatus(otiKioskPollStatus *out_poll_status);
+    ```
+  </Tab>
+</Tabs>
+
+***
+
 ## `GetStatus`
 
 Retrieves the reader's current status, including its transaction readiness and connectivity state. This is useful for monitoring the device state during integration or deployment.
@@ -186,7 +219,7 @@ See the `GetStatus` API signature in the code below:
   </Tab>
 </Tabs>
 
-The possible result values are: `NotReady`, `Ready`, `PaymentTransaction`, `Update`, `NoReader`, and `NoTerminalId`.
+The possible result values are: `NotReady`, `Ready`, `PaymentTransaction`, `Update`, `NoReader`, `NoTerminalId`, `NoNetwork`, and `NoTransaction`.
 
 <Note>
   * **`Update`**: Indicates the EMV Core is busy with TMS updates (e.g., new firmware or configuration).

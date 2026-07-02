@@ -28,7 +28,8 @@ This event is triggered after a card token is successfully retrieved.
     ```json
     {"jsonrpc":"2.0", "method": "CardTokenReceived", "params": {"status": "OK",
     "errorCode": 0, "errorDescription": "", "CardToken":
-    "WSAr79nKPywW3INXrWvr6IL3vgTgSJlwZBgseKDmMHM=", "PartialPan": ""}, "id": 702}
+    "WSAr79nKPywW3INXrWvr6IL3vgTgSJlwZBgseKDmMHM=", "PartialPan": "",
+    "CardType": "EMV"}, "id": 702}
     ```
 
     Closed loop example:
@@ -36,8 +37,18 @@ This event is triggered after a card token is successfully retrieved.
     ```json
     {"jsonrpc":"2.0", "method": "CardTokenReceived", "params": {"status":
     "LocalCLP", "errorCode": 0, "errorDescription": "", "CardToken": "73D0D1C5",
-    "PartialPan": ""}, "id": 702}
+    "PartialPan": "", "CardType": "Type A"}, "id": 702}
     ```
+
+    **Parameters:**
+
+    | Parameter    | Description                                                                                       |
+    | :----------- | :-------------------------------------------------------------------------------------------------- |
+    | `status`     | Transaction result: `OK`, `Declined`, `Error`, `Timeout`, `Cancelled`, or `LocalCLP`.               |
+    | `errorCode`  | Numerical error code. `0` when there is no error.                                                   |
+    | `CardToken`  | Card token. Base64 string for payment cards, or the card UID for closed loop (Mifare) cards.        |
+    | `PartialPan` | Masked PAN with the card account number's first six and last four digits. Empty for closed loop cards. |
+    | `CardType`   | Card scheme (for example, EMV, MasterCard, Visa). For closed loop cards, the card technology (for example, Type A, Mifare). |
   </Tab>
 
   <Tab title="Android">
@@ -56,6 +67,32 @@ This event is triggered after a card token is successfully retrieved.
     ```c Linux
     void LibOtiKiosk_Register_GetTokenResponse_Callback(GetTokenCb_t cb);
     ```
+
+    **Parameters:**
+
+    **`cb`**: A callback function of type `void (*)(otiKioskGetTokenResponse* resp)`. This function is triggered automatically when a card token operation completes.
+
+    The callback receives a pointer to an `otiKioskGetTokenResponse` struct with the token result:
+
+    ```c C
+    typedef struct {
+        otiTransactionStatus status;        // Operation status
+        int error_code;                      // Error code if failed
+        char error_message[100];             // Error description
+        char card_token[128];                // Generated card token
+        char card_type[32];                  // Card scheme (e.g., EMV, Visa, Mifare)
+    } otiKioskGetTokenResponse;
+    ```
+
+    **Struct fields:**
+
+    | Field           | Description                                                                                                   |
+    | :-------------- | :-------------------------------------------------------------------------------------------------------------- |
+    | `status`        | Status of the token operation. Same values as the JSON `status` field.                                        |
+    | `error_code`    | Numerical error code. `0` when there is no error.                                                             |
+    | `error_message` | Short technical description of the error, for developer and support use. Do not display to users.            |
+    | `card_token`    | Generated card token. Base64 string for payment cards, or the card UID for closed loop cards.                 |
+    | `card_type`     | Card scheme (for example, EMV, Visa) for payment cards, or card technology (for example, Type A, Mifare) for closed loop cards. |
   </Tab>
 </Tabs>
 
