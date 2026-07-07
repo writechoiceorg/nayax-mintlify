@@ -151,7 +151,7 @@ const UnattendedDeviceIcon = () => (
       icon: <AuthToolIcon />,
       title: "Auth Tool",
       subtitle: "Spark",
-      description: "Encrypt or decrypt the StartAuthentication and StartSession ciphers and build request signatures, in your browser.",
+      description: "Encrypt or decrypt the StartAuthentication and StartSession ciphers and build the Header Signature, in your browser.",
       link: "/docs/integrate-pos-device/spark/security-authentication/spark-auth-tool",
     },
     {
