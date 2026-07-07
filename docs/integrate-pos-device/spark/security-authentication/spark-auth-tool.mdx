@@ -8,7 +8,16 @@ import { SparkAuthTool } from "/snippets/SparkAuthTool.jsx";
 
 Use this tool to handle Spark authentication without writing any code. Everything runs in your browser, so your token and sign key never leave your machine.
 
-Use the tabs at the top to switch between **StartAuthentication**, **StartSession**, and **Header Signature**. On the StartAuthentication tab, the **Auth** and **Legacy Auth (v1)** sub-tabs cover the current and legacy signature flows.
+The tabs at the top cover the three operations the tool performs:
+
+- **StartAuthentication**: build or inspect the cipher and the
+  `TransactionSignature` header for the `StartAuthentication` call, the
+  integrator's first request to open a transaction. The **Auth** and **Legacy
+  Auth (v1)** sub-tabs cover the current and legacy signature flows.
+- **StartSession**: build or inspect the `Cipher` your server returns when
+  Nayax sends a `StartSession` request to open a session.
+- **Header Signature**: generate the `IntegratorId` and `TransactionSignature`
+  headers that authenticate a Spark API request.
 
 <SparkAuthTool />
 
