@@ -191,7 +191,7 @@ paths:
         content: |
           The `StartAuthentication` endpoint is the first step for any External Settlement. Use this to verify your server’s identity with Nayax and create a secure link for the transaction.
 
-          <Card title="Try it: Spark Auth Tool" icon="bolt" href="/docs/integrate-pos-device/spark/security-authentication/spark-authentication" arrow>
+          <Card title="Try it: Spark Auth Tool" icon="bolt" href="/docs/integrate-pos-device/spark/security-authentication/spark-auth-tool" arrow>
             Build and inspect the cipher and the `TransactionSignature` header for this endpoint in your browser, no code required.
           </Card>
 
@@ -264,7 +264,7 @@ paths:
         content: |
           This is the initial API call sent by Nayax. It initiates the transaction session by authenticating both parties and generating a `SparkTransactionId`, which will be echoed in all subsequent calls throughout the transaction's lifecycle.
 
-          <Card title="Try it: Spark Auth Tool" icon="bolt" href="/docs/integrate-pos-device/spark/security-authentication/spark-authentication#startsession" arrow>
+          <Card title="Try it: Spark Auth Tool" icon="bolt" href="/docs/integrate-pos-device/spark/security-authentication/spark-auth-tool#startsession" arrow>
             Build or inspect the `StartSession` cipher in your browser, no code required. Opens the tool on the StartSession tab.
           </Card>
       tags:

@@ -4,18 +4,7 @@ metadata:
   og:description: "To ensure secure communication, every request sent by the Integrator must include two specific authentication headers. These headers verify your."
 ---
 
-import { SparkAuthTool } from "/snippets/SparkAuthTool.jsx";
-
 To ensure secure communication, every request sent by the Integrator must include two specific authentication headers. These headers verify your identity and ensure the integrity of the transaction data.
-
-## Interactive Authentication Tool
-
-Use the tool below to handle Spark authentication without writing any code. Everything runs in your browser, so your token and sign key never leave your machine. 
-Use the tabs at the top to switch between **StartAuthentication**, **StartSession**, and **Header Signature**.
-
-<SparkAuthTool />
-
-The following sections explain what the tool does under the hood.
 
 ## Prerequisites
 
@@ -76,4 +65,12 @@ curl --location 'https://{your-domain}/api/StartAuthentication' \
 
 ## See Also
 
-<Card icon="link" title="Transaction Flows" href="/docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark" />
+<Columns cols={2}>
+  <Card icon="bolt" title="Interactive Authentication Tool" href="/docs/integrate-pos-device/spark/security-authentication/spark-auth-tool">
+    Build and inspect ciphers and signature headers in your browser, no code required.
+  </Card>
+
+  <Card icon="link" title="Transaction Flows" href="/docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark">
+    How authentication fits into the full Spark transaction sequence.
+  </Card>
+</Columns>
