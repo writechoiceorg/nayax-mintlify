@@ -6,4 +6,16 @@ metadata:
 
 In Nayax, devices are the hardware components or equipment integrated into your operations. These can include payment terminals or connected hardware to facilitate transactions, manage inventory, or provide customer services. Each device is uniquely identifiable within the Nayax platform, enabling seamless management, monitoring, and configuration.
 
-This section contains guides to help you manage devices through Lynx API. Below is a list of the available guides:
+<Columns cols={2}>
+  <Card icon="circle-info" title="Retrieve Device Information" href="/docs/manage-data-operations/lynx-api/devices/getting-all-devices-under-an-operator">
+    View device attributes such as operator, model, ID, and status via Nayax Core or Lynx API.
+  </Card>
+
+  <Card icon="circle-stop" title="Disable a Device" href="/docs/manage-data-operations/lynx-api/devices/disabling-a-device">
+    Stop a device from processing payments and orders by disabling it via a Lynx API PUT request.
+  </Card>
+
+  <Card icon="arrow-right-arrow-left" title="Move Devices Between Operators" href="/docs/manage-data-operations/lynx-api/devices/moving-device-between-operators">
+    Reassign a device from one operator to another within your Nayax hierarchy using a Lynx API endpoint.
+  </Card>
+</Columns>

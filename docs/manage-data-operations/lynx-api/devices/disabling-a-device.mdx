@@ -10,7 +10,7 @@ Sometimes, you may want to disable a device associated with a Machine to stop it
 
 <EndpointCard
   title="Update Device"
-  href="/reference/lynx/devices/get-device-by-deviceid"
+  href="/reference/lynx/devices/update-device"
   method="put"
 />
 
@@ -22,11 +22,11 @@ Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) 
 
 ## Disabling the Device
 
-Use the [Update Device](ref:/update-device-by-deviceid) endpoint to update the device's status. You need to provide the `DeviceID`, `ActorID` (operator ID), and the new status flag. See an example request in the code block below:
+Use the [Update Device](/reference/lynx/devices/update-device) endpoint to update the device's status. You need to provide the `DeviceID`, `ActorID` (operator ID), and the new status flag. See an example request in the code block below:
 
 ```sh
 curl -X PUT "https://qa-lynx.nayax.com/operational/v1/devices/<DEVICE_ID>" \
--H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+-H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
 -H "Content-Type: application/json" \
 -d '{
   "ActorID": "<ACTOR_ID>",

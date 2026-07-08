@@ -97,39 +97,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Actors'
-  /v1/actors/{ParentActorID}:
-    post:
-      tags:
-        - Actors
-      summary: Create a New Actor
-      operationId: create-new-actor
-      description: >-
-        Creates a new actor under the specified parent actor. The parent actor
-        is identified by the `ParentActorID` provided in the path. The request
-        body must contain the details of the new actor.
-      parameters:
-        - name: ParentActorID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
-          description: >-
-            The unique identifier of the parent actor under which the new actor
-            will be created.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ActorsDbEntity'
-      responses:
-        '200':
-          description: Actor created successfully.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Actors'
   /v2/actors/{ParentActorID}:
     post:
       tags:
@@ -3027,30 +2994,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RefundPaymentLynxModelResponse'
-  /v1/payment/refund-decline:
-    post:
-      tags:
-        - Payment
-      summary: Decline a Payment Refund
-      description: >-
-        Submits a request to decline a previously submitted payment refund
-        request. The request body includes details such as the transaction ID
-        and reason for declining the refund.
-      operationId: decline-payment-refund
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PaymentRefundDeclineLynxModel'
-      responses:
-        '200':
-          description: >-
-            The refund decline request was successfully processed, and the
-            response contains the result of the request.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RefundPaymentLynxModelResponse'
   /v1/payment/refund-approve:
     post:
       tags:
@@ -3071,6 +3014,30 @@ paths:
           description: >-
             The refund approval was successfully processed, and the response
             contains the result of the approval.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundPaymentLynxModelResponse'
+  /v1/payment/refund-decline:
+    post:
+      tags:
+        - Payment
+      summary: Decline a Payment Refund
+      description: >-
+        Submits a request to decline a previously submitted payment refund
+        request. The request body includes details such as the transaction ID
+        and reason for declining the refund.
+      operationId: decline-payment-refund
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRefundDeclineLynxModel'
+      responses:
+        '200':
+          description: >-
+            The refund decline request was successfully processed, and the
+            response contains the result of the request.
           content:
             application/json:
               schema:
@@ -4348,10 +4315,9 @@ paths:
 components:
   securitySchemes:
     Authorization:
-      type: apiKey
-      description: Enter your API key. It's required to authenticate API requests.
-      name: Authorization
-      in: header
+      type: http
+      scheme: bearer
+      description: Enter your Bearer token. It's required to authenticate API requests.
   schemas:
     WidgetDataResponseDto:
       type: object
