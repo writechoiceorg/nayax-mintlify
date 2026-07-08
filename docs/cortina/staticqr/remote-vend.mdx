@@ -6,13 +6,27 @@ Remote Vend allows the integrator to initiate a transaction with the selected pr
 
 The selected product can be sent as a product code for MDB or Marshal machines, or a specific pulse line ID for Pulse machines.
 
+<Warning>
+  This functionality is <u>only supported for the following protocols</u>:
+
+  - MDB level 3 (needs both the physical machine to support MDB level 3 as well as have matching configurations on Nayax Core)
+  - Pulse
+
+  **NOT** supported for:
+
+  - MDB level 1 / 2
+  - Marshall
+</Warning>
+
 <Note>
-This functionality is currently supported only with `VPOS\ONYX` device.
+  This functionality is currently supported only with `VPOS\ONYX` device.
 </Note>
 
 ## Virtual Machine's configurations:
 
-<Frame><img src="/images/docs/remote-vend/image1.png" /></Frame>
+<Frame>
+  ![](/images/docs/remote-vend/image1.png)
+</Frame>
 
 ## How to Implement
 
@@ -55,7 +69,7 @@ Cortina V1/V2:
 
 ### Not Pulse (MDB, Marshall etc.)
 
-* MDB- note that Remote Vend is supported on MDB machines with level 3 only (a protocol limitation)
+- MDB- note that Remote Vend is supported on MDB machines with level 3 only (a protocol limitation)
 
 #### What is the format of the call?
 
