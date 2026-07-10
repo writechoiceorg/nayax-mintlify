@@ -70,7 +70,7 @@ See the API Signature for the `CancelTransaction` method:
 
 ## `ConfirmTransaction`
 
-A confirmation request is the second stage of an authorization request. It is used to confirm the authorization obtained so that settlement can proceed.
+A confirmation request is the second stage of the authorization flow. It confirms the pre-authorization so that settlement can take place.
 
 ### API Signature
 
@@ -116,8 +116,7 @@ A confirmation request is the second stage of an authorization request. It is us
     Request:
 
     ```json JSON
-    {"jsonrpc":"2.0","method":"ConfirmTransaction", "params": {"amount":450,
-    "fee":0, "productID":42, "transaction_Reference":"6103587330"}, "id":8}
+    {"jsonrpc":"2.0","method":"ConfirmTransaction", "params": {"amount":450, "fee":0, "productID":42, "transaction_Reference":"6103587330", "AdditionalReceiptData":{"Message": "Purchase confirmed", "VAT_Percentage": 10}}, "id":8}
     ```
 
     Response:
@@ -128,13 +127,14 @@ A confirmation request is the second stage of an authorization request. It is us
 
     **Parameters:**
 
-    | Parameter                | Description                                                                                                                        |
-    | :----------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
-    | **id**                   | Command ID.                                                                                                                        |
-    | **amount**               | The actual amount to charge – in minor units (cents).                                                                              |
-    | **transactionReference** | Transaction reference from the PSP. Use the `TransactionDbID` field from the `TransactionComplete` event.                          |
-    | **productID**            | Optional parameter: ID of the product selected by the consumer. This number will be saved on the server and available for reports. |
-    | **terminal\_data**       | Optional parameter: `terminal_data=(key1=value1,key2=value2)`.                                                                     |
+    | Parameter                 | Description                                                                                                                        |
+    | :------------------------ | :--------------------------------------------------------------------------------------------------------------------------------- |
+    | **id**                    | Command ID.                                                                                                                        |
+    | **amount**                | The actual amount to charge – in minor units (cents).                                                                              |
+    | **transactionReference**  | Transaction reference from the PSP. Use the `transactionId` field from the `TransactionComplete` event.                          |
+    | **productID**             | Optional parameter: ID of the product selected by the consumer. This number will be saved on the server and available for reports. |
+    | **terminal\_data**        | Optional parameter: `terminal_data=(key1=value1,key2=value2)`.                                                                     |
+    | **AdditionalReceiptData** | Optional. JSON object with extra receipt data to include at confirmation time.                                                      |
   </Tab>
 
   <Tab title="Android">
@@ -153,17 +153,18 @@ A confirmation request is the second stage of an authorization request. It is us
 
   <Tab title="Linux">
     ```c C
-    KIOSK_RET LibOtiKiosk_ConfirmTransaction(uint32_t amount_cents, uint32_t fee_cents, uint32_t product_id, char* transaction_reference);
+    KIOSK_RET LibOtiKiosk_ConfirmTransaction(uint32_t amount_cents, uint32_t fee_cents, uint32_t product_id, char* transaction_reference, char* additional_receipt_data);
     ```
 
     **Parameters:**
 
-    | Parameter               | Description                                           |
-    | ----------------------- | ----------------------------------------------------- |
-    | `amount_cents`          | Amount to charge in minor units (cents, not dollars). |
-    | `fee_cents`             | Optional fee amount in minor units.                   |
-    | `transaction_reference` | Unique reference from pre-authorization.              |
-    | `product_id`            | Product identifier.                                   |
+    | Parameter                  | Description                                           |
+    | --------------------------- | ----------------------------------------------------- |
+    | `amount_cents`               | Amount to charge in minor units (cents, not dollars). |
+    | `fee_cents`                  | Deprecated. Not used.                                 |
+    | `transaction_reference`      | Unique reference from pre-authorization.              |
+    | `product_id`                 | Product identifier.                                   |
+    | `additional_receipt_data`    | Optional. JSON string with extra receipt data to include at confirmation time. Can be `NULL`. |
   </Tab>
 </Tabs>
 
@@ -176,7 +177,7 @@ The `GetCardToken` method initiates the card tokenization process, returning a c
 EMV Core waits for a card to be presented, reads the data, and triggers a `CardTokenReceived` event:
 
 * **Payment Cards:** Returns a Base64 string containing the card token.
-* **CLP Cards (e.g., Mifare):** Returns the card UID.
+* **CLP Cards (for example, Mifare):** Returns the card UID.
 
 ### API Signature
 
@@ -233,7 +234,7 @@ EMV Core waits for a card to be presented, reads the data, and triggers a `CardT
 
 ## `PreAuthorize`
 
-This method initiates a pre-authorization transaction with a specified amount. It helps reserve funds without immediate settlement, for example, EV chargers reserve a maximum amount before actual usage. EMV Core will wait for a card to be presented to the reader, read it, and, if needed, process it with the payment service. It will then send the `TransactionComplete` event.
+Use `PreAuthorize` to pre-authorize a card with the payment processor. EMV Core waits for a card, reads it, and processes it with the payment service if needed. It then sends a `TransactionComplete` event.
 
 ### API Signature
 
@@ -242,9 +243,7 @@ This method initiates a pre-authorization transaction with a specified amount. I
     Request:
 
     ```json JSON
-    {"jsonrpc":"2.0","method":"PreAuthorize", "params": {"amount":450,
-    "timeout":10, "fee":0, "productID":0, "continuous":false}, "id":801}
-
+    {"jsonrpc":"2.0","method":"PreAuthorize", "params": {"amount":450, "timeout":10, "productID":0, "continuous":false, "AdditionalReceiptData": {"Message": "Good Morning", "VAT_Percentage": 10}, "isFinalAmount":false, "deferred":false}, "id":801}
     ```
 
     Response:
@@ -256,14 +255,17 @@ This method initiates a pre-authorization transaction with a specified amount. I
 
     **Parameters:**
 
-    | Parameter      | Description                                                                                                                                                                |
-    | :------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-    | **amount**     | Amount to charge – in full units (Dollars, not cents).                                                                                                                     |
-    | **fee**        | Deprecated – Not used.                                                                                                                                                     |
-    | **currency**   | Taken from configuration since SDK v1.4.                                                                                                                                   |
-    | **productID**  | Optional parameter: ID of the product selected by the consumer. This number will be saved in the server and available for reports.                                         |
-    | **continuous** | If continuous is true, then poll for card will start immediately after card transaction timeout and `TransactionComplete` event will be sent with status ‘PollContinuous’. |
-    | **timeout**    | Maximum seconds to wait. If no card arrives, the request returns a `Timeout` status.                                                                                       |
+    | Parameter                 | Description                                                                                                                                                                                                                                                                                                                                                    |
+    | :------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | **amount**                | Amount to charge in full units (Dollars, not cents).                                                                                                                                                                                                                                                                                                         |
+    | **fee**                   | Deprecated. Not used.                                                                                                                                                                                                                                                                                                                                         |
+    | **currency**              | Taken from configuration since SDK v1.4. If `CURRENCY_CODE` is not set, SDK v1.5 reads the currency from the reader's tag `9F3C` on the first transaction, and falls back to USD (840) if that's also unavailable.                                                                                                                                          |
+    | **productID**             | Optional parameter: ID of the product selected by the consumer. This number will be saved in the server and available for reports.                                                                                                                                                                                                                              |
+    | **continuous**            | If continuous is true, then poll for card will start immediately after card transaction timeout and `TransactionComplete` event will be sent with status ‘PollContinuous’.                                                                                                                                                                                      |
+    | **timeout**               | Maximum seconds to wait. If no card arrives, the request returns a `Timeout` status.                                                                                                                                                                                                                                                                           |
+    | **AdditionalReceiptData** | Optional. JSON object with extra receipt data passed to the PSP and included in the eReceipt.                                                                                                                                                                                                                                                                  |
+    | **isFinalAmount**         | `true`: fixed amount, indicates `pre-selection` flow. `false`: amount may change, indicates `pre-authorization` flow. When used with `deferred=false`, the host must call `ConfirmTransaction` or `VoidTransaction` in both cases. When used with `deferred=true`, no need to call `ConfirmTransaction` or `VoidTransaction`. The transaction settles automatically. |
+    | **deferred**              | Optional. `true`: Deferred Authorization (Transit mode). Card read offline, authorization queued for settlement. See Deferred Transaction for details.                                                                                                                                                                                                         |
   </Tab>
 
   <Tab title="Android">
@@ -275,7 +277,7 @@ This method initiates a pre-authorization transaction with a specified amount. I
 
     | Parameter          | Description                                                                                                    |
     | ------------------ | -------------------------------------------------------------------------------------------------------------- |
-    | `amountMinorUnits` | Amount to charge in minor units (e.g., cents, not dollars).                                                    |
+    | `amountMinorUnits` | Amount to charge in minor units (for example, cents, not dollars).                                                    |
     | `productID`        | ID of the product selected by the consumer. This number will be saved on the server and available for reports. |
     | `timeoutSeconds`   | Maximum wait time for card presentation.                                                                       |
     | `continuous`       | Whether to enable continuous polling.                                                                          |
@@ -285,10 +287,12 @@ This method initiates a pre-authorization transaction with a specified amount. I
     ```c C
     otiKioskPaymentParameters params = {
         .amount_cents = 1500, // $15.00
-        .fee_cents = 0,
         .product_id = 12345,
         .timeout_sec = 60,
-        .continuous = false
+        .continuous = false,
+        .additional_receipt_data = NULL,
+        .is_deferred = false,
+        .is_final_amount = false
     };
 
     KIOSK_RET result = LibOtiKiosk_PreAuthorize(&params);
@@ -299,13 +303,15 @@ This method initiates a pre-authorization transaction with a specified amount. I
 
     **Parameters:**
 
-    | Parameter      | Description                                                                                                    |
-    | -------------- | -------------------------------------------------------------------------------------------------------------- |
-    | `amount_cents` | Amount to charge in minor units (e.g., cents, not dollars).                                                    |
-    | `fee_cents`    | Optional fee amount in minor units.                                                                            |
-    | `product_id`   | ID of the product selected by the consumer. This number will be saved on the server and available for reports. |
-    | `timeout_sec`  | Maximum wait time for card presentation.                                                                       |
-    | `continuous`   | Whether to enable continuous polling.                                                                          |
+    | Parameter                  | Description                                                                                                    |
+    | --------------------------- | -------------------------------------------------------------------------------------------------------------- |
+    | `amount_cents`               | Amount to charge in minor units (for example, cents, not dollars).                                                    |
+    | `product_id`                 | ID of the product selected by the consumer. This number will be saved on the server and available for reports. |
+    | `timeout_sec`                | Maximum wait time for card presentation.                                                                       |
+    | `continuous`                 | Whether to enable continuous polling.                                                                          |
+    | `additional_receipt_data`    | Optional. JSON string with extra receipt data passed to the PSP and included in the eReceipt. Can be `NULL`.   |
+    | `is_deferred`                | Optional. `true` for Deferred Authorization (Transit mode): the card is read offline and the authorization is queued for settlement. |
+    | `is_final_amount`            | `true`: fixed amount, indicates the pre-selection flow. `false`: amount may change, indicates the pre-authorization flow. |
   </Tab>
 </Tabs>
 
@@ -313,7 +319,7 @@ This method initiates a pre-authorization transaction with a specified amount. I
   Setting `productID` to a non-zero value marks the pre-authorized amount as final; it cannot be changed in `ConfirmTransaction`. If the final amount is not yet known, set `productID = 0` in `PreAuthorize` and provide the actual ID in `ConfirmTransaction`.
 </Warning>
 
-If the transaction is approved (the `TransactionComplete` event returns with status `OK`), the application must call the `ConfirmTransaction` or `VoidTransaction` methods to complete the workflow.
+If the transaction is approved (the `TransactionComplete` event returns with status `OK`), your application must call `ConfirmTransaction` or `VoidTransaction` to complete the flow.
 
 ***
 

@@ -4,18 +4,45 @@ metadata:
   og:description: "This section provides a comprehensive guide to managing inventory within the Nayax system. It covers all the key stages of the inventory management."
 ---
 
-This section provides a comprehensive guide to managing inventory within the Nayax system. It covers all the key stages of the inventory management process, from organizing products into groups to generating actionable pick lists for restocking machines. Below is a list of the available guides:
+Start with the Inventory Workflow to understand the mandatory four-step sequence before diving into the individual guides.
 
-<Columns cols={2}>
-  <Card icon="link" title="Inventory Workflow" href="/docs/manage-data-operations/lynx-api/inventory-management/inventory-workflow" />
+<Card
+  title="Inventory Workflow"
+  icon="diagram-project"
+  href="/docs/manage-data-operations/lynx-api/inventory-management/inventory-workflow"
+>
+  The four-step sequence for setting up inventory, from product groups to pick lists.
+</Card>
 
-  <Card icon="link" title="Product Groups" href="/docs/manage-data-operations/lynx-api/inventory-management/create-product-group" />
+<CardGroup cols={2}>
+  <Card
+    title="Product Groups"
+    icon="layer-group"
+    href="/docs/manage-data-operations/lynx-api/inventory-management/create-product-group"
+  >
+    Create logical categories for your products, such as Beverages or Snacks.
+  </Card>
+  <Card
+    title="Operator Products"
+    icon="box"
+    href="/docs/manage-data-operations/lynx-api/inventory-management/create-products"
+  >
+    Add products to your catalog with pricing, barcodes, and group assignments.
+  </Card>
+  <Card
+    title="Machine Products"
+    icon="map"
+    href="/docs/manage-data-operations/lynx-api/inventory-management/machine-products-1"
+  >
+    Map catalog products to machine bins to define each machine's layout.
+  </Card>
+  <Card
+    title="Pick Lists"
+    icon="clipboard-list"
+    href="/docs/manage-data-operations/lynx-api/inventory-management/pick-lists"
+  >
+    Generate restocking lists with the products and quantities each machine needs.
+  </Card>
+</CardGroup>
 
-  <Card icon="link" title="Operator Products" href="/docs/manage-data-operations/lynx-api/inventory-management/create-products" />
-
-  <Card icon="link" title="Machine Products" href="/docs/manage-data-operations/lynx-api/inventory-management/machine-products-1" />
-
-  <Card icon="link" title="Pick Lists" href="/docs/manage-data-operations/lynx-api/inventory-management/pick-lists" />
-
-  <Card icon="link" title="Pick List Actions" href="/docs/manage-data-operations/lynx-api/inventory-management/pick-list-actions" />
-</Columns>
+See [Pick List Actions](/docs/manage-data-operations/lynx-api/inventory-management/pick-list-actions) to update, retrieve, or delete existing pick lists.

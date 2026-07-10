@@ -395,8 +395,8 @@
               },
               {
                 "group": "UNO-mini Hardware",
-                "root": "docs/integrate-pos-device/emv-core/uno-mini/uno-mini-overview",
                 "pages": [
+                  "docs/integrate-pos-device/emv-core/uno-mini/uno-mini-overview",
                   "docs/integrate-pos-device/emv-core/uno-mini/uno-mini-mechanical",
                   "docs/integrate-pos-device/emv-core/uno-mini/uno-mini-user-interface",
                   "docs/integrate-pos-device/emv-core/uno-mini/uno-mini-power-supply",
@@ -421,13 +421,13 @@
                 "pages": [
                   "docs/integrate-pos-device/spark/spark",
                   "docs/integrate-pos-device/spark/spark-integration-process",
-                  "docs/integrate-pos-device/spark/spark-integration",
                   "docs/integrate-pos-device/spark/spark-network-requirement",
                   {
                     "group": "Security & Authentication",
                     "pages": [
                       "docs/integrate-pos-device/spark/security-authentication/spark-authentication",
-                      "docs/integrate-pos-device/spark/security-authentication/spark-legacy-authentication"
+                      "docs/integrate-pos-device/spark/security-authentication/spark-legacy-authentication",
+                      "docs/integrate-pos-device/spark/security-authentication/spark-auth-tool"
                     ],
                     "root": "docs/integrate-pos-device/spark/security-authentication/index"
                   },
@@ -441,6 +441,17 @@
                       "docs/integrate-pos-device/spark/payment-flows/external-cancel"
                     ],
                     "root": "docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark"
+                  },
+                  {
+                    "group": "Machine Configuration",
+                    "pages": [
+                      "docs/integrate-pos-device/spark/machine-configuration/spark-remote-start-configuration",
+                      "docs/integrate-pos-device/spark/machine-configuration/spark-device-start-configuration",
+                      "docs/integrate-pos-device/spark/machine-configuration/spark-device-stop-configuration",
+                      "docs/integrate-pos-device/spark/machine-configuration/spark-external-settlement-configuration",
+                      "docs/integrate-pos-device/spark/machine-configuration/additional-features"
+                    ],
+                    "root": "docs/integrate-pos-device/spark/machine-configuration/index"
                   },
                   {
                     "group": "Webhook Callbacks",
@@ -759,9 +770,18 @@
         ]
       },
       {
-        "tab": "MCP Server",
+        "tab": "Build with AI",
         "icon": "robot",
-        "pages": ["docs/get-started/mcp-setup"]
+        "pages": [
+          {
+            "group": "Build with AI",
+            "root": "docs/get-started/build-with-ai",
+            "pages": [
+              "docs/get-started/mcp-setup",
+              "docs/get-started/agent-skills"
+            ]
+          }
+        ]
       },
       {
         "tab": "Release Notes",

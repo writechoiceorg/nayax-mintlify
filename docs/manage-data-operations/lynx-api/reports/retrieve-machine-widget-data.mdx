@@ -4,7 +4,7 @@ metadata:
   og:description: "The Lynx Widget API provides access to widget data. In this article, you will learn how to retrieve widget information using API calls, from listing available widgets to obtaining data from a specific widget."
 ---
 
-The Widgets Dashboard APIs allow you to discover which widgets are available for a given screen and then fetch the data for each individual widget. The APIs are exposed by the Lynx Operational API and proxy requests to the internal Cortex Reports service.
+The Widgets Dashboard APIs let you discover which widgets are available for a given screen and fetch the data for each individual widget.
 
 ## Prerequisites
 
@@ -12,7 +12,7 @@ Before making calls to the Widget API, you need to have:
 
 * Access to the Lynx QA or Production environment
 * A valid API token (See [Security & Token](/docs/manage-data-operations/lynx-api/security))
-* [Machines](/reference/lynx/machines/get-machine-basic-info) or [Operator](/docs/manage-data-operations/lynx-api/operator/index) IDs
+* [Machines](/reference/lynx/machines/get-specific-machine-basic-info) or [Operator](/docs/manage-data-operations/lynx-api/operator/index) IDs
 
 ## Base URL
 
@@ -33,7 +33,7 @@ https://<host>/v1/dashboard
 All endpoints require authentication via JWT bearer token. Include the token in every request:
 
 ```text
-Authorization: Bearer <token>
+Authorization: Bearer <YOUR_ACCESS_TOKEN>
 ```
 
 See [Security & Token](/docs/manage-data-operations/lynx-api/security) for details on obtaining a token.
@@ -42,19 +42,15 @@ See [Security & Token](/docs/manage-data-operations/lynx-api/security) for detai
 
 The following endpoints are available. Select a card to view the full API reference.
 
-<Columns cols={3}>
-  <Card icon="link" title="List Widgets for a Screen" href="/reference/lynx/report/get-dashboard-widgets">
+<CardGroup cols={2}>
+  <Card icon="grid" title="List Widgets for a Screen" href="/reference/lynx/report/get-available-widgets">
     Returns all widgets configured for a given screen type, including their IDs, names, and configurations.
   </Card>
 
-  <Card icon="link" title="Retrieve Widget Data (POST)" href="/reference/lynx/report/get-widget-data">
+  <Card icon="chart-line" title="Retrieve Widget Data" href="/reference/lynx/report/retrieve-widget-data">
     Fetches data for a specific widget with full filter support (date range, machine ID, etc.). **Recommended for most use cases.**
   </Card>
-
-  <Card icon="link" title="Retrieve Widget Data (GET)">
-    Simple variant for fetching widget data via query parameters. No filter support - use the POST variant when filters are needed.
-  </Card>
-</Columns>
+</CardGroup>
 
 <Note>
   The GET simple variant (`GET /v1/dashboard/widget-data`) is not included in the API reference as it is not defined in the OpenAPI spec. Use the POST variant for filter support and full API reference coverage.

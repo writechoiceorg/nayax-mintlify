@@ -102,6 +102,15 @@ const UnattendedDeviceIcon = () => (
     </svg>
   );
 
+  const AuthToolIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="54" viewBox="0 0 48 54" fill="none">
+      <rect x="11" y="22" width="26" height="18" rx="2" stroke="#FFCD00" strokeWidth="3" strokeLinejoin="round" />
+      <path d="M16 22v-4a8 8 0 0 1 16 0v4" stroke="#FFCD00" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="24" cy="30" r="2.5" fill="#FFCD00" />
+      <path d="M24 32.5v4" stroke="#FFCD00" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+
   const cards = [
     {
       icon: <UnattendedDeviceIcon />,
@@ -137,6 +146,13 @@ const UnattendedDeviceIcon = () => (
       subtitle: "Spark",
       description: "Remotely integrate your platform with Nayax devices via server-to-server connection.",
       link: "/docs/integrate-pos-device/spark/spark-integration-process",
+    },
+    {
+      icon: <AuthToolIcon />,
+      title: "Auth Tool",
+      subtitle: "Spark",
+      description: "Encrypt or decrypt the StartAuthentication and StartSession ciphers and build the Header Signature, in your browser.",
+      link: "/docs/integrate-pos-device/spark/security-authentication/spark-auth-tool",
     },
     {
       icon: <EVChargerIcon />,
