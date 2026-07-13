@@ -1,13 +1,13 @@
 ---
 title: "Connect to the VPOS Service"
-description: "Add the vpos-api SDK, bind to the VPOS service, and register your Android app so it can take payments on VPOS Media."
+description: "Add the VPOS Service API library, bind to the VPOS service, and register your Android app so it can take payments on VPOS Media."
 metadata:
-  og:description: "Add the vpos-api SDK, bind to the VPOS service, and register your Android app so it can take payments on VPOS Media."
+  og:description: "Add the VPOS Service API library, bind to the VPOS service, and register your Android app so it can take payments on VPOS Media."
 ---
 
 Every App to App integration starts with the same connection sequence, and every
-payment flow depends on it. Because the sequence is identical for pre-selection
-and pre-authorization, you build it once and reuse it for every payment.
+payment flow depends on it. Because the sequence is identical for Pre-Selection
+and Pre-Authorization, you build it once and reuse it for every payment.
 
 ## Prerequisites
 
@@ -18,10 +18,12 @@ Before you connect, make sure you have:
 * A VPOS Media test device in test mode, with your APK installed alongside
   Nayax's payment app.
 
-## Add the SDK
+## Build the Integration
 
-Place the `vpos-api` AAR in your module's `libs/` folder and add it as a
-dependency.
+<Steps>
+  <Step title="Add the SDK">
+    Place the `vpos-api` AAR in your module's `libs/` folder and add it as a
+    dependency:
 
 ```groovy
 dependencies {
@@ -29,12 +31,14 @@ dependencies {
 }
 ```
 
-Add three entries to your `AndroidManifest.xml`. The `SYSTEM_ALERT_WINDOW`
-permission lets the VPOS service draw the payment screens over your app, the
-`queries` entry lets your app find the service, and the
-`payment_ui_activity_t` activity is required when you use the built-in payment
-UI. Without that activity, a payment call with `showUI = true` throws
-`ActivityNotFoundException`.
+    Then add three entries to your `AndroidManifest.xml`:
+
+    * **`SYSTEM_ALERT_WINDOW` permission**, so the VPOS service can draw the
+      payment screens over your app.
+    * **`queries` entry**, so your app can find the VPOS service.
+    * **`payment_ui_activity_t` activity**, required for the built-in payment UI.
+      A payment call with `showUI = true` throws `ActivityNotFoundException`
+      without it.
 
 ```xml
 <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -49,14 +53,18 @@ UI. Without that activity, a payment call with `showUI = true` throws
         android:exported="false" />
 </application>
 ```
+  </Step>
+  <Step title="Connect and register">
+    Connecting takes four moves:
 
-## Connect and register
+    1. Get the connector with `getInstance`.
+    2. Set a `Listener` on it. Binding is asynchronous, so the result arrives
+       there.
+    3. Call `init` with your context, then `bind`.
+    4. When `on_vpos_connected` fires, read the `general` and `payment`
+       interfaces and call `register_application`.
 
-Get the shared connector with `getInstance`, set a listener, then call `init`
-and `bind`. Binding is asynchronous, so the result arrives on the listener. When
-`on_vpos_connected` fires, read the `general` and `payment` interfaces from the
-connector and register your application. After `register_application` returns,
-your app is ready to take payments.
+    Together, that looks like this:
 
 ```java
 vpos_service_remote_connector connector = vpos_service_remote_connector.getInstance();
@@ -87,10 +95,17 @@ connector.init(context);
 connector.bind();
 ```
 
-Set `force_launch` to `true` when your app displays the built-in payment UI. The
-last argument to `register_application` is an optional `device_listener_i`: pass
-one to receive device readiness and attribute events, or `null` if you do not
-need them.
+    Two `register_application` arguments are worth noting:
+
+    * **`force_launch`:** set it to `true` when your app displays the built-in
+      payment UI.
+    * **`device_listener_i`** (last argument): optional. Pass one to receive
+      device readiness and attribute events, or `null` if you do not need them.
+  </Step>
+</Steps>
+
+Your app is now connected, registered, and ready to take payments. Choose a
+payment flow to run your first transaction.
 
 ## Next Steps
 

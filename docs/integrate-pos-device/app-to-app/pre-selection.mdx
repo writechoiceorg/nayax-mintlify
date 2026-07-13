@@ -1,8 +1,8 @@
 ---
 title: "Pre-Selection Payment"
-description: "Run a single-phase pre-selection payment on VPOS Media with payment.pay, which detects the card, authorizes, and settles in one call."
+description: "Run a single-phase pre-selection payment on VPOS Media that detects the card, authorizes, and settles in a single call."
 metadata:
-  og:description: "Run a single-phase pre-selection payment on VPOS Media with payment.pay, which detects the card, authorizes, and settles in one call."
+  og:description: "Run a single-phase pre-selection payment on VPOS Media that detects the card, authorizes, and settles in a single call."
 ---
 
 A pre-selection payment is the regular flow: the consumer picks a product or
@@ -11,7 +11,7 @@ together, so you run the whole transaction with a single `payment.pay` call.
 
 Use pre-selection when the final amount is known before the consumer pays, such
 as a fixed-price wash cycle or a kiosk item. When you need to authorize first and
-capture a final amount later, use [pre-authorization](/docs/integrate-pos-device/app-to-app/pre-authorization)
+capture a final amount later, use [Pre-Authorization](/docs/integrate-pos-device/app-to-app/pre-authorization)
 instead.
 
 ## The Pay Method
@@ -19,7 +19,7 @@ instead.
 `payment.pay` runs the whole transaction. You pass the amount in minor units
 (for example, cents), a channel bitmask that selects which payment methods to
 accept, a `payment_listener_i` to receive the result, and a `showUI` flag that
-chooses the built-in or custom screens.
+chooses the built-in or custom screens:
 
 ```java
 payment.pay(
@@ -73,23 +73,23 @@ The pre-selection flow runs in one phase. After your app calls `pay`, the
 service drives the card interaction and reports each step through the listener.
 
 <Steps>
-  <Step title="Your App Starts the Payment">
+  <Step title="Your app starts the payment">
     The consumer selects a product or amount in your app. Your app calls
     `payment.pay` with the amount, the channels to accept, and a
     `payment_listener_i`.
   </Step>
-  <Step title="The Service Waits for a Card">
+  <Step title="The service waits for a card">
     The VPOS service powers up the reader on the selected channels and waits for
     the consumer to present a card.
   </Step>
-  <Step title="The Card Is Detected">
+  <Step title="The card is detected">
     When the consumer presents a card, the service calls `on_card_detected`.
   </Step>
-  <Step title="The Service Authorizes">
+  <Step title="The service authorizes">
     The service runs the EMV and online authorization and calls
     `on_authorization`. If `authorized` is `true`, the payment was approved.
   </Step>
-  <Step title="The Service Settles">
+  <Step title="The service settles">
     For an approved payment, the service captures the funds and calls
     `on_settlement`. If `settled` is `true`, the transaction is complete.
   </Step>
