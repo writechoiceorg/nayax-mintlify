@@ -59,6 +59,7 @@ The table below describes the request parameters for this method.
 | `tranType` | integer | Transaction type. Values include: `1` (Regular), `3` (Forced Transaction), `6` (Cash Back), `7` (Cash), `30` (Balance), `53` (Refund). |
 | `creditTerms` | integer | Credit card payment options. Values include: `1` (Regular), `2` (Special Credit), `3` (Immediate), `6` (Credit), `8` (Settlements). |
 | `creditPayments` | integer | The number of credit payments. |
+| `payments` | integer | The number of payments, not including the first payment.<br />For example, if payments value is 2, the actual number of payments for the consumer would have is 3.<br />If the firstPaymentAmount is not provided in the request- all of the payments will be divided equally. |
 | `payments` | integer | The number of additional payments for the transaction, not including the first payment.<br />For example, if "payments" value is 2, the actual number of payments for the consumer would have is 3.<br /><br />If the firstPaymentAmount is not provided in the request- all of the payments amounts will be divided equally. |
 | `firstPaymentAmount` | integer | Amount in cents of the first payment. |
 | `paymentIndex` | integer | The index to which the payments are linked. Values include: `1` (Linked to Madad), `2` (Linked to Dollar). |
