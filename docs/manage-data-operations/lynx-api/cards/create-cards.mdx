@@ -12,34 +12,21 @@ Cards serve as versatile solutions for various business needs, such as facilitat
 
 Nayax offers several types of cards, each designed for a distinct purpose:
 
-* **Prepaid Card**: Preloaded with funds, prepaid cards are ideal for controlled spending. They are commonly used for gift cards, employee stipends, or consumer transactions and offer convenience and security.
-* **Technician Card**: Issued to service technicians or employees, these cards facilitate access to specific systems or authorize work-related transactions, ensuring secure operations in the field.
-* **Refund Card**: Designed to process refunds, these cards efficiently return funds to customers, simplifying financial workflows and enhancing customer satisfaction.
-* **Discount Card**: Used in loyalty programs or promotional campaigns, discount cards offer exclusive benefits like reduced prices or special offers, encouraging customer retention and engagement.
+- **Prepaid Card**: Preloaded with funds, prepaid cards are ideal for controlled spending. They are commonly used for gift cards, employee stipends, or consumer transactions and offer convenience and security.
+- **Technician Card**: Issued to service technicians or employees, these cards facilitate access to specific systems or authorize work-related transactions, ensuring secure operations in the field.
+- **Refund Card**: Designed to process refunds, these cards efficiently return funds to customers, simplifying financial workflows and enhancing customer satisfaction.
+- **Discount Card**: Used in loyalty programs or promotional campaigns, discount cards offer exclusive benefits like reduced prices or special offers, encouraging customer retention and engagement.
 
 In this guide, we will be showing an API request creating a prepaid card, but all of them can be created in the same way.
 
 ## Card Creation
 
 To create a new virtual credit card with Lynx API you can use the **POST** method on two different endpoints:
-<Columns cols={2}>
-<EndpointCard
-  title="V1: Create Virtual Card"
-  href="/reference/lynx/cards/create-virtual-card"
-  method="post"
-/>
-
-<EndpointCard
-  title="V2: Create New Card"
-  href="/reference/lynx/cards/create-new-card"
-  method="post"
-/>
-</Columns>
 
 <Warning>
-**Authentication**
+  **Authentication**
 
-Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
+  Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
 </Warning>
 
 The sections below will guide you through creating a card using any of these options through Lynx API.
@@ -75,39 +62,37 @@ curl --request POST \
   "use_wd_limit": true,
   "wd_limits_trans": 100
 }'
-
 ```
 
 These are the mandatory fields when using the V1 option:
 
-* `ActorID`: Operator ID tracks the card issuer.
-* `CardUniqueIdentifier`: A unique identifier for the card.
-* `CardStatus`: Card's status (1 = Active, 2 = Inactive).
-* `CardType`: Type of card.
-  * Prepaid Card: `33`
-  * Technician Card: `31`
-  * Refund Card: `34`
-  * Discount Card: `30000616`
-* `CountryID`: Country code based on ISO standards (viewable in the "Lookups" section).
-* `Currency`: Currency code.
-* `CardPhysicalType`: The physical type of the card, options are:
-  * `0000528`: Swipe Card
-  * `30000529`: Contact Card
-  * `30000530`: Contactless Card
-  * `30000531`: Contactless Sticker
-  * `30000532`: Monyx App Virtual ID
-  * `30000533`: Custom 3rd Party ID
-  * `30000534`: Dual Card Contact + Contactless
-  * `30000535`: Dual Card Swipe + Contactless
-  * `30000601`: Monyx Virtual Card
-  * `943237560`: QR Code
+- `ActorID`: Operator ID tracks the card issuer.
+- `CardUniqueIdentifier`: A unique identifier for the card.
+- `CardStatus`: Card's status (1 = Active, 2 = Inactive).
+- `CardType`: Type of card.
+  - Prepaid Card: `33`
+  - Technician Card: `31`
+  - Refund Card: `34`
+  - Discount Card: `30000616`
+- `CountryID`: Country code based on ISO standards (viewable in the "Lookups" section).
+- `Currency`: Currency ID code.
+- `CardPhysicalType`: The physical type of the card, options are:
+  - `0000528`: Swipe Card
+  - `30000529`: Contact Card
+  - `30000530`: Contactless Card
+  - `30000531`: Contactless Sticker
+  - `30000532`: Monyx App Virtual ID
+  - `30000533`: Custom 3rd Party ID
+  - `30000534`: Dual Card Contact \+ Contactless
+  - `30000535`: Dual Card Swipe \+ Contactless
+  - `30000601`: Monyx Virtual Card
+  - `943237560`: QR Code
 
 A successful request will return a JSON object containing the details of the newly created card.
 
 ### V2 endpoint
 
-The V2 option provides extended functionality, including additional fields for detailed customization. This version lets you specify card type, physical type, membership level, activation and expiration dates, and group limits.
-To create the card, send a **POST** request to the [ Create New Card](/reference/lynx/cards/create-new-card) endpoint, filling in the card details in the body parameters. See the example in the code block below:
+The V2 option provides extended functionality, including additional fields for detailed customization. This version lets you specify card type, physical type, membership level, activation and expiration dates, and group limits. To create the card, send a **POST** request to the [ Create New Card](/reference/lynx/cards/create-new-card) endpoint, filling in the card details in the body parameters. See the example in the code block below:
 
 ```sh
 curl --request POST \
@@ -187,23 +172,22 @@ curl --request POST \
     }
   ]
 }'
-
 ```
 
 These are the mandatory fields when using the V2 option:
 
-* `CardDetails`
-  * `ActorID`: Operator ID.
-  * `CardUniqueIdentifier`: Unique card identifier.
-  * `CardTypeID`: Type of card.
-  * `PhysicalTypeID`: Physical card type.
-  * `Status`: 1 for Active.
-* `CardHolderDetails`
-  * `CardHolderName`: Name of the cardholder.
-  * `CountryID`: ISO country code.
-  * `MemberTypeID`: Membership type.
-* `CardCreditAttributes`
-  * `CurrencyID`: Currency code.
+- `CardDetails`
+  - `ActorID`: Operator ID.
+  - `CardUniqueIdentifier`: Unique card identifier.
+  - `CardTypeID`: Type of card.
+  - `PhysicalTypeID`: Physical card type.
+  - `Status`: 1 for Active.
+- `CardHolderDetails`
+  - `CardHolderName`: Name of the cardholder.
+  - `CountryID`: ISO country code.
+  - `MemberTypeID`: Membership type.
+- `CardCreditAttributes`
+  - `CurrencyID`: Currency code.
 
 A successful request will return a JSON object with the details of the created card, providing flexibility and control over card features.
 
@@ -212,16 +196,17 @@ A successful request will return a JSON object with the details of the created c
 Once you send the request to create the card using any endpoints mentioned above, you can go to Nayax Core and check if the card is present in the **Card Management** screen. Follow the steps below to do so.
 
 1. Access your Nayax Core Dashboard
-2. On the top menu, navigate to **Consumers > Card Management**
-
-   <Frame><img src="/images/docs/create-cards/image1.png" /></Frame>
+2. On the top menu, navigate to **Consumers \> Card Management**
+   <Frame>
+     ![](/images/docs/create-cards/image1.png)
+   </Frame>
 3. Now, you can search for the created card and select it from the list.
-
-   <Frame><img src="/images/docs/create-cards/image2.png" /></Frame>
+   <Frame>
+     ![](/images/docs/create-cards/image2.png)
+   </Frame>
 
 The card created through the Lynx API is available in the Nayax Core, confirming it was successfully created.
 
 <Note>
   The `ExternalApplicationUserID` field won't appear in Nayax Core, but it would appear when using the **GET** method of the [cards](/reference/lynx/cards/get-cards) endpoint.
 </Note>
-
