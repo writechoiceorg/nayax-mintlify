@@ -777,8 +777,7 @@
             "group": "Build with AI",
             "root": "docs/get-started/build-with-ai",
             "pages": [
-              "docs/get-started/mcp-setup",
-              "docs/get-started/agent-skills"
+              "docs/get-started/mcp-setup"
             ]
           }
         ]
@@ -796,6 +795,10 @@
     ]
   },
   "redirects": [
+    {
+      "source": "/docs/get-started/agent-skills",
+      "destination": "/docs/get-started/build-with-ai"
+    },
     {
       "source": "/docs/nayax-different-integrations",
       "destination": "/docs/get-started/nayax-different-integrations"
