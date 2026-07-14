@@ -1,20 +1,17 @@
 ---
 title: "Use Nayax Agent Skills"
 description: "Install Nayax agent skills to give your AI coding agent verified knowledge of Lynx API endpoints, workflows, and known pitfalls."
+hidden: true
 ---
 
-Agent skills are instruction packages that AI coding agents load on demand.
-Each Nayax skill covers one API area and steers your agent toward the correct
-endpoints, request shapes, and known pitfalls of that area, so you get
-accurate integration guidance instead of guesswork.
+Agent skills are instruction packages that AI coding agents load on demand. Each Nayax skill covers one API area and steers your agent toward the correct endpoints, request shapes, and known pitfalls of that area, so you get accurate integration guidance instead of guesswork.
 
 ## Available skills
 
-Nayax skills are published in the [nayax-ai GitHub repository](https://github.com/writechoiceorg/nayax-ai).
-The following skills are available today:
+Nayax skills are published in the [nayax-ai GitHub repository](https://github.com/writechoiceorg/nayax-ai). The following skills are available today:
 
 | Skill | What it covers |
-|-------|----------------|
+| --- | --- |
 | `nayax-lynx-inventory` | Lynx product inventory: product groups, products, machine mapping, and pick lists for restocking. |
 | `nayax-lynx-prepaid-cards` | Prepaid and virtual cards: creation, credit and revalue, balances, transfers, and lookup. |
 | `nayax-lynx-refunds` | Refund workflow: request a refund, upload documentation, and approve or decline. |
@@ -26,52 +23,46 @@ These cover the main Lynx API areas. Install any of them with the steps below.
 
 Before you install a skill, you'll need:
 
-- An AI coding agent that supports agent skills, such as Claude Code, Cursor,
-  or another tool compatible with the `SKILL.md` format.
-- A Lynx user token, if you want your agent to run real API calls. See
-  [Security & Token](/docs/manage-data-operations/lynx-api/security) for how
-  to get one.
+- An AI coding agent that supports agent skills, such as Claude Code, Cursor, or another tool compatible with the `SKILL.md` format.
+- A Lynx user token, if you want your agent to run real API calls. See [Security & Token](/docs/manage-data-operations/lynx-api/security) for how to get one.
 
 ## Install skills
 
 The `skills` CLI works with any compatible agent and is the simplest way to start. If you use Claude Code, you can install skills as a plugin instead, which keeps them updated automatically.
 
 <Note>
-Skills work on their own. They don't need the Nayax MCP server to be
-connected, and the MCP server doesn't need any skills installed.
+  Skills work on their own. They don't need the Nayax MCP server to be connected, and the MCP server doesn't need any skills installed.
 </Note>
 
 <Tabs>
   <Tab title="skills CLI (recommended)">
-    The `skills` CLI installs skills for Claude Code, Cursor, and other
-    compatible agents. Run it in your project folder.
+    The `skills` CLI installs skills for Claude Code, Cursor, and other compatible agents. Run it in your project folder.
 
     Choose what to install from an interactive list:
 
-```bash
-npx skills add writechoiceorg/nayax-ai
-```
+    ```bash
+    npx skills add writechoiceorg/nayax-ai
+    ```
 
     Install every Nayax skill at once, with no prompts:
 
-```bash
-npx skills add writechoiceorg/nayax-ai --all
-```
+    ```bash
+    npx skills add writechoiceorg/nayax-ai --all
+    ```
 
     Install specific skills by repeating the `--skill` flag:
 
-```bash
-npx skills add writechoiceorg/nayax-ai --skill nayax-lynx-inventory --skill nayax-lynx-refunds
-```
+    ```bash
+    npx skills add writechoiceorg/nayax-ai --skill nayax-lynx-inventory --skill nayax-lynx-refunds
+    ```
   </Tab>
-
   <Tab title="Claude Code">
     Add the Nayax plugin marketplace, then install the skills you want as plugins:
 
-```bash
-claude plugin marketplace add writechoiceorg/nayax-ai
-claude plugin install nayax-lynx-inventory@nayax
-```
+    ```bash
+    claude plugin marketplace add writechoiceorg/nayax-ai
+    claude plugin install nayax-lynx-inventory@nayax
+    ```
 
     Install additional skills by repeating the last command with their names, for example `nayax-lynx-refunds@nayax`. Installed skills are available in every Claude Code session.
   </Tab>
@@ -79,8 +70,7 @@ claude plugin install nayax-lynx-inventory@nayax
 
 ## What you can do with a skill
 
-Once installed, your agent loads the skill automatically when your prompt
-touches its area. For example, with `nayax-lynx-inventory` you can ask:
+Once installed, your agent loads the skill automatically when your prompt touches its area. For example, with `nayax-lynx-inventory` you can ask:
 
 ```text
 Create a product group called Beverages and add three products to it in the Lynx sandbox.
@@ -90,14 +80,8 @@ Create a product group called Beverages and add three products to it in the Lynx
 Map my products to machine 12345 and generate a pick list.
 ```
 
-The agent follows the correct workflow order, such as creating product groups
-before products, and knows about behavior that often trips up integrations,
-like endpoints that return an empty body on success.
+The agent follows the correct workflow order, such as creating product groups before products, and knows about behavior that often trips up integrations, like endpoints that return an empty body on success.
 
 ## Pair skills with the MCP server
 
-Skills and the Nayax MCP server complement each other. A skill carries
-curated workflow knowledge for one API area, while the MCP server gives your
-agent live search access to the full developer portal. For the best results,
-[connect your agent to the Nayax MCP server](/docs/get-started/mcp-setup) as
-well.
+Skills and the Nayax MCP server complement each other. A skill carries curated workflow knowledge for one API area, while the MCP server gives your agent live search access to the full developer portal. For the best results, [connect your agent to the Nayax MCP server](/docs/get-started/mcp-setup) as well.
