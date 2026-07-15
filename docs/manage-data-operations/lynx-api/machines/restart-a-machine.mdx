@@ -7,14 +7,6 @@ metadata:
 Restart a Nayax device remotely by pushing a configuration attribute into the machine's queue. The device picks up the change on its next poll and restarts, then reconnects to the server on its own.
 
 <Warning>
-**Draft: pending Nayax confirmation.** This page is a preview built from the integration notes provided. Before it publishes, the Nayax team needs to confirm:
-
-- Remote restart is supported through the API, including for ONYX devices.
-- `PUT .../machines/{MachineID}/configuration` is a new endpoint (it is not yet in the Lynx API reference).
-- The response body a successful call returns.
-</Warning>
-
-<Warning>
 **Authentication**
 
 Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use them to authenticate your API requests.
