@@ -1,0 +1,63 @@
+---
+title: "Restart a Machine"
+metadata:
+  og:description: "Trigger a remote restart of a Nayax device through the Lynx API using the machine configuration endpoint and attribute 144."
+---
+
+Restart a Nayax device remotely by pushing a configuration attribute into the machine's queue. The device picks up the change on its next poll and restarts, then reconnects to the server on its own.
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use them to authenticate your API requests.
+</Warning>
+
+## Restarting a Machine
+
+Push attribute `144` into the machine's configuration queue. Provide the `MachineID` as a path parameter, and the attribute you want to set as body parameters, as shown below:
+
+```bash Request
+curl -X PUT "https://lynx.nayax.com/operational/v1/machines/<MACHINE_ID>/configuration" \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "AttributeID": 144,
+    "Value": "1"
+  }'
+```
+
+<Note>
+  Replace `<MACHINE_ID>` with your machine's unique identifier, and `<YOUR_ACCESS_TOKEN>` with your Lynx API token.
+</Note>
+
+This table outlines the body parameters:
+
+| **Name**      | **Type** | **Description**                                                            |
+| :------------ | :------- | :------------------------------------------------------------------------ |
+| `AttributeID` | `int`    | The configuration attribute to push. Use `144` to restart the device.     |
+| `Value`       | `string` | The value assigned to the attribute. Use `"1"` to trigger the restart.    |
+
+The device restarts within a few minutes once it polls the queue. Restarting also applies any other configuration changes waiting in the queue.
+
+## Restart Versus Reboot
+
+A restart is the lighter of the two power operations. It powers the device off and on and applies any other pending configuration. A reboot is heavier: it activates the bootloader. Use a restart unless you specifically need the bootloader.
+
+<Warning>
+Do not trigger a restart during an active transaction. Wait until the device is idle so you do not interrupt a payment in progress.
+</Warning>
+
+## Confirming the Restart
+
+After the device restarts, it sends a `PowerUp` event back to the server confirming it is online again. Use this event to verify the restart completed.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Machine Attributes" icon="sliders" href="/docs/manage-data-operations/lynx-api/machines/updating-a-machines-attribute">
+    Update other machine attributes through the Lynx API.
+  </Card>
+  <Card title="Retrieve Machine Information" icon="magnifying-glass" href="/docs/manage-data-operations/lynx-api/machines/retrieve-machine-information">
+    Look up a machine's details and current status.
+  </Card>
+</CardGroup>
