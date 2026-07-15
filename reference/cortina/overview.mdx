@@ -10,35 +10,59 @@ The Cortina API documentation provides comprehensive information about the vario
 
 ## API Modules
 
-<Columns cols={3}>
+### Getting Started
+
+<Columns cols={2}>
 <Card
-  icon="link"
+  icon="circle-info"
   title="General"
   href="/reference/cortina/cortina-onboarding/get-version"
-/>
+>
+  Retrieve the API version and other general service details.
+</Card>
 <Card
-  icon="link"
+  icon="user-plus"
   title="Cortina Onboarding"
   href="/reference/cortina/cortina-onboarding/onboard-actor"
-/>
+>
+  Register and configure integrator actors before processing payments.
+</Card>
+</Columns>
+
+### Card Payments
+
+<Columns cols={2}>
 <Card
-  icon="link"
+  icon="credit-card"
   title="Cortina Credit Card"
   href="/reference/cortina/cortina-credit-card/cortina-credit-card-authorization"
-/>
+>
+  Authorize, sell, settle, cancel, and void credit card transactions.
+</Card>
 <Card
-  icon="link"
+  icon="wallet"
   title="Cortina Prepaid Card"
   href="/reference/cortina/cortina-prepaid/cortina-prepaid-authorization"
-/>
+>
+  Process prepaid card payments, balance checks, and refunds.
+</Card>
+</Columns>
+
+### QR Payments
+
+<Columns cols={2}>
 <Card
-  icon="link"
+  icon="qrcode"
   title="DynamicQR"
   href="/reference/cortina/dynamicqr/cortina-dynamicqr-generateqr"
-/>
+>
+  Generate dynamic QR codes and manage the resulting payments.
+</Card>
 <Card
-  icon="link"
+  icon="qrcode"
   title="StaticQR"
   href="/reference/cortina/staticqr/cortina-staticqr-start"
-/>
+>
+  Process payments initiated from a static QR code on the machine.
+</Card>
 </Columns>
