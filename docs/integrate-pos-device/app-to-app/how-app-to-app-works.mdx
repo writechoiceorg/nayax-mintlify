@@ -1,0 +1,89 @@
+---
+title: "How App to App Works"
+description: "The architecture behind App to App: AIDL, the VPOS Service API classes, the async listener model, and built-in or custom payment UI."
+metadata:
+  og:description: "The architecture behind App to App: AIDL, the VPOS Service API classes, the async listener model, and built-in or custom payment UI."
+---
+
+App to App is two apps working together on one VPOS Media device: your Android
+app and Nayax's payment app. Your app runs the screens and decides when to take
+a payment, and Nayax's app runs the payment and reports back what happened.
+
+The two apps talk through the VPOS Service API, a Java library you add to your
+app.
+
+## Why App to App
+
+Building payments into a device app is normally slow and expensive. You take on
+the PCI and EMV burden, you integrate separately with each acquirer, and you
+often add extra hardware just to give the app a display.
+
+App to App removes that work. Nayax provides a ready-to-use Android SDK and
+keeps the payment processing and compliance. Unlike bare-metal terminal SDKs
+that stop at card capture, Nayax processes the transaction end to end and
+returns the result to your app.
+
+## How the Two Apps Talk
+
+The connection uses AIDL, the standard Android mechanism that lets one app call
+methods in another. You never touch card data or payment code: your app binds to
+Nayax's payment service (Nayax calls it the VPOS service), then sends requests
+and receives results. Nayax keeps full control of the card reader, EMV
+processing, PIN entry, and the connection to its backend.
+
+At a high level, every integration follows the same shape:
+
+1. Connect to the VPOS service and wait until it reports that it is ready.
+2. Register your app through the `general` class.
+3. Call a payment method when a consumer wants to pay.
+4. React to the results Nayax sends back through listener callbacks.
+
+## The Parts You Use
+
+The VPOS Service API is large, but a payment integration needs only three parts.
+The rest of the library is available in the SDK reference.
+
+* **The remote connector** (`vpos_service_remote_connector`) opens and manages
+  the connection to the VPOS service, and tells you when it is ready.
+* **The `general` class** registers your app and returns device information,
+  plus platform features such as centralized logging and remote parameters.
+* **The `payment` class** runs the payment itself, from card detection through
+  authorization and settlement.
+
+## How Results Come Back
+
+The VPOS Service API is asynchronous. You make a call, and instead of waiting for
+it to finish, you receive the results later through callbacks. You implement
+listener interfaces, and Nayax calls them as the payment progresses.
+
+You work with two listeners:
+
+* `device_listener_i` reports on the device. Its `on_ready` callback signals
+  that the payment APIs are ready to call.
+* `payment_listener_i` reports the steps of a payment.
+
+The payment flow pages show which `payment_listener_i` callbacks fire and in what
+order, and the SDK reference lists every callback.
+
+## Built-In or Custom Payment UI
+
+During a payment, the screens (present card, processing, result) have to come
+from somewhere. You choose with the `showUI` boolean, the last argument on every
+payment call, and the choice is per call.
+
+* **Built-in UI (`showUI = true`):** Nayax draws the payment screens on top of
+  your app. This is the fastest path to go live, and Nayax owns the screen while
+  the payment runs.
+* **Custom UI (`showUI = false`):** your app draws every screen, using the
+  `payment_listener_i` callbacks to know what to show. Nayax still handles the
+  card, EMV, and PIN securely. This gives you the most control and suits
+  branded, multi-step experiences.
+
+## See Also
+
+These pages cover the rest of an App to App integration.
+
+* [Getting Started](/docs/integrate-pos-device/app-to-app/getting-started) for the integration lifecycle, from access to go-live.
+* [Connect to the VPOS Service](/docs/integrate-pos-device/app-to-app/connect-to-the-vpos-service) to bind to the service and register your app.
+* [Pre-Selection Payment](/docs/integrate-pos-device/app-to-app/pre-selection) for a single-phase payment.
+* [Pre-Authorization Payment](/docs/integrate-pos-device/app-to-app/pre-authorization) for the two-phase authorize-then-settle flow.

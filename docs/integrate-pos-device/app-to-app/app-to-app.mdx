@@ -1,0 +1,48 @@
+---
+title: "Overview"
+description: "Run your Android app on VPOS Media while Nayax handles the card, EMV, authorization, and settlement, and keeps every payment certification."
+metadata:
+  og:description: "Run your Android app on VPOS Media while Nayax handles the card, EMV, authorization, and settlement, and keeps every payment certification."
+---
+
+import McpNote from '/snippets/mcp-server-note.mdx';
+
+App to App integration lets you add Nayax payments to your own Android app on a
+VPOS Media device, without building a payment stack or taking on PCI and EMV
+certification. Your app owns the on-screen experience, and Nayax runs the
+payment.
+
+<McpNote />
+
+## Get Started
+
+Learn how the integration works, then set up the connection your app builds once
+and reuses for every payment.
+
+<Columns cols={3}>
+  <Card icon="diagram-project" title="Learn How It Works" href="/docs/integrate-pos-device/app-to-app/how-app-to-app-works">
+    How the two apps connect, the API parts, and the payment model.
+  </Card>
+
+  <Card icon="rocket" title="Follow the Integration Process" href="/docs/integrate-pos-device/app-to-app/getting-started">
+    The integration lifecycle, from access to go-live.
+  </Card>
+
+  <Card icon="plug" title="Connect to the VPOS Service" href="/docs/integrate-pos-device/app-to-app/connect-to-the-vpos-service">
+    Bind, register, and wait for the ready callback.
+  </Card>
+</Columns>
+
+## Payment Flows
+
+Choose the flow that matches when you know the final amount.
+
+<Columns cols={2}>
+  <Card icon="credit-card" title="Run a Pre-Selection Payment" href="/docs/integrate-pos-device/app-to-app/pre-selection">
+    Authorize and settle a fixed amount in one call.
+  </Card>
+
+  <Card icon="lock" title="Run a Pre-Authorization Payment" href="/docs/integrate-pos-device/app-to-app/pre-authorization">
+    Hold an amount, then settle the final amount.
+  </Card>
+</Columns>

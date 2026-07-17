@@ -1,0 +1,63 @@
+---
+title: "Getting Started"
+description: "Go from partner access to your first payment on a VPOS Media test device: prerequisites, then connect, run a payment, certify, and go live."
+metadata:
+  og:description: "Go from partner access to your first payment on a VPOS Media test device: prerequisites, then connect, run a payment, certify, and go live."
+---
+
+Getting started has two parts: the access and tools you get from Nayax, and the
+build steps you follow on a test device. Together they take you from your first
+request for access to your first payment.
+
+## Prerequisites
+
+Before you write any code, get these from Nayax:
+
+* **Partner access:** contact your Nayax customer success manager or Professional
+  Services team and sign the integration agreement.
+* **The SDK:** download the `vpos-api` SDK (the AAR), the API reference, and the
+  sample app from DevZone.
+* **A test device:** Nayax ships a VPOS Media 4 or VPOS Media 4 Mini in test mode
+  for development.
+
+## Build Your Integration
+
+Once you have access, the SDK, and a test device, work through these steps. Each
+one links to the guide with the details.
+
+<Steps>
+  <Step title="Add the SDK to your app">
+    Add the `vpos-api` AAR and the required manifest entries to your Android
+    project (see [Connect to the VPOS Service](/docs/integrate-pos-device/app-to-app/connect-to-the-vpos-service)),
+    then install your APK on the test device alongside Nayax's payment app.
+  </Step>
+  <Step title="Connect and register">
+    Bind to the VPOS service, register your application, and wait for the ready
+    callback. See [Connect to the VPOS Service](/docs/integrate-pos-device/app-to-app/connect-to-the-vpos-service).
+  </Step>
+  <Step title="Run a payment">
+    Call a payment method and handle the result callbacks. Start with
+    [Pre-Selection Payment](/docs/integrate-pos-device/app-to-app/pre-selection),
+    or use [Pre-Authorization Payment](/docs/integrate-pos-device/app-to-app/pre-authorization)
+    when the final amount is not known up front.
+  </Step>
+  <Step title="Certify and go live">
+    Run the certification suite with Nayax Professional Services, then deploy
+    your APK alongside the production payment app and roll it out to your fleet.
+  </Step>
+</Steps>
+
+That is the full path from partner access to a live fleet. When you are ready to
+build, start by connecting to the VPOS service.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Connect to the VPOS Service" icon="plug" href="/docs/integrate-pos-device/app-to-app/connect-to-the-vpos-service">
+    Start building: bind to the service, register your app, and wait for the
+    ready callback.
+  </Card>
+  <Card title="Pre-Selection Payment" icon="credit-card" href="/docs/integrate-pos-device/app-to-app/pre-selection">
+    Run your first payment once your app is connected and registered.
+  </Card>
+</CardGroup>

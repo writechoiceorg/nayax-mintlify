@@ -489,6 +489,30 @@
                 }
               }
             ]
+          },
+          {
+            "item": "App to App",
+            "icon": "layer-group",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "docs/integrate-pos-device/app-to-app/app-to-app",
+                  "docs/integrate-pos-device/app-to-app/how-app-to-app-works",
+                  "docs/integrate-pos-device/app-to-app/getting-started",
+                  "docs/integrate-pos-device/app-to-app/connect-to-the-vpos-service",
+                  "docs/integrate-pos-device/app-to-app/device-management"
+                ]
+              },
+              {
+                "group": "Payment Flows",
+                "pages": [
+                  "docs/integrate-pos-device/app-to-app/pre-selection",
+                  "docs/integrate-pos-device/app-to-app/pre-authorization",
+                  "docs/integrate-pos-device/app-to-app/transaction-status"
+                ]
+              }
+            ]
           }
         ]
       },

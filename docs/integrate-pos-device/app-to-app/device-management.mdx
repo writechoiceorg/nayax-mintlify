@@ -1,0 +1,124 @@
+---
+title: "Device Management"
+description: "Go beyond app registration on VPOS Media: read device information, write to Nayax centralized logging, manage remote attributes, format currency, and control kiosk mode."
+metadata:
+  og:description: "Go beyond app registration on VPOS Media: read device information, write to Nayax centralized logging, manage remote attributes, format currency, and control kiosk mode."
+---
+
+Beyond registering your app, the `general` class exposes the platform features
+around a payment. All of them are optional, and you call them on the same
+`general` interface you use to
+[register your app](/docs/integrate-pos-device/app-to-app/connect-to-the-vpos-service):
+
+* [**Read device information**](#read-device-information) such as model, serial number, currency, and language.
+* [**Centralized logging**](#centralized-logging) to write your app's logs to the Nayax backend.
+* [**Remote attributes**](#remote-attributes) to read and subscribe to values Nayax manages remotely.
+* [**Locale and currency formatting**](#locale-and-currency-formatting) to display amounts in the device's currency.
+* [**Kiosk mode**](#kiosk-mode) to hide the system UI for unattended operation.
+
+## Read Device Information
+
+`general.get_info` returns a `device_info_t` describing the device, so you can
+read its model, serial number, country, currency, EMV kernel version, and
+languages:
+
+```java
+device_info_t info = general.get_info();
+
+String model    = info.get_model();
+String serial   = info.get_serial();
+int country     = info.get_country_code();   // ISO 3166-1 numeric
+int currency    = info.get_currency_code();  // ISO 4217 numeric
+String kernel   = info.get_emv_kernel_version();
+```
+
+## Centralized Logging
+
+Write to the Nayax logging system to debug terminals you cannot reach in
+production. `general.log` writes one entry, and `general.send_device_logs`
+uploads the collected logs to the backend, where you retrieve them through Nayax
+Core:
+
+```java
+general.log(
+    general.LOG_LEVEL_INFO,   // LOG_LEVEL_INFO, LOG_LEVEL_DEBUG, LOG_LEVEL_WARN, LOG_LEVEL_ERROR
+    "checkout",               // module: your component name, for categorization
+    "Started payment for cart 4821");
+
+// Later, push the collected logs to the server.
+general.send_device_logs();
+```
+
+Each entry is tagged with your application name and module, so your logs stay
+separate from the device logs and other apps.
+
+## Remote Attributes
+
+Attributes are configuration values Nayax manages remotely, such as an
+application language or a feature toggle. Read one with `general.attribute`, and
+subscribe with `general.register_attribute` to be notified when it changes:
+
+```java
+// Read a value once. Returns null if the attribute is not set.
+byte[] value = general.attribute(attributeCode);
+
+// Subscribe to change notifications for an attribute.
+general.register_attribute(attributeCode);
+```
+
+Change notifications arrive on `device_listener_i.on_attribute`, the listener you
+pass to `register_application`. This lets Nayax push a change, such as a new
+language, without a redeploy:
+
+```java
+@Override
+public void on_attribute(int code, AttributeData data) {
+    // The attribute identified by code changed. Apply the new value.
+}
+```
+
+<Note>
+`register_attribute` only subscribes to notifications. To also read the current
+value, call `attribute` for the same code.
+</Note>
+
+## Locale and Currency Formatting
+
+Let the service format amounts in the device's configured currency instead of
+hard-coding separators and symbols:
+
+```java
+general.set_locale(
+    "en",   // lang_code: ISO 639-1 language code
+    840,    // country_code: ISO 3166-1 numeric
+    840,    // currency_code: ISO 4217 numeric (0 = use locale default)
+    2);     // decimal_places: fractional digits (0, 1, or 2)
+
+String symbol    = general.currency_symbol();   // for example "$"
+String formatted = general.format_amount(5.0);  // for example "$5.00"
+```
+
+`currency_code` overrides the currency derived from `country_code`, for
+deployments that bill in a different currency than their country's default.
+
+## Kiosk Mode
+
+`general.kiosk` controls the Android UI restrictions for unattended, kiosk, and
+vending scenarios. Enabling it hides the navigation and status bars for
+full-screen operation:
+
+```java
+general.kiosk(true);   // hide system UI for kiosk operation
+general.kiosk(false);  // restore normal UI
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Pre-Selection Payment" icon="credit-card" href="/docs/integrate-pos-device/app-to-app/pre-selection">
+    Run a single-phase payment that authorizes and settles in one call.
+  </Card>
+  <Card title="Transaction Status" icon="list-check" href="/docs/integrate-pos-device/app-to-app/transaction-status">
+    List open and settled transactions for reconciliation.
+  </Card>
+</CardGroup>
