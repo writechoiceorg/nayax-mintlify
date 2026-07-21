@@ -1,0 +1,193 @@
+---
+title: "EMV Core RTOS SDK Release Notes"
+description: "Track EMV Core RTOS SDK changes as they ship."
+rss: true
+---
+
+Nayax logs EMV Core RTOS SDK changes on this page as they ship. Subscribe to
+the RSS feed using the icon at the top of the page to get notified of new
+entries.
+
+Release notes are organized into three categories to help you evaluate the
+impact of each update:
+
+* **Improvements**: New API commands, expanded platform and card support, and
+  performance enhancements.
+* **Fixes**: Resolved bugs and reliability improvements.
+* **Known Issues**: Current limitations or pending features, with recommended
+  workarounds.
+
+<Update
+  label="SDK Version 1.0"
+  rss={{
+    title: "RTOS SDK Version 1.0: TLS support, External Settlement, and e-Receipt support",
+    description: "First official RTOS SDK release: TLS-secured server communication, External Settlement and e-Receipt data on TransactionComplete, and CLP card type detection, plus reliability fixes across networking, logging, configuration, and reader communication."
+  }}
+>
+
+_Released: 11 February 2026_
+
+This version includes the following improvements, fixes, and known issues for the RTOS SDK:
+
+<Accordion title="Improvements" icon="rocket">
+  ### **Linux Sample Application (Portable C Sources)**
+
+  SDK callback architecture refactored for better compiler compatibility (RM7434). JSON-RPC messages are now logged by default in the sample application (RM7471).
+
+  ***
+
+  ### **TLS Support**
+
+  Secure server communication via TLS for both TMS and payment service connections (RM7021).
+
+  ***
+
+  ### **External Settlement (Remote Settlement)**
+
+  `TransactionComplete` now returns an `Additional_Parameters` field with the data required for Nayax server-to-server External Settlement (RM7549):
+
+  * `SiteId`: unique identifier of the transaction site
+  * `EntryMode`: transaction entry mode (Swipe, Contact, NFC)
+  * `MachineAuTime`: machine authorization time
+  * `NayaxTransactionId`: transaction ID
+
+  ***
+
+  ### **e-Receipt Support**
+
+  `TransactionComplete` now returns the data required for the Nayax e-Receipt.
+
+  ***
+
+  ### **CLP Card Type Detection**
+
+  `TransactionComplete` now returns the closed-loop card type.
+
+  ***
+
+  ### **Reserved for Future Use**
+
+  The following features are included but not yet fully tested and should not be used:
+
+  * `UpdateMachineAttributes` API
+  * Enhanced `SendToReader` functionality with TLS-based permissions
+  * Push service integration
+</Accordion>
+
+<Accordion title="Fixes" icon="wrench">
+  ### **libecodsdk Library**
+
+  * Network Status Notifications
+  * Threading Model: Dual-Thread Architecture
+  * New configuration options in `ecod_sdk_configs.h`:
+    * `EC_ACK_TIMEOUT_MS`: timeout for ACK responses (default: 1000 ms)
+    * `EC_ACK_MAX_RETRIES`: maximum retries for unacknowledged frames (default: 0)
+    * `EC_SUPPORT_LONG_LIVED_SOCKETS`: enable persistent socket connections
+  * New status value: `EC_DISABLED`, indicates EMV Core is in a disabled state
+
+  ***
+
+  ### **Platform Layer**
+
+  * Added `ecod_platform_init()` for platform-specific initialization
+  * Serial port data flushing on port open
+  * Linux: SIGPIPE signal handling to prevent crashes on socket disconnections
+
+  ***
+
+  ### **Logging**
+
+  * Log files limited to 336 KB total to protect critical operations (RM7534)
+  * Fix: Log upload now includes the most recent entries (issue #7357)
+  * Auto-cleanup of excess log files on configuration change (RM7539)
+  * New log level: `EC_LOG_LEVEL_TRACE` for detailed debugging
+  * File logging support added
+  * Improved log formatting with module prefixes
+
+  ***
+
+  ### **Configuration & Storage**
+
+  * Periodic file system cleanup for long-term reliability (RM7527)
+  * Reader file-system cleanup to prevent storage exhaustion (RM7531)
+  * Fix: Configuration file corruption during updates (RM7533)
+
+  ***
+
+  ### **Payment Parameters (`emvCorePaymentParameters`)**
+
+  * Removed: `fee_cents` and `currency_code`
+  * Added: `additional_receipt_data`, `is_final_amount`, `is_deferred` (RFU)
+
+  ***
+
+  ### **Reader Communication**
+
+  * Backwards compatibility with ECOD v0.9
+  * Device auto-recovers when reader misses configuration files (RM7573)
+  * Reader configuration update reliability improved with retry mechanism (RM7575)
+  * Socket response timeout handling improved (RM7578)
+  * ACK/NAK handling with automatic retransmission
+  * Better handling of fragmented serial messages
+  * Frame size validation
+
+  ***
+
+  ### **Network Bridge (Socket API)**
+
+  * Nagle's algorithm disabled for reduced latency on small packets
+  * Optimized socket data arrival notifications
+  * Automatic network connectivity monitoring (Linux)
+
+  ***
+
+  ### **User Interface**
+
+  * Fix: `ReaderMessage` events now include correct message index (RM7470)
+  * Fix: "Present card" message displays immediately after `PreAuthorize` (RM7553)
+  * Fix: LED blinking behavior corrected during Poll EMV (RM7585)
+
+  ***
+
+  ### **Reader Firmware**
+
+  * Safe dual-mode operation (TLV and JSON-RPC) (RM7571, RM7572, RM7584)
+  * Firmware update package size reduced
+</Accordion>
+
+<Accordion title="Known Issues" icon="exclamation-triangle">
+  ### **Intermittent TLV Messages (RM7586)**
+
+  Device may intermittently send TLV format messages instead of JSON-RPC.
+
+  ***
+
+  ### **Slow First Response After Reset (RM7592)**
+
+  Serial communication: the first response after reset may be slow.
+
+  ***
+
+  ### **Virtual Machine Device Discovery**
+
+  On virtual Linux machines (e.g., WSL or VirtualBox), the host sample application cannot find the device after it restarts:
+
+  ```
+  SERIAL [ERROR] failed to open HID port /dev/hidraw0: No such file or directory
+  ```
+
+  This occurs because the virtual OS attaches the reader with a different name (e.g., `hidraw1`). Not relevant for physical operating systems.
+</Accordion>
+
+</Update>
+
+### Version history
+
+Every earlier RTOS SDK version, condensed to one line. See the current
+version above for full detail and links.
+
+| Version | Date | Summary |
+|---|---|---|
+| SDK Version 0.9 | July 31, 2025 | **Added**:<ul><li>A portable Linux sample app</li><li>A framed Datalink layer</li><li>`GetCardToken`/`CardTokenReceived`/`GetAttribute` commands</li></ul>**Fixed** (#7052, #7054, #7056, #7072, #7233):<ul><li>LED bugs</li><li>Core-version bugs</li><li>Present Card display bugs</li></ul> |
+| SDK Version 0.2 | March 24, 2025 | **Added**:<ul><li>UART TTL communication</li><li>UNO-8 Manager v4.0.0</li></ul>**Fixed** (#7077, #7043, #7051):<ul><li>Safe-Mode startup</li><li>Parallel TMS transfers during transactions</li><li>Millisecond log timestamps</li></ul> |
+| SDK Version 0.1 | December 30, 2024 | First RTOS SDK release |

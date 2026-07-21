@@ -134,7 +134,9 @@
               {
                 "group": "Release Notes",
                 "pages": [
-                  "docs/integrate-pos-device/marshall/marshall-sdk-release-notes"
+                  "docs/integrate-pos-device/marshall/marshall-java-release-notes",
+                  "docs/integrate-pos-device/marshall/marshall-csharp-release-notes",
+                  "docs/integrate-pos-device/marshall/marshall-c-release-notes"
                 ]
               }
             ]
@@ -412,7 +414,8 @@
               {
                 "group": "Release Notes",
                 "pages": [
-                  "docs/integrate-pos-device/emv-core/emv-core-release-notes"
+                  "docs/integrate-pos-device/emv-core/emv-core-android-linux-release-notes",
+                  "docs/integrate-pos-device/emv-core/emv-core-rtos-release-notes"
                 ]
               }
             ]
@@ -1436,7 +1439,7 @@
     },
     {
       "source": "/docs/emv-core-release-notes",
-      "destination": "/docs/integrate-pos-device/emv-core/emv-core-release-notes"
+      "destination": "/docs/integrate-pos-device/emv-core/emv-core-android-linux-release-notes"
     },
     {
       "source": "/docs/spark",
