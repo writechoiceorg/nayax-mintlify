@@ -1,0 +1,1178 @@
+---
+title: "SDK Release Notes"
+description: "Track Marshall SDK changes across Java, C#, and C as they ship."
+rss: true
+---
+
+Nayax logs Marshall SDK changes on this page as they ship, grouped by language.
+Subscribe to the RSS feed using the icon at the top of the page to get notified
+of new entries.
+
+<Tabs>
+  <Tab title="Java">
+
+  <Update label="Java 0.1.6.23">
+    <Note>
+    Some features in this release require VPOS version 4.0.8.23-RC3 or newer.
+    </Note>
+
+  - fixed the missed ack issue
+  </Update>
+
+  <Update label="Java 0.1.6.22">
+  - fixed link down issue where missed ack caused keepalive stop...
+  </Update>
+
+  <Update label="Java 0.1.6.21">
+  - improved linked reliability
+  - fixed false retransmissions
+  </Update>
+
+  <Update label="Java 0.1.6.20">
+  - bug fix: race condition between rx and tx threads on m_pending_tx_msg access.
+  </Update>
+
+  <Update label="Java 0.1.6.19">
+  - added pre_auth_amount_config (0x8c) vend sub-command: message class, decode/encode, factory method, event handling and public API
+  - added pre_auth config menu option to demo
+  </Update>
+
+  <Update label="Java 0.1.6.18">
+  - session_end timeout expired too soon. caused reader_always_on to fire too early
+  </Update>
+
+  <Update label="Java 0.1.6.17">
+  - bug fix: msg_remote_selection_t encode was empty stub, now encodes all fields (funds_available, payment_media_id, payment_type, payment_data, item_number, item_options)
+  - bug fix: msg_setup_max_min_prices_t encode was missing sub_command byte in output buffer
+  - bug fix: msg_setup_max_min_prices_t encode typo "index = +" corrected to "index +=" for currency_code encoding
+  - bug fix: msg_expansion_t added null check on body before decode/encode, preventing NPE on ftl_retry_deny and default cases
+  - bug fix: msg_mdb_rsp_t decode now instantiates mdb_t.msg_ftl_retry_deny_t for mdb_response_poll_ftl_retry_deny case
+  </Update>
+
+  <Update label="Java 0.1.6.16">
+  - added external reader command
+  - fixed reader state command to work also on always_idle mode
+  </Update>
+
+  <Update label="Java 0.1.6.15">
+  - added sanity check for vend_request and close_session apis now they return boolean value. price should not exceed permitted amount (65k for !long_price)
+  </Update>
+
+  <Update label="Java 0.1.6.14">
+  - added support for real-time price change for always_idle mode (even after reader is already enabled)
+  - updated log for multi-vend request
+  </Update>
+
+  <Update label="Java 0.1.6.13">
+  - fixed vend_multi_close_session encoding
+  </Update>
+
+  <Update label="Java 0.1.6.12">
+  - prevent vend/socket/general actions when no link. prevents unnecessary crashes...
+  - eth_port logging optimization
+  </Update>
+
+  <Update label="Java 0.1.6.11">
+  - multi-vend multi-session bug fix: close session encoded session id incorrectly
+  </Update>
+
+  <Update label="Java 0.1.6.10">
+  - added support for file-system manangement (vpos provides fs services)
+  - bug fix: when session completes, clear card info data of previous session
+  - improved vmc_link buffer management. fixed possible bug, could lead to a retransmission caused on buffer overflow (and thus frame loss)
+  </Update>
+
+  <Update label="Java 0.1.6.09">
+  - added support for extended display contorl
+  - version string now contains sdk language
+  </Update>
+
+  <Update label="Java 0.1.6.08">
+  - bug fix: frame size detection, better sanity, support for varying marshall message size
+  - port interface, added flush() call
+  </Update>
+
+  <Update label="Java 0.1.6.07">
+  - added site id transferred to machine, via transfer data
+  - added brand name transferred to machine, via transfer data
+  - added new command, tech mode commands, currently open door command
+  - logger updated functionality
+  </Update>
+
+  <Update label="Java 0.1.6.06">
+  - fixed fw_info string copy - in some scenario, could add gibberish to end fo strings on message
+  - fixed msg_alert string decode error
+  </Update>
+
+  <Update label="Java 0.1.6.05">
+  - machine sub type was hard-coded until now.
+  - ability to set machine sub type
+  - bug fix on encoding multi-session multi-vend marshall frames
+  - updated entry_type enum
+  </Update>
+
+  <Update label="Java 0.1.6.04">
+  - added support for long_price - 4 bytes price capability (relevant only for vpos-media). fixed also minus price displayed
+  - added support for 3rd party auth for qr code reader
+  - fixed marshall max_msg_len. relevant from now on for vpos-media
+  - added support for qr-code card type and 3rd party authorization
+  - vend_session_data_t now contains all nullable fields. meaning api user can understand if value was assigned or not!
+  - added new transfer_data bit: brands selection (japanese market)
+  - multi-session works now with multi-vend simultaneously
+  - added final_price field on onSessionInfo
+  - added link ready() check to all vend apis. will prevent crashes when programmer calls vend api when no link. (should not...)
+  - added "rc" to the version name when not official release
+  </Update>
+
+  <Update label="Java 0.1.6.03">
+  - minor change - removed warning on vmc_vend_t if not registered callbacks handler. added null check on every call instead done for the sake of code share between marshall_sdk and marshall_master_sdk
+  </Update>
+
+  <Update label="Java 0.1.6.02">
+  - fix vpos serial number as bytes, programmer needed to convert to string and reverse it. now it is provided as a string with correcly arranged serial number
+  - fixed typo on "marshall_func_code_transfer_data"
+  </Update>
+
+  <Update label="Java 0.1.6.01">
+  - now more lowlevel_serial.java. now just inject serial_port_i implementation (provided certified ftdi and pc_port implementation)
+  - changed display control api signature. now specifically looks for layout_t instance
+  </Update>
+
+  <Update label="Java 0.1.5.27">
+  - fixed re-transmission error due to bug in buffer management which caused to lose consecutive packets in case two arrived at same time
+  - bug fix in mdb_rsp parsing (marshall master)
+  - bug fix in lowlevel_serial buffer managment code
+  </Update>
+
+  <Update label="Java 0.1.5.26">
+  - added session_id field in vend_session_t object for quick reference only relevant in multi-session scenario
+  - added some more logs
+  - bug fix: error in parsing msg_display_event_t message. user callback was not called...
+  </Update>
+
+  <Update label="Java 0.1.5.25">
+  - fixed card_balance decoding issue
+  - fixed transfer_data parsing possible crash
+  - added logs to transfer_data decoded fields
+  - fixed possible crash when parsing transfer_data packet
+  - fixed parsing final_price parsing
+  </Update>
+
+  <Update label="Java 0.1.5.24">
+  - fixed an edge case where api user might stall callback, while waiting for end_session event. could cause dead-lock
+  - added the ability to send transfer data message during whole transaction period (starting at card detection)
+  - added new log entries: print sdk configuration to log, very helpful when debugging
+  </Update>
+
+  <Update label="Java 0.1.5.23">
+  - fix error: received on_begin_session without actually having session started... state machine was then in undefined state...
+  </Update>
+
+  <Update label="Java 0.1.5.22">
+  - log possible exception, in case it ever happens...
+  </Update>
+
+  <Update label="Java 0.1.5.20-21">
+  - fixed possible crash when loosing communication and sending reader_enable at the same moment
+  - cleaned some logs
+  </Update>
+
+  <Update label="Java 0.1.5.19">
+  - fixed race-condition between rx and tx threads, causing retransmisttion for a packat that it's ack was already recevived.
+  - updated some logs to be more readable
+  </Update>
+
+  <Update label="Java 0.1.5.18">
+  - fixed ereceipt not working on multi-session setup
+  - able to switch to info session on always_idle setup
+  </Update>
+
+  <Update label="Java 0.1.5.17">
+  - added check balance session type
+  - added card sub type transfer_data
+  - adde card balance transfer_data
+  - vend discount and final price calculation
+  </Update>
+
+  <Update label="Java 0.1.5.16">
+  - fixed item price and code api type from integer to short as should be
+  - crash fix: when cancelling a session after card presented but before vend requested
+  </Update>
+
+  <Update label="Java 0.1.5.15">
+  - fixed session cancel on always_idle mode
+  - session_status field on session object is now filled by the sdk. notifies the programmer about transaction cancellation reason (canceled/timeout/all ok). dispense_failed is on the programmer (in multi-session, the programmers needs to update the user canceled status when closing the session, if canceled after approval, and before settlement)
+  - fixed transaction_id_len not filled
+  - low_level_serial - cpu usage optimization
+  </Update>
+
+  <Update label="Java 0.1.5.14">
+  - dump packets on rx re-arrangement: dump packet before parsing. helps debugging...
+  - lowlevel_serial implementation - better handling of data under stress
+  </Update>
+
+  <Update label="Java 0.1.5.13">
+  - added new api: vend_status(bool), explicit vend success now it is possible to easily perform long tasks before deciding on vend success
+  - fixed vend cancel bug, when was applied after vend approved, and before vend success/failed
+  - added total actually charged (and discount if one is given) on session structure. valid after session is closed
+  - added absolute posix timestamp to log lines
+  - added aux callback, for 3rd party logging integration (Log.aux())
+  - change API name: Log.initialize() to Log.stream()
+  - fixed false cpu warning on sdk initialization
+  </Update>
+
+  <Update label="Java 0.1.5.12">
+  - onStatus API changed: added extra data parameter
+  - added device_not_available_reason enums
+  - fixed transfer_data faulty parsing issue
+  - on sample application: added status code to human readable string
+  - on sample application: added extra vpos info on onReady event
+  </Update>
+
+  <Update label="Java 0.1.5.11">
+  - Log module added new API Log.console(boolean) to enable/disable console log output
+  - added new fields to transfer_data - receive extra information: main+pos fw version, etc
+  - added new enums for device status
+  - major rework on sample application
+  - added new fields for transfer_data: main+pos fw versions, monyx id, default credit
+  - added new event: onSessionTimeout(id)
+  </Update>
+
+  <Update label="Java 0.1.5.10">
+  - fixed a bug: vend deny persist mode yielded always on even on succesfull transactions
+  - added unit_of_measure (vmc_vend) enum values
+  - added new enums for device status
+  - major rework on sample application
+  - added new fields for transfer_data: main+pos fw versions, monyx id, default credit
+  - added new event: onSessionTimeout(id)
+  </Update>
+
+  <Update label="Java 0.1.5.9">
+  - fixed fw_info newest fields arrangement bug
+  - low_level_serial link improvements...
+  - vend session status request bug fix
+  - added remote vend support
+  </Update>
+
+  <Update label="Java 0.1.5.8">
+  - vmc_socket socket busy and retransmit timeout fixed
+  </Update>
+
+  <Update label="Java 0.1.5.7">
+  - bug fix: rare event - race condition between user cancel right after cc swipe
+  - lowlevel_serial improvement - in case faulty packet len bytes, could get stuck for `<x>` seconds
+  - vmc_socket bug fix. on busy modem, packet will be re-transmitted, and only after several retries will be discarded and fail notified
+  </Update>
+
+  <Update label="Java 0.1.5.6">
+  - removed ev extension
+  - minor api bug fixes
+  - cpu starvation detection initial print bug fix
+  - sample updated updated
+  </Update>
+
+  <Update label="Java 0.1.5.5">
+  - added agreed marshall version
+  - aligned with marshall 3.0:
+  - added get session(s) status (all opened sessions code)
+  - added additional fw_info field: marshall sdk version string
+  - added get reader state api (enabled / disabled)
+  - added entry type enum
+  - qr e-receipt
+  - updated card type enum `vmc_vend_t.card_type_xxx_e`
+  - new api for device's marshall version query
+  </Update>
+
+  <Update label="Java 0.1.5.4">
+  - fixed ui api bug
+  - cpu profiling mechanism improved
+  - added additional vmc information fields to fw_info message
+  - multi-vend - limit different products to `<x>` products (avoid buffer overflow)
+  </Update>
+
+  <Update label="Java 0.1.5.3">
+  - added additional vmc information fields to fw_info message
+  - multi-vend - limit different products to `<x>` products (avoid buffer overflow)
+  </Update>
+
+  <Update label="Java 0.1.5.2">
+  - added cpu monitoring, help debug cpu starvation cases
+  - on crc error, logging packet byte stream
+  </Update>
+
+  <Update label="Java 0.1.5.1">
+  - ui event callback api bug fix
+  </Update>
+
+  <Update label="Java 0.1.5.0">
+  - added new vend callback: onStatus. see `marshal_t.status_xxxxx` for enum
+  - updated close session status messages
+  </Update>
+
+  <Update label="Java 0.1.4.8">
+  - updated to latest marshall spec.
+    - added new tlv fields (product code, product price)
+  </Update>
+
+  <Update label="Java 0.1.4.7">
+  - enabled multi-instance of the marshall sdk. ability to connect several VPOSes to a single VMC machine
+  </Update>
+
+  <Update label="Java 0.1.4.6">
+  - mifare card uid special encoding handling
+  </Update>
+
+  <Update label="Java 0.1.4.5">
+  - more msr goodness: some cards are encoded as integer, some as ascii string
+  </Update>
+
+  <Update label="Java 0.1.4.4">
+  - updated ev extension
+  - changed API for vmc_vend onReady(). now provides session object incase transaction has ended
+  - changed API for vmc_general requestTime. now it is request_time
+  - changed API for vmc_general setDisplayText. now it is set_display_text
+  - added display control API to vmc_general
+  </Update>
+
+  <Update label="Java 0.1.4.2">
+  - updated sample application: paymarket demo
+  </Update>
+
+  <Update label="Java 0.1.4.1">
+  - added ability to redirect log to file stream
+  - fixed get_transaction_id() when called inside onTranactionInfo, got invalid date
+  </Update>
+
+  <Update label="Java 0.1.4.0">
+  - added two new parameters:
+    - serial packets dump level - dump all, all but keep-alive, all
+    - vend-denied policy - should just notify vmc about vend-failed and restore to idle mode, and wait for another credit-card?
+  </Update>
+
+  <Update label="Java 0.1.3.5">
+  - updated sdk to latest marshall protocol revision.
+  - on link establishment, additional info is provided to application: merchant id, merchant terminal id, machine location
+  - updated sample application: added multi-session demo, multi-vend demo, based on vmc_config
+  - revised documentation, updated to latest marshall sdk
+  </Update>
+
+  <Update label="Java 0.1.3.4">
+  - fixed always-idle bug. vpos needs to have reader enabled (even though it is called 'always-idle')
+  </Update>
+
+  <Update label="Java 0.1.3.3">
+  - fixed possible crash on call to 'alert' api
+  - added reader_always_on fix. only when always_idle  is explicitly disabled. thanks Marko!
+  </Update>
+
+  <Update label="Java 0.1.3.2">
+  - debug flag now controls the log outputs. debug = false - sdk is log silent
+  - added always idle sample code
+  </Update>
+
+  <Update label="Java 0.1.3.1">
+  - updated libjserial to latest version on demo application
+  </Update>
+
+  <Update label="Java 0.1.3.0">
+  - new sample code arrangement
+  - added documentation to folder
+  </Update>
+
+  <Update label="Java 0.1.2.9">
+  - fixed always_on feature removed by mistake
+  </Update>
+
+  <Update label="Java 0.1.2.8">
+  - minor code cleanup
+  - added new machine type: paymarket
+  - changed ev-charger machine type
+  </Update>
+
+  <Update label="Java 0.1.2.7">
+  - added socket mtu configuration
+  - added socket timeout configuration
+  - added support for latest marshall protocol 2.0
+  - added always_idle mdb mode
+  - fixed comm-timeout issue, where keep-alive timeout is larger than 15 seconds
+  - added transfer_data ftl data callback to sdk user
+  - fund available conversion issue fix
+  </Update>
+
+  <Update label="Java 0.1.2.6">
+  - added method that returns marshall-sdk version
+  - added tcp socket example to sample code
+  - added machine type to sdk configuration
+  - improved logging module
+  - code maintenance
+  </Update>
+
+  <Update label="Java 0.1.2.5">
+  - improved socket handling
+  - removed false warning (mismatch message id)
+  - call lowlevel reset method when crc error occurse(on some devices it improves reliablity when high load on serial port occurs)
+  </Update>
+
+  <Update label="Java 0.1.2.4">
+  - fixed link bug - sometimes, tried to transmit from empty queue!
+  - now sdk is delivered as .JAR and demo application
+  </Update>
+
+  <Update label="Java 0.1.2.3">
+  - updated pay api
+  </Update>
+
+  <Update label="Java 0.1.2.2">
+  - added the parsing of transferdata structure on vend session. now user gets detailed, readable information
+  - updated sample application
+  </Update>
+
+  <Update label="Java 0.1.2.1">
+  - better logging
+  - added multi-vend example call on Main.java
+  - important! vpos much be configured as pre-authorization for multi-vend sessions
+  - added new flag to vmc_configuration: multi_vend_support
+  - fixed bug on onReady, could not call some marshall APIs
+  </Update>
+
+  <Update label="Java 0.1.2.0">
+  - updated multi-vend api: one vend_request for both cases (just supply list of products for session object)
+  </Update>
+
+  <Update label="Java 0.1.1.6">
+  - handling aynnc socket close request (from vpos)
+  - handling session close request (from vpos)
+  - fixed issue when cancelling session after credit-card has been presented, but before vend requested
+  - fixed issue when trying to close session while reader is in enabled state
+  </Update>
+
+  <Update label="Java 0.1.1.5">
+  - report quantity to dcs NOTE: must work with version VPOS version 4.0.1.5 rc9 or newer
+  - added transaction_id report via new API
+  </Update>
+
+  <Update label="Java 0.1.1.4">
+  - aligned close session to new format
+  </Update>
+
+  <Update label="Java 0.1.1.3">
+  - fix issue with model and version reporting to dcs
+  - seperate keep-alive timer from configured keepalive-timeout
+  </Update>
+
+  <Update label="Java 0.1.1.2">
+  - added link statistics
+  - fixed issue where re-transmission occured due to tight timing issue
+  - added another log message
+  - added link statistics
+  - fixed issue with buffer index while parsing packet in middle of master-buffer
+  </Update>
+
+  <Update label="Java 0.1.1.1">
+  - fixes some issues with low-level serial template file
+  </Update>
+
+  <Update label="Java 0.1.1.0">
+  - fixed re-transmit index bug
+  </Update>
+
+  <Update label="Java 0.1.0.9">
+  - Handle piggy-back Marshall messages
+  </Update>
+
+  <Update label="Java 0.1.0.8">
+  - improved lowlevel_serial
+  - improved response during heavy socket work
+  </Update>
+
+  <Update label="Java 0.1.0.7">
+  - Added multi-vend support
+  - Added pre-paid 'pay' api
+  - Added CC last 4 digits transfer-data
+  </Update>
+
+  <Update label="Java 0.1.0.6">
+  - Fixed potential bug, wrong order of Marshall messages sometimes transmitted, on rare high-load scenarios
+  </Update>
+
+  <Update label="Java 0.1.0.5">
+  - Added reader_always_on configuration parameter
+  </Update>
+
+  <Update label="Java 0.1.0.4">
+  - Add cash sale notification api
+  - Added link events callbacks
+  - Fixed session status incorrect bug
+  </Update>
+
+  <Update label="Java 0.1.0.3">
+  - Added new socket callbacks for better session control
+  - Added display message, alert, time request messages
+  - bug fixes
+  </Update>
+
+  <Update label="Java 0.1.0.2">
+  - moved lowlevel_serial outside of SDK. this is application specific
+  - added configuration reporting to vending client
+  </Update>
+
+  <Update label="Java 0.1.0.1">
+  - fixed closing ftp socket issue
+  - added vpos config notification for client
+  </Update>
+
+  </Tab>
+
+  <Tab title="C#">
+
+  <Update label="C# 0.0.5.20">
+  - vmc_link: fixed link down issue where a missed ack left a packet pending forever, stopping keepalive (retransmit no longer gated on transmit>receive
+  - vmc_vend_t: session_end and send_transfer_data are now handled globally in any state, so the vend flow state is more robust
+  - lowlevel_serial_t: consolidated serial rx handling (head-only framing, poll-friendly sleep, named reader thread)
+  </Update>
+
+  <Update label="C# 0.0.5.19">
+  - improved link reliability
+  - fixed false retransmissions
+  </Update>
+
+  <Update label="C# 0.0.5.18">
+  - bug fix: race condition between rx and tx threads on m_pending_tx_msg access.
+  </Update>
+
+  <Update label="C# 0.0.5.17">
+  - added pre_auth_amount_config (0x8c) vend sub-command: message class, decode/encode, factory method, event handling and public API
+  - added missing demo menu options to align with java sdk: check balance, pp pay, pre_auth config, display message, close socket
+  </Update>
+
+  <Update label="C# 0.0.5.16">
+  - multi-vend max products per marshall message is now calculated as function of negotiated max message size.
+  - session_end timeout expired too soon. caused reader_always_on to fire too early
+  </Update>
+
+  <Update label="C# 0.0.5.15">
+  - aligned c# sdk with java sdk across all modules:
+    - **marshall_t:**
+      - fixed transfer_data bitmap constants: added missing consumer_id (0x00004000), realigned all subsequent bitmaps
+      - added consumer_id field with encode/decode support in transfer_data
+      - fixed msg_time_rsp_t.encode() - was empty, now writes all 6 time bytes
+      - added missing message classes: msg_ext_vposm_tlv_t, msg_generic_data_t, msg_ev_ext_boot_notification, msg_ev_ext_start_notification, msg_ev_ext_stop_notification, msg_ev_ext_meter_value, msg_ev_ext_status_notification, msg_ev_ext_diag_response, msg_ev_ext_guid_response, evse_rec_t, evse_diag_rec_t
+      - added missing func_code constants for vposm_ext and ev_ext messages
+      - added factory switch dispatch for vposm_ext_vposm_tlv and ev_ext_guid_response
+      - default case in factory switch now creates msg_generic_data_t instead of null body
+    - **vmc_vend_t:**
+      - fixed payment_type_data_value assignment (was duplicate of payment_type_key_value)
+      - added long_price parameter to vendExPay mdb request
+      - fixed transferData ack option from 0 to marshall_packet_option_ack_mask
+      - reordered vend_denied handler: vendSessionComplete() before onVendDenied()
+      - fixed session_cancel to notify with session_status_user_cancel_e
+      - added m_vmc_link = null in init()
+      - fixed close_session default status to mdb_close_session_status_session_timeout
+      - removed extra is_online() check in session_start
+      - added vend_amount/discount calculation before vend_approved callback
+      - added unit_of_measure in vend_ex_close_session
+      - added select_brands parsing in transfer_data handler
+      - added QR code entry type case
+      - changed vend_pp_pay parameter from byte[] to String with hex_str_to_buf conversion
+      - dynamic multi-vend max products based on max_frame_size
+      - added null checks on all vend callback invocations
+    - **vmc_general_t:**
+      - fixed typo: reuqest_time -> request_time
+      - fixed typo: audio_file_idf -> audio_file_id
+      - added set_param(ushort dcs_code, byte[] data) method
+      - fixed display_control_apply_layout to use is_online() check
+    - **vmc_socket_t:**
+      - added is_online() guard on open_socket and transmit
+      - added m_pending_tx_msg_retries = 3 on transmit
+      - fixed close_socket notification condition
+      - added m_vmc_link = null in init()
+    - **vmc_link:**
+      - changed MARSHALL_NO_COMM_TIMEOUT from 15000 to 3000
+    - **mdb_req_t:**
+      - added missing mdb_sub_command_pre_auth_amount_config constant (0x8c)
+      - fixed msg_ex_multi_vend_req_t.encode(): added missing total_price/total_items/quantity initialization before product encoding loop
+      - bug fix: msg_setup_max_min_prices_t encode was missing sub_command byte in output buffer
+      - bug fix: msg_setup_max_min_prices_t encode typo "index = +" corrected to "index +=" for currency_code encoding
+      - bug fix: msg_expansion_t added null check on body before decode/encode, preventing NRE on ftl_retry_deny and default cases
+    - **mdb_rsp_t:**
+      - bug fix: msg_remote_selection_t encode was empty stub, now encodes all fields (funds_available, payment_media_id, payment_type, payment_data, item_number, item_options)
+      - bug fix: msg_mdb_rsp_t decode now instantiates mdb_t.msg_ftl_retry_deny_t for mdb_response_poll_ftl_retry_deny case
+    - **mdb_t:**
+      - bug fix: msg_reader_state_t encode was empty, now writes state byte
+      - string_utils: aligned with java version
+  </Update>
+
+  <Update label="C# 0.0.5.14">
+  - fix: session_id decode on msg_single_vend_t message
+  - added support for real-time price change for always_idle mode (even after reader is already enabled)
+  - updated log for multi-vend request
+  - added sanity check for vend_request and close_session apis now they return boolean value. price should not exceed permitted amount (65k for !long_price)
+  </Update>
+
+  <Update label="C# 0.0.5.13">
+  - aligned c# sdk with java, added
+  - fixed multi_vend_session_close encoding.
+  </Update>
+
+  <Update label="C# 0.0.5.12">
+  - prevent vend/socket/general actions when no link. prevents unnceserry crashes...
+  - eth_port logging optimization
+  </Update>
+
+  <Update label="C# 0.0.5.11">
+  - removed unncesserry and fightenning warning ("sporious ack")
+  - bugfix: eth_port recover when vpos restarts but socket for some reason does not close on vmc side... will close and try to reconnect
+  </Update>
+
+  <Update label="C# 0.0.5.10">
+  - fix for multi-vend multi-session packet encoding
+  </Update>
+
+  <Update label="C# 0.0.5.09">
+  - bug fix: potential packet loss from time to time due to buffer wrap around. triggered retransmisttion.
+  - bug fix: card data is cleared after end of transaction
+  - eth_port functional
+  </Update>
+
+  <Update label="C# 0.0.5.08">
+  - added enhanced display control(vposm), with legacy support for vpos touch devices
+  - stablized eth_port implementation
+  - updated sample application to support variouse display control layouts
+  </Update>
+
+  <Update label="C# 0.0.5.07">
+  - bug fix: frame size detection, better sanity, support for varying marshall message size
+  - port interface, added flush() call
+  </Update>
+
+  <Update label="C# 0.0.5.06">
+  - added site id transfered to machine, via transfer data
+  - added brand name transfered to machine, via transfer data
+  - added new command, tech mode commands, currently open door command
+  - fixed long price for single product
+  - updated sample application
+  </Update>
+
+  <Update label="C# 0.0.5.05">
+  - added brand selection
+  - added generating custom transaction_id
+  - updated sample application
+  </Update>
+
+  <Update label="C# 0.0.5.04">
+  - fixed issue receiveing on_begin_session on latest sdk
+  </Update>
+
+  <Update label="C# 0.0.5.03">
+  - long price support (vposm), fixed negative price display issue
+  - added qr 3rd party authorization support
+  </Update>
+
+  <Update label="C# 0.0.5.02">
+  - no more cpu starvartion warning. confused implementors
+  </Update>
+
+  <Update label="C# 0.0.5.01">
+  - no more lowlevel_serial. you just have to inject serial_port_i implementation already provided a working pc_port.cs
+  - fix vpos serial number as bytes, programmer needed to convert to string and reverse it. now it is provided as a string with correcly arranged serial number
+  </Update>
+
+  <Update label="C# 0.0.4.23">
+  - fixed re-transmission error due to bug in buffer management which caused to lose consecutive packets in case two arrived at same time
+  - bug fix in mdb_rsp parsing (marshall master)
+  - bug fix in lowlevel_serial buffer managment code
+  - bug fix in string tlv decoding, resulting in transfer_data message error parsing
+  </Update>
+
+  <Update label="C# 0.0.4.22">
+  - added session_id field in vend_session_t object for quick reference only relevant in multi-session scenario
+  - added some more logs
+  - bug fix: error in parsing msg_display_event_t message. user callback was not called...
+  </Update>
+
+  <Update label="C# 0.0.4.21">
+  - fixed card_balance decoding issue
+  - fixed transfer_data parsing possible crash
+  - added logs to transfer_data decoded fields
+  - fixed possible crash when parsing transfer_data packet
+  - changed .net version to 4.6.2
+  - fixed transfer_data parsing variable length of integer fields
+  - utilities modules functions refactor
+  </Update>
+
+  <Update label="C# 0.0.4.20">
+  - added logger API - dump raw data to log file
+  </Update>
+
+  <Update label="C# 0.0.4.19">
+  - fix error: received on_begin_session without actually having session started... state machine was then in undefined state...
+  - fixed an issue where api was called regardless of link state. might cause deadlock
+  - fixed an edge case where api user might stall callback, while waiting for end_session event. could cause dead-lock
+  - added the ability to send transfer data message during whole transaction period (starting at card detection)
+  - added new log entries: print sdk configuration to log, very helpful when debugging
+  </Update>
+
+  <Update label="C# 0.0.4.17">
+  - fixed ereceipt not working on multi-session setup
+  - able to switch to info session on always_idle setup
+  - added check balance session type
+  - added card sub type transfer_data
+  - adde card balance transfer_data
+  - vend discount and final price calculation
+  - fixed race-condition between rx and tx threads, causing retransmisttion for a packat that it's ack was already recevived.
+  - updated some logs to be more readable
+  - fixed possible crash when loosing communication and sending reader_enable at the same moment
+  - updated lowlevel_serial reference implementation
+  </Update>
+
+  <Update label="C# 0.0.4.16">
+  - fixed sample. multi-instance feature broke the sample. now it is ok
+  - fixed multi-instance issue on the sdk
+  </Update>
+
+  <Update label="C# 0.0.4.15">
+  - added the ability to instantiate  multiple marshall links. see example
+  </Update>
+
+  <Update label="C# 0.0.4.14">
+  - fixed item price and code api type from integer to short as should be
+  - crash fix: when cancelling a session after card presented but before vend requested
+  </Update>
+
+  <Update label="C# 0.0.4.13">
+  - bug fix: transfer_data parsing error. missed few tags due to this...
+  </Update>
+
+  <Update label="C# 0.0.4.12">
+  - updated sample application: demonstrate info session, explicit vend success
+  - updated log module: ability to capture each log line, for programmer to forward to whereever
+  - fixed session cancel on always_idle mode
+  - lowlevel_serial - cpu usage optimization
+  - session_status field on session object is now filled by the sdk. notifies the programmer about transaction cancellation reason (canceled/timeout/all ok). dispense_failed is on the programmer (in multi-session, the programmers needs to update the user canceled status when closing the session, if canceled after approval, and before settlement)
+  </Update>
+
+  <Update label="C# 0.0.4.11">
+  - dump packets on rx re-arrangement: dump packet before parsing. helps debugging...
+  - lowlevel_serial implementation - better handling of data under stress
+  </Update>
+
+  <Update label="C# 0.0.4.10">
+  - added new api: vend_status(bool), explicit vend success now it is possible to easily perform long tasks before deciding on vend success
+  - fixed vend cancel bug, when was applied after vend approved, and before vend success/failed
+  - fixed false cpu warning on sdk initialization
+  - added total actually charged (and discount if one is given) on session structure. valid after session is closed
+  - added absolute posix timestamp to log lines
+  - change API name: Log.initialize() to Log.stream()
+  </Update>
+
+  <Update label="C# 0.0.4.9">
+  - onStatus API changed: added extra data parameter
+  - added device_not_available_reason enums
+  - fixed transfer_data faulty parsing issue
+  - on sample application: added status code to human readable string
+  - on sample application: added extra vpos info on onReady event
+  </Update>
+
+  <Update label="C# 0.0.4.8">
+  - Log module added new API Log.console(boolean) to enable/disable console log output
+  - added new fields to transfer_data - receive extra information: main+pos fw version, etc
+  - added new enums for device status
+  - major rework on sample application
+  - added new fields for transfer_data: main+pos fw versions, monyx id, default credit
+  - added new event: onSessionTimeout(id)
+  </Update>
+
+  <Update label="C# 0.0.4.7">
+  - output is aligned both for terminal and file
+  - added unit_of_measure (vmc_vend) enum values
+  </Update>
+
+  <Update label="C# 0.0.4.6">
+  - fixed fw_info newest fields arrangement bug
+  - low_level_serial link realiability improvements...
+  - vend session status request bug fix
+  - vmc_socket socket busy and retransmit timeout fixed
+  - sample application further code arrangement and examples added
+  </Update>
+
+  <Update label="C# 0.0.4.5">
+  - bug fix: added sempahore protection on tx_buf reference critical section
+  </Update>
+
+  <Update label="C# 0.0.4.4">
+  - added additional vmc information fields to fw_info message
+  - multi-vend - limit different products to `<x>` products (avoid buffer overflow)
+  - added cpu monitoring, help debug cpu starvation cases
+  - added agreed marshall version
+  - aligned with marshall 3.0:
+  - added get session(s) status (all opened sessions code)
+  - added additional fw_info field: marshall sdk version string
+  - added get reader state api (enabled / disabled)
+  - added entry type enum
+  - qr e-receipt
+  - remote vend
+  - updated card type enum `vmc_vend_t.card_type_xxx_e`
+  - re-write sample application
+  </Update>
+
+  <Update label="C# 0.0.4.3">
+  - able to start and stop file log during runtime
+  </Update>
+
+  <Update label="C# 0.0.4.2">
+  - ui event bug fix
+  </Update>
+
+  <Update label="C# 0.0.4.1">
+  - added protection against disabling reader in idle mode.
+  - added display events callbacks
+  - updated sample application with UI control, and DCS attribute update APIs
+  </Update>
+
+  <Update label="C# 0.0.4.0">
+  - added display control support
+  - added extra status codes
+  - added vend callback: onStatus. see `marshall_t.status_xxxx` for enum
+  </Update>
+
+  <Update label="C# 0.0.3.5">
+  - fix  msr card encoding
+  </Update>
+
+  <Update label="C# 0.0.3.4">
+  - lowlevel_serial_t - added serialport access protection, optimized access
+  - changed vend onReady callback interface - now provides last session object (null on first call)
+  </Update>
+
+  <Update label="C# 0.0.3.3">
+  - bug fix: error when calling start_session from onReady()
+  </Update>
+
+  <Update label="C# 0.0.3.2">
+  - ability to direct SDK logs to file
+  - added monyx card to card_type enum (received om session data event)
+  - fixed multi-vend crash due to invalid log string formatting
+  - fixed get_transaction_id() when called inside onTranactionInfo, got invalid date
+  - updated sample application
+  </Update>
+
+  <Update label="C# 0.0.3.1">
+  - added two new parameters:
+    - serial packets dump level - dump all, all but keep-alive, all
+    - vend-denied policy - should just notify vmc about vend-failed and restore to idle mode, and wait for another credit-card?
+  - added session_timeout status type to session class
+  - updated sample application
+  </Update>
+
+  <Update label="C# 0.0.3.0">
+  - updated sdk to latest marshall protocol revision.
+  - on link establishment, additional info is provided to application: merchant id, merchant terminal id, machine location
+  - added socket mtu and timeout configuration
+  </Update>
+
+  <Update label="C# 0.0.2.17">
+  - empty queue error is actually just a notification, and not an error
+  </Update>
+
+  <Update label="C# 0.0.2.16">
+  - fixed always_idle bug!
+  </Update>
+
+  <Update label="C# 0.0.2.15">
+  - updated vmc_general events interface
+  - added reader_always_on fix. only when always_idle is explicitly disabled. thanks Marko!
+  </Update>
+
+  <Update label="C# 0.0.2.14">
+  - debug options enable / disable log output
+  - added 'always idle' sample code
+  </Update>
+
+  <Update label="C# 0.0.2.13">
+  - fixed 'stop' issue, where couldn't start again
+  - added vmc_framework.get_version()
+  </Update>
+
+  <Update label="C# 0.0.2.12">
+  - fixed link critical bug
+  </Update>
+
+  <Update label="C# 0.0.2.11">
+  - added new machine type: paymarket
+  - changed ev-charger machine type
+  </Update>
+
+  <Update label="C# 0.0.2.10">
+  - improved socket handling
+  - removed false warning (mismatch message id)
+  - added machine type to configuration
+  - fund available conversion issue fix
+  - fixed issue with machine serial, version and model strings length larger than limit
+  - added always_idle mode
+  </Update>
+
+  <Update label="C# 0.0.2.9">
+  - fixed link bug - sometimes, tried to transmit from empty queue!
+  </Update>
+
+  <Update label="C# 0.0.2.8">
+  - added the parsing of transferdata structure on vend session. now user gets detailed, readable information
+  - updated sample application: transaction info and get time example
+  </Update>
+
+  <Update label="C# 0.0.2.7">
+  - better socket logging
+  - changed lowlevel interface
+  - onReady(...) callback now transferes vpos configuration
+  - important! vpos much be configured as pre-authorization for multi-vend sessions
+  - fixed bug on onReady(...), could not call some marshall APIs
+  - added new flag to vmc_configuration: multi_vend_support
+  </Update>
+
+  <Update label="C# 0.0.2.6">
+  - updated vend_session_t object.
+  - vend request now unified. same API for single and multi vend request. products are declared on vend_session_t object
+  </Update>
+
+  <Update label="C# 0.0.2.5">
+  - report quantity to dcs NOTE: must work with version VPOS version 4.0.1.5 rc9 or newer
+  - added transaction_id report via new API
+  - fixed issue when cancelling session after credit-card has been presented, but before vend requested
+  - fixed issue when trying to close session while reader is in enabled state
+  </Update>
+
+  <Update label="C# 0.0.2.4">
+  - fix issue with model and version reporting to dcs
+  - seperate keep-alive timer from configured keepalive-timeout
+  </Update>
+
+  <Update label="C# 0.0.2.3">
+  - added another log message
+  - added link statistics
+  - fixed issue with buffer index while parsing packet in middle of master-buffer
+  </Update>
+
+  <Update label="C# 0.0.2.2">
+  - fixed communications issue
+  </Update>
+
+  <Update label="C# 0.0.2.1">
+  - fixed issue with re-transmit time-out. sometimes was sent too fast
+  </Update>
+
+  <Update label="C# 0.0.2.0">
+  - low_level_serial example improvement
+  - handle marshall piggy-back messages
+  - re-transmit bug fixed
+  </Update>
+
+  <Update label="C# 0.0.1.9">
+  - added vmc auth sample
+  - low_level_serial example improvement
+  </Update>
+
+  <Update label="C# 0.0.1.8">
+  - fixed link issue
+  - added cc last 4 digits (transfer-data)
+  </Update>
+
+  <Update label="C# 0.0.1.7">
+  - added reader always on mode
+  - added cash sale
+  </Update>
+
+  <Update label="C# 0.0.1.6">
+  - fixed session close status bug
+  - Add cash sale notification api
+  </Update>
+
+  <Update label="C# 0.0.1.5">
+  - added mifare/mag auth support
+  </Update>
+
+  <Update label="C# 0.0.1.4">
+  - added socket support
+  - added info session support
+  </Update>
+
+  <Update label="C# 0.0.1.3">
+  - initial version
+  </Update>
+
+  </Tab>
+
+  <Tab title="C">
+
+  <Update label="C 0.0.2.29 (28.10.2025)">
+  - Added site ID transfer to machine via transfer data
+  - Added brand name transfer to machine via transfer data
+  - Added new technician mode commands (open door command)
+  - Enhanced error handling with improved validation and descriptive messages
+  - Bug fix - high com_id issue
+  </Update>
+
+  <Update label="C 0.0.2.28 (30.1.2025)">
+  - fixed crash on cancel after session_begin and before vend_request.
+  </Update>
+
+  <Update label="C 0.0.2.27 (16.12.2024)">
+  - clear transaction data upon returning to ready mode (after transaction is finished)
+  </Update>
+
+  <Update label="C 0.0.2.26 (13.10.2024)">
+  - fixed issue when canceling info session, caused crash!
+  </Update>
+
+  <Update label="C 0.0.2.25 (13.10.2024)">
+  - fixed issue handling consecutive frames received immediately from vpost
+  - added ereceipt support
+  </Update>
+
+  <Update label="C 0.0.2.24 (25.9.2024)">
+  - fixed issue with transaction canceled.
+  </Update>
+
+  <Update label="C 0.0.2.23 (08.4.2024)">
+  - cpu_platform_get_time() returns 64bit value. solved overflow after 50 days
+  - quit on demo app now actually quits...
+  - added long_price support
+  </Update>
+
+  <Update label="C 0.0.2.22 (08.4.2024)">
+  - added qr_code entry mode and 3rd party authorization support
+  - added new sample application, with menu to demonstrate api usage
+  - added linux platform support, out of the box
+  - added windows platform support, out of the box
+  </Update>
+
+  <Update label="C 0.0.2.21 (08.4.2024)">
+  - added display control api(vmc_general.h)
+  - added keil compiler support
+  </Update>
+
+  <Update label="C 0.0.2.16 (05.04.2023)">
+  - info_session works in always_idle setup
+  </Update>
+
+  <Update label="C 0.0.2.15 (04.04.2023)">
+  - added card_sub_type transfer_data field
+  - added card_balance transfer_data field
+  - added check balance session type
+  </Update>
+
+  <Update label="C 0.0.2.14 (04.01.2023)">
+  - added new transfer data fields
+  - updated discount and final price logic for all payment types
+  </Update>
+
+  <Update label="C 0.0.2.13 (01.01.2023)">
+  - added new transfer data fields
+  </Update>
+
+  <Update label="C 0.0.2.12 (20.12.2022)">
+  - session_status field on session object is now filled by the sdk. notifies the programmer about transaction cancellation reason (canceled/timeout/all ok). dispense_failed is on the programmer (in multi-session, the programmers needs to update the user canceled status when closing the session, if cancled after approal, and before settlement)
+  - added on_status event callback
+  - added vmc_vend_event_on_session_timeout event
+  - added vmc_link_get_version() - returns SDK version
+  </Update>
+
+  <Update label="C 0.0.2.11 (12.12.2022)">
+  - fixed segmentation fault: occured when printing 'moderate' level
+  - fixed segmentation faukt: when issuing info session. thanks Filipe Osório
+  - fixed missing transaction_id_len not set
+  - fixed vend cancel on always_idle scenariot
+  </Update>
+
+  <Update label="C 0.0.2.10 (06.12.2022)">
+  - rx buffer management improvements: can now handle concatacated frames on rx_buffer
+  </Update>
+
+  <Update label="C 0.0.2.9 (18.10.2022)">
+  - added the ability to dynamically allocate vmc_buffer_t array. protected by define (VMC_DYNAMIC_ALLOCATION)
+  - fixed bug - socket transmit, sometimes socket is busy, user will now get busy event, for retransmittion of data packet
+  - added statistics (crc, link, etc)
+  </Update>
+
+  <Update label="C 0.0.2.8 (24.8.2022)">
+  - added new api: vend_status(bool), explicit vend success now it is possible to easily perform long tasks before deciding on vend success
+  - added total actually charged (and discount if one is given) on session structure. valid after session is closed
+  </Update>
+
+  <Update label="C 0.0.2.7 (25.7.2022)">
+  - fixed a pointer conversion, causing segmentation fault error
+  - fixed opened sessions query buf. returned 0 always.
+  - fixed TransferData(): Tag 1: TransactionID length bug: extended from 4 to 8 bytes
+  </Update>
+
+  <Update label="C 0.0.2.6 (6.4.2022)">
+  - fixed a bug: vend deny persist mode yielded always on even on succesfull transactions
+  - added unit_of_measure enums to vmc_vend
+  - added new vend events: session_cancled, sessions_rsp, reader_state_rsp
+  - added qr code (ereceipt) reception handling
+  - added new api: is_in_middle_of_transaction()
+  - added new fields to fw_info message (vmc_config)
+  </Update>
+
+  <Update label="C 0.0.2.5 (20.7.2021)">
+  - multi-vend items bug fix
+  </Update>
+
+  <Update label="C 0.0.2.4 (17.6.2021)">
+  - fixed multi-vend crash error on overflowing number of items
+  </Update>
+
+  <Update label="C 0.0.2.3 (19.5.2021)">
+  - updated status codes and added on_status vend event. see `marshall_t.status_xxxx`
+  - added alert feature
+  - various bug-fixes:
+  - support for 8-bit slim micro-controllers
+  </Update>
+
+  <Update label="C 0.0.2.2 (28.4.2021)">
+  - updated status codes and added on_status vend event. see `marshall_t.status_xxxx`
+  - added alert feature
+  </Update>
+
+  <Update label="C 0.0.2.1 (17.03.2021)">
+  - added compilation flags in order to reduce flash usage, ability to disable unused modules (socket, general, etc)
+  </Update>
+
+  <Update label="C 0.0.2.0 (1.10.2020)">
+  - added time update api
+  - added new experimental library: http client. supports get/post/update/delete
+  - added new experimental library: ftp client. supports downloading file from ftp server
+  - vmc_socket module bug fix - could stall in state-machine
+  - marshall c sdk now nativly supports big or little endian platforms
+  - mult-vend bug fix
+  - always-idle bug fix
+  </Update>
+
+  <Update label="C 0.0.1.3 (15.9.2020)">
+  - added link events handler
+  </Update>
+
+  <Update label="C 0.0.1.2 (09.09.2020)">
+  - fixed multi-vend bug
+  </Update>
+
+  <Update label="C 0.0.1.1 (28.8.2020)">
+  - added monyx card
+  </Update>
+
+  <Update label="C 0.0.1.0 (3.8.2020)">
+  - added debug level dump packets option
+  - vend-denied policy ( on vend-denied, wait for another credit-card or return to idle mode)
+  - added machine type parameter
+  </Update>
+
+  <Update label="C 0.0.0.2 (16.4.2020)">
+  - updated transfer_data functionality
+  - added stm32f0 sample application with uart/dma support
+  </Update>
+
+  <Update label="C 0.0.0.1 (12.3.2020)">
+  - initial release
+  </Update>
+
+  </Tab>
+</Tabs>
