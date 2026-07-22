@@ -1,0 +1,83 @@
+---
+title: "Marshall C SDK Release Notes"
+sidebarTitle: "C"
+description: "Track Marshall C SDK changes as they ship."
+rss: true
+---
+
+Nayax logs Marshall C SDK changes on this page as they ship. Subscribe to
+the RSS feed using the icon at the top of the page to get notified of new
+entries.
+
+Release notes are organized into two categories to help you evaluate the
+impact of each update:
+
+* **Improvements**: New APIs, expanded feature support, and performance
+  enhancements.
+* **Fixes**: Resolved bugs and reliability improvements.
+
+<Update
+  label="C 0.0.2.29 (28.10.2025) (Current)"
+  rss={{
+    title: "C SDK 0.0.2.29: transfer data, technician commands, and error handling improvements",
+    description: "Improvements: site ID and brand name transfer via transfer data, a new technician-mode door command, and enhanced error handling. Fixes: a bug related to a high `com_id` value."
+  }}
+>
+
+<Accordion title="Improvements" icon="rocket">
+### Transfer data and technician commands
+
+Site ID and brand name are now transferred to the machine via transfer data, and a new technician-mode command opens the door remotely.
+
+***
+
+### Error handling
+
+Enhanced error handling with improved validation and more descriptive messages.
+</Accordion>
+
+<Accordion title="Fixes" icon="wrench">
+### High com_id issue
+
+Fixed a bug related to a high `com_id` value.
+</Accordion>
+
+</Update>
+
+### Version history
+
+Every earlier C SDK version, condensed to one line. See the current version above for full detail and links.
+
+| Version | Date | Summary |
+|---|---|---|
+| 0.0.2.28 | January 30, 2025 | Fixed a crash on cancel after `session_begin` and before `vend_request` |
+| 0.0.2.27 | December 16, 2024 | Transaction data is now cleared when returning to ready mode after a transaction finishes |
+| 0.0.2.26 | October 13, 2024 | Fixed a crash when canceling an info session |
+| 0.0.2.25 | October 13, 2024 | Added e-receipt support; fixed an issue handling consecutive frames received immediately from VPOS |
+| 0.0.2.24 | September 25, 2024 | Fixed an issue with canceled transactions |
+| 0.0.2.23 | April 8, 2024 | Added `long_price` support; `cpu_platform_get_time()` now returns a 64-bit value, fixing an overflow after 50 days; fixed the demo app's quit option not actually quitting |
+| 0.0.2.22 | April 8, 2024 | Added QR-code entry mode and third-party authorization support, a new sample application demonstrating API usage, and out-of-the-box Linux and Windows platform support |
+| 0.0.2.21 | April 8, 2024 | Added a display control API (`vmc_general.h`) and Keil compiler support |
+| 0.0.2.16 | April 5, 2023 | Fixed info session to work in always-idle setups |
+| 0.0.2.15 | April 4, 2023 | Added `card_sub_type` and `card_balance` transfer_data fields and a check-balance session type |
+| 0.0.2.14 | January 4, 2023 | Added new transfer data fields; updated discount and final price logic for all payment types |
+| 0.0.2.13 | January 1, 2023 | Added new transfer data fields |
+| 0.0.2.12 | December 20, 2022 | `session_status` on the session object is now filled in by the SDK to report the transaction cancellation reason; added the `on_status` event callback, the `vmc_vend_event_on_session_timeout` event, and `vmc_link_get_version()` |
+| 0.0.2.11 | December 12, 2022 | Fixed segmentation faults printing the "moderate" log level and issuing an info session, a missing `transaction_id_len`, and a vend-cancel bug in always-idle mode |
+| 0.0.2.10 | December 6, 2022 | Improved rx buffer management to handle concatenated frames |
+| 0.0.2.9 | October 18, 2022 | Added the ability to dynamically allocate the `vmc_buffer_t` array (behind `VMC_DYNAMIC_ALLOCATION`) and crc/link statistics; fixed a socket-transmit bug so a busy socket now raises a busy event for retransmission |
+| 0.0.2.8 | August 24, 2022 | Added `vend_status(bool)` for explicit vend success and the total charged (and discount, if any) on the session structure |
+| 0.0.2.7 | July 25, 2022 | Fixed a pointer-conversion segmentation fault, an opened-sessions query always returning 0, and a `TransferData()` TransactionID length bug (extended from 4 to 8 bytes) |
+| 0.0.2.6 | April 6, 2022 | Added `unit_of_measure` enums to `vmc_vend`, new vend events (`session_cancled`, `sessions_rsp`, `reader_state_rsp`), QR code (e-receipt) handling, `is_in_middle_of_transaction()`, and new `fw_info` fields; fixed a bug where vend-deny persist mode stayed always-on even after a successful transaction |
+| 0.0.2.5 | July 20, 2021 | Fixed a multi-vend items bug |
+| 0.0.2.4 | June 17, 2021 | Fixed a multi-vend crash on an overflowing number of items |
+| 0.0.2.3 | May 19, 2021 | Added updated status codes, the `on_status` vend event, an alert feature, and support for 8-bit slim micro-controllers, plus various other bug fixes |
+| 0.0.2.2 | April 28, 2021 | Added updated status codes, the `on_status` vend event, and an alert feature |
+| 0.0.2.1 | March 17, 2021 | Added compilation flags to reduce flash usage and disable unused modules (socket, general, etc) |
+| 0.0.2.0 | October 1, 2020 | Added a time-update API, experimental HTTP and FTP client libraries, and native big/little-endian platform support; fixed a `vmc_socket` state-machine stall, a multi-vend bug, and an always-idle bug |
+| 0.0.1.3 | September 15, 2020 | Added a link events handler |
+| 0.0.1.2 | September 9, 2020 | Fixed a multi-vend bug |
+| 0.0.1.1 | August 28, 2020 | Added the Monyx card |
+| 0.0.1.0 | August 3, 2020 | Added a debug-level packet dump option, a vend-denied policy, and a machine type parameter |
+| 0.0.0.2 | April 16, 2020 | Updated transfer_data functionality; added an STM32F0 sample application with UART/DMA support |
+| 0.0.0.1 | March 12, 2020 | Initial release |
