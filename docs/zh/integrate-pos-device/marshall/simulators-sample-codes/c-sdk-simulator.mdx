@@ -1,0 +1,49 @@
+---
+title: C SDK 模拟器
+metadata:
+  og:description: Nayax Marshall SDK 包含一个模拟器，可帮助开发人员测试和调试其设备与 Nayax 支付系统的集成。
+---
+
+import {TerminalBlock} from "/snippets/TerminalBlock.jsx";
+
+Nayax Marshall SDK 包含一个模拟器，可帮助开发者测试和调试其设备与 Nayax 支付系统的集成。该模拟器能够模拟实际硬件和软件交互的行为，使您无需使用物理硬件即可验证售货流程。
+
+## 模拟器
+
+当在终端上启动 C SDK 模拟器时，其菜单将如下所示：
+
+<TerminalBlock>
+  \[0]: 启动会话 0 \[1]: 关闭会话 0 \[2]: 会话信息 \[3]: 取消会话 \[4]: 查询会话 \[5]: 读取器状态 \[6]: 链接统计信息 \[7]: 退出
+</TerminalBlock>
+
+下表描述了模拟器终端上的每个选项。
+
+| 命令                | 描述                                                           |
+| :---------------- | :----------------------------------------------------------- |
+| `Start session 0` | 使用产品代码 0 启动会话（交易）。                                           |
+| `Close Session 0` | 仅适用于多会话。交易结束时关闭会话（结算）。                                       |
+| `Cancel Session`  | 从外围设备端取消交易。此操作可在消费者银行卡获得授权之前执行。                              |
+| `Query sessions`  | 提供有关当前打开的会话的信息。*此选项适用于 4.0.0.22 及以上版本*。                      |
+| `Reader state`    | 提供读卡器是否`enabled (1)/disabled (0)`的信息。此选项自 4.0.0.22 及以上版本起适用。 |
+| `Link stats`      | 提供有关 CRC 错误数量、数据包重传次数和通信中断次数的信息。                             |
+| `Quit`            | 退出模拟器程序。                                                     |
+
+## 交易流程示例
+
+以下是每种交易类型的流程示例：
+
+1. 常规交易（单一会话）：
+   1. 启动会话：使用`[0]: Start session`。
+   2. 出示银行卡，等待授权和“谢谢”屏幕。
+2. 多会话交易：
+   1. 使用`[0]: Start session 0`启动会话。
+   2. 出示银行卡，等待授权和“谢谢”屏幕。
+   3. 关闭相关会话——在此情况下，使用`[1]: Close Session 0`。
+
+## 参见
+
+<Columns cols={3}>
+  <Card icon="link" title="C# SDK 模拟器" href="/docs/integrate-pos-device/marshall/simulators-sample-codes/csharp-sdk-simulator" arrow />
+
+  <Card icon="link" title="Java SDK模拟器" href="/docs/integrate-pos-device/marshall/simulators-sample-codes/java-sdk-simulator" arrow />
+</Columns>

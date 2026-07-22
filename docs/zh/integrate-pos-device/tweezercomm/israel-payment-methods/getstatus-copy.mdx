@@ -1,0 +1,68 @@
+---
+title: 获取内部状态
+metadata:
+  og:description: getInternalStatus 方法用于检查 AEA（支付应用程序）的内部服务状态。它有助于判断设备是处于空闲、繁忙。
+---
+
+`getInternalStatus` 方法用于检查 AEA（支付应用程序）的内部服务状态。它有助于判断设备是处于空闲、繁忙，还是处于交易的某个特定阶段。应避免频繁调用此方法。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+请在请求中确保配置以下内容：
+
+- `method` 字段必须设置为 `getInternalStatus`。
+- The service must be set to `ashrait` in the `params`.
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getInternalStatus",
+    "params": [
+        "ashrait"
+    ],
+    "id": "123454352"
+}
+```
+
+### 请求参数
+
+此方法除标准服务名称外不需要任何其他参数。
+
+## 回复
+
+成功调用会返回一个包含内部状态字符串的对象。
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "status": "idle"
+    }
+}
+```
+
+### 响应参数
+
+The result `object` contains the following field:
+
+| 姓名       | 类型     | 描述            |
+| :------- | :----- | :------------ |
+| `status` | string | 表示设备内部状态的字符串。 |
+
+### 可能的状态取值
+
+status 字段将包含以下字符串之一：
+
+| 价值             | 描述                        |
+| :------------- | :------------------------ |
+| `IDLE`         | 设备处于空闲模式，可以处理新请求。         |
+| `BUSY`         | 设备正忙，此时无法处理新请求。           |
+| `PHASE2_READY` | 设备已完成交易第 1 阶段，可以进行第 2 阶段。 |
+| `AUTH_READY`   | 设备已准备好进行授权。               |

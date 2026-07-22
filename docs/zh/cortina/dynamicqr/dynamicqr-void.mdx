@@ -1,0 +1,934 @@
+---
+title: Void
+metadata:
+  og:description: Cortina DQR 使用 Void 命令通知集成方,以便在以下情况之一发生时,与 Cortina 支付提供商发起取消流程。
+---
+
+Cortina DQR 使用 `Void` 命令通知集成方,以便在以下任一情况发生时,与 Cortina 支付提供商发起取消流程:
+
+1. 出售过程中出现问题(在“Approved”的 `Inquiry` 响应之后)——消费者按下取消按钮,或机器出售失败(产品出货/服务提供出现问题)。
+2. 超时前未收到 `Inquiry` 响应。
+
+此命令对于让支付提供商知道交易已在 Nayax 端（以及从消费者的角度来看）被取消至关重要，并且执行此命令是为了让支付提供商在其端完成取消操作。
+
+## 要求
+
+Nayax's servers send a POST request to your configured `Void` endpoint, which would be of the following format:
+
+`(customer's URL)/Cortina/DynamicQR/Void`
+
+该负载（payload）包含读卡操作的完整结果：
+
+```json
+{
+  "ReasonCode": 3,
+  "ReasonText": "Cashless Cancelled by machine",
+  "BasicInfo": {
+    "TransactionId": "236584335969834429321847829253667359",
+    "Amount": 0.1,
+    "Currency": "ILS",
+    "SiteId": 1,
+    "MachineAuTime": "230221121009"
+  },
+  "DeviceInfo": {
+    "Id": 0,
+    "HwSerial": "0434324119376524",
+    "FWVersion": "",
+    "Type": "ONYX"
+  },
+  "MachineInfo": {
+    "Id": 869761713,
+    "Name": "TestPayDynamicQR V2",
+    "TerminalId": "987654321",
+    "DecimalPlace": 2,
+    "Offset": "2.00",
+    "CountryCode": "US",
+    "CountryISOCode": "USA",
+    "Country": "UNITED STATES",
+    "City": "Abbeville",
+    "Address": "TestPayDynamicQR V2",
+    "ZipCode": "1223311"
+  },
+  "ActorInfo": {
+    "Id": 2001187922,
+    "Name": "TanyaT_OP",
+    "MerchantId": "123456789"
+  },
+  "CustomData": {
+    "Actor": "",
+    "Machine": {
+      "dynamic_qr_channels_rec_ids": "18,19"
+    }
+  },
+  "PaymentInfo": {
+    "SrvTranId": "236584335969834429321847829253667359",
+    "AuthCode": "333333",
+    "AuthAmount": 0.1,
+    "SettAmount": 0.1,
+    "RRN": "111111",
+    "Token": "",
+    "AuthDateTime": "230221101008",
+    "SettDateTime": "230221101009",
+    "TraceNumber": "4444",
+    "AuthSource": "55555",
+    "IsGatewayTimeout": false
+  }
+}
+```
+
+### 请求参数
+
+下表描述了请求正文中包含的参数：
+
+<table>
+  <thead>
+    <tr>
+      字段
+      类型
+      描述
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      交易标识符和参考信息
+    </tr>
+
+    <tr>
+      `TransactionId`
+      String(36)
+
+      <td style={{ textAlign: "left" }}>
+        此交易的**唯一标识符**。
+
+        <ul>
+          如果使用了 `/StartSession`，则回显其加密后的 ID。
+          否则，将由 Nayax Engine 生成此值。
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      `NayaxTransactionId`
+      Int(64)
+
+      <td style={{ textAlign: "left" }}>
+        **Nayax 内部交易的唯一 ID** ，在后续请求中会重复出现。
+      </td>
+    </tr>
+
+    <tr>
+      `SrvTranId`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        **集成商的内部交易 ID** 。
+
+        <ul>
+          条件性：如果未使用 `/StartSession`，则为必填字段。
+          如果使用了 /StartSession，则该字段应为空，或回显交易 ID（Transaction ID）。
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      `RRN`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        **参考检索编号（RRN）** 。建议向**消费者/持卡人**公开，以便获得支持。
+      </td>
+    </tr>
+
+    <tr>
+      `AuthCode`
+      String(40)
+
+      <td style={{ textAlign: "left" }}>
+        **外部授权码**（通常来自发卡行的银行）。
+      </td>
+    </tr>
+
+    <tr>
+      `Token`
+      String(256)
+
+      <td style={{ textAlign: "left" }}>
+        交易的唯一令牌。**仅供 Nayax 内部使用。**
+      </td>
+    </tr>
+
+    <tr>
+      `TraceNumber`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        追踪编号。**仅供Nayax内部使用。**
+      </td>
+    </tr>
+
+    <tr>
+      `AuthSource`
+      String(5)
+
+      <td style={{ textAlign: "left" }}>
+        仅供 Nayax 内部使用。
+      </td>
+    </tr>
+
+    <tr>
+      财务和时间详情
+    </tr>
+
+    <tr>
+      `Amount`
+      Double
+
+      <td style={{ textAlign: "left" }}>
+        **付款金额**（以美分为单位，最多保留 3 位小数）。
+
+        <ul>
+          示例：1 分 = `0.01`。
+          注意：没有小数位的货币仍以 double 类型表示（例如，234 JYN = `234.0`）。
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      `AuthAmount`
+      Double
+
+      <td style={{ textAlign: "left" }}>
+        `/Authorization` 请求中所请求的原始金额。是否显示取决于 `/Authorization` 的响应。
+      </td>
+    </tr>
+
+    <tr>
+      `SettAmount`
+      Double
+
+      <td style={{ textAlign: "left" }}>
+        `/Settlement` 或 `/Sale` 流程中请求的原始金额。与 Authorization 命令无关。
+      </td>
+    </tr>
+
+    <tr>
+      `AuthDateTime`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        `/Authorization` 发生的日期和时间。格式：`ddMMyyHHmmss`。
+      </td>
+    </tr>
+
+    <tr>
+      `SettDateTime`
+      Double
+
+      <td style={{ textAlign: "left" }}>
+        结算日期/时间。与授权命令无关。
+      </td>
+    </tr>
+
+    <tr>
+      卡片及支付详情
+    </tr>
+
+    <tr>
+      `CardNumber`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        根据交易类型提供的卡片信息：
+
+        <ul>
+          对于卡片在场（card-present）的 Authorization/Sale，为完整的 Track 2 数据。
+          对于其他交易类型，仅为卡号（Card PAN）。
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      `EntryMode`
+      String(4)
+
+      <td style={{ textAlign: "left" }}>
+        卡片信息的读取方式：
+
+        <ul>
+          MCR：磁条读取（刷卡）
+          CON：接触式芯片（插卡）
+          CLS：非接触式芯片（挥卡）
+          NFC：手机/移动设备非接触式
+          QR：由 DOT 读取的二维码
+          有关特定边缘情况，请咨询 Nayax POC。
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      `ExpYear`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        卡片到期年份（ **YY**格式）。**条件性**（仅当接口为 1 或 10 时）。
+      </td>
+    </tr>
+
+    <tr>
+      `ExpMonth`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        卡片到期月份（ **MM**格式）。**条件性**（仅当接口为 1 或 10 时）。
+      </td>
+    </tr>
+
+    <tr>
+      `EMVData`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        EMV标签数据采用**TLV（标签长度-值）格式**。
+      </td>
+    </tr>
+
+    <tr>
+      `IDNumber`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        持卡人**ID号码**。
+      </td>
+    </tr>
+
+    <tr>
+      `RandomNumber`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        暂无更多信息。
+      </td>
+    </tr>
+
+    <tr>
+      `PrimaryId`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        主要品牌 ID。
+      </td>
+    </tr>
+
+    <tr>
+      `PrimaryDescription`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        主要品牌描述。
+      </td>
+    </tr>
+
+    <tr>
+      `SecondaryId`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        次要品牌 ID。
+      </td>
+    </tr>
+
+    <tr>
+      `SecondaryDescription`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        次要品牌描述。
+      </td>
+    </tr>
+
+    <tr>
+      `CardHolderName`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        持卡人姓名。
+      </td>
+    </tr>
+
+    <tr>
+      机器及位置详情
+    </tr>
+
+    <tr>
+      `SiteId`
+      Int(16)
+
+      <td style={{ textAlign: "left" }}>
+        **Nayax服务器**区域。
+      </td>
+    </tr>
+
+    <tr>
+      `HwSerial`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        Nayax 设备**硬件序列号**。
+      </td>
+    </tr>
+
+    <tr>
+      `FWVersion`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        设备固件版本。
+      </td>
+    </tr>
+
+    <tr>
+      `Type`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        Nayax 设备类型。
+      </td>
+    </tr>
+
+    <tr>
+      `Id`
+      Int(64)
+
+      <td style={{ textAlign: "left" }}>
+        机器实体的唯一 ID。
+      </td>
+    </tr>
+
+    <tr>
+      `Name`
+      String(255)
+
+      <td style={{ textAlign: "left" }}>
+        机器名称。
+      </td>
+    </tr>
+
+    <tr>
+      `TerminalId`
+      String(255)
+
+      <td style={{ textAlign: "left" }}>
+        **终端标识符**。请联系 Nayax TPOC 进行定义。
+      </td>
+    </tr>
+
+    <tr>
+      `DecimalPlace`
+      Int(64)
+
+      <td style={{ textAlign: "left" }}>
+        金额的**小数点位置**。
+      </td>
+    </tr>
+
+    <tr>
+      `Offset`
+      String(255)
+
+      <td style={{ textAlign: "left" }}>
+        UTC 时区偏移量。
+      </td>
+    </tr>
+
+    <tr>
+      `GroupId`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        仅供 Nayax 内部使用。
+      </td>
+    </tr>
+
+    <tr>
+      `OperatorId`
+      String(255)
+
+      <td style={{ textAlign: "left" }}>
+        商户 ID。
+      </td>
+    </tr>
+
+    <tr>
+      `Region`
+      String(255)
+
+      <td style={{ textAlign: "left" }}>
+        机器所在地区。
+      </td>
+    </tr>
+
+    <tr>
+      `City`
+      String(255)
+
+      <td style={{ textAlign: "left" }}>
+        机器所在城市。
+      </td>
+    </tr>
+
+    <tr>
+      `ZipCode`
+      String(255)
+
+      <td style={{ textAlign: "left" }}>
+        机器**邮政编码**。
+      </td>
+    </tr>
+
+    <tr>
+      `Name`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        国家全称（用于机器位置）。
+      </td>
+    </tr>
+
+    <tr>
+      `NumericCode`
+      String(3)
+
+      <td style={{ textAlign: "left" }}>
+        ISO-3166-1 Numeric-3 代码。
+      </td>
+    </tr>
+
+    <tr>
+      `Alpha2Code`
+      String(2)
+
+      <td style={{ textAlign: "left" }}>
+        ISO-3166-1 Alpha-2 代码。
+      </td>
+    </tr>
+
+    <tr>
+      `Alpha3Code`
+      String(3)
+
+      <td style={{ textAlign: "left" }}>
+        ISO-3166-1 Alpha-3 代码。
+      </td>
+    </tr>
+
+    <tr>
+      `State`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        演员地理位置**代码**。
+      </td>
+    </tr>
+
+    <tr>
+      `City`
+      String(255)
+
+      <td style={{ textAlign: "left" }}>
+        演员地理**城市**。
+      </td>
+    </tr>
+
+    <tr>
+      `CountryCode`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        演员地理位置**国家代码（ISO3）** 。
+      </td>
+    </tr>
+
+    <tr>
+      `ZipCode`
+      String(255)
+
+      <td style={{ textAlign: "left" }}>
+        演员地理位置**邮政编码**。
+      </td>
+    </tr>
+
+    <tr>
+      `Address`
+      String(255)
+
+      <td style={{ textAlign: "left" }}>
+        演员地理位置**地址**。
+      </td>
+    </tr>
+
+    <tr>
+      `Longitude`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        机器位置**经度**。
+      </td>
+    </tr>
+
+    <tr>
+      `Latitude`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        机器位置**纬度**。
+      </td>
+    </tr>
+
+    <tr>
+      自定义数据（JSON 字符串）
+    </tr>
+
+    <tr>
+      `DirectActor`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        直接演员**自定义数据**（ **JSON 格式**的字符串）。
+      </td>
+    </tr>
+
+    <tr>
+      `Operator`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        操作员**自定义数据**（ **JSON 格式**的字符串）。
+      </td>
+    </tr>
+
+    <tr>
+      `Distributor`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        分销商**自定义数据**（ **JSON 格式**的字符串）。
+      </td>
+    </tr>
+
+    <tr>
+      `Actor`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        演员**自定义数据**（ **JSON 格式**的字符串）。
+      </td>
+    </tr>
+
+    <tr>
+      `Machine`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        机器**自定义数据**（ **JSON 格式**的字符串）。
+      </td>
+    </tr>
+
+    <tr>
+      `AdditionalData`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        通用自定义数据字符串， **JSON 格式**。
+      </td>
+    </tr>
+
+    <tr>
+      系统与响应标志
+    </tr>
+
+    <tr>
+      `IsGatewayTimeout`
+      Bool
+
+      <td style={{ textAlign: "left" }}>
+        指示是否发生**网关超时**（响应中有效）。
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## 回复
+
+客户的支付方式会向 Nayax 服务器发送的撤销响应。负载应如下所示：
+
+```json
+{
+  "Status": {
+    "Verdict": "Approved",
+    "Code": 0,
+    "StatusMessage": "Cortina V2 Stub Tester"
+  },
+  "PaymentInfo": {
+    "SrvTranId": "236584335969834429321847829253667359",
+    "AuthCode": "333333",
+    "AuthAmount": 0.1,
+    "SettAmount": 0.1,
+    "RRN": "111111",
+    "Token": "",
+    "AuthDateTime": "230221101008",
+    "SettDateTime": "230221101009",
+    "TraceNumber": "4444",
+    "AuthSource": "55555",
+    "IsGatewayTimeout": false
+  }
+}
+```
+
+### 响应参数
+
+下表描述了 API 响应中返回的字段：
+
+<table>
+  <thead>
+    <tr>
+      字段
+      类型
+      描述
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      交易状态及错误代码
+    </tr>
+
+    <tr>
+      `Verdict`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        请求的最终状态。必须是以下常量字符串值之一：
+
+        <ul>
+          <li>**`Approved`**</li>
+          <li>**`Declined`**</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      `Code`
+      Int(32)
+
+      <td style={{ textAlign: "left" }}>
+        拒绝代码（Decline Code）。条件性字段——仅当 `Verdict` 为 “Declined” 时才会出现。有效代码包括：
+
+        <ul>
+          1：余额不足
+          5：疑似欺诈
+          6：系统一般性故障
+          7：金额无效
+          8 / 998：格式/解析错误或验证错误
+          992：超时异常
+          997：缺少必填参数
+          999：一般性异常
+          有关其他状态和内部错误（例如 40、990、1011），请参阅完整列表。
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      `StatusMessage`
+      String(255)
+
+      <td style={{ textAlign: "left" }}>
+        包含**交易状态消息**或有关结果的其他不同数据的自由文本字段。
+      </td>
+    </tr>
+
+    <tr>
+      `CustomDeclineCode`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        用于指定自定义拒绝代码（例如与 Soft Decline 或 Switch Interface 相关的代码）。可能反映收单机构（acquirer）的响应代码。
+      </td>
+    </tr>
+
+    <tr>
+      财务和时间详情
+    </tr>
+
+    <tr>
+      `AuthAmount`
+      Double
+
+      <td style={{ textAlign: "left" }}>
+        `/Authorization` 请求中所请求的原始金额。
+      </td>
+    </tr>
+
+    <tr>
+      `SettAmount`
+      Double
+
+      <td style={{ textAlign: "left" }}>
+        `/Settlement` 或 `/Sale` 流程中请求的原始金额。与 Authorization 无关。
+      </td>
+    </tr>
+
+    <tr>
+      `AuthDateTime`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        `/Authorization` 发生的日期和时间。格式：`ddMMyyHHmmss`。
+      </td>
+    </tr>
+
+    <tr>
+      `SettDateTime`
+      Double
+
+      <td style={{ textAlign: "left" }}>
+        结算日期/时间。与授权命令无关。
+      </td>
+    </tr>
+
+    <tr>
+      交易标识符和参考信息
+    </tr>
+
+    <tr>
+      `SrvTranId`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        **集成商的内部交易 ID** 。
+
+        <ul>
+          条件性：如果未使用 `/StartSession`，则为必填字段。
+          如果使用了 /StartSession，则该字段应为空，或回显交易 ID（Transaction ID）。
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      `AuthCode`
+      String(40)
+
+      <td style={{ textAlign: "left" }}>
+        **外部授权码**（通常来自发卡行的银行）。
+      </td>
+    </tr>
+
+    <tr>
+      `RRN`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        **参考检索编号（RRN）** 。建议向**消费者/持卡人**公开，以便获得支持。
+      </td>
+    </tr>
+
+    <tr>
+      `Token`
+      String(256)
+
+      <td style={{ textAlign: "left" }}>
+        交易的唯一令牌。**仅供 Nayax 内部使用。**
+      </td>
+    </tr>
+
+    <tr>
+      `TraceNumber`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        追踪编号。**仅供Nayax内部使用。**
+      </td>
+    </tr>
+
+    <tr>
+      `AuthSource`
+      String(5)
+
+      <td style={{ textAlign: "left" }}>
+        仅供 Nayax 内部使用。
+      </td>
+    </tr>
+
+    <tr>
+      `InitiateTranReference`
+      Int(64)
+
+      <td style={{ textAlign: "left" }}>
+        **条件**：反映预付会员卡重新尝试的**原始 Nayax 交易 ID** 。
+      </td>
+    </tr>
+
+    <tr>
+      忠诚度及系统详情
+    </tr>
+
+    <tr>
+      `RegularCreditType`
+      Int(32)
+
+      <td style={{ textAlign: "left" }}>
+        定义 `RegularCredit` 的计量单位（枚举值）：
+
+        <ul>
+          0：信用额度以交易次数计（count）。
+          1：信用额度以金额计（currency）。
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      `RegularCredit`
+      Double
+
+      <td style={{ textAlign: "left" }}>
+        根据 `RegularCreditType` 计算的常规信用额度值（金额或交易次数）。使用小数位数 2。
+      </td>
+    </tr>
+
+    <tr>
+      `RevalueCredit`
+      Int(32)
+
+      <td style={{ textAlign: "left" }}>
+        **重新估值信用额度**。**仅当关联的卡配置为可重新估值时才会显示**。
+      </td>
+    </tr>
+
+    <tr>
+      `IsRevalueCard`
+      Bool
+
+      <td style={{ textAlign: "left" }}>
+        指示该卡是否**允许重新估值**。
+      </td>
+    </tr>
+
+    <tr>
+      `IsGatewayTimeout`
+      Bool
+
+      <td style={{ textAlign: "left" }}>
+        指示是否发生**网关超时**（响应中有效）。
+      </td>
+    </tr>
+
+    <tr>
+      `ProviderExternalData`
+      String
+
+      <td style={{ textAlign: "left" }}>
+        来自提供商的外部数据，**格式为 JSON 字符串**。
+      </td>
+    </tr>
+  </tbody>
+</table>

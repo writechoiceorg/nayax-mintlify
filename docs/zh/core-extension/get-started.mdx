@@ -1,0 +1,97 @@
+---
+title: 开始
+description: 完整体验从沙盒访问到生产环境中的核心扩展程序上线的开发者历程。
+---
+
+本指南将引导您完成构建和部署核心扩展的端到端流程：从获取沙盒访问权限，到构建和测试您的应用程序，再到认证和生产部署。
+
+最后，您将拥有一个可在 Nayax Core 中加载并验证用户身份的可用扩展程序。
+
+## 你需要准备什么
+
+- 拥有沙盒访问权限的 Nayax 开发者帐户（由 Nayax 在您完成注册后提供）
+- 您可控制的托管 Web 应用程序（您的扩展程序在 Nayax Core 内部的 iframe 中运行）
+- 熟悉[核心扩展概述](/docs/core-extension/overview)和[扩展类型](/docs/core-extension/extension-types)
+
+<Note>
+  核心扩展程序不支持自助注册。Nayax 会为您配置沙盒访问权限，并在 Nayax Core 中手动注册您的应用。请联系您的 Nayax 代表以开始注册流程。
+</Note>
+
+<Steps>
+  <Step title="获取沙盒访问权限">
+    Nayax 会向您发送一封欢迎邮件，其中包含您的沙箱凭据和环境详情。该沙箱是一个完整的 Nayax Core 环境，您可以在其中对扩展程序进行端到端测试，然后再提交认证。
+
+    获得访问权限后，请验证您是否能够通过欢迎邮件中提供的 URL 登录到沙盒 Nayax Core 实例。
+  </Step>
+
+  <Step title="选择您的主机方案">
+    您的扩展程序以 Web 应用程序的形式运行，托管在 Nayax Core 以 iframe 形式加载的 URL 上。您可以将其托管在您自己的基础设施上，或者在某些情况下，托管在 Nayax 提供的基础设施上。
+
+    将您的应用程序托管在可公开访问的 HTTPS URL 上。当您的应用程序在沙盒菜单中注册时，您需要将此 URL 提供给 Nayax。
+  </Step>
+
+  <Step title="实施所需的集成">
+    在对扩展程序进行端到端测试之前，请实现应用程序框架要求的四个方面。
+
+    **[Authentication](/docs/core-extension/authentication):** Receive the JWT token Nayax passes to your app at load time and use it for all Nayax API calls.
+
+    **[Extension Types](/docs/core-extension/extension-types):** Choose the display type that fits your use case (Screen, Fullscreen, Button with Popup, or Tab) and implement the matching token delivery method.
+
+    **[Translations](/docs/core-extension/translations):** Wrap all user-visible text in the translation function so Nayax Core can serve your UI in the user's language.
+
+    **[Role-Based UI Visibility](/docs/core-extension/role-based-visibility):** Register the UI elements your app exposes so Nayax Core administrators can control visibility by role.
+  </Step>
+
+  <Step title="在沙盒中注册您的应用">
+    应用程序托管完毕且集成完成后，请向 Nayax 提供以下信息：
+
+    - 您的托管应用程序的 URL
+    - 您使用的显示类型（屏幕、全屏、带弹出窗口的按钮或标签页）
+    - 应用应显示的菜单位置
+    - 您的应用所需的权限范围（如有）
+
+    Nayax 会手动将您的应用注册到 Nayax Core 沙盒菜单中。应用在沙盒环境中可见后，您将收到确认信息。
+  </Step>
+
+  <Step title="在沙箱中进行测试">
+    应用注册完成后，以拥有菜单项访问权限的用户身份登录 Nayax Core 沙盒环境。验证：
+
+    - 您的扩展程序已加载到正确的 URL
+    - 您已收到有效的 JWT 令牌（请检查浏览器控制台或网络选项卡）。
+    - 使用该令牌发起的 API 调用返回预期数据
+    - 切换 Nayax Core 语言设置时，UI 文本会以正确的语言显示。
+    - 根据用户的角色，角色控制元素会正确地显示和隐藏。
+  </Step>
+
+  <Step title="提交认证申请">
+    当您的扩展程序通过沙盒测试后，请联系 Nayax 申请认证。Nayax 会在批准您的应用上线前对其进行审核。
+  </Step>
+
+  <Step title="部署到生产环境">
+    认证完成后，Nayax 会将您的应用注册到生产环境 Nayax Core 中。将您的应用部署到生产环境托管基础架构，并验证其是否能使用生产环境 JWT 公钥正确加载。
+
+    有关生产环境公钥和令牌验证的详细信息，请参阅[身份验证部分](/docs/core-extension/authentication)。
+  </Step>
+</Steps>
+
+## 概括
+
+您已完成核心扩展的完整生命周期：沙盒访问、实施、沙盒注册和测试、认证以及生产部署。接下来的步骤是使用以下指南详细实施每个技术领域。
+
+<CardGroup cols={2}>
+  <Card title="验证" icon="key" href="/docs/core-extension/authentication">
+    接收并验证 JWT 令牌。
+  </Card>
+
+  <Card title="扩展类型" icon="window-restore" href="/docs/core-extension/extension-types">
+    选择并实施合适的显示类型。
+  </Card>
+
+  <Card title="翻译" icon="language" href="/docs/core-extension/translations">
+    公开您的 UI 字符串以支持多语言。
+  </Card>
+
+  <Card title="基于角色的可见性" icon="shield-halved" href="/docs/core-extension/role-based-visibility">
+    声明哪些 UI 元素可由角色控制。
+  </Card>
+</CardGroup>

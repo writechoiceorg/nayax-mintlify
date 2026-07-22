@@ -1,0 +1,126 @@
+---
+title: 显示确认
+description: 提示客户进行简单的是/否或确定/取消确认。
+metadata:
+  og:description: displayConfirm 方法在终端屏幕上向客户展示一个二选一的选项。这为处理用户同意提供了一种简化的方式。
+---
+
+`displayConfirm` 方法在终端屏幕上向客户展示一个二选一的选项。这为处理交易流程中的用户同意或简单决策点提供了一种简化的方式。
+
+使用此方法可以：
+
+- 征求条款同意,例如“您是否同意 $100 的预授权保留?”
+- 确认物理操作,例如“油枪是否已放回枪座?”
+- 提示用户选择小票偏好,例如“您是否需要打印小票?”
+- 为附加服务提供快速提示,例如“是否添加 $5.00 的洗车服务?”
+
+Nayax 设备上二选一提示的示例:
+
+<Frame>
+  <div className="flex gap-4">
+    <img src="/images/choose-payment-method.png" />
+
+    <img src="/images/want-a-receipt.png" />
+  </div>
+</Frame>
+
+## 请求
+
+The request requires a `title` and the text for the specific prompt. You can customize the labels of the two buttons to fit your specific use case.
+
+以下示例展示了一个典型的请求：
+
+```json
+{
+"command": "displayConfirm",
+"requestId": "req-010",
+"data": {
+"title": "Do You Want A Receipt?",
+"yesLabel": "Pay at pump",
+"noLabel": "Pay in store",
+"yesImage": "payatpump",
+"noImage": "payinstore"
+}
+}
+```
+
+### 参数定义
+
+下表描述了此请求可用的参数：
+
+| 姓名           | 类型     | 必需的 | 描述                     |
+| :----------- | :----- | :-- | :--------------------- |
+| 命令           | string | 是的  | 设置为`"displayConfirm"`。 |
+| 请求 ID        | string | 是的  | 用于跟踪响应的唯一标识符。          |
+| title        | string | 是的  | 显示在确认框顶部的标题文本。         |
+| message      | string | 是的  | 向用户显示的具体问题或提示文本。       |
+| confirmLabel | string | 不   | 肯定按钮的文本(默认为“是”或“确定”)。  |
+| cancelLabel  | string | 不   | 否定按钮的文本(默认为“否”或“取消”)。  |
+
+这是一个纯文本请求示例:
+
+```json
+{
+"command": "displayConfirm",
+"requestId": "req-010",
+"data": {
+"title": "Confirm Amount",
+"yesLabel": "Confirm",
+"noLabel": "Cancel"
+}
+}
+```
+
+这是一个纯图片请求示例:
+
+```json
+{
+"command": "displayConfirm",
+"requestId": "req-011",
+"data": {
+"title": "Choose Payment Method",
+"yesImage": "payatpump",
+"noImage": "payinstore"
+}
+}
+```
+
+这是一个文本和图片请求示例:
+
+```json
+{
+"command": "displayConfirm",
+"requestId": "req-012",
+"data": {
+"title": "Select Service",
+"yesLabel": "Pay at Pump",
+"noLabel": "Pay in Store",
+"yesImage": "payatpump",
+"noImage": "payinstore"
+}
+}
+```
+
+## 回应
+
+按下按钮后,终端会立即返回用户的选择。
+
+以下示例展示了一个典型的响应：
+
+```json
+{
+"requestId": "req-010",
+"data": {
+"selectedIndex": 0
+}
+}
+```
+
+### 响应参数
+
+`data` 对象包含确认提示的结果:
+
+| 姓名        | 类型     | 描述                                         |
+| :-------- | :----- | :----------------------------------------- |
+| confirmed | 布尔值    | 如果用户选择了肯定按钮,则返回 `true`,否则返回 `false`。       |
+| 状态        | string | 按下按钮后返回 `COMPLETED`,如果用户超时则返回 `CANCELLED`。 |

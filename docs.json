@@ -30,603 +30,732 @@
   },
   "favicon": "/images/favicon.ico",
   "navigation": {
-    "tabs": [
+    "languages": [
       {
-        "tab": "Docs Home",
-        "icon": "home",
-        "pages": [
-          "index"
-        ]
-      },
-      {
-        "tab": "Terminal SDKs",
-        "icon": "tablet-screen-button",
-        "menu": [
+        "language": "en",
+        "default": true,
+        "tabs": [
           {
-            "item": "Marshall",
-            "icon": "microchip",
-            "groups": [
-              {
-                "group": "Marshall Guides",
-                "pages": [
-                  "docs/integrate-pos-device/marshall/marshall-sdk",
-                  "docs/integrate-pos-device/marshall/get-started/marshall-integration-process",
-                  {
-                    "group": "Payment Flows",
-                    "pages": [
-                      "docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel",
-                      "docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-auth",
-                      "docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session",
-                      "docs/integrate-pos-device/marshall/payment-flows/marshall-multi-vend-with-pre-sel",
-                      "docs/integrate-pos-device/marshall/payment-flows/marshall-multi-vend-with-pre-auth",
-                      "docs/integrate-pos-device/marshall/payment-flows/sub-flows-features",
-                      "docs/integrate-pos-device/marshall/payment-flows/external-settlement-marshall",
-                      "docs/integrate-pos-device/marshall/payment-flows/multi-session-pre-authorization-with-external-settlement"
-                    ],
-                    "root": "docs/integrate-pos-device/marshall/payment-flows/marshall-payment-flows"
-                  },
-                  {
-                    "group": "Get Started",
-                    "pages": [
-                      "docs/integrate-pos-device/marshall/get-started/marshall-csharp-java-integration",
-                      "docs/integrate-pos-device/marshall/get-started/c-sdk-integration",
-                      "docs/integrate-pos-device/marshall/get-started/vmc-configuration-object",
-                      "docs/integrate-pos-device/marshall/get-started/sdk-flags-descriptions",
-                      "docs/integrate-pos-device/marshall/get-started/certification-proccess"
-                    ],
-                    "root": "docs/integrate-pos-device/marshall/get-started/marshall-get-started"
-                  },
-                  {
-                    "group": "Simulators & Sample Codes",
-                    "pages": [
-                      "docs/integrate-pos-device/marshall/simulators-sample-codes/java-sdk-simulator",
-                      "docs/integrate-pos-device/marshall/simulators-sample-codes/csharp-sdk-simulator",
-                      "docs/integrate-pos-device/marshall/simulators-sample-codes/c-sdk-simulator",
-                      "docs/integrate-pos-device/marshall/simulators-sample-codes/single-session",
-                      "docs/integrate-pos-device/marshall/simulators-sample-codes/multi-session",
-                      "docs/integrate-pos-device/marshall/simulators-sample-codes/multi-vend",
-                      "docs/integrate-pos-device/marshall/simulators-sample-codes/marshall-c-always-idle"
-                    ],
-                    "root": "docs/integrate-pos-device/marshall/simulators-sample-codes/marshall-sdk-simulators"
-                  },
-                  "docs/integrate-pos-device/marshall/marshall-create-payments",
-                  {
-                    "group": "Methods & Functions",
-                    "pages": [
-                      "docs/integrate-pos-device/marshall/methods-functions/framework",
-                      "docs/integrate-pos-device/marshall/methods-functions/link-and-events-configuration",
-                      "docs/integrate-pos-device/marshall/methods-functions/vending-events",
-                      "docs/integrate-pos-device/marshall/methods-functions/data-structures",
-                      "docs/integrate-pos-device/marshall/methods-functions/general-marshall-events"
-                    ],
-                    "root": "docs/integrate-pos-device/marshall/methods-functions/marshall-methods-and-functions"
-                  },
-                  {
-                    "group": "HW Integration Kit and Setup",
-                    "pages": [
-                      "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/sales-kit",
-                      "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/installation-steps",
-                      "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/set-up-nayax-core-for-marshall-integration"
-                    ],
-                    "root": "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/vpos-touch-installation"
-                  },
-                  {
-                    "group": "Additional Resources",
-                    "pages": [
-                      "docs/integrate-pos-device/marshall/additional-resources/marshall-display",
-                      "docs/integrate-pos-device/marshall/additional-resources/log-generation",
-                      "docs/integrate-pos-device/marshall/additional-resources/marshall-ontransferdata",
-                      "docs/integrate-pos-device/marshall/additional-resources/stablity-issues",
-                      "docs/integrate-pos-device/marshall/additional-resources/capabilities"
-                    ]
-                  },
-                  {
-                    "group": "Marshall FAQs",
-                    "pages": [
-                      "docs/integrate-pos-device/marshall/marshall-faqs/faq-general",
-                      "docs/integrate-pos-device/marshall/marshall-faqs/faq",
-                      "docs/integrate-pos-device/marshall/marshall-faqs/faq-marshall-flowconfigurations"
-                    ],
-                    "root": "docs/integrate-pos-device/marshall/marshall-faqs/index"
-                  }
-                ]
-              }
+            "tab": "Docs Home",
+            "icon": "home",
+            "pages": [
+              "index"
             ]
           },
           {
-            "item": "Marshall Pro (Fuel)",
-            "icon": "gas-pump",
-            "groups": [
+            "tab": "Terminal SDKs",
+            "icon": "tablet-screen-button",
+            "menu": [
               {
-                "group": "Marshall Pro Guides",
-                "pages": [
-                  "docs/integrate-pos-device/marshall-pro/getting-started/index",
-                  "docs/integrate-pos-device/marshall-pro/getting-started/marshall-pro-integration-process",
-                  "docs/integrate-pos-device/marshall-pro/getting-started/forecourt-architecture",
-                  "docs/integrate-pos-device/marshall-pro/getting-started/best-practices",
-                  "docs/integrate-pos-device/marshall-pro/getting-started/security-digital-signatures"
-                ]
-              },
-              {
-                "group": "Payment Flows",
-                "pages": [
-                  "docs/integrate-pos-device/marshall-pro/methods/payment/two-phase-pre-authorization",
-                  "docs/integrate-pos-device/marshall-pro/methods/payment/post-pay",
-                  "docs/integrate-pos-device/marshall-pro/methods/payment/periodic-reconciliation"
-                ]
-              },
-              {
-                "group": "Messaging Protocol",
-                "pages": [
-                  "docs/integrate-pos-device/marshall-pro/messaging-protocol/tcp-communication",
-                  "docs/integrate-pos-device/marshall-pro/messaging-protocol/request-response-format",
-                  "docs/integrate-pos-device/marshall-pro/messaging-protocol/error-codes",
-                  "docs/integrate-pos-device/marshall-pro/messaging-protocol/example-fuel-station-flow"
-                ]
-              },
-              {
-                "group": "Methods",
-                "pages": [
-                  "docs/integrate-pos-device/marshall-pro/methods/api",
+                "item": "Marshall",
+                "icon": "microchip",
+                "groups": [
                   {
-                    "group": "General",
+                    "group": "Marshall Guides",
                     "pages": [
-                      "docs/integrate-pos-device/marshall-pro/methods/general/info",
-                      "docs/integrate-pos-device/marshall-pro/methods/general/status"
-                    ]
-                  },
-                  {
-                    "group": "Payment",
-                    "pages": [
-                      "docs/integrate-pos-device/marshall-pro/methods/payment/card-detect",
-                      "docs/integrate-pos-device/marshall-pro/methods/payment/stop-card-detect",
-                      "docs/integrate-pos-device/marshall-pro/methods/payment/authorize",
-                      "docs/integrate-pos-device/marshall-pro/methods/payment/detect-and-auth",
-                      "docs/integrate-pos-device/marshall-pro/methods/payment/settle",
-                      "docs/integrate-pos-device/marshall-pro/methods/payment/pay",
-                      "docs/integrate-pos-device/marshall-pro/methods/payment/query"
-                    ]
-                  },
-                  {
-                    "group": "Display",
-                    "pages": [
-                      "docs/integrate-pos-device/marshall-pro/methods/display/display-screen",
-                      "docs/integrate-pos-device/marshall-pro/methods/display/display-input",
-                      "docs/integrate-pos-device/marshall-pro/methods/display/display-select",
-                      "docs/integrate-pos-device/marshall-pro/methods/display/display-confirm"
-                    ]
-                  },
-                  {
-                    "group": "Utility",
-                    "pages": [
-                      "docs/integrate-pos-device/marshall-pro/methods/utility/print"
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "item": "TweezerComm",
-            "icon": "mobile",
-            "groups": [
-              {
-                "group": "TweezerComm Guides",
-                "pages": [
-                  "docs/integrate-pos-device/tweezercomm/overview-tweezer",
-                  "docs/integrate-pos-device/tweezercomm/tweezercomm-integration-process",
-                  "docs/integrate-pos-device/tweezercomm/tweezercomm-get-started",
-                  {
-                    "group": "🌐 Global Payment Flows",
-                    "pages": [
-                      "docs/integrate-pos-device/tweezercomm/global-payment-flows/tweezercomm-engine-preselection-flow",
-                      "docs/integrate-pos-device/tweezercomm/global-payment-flows/tweezercomm-engine-preauth-flow"
-                    ],
-                    "root": "docs/integrate-pos-device/tweezercomm/global-payment-flows/payment-flows-copy-1"
-                  },
-                  {
-                    "group": "Global Payment Methods",
-                    "pages": [
-                      "docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction",
-                      "docs/integrate-pos-device/tweezercomm/global-payment-methods/refunds-dotransaction",
-                      "docs/integrate-pos-device/tweezercomm/global-payment-methods/abort-transaction",
-                      "docs/integrate-pos-device/tweezercomm/global-payment-methods/gettransactionbyvuid",
-                      "docs/integrate-pos-device/tweezercomm/global-payment-methods/getreport",
-                      "docs/integrate-pos-device/tweezercomm/global-payment-methods/getstatus",
-                      "docs/integrate-pos-device/tweezercomm/global-payment-methods/getinternalstatus",
-                      "docs/integrate-pos-device/tweezercomm/global-payment-methods/getretailerinfo",
-                      "docs/integrate-pos-device/tweezercomm/global-payment-methods/startpinpadtransaction",
-                      "docs/integrate-pos-device/tweezercomm/global-payment-methods/dopinpadtransaction",
-                      "docs/integrate-pos-device/tweezercomm/global-payment-methods/endpinpadtransaction"
-                    ],
-                    "root": "docs/integrate-pos-device/tweezercomm/global-payment-methods/payment-services-methods-copy-1"
-                  },
-                  {
-                    "group": "🟦 Israel Payment Flows",
-                    "pages": [
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-flows/single-phase-transaction",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-flows/2-phase-transaction",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-pre-authorization-israel",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-deferred-payment",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-split-transaction"
-                    ],
-                    "root": "docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-israel-payment-flows"
-                  },
-                  {
-                    "group": "Israel Payment Methods",
-                    "pages": [
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransaction-ashrait",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase1",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase2",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/dominisettlement",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/addsubretailer",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/aborttransaction-copy",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/canceltransaction-1",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/gettransactionbyvuid-copy",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/gettransactionbyvuid-copy-1",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/getreport-1",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/getreport-copy-1",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/getreport-copy",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/getstatus-copy",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/addsubretailer-copy",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase2-copy-1",
-                      "docs/integrate-pos-device/tweezercomm/israel-payment-methods/authorizependingtransactions"
-                    ],
-                    "root": "docs/integrate-pos-device/tweezercomm/israel-payment-methods/tweezercomm-israel-payment-methods"
-                  },
-                  {
-                    "group": "Device Methods",
-                    "pages": [
-                      "docs/integrate-pos-device/tweezercomm/device-methods/getinfo",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/readcard",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/abortreadcard",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/getconfig",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/setconfig",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/getversion",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/uploadlogs",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/getproperty",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/getuserinput",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserinput",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/getuserselection",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserselection",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/showanimation",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/hideanimation",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/displayswipecard",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/abortswipe",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/displayqr",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/abortdisplayqr",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/abortdisplay",
-                      "docs/integrate-pos-device/tweezercomm/device-methods/sendgeneralevent"
-                    ],
-                    "root": "docs/integrate-pos-device/tweezercomm/device-methods/index"
-                  },
-                  "docs/integrate-pos-device/tweezercomm/pinpad-mode",
-                  "docs/integrate-pos-device/tweezercomm/resilience-mechanism-copy",
-                  "docs/integrate-pos-device/tweezercomm/tc-service",
-                  {
-                    "group": "Additional Resources",
-                    "pages": [
-                      "docs/integrate-pos-device/tweezercomm/additional-resources/certification-files",
-                      "docs/integrate-pos-device/tweezercomm/additional-resources/response-codes",
-                      "docs/integrate-pos-device/tweezercomm/additional-resources/configuring-static-ip",
-                      "docs/integrate-pos-device/tweezercomm/additional-resources/using-test-cards-real-cards-during-the-integration"
-                    ],
-                    "root": "docs/integrate-pos-device/tweezercomm/additional-resources/tweezercomm-additional-resources"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "item": "EMV Core",
-            "icon": "credit-card",
-            "groups": [
-              {
-                "group": "EMV Core Guides",
-                "pages": [
-                  "docs/integrate-pos-device/emv-core/overview",
-                  "docs/integrate-pos-device/emv-core/get-started/emv-core-integration-process"
-                ]
-              },
-              {
-                "group": "Android & Linux SDK",
-                "pages": [
-                  "docs/integrate-pos-device/emv-core/get-started/emv-core-get-started-1",
-                  {
-                    "group": "Installation",
-                    "pages": [
-                      "docs/integrate-pos-device/emv-core/get-started/emv-core-android-installation",
-                      "docs/integrate-pos-device/emv-core/get-started/emv-core-linux-installation"
-                    ]
-                  },
-                  "docs/integrate-pos-device/emv-core/get-started/emv-core-device-id",
-                  {
-                    "group": "Payment Flows",
-                    "pages": [
-                      "docs/integrate-pos-device/emv-core/payment-flows/payment-with-authorization",
-                      "docs/integrate-pos-device/emv-core/payment-flows/closed-loop-transaction",
-                      "docs/integrate-pos-device/emv-core/payment-flows/single-step-payment",
-                      "docs/integrate-pos-device/emv-core/payment-flows/pre-authorization-with-external-settlement"
-                    ],
-                    "root": "docs/integrate-pos-device/emv-core/payment-flows/transaction-flow"
-                  },
-                  {
-                    "group": "SDK Methods & Functions",
-                    "pages": [
-                      "docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1",
-                      "docs/integrate-pos-device/emv-core/sdk-methods-functions/remote-management",
-                      "docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks",
-                      "docs/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages"
-                    ],
-                    "root": "docs/integrate-pos-device/emv-core/sdk-methods-functions/emv-core-apis"
-                  },
-                  {
-                    "group": "Demo Applications",
-                    "pages": [
-                      "docs/integrate-pos-device/emv-core/demo-applications/android-demo-application",
-                      "docs/integrate-pos-device/emv-core/demo-applications/linux-demo-application"
-                    ],
-                    "root": "docs/integrate-pos-device/emv-core/demo-applications/emv-core-demo-applications"
-                  },
-                  "docs/integrate-pos-device/emv-core/emv-core-configuration"
-                ]
-              },
-              {
-                "group": "RTOS SDK",
-                "pages": [
-                  "docs/integrate-pos-device/emv-core/rtos/rtos-overview",
-                  "docs/integrate-pos-device/emv-core/rtos/rtos-get-started",
-                  "docs/integrate-pos-device/emv-core/rtos/rtos-platform-porting",
-                  "docs/integrate-pos-device/emv-core/rtos/rtos-integration-guide",
-                  {
-                    "group": "API Reference",
-                    "pages": [
-                      "docs/integrate-pos-device/emv-core/rtos/rtos-c-api",
-                      "docs/integrate-pos-device/emv-core/rtos/rtos-json-rpc-api",
-                      "docs/integrate-pos-device/emv-core/rtos/rtos-datalink-layer"
-                    ]
-                  },
-                  "docs/integrate-pos-device/emv-core/rtos/rtos-linux-sample-app",
-                  "docs/integrate-pos-device/emv-core/rtos/rtos-configuration",
-                  "docs/integrate-pos-device/emv-core/rtos/rtos-firmware-updates",
-                  "docs/integrate-pos-device/emv-core/rtos/rtos-troubleshooting"
-                ]
-              },
-              {
-                "group": "UNO-mini Hardware",
-                "pages": [
-                  "docs/integrate-pos-device/emv-core/uno-mini/uno-mini-overview",
-                  "docs/integrate-pos-device/emv-core/uno-mini/uno-mini-mechanical",
-                  "docs/integrate-pos-device/emv-core/uno-mini/uno-mini-user-interface",
-                  "docs/integrate-pos-device/emv-core/uno-mini/uno-mini-power-supply",
-                  "docs/integrate-pos-device/emv-core/uno-mini/uno-mini-connections"
-                ]
-              },
-              {
-                "group": "Release Notes",
-                "pages": [
-                  "docs/integrate-pos-device/emv-core/emv-core-release-notes",
-                  "docs/integrate-pos-device/emv-core/rtos/rtos-release-notes"
-                ]
-              }
-            ]
-          },
-          {
-            "item": "Spark",
-            "icon": "bolt",
-            "groups": [
-              {
-                "group": "Spark Guides",
-                "pages": [
-                  "docs/integrate-pos-device/spark/spark",
-                  "docs/integrate-pos-device/spark/spark-integration-process",
-                  "docs/integrate-pos-device/spark/spark-network-requirement",
-                  {
-                    "group": "Security & Authentication",
-                    "pages": [
-                      "docs/integrate-pos-device/spark/security-authentication/spark-authentication",
-                      "docs/integrate-pos-device/spark/security-authentication/spark-legacy-authentication",
-                      "docs/integrate-pos-device/spark/security-authentication/spark-auth-tool"
-                    ],
-                    "root": "docs/integrate-pos-device/spark/security-authentication/index"
-                  },
-                  {
-                    "group": "Payment Flows",
-                    "pages": [
-                      "docs/integrate-pos-device/spark/payment-flows/spark-device-start",
-                      "docs/integrate-pos-device/spark/payment-flows/spark-remote-start",
-                      "docs/integrate-pos-device/spark/payment-flows/spark-device-stop",
-                      "docs/integrate-pos-device/spark/payment-flows/external-settlement",
-                      "docs/integrate-pos-device/spark/payment-flows/external-cancel"
-                    ],
-                    "root": "docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark"
-                  },
-                  {
-                    "group": "Machine Configuration",
-                    "pages": [
-                      "docs/integrate-pos-device/spark/machine-configuration/spark-remote-start-configuration",
-                      "docs/integrate-pos-device/spark/machine-configuration/spark-device-start-configuration",
-                      "docs/integrate-pos-device/spark/machine-configuration/spark-device-stop-configuration",
-                      "docs/integrate-pos-device/spark/machine-configuration/spark-external-settlement-configuration",
-                      "docs/integrate-pos-device/spark/machine-configuration/additional-features"
-                    ],
-                    "root": "docs/integrate-pos-device/spark/machine-configuration/index"
-                  },
-                  {
-                    "group": "Webhook Callbacks",
-                    "pages": [
-                      "docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback",
-                      "docs/integrate-pos-device/spark/webhook-callbacks/stopcallback",
-                      "docs/integrate-pos-device/spark/webhook-callbacks/timeoutcallback",
-                      "docs/integrate-pos-device/spark/webhook-callbacks/declinecallback"
-                    ],
-                    "root": "docs/integrate-pos-device/spark/webhook-callbacks/index"
-                  },
-                  {
-                    "group": "Additional Resources",
-                    "pages": [
-                      "docs/integrate-pos-device/spark/additional-resources/smc-support",
-                      "docs/integrate-pos-device/spark/additional-resources/spark-posdisplay-format",
-                      "docs/integrate-pos-device/spark/additional-resources/spark-ereceiptdata-format",
-                      "docs/integrate-pos-device/spark/additional-resources/spark-response-codes"
-                    ],
-                    "root": "docs/integrate-pos-device/spark/additional-resources/index"
-                  },
-                  {
-                    "group": "Sample Codes",
-                    "pages": [
-                      "docs/integrate-pos-device/spark/sample-codes/spark-authentication-code-sample"
-                    ]
-                  }
-                ]
-              },
-              {
-                "group": "API Reference",
-                "openapi": {
-                  "source": "/openapi/spark.yaml",
-                  "directory": "reference/spark"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Platform Management",
-        "icon": "gears",
-        "menu": [
-          {
-            "item": "Transaction Reporting",
-            "icon": "envelope",
-            "groups": [
-              {
-                "group": "Transaction Reporting Guides",
-                "pages": [
-                  "docs/manage-data-operations/amazon-sqs/overview",
-                  {
-                    "group": "Nayax Core Setup",
-                    "pages": [
+                      "docs/integrate-pos-device/marshall/marshall-sdk",
+                      "docs/integrate-pos-device/marshall/get-started/marshall-integration-process",
                       {
-                        "group": "Set Up Transaction Delivery",
-                        "root": "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-transaction-delivery",
+                        "group": "Payment Flows",
                         "pages": [
-                          "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/transaction-json-reference"
-                        ]
+                          "docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel",
+                          "docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-auth",
+                          "docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session",
+                          "docs/integrate-pos-device/marshall/payment-flows/marshall-multi-vend-with-pre-sel",
+                          "docs/integrate-pos-device/marshall/payment-flows/marshall-multi-vend-with-pre-auth",
+                          "docs/integrate-pos-device/marshall/payment-flows/sub-flows-features",
+                          "docs/integrate-pos-device/marshall/payment-flows/external-settlement-marshall",
+                          "docs/integrate-pos-device/marshall/payment-flows/multi-session-pre-authorization-with-external-settlement"
+                        ],
+                        "root": "docs/integrate-pos-device/marshall/payment-flows/marshall-payment-flows"
                       },
-                      "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-eva-dts-dexddcmp-audit-file-delivery",
-                      "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-events-delivery",
-                      "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-encryption-on-amazon-sqs-delivery"
-                    ],
-                    "root": "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/nayax-back-office-setup"
-                  },
-                                    {
-                    "group": "Amazon Queue Setup",
-                    "pages": [
-                      "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/create-new-queue",
-                      "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/set-up-queue-permissions",
-                      "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/create-user-for-queue-access"
-                    ],
-                    "root": "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/index"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "item": "Lynx API",
-            "icon": "link",
-            "groups": [
-              {
-                "group": "Lynx API Guides",
-                "pages": [
-                  "docs/manage-data-operations/lynx-api/lynx-overview",
-                  "docs/manage-data-operations/lynx-api/security",
-                  {
-                    "group": "Cards",
-                    "pages": [
-                      "docs/manage-data-operations/lynx-api/cards/create-cards",
-                      "docs/manage-data-operations/lynx-api/cards/retrieve-card-data",
-                      "docs/manage-data-operations/lynx-api/cards/add-credit-to-card",
-                      "reference/manage-data-operations/lynx-api/cards"
-                    ]
-                  },
-                  {
-                    "group": "Refunds",
-                    "pages": [
-                      "docs/manage-data-operations/lynx-api/refunds/request-refunds",
-                      "docs/manage-data-operations/lynx-api/refunds/approve-or-decline-a-refund",
-                      "docs/manage-data-operations/lynx-api/refunds/upload-refund-document"
-                    ]
-                  },
-                  {
-                    "group": "Operator",
-                    "pages": [
-                      "docs/manage-data-operations/lynx-api/operator/nayax-hierarchy",
-                      "docs/manage-data-operations/lynx-api/operator/retrieve-hierarchy",
-                      "docs/manage-data-operations/lynx-api/operator/create-operator",
-                      "docs/manage-data-operations/lynx-api/operator/operator-actions",
-                      "reference/manage-data-operations/lynx-api/actor-types"
-                    ]
-                  },
-                  {
-                    "group": "Machines",
-                    "pages": [
-                      "docs/manage-data-operations/lynx-api/machines/create-new-machine-guides",
-                      "docs/manage-data-operations/lynx-api/machines/retrieve-machine-information",
-                      "docs/manage-data-operations/lynx-api/machines/getting-a-machines-last-sales",
-                      "docs/manage-data-operations/lynx-api/machines/get-monyx-id",
-                      "docs/manage-data-operations/lynx-api/machines/updating-a-machines-attribute",
-                      "docs/manage-data-operations/lynx-api/machines/getting-a-machines-id-by-the-devices-serial-number",
-                      "docs/manage-data-operations/lynx-api/machines/getting-a-machines-last-sales-ereceipt-information",
-                      "reference/manage-data-operations/lynx-api/machine-types"
-                    ]
-                  },
-                  {
-                    "group": "Devices",
-                    "pages": [
-                      "docs/manage-data-operations/lynx-api/devices/getting-all-devices-under-an-operator",
-                      "docs/manage-data-operations/lynx-api/devices/disabling-a-device",
-                      "docs/manage-data-operations/lynx-api/devices/moving-device-between-operators"
-                    ]
-                  },
-                  {
-                    "group": "Inventory Management",
-                    "pages": [
-                      "docs/manage-data-operations/lynx-api/inventory-management/inventory-workflow",
-                      "docs/manage-data-operations/lynx-api/inventory-management/create-product-group",
-                      "docs/manage-data-operations/lynx-api/inventory-management/create-products",
-                      "docs/manage-data-operations/lynx-api/inventory-management/machine-products-1",
-                      "docs/manage-data-operations/lynx-api/inventory-management/pick-lists",
-                      "docs/manage-data-operations/lynx-api/inventory-management/pick-list-actions"
-                    ]
-                  },
-                  "reference/manage-data-operations/lynx-api/languages",
-                  "docs/manage-data-operations/lynx-api/product-faqs",
-                  {
-                    "group": "Reports",
-                    "root": "docs/manage-data-operations/lynx-api/reports/index",
-                    "pages": [
                       {
-                        "group": "Dashboard Widgets",
-                        "root": "docs/manage-data-operations/lynx-api/reports/widgets-overview",
+                        "group": "Get Started",
                         "pages": [
-                          "docs/manage-data-operations/lynx-api/reports/widget-sales-by-period",
-                          "docs/manage-data-operations/lynx-api/reports/widget-dashboard-sales-table",
-                          "docs/manage-data-operations/lynx-api/reports/widget-last-year-vs-this-year",
-                          "docs/manage-data-operations/lynx-api/reports/widget-10-most-popular-machines"
+                          "docs/integrate-pos-device/marshall/get-started/marshall-csharp-java-integration",
+                          "docs/integrate-pos-device/marshall/get-started/c-sdk-integration",
+                          "docs/integrate-pos-device/marshall/get-started/vmc-configuration-object",
+                          "docs/integrate-pos-device/marshall/get-started/sdk-flags-descriptions",
+                          "docs/integrate-pos-device/marshall/get-started/certification-proccess"
+                        ],
+                        "root": "docs/integrate-pos-device/marshall/get-started/marshall-get-started"
+                      },
+                      {
+                        "group": "Simulators & Sample Codes",
+                        "pages": [
+                          "docs/integrate-pos-device/marshall/simulators-sample-codes/java-sdk-simulator",
+                          "docs/integrate-pos-device/marshall/simulators-sample-codes/csharp-sdk-simulator",
+                          "docs/integrate-pos-device/marshall/simulators-sample-codes/c-sdk-simulator",
+                          "docs/integrate-pos-device/marshall/simulators-sample-codes/single-session",
+                          "docs/integrate-pos-device/marshall/simulators-sample-codes/multi-session",
+                          "docs/integrate-pos-device/marshall/simulators-sample-codes/multi-vend",
+                          "docs/integrate-pos-device/marshall/simulators-sample-codes/marshall-c-always-idle"
+                        ],
+                        "root": "docs/integrate-pos-device/marshall/simulators-sample-codes/marshall-sdk-simulators"
+                      },
+                      "docs/integrate-pos-device/marshall/marshall-create-payments",
+                      {
+                        "group": "Methods & Functions",
+                        "pages": [
+                          "docs/integrate-pos-device/marshall/methods-functions/framework",
+                          "docs/integrate-pos-device/marshall/methods-functions/link-and-events-configuration",
+                          "docs/integrate-pos-device/marshall/methods-functions/vending-events",
+                          "docs/integrate-pos-device/marshall/methods-functions/data-structures",
+                          "docs/integrate-pos-device/marshall/methods-functions/general-marshall-events"
+                        ],
+                        "root": "docs/integrate-pos-device/marshall/methods-functions/marshall-methods-and-functions"
+                      },
+                      {
+                        "group": "HW Integration Kit and Setup",
+                        "pages": [
+                          "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/sales-kit",
+                          "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/installation-steps",
+                          "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/set-up-nayax-core-for-marshall-integration"
+                        ],
+                        "root": "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/vpos-touch-installation"
+                      },
+                      {
+                        "group": "Additional Resources",
+                        "pages": [
+                          "docs/integrate-pos-device/marshall/additional-resources/marshall-display",
+                          "docs/integrate-pos-device/marshall/additional-resources/log-generation",
+                          "docs/integrate-pos-device/marshall/additional-resources/marshall-ontransferdata",
+                          "docs/integrate-pos-device/marshall/additional-resources/stablity-issues",
+                          "docs/integrate-pos-device/marshall/additional-resources/capabilities"
                         ]
                       },
                       {
-                        "group": "Widget API",
+                        "group": "Marshall FAQs",
                         "pages": [
-                          "docs/manage-data-operations/lynx-api/reports/retrieve-machine-widget-data",
-                          "docs/manage-data-operations/lynx-api/reports/available-widgets",
-                          "docs/manage-data-operations/lynx-api/reports/widget-filters",
-                          "docs/manage-data-operations/lynx-api/reports/integration-guide"
+                          "docs/integrate-pos-device/marshall/marshall-faqs/faq-general",
+                          "docs/integrate-pos-device/marshall/marshall-faqs/faq",
+                          "docs/integrate-pos-device/marshall/marshall-faqs/faq-marshall-flowconfigurations"
+                        ],
+                        "root": "docs/integrate-pos-device/marshall/marshall-faqs/index"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "item": "Marshall Pro (Fuel)",
+                "icon": "gas-pump",
+                "groups": [
+                  {
+                    "group": "Marshall Pro Guides",
+                    "pages": [
+                      "docs/integrate-pos-device/marshall-pro/getting-started/index",
+                      "docs/integrate-pos-device/marshall-pro/getting-started/marshall-pro-integration-process",
+                      "docs/integrate-pos-device/marshall-pro/getting-started/forecourt-architecture",
+                      "docs/integrate-pos-device/marshall-pro/getting-started/best-practices",
+                      "docs/integrate-pos-device/marshall-pro/getting-started/security-digital-signatures"
+                    ]
+                  },
+                  {
+                    "group": "Payment Flows",
+                    "pages": [
+                      "docs/integrate-pos-device/marshall-pro/methods/payment/two-phase-pre-authorization",
+                      "docs/integrate-pos-device/marshall-pro/methods/payment/post-pay",
+                      "docs/integrate-pos-device/marshall-pro/methods/payment/periodic-reconciliation"
+                    ]
+                  },
+                  {
+                    "group": "Messaging Protocol",
+                    "pages": [
+                      "docs/integrate-pos-device/marshall-pro/messaging-protocol/tcp-communication",
+                      "docs/integrate-pos-device/marshall-pro/messaging-protocol/request-response-format",
+                      "docs/integrate-pos-device/marshall-pro/messaging-protocol/error-codes",
+                      "docs/integrate-pos-device/marshall-pro/messaging-protocol/example-fuel-station-flow"
+                    ]
+                  },
+                  {
+                    "group": "Methods",
+                    "pages": [
+                      "docs/integrate-pos-device/marshall-pro/methods/api",
+                      {
+                        "group": "General",
+                        "pages": [
+                          "docs/integrate-pos-device/marshall-pro/methods/general/info",
+                          "docs/integrate-pos-device/marshall-pro/methods/general/status"
+                        ]
+                      },
+                      {
+                        "group": "Payment",
+                        "pages": [
+                          "docs/integrate-pos-device/marshall-pro/methods/payment/card-detect",
+                          "docs/integrate-pos-device/marshall-pro/methods/payment/stop-card-detect",
+                          "docs/integrate-pos-device/marshall-pro/methods/payment/authorize",
+                          "docs/integrate-pos-device/marshall-pro/methods/payment/detect-and-auth",
+                          "docs/integrate-pos-device/marshall-pro/methods/payment/settle",
+                          "docs/integrate-pos-device/marshall-pro/methods/payment/pay",
+                          "docs/integrate-pos-device/marshall-pro/methods/payment/query"
+                        ]
+                      },
+                      {
+                        "group": "Display",
+                        "pages": [
+                          "docs/integrate-pos-device/marshall-pro/methods/display/display-screen",
+                          "docs/integrate-pos-device/marshall-pro/methods/display/display-input",
+                          "docs/integrate-pos-device/marshall-pro/methods/display/display-select",
+                          "docs/integrate-pos-device/marshall-pro/methods/display/display-confirm"
+                        ]
+                      },
+                      {
+                        "group": "Utility",
+                        "pages": [
+                          "docs/integrate-pos-device/marshall-pro/methods/utility/print"
                         ]
                       }
                     ]
+                  }
+                ]
+              },
+              {
+                "item": "TweezerComm",
+                "icon": "mobile",
+                "groups": [
+                  {
+                    "group": "TweezerComm Guides",
+                    "pages": [
+                      "docs/integrate-pos-device/tweezercomm/overview-tweezer",
+                      "docs/integrate-pos-device/tweezercomm/tweezercomm-integration-process",
+                      "docs/integrate-pos-device/tweezercomm/tweezercomm-get-started",
+                      {
+                        "group": "🌐 Global Payment Flows",
+                        "pages": [
+                          "docs/integrate-pos-device/tweezercomm/global-payment-flows/tweezercomm-engine-preselection-flow",
+                          "docs/integrate-pos-device/tweezercomm/global-payment-flows/tweezercomm-engine-preauth-flow"
+                        ],
+                        "root": "docs/integrate-pos-device/tweezercomm/global-payment-flows/payment-flows-copy-1"
+                      },
+                      {
+                        "group": "Global Payment Methods",
+                        "pages": [
+                          "docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction",
+                          "docs/integrate-pos-device/tweezercomm/global-payment-methods/refunds-dotransaction",
+                          "docs/integrate-pos-device/tweezercomm/global-payment-methods/abort-transaction",
+                          "docs/integrate-pos-device/tweezercomm/global-payment-methods/gettransactionbyvuid",
+                          "docs/integrate-pos-device/tweezercomm/global-payment-methods/getreport",
+                          "docs/integrate-pos-device/tweezercomm/global-payment-methods/getstatus",
+                          "docs/integrate-pos-device/tweezercomm/global-payment-methods/getinternalstatus",
+                          "docs/integrate-pos-device/tweezercomm/global-payment-methods/getretailerinfo",
+                          "docs/integrate-pos-device/tweezercomm/global-payment-methods/startpinpadtransaction",
+                          "docs/integrate-pos-device/tweezercomm/global-payment-methods/dopinpadtransaction",
+                          "docs/integrate-pos-device/tweezercomm/global-payment-methods/endpinpadtransaction"
+                        ],
+                        "root": "docs/integrate-pos-device/tweezercomm/global-payment-methods/payment-services-methods-copy-1"
+                      },
+                      {
+                        "group": "🟦 Israel Payment Flows",
+                        "pages": [
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-flows/single-phase-transaction",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-flows/2-phase-transaction",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-pre-authorization-israel",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-deferred-payment",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-split-transaction"
+                        ],
+                        "root": "docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-israel-payment-flows"
+                      },
+                      {
+                        "group": "Israel Payment Methods",
+                        "pages": [
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransaction-ashrait",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase1",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase2",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/dominisettlement",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/addsubretailer",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/aborttransaction-copy",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/canceltransaction-1",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/gettransactionbyvuid-copy",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/gettransactionbyvuid-copy-1",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/getreport-1",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/getreport-copy-1",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/getreport-copy",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/getstatus-copy",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/addsubretailer-copy",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase2-copy-1",
+                          "docs/integrate-pos-device/tweezercomm/israel-payment-methods/authorizependingtransactions"
+                        ],
+                        "root": "docs/integrate-pos-device/tweezercomm/israel-payment-methods/tweezercomm-israel-payment-methods"
+                      },
+                      {
+                        "group": "Device Methods",
+                        "pages": [
+                          "docs/integrate-pos-device/tweezercomm/device-methods/getinfo",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/readcard",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/abortreadcard",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/getconfig",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/setconfig",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/getversion",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/uploadlogs",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/getproperty",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/getuserinput",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserinput",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/getuserselection",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserselection",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/showanimation",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/hideanimation",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/displayswipecard",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/abortswipe",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/displayqr",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/abortdisplayqr",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/abortdisplay",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/sendgeneralevent"
+                        ],
+                        "root": "docs/integrate-pos-device/tweezercomm/device-methods/index"
+                      },
+                      "docs/integrate-pos-device/tweezercomm/pinpad-mode",
+                      "docs/integrate-pos-device/tweezercomm/resilience-mechanism-copy",
+                      "docs/integrate-pos-device/tweezercomm/tc-service",
+                      {
+                        "group": "Additional Resources",
+                        "pages": [
+                          "docs/integrate-pos-device/tweezercomm/additional-resources/certification-files",
+                          "docs/integrate-pos-device/tweezercomm/additional-resources/response-codes",
+                          "docs/integrate-pos-device/tweezercomm/additional-resources/configuring-static-ip",
+                          "docs/integrate-pos-device/tweezercomm/additional-resources/using-test-cards-real-cards-during-the-integration"
+                        ],
+                        "root": "docs/integrate-pos-device/tweezercomm/additional-resources/tweezercomm-additional-resources"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "item": "EMV Core",
+                "icon": "credit-card",
+                "groups": [
+                  {
+                    "group": "EMV Core Guides",
+                    "pages": [
+                      "docs/integrate-pos-device/emv-core/overview",
+                      "docs/integrate-pos-device/emv-core/get-started/emv-core-integration-process"
+                    ]
+                  },
+                  {
+                    "group": "Android & Linux SDK",
+                    "pages": [
+                      "docs/integrate-pos-device/emv-core/get-started/emv-core-get-started-1",
+                      {
+                        "group": "Installation",
+                        "pages": [
+                          "docs/integrate-pos-device/emv-core/get-started/emv-core-android-installation",
+                          "docs/integrate-pos-device/emv-core/get-started/emv-core-linux-installation"
+                        ]
+                      },
+                      "docs/integrate-pos-device/emv-core/get-started/emv-core-device-id",
+                      {
+                        "group": "Payment Flows",
+                        "pages": [
+                          "docs/integrate-pos-device/emv-core/payment-flows/payment-with-authorization",
+                          "docs/integrate-pos-device/emv-core/payment-flows/closed-loop-transaction",
+                          "docs/integrate-pos-device/emv-core/payment-flows/single-step-payment",
+                          "docs/integrate-pos-device/emv-core/payment-flows/pre-authorization-with-external-settlement"
+                        ],
+                        "root": "docs/integrate-pos-device/emv-core/payment-flows/transaction-flow"
+                      },
+                      {
+                        "group": "SDK Methods & Functions",
+                        "pages": [
+                          "docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1",
+                          "docs/integrate-pos-device/emv-core/sdk-methods-functions/remote-management",
+                          "docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks",
+                          "docs/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages"
+                        ],
+                        "root": "docs/integrate-pos-device/emv-core/sdk-methods-functions/emv-core-apis"
+                      },
+                      {
+                        "group": "Demo Applications",
+                        "pages": [
+                          "docs/integrate-pos-device/emv-core/demo-applications/android-demo-application",
+                          "docs/integrate-pos-device/emv-core/demo-applications/linux-demo-application"
+                        ],
+                        "root": "docs/integrate-pos-device/emv-core/demo-applications/emv-core-demo-applications"
+                      },
+                      "docs/integrate-pos-device/emv-core/emv-core-configuration"
+                    ]
+                  },
+                  {
+                    "group": "RTOS SDK",
+                    "pages": [
+                      "docs/integrate-pos-device/emv-core/rtos/rtos-overview",
+                      "docs/integrate-pos-device/emv-core/rtos/rtos-get-started",
+                      "docs/integrate-pos-device/emv-core/rtos/rtos-platform-porting",
+                      "docs/integrate-pos-device/emv-core/rtos/rtos-integration-guide",
+                      {
+                        "group": "API Reference",
+                        "pages": [
+                          "docs/integrate-pos-device/emv-core/rtos/rtos-c-api",
+                          "docs/integrate-pos-device/emv-core/rtos/rtos-json-rpc-api",
+                          "docs/integrate-pos-device/emv-core/rtos/rtos-datalink-layer"
+                        ]
+                      },
+                      "docs/integrate-pos-device/emv-core/rtos/rtos-linux-sample-app",
+                      "docs/integrate-pos-device/emv-core/rtos/rtos-configuration",
+                      "docs/integrate-pos-device/emv-core/rtos/rtos-firmware-updates",
+                      "docs/integrate-pos-device/emv-core/rtos/rtos-troubleshooting"
+                    ]
+                  },
+                  {
+                    "group": "UNO-mini Hardware",
+                    "pages": [
+                      "docs/integrate-pos-device/emv-core/uno-mini/uno-mini-overview",
+                      "docs/integrate-pos-device/emv-core/uno-mini/uno-mini-mechanical",
+                      "docs/integrate-pos-device/emv-core/uno-mini/uno-mini-user-interface",
+                      "docs/integrate-pos-device/emv-core/uno-mini/uno-mini-power-supply",
+                      "docs/integrate-pos-device/emv-core/uno-mini/uno-mini-connections"
+                    ]
+                  },
+                  {
+                    "group": "Release Notes",
+                    "pages": [
+                      "docs/integrate-pos-device/emv-core/emv-core-release-notes",
+                      "docs/integrate-pos-device/emv-core/rtos/rtos-release-notes"
+                    ]
+                  }
+                ]
+              },
+              {
+                "item": "Spark",
+                "icon": "bolt",
+                "groups": [
+                  {
+                    "group": "Spark Guides",
+                    "pages": [
+                      "docs/integrate-pos-device/spark/spark",
+                      "docs/integrate-pos-device/spark/spark-integration-process",
+                      "docs/integrate-pos-device/spark/spark-network-requirement",
+                      {
+                        "group": "Security & Authentication",
+                        "pages": [
+                          "docs/integrate-pos-device/spark/security-authentication/spark-authentication",
+                          "docs/integrate-pos-device/spark/security-authentication/spark-legacy-authentication",
+                          "docs/integrate-pos-device/spark/security-authentication/spark-auth-tool"
+                        ],
+                        "root": "docs/integrate-pos-device/spark/security-authentication/index"
+                      },
+                      {
+                        "group": "Payment Flows",
+                        "pages": [
+                          "docs/integrate-pos-device/spark/payment-flows/spark-device-start",
+                          "docs/integrate-pos-device/spark/payment-flows/spark-remote-start",
+                          "docs/integrate-pos-device/spark/payment-flows/spark-device-stop",
+                          "docs/integrate-pos-device/spark/payment-flows/external-settlement",
+                          "docs/integrate-pos-device/spark/payment-flows/external-cancel"
+                        ],
+                        "root": "docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark"
+                      },
+                      {
+                        "group": "Machine Configuration",
+                        "pages": [
+                          "docs/integrate-pos-device/spark/machine-configuration/spark-remote-start-configuration",
+                          "docs/integrate-pos-device/spark/machine-configuration/spark-device-start-configuration",
+                          "docs/integrate-pos-device/spark/machine-configuration/spark-device-stop-configuration",
+                          "docs/integrate-pos-device/spark/machine-configuration/spark-external-settlement-configuration",
+                          "docs/integrate-pos-device/spark/machine-configuration/additional-features"
+                        ],
+                        "root": "docs/integrate-pos-device/spark/machine-configuration/index"
+                      },
+                      {
+                        "group": "Webhook Callbacks",
+                        "pages": [
+                          "docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback",
+                          "docs/integrate-pos-device/spark/webhook-callbacks/stopcallback",
+                          "docs/integrate-pos-device/spark/webhook-callbacks/timeoutcallback",
+                          "docs/integrate-pos-device/spark/webhook-callbacks/declinecallback"
+                        ],
+                        "root": "docs/integrate-pos-device/spark/webhook-callbacks/index"
+                      },
+                      {
+                        "group": "Additional Resources",
+                        "pages": [
+                          "docs/integrate-pos-device/spark/additional-resources/smc-support",
+                          "docs/integrate-pos-device/spark/additional-resources/spark-posdisplay-format",
+                          "docs/integrate-pos-device/spark/additional-resources/spark-ereceiptdata-format",
+                          "docs/integrate-pos-device/spark/additional-resources/spark-response-codes"
+                        ],
+                        "root": "docs/integrate-pos-device/spark/additional-resources/index"
+                      },
+                      {
+                        "group": "Sample Codes",
+                        "pages": [
+                          "docs/integrate-pos-device/spark/sample-codes/spark-authentication-code-sample"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "group": "API Reference",
+                    "openapi": {
+                      "source": "/openapi/spark.yaml",
+                      "directory": "reference/spark"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Platform Management",
+            "icon": "gears",
+            "menu": [
+              {
+                "item": "Transaction Reporting",
+                "icon": "envelope",
+                "groups": [
+                  {
+                    "group": "Transaction Reporting Guides",
+                    "pages": [
+                      "docs/manage-data-operations/amazon-sqs/overview",
+                      {
+                        "group": "Nayax Core Setup",
+                        "pages": [
+                          {
+                            "group": "Set Up Transaction Delivery",
+                            "root": "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-transaction-delivery",
+                            "pages": [
+                              "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/transaction-json-reference"
+                            ]
+                          },
+                          "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-eva-dts-dexddcmp-audit-file-delivery",
+                          "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-events-delivery",
+                          "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-encryption-on-amazon-sqs-delivery"
+                        ],
+                        "root": "docs/manage-data-operations/amazon-sqs/set-up-nayax-core/nayax-back-office-setup"
+                      },
+                      {
+                        "group": "Amazon Queue Setup",
+                        "pages": [
+                          "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/create-new-queue",
+                          "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/set-up-queue-permissions",
+                          "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/create-user-for-queue-access"
+                        ],
+                        "root": "docs/manage-data-operations/amazon-sqs/amazon-queue-setup/index"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "item": "Lynx API",
+                "icon": "link",
+                "groups": [
+                  {
+                    "group": "Lynx API Guides",
+                    "pages": [
+                      "docs/manage-data-operations/lynx-api/lynx-overview",
+                      "docs/manage-data-operations/lynx-api/security",
+                      {
+                        "group": "Cards",
+                        "pages": [
+                          "docs/manage-data-operations/lynx-api/cards/create-cards",
+                          "docs/manage-data-operations/lynx-api/cards/retrieve-card-data",
+                          "docs/manage-data-operations/lynx-api/cards/add-credit-to-card",
+                          "reference/manage-data-operations/lynx-api/cards"
+                        ]
+                      },
+                      {
+                        "group": "Refunds",
+                        "pages": [
+                          "docs/manage-data-operations/lynx-api/refunds/request-refunds",
+                          "docs/manage-data-operations/lynx-api/refunds/approve-or-decline-a-refund",
+                          "docs/manage-data-operations/lynx-api/refunds/upload-refund-document"
+                        ]
+                      },
+                      {
+                        "group": "Operator",
+                        "pages": [
+                          "docs/manage-data-operations/lynx-api/operator/nayax-hierarchy",
+                          "docs/manage-data-operations/lynx-api/operator/retrieve-hierarchy",
+                          "docs/manage-data-operations/lynx-api/operator/create-operator",
+                          "docs/manage-data-operations/lynx-api/operator/operator-actions",
+                          "reference/manage-data-operations/lynx-api/actor-types"
+                        ]
+                      },
+                      {
+                        "group": "Machines",
+                        "pages": [
+                          "docs/manage-data-operations/lynx-api/machines/create-new-machine-guides",
+                          "docs/manage-data-operations/lynx-api/machines/retrieve-machine-information",
+                          "docs/manage-data-operations/lynx-api/machines/getting-a-machines-last-sales",
+                          "docs/manage-data-operations/lynx-api/machines/get-monyx-id",
+                          "docs/manage-data-operations/lynx-api/machines/updating-a-machines-attribute",
+                          "docs/manage-data-operations/lynx-api/machines/getting-a-machines-id-by-the-devices-serial-number",
+                          "docs/manage-data-operations/lynx-api/machines/getting-a-machines-last-sales-ereceipt-information",
+                          "reference/manage-data-operations/lynx-api/machine-types"
+                        ]
+                      },
+                      {
+                        "group": "Devices",
+                        "pages": [
+                          "docs/manage-data-operations/lynx-api/devices/getting-all-devices-under-an-operator",
+                          "docs/manage-data-operations/lynx-api/devices/disabling-a-device",
+                          "docs/manage-data-operations/lynx-api/devices/moving-device-between-operators"
+                        ]
+                      },
+                      {
+                        "group": "Inventory Management",
+                        "pages": [
+                          "docs/manage-data-operations/lynx-api/inventory-management/inventory-workflow",
+                          "docs/manage-data-operations/lynx-api/inventory-management/create-product-group",
+                          "docs/manage-data-operations/lynx-api/inventory-management/create-products",
+                          "docs/manage-data-operations/lynx-api/inventory-management/machine-products-1",
+                          "docs/manage-data-operations/lynx-api/inventory-management/pick-lists",
+                          "docs/manage-data-operations/lynx-api/inventory-management/pick-list-actions"
+                        ]
+                      },
+                      "reference/manage-data-operations/lynx-api/languages",
+                      "docs/manage-data-operations/lynx-api/product-faqs",
+                      {
+                        "group": "Reports",
+                        "root": "docs/manage-data-operations/lynx-api/reports/index",
+                        "pages": [
+                          {
+                            "group": "Dashboard Widgets",
+                            "root": "docs/manage-data-operations/lynx-api/reports/widgets-overview",
+                            "pages": [
+                              "docs/manage-data-operations/lynx-api/reports/widget-sales-by-period",
+                              "docs/manage-data-operations/lynx-api/reports/widget-dashboard-sales-table",
+                              "docs/manage-data-operations/lynx-api/reports/widget-last-year-vs-this-year",
+                              "docs/manage-data-operations/lynx-api/reports/widget-10-most-popular-machines"
+                            ]
+                          },
+                          {
+                            "group": "Widget API",
+                            "pages": [
+                              "docs/manage-data-operations/lynx-api/reports/retrieve-machine-widget-data",
+                              "docs/manage-data-operations/lynx-api/reports/available-widgets",
+                              "docs/manage-data-operations/lynx-api/reports/widget-filters",
+                              "docs/manage-data-operations/lynx-api/reports/integration-guide"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "group": "API Reference",
+                    "pages": [
+                      {
+                        "group": "Endpoints",
+                        "openapi": {
+                          "source": "/openapi/lynx.yaml",
+                          "directory": "reference/lynx"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Core Extension",
+            "icon": "plug",
+            "groups": [
+              {
+                "group": "Core Extension Guides",
+                "pages": [
+                  "docs/core-extension/overview",
+                  "docs/core-extension/get-started",
+                  "docs/core-extension/authentication",
+                  "docs/core-extension/extension-types",
+                  "docs/core-extension/translations",
+                  "docs/core-extension/role-based-visibility"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Cortina",
+            "icon": "credit-card",
+            "groups": [
+              {
+                "group": "Cortina Guides",
+                "pages": [
+                  "docs/cortina/overview-cortina",
+                  "docs/cortina/cortina-integration",
+                  "docs/cortina/network-requirements",
+                  {
+                    "group": "Start Session",
+                    "pages": [
+                      "docs/cortina/start-session/cortina-auth"
+                    ],
+                    "root": "docs/cortina/start-session/index"
+                  },
+                  "docs/cortina/sale-end-notification",
+                  {
+                    "group": "Prepaid Card",
+                    "pages": [
+                      "docs/cortina/prepaid-card/copy-of-prepaid-card-authorization",
+                      "docs/cortina/prepaid-card/prepaid-card-settlement",
+                      "docs/cortina/prepaid-card/prepaid-card-cancel",
+                      "docs/cortina/prepaid-card/prepaid-card-sale",
+                      "docs/cortina/prepaid-card/prepaid-card-void",
+                      "docs/cortina/prepaid-card/prepaid-card-refund",
+                      "docs/cortina/prepaid-card/prepaid-card-decline-reasons",
+                      "docs/cortina/prepaid-card/check-balance",
+                      "docs/cortina/prepaid-card/partial-approval-for-prepaid",
+                      "docs/cortina/prepaid-card/discount"
+                    ],
+                    "root": "docs/cortina/prepaid-card/prepaid-card-flows"
+                  },
+                  {
+                    "group": "StaticQR",
+                    "pages": [
+                      "docs/cortina/staticqr/static-qr-start",
+                      "docs/cortina/staticqr/static-qr-authorization",
+                      "docs/cortina/staticqr/static-qr-settlement",
+                      "docs/cortina/staticqr/static-qr-cancel",
+                      "docs/cortina/staticqr/static-qr-sale",
+                      "docs/cortina/staticqr/static-qr-void",
+                      "docs/cortina/staticqr/static-qr-refund",
+                      "docs/cortina/staticqr/staticqr-decline-reasons",
+                      "docs/cortina/staticqr/on-screen-qr-display",
+                      "docs/cortina/staticqr/remote-vend"
+                    ],
+                    "root": "docs/cortina/staticqr/staticqr-flows"
+                  },
+                  {
+                    "group": "DynamicQR",
+                    "pages": [
+                      "docs/cortina/dynamicqr/dynamicqr-decline-reasons",
+                      "docs/cortina/dynamicqr/dynamicqr-generateqr",
+                      "docs/cortina/dynamicqr/dynamicqr-inquiry",
+                      "docs/cortina/dynamicqr/dynamicqr-void",
+                      "docs/cortina/dynamicqr/dynamicqr-refund"
+                    ],
+                    "root": "docs/cortina/dynamicqr/cortina-dynamicqr"
+                  },
+                  {
+                    "group": "Credit Card",
+                    "pages": [
+                      "docs/cortina/credit-card/credit-card-decline-reasons",
+                      "docs/cortina/credit-card/partial-approval",
+                      "docs/cortina/credit-card/incremental-authorization-1",
+                      "docs/cortina/credit-card/emv-response-tags",
+                      {
+                        "group": "PIN Processing",
+                        "pages": [
+                          "docs/cortina/credit-card/pin-processing/receiving-the-pin-block",
+                          "docs/cortina/credit-card/pin-processing/dynamic-key-exchange",
+                          "docs/cortina/credit-card/pin-processing/strong-customer-authentication-sca"
+                        ],
+                        "root": "docs/cortina/credit-card/pin-processing/index"
+                      }
+                    ],
+                    "root": "docs/cortina/credit-card/cortina-credit-card-flows"
+                  },
+                  "docs/cortina/refunds",
+                  {
+                    "group": "Cortina FAQs",
+                    "pages": [
+                      "docs/cortina/cortina-faqs/cortina-prepaid-faq",
+                      "docs/cortina/cortina-faqs/faq-2",
+                      "docs/cortina/cortina-faqs/faq-3"
+                    ],
+                    "root": "docs/cortina/cortina-faqs/index"
                   }
                 ]
               },
@@ -636,162 +765,806 @@
                   {
                     "group": "Endpoints",
                     "openapi": {
-                      "source": "/openapi/lynx.yaml",
-                      "directory": "reference/lynx"
+                      "source": "/openapi/cortina.yaml",
+                      "directory": "reference/cortina"
                     }
                   }
                 ]
               }
             ]
-          }
-        ]
-      },
-      {
-        "tab": "Core Extension",
-        "icon": "plug",
-        "groups": [
+          },
           {
-            "group": "Core Extension Guides",
+            "tab": "Build with AI",
+            "icon": "robot",
             "pages": [
-              "docs/core-extension/overview",
-              "docs/core-extension/get-started",
-              "docs/core-extension/authentication",
-              "docs/core-extension/extension-types",
-              "docs/core-extension/translations",
-              "docs/core-extension/role-based-visibility"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Cortina",
-        "icon": "credit-card",
-        "groups": [
-          {
-            "group": "Cortina Guides",
-            "pages": [
-              "docs/cortina/overview-cortina",
-              "docs/cortina/cortina-integration",
-              "docs/cortina/network-requirements",
               {
-                "group": "Start Session",
+                "group": "Build with AI",
+                "root": "docs/get-started/build-with-ai",
                 "pages": [
-                  "docs/cortina/start-session/cortina-auth"
-                ],
-                "root": "docs/cortina/start-session/index"
-              },
-              "docs/cortina/sale-end-notification",
-              {
-                "group": "Prepaid Card",
-                "pages": [
-                  "docs/cortina/prepaid-card/copy-of-prepaid-card-authorization",
-                  "docs/cortina/prepaid-card/prepaid-card-settlement",
-                  "docs/cortina/prepaid-card/prepaid-card-cancel",
-                  "docs/cortina/prepaid-card/prepaid-card-sale",
-                  "docs/cortina/prepaid-card/prepaid-card-void",
-                  "docs/cortina/prepaid-card/prepaid-card-refund",
-                  "docs/cortina/prepaid-card/prepaid-card-decline-reasons",
-                  "docs/cortina/prepaid-card/check-balance",
-                  "docs/cortina/prepaid-card/partial-approval-for-prepaid",
-                  "docs/cortina/prepaid-card/discount"
-                ],
-                "root": "docs/cortina/prepaid-card/prepaid-card-flows"
-              },
-              {
-                "group": "StaticQR",
-                "pages": [
-                  "docs/cortina/staticqr/static-qr-start",
-                  "docs/cortina/staticqr/static-qr-authorization",
-                  "docs/cortina/staticqr/static-qr-settlement",
-                  "docs/cortina/staticqr/static-qr-cancel",
-                  "docs/cortina/staticqr/static-qr-sale",
-                  "docs/cortina/staticqr/static-qr-void",
-                  "docs/cortina/staticqr/static-qr-refund",
-                  "docs/cortina/staticqr/staticqr-decline-reasons",
-                  "docs/cortina/staticqr/on-screen-qr-display",
-                  "docs/cortina/staticqr/remote-vend"
-                ],
-                "root": "docs/cortina/staticqr/staticqr-flows"
-              },
-              {
-                "group": "DynamicQR",
-                "pages": [
-                  "docs/cortina/dynamicqr/dynamicqr-decline-reasons",
-                  "docs/cortina/dynamicqr/dynamicqr-generateqr",
-                  "docs/cortina/dynamicqr/dynamicqr-inquiry",
-                  "docs/cortina/dynamicqr/dynamicqr-void",
-                  "docs/cortina/dynamicqr/dynamicqr-refund"
-                ],
-                "root": "docs/cortina/dynamicqr/cortina-dynamicqr"
-              },
-              {
-                "group": "Credit Card",
-                "pages": [
-                  "docs/cortina/credit-card/credit-card-decline-reasons",
-                  "docs/cortina/credit-card/partial-approval",
-                  "docs/cortina/credit-card/incremental-authorization-1",
-                  "docs/cortina/credit-card/emv-response-tags",
-                  {
-                    "group": "PIN Processing",
-                    "pages": [
-                      "docs/cortina/credit-card/pin-processing/receiving-the-pin-block",
-                      "docs/cortina/credit-card/pin-processing/dynamic-key-exchange",
-                      "docs/cortina/credit-card/pin-processing/strong-customer-authentication-sca"
-                    ],
-                    "root": "docs/cortina/credit-card/pin-processing/index"
-                  }
-                ],
-                "root": "docs/cortina/credit-card/cortina-credit-card-flows"
-              },
-              "docs/cortina/refunds",
-              {
-                "group": "Cortina FAQs",
-                "pages": [
-                  "docs/cortina/cortina-faqs/cortina-prepaid-faq",
-                  "docs/cortina/cortina-faqs/faq-2",
-                  "docs/cortina/cortina-faqs/faq-3"
-                ],
-                "root": "docs/cortina/cortina-faqs/index"
+                  "docs/get-started/mcp-setup",
+                  "docs/get-started/agent-skills"
+                ]
               }
             ]
           },
           {
-            "group": "API Reference",
+            "tab": "Release Notes",
+            "icon": "newspaper",
+            "href": "https://www.nayax.com/product-updates/integrated-pos/integrated-vpos-touch-onyx/"
+          },
+          {
+            "tab": "Help Center",
+            "icon": "circle-question",
+            "href": "https://nayax-u.nayax.com/"
+          }
+        ]
+      },
+      {
+        "language": "zh",
+        "tabs": [
+          {
+            "tab": "Docs Home",
+            "icon": "home",
             "pages": [
+              "index"
+            ]
+          },
+          {
+            "tab": "Terminal SDKs",
+            "icon": "tablet-screen-button",
+            "menu": [
               {
-                "group": "Endpoints",
-                "openapi": {
-                  "source": "/openapi/cortina.yaml",
-                  "directory": "reference/cortina"
-                }
+                "item": "Marshall",
+                "icon": "microchip",
+                "groups": [
+                  {
+                    "group": "Marshall 指南",
+                    "pages": [
+                      "docs/zh/integrate-pos-device/marshall/marshall-sdk",
+                      "docs/zh/integrate-pos-device/marshall/get-started/marshall-integration-process",
+                      {
+                        "group": "支付流程",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel",
+                          "docs/zh/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-auth",
+                          "docs/zh/integrate-pos-device/marshall/payment-flows/marshall-multi-session",
+                          "docs/zh/integrate-pos-device/marshall/payment-flows/marshall-multi-vend-with-pre-sel",
+                          "docs/zh/integrate-pos-device/marshall/payment-flows/marshall-multi-vend-with-pre-auth",
+                          "docs/zh/integrate-pos-device/marshall/payment-flows/sub-flows-features",
+                          "docs/zh/integrate-pos-device/marshall/payment-flows/external-settlement-marshall",
+                          "docs/zh/integrate-pos-device/marshall/payment-flows/multi-session-pre-authorization-with-external-settlement"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/marshall/payment-flows/marshall-payment-flows"
+                      },
+                      {
+                        "group": "快速入门",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/marshall/get-started/marshall-csharp-java-integration",
+                          "docs/zh/integrate-pos-device/marshall/get-started/c-sdk-integration",
+                          "docs/zh/integrate-pos-device/marshall/get-started/vmc-configuration-object",
+                          "docs/zh/integrate-pos-device/marshall/get-started/sdk-flags-descriptions",
+                          "docs/zh/integrate-pos-device/marshall/get-started/certification-proccess"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/marshall/get-started/marshall-get-started"
+                      },
+                      {
+                        "group": "模拟器和示例代码",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/marshall/simulators-sample-codes/java-sdk-simulator",
+                          "docs/zh/integrate-pos-device/marshall/simulators-sample-codes/csharp-sdk-simulator",
+                          "docs/zh/integrate-pos-device/marshall/simulators-sample-codes/c-sdk-simulator",
+                          "docs/zh/integrate-pos-device/marshall/simulators-sample-codes/single-session",
+                          "docs/zh/integrate-pos-device/marshall/simulators-sample-codes/multi-session",
+                          "docs/zh/integrate-pos-device/marshall/simulators-sample-codes/multi-vend",
+                          "docs/zh/integrate-pos-device/marshall/simulators-sample-codes/marshall-c-always-idle"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/marshall/simulators-sample-codes/marshall-sdk-simulators"
+                      },
+                      "docs/zh/integrate-pos-device/marshall/marshall-create-payments",
+                      {
+                        "group": "方法和功能",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/marshall/methods-functions/framework",
+                          "docs/zh/integrate-pos-device/marshall/methods-functions/link-and-events-configuration",
+                          "docs/zh/integrate-pos-device/marshall/methods-functions/vending-events",
+                          "docs/zh/integrate-pos-device/marshall/methods-functions/data-structures",
+                          "docs/zh/integrate-pos-device/marshall/methods-functions/general-marshall-events"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/marshall/methods-functions/marshall-methods-and-functions"
+                      },
+                      {
+                        "group": "硬件集成套件与设置",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/marshall/hw-integration-kit-and-setup/sales-kit",
+                          "docs/zh/integrate-pos-device/marshall/hw-integration-kit-and-setup/installation-steps",
+                          "docs/zh/integrate-pos-device/marshall/hw-integration-kit-and-setup/set-up-nayax-core-for-marshall-integration"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/marshall/hw-integration-kit-and-setup/vpos-touch-installation"
+                      },
+                      {
+                        "group": "其他资源",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/marshall/additional-resources/marshall-display",
+                          "docs/zh/integrate-pos-device/marshall/additional-resources/log-generation",
+                          "docs/zh/integrate-pos-device/marshall/additional-resources/marshall-ontransferdata",
+                          "docs/zh/integrate-pos-device/marshall/additional-resources/stablity-issues",
+                          "docs/zh/integrate-pos-device/marshall/additional-resources/capabilities"
+                        ]
+                      },
+                      {
+                        "group": "Marshall 常见问题解答",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/marshall/marshall-faqs/faq-general",
+                          "docs/zh/integrate-pos-device/marshall/marshall-faqs/faq",
+                          "docs/zh/integrate-pos-device/marshall/marshall-faqs/faq-marshall-flowconfigurations"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/marshall/marshall-faqs/index"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "item": "Marshall Pro (Fuel)",
+                "icon": "gas-pump",
+                "groups": [
+                  {
+                    "group": "Marshall Pro Guides",
+                    "pages": [
+                      "docs/zh/integrate-pos-device/marshall-pro/getting-started/index",
+                      "docs/zh/integrate-pos-device/marshall-pro/getting-started/marshall-pro-integration-process",
+                      "docs/zh/integrate-pos-device/marshall-pro/getting-started/forecourt-architecture",
+                      "docs/zh/integrate-pos-device/marshall-pro/getting-started/best-practices",
+                      "docs/zh/integrate-pos-device/marshall-pro/getting-started/security-digital-signatures"
+                    ]
+                  },
+                  {
+                    "group": "Payment Flows",
+                    "pages": [
+                      "docs/zh/integrate-pos-device/marshall-pro/methods/payment/two-phase-pre-authorization",
+                      "docs/zh/integrate-pos-device/marshall-pro/methods/payment/post-pay",
+                      "docs/zh/integrate-pos-device/marshall-pro/methods/payment/periodic-reconciliation"
+                    ]
+                  },
+                  {
+                    "group": "Messaging Protocol",
+                    "pages": [
+                      "docs/zh/integrate-pos-device/marshall-pro/messaging-protocol/tcp-communication",
+                      "docs/zh/integrate-pos-device/marshall-pro/messaging-protocol/request-response-format",
+                      "docs/zh/integrate-pos-device/marshall-pro/messaging-protocol/error-codes",
+                      "docs/zh/integrate-pos-device/marshall-pro/messaging-protocol/example-fuel-station-flow"
+                    ]
+                  },
+                  {
+                    "group": "Methods",
+                    "pages": [
+                      "docs/zh/integrate-pos-device/marshall-pro/methods/api",
+                      {
+                        "group": "General",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/marshall-pro/methods/general/info",
+                          "docs/zh/integrate-pos-device/marshall-pro/methods/general/status"
+                        ]
+                      },
+                      {
+                        "group": "Payment",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/marshall-pro/methods/payment/card-detect",
+                          "docs/zh/integrate-pos-device/marshall-pro/methods/payment/stop-card-detect",
+                          "docs/zh/integrate-pos-device/marshall-pro/methods/payment/authorize",
+                          "docs/zh/integrate-pos-device/marshall-pro/methods/payment/detect-and-auth",
+                          "docs/zh/integrate-pos-device/marshall-pro/methods/payment/settle",
+                          "docs/zh/integrate-pos-device/marshall-pro/methods/payment/pay",
+                          "docs/zh/integrate-pos-device/marshall-pro/methods/payment/query"
+                        ]
+                      },
+                      {
+                        "group": "Display",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/marshall-pro/methods/display/display-screen",
+                          "docs/zh/integrate-pos-device/marshall-pro/methods/display/display-input",
+                          "docs/zh/integrate-pos-device/marshall-pro/methods/display/display-select",
+                          "docs/zh/integrate-pos-device/marshall-pro/methods/display/display-confirm"
+                        ]
+                      },
+                      {
+                        "group": "Utility",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/marshall-pro/methods/utility/print"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "item": "TweezerComm",
+                "icon": "mobile",
+                "groups": [
+                  {
+                    "group": "TweezerComm Guides",
+                    "pages": [
+                      "docs/zh/integrate-pos-device/tweezercomm/overview-tweezer",
+                      "docs/zh/integrate-pos-device/tweezercomm/tweezercomm-integration-process",
+                      "docs/zh/integrate-pos-device/tweezercomm/tweezercomm-get-started",
+                      {
+                        "group": "🌐 Global Payment Flows",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/tweezercomm/global-payment-flows/tweezercomm-engine-preselection-flow",
+                          "docs/zh/integrate-pos-device/tweezercomm/global-payment-flows/tweezercomm-engine-preauth-flow"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/tweezercomm/global-payment-flows/payment-flows-copy-1"
+                      },
+                      {
+                        "group": "Global Payment Methods",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction",
+                          "docs/zh/integrate-pos-device/tweezercomm/global-payment-methods/refunds-dotransaction",
+                          "docs/zh/integrate-pos-device/tweezercomm/global-payment-methods/abort-transaction",
+                          "docs/zh/integrate-pos-device/tweezercomm/global-payment-methods/gettransactionbyvuid",
+                          "docs/zh/integrate-pos-device/tweezercomm/global-payment-methods/getreport",
+                          "docs/zh/integrate-pos-device/tweezercomm/global-payment-methods/getstatus",
+                          "docs/zh/integrate-pos-device/tweezercomm/global-payment-methods/getinternalstatus",
+                          "docs/zh/integrate-pos-device/tweezercomm/global-payment-methods/getretailerinfo",
+                          "docs/zh/integrate-pos-device/tweezercomm/global-payment-methods/startpinpadtransaction",
+                          "docs/zh/integrate-pos-device/tweezercomm/global-payment-methods/dopinpadtransaction",
+                          "docs/zh/integrate-pos-device/tweezercomm/global-payment-methods/endpinpadtransaction"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/tweezercomm/global-payment-methods/payment-services-methods-copy-1"
+                      },
+                      {
+                        "group": "🟦 Israel Payment Flows",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-flows/single-phase-transaction",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-flows/2-phase-transaction",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-pre-authorization-israel",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-deferred-payment",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-split-transaction"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-israel-payment-flows"
+                      },
+                      {
+                        "group": "Israel Payment Methods",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/dotransaction-ashrait",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase1",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase2",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/dominisettlement",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/addsubretailer",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/aborttransaction-copy",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/canceltransaction-1",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/gettransactionbyvuid-copy",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/gettransactionbyvuid-copy-1",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/getreport-1",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/getreport-copy-1",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/getreport-copy",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/getstatus-copy",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/addsubretailer-copy",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase2-copy-1",
+                          "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/authorizependingtransactions"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/tweezercomm/israel-payment-methods/tweezercomm-israel-payment-methods"
+                      },
+                      {
+                        "group": "Device Methods",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/getinfo",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/readcard",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/abortreadcard",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/getconfig",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/setconfig",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/getversion",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/uploadlogs",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/getproperty",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/getuserinput",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/abortgetuserinput",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/getuserselection",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/abortgetuserselection",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/showanimation",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/hideanimation",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/displayswipecard",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/abortswipe",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/displayqr",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/abortdisplayqr",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/abortdisplay",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/sendgeneralevent"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/tweezercomm/device-methods/index"
+                      },
+                      "docs/zh/integrate-pos-device/tweezercomm/pinpad-mode",
+                      "docs/zh/integrate-pos-device/tweezercomm/resilience-mechanism-copy",
+                      "docs/zh/integrate-pos-device/tweezercomm/tc-service",
+                      {
+                        "group": "Additional Resources",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/tweezercomm/additional-resources/certification-files",
+                          "docs/zh/integrate-pos-device/tweezercomm/additional-resources/response-codes",
+                          "docs/zh/integrate-pos-device/tweezercomm/additional-resources/configuring-static-ip",
+                          "docs/zh/integrate-pos-device/tweezercomm/additional-resources/using-test-cards-real-cards-during-the-integration"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/tweezercomm/additional-resources/tweezercomm-additional-resources"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "item": "EMV Core",
+                "icon": "credit-card",
+                "groups": [
+                  {
+                    "group": "EMV Core Guides",
+                    "pages": [
+                      "docs/zh/integrate-pos-device/emv-core/overview",
+                      "docs/zh/integrate-pos-device/emv-core/get-started/emv-core-integration-process"
+                    ]
+                  },
+                  {
+                    "group": "Android & Linux SDK",
+                    "pages": [
+                      "docs/zh/integrate-pos-device/emv-core/get-started/emv-core-get-started-1",
+                      {
+                        "group": "Installation",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/emv-core/get-started/emv-core-android-installation",
+                          "docs/zh/integrate-pos-device/emv-core/get-started/emv-core-linux-installation"
+                        ]
+                      },
+                      "docs/zh/integrate-pos-device/emv-core/get-started/emv-core-device-id",
+                      {
+                        "group": "Payment Flows",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/emv-core/payment-flows/payment-with-authorization",
+                          "docs/zh/integrate-pos-device/emv-core/payment-flows/closed-loop-transaction",
+                          "docs/zh/integrate-pos-device/emv-core/payment-flows/single-step-payment",
+                          "docs/zh/integrate-pos-device/emv-core/payment-flows/pre-authorization-with-external-settlement"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/emv-core/payment-flows/transaction-flow"
+                      },
+                      {
+                        "group": "SDK Methods & Functions",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/emv-core/sdk-methods-functions/payment-1",
+                          "docs/zh/integrate-pos-device/emv-core/sdk-methods-functions/remote-management",
+                          "docs/zh/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks",
+                          "docs/zh/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/emv-core/sdk-methods-functions/emv-core-apis"
+                      },
+                      {
+                        "group": "Demo Applications",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/emv-core/demo-applications/android-demo-application",
+                          "docs/zh/integrate-pos-device/emv-core/demo-applications/linux-demo-application"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/emv-core/demo-applications/emv-core-demo-applications"
+                      },
+                      "docs/zh/integrate-pos-device/emv-core/emv-core-configuration"
+                    ]
+                  },
+                  {
+                    "group": "RTOS SDK",
+                    "pages": [
+                      "docs/zh/integrate-pos-device/emv-core/rtos/rtos-overview",
+                      "docs/zh/integrate-pos-device/emv-core/rtos/rtos-get-started",
+                      "docs/zh/integrate-pos-device/emv-core/rtos/rtos-platform-porting",
+                      "docs/zh/integrate-pos-device/emv-core/rtos/rtos-integration-guide",
+                      {
+                        "group": "API Reference",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/emv-core/rtos/rtos-c-api",
+                          "docs/zh/integrate-pos-device/emv-core/rtos/rtos-json-rpc-api",
+                          "docs/zh/integrate-pos-device/emv-core/rtos/rtos-datalink-layer"
+                        ]
+                      },
+                      "docs/zh/integrate-pos-device/emv-core/rtos/rtos-linux-sample-app",
+                      "docs/zh/integrate-pos-device/emv-core/rtos/rtos-configuration",
+                      "docs/zh/integrate-pos-device/emv-core/rtos/rtos-firmware-updates",
+                      "docs/zh/integrate-pos-device/emv-core/rtos/rtos-troubleshooting"
+                    ]
+                  },
+                  {
+                    "group": "UNO-mini Hardware",
+                    "pages": [
+                      "docs/zh/integrate-pos-device/emv-core/uno-mini/uno-mini-overview",
+                      "docs/zh/integrate-pos-device/emv-core/uno-mini/uno-mini-mechanical",
+                      "docs/zh/integrate-pos-device/emv-core/uno-mini/uno-mini-user-interface",
+                      "docs/zh/integrate-pos-device/emv-core/uno-mini/uno-mini-power-supply",
+                      "docs/zh/integrate-pos-device/emv-core/uno-mini/uno-mini-connections"
+                    ]
+                  },
+                  {
+                    "group": "Release Notes",
+                    "pages": [
+                      "docs/zh/integrate-pos-device/emv-core/emv-core-release-notes",
+                      "docs/zh/integrate-pos-device/emv-core/rtos/rtos-release-notes"
+                    ]
+                  }
+                ]
+              },
+              {
+                "item": "Spark",
+                "icon": "bolt",
+                "groups": [
+                  {
+                    "group": "Spark Guides",
+                    "pages": [
+                      "docs/zh/integrate-pos-device/spark/spark",
+                      "docs/zh/integrate-pos-device/spark/spark-integration-process",
+                      "docs/zh/integrate-pos-device/spark/spark-network-requirement",
+                      {
+                        "group": "Security & Authentication",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/spark/security-authentication/spark-authentication",
+                          "docs/zh/integrate-pos-device/spark/security-authentication/spark-legacy-authentication",
+                          "docs/zh/integrate-pos-device/spark/security-authentication/spark-auth-tool"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/spark/security-authentication/index"
+                      },
+                      {
+                        "group": "Payment Flows",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/spark/payment-flows/spark-device-start",
+                          "docs/zh/integrate-pos-device/spark/payment-flows/spark-remote-start",
+                          "docs/zh/integrate-pos-device/spark/payment-flows/spark-device-stop",
+                          "docs/zh/integrate-pos-device/spark/payment-flows/external-settlement",
+                          "docs/zh/integrate-pos-device/spark/payment-flows/external-cancel"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/spark/payment-flows/transaction-flows-spark"
+                      },
+                      {
+                        "group": "Machine Configuration",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/spark/machine-configuration/spark-remote-start-configuration",
+                          "docs/zh/integrate-pos-device/spark/machine-configuration/spark-device-start-configuration",
+                          "docs/zh/integrate-pos-device/spark/machine-configuration/spark-device-stop-configuration",
+                          "docs/zh/integrate-pos-device/spark/machine-configuration/spark-external-settlement-configuration",
+                          "docs/zh/integrate-pos-device/spark/machine-configuration/additional-features"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/spark/machine-configuration/index"
+                      },
+                      {
+                        "group": "Webhook Callbacks",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/spark/webhook-callbacks/transactioncallback",
+                          "docs/zh/integrate-pos-device/spark/webhook-callbacks/stopcallback",
+                          "docs/zh/integrate-pos-device/spark/webhook-callbacks/timeoutcallback",
+                          "docs/zh/integrate-pos-device/spark/webhook-callbacks/declinecallback"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/spark/webhook-callbacks/index"
+                      },
+                      {
+                        "group": "Additional Resources",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/spark/additional-resources/smc-support",
+                          "docs/zh/integrate-pos-device/spark/additional-resources/spark-posdisplay-format",
+                          "docs/zh/integrate-pos-device/spark/additional-resources/spark-ereceiptdata-format",
+                          "docs/zh/integrate-pos-device/spark/additional-resources/spark-response-codes"
+                        ],
+                        "root": "docs/zh/integrate-pos-device/spark/additional-resources/index"
+                      },
+                      {
+                        "group": "Sample Codes",
+                        "pages": [
+                          "docs/zh/integrate-pos-device/spark/sample-codes/spark-authentication-code-sample"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "group": "API Reference",
+                    "openapi": {
+                      "source": "/openapi/spark.yaml",
+                      "directory": "reference/spark"
+                    }
+                  }
+                ]
               }
             ]
-          }
-        ]
-      },
-      {
-        "tab": "Build with AI",
-        "icon": "robot",
-        "pages": [
+          },
           {
-            "group": "Build with AI",
-            "root": "docs/get-started/build-with-ai",
-            "pages": [
-              "docs/get-started/mcp-setup",
-              "docs/get-started/agent-skills"
+            "tab": "Platform Management",
+            "icon": "gears",
+            "menu": [
+              {
+                "item": "Transaction Reporting",
+                "icon": "envelope",
+                "groups": [
+                  {
+                    "group": "Transaction Reporting Guides",
+                    "pages": [
+                      "docs/zh/manage-data-operations/amazon-sqs/overview",
+                      {
+                        "group": "Nayax Core Setup",
+                        "pages": [
+                          {
+                            "group": "Set Up Transaction Delivery",
+                            "root": "docs/zh/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-transaction-delivery",
+                            "pages": [
+                              "docs/zh/manage-data-operations/amazon-sqs/set-up-nayax-core/transaction-json-reference"
+                            ]
+                          },
+                          "docs/zh/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-eva-dts-dexddcmp-audit-file-delivery",
+                          "docs/zh/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-events-delivery",
+                          "docs/zh/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-encryption-on-amazon-sqs-delivery"
+                        ],
+                        "root": "docs/zh/manage-data-operations/amazon-sqs/set-up-nayax-core/nayax-back-office-setup"
+                      },
+                      {
+                        "group": "Amazon Queue Setup",
+                        "pages": [
+                          "docs/zh/manage-data-operations/amazon-sqs/amazon-queue-setup/create-new-queue",
+                          "docs/zh/manage-data-operations/amazon-sqs/amazon-queue-setup/set-up-queue-permissions",
+                          "docs/zh/manage-data-operations/amazon-sqs/amazon-queue-setup/create-user-for-queue-access"
+                        ],
+                        "root": "docs/zh/manage-data-operations/amazon-sqs/amazon-queue-setup/index"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "item": "Lynx API",
+                "icon": "link",
+                "groups": [
+                  {
+                    "group": "Lynx API Guides",
+                    "pages": [
+                      "docs/zh/manage-data-operations/lynx-api/lynx-overview",
+                      "docs/zh/manage-data-operations/lynx-api/security",
+                      {
+                        "group": "Cards",
+                        "pages": [
+                          "docs/zh/manage-data-operations/lynx-api/cards/create-cards",
+                          "docs/zh/manage-data-operations/lynx-api/cards/retrieve-card-data",
+                          "docs/zh/manage-data-operations/lynx-api/cards/add-credit-to-card",
+                          "reference/manage-data-operations/lynx-api/cards"
+                        ]
+                      },
+                      {
+                        "group": "Refunds",
+                        "pages": [
+                          "docs/zh/manage-data-operations/lynx-api/refunds/request-refunds",
+                          "docs/zh/manage-data-operations/lynx-api/refunds/approve-or-decline-a-refund",
+                          "docs/zh/manage-data-operations/lynx-api/refunds/upload-refund-document"
+                        ]
+                      },
+                      {
+                        "group": "Operator",
+                        "pages": [
+                          "docs/zh/manage-data-operations/lynx-api/operator/nayax-hierarchy",
+                          "docs/zh/manage-data-operations/lynx-api/operator/retrieve-hierarchy",
+                          "docs/zh/manage-data-operations/lynx-api/operator/create-operator",
+                          "docs/zh/manage-data-operations/lynx-api/operator/operator-actions",
+                          "reference/manage-data-operations/lynx-api/actor-types"
+                        ]
+                      },
+                      {
+                        "group": "Machines",
+                        "pages": [
+                          "docs/zh/manage-data-operations/lynx-api/machines/create-new-machine-guides",
+                          "docs/zh/manage-data-operations/lynx-api/machines/retrieve-machine-information",
+                          "docs/zh/manage-data-operations/lynx-api/machines/getting-a-machines-last-sales",
+                          "docs/zh/manage-data-operations/lynx-api/machines/get-monyx-id",
+                          "docs/zh/manage-data-operations/lynx-api/machines/updating-a-machines-attribute",
+                          "docs/zh/manage-data-operations/lynx-api/machines/getting-a-machines-id-by-the-devices-serial-number",
+                          "docs/zh/manage-data-operations/lynx-api/machines/getting-a-machines-last-sales-ereceipt-information",
+                          "reference/manage-data-operations/lynx-api/machine-types"
+                        ]
+                      },
+                      {
+                        "group": "Devices",
+                        "pages": [
+                          "docs/zh/manage-data-operations/lynx-api/devices/getting-all-devices-under-an-operator",
+                          "docs/zh/manage-data-operations/lynx-api/devices/disabling-a-device",
+                          "docs/zh/manage-data-operations/lynx-api/devices/moving-device-between-operators"
+                        ]
+                      },
+                      {
+                        "group": "Inventory Management",
+                        "pages": [
+                          "docs/zh/manage-data-operations/lynx-api/inventory-management/inventory-workflow",
+                          "docs/zh/manage-data-operations/lynx-api/inventory-management/create-product-group",
+                          "docs/zh/manage-data-operations/lynx-api/inventory-management/create-products",
+                          "docs/zh/manage-data-operations/lynx-api/inventory-management/machine-products-1",
+                          "docs/zh/manage-data-operations/lynx-api/inventory-management/pick-lists",
+                          "docs/zh/manage-data-operations/lynx-api/inventory-management/pick-list-actions"
+                        ]
+                      },
+                      "reference/manage-data-operations/lynx-api/languages",
+                      "docs/zh/manage-data-operations/lynx-api/product-faqs",
+                      {
+                        "group": "Reports",
+                        "root": "docs/zh/manage-data-operations/lynx-api/reports/index",
+                        "pages": [
+                          {
+                            "group": "Dashboard Widgets",
+                            "root": "docs/zh/manage-data-operations/lynx-api/reports/widgets-overview",
+                            "pages": [
+                              "docs/zh/manage-data-operations/lynx-api/reports/widget-sales-by-period",
+                              "docs/zh/manage-data-operations/lynx-api/reports/widget-dashboard-sales-table",
+                              "docs/zh/manage-data-operations/lynx-api/reports/widget-last-year-vs-this-year",
+                              "docs/zh/manage-data-operations/lynx-api/reports/widget-10-most-popular-machines"
+                            ]
+                          },
+                          {
+                            "group": "Widget API",
+                            "pages": [
+                              "docs/zh/manage-data-operations/lynx-api/reports/retrieve-machine-widget-data",
+                              "docs/zh/manage-data-operations/lynx-api/reports/available-widgets",
+                              "docs/zh/manage-data-operations/lynx-api/reports/widget-filters",
+                              "docs/zh/manage-data-operations/lynx-api/reports/integration-guide"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "group": "API Reference",
+                    "pages": [
+                      {
+                        "group": "Endpoints",
+                        "openapi": {
+                          "source": "/openapi/lynx.yaml",
+                          "directory": "reference/lynx"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
             ]
+          },
+          {
+            "tab": "Core Extension",
+            "icon": "plug",
+            "groups": [
+              {
+                "group": "Core Extension Guides",
+                "pages": [
+                  "docs/zh/core-extension/overview",
+                  "docs/zh/core-extension/get-started",
+                  "docs/zh/core-extension/authentication",
+                  "docs/zh/core-extension/extension-types",
+                  "docs/zh/core-extension/translations",
+                  "docs/zh/core-extension/role-based-visibility"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Cortina",
+            "icon": "credit-card",
+            "groups": [
+              {
+                "group": "Cortina Guides",
+                "pages": [
+                  "docs/zh/cortina/overview-cortina",
+                  "docs/zh/cortina/cortina-integration",
+                  "docs/zh/cortina/network-requirements",
+                  {
+                    "group": "Start Session",
+                    "pages": [
+                      "docs/zh/cortina/start-session/cortina-auth"
+                    ],
+                    "root": "docs/zh/cortina/start-session/index"
+                  },
+                  "docs/zh/cortina/sale-end-notification",
+                  {
+                    "group": "Prepaid Card",
+                    "pages": [
+                      "docs/zh/cortina/prepaid-card/copy-of-prepaid-card-authorization",
+                      "docs/zh/cortina/prepaid-card/prepaid-card-settlement",
+                      "docs/zh/cortina/prepaid-card/prepaid-card-cancel",
+                      "docs/zh/cortina/prepaid-card/prepaid-card-sale",
+                      "docs/zh/cortina/prepaid-card/prepaid-card-void",
+                      "docs/zh/cortina/prepaid-card/prepaid-card-refund",
+                      "docs/zh/cortina/prepaid-card/prepaid-card-decline-reasons",
+                      "docs/zh/cortina/prepaid-card/check-balance",
+                      "docs/zh/cortina/prepaid-card/partial-approval-for-prepaid",
+                      "docs/zh/cortina/prepaid-card/discount"
+                    ],
+                    "root": "docs/zh/cortina/prepaid-card/prepaid-card-flows"
+                  },
+                  {
+                    "group": "StaticQR",
+                    "pages": [
+                      "docs/zh/cortina/staticqr/static-qr-start",
+                      "docs/zh/cortina/staticqr/static-qr-authorization",
+                      "docs/zh/cortina/staticqr/static-qr-settlement",
+                      "docs/zh/cortina/staticqr/static-qr-cancel",
+                      "docs/zh/cortina/staticqr/static-qr-sale",
+                      "docs/zh/cortina/staticqr/static-qr-void",
+                      "docs/zh/cortina/staticqr/static-qr-refund",
+                      "docs/zh/cortina/staticqr/staticqr-decline-reasons",
+                      "docs/zh/cortina/staticqr/on-screen-qr-display",
+                      "docs/zh/cortina/staticqr/remote-vend"
+                    ],
+                    "root": "docs/zh/cortina/staticqr/staticqr-flows"
+                  },
+                  {
+                    "group": "DynamicQR",
+                    "pages": [
+                      "docs/zh/cortina/dynamicqr/dynamicqr-decline-reasons",
+                      "docs/zh/cortina/dynamicqr/dynamicqr-generateqr",
+                      "docs/zh/cortina/dynamicqr/dynamicqr-inquiry",
+                      "docs/zh/cortina/dynamicqr/dynamicqr-void",
+                      "docs/zh/cortina/dynamicqr/dynamicqr-refund"
+                    ],
+                    "root": "docs/zh/cortina/dynamicqr/cortina-dynamicqr"
+                  },
+                  {
+                    "group": "Credit Card",
+                    "pages": [
+                      "docs/zh/cortina/credit-card/credit-card-decline-reasons",
+                      "docs/zh/cortina/credit-card/partial-approval",
+                      "docs/zh/cortina/credit-card/incremental-authorization-1",
+                      "docs/zh/cortina/credit-card/emv-response-tags",
+                      {
+                        "group": "PIN Processing",
+                        "pages": [
+                          "docs/zh/cortina/credit-card/pin-processing/receiving-the-pin-block",
+                          "docs/zh/cortina/credit-card/pin-processing/dynamic-key-exchange",
+                          "docs/zh/cortina/credit-card/pin-processing/strong-customer-authentication-sca"
+                        ],
+                        "root": "docs/zh/cortina/credit-card/pin-processing/index"
+                      }
+                    ],
+                    "root": "docs/zh/cortina/credit-card/cortina-credit-card-flows"
+                  },
+                  "docs/zh/cortina/refunds",
+                  {
+                    "group": "Cortina FAQs",
+                    "pages": [
+                      "docs/zh/cortina/cortina-faqs/cortina-prepaid-faq",
+                      "docs/zh/cortina/cortina-faqs/faq-2",
+                      "docs/zh/cortina/cortina-faqs/faq-3"
+                    ],
+                    "root": "docs/zh/cortina/cortina-faqs/index"
+                  }
+                ]
+              },
+              {
+                "group": "API Reference",
+                "pages": [
+                  {
+                    "group": "Endpoints",
+                    "openapi": {
+                      "source": "/openapi/cortina.yaml",
+                      "directory": "reference/cortina"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Build with AI",
+            "icon": "robot",
+            "pages": [
+              {
+                "group": "Build with AI",
+                "root": "docs/zh/get-started/build-with-ai",
+                "pages": [
+                  "docs/zh/get-started/mcp-setup",
+                  "docs/zh/get-started/agent-skills"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Release Notes",
+            "icon": "newspaper",
+            "href": "https://www.nayax.com/product-updates/integrated-pos/integrated-vpos-touch-onyx/"
+          },
+          {
+            "tab": "Help Center",
+            "icon": "circle-question",
+            "href": "https://nayax-u.nayax.com/"
           }
         ]
-      },
-      {
-        "tab": "Release Notes",
-        "icon": "newspaper",
-        "href": "https://www.nayax.com/product-updates/integrated-pos/integrated-vpos-touch-onyx/"
-      },
-      {
-        "tab": "Help Center",
-        "icon": "circle-question",
-        "href": "https://nayax-u.nayax.com/"
       }
     ]
   },

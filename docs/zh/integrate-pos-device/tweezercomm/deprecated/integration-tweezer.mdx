@@ -1,0 +1,64 @@
+---
+title: 开始
+metadata:
+  og:description: TweezerComm 遵循 JSON-RPC 2.0 规范，以规范 POS/ECR 与 Agamento 支付应用程序之间的交易处理（该
+---
+
+TweezerComm 遵循[JSON-RPC 2.0](http://www.jsonrpc.org/specification)规范，以标准化 POS/ECR 和 Agamento 支付应用程序（运行在 Nayax 有人值守设备上）之间的交易处理。JSON-RPC 是一种轻量级的远程过程调用 (RPC) 协议，以 JSON 编码。它允许客户端和服务器使用结构化请求和响应进行通信。
+
+请参阅以下部分，了解如何在 TweezerComm 上提交请求。
+
+## 服务器端点
+
+TweezerComm 使用标准 REST API 约定通过 HTTPS 运行。SPICy 服务器充当处理 JSON-RPC 消息的入口点。服务器端点的结构如下：
+
+```
+https://device_ip:8080/SPICy
+```
+
+所有请求均通过 POST 方法在此端点处理。请记得将 `device_ip` 替换为您设备的实际 IP 地址。
+
+<Note>
+  阿加门托港
+
+  Agamento 在端口**8080**上监听 TC Lan 集成，在端口**9090**上监听 Bonjour 集成，从而允许客户端应用程序和支付设备之间的通信。
+</Note>
+
+## 执行请求
+
+要通过 SPICy 服务器请求 TweezerComm，客户端应用程序必须向指定端点发送格式正确的 JSON-RPC 请求。以下是如何发起基本交易的示例：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "doTransaction",
+    "id": "123454352",
+    "params": [
+        "engine",
+        {
+            "vuid": "44d96006",
+            "amount": 100,
+            "tranType": 1
+        }
+    ]
+}
+```
+
+本次请求中需要配置以下参数：
+
+- `jsonrpc`：定义 JSON-RPC 版本。在此情况下，请始终将其设置为 `2.0`。
+- `method`: Specifies the method to be used. See [Payment Services Methods](/docs/integrate-pos-device/tweezercomm/global-payment-methods/payment-services-methods-copy-1) and [Device Methods](/docs/integrate-pos-device/tweezercomm/device-methods/index) for a list and description of available methods.
+- `id`：用于跟踪请求的唯一标识符。
+- `params`：这是一个分为两部分的数组。
+  - 第一个指定支付服务。在此示例中为 `engine`。
+  - 第二部分包含特定于请求方法的参数。
+
+通过遵循这种结构，客户端应用程序可以可靠地与 TweezerComm 交互，以实现安全高效的支付处理。
+
+## 参见
+
+<Columns cols={3}>
+  <Card icon="link" title="付款流程" href="/docs/integrate-pos-device/tweezercomm/global-payment-flows/payment-flows-copy-1" arrow />
+
+  <Card icon="link" title="创建付款" href="/docs/integrate-pos-device/tweezercomm/deprecated/tweezercomm-create-payments" arrow />
+</Columns>

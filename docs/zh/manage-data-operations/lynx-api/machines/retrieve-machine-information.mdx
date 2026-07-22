@@ -1,0 +1,344 @@
+---
+title: 检索机器信息
+metadata:
+  og:description: 在 Nayax Core 中，机器具有多种属性，例如机器的运营商、机器的型号或 ID 及其状态。这些属性都可以
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx"
+
+在 Nayax Core 中，机器具有多种属性，例如机器的运营商、机器的型号或 ID 及其状态。您可以通过以下方式访问 Machines 菜单，以查看所有这些属性：
+
+1. 在您的 Dashboard 中，进入 Operations > Machines。
+2. 使用搜索功能筛选机器列表。
+3. 从列表中选择所需的机器。
+4. 打开**“常规信息”**选项卡。
+
+<Frame>
+  <img src="/images/docs/retrieve-machine-information/image1.png" />
+</Frame>
+
+在此处，您可以查看该机器的所有关键信息，供其他请求使用。
+
+<Warning>
+  验证
+
+  请参阅本文档的[“安全和令牌”](/docs/manage-data-operations/lynx-api/security)页面，了解如何访问您的令牌，以及如何正确使用它来验证您的 API 请求。
+</Warning>
+
+Lynx API 提供四种以编程方式检索机器信息的方法。请使用与您现有标识符相匹配的部分。
+
+## 通过 `MachineID` 检索机器
+
+使用 [Get Specific Machine Basic Info](/reference/lynx/machines/get-specific-machine-basic-info) 端点检索具有特定 `MachineID` 的机器的详细信息。请在请求的路径参数中插入 `MachineID`。
+
+<EndpointCard title="获取特定机器的基本信息" href="/reference/lynx/machines/get-specific-machine-basic-info" method="get" />
+
+<CodeGroup>
+  ```sh Request
+  curl --request GET \
+       --url https://qa-lynx.nayax.com/operational/v1/machines/{MachineID} \
+       --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
+       --header 'accept: application/json'
+  ```
+
+  ```json Response
+  {
+    "MachineID": 0,
+    "ActorID": 0,
+    "CountryID": 0,
+    "CurrencyID": 0,
+    "InstituteID": 0,
+    "LocationID": 0,
+    "MachineGroupID": 0,
+    "MachineModelID": 0,
+    "MachineName": "string",
+    "MachineNumber": "string",
+    "MachineStatusBit": 0,
+    "LanguageID": 2,
+    "OperatorActorID": 0,
+    "DistributorActorID": 0,
+    "AreaActorID": 0,
+    "SalesSourceID": 0,
+    "MachineTypeID": 555001,
+    "SerialNumber": "string",
+    "VPOSSerialNumber": "string",
+    "DeviceSerialNumber": "string",
+    "VPOSID": 0,
+    "DeviceID": 0,
+    "UseLocationFrom": 0,
+    "GeoCountry": 0,
+    "GeoState": "string",
+    "GeoCity": "string",
+    "GeoAddress": "string",
+    "GeoStreetNumber": "string",
+    "GeoLongitude": 0,
+    "GeoLatitude": 0,
+    "GeoZoom": 0,
+    "GeoZipCode": "string",
+    "SearchAddress": "string",
+    "Remarks": "string",
+    "DexType": 0,
+    "DexMidnightReadsEnableBit": true,
+    "DexG85CheckEnableBit": true,
+    "DexDivideBillsBy": 0,
+    "DexG85CheckParsingFilterEnableBit": true,
+    "UseCardPriceCorrectCashPriceBit": true,
+    "MachineTimeZoneOffset": 0,
+    "DexReadInterval": 0,
+    "LocationType": 0,
+    "ApplyDisplayPickListSelectionsToReportsBit": true,
+    "DisplayPickListSelectionsAs": 0,
+    "LastUpdated": "2024-11-25T14:04:50.909Z",
+    "MachineProfile": 0,
+    "CityID": 0,
+    "RegionID": 0,
+    "CountryDialingCode": 0,
+    "DexIgnoreCRCCheckBit": true,
+    "DexParseLABit": true,
+    "ProductMapID": 0,
+    "Longitude": 0,
+    "Latitude": 0,
+    "DexTotalSalesMinusCardSalesBit": true,
+    "RouteActorID": 0,
+    "MachineLogicAlertEnableBit": true,
+    "AlertRuleSetId": 0,
+    "MachineMemberTypePricingEnableBit": true,
+    "DexMultiplyCoinsBy": 0,
+    "DexMultiplyTubesBy": 0,
+    "CustomerID": 0,
+    "CommissionType": 0,
+    "CommissionDefaultValue": 0,
+    "CreatedBy": 0,
+    "CreatedOn": "2024-11-25T14:04:50.909Z",
+    "UpdateBy": 0,
+    "TubeSource": 0,
+    "BillSource": 0,
+    "SmartStickerId": 0,
+    "EnableRemoveVendBit": true,
+    "EnableEreceiptBit": true,
+    "ProductMapAutomaticCreationBit": true,
+    "Refs": {
+      "additionalProp": "string"
+    }
+  }
+  ```
+</CodeGroup>
+
+## 通过 `DeviceSerialNumber` 检索机器
+
+使用 [Get Specific Machine Basic Info by Device](/reference/lynx/machines/get-specific-machine-basic-info-by-device) 端点检索与特定 `DeviceSerialNumber` 关联的机器的详细信息。请在请求的路径参数中插入 `DeviceSerialNumber`。
+
+<EndpointCard title="按设备获取特定机器基本信息" href="/reference/lynx/machines/get-specific-machine-basic-info-by-device" method="get" />
+
+<CodeGroup>
+  ```sh Request
+  curl --request GET \
+       --url https://qa-lynx.nayax.com/operational/v1/devices/{DeviceSerialNumber}/machine \
+       --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
+       --header 'accept: application/json'
+  ```
+
+  ```json Response
+  {
+    "MachineID": 0,
+    "ActorID": 0,
+    "CountryID": 0,
+    "CurrencyID": 0,
+    "InstituteID": 0,
+    "LocationID": 0,
+    "MachineGroupID": 0,
+    "MachineModelID": 0,
+    "MachineName": "string",
+    "MachineNumber": "string",
+    "MachineStatusBit": 0,
+    "LanguageID": 2,
+    "OperatorActorID": 0,
+    "DistributorActorID": 0,
+    "AreaActorID": 0,
+    "SalesSourceID": 0,
+    "MachineTypeID": 555001,
+    "SerialNumber": "string",
+    "VPOSSerialNumber": "string",
+    "DeviceSerialNumber": "string",
+    "VPOSID": 0,
+    "DeviceID": 0,
+    "UseLocationFrom": 0,
+    "GeoCountry": 0,
+    "GeoState": "string",
+    "GeoCity": "string",
+    "GeoAddress": "string",
+    "GeoStreetNumber": "string",
+    "GeoLongitude": 0,
+    "GeoLatitude": 0,
+    "GeoZoom": 0,
+    "GeoZipCode": "string",
+    "SearchAddress": "string",
+    "Remarks": "string",
+    "DexType": 0,
+    "DexMidnightReadsEnableBit": true,
+    "DexG85CheckEnableBit": true,
+    "DexDivideBillsBy": 0,
+    "DexG85CheckParsingFilterEnableBit": true,
+    "UseCardPriceCorrectCashPriceBit": true,
+    "MachineTimeZoneOffset": 0,
+    "DexReadInterval": 0,
+    "LocationType": 0,
+    "ApplyDisplayPickListSelectionsToReportsBit": true,
+    "DisplayPickListSelectionsAs": 0,
+    "LastUpdated": "2024-11-25T14:04:50.909Z",
+    "MachineProfile": 0,
+    "CityID": 0,
+    "RegionID": 0,
+    "CountryDialingCode": 0,
+    "DexIgnoreCRCCheckBit": true,
+    "DexParseLABit": true,
+    "ProductMapID": 0,
+    "Longitude": 0,
+    "Latitude": 0,
+    "DexTotalSalesMinusCardSalesBit": true,
+    "RouteActorID": 0,
+    "MachineLogicAlertEnableBit": true,
+    "AlertRuleSetId": 0,
+    "MachineMemberTypePricingEnableBit": true,
+    "DexMultiplyCoinsBy": 0,
+    "DexMultiplyTubesBy": 0,
+    "CustomerID": 0,
+    "CommissionType": 0,
+    "CommissionDefaultValue": 0,
+    "CreatedBy": 0,
+    "CreatedOn": "2024-11-25T14:04:50.909Z",
+    "UpdateBy": 0,
+    "TubeSource": 0,
+    "BillSource": 0,
+    "SmartStickerId": 0,
+    "EnableRemoveVendBit": true,
+    "EnableEreceiptBit": true,
+    "ProductMapAutomaticCreationBit": true,
+    "Refs": {
+      "additionalProp": "string"
+    }
+  }
+  ```
+</CodeGroup>
+
+## 通过 `VPOSSerial` 检索机器
+
+使用 [Get Specific Machine Basic Info by VPOS](/reference/lynx/machines/get-specific-machine-basic-info-by-vpos) 端点检索与特定 `VPOSSerial` 关联的机器的详细信息。请在请求的路径参数中插入 `VPOSSerial`。
+
+<EndpointCard title="通过 VPOS 获取特定机器的基本信息" href="/reference/lynx/machines/get-specific-machine-basic-info-by-vpos" method="get" />
+
+<CodeGroup>
+  ```sh Request
+  curl --request GET \
+       --url https://qa-lynx.nayax.com/operational/v1/vpos/{VPOSSerial}/machine \
+       --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
+       --header 'accept: application/json'
+  ```
+
+  ```json Response
+  {
+    "MachineID": 0,
+    "ActorID": 0,
+    "CountryID": 0,
+    "CurrencyID": 0,
+    "InstituteID": 0,
+    "LocationID": 0,
+    "MachineGroupID": 0,
+    "MachineModelID": 0,
+    "MachineName": "string",
+    "MachineNumber": "string",
+    "MachineStatusBit": 0,
+    "LanguageID": 2,
+    "OperatorActorID": 0,
+    "DistributorActorID": 0,
+    "AreaActorID": 0,
+    "SalesSourceID": 0,
+    "MachineTypeID": 555001,
+    "SerialNumber": "string",
+    "VPOSSerialNumber": "string",
+    "DeviceSerialNumber": "string",
+    "VPOSID": 0,
+    "DeviceID": 0,
+    "UseLocationFrom": 0,
+    "GeoCountry": 0,
+    "GeoState": "string",
+    "GeoCity": "string",
+    "GeoAddress": "string",
+    "GeoStreetNumber": "string",
+    "GeoLongitude": 0,
+    "GeoLatitude": 0,
+    "GeoZoom": 0,
+    "GeoZipCode": "string",
+    "SearchAddress": "string",
+    "Remarks": "string",
+    "DexType": 0,
+    "DexMidnightReadsEnableBit": true,
+    "DexG85CheckEnableBit": true,
+    "DexDivideBillsBy": 0,
+    "DexG85CheckParsingFilterEnableBit": true,
+    "UseCardPriceCorrectCashPriceBit": true,
+    "MachineTimeZoneOffset": 0,
+    "DexReadInterval": 0,
+    "LocationType": 0,
+    "ApplyDisplayPickListSelectionsToReportsBit": true,
+    "DisplayPickListSelectionsAs": 0,
+    "LastUpdated": "2024-11-25T14:04:50.909Z",
+    "MachineProfile": 0,
+    "CityID": 0,
+    "RegionID": 0,
+    "CountryDialingCode": 0,
+    "DexIgnoreCRCCheckBit": true,
+    "DexParseLABit": true,
+    "ProductMapID": 0,
+    "Longitude": 0,
+    "Latitude": 0,
+    "DexTotalSalesMinusCardSalesBit": true,
+    "RouteActorID": 0,
+    "MachineLogicAlertEnableBit": true,
+    "AlertRuleSetId": 0,
+    "MachineMemberTypePricingEnableBit": true,
+    "DexMultiplyCoinsBy": 0,
+    "DexMultiplyTubesBy": 0,
+    "CustomerID": 0,
+    "CommissionType": 0,
+    "CommissionDefaultValue": 0,
+    "CreatedBy": 0,
+    "CreatedOn": "2024-11-25T14:04:50.909Z",
+    "UpdateBy": 0,
+    "TubeSource": 0,
+    "BillSource": 0,
+    "SmartStickerId": 0,
+    "EnableRemoveVendBit": true,
+    "EnableEreceiptBit": true,
+    "ProductMapAutomaticCreationBit": true,
+    "Refs": {
+      "additionalProp": "string"
+    }
+  }
+  ```
+</CodeGroup>
+
+## 检索所有机器的基本信息
+
+使用 [Get All Machine Basic Info](/reference/lynx/machines/get-all-machine-basic-info) 端点检索所有机器的基本信息，并可通过下列查询参数进行可选筛选。
+
+<EndpointCard title="获取所有机器基本信息" href="/reference/lynx/machines/get-all-machine-basic-info" method="get" />
+
+```sh Request
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/machines \
+     --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
+     --header 'accept: application/json'
+```
+
+| 范围                  | `Type`   | 描述                        |
+| ------------------- | -------- | ------------------------- |
+| ResultsLimit        | `int32`  | 要返回的最大结果数；默认设置为 100。      |
+| ResultsOffset       | `int32`  | 在开始返回结果之前要跳过的结果数；默认设置为 0。 |
+| 演员ID                | `int64`  | 按与机器关联的 actor ID 筛选结果。    |
+| 操作员标识符              | `string` | 按运营商标识符筛选结果。              |
+| 机器ID                | `int64`  | 按机器 ID 筛选结果。              |
+| MachineSerialNumber | `string` | 按机器的序列号筛选结果。              |
+| 机器名                 | `string` | 按机器的名称筛选结果。               |
+| 设备ID                | `int32`  | 按与机器关联的设备 ID 筛选结果。        |
+| VposID              | `int64`  | 按与机器关联的 VPOS ID 筛选结果。     |

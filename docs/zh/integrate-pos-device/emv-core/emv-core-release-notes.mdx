@@ -1,0 +1,547 @@
+---
+title: Android 和 Linux SDK 发行说明
+metadata:
+  og:description: 本节全面记录了 EMV Core 在我们支持的各平台上的更新、增强功能和稳定性改进历史。
+---
+
+本节全面记录了 EMV Core 在我们支持的各平台上的更新、增强功能和稳定性改进历史。
+
+我们的发行说明分为三个主要类别,以帮助您评估每次更新的影响:
+
+- Improvements(改进):新增的 API 命令、扩展的卡片支持以及性能提升。
+- Fixes(修复):已解决的错误和逻辑修正,以确保系统稳定性。
+- Known Issues(已知问题):当前的限制或待实现功能,并附有建议的解决方法。
+
+<Note>
+  平台特定功能
+
+  虽然大多数更新是通用的,但平台特定的改进或修复会在章节标题中标注 (Android Only) 或 (Linux Only)。
+</Note>
+
+### SDK Version 1.4(最新版本)
+
+此版本包含以下针对 SDK 的改进、修复和已知问题:
+
+<Accordion title="改进" icon="rocket">
+  ### 自动化货币代码管理 (#7473)
+
+  主机应用程序不再负责手动设置货币代码。SDK 现在直接从 Nayax Core 管理该项,确保始终应用正确的货币参数,无需人工干预。此更改降低了集成复杂度,并防止了货币数据中潜在的不匹配问题。
+
+  ---
+
+  ### 服务器连接与自动故障转移 (#7474)
+
+  EMV Core 已更新为自动尝试连接到 Nayax Core(`tms-c.otiglobal.com`)和 OTI TMS(`tms.otiglobal.com`)。您现在可以在配置中省略 `TMS_SVC_URL` 属性,从而使从 OTI TMS 管理迁移到 Nayax Core 系统的设备过渡更加顺畅。
+
+  ---
+
+  ### 本地串口管理 (#7308) (仅限 Linux)
+
+  主机应用程序现在可以通过位于 `/etc/oti_kiosk/init.cfg` 的配置文件在本地管理读卡器串口。通过定义 `READER_SERIAL_PORT` 属性(例如 `READER_SERIAL_PORT=/dev/ttyS0`),SDK 可以立即定位硬件接口。
+</Accordion>
+
+<Accordion title="修复" icon="wrench">
+  ### 事件传递与读卡器稳定性 (#7443, #7497)
+
+  Fixed an intermittent issue where [`ReaderMessageEvent`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages) would stop arriving at the host application. Additionally, we resolved a connectivity bug where the EMV Core was unable to reconnect to a serial reader following a POS firmware update.
+
+  ### 示例应用程序 Token 报告(仅限 Linux)
+
+  修复了 Sample 应用程序中的一个逻辑错误,该错误导致在开环(open-loop)卡的 `TransactionComplete` 事件中未能返回卡片 token。
+
+  ### 示例应用程序资源(仅限 Android)
+
+  修复了此前发行版本中包含了错误的示例应用程序源文件的问题。SDK v1.4 软件包现在包含经过验证的更新后源代码。
+</Accordion>
+
+<Accordion title="已知问题" icon="exclamation-triangle">
+  ### 离线受理限制（#6918）
+
+  `PMT_ACCEPT_OFFLINE` 命令目前仅适用于 DEMO 用途。在此标志下处理的交易尚未发送到服务器,并将保留在设备本地,直至未来的更新。
+
+  ---
+
+  ### 终端 ID 更新延迟 (#7211, #7030)
+
+  如果在未手动重置 EMV 核心的情况下更换读卡器，终端 ID 将不会更新。每次更换硬件时，请务必重置 EMV 核心，以确保注册正确的终端标识。
+
+  ---
+
+  ### Authorizing 状态事件 (#7510)
+
+  There is a known intermittent issue where the EMV Core may fail to send the [`ReaderMessageEvent`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages) with index 36 (“Authorizing”). Applications should handle the transaction flow even if this specific status update is missing.
+</Accordion>
+
+### SDK Version 1.2
+
+此版本包含以下针对该 SDK 的改进和已知问题：
+
+<Accordion title="改进" icon="rocket">
+  ### 电子小票(e-Receipt)与远程结算支持 (#6782, #7411)
+
+  The SDK now supports e-Receipts and Remote (Deferred) Settlement. The [`TransactionComplete`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) API has been updated to return `additional_parameters`, allowing for a decoupled settlement flow where capture and final settlement occur independently across systems via a server-to-server API.
+
+  ---
+
+  ### Nayax Core 属性与限额管理 (#7139, #7346, #7269)
+
+  We have introduced the [`UpdateMachineAttributes`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/remote-management) API to transmit machine parameters to the Nayax Core. Additionally, EMV Contactless limits (`R_CL_TRANS_LIMIT`) and CDCVM transaction limits (`R_CDCVM_TRANS_LIMIT`) are now manageable directly from the Nayax Core.
+
+  该 SDK 还提供了扩展的远程重置选项(Restart Application、Reboot 或 Restart Reader),可通过 Nayax Core 或 OTI TMS 触发。
+
+  ---
+
+  ### Nayax Core 管理的闭环卡(Closed-Loop Cards)
+
+  您现在可以通过设置 `CLP_MIFARE_ENABLED=1`,通过 Nayax Core 管理闭环卡和预付卡。这使 Nayax 服务器能够直接处理 CLP 卡。
+
+  > 注意:此版本中 `CLP_MIFARE_ENABLED` 的默认值已更改为 `2`(Local API),以默认优先进行本地 UID 传递。
+
+  ---
+
+  ### 增强诊断和日志记录（#6888）
+
+  日志现在包含日期前缀(例如 `31-23:59:59 INFO [APP3]`),以便更好地进行时间顺序追踪。此外,新增的 TMS “Upload” 命令(用于 `TRACE` 文件名)支持从读卡器远程检索 trace 文件夹。
+</Accordion>
+
+<Accordion title="修复" icon="wrench">
+  ### 离线稳定性与显示逻辑 (#7385, #7371)
+
+  修复了一个 UI 同步问题:在没有网络连接的情况下发起的 `PreAuthorize` 命令,会在网络恢复并切换到 “SUCCESS” 之前先错误地显示 “DECLINED”。我们还修复了在离线状态下多次调用 `PreAuthorize` 时发生的严重崩溃问题。
+
+  ### 读卡器启动与 Core 调用 (#7199, #7272)
+
+  修复了 EMV Core 在读卡器完成启动之前就报告 `Ready` 的错误。此外,我们实现了防止多次同时调用 EMV Core 的保护机制,以避免资源冲突。
+
+  ### 增强的日志管理
+
+  日志保留和传输的默认配置(`LOG_NO_OF_FILES`、`LOG_FILE_SIZE` 和 `LOG_HOURS_TO_UPLOAD`)已被增大,以提供更好的诊断覆盖率和数据保留能力。
+
+  ### API 弃用
+
+  `PayTransaction` API 现已正式弃用。请迁移至 `PreAuthorize` 和 `ConfirmTransaction`。
+</Accordion>
+
+<Accordion title="已知问题" icon="exclamation-triangle">
+  ### 离线受理限制（#6918）
+
+  `PMT_ACCEPT_OFFLINE` 命令目前仅适用于 DEMO 用途。在此标志下处理的交易尚未发送到服务器,并将保留在设备本地。
+
+  ---
+
+  ### 终端 ID 更新延迟 (#7211, #7030)
+
+  更换读卡器而不对 EMV Core 执行手动重置,不会触发 Terminal ID 的更新。我们建议在更换硬件时始终重置 EMV Core,以确保注册正确的终端身份。
+</Accordion>
+
+### SDK Version 1.1(仅限 Linux)
+
+此版本包含以下针对该 SDK 的改进和已知问题：
+
+<Accordion title="改进" icon="rocket">
+  ### 官方固件发布 (#6813, #7165, #7157)
+
+  此版本包含 UNO-8 固件(v54227)的正式发布,解决了此前在 tokenization 和闭环识别方面的问题。此外,UNO-mini 固件(v071514)现已作为 beta 版本一并提供。
+
+  新的 UNO-mini 固件引入了高级调试功能。通过配置(Tag DFA276)激活后,最右侧的 LED 灯会快速闪烁,以指示调试状态已激活。
+</Accordion>
+
+<Accordion title="修复" icon="wrench">
+  ### 串行读卡器通信稳定性
+
+  修复了一个影响串行读卡器的严重通信错误,该错误会导致 EMV Core 与硬件之间的链路失败。现在,在长时间运行期间连接更加稳定可靠。
+
+  ### TMS 独立性 (#7144)
+
+  修复了支付处理依赖于 Terminal Management System(TMS)的问题。现在,即使 TMS 不可用或处于离线状态,交易也能成功完成。
+
+  ### 套接字资源管理 (#7331)
+
+  修复了网络套接字偶尔被遗留为打开且未使用状态的资源泄漏问题。此项优化确保了更好的系统性能,并防止 SDK 耗尽可用的网络句柄。
+</Accordion>
+
+<Accordion title="已知问题" icon="exclamation-triangle">
+  ### 电源电压要求(UNO-mini)
+
+  UNO-mini 需要至少 4.5V 的稳定电源。低于此阈值运行可能导致设备进入不一致状态,从而无法正常发挥硬件功能。
+
+  ---
+
+  ### 终端 ID 更新延迟 (#7211, #7030)
+
+  更换读卡器而不对 EMV Core 执行手动重置,不会触发 Terminal ID 的更新。
+
+  我们建议在更换硬件时重置 EMV Core,以确保成功注册正确的终端身份。
+
+  ---
+
+  ### 离线受理限制（#6918）
+
+  `PMT_ACCEPT_OFFLINE` 命令目前仅适用于 DEMO 用途。在此版本中,在此标志下处理的交易不会发送到服务器。
+</Accordion>
+
+### SDK 版本 1.0
+
+此版本包含以下针对该 SDK 的改进和已知问题：
+
+<Accordion title="改进" icon="rocket">
+  ### GetAttribute API 命令 (#71156)(仅限 Android)
+
+  我们在 API 中新增了 `GetAttribute` 命令,以便更轻松地获取设备属性。它通过单个命令即可直接访问元数据,从而简化了您的集成工作,并可在 Sample 应用程序新增的 “Config” 选项卡中进行测试。
+
+  ---
+
+  ### 示例测试应用程序增强(仅限 Linux)
+
+  The Linux Sample application now includes full keyboard command support for all APIs and an optional ‘auto’ flow mode for continuous transaction loops. It also includes dedicated sample code for [`GetCardToken`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) and [`CardTokenReceived`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) functions.
+
+  ---
+
+  ### 增强的 Java 日志记录 (#7129)(仅限 Android)
+
+  日志现在包含 Java 应用程序的调用和响应(以 \[APP2] 前缀标记),帮助您区分应用层事件与 SDK 内部流程,以便更快地进行调试。
+
+  ---
+
+  ### 读卡器配置报告 (#7117)(仅限 Android)
+
+  SDK 现在会在发送给服务器的版本数据中自动包含读卡器配置名称。这为远程故障排查提供了对当前设备设置更好的可见性。
+</Accordion>
+
+<Accordion title="修复" icon="wrench">
+  ### 日志截断与显示 (#6960, #7136)
+
+  修复了日志行在末尾被截断的间歇性问题。我们还解决了一个错误:左侧 LED 在设备空闲状态下未能闪烁,确保了正确的视觉状态指示。
+
+  ### 卡片类型与 CLP 响应映射 (#7091, #7169, #7180)
+
+  修复了闭环卡的识别问题(此前默认识别为 “Mifare”),并新增了对 Mifare Plus UID 的支持。此外,CLP 交易响应已与开环格式对齐:status 现在返回 `LocalCLP`,并且在成功读取后会清除错误描述。
+
+  ### 系统时序与同步 (#6658, #7200, #7204)
+
+  Resolved logic issues in `PRE_AUTH_AMOUNT` and fixed a hang where [`TransactionComplete`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) would wait for a timeout if the reader was in boot. We also corrected a mutex timing bug that caused false-positive `SAT_Mutex_Acquire` timeout errors on some systems.
+
+  ### 连接性与固件修复 (#7157, #7165, #6813)
+
+  Fixed connectivity issues for the UNO-mini TTL after a reset and resolved recognition errors for Mifare PLUS ISO 14443-4 as closed loop. We also addressed a failure in [`GetCardToken`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) for specific Visa and Amex cards.
+
+  > 注意:这些修复需要特定的固件版本:UNO-mini FW EMVS\_v071457、UNO-8 FW 54222 和 UNO-8 FW 54216。
+
+  ### Android 诊断与界面 (#7130, #7210)(仅限 Android)
+
+  更新了默认日志级别,使其包含服务器调用/响应,并修复了 “Thank you” 消息显示的问题,此前该消息会在交易被取消或超时后错误地出现。
+</Accordion>
+
+<Accordion title="已知问题" icon="exclamation-triangle">
+  ### 离线受理限制（#6918）
+
+  `PMT_ACCEPT_OFFLINE` 命令目前仅用于演示(DEMO)目的。在此标志下处理的交易尚未发送到服务器,而是保留在设备本地。
+
+  ---
+
+  ### Terminal ID 与发现延迟 (#7211, #7030, #6994)
+
+  更换读卡器而不对 EMV Core 执行手动重置,不会更新 Terminal ID。此外,EMV Core 在硬件重置后可能需要大约一分钟才能找到读卡器。
+
+  ---
+
+  ### 系统状态与消息传递 (#7199, #7196, #7205, #7182)
+
+  The SDK does not currently trigger [`SystemStatusChanged`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) for network changes and may report a `Ready` status while the reader is still booting. Furthermore, [`CancelTransaction`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) will return "Cannot Cancel" if a transaction is already Authorizing or Completed.
+
+  ---
+
+  ### 硬件与资源使用
+
+  On UNO-mini hardware, the Left LED may stay illuminated after a poll timeout. Additionally, when a reader is unavailable, [`GetStatus`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/remote-management) calls occur at a high frequency (every 1ms), which may increase resource usage.
+
+  ---
+
+  ### 测试应用程序交易延迟 (#7207)(仅限 Android)
+
+  Android Sample Test Application 在超时后不会响应 `TransactionComplete`,导致在测试环境中发起新交易之前出现延迟。
+</Accordion>
+
+### SDK 版本 0.9
+
+此版本包含以下针对该 SDK 的改进和已知问题：
+
+<Accordion title="改进" icon="rocket">
+  ### GetCardToken 中的 Mifare UID 支持 (#6550)
+
+  The [`GetCardToken`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) command has been updated to return the Mifare UID. This improvement allows for more precise identification of Mifare-based cards during the tokenization process, providing consistent card data across different card types.
+
+  ---
+
+  ### 增强的 EMV Core 启动与恢复 (#6838)(仅限 Android)
+
+  EMV Core 现在会在系统启动时自动启动,并在崩溃时尝试自动重启。这确保了后台服务无论 Test 应用程序处于何种状态都能持续运行。
+
+  ---
+
+  ### GetCardToken 连续模式 (#6978)(仅限 Android)
+
+  我们在 `GetCardToken` 命令中新增了对连续模式的支持。这使应用程序能够持续处于轮询状态以进行令牌化，非常适合快速连续处理多张卡片的场景。
+
+  > 注意：对于 Linux，此功能目前在此版本中被列为已知限制。
+</Accordion>
+
+<Accordion title="修复" icon="wrench">
+  ### 闭环 UID 报告 (#6980)
+
+  Fixed an issue where the UID for closed loop cards was missing from the [`TransactionComplete`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) event. The SDK now correctly and consistently returns the UID upon transaction completion.
+
+  ### UI 与输入稳定性 (#6987, #7001)
+
+  修复了一个错误：快速点击“取消”五次会导致系统在轮询状态中挂起 60 秒。我们还修正了演示应用程序的版本号在更改应用后未能更新的问题。
+
+  ### UNO-mini 固件事件 (#6961)
+
+  解决了 UNO-mini 固件不支持读卡器消息事件（Reader Message Events）的兼容性问题。该固件现在会正确地将这些事件广播给主机应用程序/SDK。
+
+  ### 预授权逻辑 (#6658)(仅限 Android)
+
+  修复了与 `PRE_AUTH_AMOUNT` 参数相关的多个逻辑问题，以确保在 Android 环境中预授权处理更加可靠。
+</Accordion>
+
+<Accordion title="已知问题" icon="exclamation-triangle">
+  ### 离线受理限制（#6918）
+
+  `PMT_ACCEPT_OFFLINE` 命令目前仅用于演示(DEMO)目的。在此标志下处理的交易尚未发送到服务器,而是保留在设备本地。
+
+  ---
+
+  ### SDK 升级安装要求（仅限 Android）
+
+  更新到 SDK v0.9 时，必须先手动卸载现有的两个 APK（服务和应用程序），然后再安装新文件，以避免出现注册或连接错误。
+
+  ---
+
+  ### 系统连接与发现 (#7030, #6994)
+
+  更换读卡器后，必须手动重启 EMV Core 才能识别新硬件。此外，重置后核心大约需要一分钟的延迟才能找到读卡器。
+
+  ---
+
+  ### 卡片类型与令牌化 (#7091, #6813, #6978)
+
+  所有闭环卡片在 `cardType` 字段中都错误地显示为“Mifare”。此外，`GetCardToken` 尚不支持特定的 Visa 和 Amex 卡片，且在 Linux 上缺少连续模式支持（问题 #6978）。
+
+  ---
+
+  ### 日志截断与通知 (#6960)
+
+  日志行在输出末尾会间歇性被截断。此外，`SystemStatusChanged` 回调不会因网络可用性的变化而触发；建议独立进行监控。
+
+  ---
+
+  ### 仅支持 USB 读卡器 (#6895)(仅限 Android)
+
+  在此版本的 Android SDK 中，仅支持 USB 读卡器。串行读卡器目前不兼容。
+</Accordion>
+
+### SDK 版本 0.8
+
+此版本包含以下针对该 SDK 的改进和已知问题：
+
+<Accordion title="改进" icon="rocket">
+  ### 新增 API 命令与连续轮询 (#6550)
+
+  我们引入了 `GetCardToken` API 命令，并在预授权（`Pre-Authorize`）和支付（`Pay`）操作中新增了连续轮询支持。这使读卡器能够保持在活跃轮询状态，改善了连续交易尝试的用户体验，并支持更广泛的基于令牌的集成。
+
+  ---
+
+  ### 本地配置与日志记录（仅限 Android）
+
+  Android SDK 现在支持在本地更新 EMV Core 配置，以便进行现场调整。此外，可以直接从设备存储读取日志文件，路径为：`/sdcard/Android/media/com.nayax.emvCore/*.log`。
+
+  ---
+
+  ### 扩展的闭环 (CLP) 与 Vicinity 支持
+
+  此版本新增了对更多种类 CLP 卡片的支持，包括 Mifare Classic、DESFire 和 Ultralight，以及 Vicinity (ISO 15693) 卡片，例如 HID（类型 P）。
+
+  > 注意：Vicinity 卡片需要 UNO-8 固件版本 054198 或更高。“Enable Technology”标签（DF4F）必须设置第 2 字节第 8 位（`00800000`）。
+
+  ---
+
+  ### 离线 CLP UID 检索
+
+  SDK 现在支持在没有网络连接的环境中检索 CLP 卡片的 UID。当 `CLP_MIFARE_ENABLED` 设置为 `2` 时，此功能处于激活状态。
+</Accordion>
+
+<Accordion title="修复" icon="wrench">
+  ### 离线稳定性与逻辑 (#6919, #6938)
+
+  Fixed a critical issue where the EMV Core would crash when no internet connection was detected. We also updated the [`Void`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) command logic: calling [`Void`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) after a [`Pre-Authorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) or `Pay` no longer incorrectly triggers a [`Cancel Transaction`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1), allowing a new transaction to start independently.
+
+  ### TMS 与读卡器连接 (#6862)
+
+  修复了在未连接读卡器时终端管理系统（TMS）无法正常工作的问题。TMS 操作现在可独立于读卡器是否存在而正常运行。
+
+  ### 串口配置 (#6862)(仅限 Linux)
+
+  修复了 EMV Core v0.8.516 中的一个错误：系统会忽略 `READER_SERIAL_PORT` 设置，并默认使用 `/dev/ttyACM0`。SDK 现在能正确遵循已定义的本地串口设置。
+</Accordion>
+
+<Accordion title="已知问题" icon="exclamation-triangle">
+  ### USB 读卡器独占支持(仅限 Android)
+
+  此版本的 Android SDK 目前仅支持 USB 读卡器。对 RS232（串行）读卡器的支持计划在未来版本中提供。
+
+  ---
+
+  ### UNO-mini 与事件支持 (#6961)
+
+  The current UNO-mini firmware does not support [`ReaderMessageEvent`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages), which may limit real-time visual or text feedback during certain operations on this hardware.
+
+  ---
+
+  ### GetCardToken 与轮询限制 (#6978)
+
+  The newly added [`GetCardToken`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) command does not yet support Continuous polling mode. The process will terminate after a single attempt or timeout.
+
+  ---
+
+  ### 日志截断与状态通知 (#6960)
+
+  存在一个间歇性问题：日志行会在文件末尾被截断。此外，`SystemStatusChanged` 回调不会因网络可用性的变化而触发。
+</Accordion>
+
+### SDK 版本 0.7
+
+此版本包含以下针对该 SDK 的改进和已知问题：
+
+<Accordion title="改进" icon="rocket">
+  ### Android 平台发布（仅限 Android）
+
+  我们很高兴地宣布 SDK 首个 Android 平台正式版本发布。此版本为 Android 环境下的支付处理、设备通信和独立服务管理奠定了基础架构。
+
+  ---
+
+  ### 扩展的配置属性（仅限 Linux）
+
+  此版本引入了若干新的配置属性以实现精细控制：`OPEN_LOOP_ENABLED`（切换开环支付）、`PRE_AUTH_AMOUNT`（可选的默认交易金额）以及 `KIOSK_TCP_LOCALHOST`（将套接字限制在 localhost 接口）。
+
+  ---
+
+  ### 通过 GetAttribute() 检索配置（仅限 Linux）
+
+  We have added the [`GetAttribute()`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/remote-management) command to the API, allowing host applications to retrieve configuration attributes directly from the SDK. This ensures the host can always verify the active configuration state in real-time.
+</Accordion>
+
+<Accordion title="修复" icon="wrench">
+  ### 套接字和文件系统优化（仅限 Linux）
+
+  The EMV Core and Test application now use Internal (Unix domain) sockets by default for more efficient local communication. Additionally, the EMV Core now automatically generates a default `CONNECT.CFG` file if it is missing from the `etc` folder.
+
+  ### TMS 生产信息检索 (#6705)(仅限 Linux)
+
+  修复了 TMS 命令 `GET_Production_Info` 失败的问题，确保可以从设备可靠地检索生产元数据。
+</Accordion>
+
+<Accordion title="已知问题" icon="exclamation-triangle">
+  ### USB 读卡器独占支持(仅限 Android)
+
+  最初发布的 Android 版本仅支持 USB 读卡器。对 RS232（串行）读卡器配置的支持目前正在开发中。
+
+  ---
+
+  ### 网络状态通知
+
+  The EMV Core does not currently trigger the [`SystemStatusChanged`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) callback for network connectivity changes. Developers should implement independent monitoring logic if the application needs to react to network state changes.
+
+  ---
+
+  ### 交易完成事件传递 (#6582)(仅限 Linux)
+
+  There is an intermittent issue where the [`TransactionComplete`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) event is not always successfully transmitted to the host application.
+
+  ---
+
+  ### 连续预授权限制 (#6576)(仅限 Linux)
+
+  在前一个 `PreAuthorize` 命令之后立即发起新的 PreAuthorize 命令（且没有刷卡操作）可能会失败。
+
+  **Workaround:** Wait for the [`TransactionComplete`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) event or use `GetStatus()` to verify terminal readiness; it will return `PaymentTransaction` if the reader is still polling.
+</Accordion>
+
+### SDK 版本 0.6.03（仅限 Linux）
+
+此版本包含以下针对 SDK 的改进、修复和已知问题:
+
+<Accordion title="改进" icon="rocket">
+  ### UART 通信与 Mifare 支持
+
+  此版本显著改进了 UART 通信的稳定性。我们还增强了对闭环 Mifare 交易的支持，新增了对 Mifare Ultralight（标识为“U”）的兼容性，并支持 7 字节 UID。
+
+  > 注意：要使闭环 Mifare 正常工作，读卡器必须配置特定标签：Enable Technology (DF 4F) 必须包含 Mifare，且 Return UID (DF 0D) 必须设置为 `0x01`。
+</Accordion>
+
+<Accordion title="修复" icon="wrench">
+  ### 配置响应解析 (#6560)
+
+  修复了 `CON_CONFIG` 响应中的空行会触发“failed to read line”错误的问题。解析器现在可以妥善处理空行，而不会中断配置过程。
+
+  ### 连续交易逻辑 (#6576)
+
+  Confirmed that calling [`PreAuthorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) while a previous [`PreAuthorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) command is still active (polling) is intentionally rejected.
+
+  **Guidance:** Developers should use the [`GetStatus()`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/remote-management) command to verify if the terminal is ready. If the device is currently polling for a card, [`GetStatus()`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/remote-management) will return the `PaymentTransaction` status.
+</Accordion>
+
+<Accordion title="已知问题" icon="exclamation-triangle">
+  ### 交易完成事件传递 (#6582)
+
+  There remains an intermittent issue where the [`TransactionComplete`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) event is not always successfully sent to the host application.
+</Accordion>
+
+### SDK 版本 0.6.00（仅限 Linux）
+
+此版本包含以下针对该 SDK 的改进和已知问题：
+
+<Accordion title="改进" icon="rocket">
+  ### 初始闭环 Mifare 支持
+
+  此版本引入了对闭环 Mifare 交易的基础支持，允许 SDK 处理私有循环环境中的基于 Mifare 的卡交互。
+
+  > 注意：要启用此功能，读卡器必须配置特定标签：Enable Technology (DF 4F) 必须包含 Mifare，且 Return UID (DF 0D) 必须设置为 `0x01`。
+</Accordion>
+
+<Accordion title="已知问题" icon="exclamation-triangle">
+  ### 配置解析错误（#6560）
+
+  `CON_CONFIG` 响应中的空行可能会触发“failed to read line”错误，从而可能中断配置握手过程。
+
+  ---
+
+  ### 连续预授权失败 (#6576)
+
+  在前一个 [PreAuthorize](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1) 命令仍处于活动状态（且尚未刷卡）时发起新的 `PreAuthorize` 命令将导致该命令失败。用户应确保在开始新交易之前当前交易已完成或已超时。
+
+  ---
+
+  ### 交易事件交付（#6582）
+
+  The [`TransactionComplete`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks) event is not always successfully transmitted to the host application, which may require the application to poll for status updates to confirm transaction outcomes.
+</Accordion>
+
+### SDK 版本 0.1（仅限 Linux）
+
+此版本包含以下针对该 SDK 的改进和已知问题：
+
+<Accordion title="改进" icon="rocket">
+  ### Linux Lite 初始版本
+
+  此版本标志着面向 Linux 系统的 Lite SDK 的首个正式发布。该版本完全使用 C 语言编写，针对低资源环境进行了优化，并为嵌入式支付集成提供了一个轻量级的基础架构。
+
+  此版本专为需要在 Linux 硬件上管理交易和读卡器通信的高性能、低占用空间解决方案的开发人员而设计。
+</Accordion>
+
+<Accordion title="已知问题" icon="exclamation-triangle">
+  ### Mifare路由和UID限制
+
+  目前，所有Mifare闭环交易均路由至OTI服务器。在此版本中，尚无配置允许主机应用程序通过EMV核心API直接接收卡UID。
+
+  未来的更新计划包含一个专门的配置设置，该设置将能够将卡 UID 直接传输到主机 API，从而更方便地对私有环路卡进行本地管理。
+</Accordion>

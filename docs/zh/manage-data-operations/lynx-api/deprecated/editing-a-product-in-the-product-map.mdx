@@ -1,0 +1,83 @@
+---
+title: Edit Products
+metadata:
+  og:description: 本页面介绍如何使用 Lynx API 编辑产品映射（Product Map）中的产品。在下面的分步指南中，您将使用以下端点
+---
+
+本页面介绍如何使用 Lynx API 编辑产品映射（Product Map）中的产品。在下面的分步指南中，您将使用以下端点：
+
+<Columns cols={3}>
+  <EndpointCard title="获取机器产品" href="/reference/lynx/machine-products/get-machine-products" method="get" />
+
+  <EndpointCard title="获取机器产品" href="/reference/lynx/machine-products/get-machine-product" method="get" />
+
+  <EndpointCard title="更新机器产品" href="/reference/lynx/machine-products/update-machine-product" method="put" />
+</Columns>
+
+<Warning>
+  验证
+
+  请参阅本文档的[“安全和令牌”](/docs/manage-data-operations/lynx-api/security)页面，了解如何访问您的令牌以及如何正确使用它们来验证您的 API 请求。
+</Warning>
+
+## 更新产品请求
+
+使用 [Update a Machine Product](/reference/lynx/machine-products/update-machine-product) 端点更新产品详细信息，例如更改 `CashPrice`。请保持其他值（包括 `MDBCode`）不变。
+
+```sh Request
+curl -X PUT "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/machineProducts/<PRODUCT_ID>" \
+-H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+-H "Content-Type: application/json" \
+-d ' {
+    "DexPrice": 1.50,
+    "ProductRef": "PROD001",
+    "MachineProductRef": "MACH001-A1",
+    "ProductGroupRef": "BEVERAGES",
+    "MachineRef": "MACH001",
+    "MachineProductID": 101,
+    "NayaxProductID": 1001,
+    "MachineID": 5001,
+    "MDBCode": 1,
+    "PAR": 10,
+    "CashPrice": 2.00,
+    "CreditCardPrice": 1.80,
+    "MachinePrice": 1.70,
+    "RetailPrice": 1.85,
+    "DEXProductName": "Cola Drink",
+    "PACode": "PA001",
+    "PCCode": "PC001",
+    "ProductMinimumPickQTY": 5,
+    "VendOutAlertThreshold": 2,
+    "LastUpdated": "2024-10-10T16:50:35.423Z",
+    "MissingStockByDEX": 3,
+    "DEXMissingStockLastUpdated": "2024-10-10T16:50:35.423Z",
+    "PrePaidCardPrice": 1.65,
+    "OperatorButtonCode": "BTN001",
+    "LastUpdatedByMobile": "2024-10-10T16:50:35.423Z",
+    "ProductGroupID": 201,
+    "MissingStockByMDB": 0,
+    "MDBMissingStockLastUpdated": "2024-10-10T16:50:35.423Z",
+    "SelectionVendOutBit": false,
+    "CommissionValue": 0.05,
+    "ExternalPrepaidPrice": 1.60,
+    "product_mark_for_alerts": 1,
+    "last_sale_dt": "2024-10-09T16:30:00.000Z",
+    "last_sale_mdb_dt": "2024-10-09T16:30:00.000Z",
+    "slow_mover": false
+  }'
+```
+
+<Note>
+  路径参数
+
+  Replace `<PRODUCT_ID>` with the identifier of the product you're updating. Make sure to update the `CashPrice` while leaving other values unchanged.
+</Note>
+
+此 API 调用的响应将确认更新已成功。状态代码 `200` 表示请求已被正确处理，即使响应中包含的是另一个产品的详细信息。
+
+在哪里：
+
+- CashPrice：产品的新价格。
+- LastUpdated：指示产品最后一次修改时间的时间戳。
+
+<br />

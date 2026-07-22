@@ -1,0 +1,197 @@
+---
+title: 拒绝回调
+metadata:
+  og:description: DeclineCallback API 调用用于通知您 Spark 交易流程中发生的失败。它通常在成功的。
+---
+
+`DeclineCallback` API 调用用于通知您 Spark 交易流程中发生的失败。它通常在 `/TriggerTransaction` 成功返回 `Approved`（已批准）结果之后触发，但此后流程在支付授权之前因某种原因失败。
+
+此回调函数对于集成商至关重要，它可以帮助检测并妥善处理会话无法继续的情况，例如：
+
+- 消费者未出示支付卡，终端超时。
+- 消费者在 Nayax 设备上取消了交易。
+- 刷卡过程中设备发生故障。
+- 其他会中断流程的终端端错误。
+
+在这种情况下，不会授予任何支付授权，交易流程将被终止。如有需要，集成方可以选择重新尝试调用 `/TriggerTransaction` 方法。
+
+## 要求
+
+Spark 会向 `/spark/DeclineCallback` 端点发送 POST 请求：
+
+```json
+{
+  "MachineId": 71234996,
+  "HwSerial": "0434334921100366",
+  "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+  "Status": {
+    "Verdict": "Declined",
+    "ErrorCode": 44,
+    "ErrorDescription": "Timeout on POS Device"
+  }
+}
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+<table>
+  <thead>
+    <tr>
+      <th>
+        场地
+      </th>
+
+      <th>
+        类型
+      </th>
+
+      <th>
+        必需的
+      </th>
+
+      <th>
+        描述
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `MachineId`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        自动售货机或终端的ID
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `HwSerial`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        硬件终端的序列号
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `SparkTransactionId`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        失败的 Spark 事务的唯一标识符
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `Status`
+      </td>
+
+      <td>
+        Object
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        一个表明衰落细节的物体
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `Status.Verdict`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        始终为 "Declined"
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `Status.ErrorCode`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        拒绝原因代码
+
+        - `44`：POS 设备超时
+        - `45`：在 POS 设备上被取消
+        - `38`：交易回调失败
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `Status.ErrorDescription`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        下降原因描述
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<Note>
+  Nayax 回调
+
+  这是来自 Nayax 的回调，不需要响应体。简单的 200 OK 服务器确认就足够了。
+</Note>

@@ -1,0 +1,96 @@
+---
+title: 显示输入
+description: 通过终端界面向客户请求特定的字母数字输入。
+metadata:
+  og:description: displayInput 方法允许客户端应用程序使用终端的键盘或触摸屏提示客户输入特定信息。
+---
+
+`displayInput` 方法允许客户端应用程序使用终端的键盘或触摸屏提示客户输入特定信息。对于需要在标准卡片信息之外获取更多数据点的工作流程,这是一个必不可少的工具。
+
+使用此方法可以：
+
+- 提示输入身份识别和安全信息,例如车队卡的 PIN、邮政编码或自定义“员工编号”。
+- 请求运营元数据,例如里程表读数、车辆编号或轮毂计数器数值。
+- 请求客户输入特定信息,例如用于会员计划的“请输入加油机编号”或“请输入电话号码”。
+
+Nayax 设备上显示提示的示例:
+displayInput
+
+## 请求
+
+调用此方法时,您必须定义 prompt 及其对应的加密签名。
+
+<Note>
+  所有 prompt/signature 对都通过设备上的 `prompts.json` 文件进行管理。如果您需要新的或自定义的提示,请通过电子邮件将您的请求发送给支持团队,我们将为您提供更新后的文件和签名。
+</Note>
+
+```json
+{
+  "command": "displayInput",
+  "requestId": "req-008",
+  "data": {
+    "title": "Loyalty",
+    "prompt": "Enter mobile number",
+    "signature": "HvWRJ2...",
+    "inputType": "NUMERIC",
+    "minLength": 6,
+    "maxLength": 10,
+    "mask": false,
+    "skipButton": true,
+    "skipButtonText": "Skip"
+  }
+}
+```
+
+### 参数定义
+
+下表描述了此请求可用的参数：
+
+| 姓名             | 类型     | 必需的 | 描述                                           |
+| :------------- | :----- | :-- | :------------------------------------------- |
+| 命令             | string | 是的  | 设置为`"displayInput"`。                         |
+| 请求 ID          | string | 是的  | 用于跟踪响应的唯一标识符。                                |
+| title          | string | 不   | 显示在输入屏幕顶部的标题文本。                              |
+| prompt         | string | 是的  | 输入问题(必须与 `prompts.json` 中已签名的值匹配)。           |
+| signature      | string | 是的  | 为特定提示提供的签名。                                  |
+| inputType      | string | 不   | `NUMERIC`、`ALPHANUMERIC` 或 `PASSWORD`(掩码显示)。 |
+| minLength      | 整数     | 不   | 提交所需的最少字符数。                                  |
+| maxLength      | 整数     | 是的  | 允许的最大字符数。                                    |
+| mask           | 布尔值    | 不   | 如果为 `true`,则隐藏用户输入(将密码字符替换为圆点/星号)。           |
+| skipButton     | 布尔值    | 不   | 如果为 `true`,则显示一个按钮以跳过输入。                     |
+| skipButtonText | string | 不   | 跳过按钮的标签(例如“跳过”)。                             |
+
+## 回应
+
+客户按下键盘上的 Enter(→)键后,终端会返回客户输入的数据。
+
+以下示例展示了一个典型的响应：
+
+```json
+{
+"requestId": "req-008",
+"data": {
+"value": "0501234567"
+}
+}
+```
+
+以下示例展示了已取消/已跳过的响应:
+
+```json
+{
+"requestId": "req-008",
+"data": {
+"key": "SKIP/CANCEL"
+}
+}
+```
+
+### 响应参数
+
+`data` 对象包含以下字段:
+
+| 姓名      | 类型     | 描述                                |
+| :------ | :----- | :-------------------------------- |
+| value   | string | 用户输入的实际字符串。                       |
+| **key** | string | 表示在输入未完成时采取的操作(例如 `SKIP/CANCEL`)。 |

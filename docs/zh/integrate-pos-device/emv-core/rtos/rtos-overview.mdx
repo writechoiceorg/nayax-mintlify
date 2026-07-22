@@ -1,0 +1,91 @@
+---
+title: 概述
+metadata:
+  og:description: Nayax EMV Core SDK for RTOS 提供了一个轻量级、可移植的 C 库,用于将 EMV 支付集成到嵌入式设备和 MCU/RTOS 系统中。
+---
+
+EMV Core RTOS SDK 是一个可移植的 C99 库，用于为基于 MCU 和 RTOS 的硬件添加 EMV 支付功能。您的应用程序调用 SDK API；SDK 负责处理读卡、授权和服务器通信。
+
+<Note>
+  本文档涵盖适用于 MCU 和 RTOS 平台的 SDK v1.0。有关 Android 或 Linux SDK，请参阅[Android 安装](/docs/integrate-pos-device/emv-core/get-started/emv-core-android-installation)或[Linux 安装](/docs/integrate-pos-device/emv-core/get-started/emv-core-linux-installation)。
+</Note>
+
+## SDK亮点
+
+- 专为嵌入式系统设计的**C99 源代码**
+- **完整的EMV交易处理**，包括命令处理和授权
+- **平台抽象层，**无需修改代码即可在任何实时操作系统上运行。
+- SDK 中包含的**Linux 参考实现**
+- 用于快速测试您的设置的**示例应用程序**
+
+## 系统概述
+
+Nayax嵌入式解决方案包含三个要素：
+
+<Columns cols={3}>
+  <Card title="非现金读卡器硬件">
+    UNO-mini 读卡器运行 EMV Core 固件，提供 JSON 支付 API 和网络套接字接口。
+  </Card>
+
+  <Card title="SDK 示例代码">
+    C99 示例代码实现了网络套接字和支付 API 调用。
+  </Card>
+
+  <Card title="Nayax 服务器（Nayax 核心）">
+    用于远程终端管理和交易清算的云服务。
+  </Card>
+</Columns>
+
+<Frame>
+  <img src="/images/docs/rtos-overview/system-overview.png" />
+</Frame>
+
+## 硬件和软件架构
+
+运行 EMV Core 的 UNO-mini 读卡器通过 UART TTL 或 USB HID 连接到主机平台（MCU/RTOS）。
+
+<Frame>
+  <img src="/images/docs/rtos-overview/hw-sw-architecture.png" />
+</Frame>
+
+<Frame>
+  <img src="/images/docs/rtos-overview/hw-sw-architecture-2.png" />
+</Frame>
+
+### 应用层
+
+信息传递过程遵循以下几个层次：
+
+| 层          | 描述                                                  |
+| :--------- | :-------------------------------------------------- |
+| 应用层        | 您的代码调用 SDK API(例如 `EcodSdk_PreAuthorize()`)         |
+| JSON-RPC 层 | 将 API 调用转换为带有数据链路帧的 JSON-RPC 消息                     |
+| 串行传输       | 通过 UART(`/dev/ttyUSB0`)或 HID(`/dev/hidraw0`)发送成帧的消息 |
+| EMV核心设备    | 处理付款请求并返回响应                                         |
+| 回调系统       | 通过已注册的回调函数传递异步响应                                    |
+
+## 需求概述
+
+| 要求     | 细节                             |
+| :----- | :----------------------------- |
+| 设备连接   | USB HID 或 UART TTL             |
+| 最低内存要求 | 64 KB（可配置以适应较小的系统）             |
+| 读者力量   | 5-12 VDC,空闲 0.7 W / 峰值 3 W     |
+| 网络     | IPv4 TCP 套接字、DNS 解析、仅客户端       |
+| 编译器    | 支持 C99 的 GCC 4.8+ 或 Clang 3.5+ |
+
+## 后续步骤
+
+<Columns cols={3}>
+  <Card icon="link" title="开始" href="/docs/integrate-pos-device/emv-core/rtos/rtos-get-started">
+    SDK交付、固件安装和获取您的设备ID。
+  </Card>
+
+  <Card icon="link" title="集成指南" href="/docs/integrate-pos-device/emv-core/rtos/rtos-integration-guide">
+    线程、回调、错误处理和配置。
+  </Card>
+
+  <Card icon="link" title="C API 参考" href="/docs/integrate-pos-device/emv-core/rtos/rtos-c-api">
+    完整的C语言API函数参考和关键数据类型。
+  </Card>
+</Columns>

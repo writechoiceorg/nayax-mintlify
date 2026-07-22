@@ -1,0 +1,299 @@
+---
+title: 流程与配置
+metadata:
+  og:description: '## 贩售结果超时（Vend Success 超时） 此参数设置设备等待贩售响应（‘Vend Approved’/‘Vend。'
+---
+
+## 销售结果超时（销售成功超时）
+
+此参数设置设备在向外围设备发送“Vend Approved”（授权交易）消息后，等待外围设备响应（“Vend Approved”/“Vend Failure”）的时间。在 Nayax Core 中，此参数的最大值为 65535 秒（18 小时 12 分 15 秒）。如果您需要更长的等待时间，可以使用[多会话模式](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session#/)，该模式下信用卡超时时间为 23 小时（截至2025年，最长可达72小时。 ），而对于专用卡，则需要 72 小时。
+
+## 状态命令
+
+配对过程完成后，当网络通信中断时，设备会立即发送“状态”命令，以便机器知晓。在 Java SDK 中，该命令大致如下所示（C# 和 C 中的代码格式相同）：
+
+```text Java SDK's log
+[1760613771245+(      7476ms)]        vmc_link: rx
+vmc_link :rx :0d:00:01:04:00:36:01:30:0b:15:01:00:08:37:92:
+[1760613771245+(         0ms)]        vmc_link: tx
+vmc_link :tx :0a:00:00:04:01:30:00:36:00:00:4c:6b:
+[1760613771245+(         0ms)]      vmc_vend_t: received status: 21
+[1760613771251+(         6ms)]            Main: device not available: in technician mode
+
+[1760613771251+(         0ms)]    vmc_socket_t: received status: 21
+```
+
+您可以看到状态为 21 (0x15)，如下表所示，这意味着设备不可用（以下字节表明原因）。
+
+<table align={["left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        状态 ID
+      </th>
+
+      <th>
+        描述
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        20
+      </td>
+
+      <td>
+        设备处于空闲模式，可开始交易 附加信息位图（在“Status Additional Data”字段中设置）：
+        Bit 0 – 以太网连接可用
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        21
+      </td>
+
+      <td>
+        设备不可用 原因位图（在“Status Additional Data”字段中设置）：
+        Bit 0 – 设备存在蜂窝网络问题
+        Bit 1 – 设备无可用网络通信
+        Bit 2 – 设备忙（长时间通信，例如远程软件更新）
+        Bit 3 – 设备处于技术员模式
+        Bit 4 – 设备存在内部问题
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+通信恢复后，设备回到空闲状态，将发送值为 20 的状态命令：
+
+```Text Java SDK's log
+[1759994336421(+7ms)] : rx:
+0d:00:01:02:00:36:01:30:0b:14:01:00:00:34:16:
+[1759994336424(+3ms)] marshall_t: received status
+[1759994336426(+2ms)] : tx:
+0a:00:00:02:01:30:00:36:00:00:69:ca:
+[1759994336431(+5ms)] vmc_vend_t: received status: 20
+[1759994336431(+0ms)] APP: received status: 20
+[1759994336433(+2ms)] APP: device available
+[1759994336434(+1ms)] vmc_socket_t: received status: 20
+```
+
+总结一下：设备与外界失去通信（SIM卡故障/以太网连接故障等）-> 外围设备发送“保持连接”信号，设备响应该信号 -> 设备发送值为21（0x15）的“状态”命令。
+
+设备恢复与外界通信 -> 外围设备发送“保持连接”消息，设备响应该消息 -> 设备发送值为 20 的“状态”命令 \[0x14]
+
+此外，与上述信息无关，状态命令还可以在消费者刷卡期间提供相关信息：
+
+| 状态 ID | 描述                         |
+| :---- | :------------------------- |
+| `54`  | 致电您的银行                     |
+| `56`  | 卡片错误（读卡器无法读取卡片）            |
+| `61`  | 将卡片插入接触式插槽                 |
+| `62`  | 信用卡不被接受                    |
+| `65`  | 处理错误（在“联系人”页面完成交易前，卡片已被移除） |
+| `66`  | 从接触槽中取出卡片                  |
+| `67`  | 使用联系阅读器                    |
+| `68`  | 使用磁条读卡器                    |
+| `69`  | 再试一次                       |
+| `71`  | 礼品卡                        |
+| `73`  | 卡片读取正常                     |
+| `74`  | 插入银行卡或刷卡                   |
+| `75`  | 仅出示一张卡                     |
+| `78`  | 使用另一张卡                     |
+| `79`  | 联系人卡片插入                    |
+| `82`  | 看看你的手机（消费者正在用手机完成交易）       |
+| `83`  | 再次赠送贺卡                     |
+| `84`  | 插入或刷另一张卡                   |
+
+如果消费者在读卡时遇到问题，系统会提示其插入卡片或使用其他卡片。但如果卡片余额不足，屏幕上不会显示相关信息，因为我们不想让消费者感到尴尬（我们也不会将其记录在 SDK 日志中，因为这与 VPOST 和机器之间的通信无关，而是与设备和收单机构之间的通信有关）。通常，您可以在 Nayax Core 中查看交易取消/卡片被拒的原因。
+
+## 沟通障碍
+
+Marshall 协议使用 ACK 命令来响应每个发送的命令，这意味着如果您的外设向设备发送命令，它将收到一个 ACK 命令作为回复，反之亦然。该命令是接收方对发送方的响应，表明已收到该命令。如果没有收到 ACK，则该命令会发送两次。如果三次尝试（原始命令 + 两次重试）均未收到 ACK，则 SDK 将停止发送保持连接命令，设备将发送重置命令以重新建立配对过程。
+
+交易过程中未收到确认：如果在“售卖成功”后未收到确认，则由 Nayax 负责结算。如果在授权后或“售卖成功”前未收到确认，Nayax 将取消交易。（如果在授权阶段之前未收到确认，交易也会被取消。）
+
+## 第三方服务器审批——机器如何通知SDK卡片是否获得批准
+
+发送“Vend Request”后，消费者出示银行卡，随后会发送 Transfer Data 命令，外围设备会获取卡片详细信息，并（自行处理，与 SDK 无关）将其转发给所需的第三方服务器。
+一旦服务器批准/拒绝了该卡，外围设备将通过调用“client\_gateway\_auth(bool approved)”命令通知 SDK（从而也通知设备）：
+
+<CodeGroup>
+  ```java Java
+  m_vmc.vend.client_gateway_auth(bool approved);
+  ```
+
+  ```csharp C#
+  vmc_instance.vend.client_gateway_auth(bool approved);
+  ```
+
+  ```c C
+  vmc_vend_client_gateway_auth(__bool approved)
+  ```
+</CodeGroup>
+
+在 SDK 的演示应用程序中，他们会模拟外围设备返回“已批准”值的情况（该函数将返回“true”）：
+
+<CodeGroup>
+  ```java Java
+  public void onSessionBegin(int funds_avail)
+  {
+      // credit card has been detected. stop timer
+      session_timer_stop();
+
+      // delayed vend example: send vend request later, and not now inside onBeginSession
+      if (false)
+          vend_timer_start();
+      else
+      {
+          // vend request
+          m_vmc.vend.vend_request(m_sessions[m_active_session]);
+
+          // example: approve mifar/mag card externally (vmc authenticates)
+          if (vmc_config.mag_card_approved_by_vmc_support || vmc_config.mifare_approved_by_vmc_support)
+              m_vmc.vend.client_gateway_auth(true);
+      }
+  }
+
+  ```
+
+  ```csharp C#
+              public override void onSessionBegin(int funds_avail)
+              {
+                  logger.d(TAG, "session began. requesting product vend");
+
+                  // do vend request
+                  vmc_instance.vend.vend_request(session);
+
+                  // todo: check if this is a mifare / mag card
+                  // todo: usually you will send this to another thread for async processing
+                  if (false)
+                  {
+                      // acknowledge mifare (note: only when machine is working on mifare/mag mode)
+                      if (vmc_config.mifare_approved_by_vmc_support || vmc_config.mag_card_approved_by_vmc_support)
+                          vmc_instance.vend.client_gateway_auth(true);
+                  }
+              }
+  ```
+
+  ```c C
+  static void triggered_vend_request(void)
+  {
+  .
+  .
+  .
+  if (config.mag_card_approved_by_vmc_support || config.mifare_approved_by_vmc_support || config.qr_approved_by_vmc_support)
+  		{
+  			vmc_vend_client_gateway_auth(__true);
+  		}
+  }
+
+  ```
+</CodeGroup>
+
+## 取消命令
+
+如果您发送了“供应商请求”但尚未收到“供应商批准”（/“供应商拒绝”），您可以发送“取消”命令，这将导致发送“供应商拒绝”。
+
+如果您在收到“vend approved”消息之前发送了“cancel”命令，但此时“vend approved”消息已经发送到您的机器，那么您将不会在日志中看到“vend cancel”的打印信息，因为在“vend approved”之后不能再发送“cancel”命令，因此外设端会发送“vend failure”消息。您也可以避免此时使用“cancel”命令，直接回复“vend failure”，这样也能得到相同的结果。
+
+如果消费者想要开始交易，但在你发送“供应商请求”之前又取消了（无论是在出示卡片之前，还是在你收到“开始会话”之后，在你能够发送“供应商请求”之前——如果是第一种情况，你将在 SDK 的日志中看到“读卡器启用”），你也可以在发送“供应商请求”之前取消交易。
+
+## 仅在信用卡授权后才开始发送会话信息
+
+使用预付卡时，会先进行授权，然后再发送“开始会话”指令。
+
+<Frame>
+  <img src="/images/docs/faq-marshall-flowconfigurations/image1.png" />
+</Frame>
+
+否则，“开始会话”操作会先执行，授权操作会在之后进行。
+
+<Frame>
+  <img src="/images/docs/faq-marshall-flowconfigurations/image2.png" />
+</Frame>
+
+必须当 VPOST/Onyx 处于空闲模式（而不是在进行活动交易的过程中）时执行关闭会话。
+
+在有活动交易的情况下，您不得发送“Close Session”，因为这可能导致问题：设备会优先处理“Close Session”，这可能使活动交易卡住。请确保仅在 onReady 触发时才发送“Close Session”命令。
+
+## 不向消费者收费/以0的价格结束会话——这是什么问题？
+
+关于以价格 0 发送“close session”——如果您想取消交易，应发送状态不为“ok”的“close session”，例如“failed to dispense”（因为以状态“ok”和价格 0 发送“close session”会被视为您机器端价格计算方面的某种错误）。
+原因在于，任何查看该设备虚拟机 last sales 记录的人都会认为我们这边在结算交易上存在问题（支付问题、配置问题等）。相比之下，在您这边，外围设备与设备之间的交易流程完全没有问题，您只是出于自身原因不想向消费者收费。
+这就是我们提供“vend failure”选项，以及“close session”状态“vend failure”和“cancel by user”的原因，因为这些状态表明产品未被提供，因此我们不会向消费者收费，并且我们会在 Last Sales/DTM 上显示相应的原因。
+
+一旦你将交易状态更改为除“确定”以外的任何状态，你发送的价格将变得无关紧要，因为交易将被视为已取消。
+
+可能的状态有：
+
+0- 状态正常
+
+1- 用户取消
+
+2\. 产品分发失败
+
+4- 拒绝出价
+
+然后您可以发送“关闭会话”命令。
+
+## 多渠道销售：如何进行部分自动售货的示例
+
+部分自动售货仅适用于 Multivend，意味着只能售卖部分选定的产品。
+
+例如，如果消费者选择了五件商品：
+
+<Frame>
+  <img src="/images/docs/faq-marshall-flowconfigurations/image3.png" />
+</Frame>
+
+并且想要模拟只售出两件商品的场景。您可以在演示应用程序的 onVendApproved 回调函数中添加以下代码：
+
+<Frame>
+  <img src="/images/docs/faq-marshall-flowconfigurations/image4.png" />
+</Frame>
+
+<CodeGroup>
+  ```java Java
+  if (vmc_config.multi_vend_support) //example of partial vending
+  {
+      ArrayList<vmc_vend_t.vend_item_t> list = new ArrayList<vmc_vend_t.vend_item_t>();
+
+      list.add(new vmc_vend_t.vend_item_t((short) 0, (short) 100, (short) 1, (byte) 1));
+      list.add(new vmc_vend_t.vend_item_t((short) 1, (short) 100, (short) 1, (byte) 1));
+
+      // prepare single session object
+      session.products_list = list;
+  }
+  ```
+
+  ```csharp C#
+  if (vmc_config.multi_vend_support) //example of partial vending
+  {
+    List<vmc_vend_t.vend_item_t> list = new List<vmc_vend_t.vend_item_t>();
+
+  	 list.Add(new vmc_vend_t.vend_item_t((ushort)0, (ushort)10, (ushort)1, (byte)1));
+  	 list.Add(new vmc_vend_t.vend_item_t((ushort)1, (ushort)10, (ushort)1, (byte)1));
+
+      // prepare single session object
+      session = new vmc_vend_t.vend_session_t(list);
+  }
+  ```
+
+  ```c C
+  			session->products = &session_products[0];
+  			session->total_products = 1;
+  ```
+</CodeGroup>
+
+## 会话超时——最多延迟一分钟。
+
+该设备每 1 分钟查询一次已打开的会话，这意味着设备结算交易的时间可能会比 Nayax Core 中定义的超时时间延迟最多 1 分钟。
+
+例如：
+
+如果您将超时设置为 1 分钟，会话将在开始后的 1 分钟到 1 分 59 秒之间的某个时间过期。
+如果您将超时设置为 5 分钟，会话将在开始后的 5 分钟到 5 分 59 秒之间的某个时间过期。如果您将超时设置为 1 小时，会话将在开始后的 1 小时到 1 小时 59 秒之间的某个时间过期。

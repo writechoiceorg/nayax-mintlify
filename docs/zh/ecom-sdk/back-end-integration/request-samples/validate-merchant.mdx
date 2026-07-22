@@ -1,0 +1,44 @@
+---
+title: 验证商户
+metadata:
+  og:description: ValidateMerchant 请求是安全识别商户的第一步。
+---
+
+`ValidateMerchant` 请求是安全识别商户的第一步。该请求的核心依赖于 Merchant Token ID,这是在商户初始入驻过程中分配的唯一安全令牌。该令牌用作主要标识符。请求中还包含补充数据(`ActorId`、`MachineId`、`Random`)和一个 `Cipher` 字段。
+
+`Cipher` 字段通常是经过数字签名或加密的负载,用于根据商户注册期间建立的预共享密钥来验证请求的完整性和真实性。
+
+## 要求
+
+Requests are performed to the [`/validate-merchant`](/reference/ecom/management/validate-merchant-start-authentication) endpoint.
+
+```json
+{
+  "TokenId": "MERCH-ABC123XYZ",
+  "ActorId": "SYS-WEB-API-01",
+  "MachineId": "IP-192-168-1-50",
+  "Random": "aBcD1EfgH2iJkLmnOpQrS3tUvWxYz",
+  "Cipher": "MjQ5ZDlmNjVhZmY2NzQzZjI1NzdjYjY0ZGUyNTEwYWE="
+}
+```
+
+下表描述了该请求的参数：
+
+| 场地          | 类型     | 描述                                                        | 必需的 |
+| :---------- | :----- | :-------------------------------------------------------- | :-- |
+| `TokenId`   | String | 在商户入驻过程中创建的**唯一标识符**（令牌）。该标识符用于识别商户。                      | 是的  |
+| `ActorId`   | String | *代表*商家发起请求的特定用户、系统或进程的 ID。                                | 是的  |
+| `MachineId` | String | 请求来源的硬件或设备的唯一标识符。                                         | 是的  |
+| `Random`    | String | 一个**唯一的、不可预测的字符串**（随机数），用于防止重放攻击。每次请求都必须使用新的随机数。          | 是的  |
+| `Cipher`    | String | **安全有效载荷**（例如，HMAC 签名或加密数据块）是使用请求字段和商户的私钥生成的。这可以证明请求的真实性。 | 是的  |
+
+## 回复
+
+验证成功会返回 `200 OK` 状态,并附带包含已验证商户详情的正文。
+
+| 场地                  | 类型       | 描述                                                      | 必需的 | 约束条件            |
+| :------------------ | :------- | :------------------------------------------------------ | :-- | :-------------- |
+| `verdict`           | 字符串 \| 空 | Const 字符串值**'Approved'**或**'Declined'** 。 | 是的  | 必须标记为“批准”或“拒绝”。 |
+| `code`              | int32    | 响应代码： **0 表示批准**，相应的拒绝代码表示拒绝。                           | 不   | 整数值。            |
+| `statusMessage`     | 字符串 \| 空 | 可选。会话状态消息自由文本字段或其他可变数据。                                 | 不   | 自由文本。           |
+| `customDeclineCode` | 字符串 \| 空 | 也可以使用自定义拒绝代码来返回**HashedEcomTransactionId** ，以验证商户是否成功。  | 不   | 字符串值。           |

@@ -1,0 +1,256 @@
+---
+title: 开始会话
+metadata:
+  og:description: Cortina 使用 Start Session 命令通知集成商,与 Cortina 支付提供商之间的交易请求已初始化。
+---
+
+Cortina 使用 `Start Session` 命令通知集成商,与 Cortina 支付提供商之间的交易请求已初始化。
+
+<Note>
+  重要提示:对于 Cortina Static QR(SQR),使用的是 `Start` 命令而非 `Start`Session,且 Start 是由 Cortina 支付提供商发送给 Nayax,而不是反过来(如前文所述)。
+</Note>
+
+More on that in [Static QR- Start](/docs/cortina/staticqr/static-qr-start#/).
+
+## 要求
+
+Nayax 的服务器会向您配置的 `StartSession` 端点发送 POST 请求,其格式如下:
+
+`(customer's URL)/Cortina/StartSession`
+
+有效载荷包含以下详细信息：
+
+```json
+{
+  "TokenId": "123456",
+  "RandomNumber": "123456789qwertyuioasdfghjkl",
+  "DynamicURL": "string",
+  "CustomData": {
+    "DirectActor": "String",
+    "Operator": "String",
+    "Distributor": "String",
+    "Actor": "String",
+    "Machine": "String",
+    "SoftDecline": "String"
+  }
+}
+```
+
+### 请求参数
+
+下表描述了请求中的所有参数:
+
+<table>
+  <thead>
+    <tr>
+      字段
+      类型
+      是否必填
+      描述
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      `TokenId`
+      String
+      是
+
+      <td style={{ textAlign: "left" }}>
+        第三方 Secret Token 参考编号。
+      </td>
+    </tr>
+
+    <tr>
+      `RandomNumber`
+      String
+      是
+
+      <td style={{ textAlign: "left" }}>
+        由 Nayax 生成的唯一 27 位随机数。
+      </td>
+    </tr>
+
+    <tr>
+      `DynamicURL`
+      String(255)
+      否
+
+      <td style={{ textAlign: "left" }}>
+        Actor 级别的 URL 配置。支持路由到不同的 URL。
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }} colspan="4">
+        自定义数据字段(JSON 格式的字符串)
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`DirectActor` Inside `CustomData`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+      <td style={{ textAlign: "left" }}>No</td>
+
+      <td style={{ textAlign: "left" }}>
+        JSON 格式的直接 Actor 自定义数据。请就定义联系 Nayax TPOC。
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Operator` Inside `CustomData`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+      <td style={{ textAlign: "left" }}>No</td>
+
+      <td style={{ textAlign: "left" }}>
+        JSON 格式的运营商自定义数据。请就定义联系 Nayax TPOC。
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Distributor` Inside `CustomData`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+      <td style={{ textAlign: "left" }}>No</td>
+
+      <td style={{ textAlign: "left" }}>
+        JSON 格式的分销商自定义数据。请就定义联系 Nayax TPOC。
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Actor` Inside `CustomData`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+      <td style={{ textAlign: "left" }}>No</td>
+
+      <td style={{ textAlign: "left" }}>
+        JSON 格式的 Actor 自定义数据。请就定义联系 Nayax TPOC。
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Machine` Inside `CustomData`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+      <td style={{ textAlign: "left" }}>No</td>
+
+      <td style={{ textAlign: "left" }}>
+        JSON 格式的 Machine 自定义数据。请就定义联系 Nayax TPOC。
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`SoftDecline` Inside `CustomData`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+      <td style={{ textAlign: "left" }}>No</td>
+
+      <td style={{ textAlign: "left" }}>
+        与 Soft Decline 相关的 JSON 格式自定义数据。请就定义联系 Nayax TPOC。
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## 回复
+
+客户支付方式将发送给 Nayax 服务器的 `StartSession` 响应。其负载应如下所示:
+
+```json
+{
+  "TranIDCipher": "a0Qnxm4fWMskzFXiMivn8BDiQVSL6be/NXIICC9HBoAiry6DUdKYPQh/YS1G8nObE6/0o9N4MFuYA7CTAxAnphuNJwBEjgBzKhhgpJ5ggnw=",
+  "Status": {
+    "Verdict": "Approved",
+    "Code": 0,
+    "StatusMessage": "string",
+    "CustomDeclineCode": "string"
+  }
+}
+```
+
+### 响应参数
+
+下表描述了响应中的所有参数:
+
+<table>
+  <thead>
+    <tr>
+      字段
+      类型
+      是否必填
+      描述
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      `TranIDCipher`
+      String(36)
+      是
+
+      <td style={{ textAlign: "left" }}>
+        用于在 `/StartSession` 请求中进行身份验证的加密交易 ID。
+
+        <ul>
+          集成方的角色:生成交易 ID(36 个字符/288 位),附加 `=` 和 `RandomNumber` 以形成密文(64 个字符)。使用 AES ECB 对该字符串进行加密。
+          AES 密钥:与 `TokenID` 匹配的 Secret Token 的最右侧 256 位(32 个字符)。
+          Nayax 的角色:解密该密文以提取交易 ID,该交易 ID 随后用于所有后续请求。
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Verdict` inside `Status`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+      <td style={{ textAlign: "left" }}>Yes</td>
+
+      <td style={{ textAlign: "left" }}>
+        表示请求最终状态的常量字符串:
+
+        <ul>
+          <li>**`Approved`**</li>
+          <li>**`Declined`**</li>
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`Code` inside `Status`</td>
+      <td style={{ textAlign: "left" }}>Int(32)</td>
+      <td style={{ textAlign: "left" }}>No</td>
+
+      <td style={{ textAlign: "left" }}>
+        拒绝代码（Decline Code）。条件性字段——仅当 `Verdict` 为 “Declined” 时才会出现。有效的拒绝代码包括：
+
+        <ul>
+          1: 余额不足
+          5: 疑似欺诈
+          6: 一般系统故障
+          7: 金额无效
+          8 / 998: 格式/解析错误或验证错误
+          992: 超时异常
+          997: 缺少必填参数
+          999: 一般异常
+          有关错误代码的完整列表,请参阅完整文档。
+        </ul>
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`StatusMessage` inside `Status`</td>
+      <td style={{ textAlign: "left" }}>String(255)</td>
+      <td style={{ textAlign: "left" }}>No</td>
+
+      <td style={{ textAlign: "left" }}>
+        包含**交易状态消息**或有关结果的其他不同数据的自由文本字段。
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>`CustomDeclineCode` inside `Status`</td>
+      <td style={{ textAlign: "left" }}>String</td>
+      <td style={{ textAlign: "left" }}>No</td>
+
+      <td style={{ textAlign: "left" }}>
+        用于指定自定义拒绝代码（例如与 Soft Decline 或 Switch Interface 相关的代码）。可能反映收单机构（acquirer）的响应代码。
+      </td>
+    </tr>
+  </tbody>
+</table>

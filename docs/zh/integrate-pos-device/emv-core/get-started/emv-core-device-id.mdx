@@ -1,0 +1,38 @@
+---
+title: 获取您的设备 ID
+metadata:
+  og:description: 在 Nayax Core 系统中注册硬件时需要提供 Device ID。该唯一标识符由读卡器的序列号(Serial Number)生成。
+---
+
+设备 ID 是将您的硬件注册到 Nayax Core 系统所必需的。此唯一标识符源自读卡器的序列号 (SN)，用于启用支付清算和远程管理功能。
+
+查找 ID 的最直接方法是查看硬件，找到 EMV 读卡器背面的序列号 (SN) 标签。
+
+<Warning>
+  扫描条形码以防止手动输入错误。
+</Warning>
+
+如果读卡器已连接到您的主机系统，您可以使用提供的测试应用程序以编程方式检索 ID：
+
+<Tabs>
+  <Tab title="Linux">
+    1. 导航至您的 SDK 目录并启动演示应用程序。
+    2. 从主菜单中选择 Kiosk ID 或 EMV Core ID 选项（通常是 Linux 上的菜单选项 9 或 RTOS 上的菜单选项 8）。
+    3. 该应用程序将查询读取器并显示一个 16 位数字字符串（例如，4207012624000149）。
+
+    <Frame>![](/images/docs/emv-core-device-id/image1.png)</Frame>
+  </Tab>
+
+  <Tab title="安卓">
+    1. 打开 SDK 示例应用程序。
+    2. 导航至 **维护** 页面。
+    3. 按下 **“获取数据”** 按钮。
+    4. **自助服务终端 ID** 字段将填充阅读器的唯一标识符。
+
+    <Frame>
+      <img src="/images/docs/emv-core-device-id/image2.png" />
+    </Frame>
+  </Tab>
+</Tabs>
+
+获取到16位数的设备ID后，请将其提供给您的Nayax客户经理。他们会将终端注册到Nayax Core系统中，这是完成任何支付交易的先决条件。

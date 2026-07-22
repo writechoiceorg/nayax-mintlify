@@ -1,0 +1,187 @@
+---
+title: 自动售货会话管理
+metadata:
+  og:description: 本页面介绍了 Marshall SDK 中用于处理贩售产品请求和会话的数据结构。例如：vend_item_t 和 vend_session_data_t。
+---
+
+本页介绍 Marshall SDK 中用于处理自动售货产品请求和会话的数据结构。例如：
+
+- `vend_item_t`
+- `vend_session_data_t`
+- `vend_session_t`
+
+这些结构定义了管理产品详细信息、会话数据和整个自动售货会话所需的类和字段。
+
+## 产品类别
+
+`vend_item_t` 类表示售卖会话中的单个商品请求。该类包括商品代码、价格、数量和计量单位。以下代码块列出了该类的所有参数：
+
+<CodeGroup>
+  ```java Java
+  public static class vend_item_t {
+      public short code;
+      public int price;
+      public int qty;
+      public byte unit;
+  }
+  ```
+
+  ```csharp C#
+  public static class vend_item_t {
+      public short code;
+      public int price;
+      public int qty;
+      public byte unit;
+  }
+  ```
+
+  ```c C
+  struct vend_item_t
+  	uint16_t code;
+  	uint16_t/uint32_t price;
+  	uint32_t qty;
+  	uint32_t unit;
+  ```
+</CodeGroup>
+
+### 产品参数
+
+下表提供了参数的更详细描述。
+
+| 范围      | 类型（推断） | 描述                           |
+| :------ | :----- | :--------------------------- |
+| `code`  | 字符串或整数 | 产品的唯一标识符，也称为 MDB 代码。         |
+| `price` | 整数     | 商品价格，其中真实价格计算方式为价格/（10^小数位）。 |
+| `qty`   | 整数     | 所售商品的数量。                     |
+| `unit`  | 整数     | 商品的计量单位，`0` 表示离散单位（例如，单瓶饮料）。 |
+
+## 自动售货会话数据类
+
+`vend_session_data_t` 类保存售卖会话的详细信息，包括交易详情和卡片信息。以下代码块列出了该类的所有参数：
+
+<CodeGroup>
+  ```java Java
+  public static class vend_session_data_t {  
+      public long transaction_id;  
+      public short choose_product_timeout;  
+      public int card_type;  
+      public int card_entry_mode;  
+      public String card_bin;  
+      public String card_bin_hash;  
+      public String prop_card_uid;  
+      public int vmc_auth_status;  
+      public int com_status;  
+      public String excel_data;  
+      public String cc_last_4_digits;  
+  }
+  ```
+
+  ```csharp C#
+  public static class vend_session_data_t {  
+      public long transaction_id;  
+      public short choose_product_timeout;  
+      public int card_type;  
+      public int card_entry_mode;  
+      public String card_bin;  
+      public String card_bin_hash;  
+      public String prop_card_uid;  
+      public int vmc_auth_status;  
+      public int com_status;  
+      public String excel_data;  
+      public String cc_last_4_digits;  
+  }
+  ```
+
+  ```c C
+  struct vmc_vend_transfer_data_t
+    int 	 encode_bitmap;
+    int       transaction_id_len;
+    uint8_t[] transaction_id;
+    uint16_t  choose_product_timeout;
+    uint8_t   card_type;
+    uint8_t   card_sub_type;
+    uint8_t   card_entry_mode;
+    int     	 card_bin_len;
+    uint8_t[] card_bin;
+    int     	 card_bin_hash_len;
+    uint8_t[] card_bin_hash;
+    int     	 prop_card_uid_len;
+    uint8_t[] prop_card_uid;
+    uint8_t   vmc_auth_status;
+    uint32_t  com_status;
+    int     	 ftl_data_len;
+    uint8_t[] ftl_data;
+    char[] 	 cc_last_4_digits;
+    uint16_t  product_code;
+    uint32_t  product_price;
+    uint32_t  default_credit;
+    uint8_t[] main_fw_ver;
+    uint8_t[] pos_fw_ver
+    uint8_t[] monyx_id;
+    uint32_t  final_price;
+    sint32_t  card_balance;
+  ```
+</CodeGroup>
+
+### 类参数
+
+下表提供了参数的更详细描述。
+
+| 范围                       | 类型（推断） | 描述                 |
+| :----------------------- | :----- | :----------------- |
+| `transaction_id`         | 字符串或整数 | 交易唯一标识符。           |
+| `choose_product_timeout` | 整数     | 选择产品的超时时间。         |
+| `card_type`              | String | 交易中使用的卡类型。         |
+| `card_entry_mode`        | String | 卡输入模式（例如，刷卡、插入）。   |
+| `card_bin`               | 字符串或整数 | 卡的银行识别号 (BIN)。     |
+| `card_bin_hash`          | String | 为了安全目的，对卡进行散列 BIN。 |
+| `prop_card_uid`          | String | 自有卡的UID。           |
+| `vmc_auth_status`        | 字符串或整数 | VMC 的授权状态。         |
+| `com_status`             | 字符串或整数 | 通信状态。              |
+| `excel_data`             | String | Excel 格式的附加数据。     |
+| `cc_last_4_digits`       | String | 信用卡的最后四位数字。        |
+
+## 自动售货会话处理类
+
+`vend_session_t` 类表示一个售卖会话，封装了会话特定数据、商品列表和会话状态。以下代码块列出了该类的所有参数：
+
+```java Java
+public static class vend_session_t {
+    public int funds_avail;
+    public int session_status;
+    public vend_session_data_t data;
+    public ArrayList<vend_item_t> products_list;
+}
+```
+
+```csharp C#
+public static class vend_session_t {
+    public int funds_avail;
+    public int session_status;
+    public vend_session_data_t data;
+    public ArrayList<vend_item_t> products_list;
+}
+```
+
+```c C
+struct vend_session_t
+  int funds_avail;
+	int total_amount;
+	int vend_amount;
+	int discount;
+	uint16_t session_id;
+	vmc_vend_transfer_data_t* data;
+	vend_item_t* products;
+	int total_products;
+```
+
+### 自动售货会话类参数
+
+下表提供了参数的更详细描述。
+
+| 范围                         | 类型（推断）                    | 描述                                                      |
+| :------------------------- | :------------------------ | :------------------------------------------------------ |
+| `funds_avail`              | 整数                        | 会议可用的资金。                                                |
+| `session_status`           | 字符串或枚举                    | 用户设置会话状态，尤其是在取消或配药失败的情况下。                               |
+| `vend_session_data_t data` | Object                    | 包含详细会话数据的 `vend_session_data_t` 实例。                     |
+| `products_list`            | ArrayList\<vend\_item\_t> | 表示会话中涉及商品的 `vend_item_t` objects 列表。请注意，在多会话模式下仅允许单个商品。 |

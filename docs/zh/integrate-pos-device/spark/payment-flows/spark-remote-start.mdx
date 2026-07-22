@@ -1,0 +1,71 @@
+---
+title: 远程启动
+metadata:
+  og:description: 在 Remote Start 流程中，由您的远程服务器发起交易，指示 Nayax 激活特定设备。此方法尤其适用于。
+---
+
+在远程启动流程中，您的远程服务器会发起交易，指示 Nayax 激活特定设备。此方法特别适用于交易从应用程序或计算机（而非直接在 Nayax 终端）发起的情况。
+
+远程启动流程使用以下 Spark 方法：
+
+- [StartAuthentication](/reference/spark/transactions/startauthentication)
+- [TriggerTransaction](/reference/spark/transactions/triggertransaction)
+- [TransactionCallback](/reference/spark/transactions/transactioncallback)
+- [Settlement](/reference/spark/transactions/settlement)
+- [CancelTransaction](/reference/spark/transactions/canceltransaction)
+- [TimeoutCallback](/reference/spark/transactions/timeoutcallback)
+- [DeclineCallback](/reference/spark/transactions/declinecallback)
+
+<Note>
+  付款流程
+
+  远程启动支持预授权和预选交易流程。以下部分将更详细地介绍每个流程。
+</Note>
+
+## 预授权流程
+
+要了解远程启动预授权流程，请参见下图：
+
+<Frame>
+  <img src="/images/docs/spark-remote-start/image1.png" />
+</Frame>
+
+以下是该图的细分：
+
+1. 消费者在服务站上启动一个会话，该会话通过第三方服务器向 Nayax 服务器发送 `StartAuthentication` 请求。
+2. Nayax 服务器以 `StartAuthenticationResponse` 响应第三方服务器。
+3. 第三方服务器向 Nayax 服务器发送 `TriggerTransaction` 请求。
+4. Nayax 服务器向 Nayax 设备发送“唤醒”命令。
+5. Nayax 设备响应 Nayax 服务器，确认它已唤醒。
+6. Nayax 服务器将 `TriggerTransactionResponse` 发回给第三方服务器。
+7. 消费者将银行卡出示给 Nayax 设备。随后，Nayax 设备向 Nayax 服务器发送 `AuthorizationRequest`。
+8. The Nayax Server performs authorization with a Payment Provider and sends a [`TransactionCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback) to the 3rd Party Server.
+9. The 3rd Party Server acknowledges the transaction callback by sending a [`TransactionCallbackACK`](/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback) (HTTP 200) to the Nayax Server. At this point, the service can be provided on the Service Station.
+10. Nayax 服务器向 Nayax 设备发送 `AuthorizationResponse`，指示授权结果。随后 Nayax 设备返回空闲状态。
+11. 第三方服务器向 Nayax 服务器发送 `Settlement` 请求。
+12. Nayax 服务器与支付提供商执行结算，并将 `SettlementResponse` 发回给第三方服务器。
+
+## 预选流程
+
+要了解远程启动预选流程，请参见下图：
+
+<Frame>
+  <img src="/images/docs/spark-remote-start/image2.png" />
+</Frame>
+
+以下是该图的细分：
+
+1. 消费者在服务站上启动一个会话，该会话通过第三方服务器向 Nayax 服务器发送 `StartAuthentication` 请求。
+2. Nayax 服务器以 `StartAuthentication` Response 响应第三方服务器。
+3. 第三方服务器向 Nayax 服务器发送 `TriggerTransaction` 请求。
+4. Nayax 服务器向 Nayax 设备发送“唤醒”命令。
+5. Nayax 设备响应 Nayax 服务器，确认它已唤醒。
+6. Nayax 服务器将 `TriggerTransaction` 响应发回给第三方服务器。
+7. 消费者将银行卡出示给 Nayax 设备。随后，Nayax 设备向 Nayax 服务器发送 `AuthorizationRequest`。
+8. The Nayax Server processes transactions by performing sales, authorizations, and settlements with a Payment Provider. Concurrently, it sends a [`TransactionCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback) to the 3rd Party Server.
+9. The 3rd Party Server acknowledges the transaction callback by sending a [`TransactionCallback`](/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback) (HTTP 200) to the Nayax Server. At this point, the service can be provided at the Service Station.
+10. Nayax 服务器向 Nayax 设备发送 `AuthorizationResponse`，指示授权结果。随后 Nayax 设备返回空闲状态。
+
+## 参见
+
+<Card icon="link" title="TransactionCallback" href="/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback" arrow />

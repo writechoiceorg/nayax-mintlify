@@ -1,0 +1,241 @@
+---
+title: 多会话
+metadata:
+  og:description: 多会话支付流程将消费者交互分为两个独立部分：1. 产品选择。2. 授权与结算。
+---
+
+多会话支付流程将消费者交互分为两个独立部分：
+
+1. 产品选择。
+2. 对消费者银行卡的授权与结算。
+
+这与单会话流程不同，在单会话流程中，结算是在产品选择和授权之后立即执行的。
+
+## 结算超时
+
+<Note>
+  结算应在授权过程完成后**1 分钟到 71 小时**之间的任何时间发生（具体值取决于 Nayax Core 中的**“会话超时”**参数）。
+
+  请注意，如果机器未在 Nayax Core 中“会话超时”参数设置的时间范围内发送结算命令，设备将自行结算该交易，并通过“Status”命令通知外围设备。
+
+  对于 VPOSM，如果超时，交易可能会被取消而不是结算——但这可以通过 Nayax Core 上的额外配置来实现（与 Marshall 流程无关——这意味着从 Marshall 的角度来看，设备总是会在会话超时时尝试结算交易）。
+</Note>
+
+<Danger>
+  外围设备不应依赖会话超时机制，因为它严格来说只是设备端的一种后备机制。这意味着外围设备应始终发送结算命令，如果不想向消费者收费，可以将结算字段之一（称为“status”，与“Status”命令无关）更改为例如“Vend failure”的状态——更多信息请参阅[多会话——结算阶段不向消费者收费](/docs/integrate-pos-device/marshall/marshall-faqs/faq-marshall-flowconfigurations#not-charging-consumers-close-session-with-price-of-0--what-is-the-issue)。
+</Danger>
+
+## 为何使用多会话
+
+多会话流程使您能够在单个设备上管理多个并发交易。它非常适合交易时间较长或需要同时服务多个消费者的外围设备。
+
+### 并发交易
+
+此流程适用于诸如电动汽车充电桩之类的环境，在这些环境中，多个消费者可能同时使用同一站点，但需要独立的支付处理。
+
+### 较长的交易时间
+
+当贩售过程超过标准的 4 分 15 秒时，多会话也很有帮助。
+
+该流程允许外围设备在银行卡授权后立即通知 Nayax 设备可以开始贩售。随后，Nayax 设备会等待外围设备后续发送有关最终贩售状态或服务停止的更新，从而进行结算。
+
+### 更快释放信用额度
+
+从技术上讲，多会话流程的运作方式类似于预选流程。对于某些收单机构而言，与采用预授权的单会话流程相比，这种架构可以更快地释放已捕获的信用额度。
+
+如果您使用带预授权的单会话，已授权的信用金额可能需要数天或数周才能释放，这可能会使消费者误以为自己已被收取了全额的预授权金额。多会话有助于缓解这一问题。
+
+## 付款流程
+
+下图展示了多会话支付流程中的事件顺序。
+
+<Note>
+  在此流程中，交易处理过程分为两个部分，因此有两个独立的图示，每个步骤对应一个。
+</Note>
+
+<Frame>
+  <img src="/images/docs/marshall-multi-session/image1.jpg" />
+</Frame>
+
+<Frame>
+  <img src="/images/docs/marshall-multi-session/image2.jpg" />
+</Frame>
+
+以下是该图的细分：
+
+1. Nayax 设备向消费者发送消息：“请选择产品。”
+
+2. 消费者从自动售货机中选择产品。
+
+3. 外围设备的 SDK 向 Nayax 设备发送售货请求：
+   <CodeGroup>
+     ```c C
+     vmc_vend_vend_request(vend_session_t *session)
+     ```
+
+     ```csharp C#
+     vmc_instance.vend.vend_request(session);
+     ```
+
+     ```java Java
+     m_vmc.vend.vend_request(m_sessions[m_active_session]);
+     ```
+   </CodeGroup>
+
+4. Nayax 设备向消费者发送消息：“请出示卡。”
+
+5. 消费者出示支付卡。
+
+6. Nayax 设备向 Nayax 服务器发送授权请求。
+
+7. Nayax 服务器将授权请求转发给计费提供商。
+
+8. 计费提供商向 Nayax 服务器发送授权响应（已批准）。
+
+9. Nayax 服务器将授权响应（已批准）发送回 Nayax 设备。
+
+10. 外围设备的 SDK 处理通过传输数据从 Nayax 设备接收的交易数据（所述数据包括有关 Nayax 交易 ID 和消费者卡详细信息的信息）：
+    <CodeGroup>
+      ```c C
+      vmc_vend_event_handler_cb(vm_vend_event_on_transaction_info)
+      ```
+
+      ```csharp C#
+      vend_callbacks(onTransactionInfo(data))
+      ```
+
+      ```java Java
+      vmc_vend_events()
+      (via onTransactionInfo(data))
+      ```
+    </CodeGroup>
+
+11. SDK 会触发“供应商已批准”事件：
+    <CodeGroup>
+      ```c C
+      vmc_vend_event_handler_cb(vm_vend_event_on_vend_approved)
+      ```
+
+      ```csharp C#
+      vend_callbacks()
+      (via onVendApproved(session))
+      ```
+
+      ```java Java
+      vmc_vend_events()
+      (via onVendApproved(session))
+      ```
+    </CodeGroup>
+
+12. 外围设备开始向消费者发放产品/提供服务。
+
+13. SDK 报告“供应商成功”：
+
+    <CodeGroup>
+      ```c C
+      vmc_vend_vend_status(&session, __true)
+      ```
+
+      ```csharp C#
+      vmc_vend_events()
+      (via onVendApproved(session) -which would return "true")
+      ```
+
+      ```java Java
+      vmc_vend_events()
+      (via onVendApproved(session) -which would return "true")
+      ```
+    </CodeGroup>
+
+    并完成贩售会话：
+
+    <CodeGroup>
+      ```c C
+      vmc_vend_vend_session_complete_lowlevel()
+      ```
+
+      ```csharp C#
+      no such function in C# or Java due to the nature of the languages
+      ```
+
+      ```java Java
+      no such function in C# or Java due to the nature of the languages
+      ```
+    </CodeGroup>
+
+14. 交易处理的第一部分结束。
+
+<Frame>
+  <img src="/images/docs/marshall-multi-session/image3.png" />
+</Frame>
+
+15. 机器完成产品发放/服务提供。
+
+16. 自动售货机 SDK 结算交易（会话）：
+    <CodeGroup>
+      ```c C
+      vmc_vend_session_close(session)
+      ```
+
+      ```csharp C#
+      vmc_instance.vend.session_close(session)
+      ```
+
+      ```java Java
+      m_vmc.vend.session_close(session)
+      ```
+    </CodeGroup>
+
+17. Nayax服务器将结算请求转发给计费提供商。
+
+18. 计费提供商向 Nayax 服务器发送结算响应（OK）。
+
+19. Nayax 服务器将结算响应（OK）返回给 Nayax 设备。
+
+20. 外围设备的 SDK 接收到有关结算状态的命令（设备是否能够完成结算），并触发“结算”事件：
+    <CodeGroup>
+      ```c C
+      vmc_vend_event_handler_cb(vm_vend_event_on_settlement)
+      ```
+
+      ```csharp C#
+      vmc_vend_events()
+      (via onSettlement(success) -which would return "true")
+      ```
+
+      ```java Java
+      vmc_vend_events()
+      (via onSettlement(success) -which would return "true")
+      ```
+    </CodeGroup>
+
+21. 自动售货机SDK传输数据并触发“交易信息”事件：
+    <CodeGroup>
+      ```c C
+      vmc_vend_event_handler_cb(vm_vend_event_on_transaction_info)
+      ```
+
+      ```csharp C#
+      vmc_vend_events()
+      (via onTransactionInfo(data))
+      ```
+
+      ```java Java
+      vmc_vend_events()
+      (via onTransactionInfo(data))
+      ```
+    </CodeGroup>
+
+22. 致消费者的信息：“谢谢惠顾，再见。”
+
+## 参见
+
+<Columns cols={3}>
+  <Card icon="link" title="付款流程" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-payment-flows" arrow />
+
+  <Card icon="link" title="开始" href="/docs/integrate-pos-device/marshall/get-started/marshall-get-started" arrow />
+
+  <Card icon="link" title="方法和功能" href="/docs/integrate-pos-device/marshall/methods-functions/marshall-methods-and-functions" arrow />
+</Columns>
+
+<br />

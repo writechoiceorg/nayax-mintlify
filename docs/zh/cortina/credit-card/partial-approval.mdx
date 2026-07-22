@@ -1,0 +1,24 @@
+---
+title: 部分批准授权
+metadata:
+  og:description: 此功能允许 Payment Gateway 在持卡人余额不足以支付全额时，批准较低的授权金额。
+---
+
+如果持卡人余额不足以支付全部请求金额，此功能允许支付网关批准较低的授权金额，从而提高集成的批准率。
+
+部分批准的金额是可用于购买的金额，并将限制结算金额。
+
+## 如何实现
+
+在 Authorization 端点响应中，按如下方式设置属性：• `Status.Verdict` = Approved• `Status.Code` = 0• `PaymentInfo.AuthAmount` = 预授权的批准金额。
+
+请参阅下面的示例：
+
+```json
+{"Status": {
+	"Verdict": "Approved",
+	"Code": 0,},
+"PaymentInfo": {
+	"AuthAmount": 5}
+}
+```

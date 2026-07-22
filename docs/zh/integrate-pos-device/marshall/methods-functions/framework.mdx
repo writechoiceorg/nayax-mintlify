@@ -1,0 +1,44 @@
+---
+title: 框架
+metadata:
+  og:description: vmc_framework 是 Marshall SDK 的核心组件，充当您的应用程序与自动售货机之间的主要接口。
+---
+
+`vmc_framework` 是 Marshall SDK 的核心组件，充当您的应用程序与自动售货机控制器 (VMC) 之间的主要接口。它处理所有基本操作，从发起和管理会话到处理交易以及与各种外围设备通信。
+
+## 功能
+
+要开始使用 `vmc_framework`，您需要获取其单例实例。这可确保框架只有一个实例处于活动状态，为所有 SDK 操作提供一致且受控的交互点。
+
+要启动框架实例，可以使用以下命令：
+
+<CodeGroup>
+  ```java Java
+  vmc_framework m_vmc = vmc_framework.getInstance();
+  ```
+
+  ```csharp C#
+  vmc_framework vmc_instance = vmc_framework.getInstance();
+  ```
+</CodeGroup>
+
+### 参数
+
+下表提供了该命令的详细描述。
+
+| 范围                        | 描述                                                  |
+| :------------------------ | :-------------------------------------------------- |
+| `vmc_framework`           | Marshall SDK 的主类，用于管理与自动售货机控制器 (VMC) 的交互。           |
+| `m_vmc` or `vmc_instance` | 保存 `vmc_framework` 实例的变量。                           |
+| `getInstance()`           | 此方法返回 `vmc_framework` 的单例实例。单例模式确保应用程序中只运行该框架的一个实例。 |
+
+## 生命周期方法
+
+控制 SDK 生命周期的主要方法有：
+
+| 范围        | 描述                                |
+| :-------- | :-------------------------------- |
+| `start()` | 初始化并启动 SDK 线程，使框架能够处理自动售货操作和设备通信。 |
+| `stop()`  | 终止 SDK 线程，停止所有操作并安全关闭框架。          |
+
+请参阅[SDK 标志说明](/docs/integrate-pos-device/marshall/get-started/sdk-flags-descriptions)以了解可以启动以控制特定配置的其他标志。

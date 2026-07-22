@@ -1,0 +1,85 @@
+---
+title: 自动售货活动
+metadata:
+  og:description: 出货事件是 Marshall SDK 的重要组成部分，使您的应用程序能够处理出货流程的各个阶段。
+---
+
+出货事件是 Marshall SDK 的重要组成部分，使您的应用程序能够处理出货流程的各个阶段。
+
+- 对于 Java 和 C# SDK，`vend_callbacks_t` 接口定义了您的应用程序必须实现的一组回调方法，以响应这些事件。
+- 在 C SDK 中，`vmc_vend_event_e` 枚举执行相同的功能。
+
+以下各节概述了这些事件及其对应的回调方法。
+
+## 贩售回调接口
+
+<Warning>
+  仅适用于 Java 和 C# SDK
+
+  本节所述接口仅适用于 Java 和 C# SDK。
+</Warning>
+
+`vend_callbacks_t` 接口旨在处理与售卖操作相关的事件。
+
+<CodeGroup>
+  ```java Java
+  public abstract static interface vend_callbacks_t
+  ```
+
+  ```csharp C#
+  public abstract static interface vend_callbacks_t
+  ```
+</CodeGroup>
+
+实现此接口可使您的应用程序管理售卖会话的生命周期，从发起到结算，并处理从 Nayax 设备接收到的各种状态和命令。以下是使用 `vend_callbacks_t` 接口时可用的方法列表：
+
+### 接口方法
+
+下表提供了对这些方法的更详细说明。
+
+| 方法                                                             | 描述                                                                                                          |
+| :------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------- |
+| `onReady(vmc_link.vpos_config_t config)`                       | 当与 VPOS（Vend Point of Sale）的链路成功建立且设备已准备好进行贩售操作时，会调用此方法。它提供了 VPOS 的配置详细信息。                                  |
+| `onSessionBegin(int funds_avail)`                              | 当客户出示银行卡时触发，表示新会话已开始且交易资金已可用。                                                                               |
+| `onTransactionInfo(vend_session_data_t data)`                  | 在收到交易数据时调用，提供有关当前交易的详细信息。                                                                                   |
+| `onVendApproved(vend_session_t session)`                       | 在售卖请求获得批准时调用。如果售卖过程成功（表示将向客户的信用卡收费），此方法应返回 `true`；如果售卖过程失败，则返回 `false`。                                     |
+| `onVendDenied(vend_session_t session)`                         | 当贩售请求被拒绝时调用，允许应用程序相应地处理该拒绝情况。                                                                               |
+| `onSettlement(boolean success)`                                | 当交易结算发生时触发，表示结算是否成功。                                                                                        |
+| `onStatus(int status)`                                         | 当外围设备从 Nayax 设备接收到 `Status` 命令时调用，提供如 Marshall Protocol 第 8.11 节所定义的会话当前 status。                            |
+| `onOpenedSessions(ushort[] sessions)`                          | 当外围设备从 Nayax 设备接收到 `Get Session Status` 命令时调用。它有助于识别哪些会话处于打开状态，尤其是在多会话模式下。（参见 Marshall Protocol 第 8.27.5 节） |
+| `onReaderState(boolean enabled)`                               | 提供读卡器的状态，表示其是启用还是禁用。（参见 Marshall 协议第 8.27.9 节）                                                              |
+| `onRemoteVend(int avail_funds, int product_code, int options)` | 当设备收到远程贩售命令时触发，提供可用资金、产品代码以及发放产品的选项。                                                                        |
+| `onReceipt(int ereceipt_type, String data)`                    | 当二维码收据生成时调用，将二维码数据传递给外围设备以供消费者查看。（参见 Marshall 协议第 8.12 节）                                                   |
+
+## 贩售事件枚举
+
+<Warning>
+  仅限 C SDK
+
+  本节所述枚举仅适用于 C SDK。
+</Warning>
+
+`vmc_vend_event_e` 枚举旨在处理 C SDK 中与售卖操作相关的事件。
+
+```c C
+Enum vmc_vend_event_e
+```
+
+### 枚举方法
+
+以下是使用 `vend_callbacks_t` 接口时可用的方法列表：
+
+| 方法                                                       | 描述                                                                       |
+| :------------------------------------------------------- | :----------------------------------------------------------------------- |
+| `onReady(vend_session_t session)`                        | 当外围设备框架准备好开始一个会话时调用。这发生在链路建立之后或上一个会话结束之后。                                |
+| `onSessionBegin(int fundsAvail)`                         | 当客户出示银行卡时调用，提供该交易的可用资金。                                                  |
+| `onTransactionInfo(vend_session_data_t data)`            | 当接收到交易数据时触发，传递有关当前会话的详细信息。                                               |
+| `onVendApproved(vend_session_t session)`                 | 当贩售请求被批准时调用，提供会话详细信息以供进一步处理。                                             |
+| `onVendDenied(vend_session_t session)`                   | 当贩售请求被拒绝时调用，传递相关的会话详细信息。                                                 |
+| `onSessionCanceled(vend_session_t session)`              | 当交易被取消时触发，提供有关被取消会话的信息。                                                  |
+| `onSettlement(uint32_t success)`                         | 表示交易的结算状态。success 参数表示结算是否成功（非零表示成功）。                                    |
+| `onStatus(uint32_t status)`                              | 当外围设备从 Nayax 设备接收到 `Status` 命令时调用。（参见 Marshall Protocol 第 8.11 节）        |
+| `onSessionsResponse(mdb_msg_sessions_status_t sessions)` | 当收到来自 Nayax 设备的“Get Session Status”命令时触发。提供有关开启会话的详细信息，在多会话模式或软件重启后很有帮助。 |
+| `onReaderStateResponse(mdb_msg_reader_status_t state)`   | 响应“Get Reader Status”命令，表示读卡器是启用还是禁用。（参见 Marshall 协议第 8.27.9 节）          |
+| `onReceipt(int ereceiptType, String data)`               | 当二维码收据生成时调用。将二维码数据传递给外围设备以供消费者查看。（参见 Marshall 协议第 8.12 节）                |
+| `onSessionTimeout(uint32_t sessionId)`                   | 当交易超时时触发，提供超时会话的 `sessionId`。                                            |

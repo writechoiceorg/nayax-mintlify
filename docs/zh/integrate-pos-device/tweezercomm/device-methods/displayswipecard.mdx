@@ -1,0 +1,75 @@
+---
+title: displaySwipeCard
+metadata:
+  og:description: displaySwipeCard 方法提示用户使用终端的 MSR（磁条读卡器）刷卡。您可以自定义
+---
+
+`displaySwipeCard` 方法提示用户使用终端的 MSR（磁条读卡器）刷卡。您可以自定义显示屏上展示的消息。
+
+读取完成后，此方法将返回卡片的 Track 2 数据。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+要调用此方法，请将 `method` 字段设置为 `displaySwipeCard`，并按下方所示包含服务名称和参数。
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "displaySwipeCard",
+    "params": [
+        "ashrait",
+        {
+            "string1": "stringDisplay1",
+            "string2": "stringDisplay2",
+            "string3": "stringDisplay3",
+            "string4": "stringDisplay4",
+            "OpenMSR": true,
+            "timeout": 120
+        }
+    ],
+    "id": "1234"
+}
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+| 姓名        | 类型     | 描述        |
+| --------- | ------ | --------- |
+| `string1` | string | 显示文本的第一行  |
+| `string2` | string | 显示文本的第二行  |
+| `string3` | string | 显示文本的第三行  |
+| `string4` | string | 显示文本的第四行  |
+| `OpenMSR` | 布尔值    | 是否打开磁条读卡器 |
+| `timeout` | 整数     | 超时时长（秒）   |
+
+## 回复
+
+成功的请求将返回以下响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "1234",
+    "result": {
+        "statusCode": 0,
+        "track2": "120134687465103900=6163595030067654872"
+    }
+}
+```
+
+### 响应参数
+
+下表说明了此方法的响应参数：
+
+| 姓名                     | 类型     | 描述                 |
+| ---------------------- | ------ | ------------------ |
+| `statusCode`           | 整数     | 操作状态（0 = 成功）       |
+| `track2`               | string | 来自磁条的卡片 Track 2 数据 |

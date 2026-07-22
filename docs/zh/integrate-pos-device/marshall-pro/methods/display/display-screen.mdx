@@ -1,0 +1,85 @@
+---
+title: 显示屏
+description: 控制终端的视觉界面，向客户显示自定义消息。
+metadata:
+  og:description: displayScreen 方法允许客户端应用程序(POS/FCC)控制终端的显示屏。这有助于引导客户完成。
+---
+
+`displayScreen` 方法允许客户端应用程序(POS/FCC)控制终端的显示屏。通过显示不属于标准支付流程的状态更新、操作说明或自定义提醒,帮助引导客户完成加油流程。
+
+使用此方法可以：
+
+- 向顾客提供工作流程说明，例如“请提起把手”或“插入加油枪”。
+- 告知用户系统状态更新，例如“4号泵已授权”或“水箱已满”。
+- 如果泵端出现问题，则显示本地化或自定义错误消息。
+- 在空闲时间显示自定义欢迎信息或促销文字，以强化品牌形象。
+
+Nayax 设备上的显示提示示例：
+
+<Frame>
+  <div className="grid grid-cols-4 gap-2">
+    <img src="/images/start-fueling.png" />
+
+    <img src="/images/fueling-in-progress.png" />
+
+    <img src="/images/approved.png" />
+
+    <img src="/images/declined.png" />
+  </div>
+</Frame>
+
+## 请求
+
+所有请求都必须包含 `command`、`requestId` 以及您希望显示的具体文本内容。
+
+以下示例展示了一个典型的请求：
+
+```json
+{
+"command": "displayScreen",
+"requestId": "req-007",
+"data": {
+"title": "Welcome",
+"line1": "Ready to Process Payment",
+"line2": "Please select payment method",
+"textColor": "WHITE",
+"alignmentHor": "CENTER",
+"alignmentVer": "TOP",
+"mediaId": "idle",
+"fitImage": "FULL",
+"loop": false
+}
+}
+```
+
+### 参数定义
+
+下表描述了此请求可用的参数：
+
+| 姓名    | 类型     | 必需的 | 描述                            |
+| :---- | :----- | :-- | :---------------------------- |
+| 命令    | string | 是的  | 设置为`"displayScreen"`。         |
+| 请求 ID | string | 是的  | 用于跟踪响应的唯一标识符。                 |
+| 文本    | string | 是的  | 终端屏幕上将显示的消息。                  |
+| 暂停    | 整数     | 不   | 消息在返回默认屏幕之前应保持可见的持续时间（以秒为单位）。 |
+
+## 回应
+
+终端在屏幕更新为请求的文本后，会返回一个简单的确认信息。
+
+以下示例展示了一个典型的响应：
+
+```json
+{
+"requestId": "req-007"
+}
+```
+
+### 响应参数
+
+该响应确认终端已处理视觉更新：
+
+| 姓名         | 类型     | 描述                          |
+| :--------- | :----- | :-------------------------- |
+| 请求 ID      | string | 返回原始请求的唯一标识符。               |
+| **status** | string | 如果消息成功显示在屏幕上,则返回 `SUCCESS`。 |

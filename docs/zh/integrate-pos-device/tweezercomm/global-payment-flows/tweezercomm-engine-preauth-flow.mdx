@@ -1,0 +1,38 @@
+---
+title: 预授权
+metadata:
+  og:description: Tweezercomm 的预授权交易会根据支付服务器的响应进行处理、授权，并最终结算或取消。
+---
+
+Tweezercomm 的预授权交易会根据支付服务器的响应进行处理、授权，并最终结算或取消。此流程还包括用于处理错误的弹性机制。
+
+## 交易流程
+
+要理解预授权流程，请参见下图：
+
+<Frame>![](/images/docs/tweezercomm-engine-preauth-flow/image1.png)</Frame>
+
+以下是每个步骤的详细说明：
+
+1. After the cardholder selects the product or service, the ECR/POS sends a [`doTransaction()`](/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction) Request to the Nayax Device (Agamento App) through TweezerComm.
+2. 随后设备会向持卡人显示提示，要求其插入或刷卡。
+3. 持卡人在 ECR/POS 上插入、刷卡或轻触其银行卡。
+4. Nayax 设备与 Nayax 服务器通信以进行支付授权。
+5. Nayax 服务器返回授权结果，该结果随后被返回给 ECR/POS。
+6. 根据授权结果，ECR/POS 会向 Nayax 设备发送 `doTransaction(tranType=6/7)` 请求，以结算或取消该交易。
+7. 结算或取消请求会被发送到 Nayax 服务器，服务器返回最终的交易状态。
+8. 随后 Nayax 设备将该状态转发回 ECR/POS，完成整个流程。
+
+<Warning>
+  弹性机制
+
+  如果返回的 `statusCode != 0`（表示出现问题），系统会参考 [Resilience Mechanism](/docs/integrate-pos-device/tweezercomm/resilience-mechanism-copy)（弹性机制），以了解 TweezerComm 如何处理错误或重试机制。
+</Warning>
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="执行交易" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction" arrow />
+
+  <Card icon="link" title="弹性流程" href="/docs/integrate-pos-device/tweezercomm/resilience-mechanism-copy" arrow />
+</Columns>

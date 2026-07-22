@@ -1,0 +1,57 @@
+---
+title: 机械集成
+description: UNO-mini 的安装准则及序列号显示要求。
+metadata:
+  og:description: 如何将 Nayax UNO-mini 安装到您的硬件外壳中，并满足 Nayax 支持所需的序列号显示要求。
+---
+
+正确安装 UNO-mini 可确保外壳中非接触式读卡的可靠性及长期机械稳定性。
+
+## 通用安装准则
+
+根据以下要求放置 UNO-mini，以确保可靠的 NFC 场性能。
+
+- 将 UNO-mini 尽可能靠近前面板安装。
+- 将 UNO-mini 尽可能远离金属部件安装。
+
+## 安装选项
+
+UNO-mini 有一个用于 M3 螺丝的安装螺孔，最大螺纹深度为 4 毫米。
+
+仅使用 M3 螺丝不足以满足量产安装的要求。请设计一个塑料支架，将 UNO-mini 牢固地固定在机器主体上，并仅将 M3 螺丝用作辅助固定点。
+
+Nayax 技术支持团队必须在量产前审查并确认您的机械安装设计。请联系您的 Nayax 集成支持团队以安排设计评审。
+
+## Nayax序列号
+
+Nayax 设备序列号是 Nayax 支持团队在 Nayax Core 中识别您设备的唯一方式。请在以下三个位置全部显示该序列号。
+
+1. 机器标签：在机器上贴附一个物理标签，标注文字“Nayax SN:”，后跟序列号。
+
+   <Frame>
+     <img src="/images/docs/uno-mini/mechanical-serial-number-label.png" alt="机器标签示例，突出显示 Nayax SN 字段" width="550" />
+   </Frame>
+
+2. OEM 后端系统：在您的后端系统中建立 OEM 机器 ID 与 Nayax 序列号之间的映射关系。
+
+   <Frame>
+     <img src="/images/docs/uno-mini/mechanical-serial-number-backend.png" alt="OEM 后端设备详情界面，突出显示 Nayax SN 字段" />
+   </Frame>
+
+3. 机器显示屏：如果机器带有显示屏，请在设备信息区域显示序列号。
+
+   <Frame>
+     <img src="/images/docs/uno-mini/mechanical-serial-number-display.png" alt="机器显示屏设备信息区域，突出显示 Nayax SN 字段" width="360" />
+   </Frame>
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="用户界面要求" href="/docs/integrate-pos-device/emv-core/uno-mini/uno-mini-user-interface" icon="link">
+    查看 EMV 徽标放置位置、卡组织品牌规则以及 LED 显示要求。
+  </Card>
+
+  <Card title="电源" href="/docs/integrate-pos-device/emv-core/uno-mini/uno-mini-power-supply" icon="link">
+    在连接设备之前，请了解电源要求和布线建议。
+  </Card>
+</CardGroup>

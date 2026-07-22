@@ -1,0 +1,86 @@
+---
+title: sendGeneralEvent
+metadata:
+  og:description: sendGeneralEvent 方法允许终端向系统传达特定的操作事件或状态更新。此方法主要用于。
+---
+
+`sendGeneralEvent` 方法允许终端向系统传达特定的操作事件或状态更新。此方法主要用于监控周期性通信、初始化流程或交易相关数据报告等后台进程的结果。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+在请求中，`method` 字段需要设置为 `sendGeneralEvent`，如下例所示：
+
+```json
+{
+  "id": "123",
+  "method": "sendGeneralEvent",
+  "jsonrpc": "2.0",
+  "params": [
+    "device",
+    {
+      "eventCode": 0,
+      "eventData": {
+        "transactionAmount": "100.00",
+        "card": "6935"
+      }
+    }
+  ]
+}
+```
+
+### 请求参数
+
+下表描述了此方法的请求参数：
+
+| 姓名          | 类型     | 描述                                                                           |
+| :---------- | :----- | :--------------------------------------------------------------------------- |
+| `params[0]` | string | 必须包含值 `device`                                                               |
+| `params[1]` | object | 包含 `eventCode` 及相关的 `eventData`                                              |
+| `eventCode` | 整数     | The identifier for the specific event ([see Enums below](#event-code-enums)) |
+| `eventData` | object | 与事件相关的元数据，例如金额、卡号末位数字                                                        |
+
+#### 事件代码枚举
+
+| 价值 | 姓名                                                        |
+| :- | :-------------------------------------------------------- |
+| 0  | `GeneralEventCode_Event`                                  |
+| 1  | `GeneralEventCode_EventEstablishmentFinishedSuccessfully` |
+| 2  | `GeneralEventCode_EventPeriodicFinishedSuccessfully`      |
+| 3  | `GeneralEventCode_EventEstablishmentFailed`               |
+| 4  | `GeneralEventCode_EventPeriodicFailed`                    |
+| 5  | `GeneralEventCode_EventMiniSettlementFailed`              |
+| 6  | `GeneralEventCode_EventCardReadError`                     |
+| 7  | `GeneralEventCode_EventMustToGoOnlineError`               |
+| 8  | `GeneralEventCode_EventTransactionReport`                 |
+
+## 回复
+
+成功的请求将返回以下响应：
+
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "123",
+   "result": {
+       "statusCode": 0,
+       "statusMessage": "ok"
+   }
+}
+```
+
+### 响应参数
+
+下表说明了此方法的响应参数：
+
+| 姓名                     | 类型     | 描述                     |
+| :--------------------- | :----- | :--------------------- |
+| `statusCode`           | 整数     | 操作状态（0 = 正常，其他 = 待定错误） |
+| `statusMessage`        | string | 状态描述（例如 “ok”）          |
+
+<br />

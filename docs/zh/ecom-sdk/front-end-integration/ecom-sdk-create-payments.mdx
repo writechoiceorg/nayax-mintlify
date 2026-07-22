@@ -1,0 +1,158 @@
+---
+title: 发起支付
+metadata:
+  og:description: startPayment 方法是使用 Nayax eCom SDK 在您的应用程序中发起支付流程的主要入口点。该方法。
+---
+
+`startPayment` 方法是使用 Nayax eCom SDK 在您的应用程序中发起支付流程的主要入口点。该方法在内部处理对 `validateMerchant` 和 `initialize` 的调用（这里指的是 Nayax eCom API 调用，而非 SDK 初始化）。这意味着您无需在发起支付前显式地调用这些 API。SDK 将执行以下操作：
+
+- 执行必要的 `validateMerchant` 调用，以安全地验证交易身份。
+- 执行 `initialize` 调用，与 Nayax 服务器和账单提供商建立支付会话。
+- 触发 Drop-In 界面，供用户完成支付。
+
+这使您可以专注于提供 `PaymentData` 和处理支付结果，而通信和安全协议则由 SDK 负责处理。
+
+## 支付数据
+
+`startPayment` 方法需要一个 `PaymentData` 对象，该对象封装了交易所需的所有详细信息。
+
+<CodeGroup>
+  ```kotlin Kotlin
+  data class PaymentData(
+      val validationKey: String,
+      val merchantRequestId: String,
+      val actorId: String,
+      val amount: Double,
+      val currencyCode: String,
+      val countryCode: String,
+      val machineId: String,
+      val requestType: Int,
+      val sessionExpiration: String? = null,
+      val entryMode: Int? = null,
+      val tokenModel: Int? = null,
+      val showSaveCardConsent: Boolean? = null,
+      val cardHolderInfo: CardHolderInfo? = null,
+      val additionalData: String? = null
+  )
+  ```
+
+  ```swift Swift
+  public struct PaymentData {
+      public let validateMerchantTranId: String
+      public let merchantRequestId: String
+      public let actorId: String
+      public let machineId: String
+      public let amount: Double
+      public let currencyCode: String
+      public let countryCode: String
+      public let requestType: Int
+      public let sessionExpiration: String?
+      public let entryMode: Int?
+      public let tokenModel: Int?
+      public let showSaveCardConsent: Bool?
+      public let cardHolderInfo: CardHolderInfo?
+      public let additionalData: String?
+
+      public init(
+          validateMerchantTranId: String,
+          merchantRequestId: String,
+          actorId: String,
+          machineId: String,
+          amount: Double,
+          currencyCode: String,
+          countryCode: String,
+          requestType: Int,
+          sessionExpiration: String? = nil,
+          entryMode: Int? = nil,
+          tokenModel: Int? = nil,
+          showSaveCardConsent: Bool? = nil,
+          cardHolderInfo: CardHolderInfo? = nil,
+          additionalData: String? = nil
+      ) {
+          self.validateMerchantTranId = validateMerchantTranId
+          self.merchantRequestId = merchantRequestId
+          self.actorId = actorId
+          self.machineId = machineId
+          self.amount = amount
+          self.currencyCode = currencyCode
+          self.countryCode = countryCode
+          self.requestType = requestType
+          self.sessionExpiration = sessionExpiration
+          self.entryMode = entryMode
+          self.tokenModel = tokenModel
+          self.showSaveCardConsent = showSaveCardConsent
+          self.cardHolderInfo = cardHolderInfo
+          self.additionalData = additionalData
+      }
+  }
+
+  public struct CardHolderInfo {
+      public let cardHolderUniqId: String?
+      public let cardholderEmail: String?
+
+      public init(
+          cardHolderUniqId: String? = nil,
+          cardholderEmail: String? = nil
+      ) {
+          self.cardHolderUniqId = cardHolderUniqId
+          self.cardholderEmail = cardholderEmail
+      }
+  }
+  ```
+</CodeGroup>
+
+关键参数包括：
+
+| 范围                                                            | 类型                                                 | 描述                                                                                                                                                                                                                                                        |
+| :------------------------------------------------------------ | :------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `validateMerchantTranId`（iOS/Flutter）`validationKey`（Android） | String                                             | 由商户生成。必填。一个唯一的 36 字符 GUID（UUID v4 格式），您需要为每个支付会话生成该值。SDK 在内部使用此值进行 `/validate-merchant` 身份验证步骤。每次调用 `startPayment()` 时都应生成一个新的 UUID。示例：`"550e8400-e29b-41d4-a716-446655440000"`                                                                           |
+| `merchantRequestId`                                           | String                                             | 由商户生成。必填。您自己的唯一交易关联 ID。Nayax 会在 Webhook 通知中以 `MerchantRequestId` 的形式回传此值。请使用它将 Webhook 与您系统中的内部交易进行匹配。示例：`"req-2026-03-31-001"`                                                                                                                           |
+| `actorId`                                                     | String                                             | 发起交易的参与方/实体的唯一标识符。                                                                                                                                                                                                                                        |
+| `amount`                                                      | Double（Android/iOS）或等效的数值类型                        | 请求的交易金额（例如，`15.00` 表示 15.00 美元）。                                                                                                                                                                                                                          |
+| `currencyCode`                                                | String（字母-3 格式，例如 "USD"、"EUR"、"ILS"）               | 交易的货币，遵循 ISO 4217 标准。                                                                                                                                                                                                                                     |
+| `countryCode`                                                 | String（2 或 3 个字母，例如 "US"、"GB"、"IL"）                | 持卡人所在国家/地区的代码，通常遵循 ISO 3166 标准。                                                                                                                                                                                                                           |
+| `machineId`                                                   | String                                             | Nayax 后台系统中定义并保存的 Machine ID，在入驻过程中获取。                                                                                                                                                                                                                    |
+| `requestType`                                                 | 整数                                                 | 指定所需的交易类型。常见值包括：`0`：Sale（授权 + 自动扣款）、`1`：Auth（仅授权）、`2`：Capture（针对预授权交易）。（有关 `requestType` 值的完整列表，包括撤销、退款、增量授权等，请参阅完整的 API 文档。）                                                                                                                             |
+| `sessionExpiration`                                           | String（ISO8601 格式，例如 `"2023-11-23T12:25:28Z"`）（可选） | 会话到期日期。如果未提供，默认通常为 1 小时。                                                                                                                                                                                                                                  |
+| `entryMode`                                                   | Integer（可选）                                        | 指示持卡人的输入方式（例如，`COF` 表示 Card On File、`ECOM` 表示电子商务、`MIT` 表示商户发起交易、`CIT` 表示持卡人发起交易）。默认值为 `ECOM`。                                                                                                                                                            |
+| `tokenModel`                                                  | Integer（有条件）                                       | 如果 `entryMode` 为 `COF`，则指示令牌模型（例如 `subscription`、`top-up`、`Stored.card`）。令牌类型行为：令牌的类型（subscription/COF/top-up）在其首次创建时设定，并存储在我们的系统中。如果后续的 [Charge Token](/reference/ecom/payments/charge-token) 请求包含不同的令牌类型参数，该参数将被忽略。系统始终使用初始化请求中的原始令牌类型，无论后续扣款请求中提供了什么值。 |
+| `showSaveCardConsent`                                         | Boolean（有条件）                                       | 如果 `entryMode` 为 `COF`，则决定支付页面上是否显示“请求同意”的问题，用于保存卡片信息。重要提示：对于有效的 Nayax 令牌，持卡人的同意是强制性的。此参数仅适用于纯信用卡流程；如果存在其他支付方式，交易将被自动拒绝。                                                                                                                                  |
+| `cardHolderInfo`                                              | 包含 `cardHolderUniqId` 和 `cardholderEmail` 的对象（可选）  | 提供持卡人详细信息，对于代币化交易尤为重要。                                                                                                                                                                                                                                    |
+
+<Warning>
+  这两个值均由您自行生成：
+
+  - `validationKey`（Android）/ `validateMerchantTranId`（iOS/Flutter）是同一个字段，只是在不同平台上命名不同。每次调用 `startPayment()` 时都应传入一个新生成的 UUID。SDK 使用它来向 Nayax 验证会话身份。
+  - `merchantRequestId` 是您自己用于标识该交易的参考 ID。Nayax 会在 Webhook 通知中返回该值，因此请使用一个能让您将 Webhook 与系统中相应订单或记录匹配起来的值。
+</Warning>
+
+## 发起一笔销售支付（Android）
+
+以下示例展示了如何为标准销售交易构建 `PaymentData` 对象，并将其传递给 `startPayment()`：
+
+```kotlin Kotlin
+val paymentData = PaymentData(
+    validationKey = UUID.randomUUID().toString(),       // 36-char GUID (Android)
+    merchantRequestId = UUID.randomUUID().toString(),   // Your correlation ID
+    actorId = "2007905102",
+    machineId = "1001621751",
+    amount = 25.00,
+    currencyCode = "USD",
+    countryCode = "US",
+    requestType = 0  // 0 = Sale, 1 = Auth
+)
+
+NayaxEcomSDK.startPayment(
+    context = context,
+    paymentData = paymentData,
+    callback = object : PaymentResultCallback { ... }
+)
+```
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="处理支付结果" href="/docs/ecom-sdk/front-end-integration/handling-payment-results" />
+
+  <Card icon="link" title="Drop-In UI" href="/docs/ecom-sdk/front-end-integration/drop-in-ui/index" />
+</Columns>

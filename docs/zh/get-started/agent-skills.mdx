@@ -1,0 +1,103 @@
+---
+title: 使用 Nayax 代理技能
+description: 安装 Nayax agent skills,让您的 AI 编程代理获得经过验证的 Lynx API 端点、工作流程及已知问题的相关知识。
+---
+
+Agent skills 是 AI 编程代理按需加载的指令包。
+每个 Nayax skill 涵盖一个 API 领域,引导您的代理找到该领域正确的
+端点、请求格式和已知问题,从而为您提供准确的
+集成指导,而不是靠猜测。
+
+## 可用的 Skills
+
+Nayax skills are published in the [nayax-ai GitHub repository](https://github.com/writechoiceorg/nayax-ai).
+The following skills are available today:
+
+| Skill                      | 涵盖内容                            |
+| -------------------------- | ------------------------------- |
+| `nayax-lynx-inventory`     | Lynx 产品库存:产品组、产品、机器映射以及补货拣货清单。  |
+| `nayax-lynx-prepaid-cards` | 预付卡与虚拟卡:创建、充值与调整余额、余额查询、转账及查询。  |
+| `nayax-lynx-refunds`       | 退款流程:发起退款申请、上传文档,以及批准或拒绝。       |
+| `nayax-lynx-reports`       | 仪表盘组件与逐机报告:状态、统计数据、最近销售记录及变更日志。 |
+
+以上涵盖了 Lynx API 的主要领域。您可按照以下步骤安装其中任意一项。
+
+## 先决条件
+
+在安装 skill 之前,您需要准备:
+
+- 支持 agent skills 的 AI 编程代理,例如 Claude Code、Cursor,
+  或其他兼容 `SKILL.md` 格式的工具。
+- 如果您希望代理运行真实的 API 调用,则需要 Lynx 用户令牌。请参阅
+  [Security & Token](/docs/manage-data-operations/lynx-api/security) 了解
+  获取方法。
+
+## 安装 Skills
+
+`skills` CLI 可与任何兼容的代理配合使用,是最简单的入门方式。如果您使用 Claude Code,也可以将 skills 作为插件安装,这样可自动保持更新。
+
+<Note>
+  Skills 可独立运作,不需要连接
+  Nayax MCP server,MCP server 也不需要安装任何 skills。
+</Note>
+
+<Tabs>
+  <Tab title="skills CLI(推荐)">
+    `skills` CLI 可为 Claude Code、Cursor 及其他
+    兼容代理安装 skills。请在您的项目文件夹中运行它。
+
+    从交互式列表中选择要安装的内容:
+
+    ```bash
+    npx skills add writechoiceorg/nayax-ai
+    ```
+
+    一次性安装所有 Nayax skills,无需任何提示:
+
+    ```bash
+    npx skills add writechoiceorg/nayax-ai --all
+    ```
+
+    通过重复使用 `--skill` 标志来安装指定的 skills:
+
+    ```bash
+    npx skills add writechoiceorg/nayax-ai --skill nayax-lynx-inventory --skill nayax-lynx-refunds
+    ```
+  </Tab>
+
+  <Tab title="Claude Code">
+    添加 Nayax 插件市场,然后将所需的 skills 作为插件安装:
+
+    ```bash
+    claude plugin marketplace add writechoiceorg/nayax-ai
+    claude plugin install nayax-lynx-inventory@nayax
+    ```
+
+    通过重复上一条命令并附加相应名称(例如 `nayax-lynx-refunds@nayax`)来安装其他 skills。已安装的 skills 可在每个 Claude Code 会话中使用。
+  </Tab>
+</Tabs>
+
+## 使用 skill 可以做什么
+
+安装完成后,当您的提示涉及相应领域时,代理会自动加载该 skill。
+例如,使用 `nayax-lynx-inventory` 时,您可以这样提问:
+
+```text
+Create a product group called Beverages and add three products to it in the Lynx sandbox.
+```
+
+```text
+Map my products to machine 12345 and generate a pick list.
+```
+
+代理会遵循正确的工作流程顺序,例如先创建产品组
+再创建产品,并了解那些容易导致集成出错的行为,
+例如某些端点在成功时会返回空响应体。
+
+## 将 skills 与 MCP server 搭配使用
+
+Skills and the Nayax MCP server complement each other. A skill carries
+curated workflow knowledge for one API area, while the MCP server gives your
+agent live search access to the full developer portal. For the best results,
+[connect your agent to the Nayax MCP server](/docs/get-started/mcp-setup) as
+well.

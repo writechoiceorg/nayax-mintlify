@@ -1,0 +1,62 @@
+---
+title: 身份验证流程
+metadata:
+  og:description: Cortina API 中的身份验证流程涉及使用 Start Session 端点将预共享令牌发送给集成方,集成方随后将执行额外的加密步骤。
+---
+
+Cortina API 中的身份验证流程涉及使用 Start Session 端点将预共享令牌发送给集成方,集成方随后将执行额外的加密步骤,以确保 Nayax 与集成方之间的通信安全。
+
+## 身份验证流程
+
+以下是身份验证流程的分步说明,并附有示例以帮助您理解每个部分。
+
+1. 在开始之前,Nayax 与集成方需约定一个共享的 Secret Token。该令牌用于加密和解密。请参见下方的示例令牌:
+   ```
+   mrV3U3nsgGFrE3w5-wnBo_WCLPce-pZ1awRvTVTkungMIKThTVbj_fiXdfoGclhn0
+   ```
+2. Nayax 发送带有 Token ID 和 27 个字符的随机字符串的 Start Session 请求。例如:
+   ```
+   123456789qwertyuioasdfghjkl
+   ```
+3. 集成方生成一个 36 位数字字符的 Transaction ID。例如:
+   ```
+   123456789012345678901234567890123456
+   ```
+4. 集成方通过将 Transaction ID 与收到的 Random 字符串以 “=” 字符分隔并附加,来准备一个 64 字符长的密文。以本示例而言,结果如下:
+   ```
+   123456789012345678901234567890123456=123456789qwertyuioasdfghjkl
+   ```
+5. 集成方从 Secret Token 的最后 32 个字符生成加密密钥(这是一个 256 位密钥)。
+   ```
+   wRvTVTkungMIKThTVbj_fiXdfoGclhn0
+   ```
+6. 使用 ECB 模式的 AES 加密(采用 `PKCS5` 填充),集成方对密文进行加密。加密后的结果随后在 Start Session 响应中返回给 Nayax。在本示例中,将生成以下密文:
+   ```
+   a0Qnxm4fWMskzFXiMivn8BDiQVSL6be/NXIICC9HBoAiry6DUdKYPQh/YS1G8nObE6/0o9N4MFuYA7CTAxAnphuNJwBEjgBzKhhgpJ5ggnw=
+   ```
+7. Nayax 使用相同的加密密钥解密该密文,并验证 Random 字符串是否与请求中发送的一致,以及格式是否正确。
+8. 一旦 Transaction ID 被解密,Nayax 会将其用于后续请求,例如 GenerateQR、Inquiry、Sale 和 Authorization。
+
+您可以使用以下网站来确认您是否正确加密了 TranIDCipher:
+
+[https://www.devglan.com/online-tools/aes-encryption-decryption](https://www.devglan.com/online-tools/aes-encryption-decryption)
+
+对于上述示例:
+
+<Frame>
+  <img src="/images/docs/cortina-auth/image1.png" />
+</Frame>
+
+您也可以使用此网站解密您的加密结果,以确保加密有效——从而确保 Nayax 服务器能够对其进行解密。对于上述示例:
+
+<Frame>
+  <img src="/images/docs/cortina-auth/image2.png" />
+</Frame>
+
+集成方必须验证 `GenerateQR`、`Sale`、`Authorization` 和 `Inquiry` 等请求中的 Transaction ID 是否是在先前的 `Start Session` 请求中创建的,并且仍然有效。建议这些请求中的 Transaction ID 有效期不超过 10 分钟。
+
+<Warning>
+  已过期的请求
+
+  即使 Transaction ID 已过期,`Settlement`、`Void`、`Cancel` 和 `Refund` 等请求仍可以处理,因为这些请求可能是在原始的 `Authorization`、`Sale` 或 `Inquiry` 请求之后所需要的。
+</Warning>

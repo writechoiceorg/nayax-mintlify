@@ -1,0 +1,87 @@
+---
+title: 概述
+keywords:
+  - marshall
+  - marshal
+  - vending protocol
+  - RS232
+  - vending machine controller
+  - VMC integration
+  - VPOST
+  - ONYX
+  - VPOSM
+  - pre-authorization
+  - multi-vend
+  - multi-session
+metadata:
+  og:description: Marshall 是 Nayax 面向自动售货机控制器(VMC)集成的 RS232 协议——用于连接 VPOST、ONYX 和 VPOSM 设备,并支持预授权和多次出货会话。需要加油机/加油站集成方案?请参阅 Marshall Pro。
+---
+
+import McpNote from '/snippets/zh/mcp-server-note.mdx';
+
+Marshall 协议是 Nayax 公司开发的专有通信协议，基于 RS232 接口运行。该协议设计稳健可靠，支持机器控制器与 VPOST、ONYX 和 VPOSM 产品线之间进行可靠的交易交换。它提供功能丰富的支付 API，支持多种支付流程，例如：
+
+- 预选
+- 预授权
+- 多会话
+- 多机售卖
+
+Marshall SDK 提供了一种简单而全面的方式来利用这些流程，无需管理 Marshall 协议的细节。
+
+<McpNote />
+
+<Note>
+  需要加油机或加油站集成方案?
+
+  本页介绍 Marshall，即 Nayax 用于自动售货机控制器 (VMC) 集成的 RS232 协议。有关加油机和油站控制器 (FCC) 集成，请参阅 [Marshall Pro](/docs/integrate-pos-device/marshall-pro/getting-started)。
+</Note>
+
+<Note>
+  可用语言
+
+  为了您的方便，SDK 以 C、C# 和 JAVA 提供。
+</Note>
+
+<br />
+
+<Warning>
+  价格字段/小数位数
+
+  Marshall 中的价格字段是一个 2 字节的整数，这意味着可以发送到设备的最高值为 65535 (0xFFFF)。设备实际向消费者收取的费用是外围设备发送的价格乘以 10 的负小数位数：也就是说，设备在进行授权和结算的价格计算时，会参考其在 Nayax Core 中设置的自身小数位数配置（该值取决于设备安装所在的国家/地区）。
+
+  这意味着，如果小数位数为 2，则该设备能够授权或向消费者收取的最高价格为 655.35。
+</Warning>
+
+## 系统概述
+
+下图展示了 Nayax 系统的事务处理和通信流程。
+
+<Frame>
+  <img src="/images/docs/marshall-sdk/image1.png" />
+</Frame>
+
+以下是该图的细分：
+
+- 其核心是管理交易的 Nayax 设备。该设备与 Nayax 支付和监控服务器通信，以处理交易，进而与银行或支付网关交互，最终完成支付。
+- 蓝色箭头表示 Nayax 设备服务器和银行之间的主要交易流。
+- 主机通过 Marshall 协议与 VPOS 通信。
+
+## 指南
+
+<Note>
+  服务条款
+
+  在使用 Marshall SDK 之前，请先阅读我们开发者专区的[服务条款](/docs/get-started/terms-of-service)。
+</Note>
+
+要开始 Marshall SDK 集成，我们建议您查看以下文档页面：
+
+<Columns cols={3}>
+  <Card icon="link" title="开始" href="/docs/integrate-pos-device/marshall/get-started/marshall-get-started" />
+
+  <Card icon="link" title="付款流程" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-payment-flows" />
+
+  <Card icon="link" title="创建付款" href="/docs/integrate-pos-device/marshall/marshall-create-payments" />
+</Columns>
+
+<br />

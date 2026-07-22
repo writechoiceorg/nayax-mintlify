@@ -1,0 +1,138 @@
+---
+title: 链接和事件配置
+keywords:
+  - vmc_link
+  - vmc_link_events_t
+  - link events
+  - VMC link
+  - vpos_config_t
+  - onReady
+  - onCommError
+  - VPOS configuration
+  - communication error
+  - acquirer terminal id
+metadata:
+  og:description: 本页面将探讨建立和管理您的应用程序与 Nayax 之间连接所需的基本组件和配置。
+---
+
+本页面将探讨使用 Marshall SDK 建立和管理您的应用程序与 Nayax 支付设备之间连接所需的基本组件和配置。这包括：
+
+- 通过 `vmc_link_events_t` 接口处理事件。
+- 了解 `vpos_config_t` 类的结构。
+
+请参阅以下部分以了解更多信息。
+
+## 链接事件接口
+
+`vmc_link_events_t` 接口定义了与自动售货机控制器 (VMC) 和 Nayax 设备之间通信链路相关的事件。实现此接口可使您的应用程序响应设备运行期间发生的关键事件。
+
+以下代码块展示了如何添加接口：
+
+<CodeGroup>
+  ```java Java
+  public interface vmc_link_events_t
+  void onReady(vmc_link.vpos_config_t config);
+  void onCommError();
+  ```
+
+  ```csharp C#
+  public interface vmc_link_events_t
+  void onReady(vpos_config_t config);
+  void onCommError();
+  ```
+</CodeGroup>
+
+### 接口方法
+
+下表描述了该接口的可用方法。
+
+| 方法              | 描述                                                                         |
+| :-------------- | :------------------------------------------------------------------------- |
+| `onReady()`     | 当与 VPOS（Vend Point of Sale）的链路成功建立且设备已准备好进行贩售操作时，会调用此方法。它提供了 VPOS 的配置详细信息。 |
+| `onCommError()` | 当 VMC 和 VPOS 之间发生通信错误时，将调用此方法，以允许您的应用程序适当地处理此类错误。                          |
+
+## VPOS 配置类
+
+`vpos_config_t` 类封装了 VPOS 的配置设置，这些设置在 VMC 和设备之间进行通信。以下代码块列出了所有可用的配置：
+
+<CodeGroup>
+  ```java Java
+  public static class vpos_config_t 
+        public byte   prot_ver_major;
+        public byte   prot_ver_minor;
+        public byte   language;
+        public byte[] country_code;
+        public byte[] currency_code;
+        public byte   decimal_place;
+        public byte[] vpos_serial;
+        public int    machine_type;
+        public byte[] merchant_id;
+        public byte[] acquirer_terminal_id;
+        public byte[] machine_location;
+  ```
+
+  ```csharp C#
+  public static class vpos_config_t 
+        public byte   prot_ver_major;
+        public byte   prot_ver_minor;
+        public byte   language;
+        public byte[] country_code;
+        public byte[] currency_code;
+        public byte   decimal_place;
+        public byte[] vpos_serial;
+        public int    machine_type;
+        public byte[] merchant_id;
+        public byte[] acquirer_terminal_id;
+        public byte[] machine_location;
+  ```
+
+  ```c C
+  vpos_config_t
+  	uint8_t 	 language;
+  	uint8_t[] country_code;
+  	uint8_t[] currency_code;
+  	uint8_t   decimal_place;
+  	uint8_t[] vpos_serial;
+  	uint8_t[] merchant_id;
+  	uint8_t[] acquirer_terminal_id;
+  	uint8_t[] machine_location;
+  ```
+</CodeGroup>
+
+### 类参数
+
+下表提供了参数的详细描述。
+
+| 范围                     | 类型（推断） | 描述                                                         |
+| :--------------------- | :----- | :--------------------------------------------------------- |
+| `prot_ver_major`       | 整数     | Marshall 协议的主要版本。                                          |
+| `prot_ver_minor`       | 整数     | Marshall 协议的次要版本。                                          |
+| `language`             | String | VPOS 的语言设置。                                                |
+| `country_code`         | String | ISO 格式的国家代码。                                               |
+| `currency_code`        | String | ISO 格式的货币代码。                                               |
+| `decimal_place`        | 整数     | 价格以 10 位指数表示。例如，如果小数点后两位为 2，请求价格为 100，则实际费用为 1.00（小数点后两位）。 |
+| `vpos_serial`          | String | VPOS 的序列号。                                                 |
+| `machine_type`         | String | 连接到 VPOS 的机器类型。                                            |
+| `merchant_id`          | String | 商户ID。                                                      |
+| `acquirer_terminal_id` | String | 收单行终端ID。                                                   |
+| `machine_location`     | String | 机器的位置。                                                     |
+
+## 回调函数
+
+要注册链接操作的回调事件，请使用以下方法：
+
+<CodeGroup>
+  ```java Java
+  public vmc_link set_events(vmc_link_events_t events);
+  ```
+
+  ```csharp C#
+  public vmc_link set_events(vmc_link_events_t events);
+  ```
+
+  ```c C
+  void vmc_link_register_callback(vmc_vend_event_handler_cb_t cb)
+  ```
+</CodeGroup>
+
+通过了解和实施这些配置和方法，您可以有效地管理 Nayax 支付设备的通信链路和事件处理，确保可靠、高效的自动售货操作。

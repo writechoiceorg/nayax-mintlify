@@ -1,0 +1,110 @@
+---
+title: 支付回调
+metadata:
+  og:description: 该 SDK 提供了一个回调接口，用于传递交易的最终状态。Android 使用 PaymentResultCallback。iOS 使用 PaymentResult。
+---
+
+该 SDK 提供了一个回调接口，用于传递交易的最终状态。
+
+- Android 使用 `PaymentResultCallback`。
+- iOS 使用 `PaymentResult`。
+
+本页将更详细地介绍这些回调，说明它们的结果方法和数据结构。
+
+## 支付回调
+
+请参见下方代码块，了解回调接口的示例。
+
+<CodeGroup>
+  ```kotlin Kotlin
+  NayaxEcomSDK.startPayment(
+    context = context,
+    paymentData = paymentData,
+    callback = object : PaymentResultCallback {
+      override fun onPaymentComplete(data: PaymentCompleteData) {
+        // Handle successful payment
+        // Access: data.merchantTranId, data.sessionId, data.tokenId, data.resultCode
+        }
+      override fun onPaymentFail(data: PaymentFailData) {
+        // Handle payment failure
+        // Access: data.merchantTranId, data.sessionId, data.reason
+        }
+      override fun onError(error: EcomError) {
+        // Handle general error
+        // Access: error.code, error.key, error.message
+        }
+    })
+  ```
+
+  ```swift Swift
+  public enum PaymentResult {
+    case complete(PaymentCompleteData) 
+    case fail(PaymentFailData) 
+    case error(EcomError) 
+      }
+      
+  public struct PaymentCompleteData {
+    public let merchantTranId: String?
+    public let sessionId: String?
+    public let tokenId: String?
+    public let resultCode: String
+    }
+
+  public struct PaymentFailData {
+    public let merchantTranId: String?
+    public let sessionId: String?
+    public let reason: DropInFailureReason
+    }
+  ```
+</CodeGroup>
+
+它包含三个用于处理支付结果的回调方法：
+
+- 交易成功（`onPaymentComplete` / `.complete`）：表示支付流程已完成，且账单提供商已批准该交易。
+- 交易失败（`onPaymentFail` / `.fail`）：表示交易因源自 Drop-In 界面或账单提供商一方的问题而失败，但并非一般性的 SDK 错误。
+- 一般错误（`onError` / `.error`）：表示在交易过程中发生了更一般性的错误，可能与 SDK 的内部状态、网络问题或身份验证问题有关。
+
+通过实现这些回调机制，您的应用程序可以针对所有可能的交易结果动态响应，从而提供稳健且用户友好的支付体验。
+
+## 结果数据结构
+
+回调将返回一个包含与支付相关信息的数据结构，具体取决于其结果。请参见以下各节。
+
+### `PaymentCompleteData`
+
+当支付成功时会收到 `PaymentCompleteData` 数据结构，其中包含以下信息：
+
+| 范围               | 描述            |
+| ---------------- | ------------- |
+| `merchantTranId` | 唯一的商户交易标识符。   |
+| `sessionId`      | 与该支付关联的会话 ID。 |
+| `tokenId`        | 令牌 ID。        |
+| `resultCode`     | 来自支付处理方的结果代码。 |
+
+### `PaymentFailData`
+
+当支付失败时会收到 `PaymentFailData` 数据结构，其中包含以下信息：
+
+| 范围               | 描述              |
+| ---------------- | --------------- |
+| `merchantTranId` | 唯一的商户交易标识符。     |
+| `sessionId`      | 该支付的会话 ID。      |
+| `reason`         | 失败原因（用户取消、拒绝等）。 |
+
+### 错误类型
+
+该 SDK 提供了多种错误类型，以帮助诊断交易过程中出现的问题。您可以在下表中找到这些错误类型：
+
+| 错误类型                  | 描述               | 示例                                                      |
+| --------------------- | ---------------- | ------------------------------------------------------- |
+| `EcomSdkError`        | 与 SDK 生命周期相关的错误。 | `not initialized`                                       |
+| `PaymentError`        | 支付过程中发生的错误。      | `AuthFailed`, `Timeout`, `NetworkError`, `GeneralError` |
+| `DropInFailureReason` | 与支付结账相关的特定错误。    | `CanceledByUser`, `Refused`                             |
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="创建付款" href="/docs/ecom-sdk/front-end-integration/ecom-sdk-create-payments" />
+
+  <Card icon="link" title="Drop-In UI" href="/docs/ecom-sdk/front-end-integration/drop-in-ui/index" />
+</Columns>

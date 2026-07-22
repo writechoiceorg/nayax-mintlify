@@ -1,0 +1,123 @@
+---
+title: 马歇尔将军活动
+metadata:
+  og:description: 本页面概述了 Marshall SDK 提供的通用功能。它包括通过 GeneralEvents 接口进行的事件处理，以及用于。
+---
+
+本页概述了 Marshall SDK 提供的通用功能。其中包括通过 `GeneralEvents` 接口进行事件处理，以及用于注册回调、发送警报和请求时间更新的 API。
+
+## 事件接口
+
+`GeneralEvents` 接口定义了与 Marshall SDK 一般操作相关的各种事件。实现此接口可使您的应用程序响应 SDK 运行期间触发的特定事件。以下代码块展示了所有可用的事件方法：
+
+<CodeGroup>
+  ```java Java
+  public interface GeneralEvents
+      void onDCSParamChange(int dcs_param, byte[] data);
+      void onDisplayEventButtonPressed(byte button_id);
+      void onDisplayEventTextInput(string input);
+      void onTransferData(byte[] data);
+      void onTimeUpdate(
+              byte year,
+              byte month,
+              byte day,
+              byte hours,
+              byte minutes,
+              byte seconds);
+  ```
+
+  ```csharp C#
+  public interface GeneralEvents
+      void onDCSParamChange(int dcs_param, byte[] data);
+      void onTransferData(byte[] data);
+      void onTimeUpdate(
+              byte year,
+              byte month,
+              byte day,
+              byte hours,
+              byte minutes,
+              byte seconds);
+  ```
+</CodeGroup>
+
+### 事件方法
+
+下表概述了可通过界面使用的所有方法。
+
+<table align={["left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        范围
+      </th>
+
+      <th>
+        描述
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `onDCSParamChange(int dcs_param, byte[] data)`
+      </td>
+
+      <td>
+        当 Nayax Core 参数发生变化时，会提供参数标识符和新数据。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `onDisplayEventButtonPressed(byte button_id)`
+      </td>
+
+      <td>
+        当按下显示屏上的按钮时触发，提供按钮标识符。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `onDisplayEventTextInput(string input)`
+      </td>
+
+      <td>
+        当从显示器接收到文本输入时调用，提供输入文本。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `onTransferData(byte[] data)`
+      </td>
+
+      <td>
+        当数据在 Device 与 Peripheral 之间传输时，将调用此函数。传输的数据以字节数组的形式提供：`(byte[] data)`，其中包含以 TLV（Tag-Length-Value，标签-长度-值）格式构建的信息。
+
+        请参阅[onTransferData](/docs/integrate-pos-device/marshall/additional-resources/marshall-ontransferdata)了解更多详细信息。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `onTimeUpdate(byte year, byte month, byte day, byte hours, byte minutes, byte seconds)`
+      </td>
+
+      <td>
+        当时间更新发生时调用它，提供更新的时间值。
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## 一般方法
+
+以下方法可用于与 Marshall SDK 的常规功能进行交互：
+
+| 范围                                         | 类型   | 描述                                                  |
+| :----------------------------------------- | :--- | :-------------------------------------------------- |
+| `register_callbacks(GeneralEvents events)` | void | 为外设通用模块注册回调事件。此方法允许您的应用程序处理 GeneralEvents 接口中定义的事件。 |
+| `alert(short id, String msg)`              | void | 向 Nayax Core 发送警报，显示在**“最新警报”**下。     |
+| `requestTime()`                            | void | 向 VPOS 发起时间请求。响应将以事件形式（`onTimeUpdate`）到达。           |

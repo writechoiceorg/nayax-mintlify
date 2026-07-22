@@ -1,0 +1,25 @@
+---
+title: 密码键盘模式
+metadata:
+  og:description: TweezerComm 协议允许您以 pin-pad 模式使用设备。在此模式下，您可以读取卡片详细信息并使用 EMV 标签和数据。
+---
+
+TweezerComm协议允许您以密码键盘模式使用设备。在此模式下，您可以读取卡片详细信息，并使用EMV标签和数据创建您自己的交易对象。
+
+## 密码键盘模式流程
+
+下图说明了使用 TweezerComm 方法在 Nayax 设备上处理卡片展示和 PIN 输入的步骤，重点是非接触式和刷卡交易。
+
+<Frame>
+  <img src="/images/docs/pinpad-mode/image1.png" />
+</Frame>
+
+以下是流程各步骤的详细说明：
+
+1. 客户端应用程序向 Nayax 设备发送 `startPinpadTransaction()` 请求，为基于卡片的交易做准备。
+2. Nayax 设备返回 `startPinpadTransaction()` 响应，然后开始显示提示，要求持卡人插入、出示或刷卡。
+3. 持卡人通过插入、刷卡或轻触 Nayax 设备来实际出示卡片。
+4. 如果持卡人插入卡片（从而触发需要输入 PIN），流程将继续，客户端发送 `doPinpadTransaction()` 请求以提示输入 PIN。
+5. 持卡人直接在 Nayax 设备上输入其 PIN。捕获 PIN 后，设备会向客户端返回 `doPinpadTransaction()` 响应。
+6. 在安全捕获所需的卡片和 PIN 数据后，客户端会向 Nayax 设备发送 `endPinpadTransaction()` 请求。
+7. Nayax 设备通过 `endPinpadTransaction()` 响应确认 PinPad 流程已完成，并使设备恢复到空闲状态。

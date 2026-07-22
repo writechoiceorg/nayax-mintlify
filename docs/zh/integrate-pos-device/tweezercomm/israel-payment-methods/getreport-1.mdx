@@ -1,0 +1,83 @@
+---
+title: getReport
+metadata:
+  og:description: 使用 getReport 方法可获取各类报告，例如 Z 报告或 X 报告，以及特定交易类型的列表。## 请求 JSON-RPC 2.0。
+---
+
+`getReport` 方法用于获取各类报告，例如 Z 报告或 X 报告，以及特定交易类型的列表。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+请在请求中确保配置以下内容：
+
+- `method` 字段必须设置为 `getReport`。
+- `params` 数组必须包含服务名称（`ashrait`），其后跟所需的操作名称。
+
+```json
+{
+    "jsonrpc":"2.0",
+    "method":"getReport",
+    "params":[
+        "ashrait",
+        "queryPreAuthTransactions"
+    ],
+    "id":"123454352"
+}
+```
+
+### 请求参数
+
+下表描述了此方法的请求参数。
+
+| 姓名           | 类型     | 描述                   |
+| :----------- | :----- | :------------------- |
+| `actionName` | string | 要执行的具体操作或报告。取值请参见下表。 |
+
+#### 操作名称取值
+
+| 价值                              | 描述                 |
+| :------------------------------ | :----------------- |
+| `x`                             | 获取 X 报告。           |
+| `z`                             | 获取 Z 报告。           |
+| `accm`                          | 获取 ACCM 报告。        |
+| `queryTransactions`             | 列出设备上所有待处理的延迟交易。   |
+| `queryReports`                  | 列出设备上所有报告的确认编号。    |
+| `queryPreAuthTransactions`      | 列出设备上所有未完成的 J5 交易。 |
+| `queryDeferredAuthTransactions` | 列出设备上所有待处理的延迟交易。   |
+
+## 回复
+
+响应内容因所请求的操作而异。查询类操作返回交易列表，而报告类操作返回可打印的小票。
+
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "ok",
+        "queriedTransactions": [
+            "24120312004508832326548"
+        ]
+    },
+    "id": "123454352"
+}
+```
+
+### 响应参数
+
+下表描述了该方法的响应参数。
+
+| 姓名                     | 类型     | 描述                                    |
+| :--------------------- | :----- | :------------------------------------ |
+| `statusCode`           | 整数     | 操作状态。值为 `0` 表示成功。所有其他值均表示错误。          |
+| `statusMessage`        | string | 操作消息（例如 `ok`）。                        |
+| `slip`                 | string | 针对报告类操作（`x`、`z`、`accm`）返回。包含要打印的报告数据。 |
+| `queriedTransactions`  | 字符串数组  | 针对查询类操作返回。包含所请求的交易或报告标识符列表。           |
+
+<br />

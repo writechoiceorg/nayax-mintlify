@@ -1,0 +1,128 @@
+---
+title: getConfig
+metadata:
+  og:description: 使用 getConfig 方法获取当前终端配置。它会返回一个包含各种系统设置的完整配置对象。
+---
+
+`getConfig` 方法用于获取当前终端配置。它会返回一个包含各种系统设置的完整配置对象，例如打印机使用情况、支持的交易类型和 UI 行为。
+
+此方法通常与 `setConfig` 一起使用，以读取和更新终端配置。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+在请求中，`method` 字段需要设置为 `getConfig`，且 params 必须包含固定值 device，如下方示例请求所示：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getConfig",
+    "id": "123454352",
+    "params": [
+        "device"
+    ]
+}
+```
+
+### 请求参数
+
+下表描述了此方法的请求参数：
+
+| 姓名       | 类型    | 描述             |
+| -------- | ----- | -------------- |
+| `params` | array | 必须包含值 `device` |
+
+## 回复
+
+成功的请求将返回类似于以下代码块中的响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "configApplied": true,
+        "autoPeriodic": true,
+        "usePrinter": true,
+        "wakeOnTransaction": false,
+        "amountDialog": false,
+        "ashraitServer": "SHVA",
+        "posType": "TC_HTTP",
+        "ecr": "1",
+        "allowCreditCardTrack2": false,
+        "ackTransaction": false,
+        "balanceAtLoyalty": false,
+        "tmsRetailer": "0883012",
+        "manualInterface": true,
+        "fullPANonReceipt": true,
+        "code3": "HANDLE_ON_PINPAD",
+        "slaveMode": false,
+        "startOnBoot": true,
+        "customDataScreen": false,
+        "keypadAlwaysOn": false,
+        "transactionTypesAllowed": [1, 8, 6, 4, 5, 7, 3, 2],
+        "creditTermsAllowed": [1, 8, 3, 6, 2],
+        "limitedAccessReports": false,
+        "limitedAccessSpecialTransactions": false,
+        "moduSMS": false,
+        "ravMutav": false,
+        "ravMutavMain": "",
+        "ravMutavAmex": "",
+        "ravMutavDiners": "",
+        "paymentAggregator": "NONE",
+        "paUser": "",
+        "configVersion": "manual",
+        "remoteAppPackageName": "",
+        "remoteAppActivityName": "",
+        "bonjourReusableSocket": false,
+        "protectInfoPopup": false,
+        "fastCredit": false,
+        "visaSensoryBranding": false,
+        "tcSecondaryPort": false,
+        "processorIP": "",
+        "autoRebootTime": "",
+        "agamentoModel": "EMV",
+        "enforceCardEjection": false,
+        "printTransactionMode": "DEFAULT",
+        "printPreAuthTransactionMode": "DEFAULT",
+        "connectionEnhancement": false,
+        "forcePeriodicBatch": false,
+        "receiptHeaderTitle": "",
+        "receiptHeaderSubtitle1": "",
+        "receiptHeaderSubtitle2": ""
+    }
+}
+```
+
+### 响应参数
+
+下面是一个包含所有可能的响应参数及其描述的表格：
+
+| 姓名                        | 类型     | 描述                       |
+| ------------------------- | ------ | ------------------------ |
+| `configApplied`           | bool   | 表示配置是否已应用                |
+| `autoPeriodic`            | bool   | 启用自动日终批处理                |
+| `usePrinter`              | bool   | 启用内置打印机使用                |
+| `wakeOnTransaction`       | bool   | 从屏保状态唤醒终端                |
+| `amountDialog`            | bool   | 在交易前显示金额对话框              |
+| `ashraitServer`           | string | 存款网关提供商（例如 SHVA）         |
+| `posType`                 | string | 集成方式（例如 TC\_HTTP）        |
+| `ecr`                     | string | POS 标识符                  |
+| `allowCreditCardTrack2`   | bool   | 在刷卡时启用 Track2 数据采集       |
+| `ackTransaction`          | bool   | 启用交易确认机制                 |
+| `balanceAtLoyalty`        | bool   | 使用商户 ID 进行忠诚度（loyalty）查询 |
+| `tmsRetailer`             | string | TMS 零售商 ID               |
+| `manualInterface`         | bool   | 启用手动输入界面                 |
+| `fullPANonReceipt`        | bool   | 在商户收据上打印完整 PAN           |
+| `code3`                   | string | Code 3 处理方式              |
+| `slaveMode`               | bool   | 将终端设置为从属模式（slave mode）   |
+| `startOnBoot`             | bool   | 设备启动时启动 Agamento         |
+| `customDataScreen`        | bool   | 在交易前显示自定义数据屏幕            |
+| `keypadAlwaysOn`          | bool   | 使小键盘始终保持在屏幕上激活           |
+| `transactionTypesAllowed` | array  | 允许的交易类型列表                |
+| `creditTermsAllowed`      | array  | 允许的信用条款列表                |

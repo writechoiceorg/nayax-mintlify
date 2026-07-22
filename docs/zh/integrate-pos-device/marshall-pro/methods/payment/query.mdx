@@ -1,0 +1,78 @@
+---
+title: query
+description: 检索未结算的交易。
+metadata:
+  og:description: query 方法允许客户端应用程序使用 requestId 轮询终端以获取特定交易的当前状态。
+---
+
+`query` 方法允许客户端应用程序使用 `requestId` 或 `transactionId` 轮询终端以获取特定交易的当前状态。这是处理网络超时或应用程序崩溃的关键安全机制，可确保 POS 和终端在支付结果方面保持同步。
+
+使用此方法可以：
+
+- 如果由于连接中断导致原始响应丢失，则通过检查最终结果来恢复事务状态。
+- 验证交易的当前状态（例如待处理、已授权或已拒绝），而无需重新触发支付逻辑。
+- 检索交易元数据，以支持本地日志记录、审计和对账。
+
+## 请求
+
+要查询交易，必须提供与原始请求关联的标识符。
+
+以下示例展示了一个典型的请求：
+
+```json
+{
+"command": "query",
+"requestId": "req-006",
+"data": {
+"filter": "AUTHORIZED"
+}
+}
+```
+
+### 参数定义
+
+下表描述了此请求可用的参数：
+
+| 场地    | 类型       | 必需的 | 描述                                                       |
+| :---- | :------- | :-: | :------------------------------------------------------- |
+| 命令    | `string` |  是的 | Always `query` for this request type.                    |
+| 请求 ID | `string` |  是的 | 请求的唯一标识符，在响应中返回。                                         |
+| 筛选    | `string` |  不  | 按状态筛选：`AUTHORIZED`、`ALL`、`SETTLED`、`FAILED` 或 `EXPIRED`。 |
+| 交易 ID | `string` |  不  | 使用特定ID查询单个交易。                                            |
+| 从日期   | `string` |  不  | 查询的起始范围（ISO 8601）。                                       |
+| 迄今为止  | `string` |  不  | 查询的结束范围（ISO 8601）。                                       |
+
+## 回应
+
+终端返回交易的当前已知状态。如果交易仍在进行中，响应将反映其当前阶段。
+
+以下示例展示了一个典型的响应：
+
+```json
+{
+"requestId": "req-006",
+"data": {
+"transactions": [
+{
+"transactionId": "TXN-20260113-003000",
+"state": "AUTHORIZED",
+"amount": 50000,
+"timeStamp": "2026-01-13T15:00:30Z"
+}
+]
+}
+}
+```
+
+### 响应参数
+
+`data` 对象将包含该特定请求可用的最新信息：
+
+| 场地    | 类型       | 描述                                                                               |
+| :---- | :------- | :------------------------------------------------------------------------------- |
+| 请求 ID | `string` | 匹配原始请求中发送的 `requestId`。                                                          |
+| 交易    | `array`  | 返回与查询匹配的交易对象列表。                                                                  |
+| 交易 ID | `string` | **交易的唯一标识符**。                                                                    |
+| 状态    | `string` | 交易的当前状态（例如 `AUTHORIZED`、`SETTLED`）。                                              |
+| 数量    | `number` | The authorized amount if `state` is `AUTHORIZED`; otherwise, the settled amount. |
+| 时间戳   | `string` | Nayax 服务器（ISO 8601）中的授权创建时间。                                                     |

@@ -1,0 +1,29 @@
+---
+title: Void
+metadata:
+  og:description: 当交易在初始支付获得授权之后,但在最终结算之前需要取消时,将执行 Void 流程。
+---
+
+当交易在初始支付获得授权之后,但在最终结算和交付之前需要取消时,将执行 Void 流程。它确保财务保留(hold)被释放,并且已登记的销售在税务机关处被合法地取消登记(或作废)。
+
+## 撤销流程(Void Flow)
+
+此图展示了 Void 请求的端到端流程:
+
+<Frame>
+  <img src="/images/docs/void-fis-cortina/image1.png" />
+</Frame>
+
+在哪里：
+
+1. Nayax Engine 向财政集成商(Fiscal Integrator)发起 Start Session。
+2. Nayax 设备向 Nayax 引擎发送取消授权请求。
+3. Nayax 引擎向支付提供商转发取消授权/销售请求。
+4. 支付提供商确认授权取消(已批准),并将其发回给 Nayax 引擎。
+5. Nayax Engine 向 Fiscal Integrator 发送 voidRequested 消息，以撤销税务登记。
+6. Fiscal Integrator 向 Fiscal Provider/税务机关发送 Un-register 请求。
+7. Fiscal Provider/税务机关向 Fiscal Integrator 返回 Approved 或 Declined 状态。
+8. Fiscal Integrator 将 Approved 或 Declined 状态转发回 Nayax Engine。
+9. Nayax Engine 向 Nayax Device 发送 Cancel Report Success 确认。
+
+总之，Void 流程是在金融系统和税务机关系统中完全撤销交易所必需的机制。

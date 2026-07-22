@@ -1,0 +1,107 @@
+---
+title: 卡片检测
+description: 允许读卡器在无需立即授权的情况下检测和读取支付方式。
+metadata:
+  og:description: cardDetect 方法激活终端读卡器以识别和捕获支付方式（卡或 QR）的数据，而不发起金融 a。
+---
+
+`cardDetect` 方法激活终端读卡器以识别和捕获支付方式（卡或 QR）的数据，而不发起资金冻结或收费。它是一种多用途工具，适用于必须先进行客户识别再进行支付阶段的工作流程。
+
+使用此方法可以：
+
+- 通过会员卡或手机二维码识别顾客，并提供个性化折扣。
+- 检索已屏蔽的卡片数据，以欢迎老用户或验证会员资格。
+- 使用卡片数据确定符合条件的燃油类型或促销活动，然后再请求授权。
+- 接受非接触式支付（CTLS）、芯片支付（EMV）、磁条支付（刷卡）和二维码扫描。
+
+Nayax 设备上卡检测提示的示例：
+cardDetect
+
+## 请求
+
+All requests must include the `command` and a unique `requestId`. While this method does not authorize funds, an `amount` must be provided for display purposes on the terminal screen.
+
+以下示例展示了一个典型的请求：
+
+```json
+{
+"command": "cardDetect",
+"requestId": "req-005",
+"data": {
+"amount": 50000,
+"tranType": 1,
+"channels": ["CTLS", "CHIP", "SWIPE"]
+}
+}
+```
+
+### 参数定义
+
+下表描述了检测请求中可用的参数：
+
+| 姓名            | 类型     | 必需的 | 描述                                                   |
+| :------------ | :----- | :-- | :--------------------------------------------------- |
+| 数量            | 整数     | 是的  | 检测期间在屏幕上显示的金额（请参阅 `decimalPlace`）。                   |
+| 转换类型          | 整数     | 不   | `1`：预授权，`2`：预选（默认值为 `1`）。                            |
+| 频道            | array  | 不   | 定义允许的支付方式：`CTLS`、`CHIP`、`SWIPE` 或 `QR`。若省略，则默认为全部方式。 |
+| buttonMediaId | string | 不   | 显示在渠道图像下方的可选按钮。目前支持的值为：`useQR`。                      |
+
+## 回应
+
+当用户与读卡器交互或成功扫描二维码时，VPOS 终端会返回响应。
+
+以下示例展示了典型的**信用卡**响应：
+
+```json
+{
+"requestId": "req-005",
+"data": {
+"state": "CARD_READ",
+"cardBrand": "VISA",
+"cardEntryMode": "CTLS",
+"maskedPan": "************1234",
+"aid": "A0000000031010"
+}
+}
+```
+
+以下示例展示了典型的**二维码**响应：
+
+```json
+{
+"requestId": "req-005",
+"data": {
+"state": "CARD_READ",
+"cardEntryMode": "QR",
+"qrCode": "1168743871706458"
+}
+}
+```
+
+以下示例展示了**按钮按下时的**响应：
+
+```json
+{
+"requestId": "req-005",
+"data": {
+"state": "BUTTON_PRESS"
+}
+}
+```
+
+<Info>
+  注意：当使用 `cardDetect` 处理非信用卡方式（例如专有的 QR 码）或按下按钮时，客户端系统负责后续的任何授权或结算逻辑。QR 码扫描或按下按钮后，读卡器会自动禁用。
+</Info>
+
+### 响应参数
+
+响应数据按客户使用的输入方式进行分类：
+
+| 姓名     | 类型     | 描述                                                               |
+| :----- | :----- | :--------------------------------------------------------------- |
+| 状态     | string | 成功检测到卡或 QR 后返回 `CARD_READ`；按下可选按钮时返回 `BUTTON_PRESS`。             |
+| 卡片输入模式 | string | 用于捕获数据的方式：`CTLS`、`CHIP`、`SWIPE` 或 `QR`。对于 `BUTTON_PRESS` 不存在此字段。 |
+| 卡品牌    | string | 检测到的卡的品牌（例如，VISA、MASTERCARD）。                                    |
+| 蒙面潘    | string | 为便于识别，已屏蔽主账号。                                                    |
+| 援助     | string | 基于EMV的交易的应用程序标识符。                                                |
+| 二维码    | string | 从扫描的二维码中获取的原始数据字符串。                                              |

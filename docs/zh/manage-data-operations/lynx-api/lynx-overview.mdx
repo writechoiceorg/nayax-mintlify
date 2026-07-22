@@ -1,0 +1,71 @@
+---
+title: 概述
+keywords:
+  - lynx
+  - Lynx API
+  - how to connect to qa
+  - connect to QA
+  - QA environment
+  - QA base URL
+  - sandbox
+  - sandbox environment
+  - test environment
+  - management API
+  - inventory management
+  - machine configuration
+  - ERP integration
+  - prepaid card top-up
+  - operational API
+metadata:
+  og:description: Lynx 是 Nayax 用于机器、设备和库存管理的 Management API。包含 QA(沙箱)和生产环境的基础 URL,帮助您连接并开始测试。
+---
+
+import McpNote from '/snippets/zh/mcp-server-note.mdx';
+
+Lynx 是 Nayax 的管理 API。它允许您与 Nayax Core 集成，并在您自己的环境中管理机器、设备和库存。本文档的这一部分提供了指南和资源，帮助您使用 Lynx API 执行各种任务，例如库存管理、机器配置等等。
+
+<Columns cols={2}>
+  <McpNote />
+
+  <Card title="使用 Nayax 代理技能" icon="wand-magic-sparkles" href="/docs/get-started/agent-skills">
+    安装用于库存、预付卡、退款和报告的 Lynx 技能(skills),指导您的 AI 代理完成集成。
+  </Card>
+</Columns>
+
+## 环境
+
+本节所有指南示例中均使用测试环境 URL。部署到生产环境时，请替换主机名。
+
+| 环境   | 基本 URL                                  |
+| ---- | --------------------------------------- |
+| 质量保证 | `https://qa-lynx.nayax.com/operational` |
+| 生产   | `https://lynx.nayax.com/operational`    |
+
+## Lynx API 的主要优势
+
+Lynx API 为寻求自动化和简化运营的企业提供了广泛的优势：
+
+- **简单集成**：轻松将 Lynx API 与您现有的内部系统集成。
+- 全面的功能:执行各种操作,包括:
+  - 库存管理和优化
+  - 机器和设备配置
+  - 执行远程操作和命令
+  - 管理预付卡
+
+## Lynx用例
+
+Lynx API 支持多种实际用例，例如：
+
+- **ERP系统集成**：与ERP系统集成，实现实时更新和管理。
+- **预付卡充值**：使用自动化工作流程向预付卡中添加信用额度。
+- **消费者管理**：自动化工作场所或零售环境中的预付卡管理。
+- **库存管理**：创建拣货清单、执行库存更新并优化多台机器的库存水平。
+
+## 参见
+
+- [Security & Token](/docs/manage-data-operations/lynx-api/security)
+- [Managing Cards](/docs/manage-data-operations/lynx-api/cards/managing-cards)
+- [Payments](/docs/manage-data-operations/lynx-api/refunds/payments)
+- [Machines](/docs/manage-data-operations/lynx-api/machines/machines-devices)
+- [Devices](/docs/manage-data-operations/lynx-api/devices/devices-1)
+- [Operator](/docs/manage-data-operations/lynx-api/operator/index)

@@ -1,0 +1,61 @@
+---
+title: 获取内部状态
+metadata:
+  og:description: getInternalStatus 方法可返回 AEA 的内部状态。请不要频繁调用此方法，以确定引擎的
+---
+
+`getInternalStatus` 方法可返回 AEA（Agamento Engine Application）的内部状态。此方法通常不频繁调用，用于确定引擎服务逻辑的内部状态，尤其是在交易流程中。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+在请求中，`method` 字段需要设置为 `getInternalStatus`，如下方示例请求所示：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getInternalStatus",
+    "id": "123454352",
+    "params": [
+        "engine"
+    ]
+}
+```
+
+### 请求参数
+
+有关此方法可用的请求参数的描述，请参阅下表。
+
+| 姓名       | 类型     | 描述      |
+| :------- | :----- | :------ |
+| `engine` | string | 固定的服务名称 |
+
+## 回复
+
+成功的请求将返回类似于以下代码块中的响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "status": "idle"
+    }
+}
+```
+
+### 响应参数
+
+下表列出了 `status` 字段的可能取值：
+
+| 价值             | 描述                |
+| -------------- | ----------------- |
+| `IDLE`         | 引擎处于空闲模式且已就绪      |
+| `BUSY`         | 引擎当前正忙，无法处理新请求    |
+| `PHASE2_READY` | 引擎已为交易的第 2 阶段做好准备 |
+| `AUTH_READY`   | 引擎已准备好执行授权        |

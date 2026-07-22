@@ -1,0 +1,31 @@
+---
+title: 预选
+metadata:
+  og:description: 预选（Pre-Selection）交易流程会在完成交易之前处理、授权并结算支付请求。这种精简的方式
+---
+
+预选（Pre-Selection）交易流程会在完成交易之前处理、授权并结算支付请求。这种精简的方式确保所有支付阶段都在一个连续的过程中一次性完成。
+
+## 交易流程
+
+要理解预选交易流程，请参考以下事件顺序：
+
+<Frame>
+  <img src="/images/docs/tweezercomm-engine-preselection-flow/image1.png" />
+</Frame>
+
+以下是每个步骤的详细说明：
+
+1. After the cardholder selects the product or service, the ECR/POS sends a [`doTransaction`](/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction) Request to the Nayax Device (Agamento App).
+2. 然后，应用程序会向持卡人显示提示，要求他插入或刷卡。
+3. 持卡人在 ECR/POS 上插入、刷卡或轻触其银行卡。
+4. Nayax 设备与 Nayax 服务器通信，以请求支付授权和结算。
+5. Nayax 服务器返回交易状态（批准或拒绝）。随后 Nayax 设备将该状态转发回 ECR/POS，完成整个流程。
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="执行交易" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction" />
+
+  <Card icon="link" title="预授权" href="/docs/integrate-pos-device/tweezercomm/global-payment-flows/tweezercomm-engine-preauth-flow" />
+</Columns>

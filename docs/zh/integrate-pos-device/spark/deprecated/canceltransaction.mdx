@@ -1,0 +1,286 @@
+---
+title: 取消交易
+metadata:
+  og:description: CancelTransaction 端点允许您取消一笔进行中的交易。在 Pre-Authorization 流程中，此方法称为 Cancel。
+---
+
+`CancelTransaction` 端点允许您取消一笔进行中的交易。
+
+在 Pre-Authorization 流程中，此方法被称为 "Cancel"，在 Pre-Selection 流程中，则被称为 "Void"。
+
+## 要求
+
+向 Spark 的 `/spark/CancelTransaction` 端点发送带有以下正文的 POST 请求：
+
+```json
+{
+  "NayaxTransactionId": 2004545072,
+  "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+  "SiteId": 2,
+  "MachineAuTime": "20240205194122328",
+  "TerminalId": "0434334921100366",
+  "TerminalIdType": 1,
+  "CancellationType": 1,
+  "CancelAmount": 15.00,
+  "ReasonCode": 101,
+  "ReasonText": "User aborted session"
+}
+
+
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+<table>
+  <thead>
+    <tr>
+      <th>
+        场地
+      </th>
+
+      <th>
+        类型
+      </th>
+
+      <th>
+        必需的
+      </th>
+
+      <th>
+        描述
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `NayaxTransactionId`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        由 Nayax 分配的唯一交易 ID，在 `/TransactionCallback` 中提供。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `SparkTransactionId`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        来自最初 `/StartAuthentication` 的会话 ID。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `SiteId`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        发生该交易的站点 ID
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `MachineAuTime`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        设备取消操作在其所在时区的时间戳（格式：`yyyyMMddHHmmssSSS`）。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TerminalId`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        所用终端的序列号或外部 ID
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TerminalIdType`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        定义所用的 ID 类型。`1` 表示 HW Serial，`2` 表示 Nayax Machine ID。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `CancellationType`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        表示所实施的取消流程：`1` 表示 Pre-Authorization Cancel，`2` 表示 Pre-Selection Void。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `CancelAmount`
+      </td>
+
+      <td>
+        Float
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        要取消的金额，以主要货币单位表示（例如美元、欧元）
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `ReasonCode`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        说明取消原因的内部代码
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `ReasonText`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        取消原因的可读说明
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## 回复
+
+成功的响应将返回以下正文：
+
+```json
+{
+  "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+  "Status": {
+    "Verdict": "Approved",
+    "ErrorDescription": "No Errors"
+  },
+  "CardBrand": "Visa",
+  "CardLast4Digits": "1234",
+  "AuthCode": "333333",
+  "MachineAuTime": "20240205194122328",
+  "AuTime": "20240205174122328",
+  "CancelTime": "20240205192215572",
+  "CurrencyCode": "EUR",
+  "CurrencyNumeric": "978",
+  "FiscalRrn": "1A2b3C4d5E6f7g8H9i",
+  "NayaxRRN": "111111"
+}
+
+
+```
+
+### 响应参数
+
+下表说明了响应的参数：
+
+| 场地                        | 类型     | 描述                                         |
+| :------------------------ | :----- | :----------------------------------------- |
+| `SparkTransactionId`      | String | 已取消会话的 ID。                                 |
+| `Status`                  | Object | 包含结果和错误说明的 Status 对象。                      |
+| `Status.Verdict`          | String | 取消成功时为 "Approved"，失败时为 "Declined"。         |
+| `Status.ErrorDescription` | String | 如为 `Declined` 则提供进一步信息，成功则为 `"No Errors"`。 |
+| `Status.ErrorCode`        | 数字     | 指示交易期间发生的特定错误类型的数字代码。此字段仅出现在错误响应中。         |
+| `CardBrand`               | String | 该交易使用的卡品牌（例如 Visa、MasterCard）。             |
+| `CardLast4Digits`         | String | 所用卡的后四位数字。                                 |
+| `AuthCode`                | String | 该取消操作的授权码。                                 |
+| `MachineAuTime`           | String | 设备取消操作在其所在时区的时间戳（格式：`yyyyMMddHHmmssSSS`）。  |
+| `AuTime`                  | String | 授权服务器时间戳。                                  |
+| `CancelTime`              | String | 取消确认的服务器时间戳（格式：`yyyyMMddHHmmssSSS`）。       |
+| `CurrencyCode`            | String | ISO货币代码（例如，“EUR”）。                         |
+| `CurrencyNumeric`         | String | ISO 数字货币代码（例如 EUR 为 "978"）。                |
+| `FiscalRrn`               | String | 财务参考编号（用于收据/审计跟踪）。                         |
+| `NayaxRRN`                | String | 该交易的 Nayax 参考编号。                           |

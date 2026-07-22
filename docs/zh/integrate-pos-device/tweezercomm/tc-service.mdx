@@ -1,0 +1,49 @@
+---
+title: TC服务
+metadata:
+  og:description: TC Service 允许您将 Agamento 应用程序用作后台服务。如果您希望在设备上运行自己的 Android 应用程序并执行交易。
+---
+
+TC Service 允许您将 Agamento 应用程序用作后台服务。如果您希望在设备上运行自己的 Android 应用程序，并使用 Agamento 执行交易，您可以将 Agamento 配置为以 TC Service 方式运行。
+
+每当您的应用程序发起交易时，Agamento 都会被触发并启动运行。应用程序之间的通信基于 TweezerComm 协议。
+
+<Frame>
+  <img src="/images/docs/tc-service/image1.png" />
+</Frame>
+
+## 演示 APK
+
+该 APK 是用于使用 TC Service 的演示工具。它包含一个基本实现，展示了如何将我们的 Agamento 应用程序作为服务使用，并发送 TweezerComm 请求。
+
+- [Demo .APK file](https://docs-engine.modularity.co.il/_static/TCServiceDemo.apk)
+
+这将帮助您更好地理解其工作原理，从而更轻松地实现它。
+
+## 示例代码
+
+请使用以下代码示例，了解如何在您的 APK 中将 Agamento 应用程序作为服务进行集成。
+
+- [TC Service Implementation Sample Code](https://github.com/ModularityLtd/TcsDemo)
+
+代码中唯一需要调整的部分是请求中要发送的 JSON 字段。例如，请参阅 `doTransaction` Command 函数（位于 `AgamentoMethods.java` 中）。在该函数中，您可以找到设置 JSON 文件字段和值的位置。
+
+例如，`put(“currency”,CURRENCY)` 是根据代码开头配置的货币设置的：`String CURRENCY = “376”`
+
+<Frame>
+  <img src="/images/docs/tc-service/image2.gif" />
+</Frame>
+
+<Note>
+  TweezerComm 命令
+
+  TweezerComm 命令应基于 API，并与您的特定支付服务相关。
+</Note>
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="开始" href="/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started" arrow />
+
+  <Card icon="link" title="交易方法" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/payment-services-methods-copy-1" arrow />
+</Columns>

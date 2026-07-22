@@ -1,0 +1,79 @@
+---
+title: 获取交易状态
+metadata:
+  og:description: 此只读查询用于检查此前发起的交易会话的当前状态。
+---
+
+此只读查询用于检查此前发起的交易会话的当前状态。它使商户系统能够主动向支付网关轮询交易的最终状态。
+
+<Warning>
+  只读
+
+  这是一个只读请求，不会触发商户通知（webhook）。
+</Warning>
+
+## 要求
+
+This request targets a dedicated [status endpoint](/reference/ecom/management/retrieve-transaction-status-by-session-id). It utilizes the `NayaxSessionId` as the primary identifier for the transaction being queried.
+
+请参阅下面的示例：
+
+```json
+{
+  "SessionInfo": {
+    "NayaxSessionId": "SESSION_ID_XYZ123"
+  },
+  "MachineInfo": {
+    "MachineId": "0434334921100366"
+  },
+  "ValidationKey": "AUTH_KEY_FOR_STATUS"
+}
+```
+
+### 请求参数
+
+下表详细说明了该请求的参数：
+
+| 范围               | 地点          | 类型     | 描述                       | 必需的 |
+| :--------------- | :---------- | :----- | :----------------------- | :-- |
+| `NayaxSessionId` | SessionInfo | String | 支付会话在初始化时被分配的唯一 ID。      | 是的  |
+| `MachineId`      | 机器信息        | String | 发起查询的终端或设备的 ID。          | 是的  |
+| `ValidationKey`  | Root        | String | 用于验证此查询请求真实性的加密密钥（HMAC）。 | 是的  |
+
+## 回复
+
+成功获取状态后，将返回最终确定的状态，包括所有相关的支付和状态信息。
+
+```json
+{
+  "status": {
+    "verdict": "Approved",
+    "code": 0,
+    "statusMessage": "Transaction successfully completed."
+  },
+  "basicInfo": {
+    "amount": 25.5,
+    "currency": "EUR",
+    "transactionId": "NAYAX_TRX_98765",
+    "transactionTimeUtc": "2025-08-28T10:30:00Z"
+  },
+  "paymentInfo": {
+    "authCode": "A1B2C3D4",
+    "providerTransactionId": "PSP_TRANS_ABC",
+    "authAmount": 25.5
+  }
+}
+```
+
+### 响应参数
+
+下表说明了响应的参数：
+
+| 范围                      | 地点     | 类型       | 描述                                                       |
+| :---------------------- | :----- | :------- | :------------------------------------------------------- |
+| `verdict`               | status | String   | "Approved"（已批准）、"Declined"（已拒绝）或 "Pending"（处理中）。交易的当前状态。 |
+| `code`                  | status | Int32    | 最终状态代码（0 表示成功）。                                          |
+| `transactionId`         | 基本信息   | String   | 所查询交易的唯一 ID。                                             |
+| `transactionTimeUtc`    | 基本信息   | DateTime | 记录最终状态时的 UTC 时间戳。                                        |
+| `authCode`              | 支付信息   | String   | 由发卡机构提供的授权码（如果成功）。                                       |
+| `providerTransactionId` | 支付信息   | String   | 由支付服务提供商分配的唯一 ID。                                        |

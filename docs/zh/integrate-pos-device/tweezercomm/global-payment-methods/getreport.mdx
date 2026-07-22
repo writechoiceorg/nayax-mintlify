@@ -1,0 +1,103 @@
+---
+title: getReport
+metadata:
+  og:description: 使用 getReport 方法获取服务交易报表。它提供了一种查询各类交易记录的方式，包括迷你结算
+---
+
+`getReport` 方法用于获取服务交易报表。它提供了一种查询各类交易记录的方式，包括迷你结算交易、预授权交易和延迟授权交易。这使客户端应用程序能够根据交易的处理阶段获取交易摘要。
+
+- 由于交易处理方式的特性，该方法与 Global 支付方式的相关性较低：在 Global 场景下，保存在支付终端上的每笔已完成交易都会立即发送到 Engine，并获得最终结算。
+  而在以色列，保存在支付终端上的每笔已完成交易会一直保留到当天结束，然后才通过批量传输（doPeriodic）将当天完成的所有交易发送到 Ashrait，此时交易才最终结算。
+
+  getReport 用于查询保存在支付终端上的信息——因此在 Global 场景下，终端上不会保存任何（尚未到达 Engine 的）交易
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+在请求中，`method` 字段需要设置为 `getReport`，如下方示例请求所示：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getReport",
+    "id": "123454352",
+    "params": [
+        "engine", "miniSettlementTransactions"
+    ]
+}
+```
+
+### 请求参数
+
+有关此方法可用的请求参数的描述，请参阅下表。
+
+<table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        姓名
+      </th>
+
+      <th>
+        类型
+      </th>
+
+      <th>
+        描述
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `action`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        要获取的交易报表类型。可用值：
+
+        - `miniSettlementTransactions`：迷你结算交易报表
+        - `queryPreAuthTransactions`：查询预授权交易报表
+        - `queryDeferredAuthTransactions`：查询延迟授权交易报表
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## 回复
+
+成功的请求将返回类似于以下代码块中的响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "statusCode": 0,
+        "queriedTransactions": [
+            "414d5aca-3df9-46aa-8c20-86d1685da885",
+            "526ecaca-3df9-46aa-8c20-8456185da885"
+        ]
+    }
+}
+```
+
+### 响应参数
+
+下面是一个包含所有可能的响应参数及其描述的表格：
+
+| 姓名                     | 类型     | 描述           |
+| ---------------------- | ------ | ------------ |
+| `statusCode`           | 整数     | 操作状态（0 = 成功） |
+| `statusMessage`        | string | 操作消息         |
+| `queriedTransactions`  | array  | 查询到的交易标识符列表。 |

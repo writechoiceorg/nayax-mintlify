@@ -1,0 +1,30 @@
+---
+title: 弹性机制
+metadata:
+  og:description: TweezerComm 具有弹性机制，用于在发生错误或故障时处理交易的完成或取消。每当发生错误时。
+---
+
+TweezerComm 具备一种弹性机制，用于在发生错误或故障时处理交易完成或取消。每当出现错误（例如 `statusCode != 0`）时，TweezerComm 都会自动回退到该机制，通过重试和验证步骤确保交易成功完成或被取消，以防止出现数据不一致的情况。
+
+## 工作原理
+
+流程图描述了该机制的运作流程。
+
+<Frame>![](/images/docs/resilience-mechanism-copy/image1.png)</Frame>
+
+当交易需要完成（结算）或取消时，系统会验证是否已收到响应，流程会根据响应而有所不同。
+
+- 如果收到响应，系统将继续检查 `StatusCode`。如果该值等于 `0`，则完成流程；否则将触发重试机制。
+- 如果未收到响应，系统将使用 `getTransactionByVuid()` 方法检索交易详情。
+  - 为检查交易是否已完成，系统会评估 `IsFinalAmount=1` 且 `TransactionDeposited=1/2` 是否成立。
+  - 如果这些值与上述值不相等，系统将触发重试机制。
+
+该过程不断循环回到完成/取消流程的开始，确保它持续进行，直到达到明确的成功或失败条件。
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="付款流程" href="/docs/integrate-pos-device/tweezercomm/global-payment-flows/payment-flows-copy-1" arrow />
+
+  <Card icon="link" title="GetTransactionByVuid" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/gettransactionbyvuid" arrow />
+</Columns>
