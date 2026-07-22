@@ -1,18 +1,30 @@
 ---
-title: "RTOS SDK Release Notes"
-metadata:
-  og:description: "Release notes for the Nayax EMV Core RTOS SDK: new features, changes, fixes, and known issues across all SDK versions."
+title: "EMV Core RTOS SDK Release Notes"
+sidebarTitle: "RTOS"
+description: "Track EMV Core RTOS SDK changes as they ship."
+rss: true
 ---
 
-This section provides a history of updates, enhancements, and stability improvements to the EMV Core RTOS SDK.
+Nayax logs EMV Core RTOS SDK changes on this page as they ship. Subscribe to
+the RSS feed using the icon at the top of the page to get notified of new
+entries.
 
-Release notes are organized into three categories:
+Release notes are organized into three categories to help you evaluate the
+impact of each update:
 
-* **Improvements**: New API commands, expanded platform support, and feature additions.
+* **Improvements**: New API commands, expanded platform and card support, and
+  performance enhancements.
 * **Fixes**: Resolved bugs and reliability improvements.
-* **Known Issues**: Current limitations with recommended workarounds.
+* **Known Issues**: Current limitations or pending features, with recommended
+  workarounds.
 
-### SDK Version 1.0
+<Update
+  label="SDK Version 1.0"
+  rss={{
+    title: "RTOS SDK Version 1.0: TLS support, External Settlement, and e-Receipt support",
+    description: "First official RTOS SDK release: TLS-secured server communication, External Settlement and e-Receipt data on TransactionComplete, and CLP card type detection, plus reliability fixes across networking, logging, configuration, and reader communication."
+  }}
+>
 
 _Released: 11 February 2026_
 
@@ -168,107 +180,15 @@ This version includes the following improvements, fixes, and known issues for th
   This occurs because the virtual OS attaches the reader with a different name (e.g., `hidraw1`). Not relevant for physical operating systems.
 </Accordion>
 
-### SDK Version 0.9
+</Update>
 
-_Released: 31 July 2025_
+### Version history
 
-This version includes the following improvements and fixes for the RTOS SDK:
+Every earlier RTOS SDK version, condensed to one line. See the current
+version above for full detail and links.
 
-<Accordion title="Improvements" icon="rocket">
-  ### **Linux Sample Application**
-
-  A new portable C Linux Sample Application is now included with the SDK.
-
-  ***
-
-  ### **Datalink Layer**
-
-  A new Datalink Layer has been added for framed serial communication with ACK/NAK support.
-
-  ***
-
-  ### **New API Commands**
-
-  Added support for `GetCardToken`, `CardTokenReceived`, and `GetAttribute`.
-</Accordion>
-
-<Accordion title="Fixes" icon="wrench">
-  * Fixed: 4 LEDs on all the time (issue #7052)
-  * Fixed: Get Core version returns empty string (issue #7054)
-  * Fixed: Junk bytes sent after `ReaderMessageEvent` JSON (issue #7056)
-  * Fixed: Cannot pay while downloading a file (issue #7072)
-  * Fixed: EMV Core sends 2 lines of "Present Card" instead of the price (issue #7233)
-  * Fixed: Updating from older versions to `EMVS_v071555_ec` could cause the reader to lock with no way to communicate
-</Accordion>
-
-<Accordion title="Known Issues" icon="exclamation-triangle">
-  ### **Log Upload Order (issue #7357)**
-
-  Log upload includes the oldest entries instead of the most recent.
-
-  ***
-
-  ### **Virtual Machine Device Discovery**
-
-  On virtual Linux machines (WSL/VirtualBox), the host sample application cannot find the device after restart. See v1.0 known issues for details.
-</Accordion>
-
-### SDK Version 0.2
-
-_Released: 24 March 2025_
-
-This version includes the following improvements and fixes for the RTOS SDK:
-
-<Accordion title="Improvements" icon="rocket">
-  ### **UART TTL Communication**
-
-  Added support for UART TTL communication.
-
-  ***
-
-  ### **UNO-8 Manager v4.0.0**
-
-  Updated UNO-8 Manager supporting the new Device File system structure (drives S: and E:); installation file at `\Utilities\UNO-8 Manager\UNO-8 Manager Setup.4.0.0.msi`.
-</Accordion>
-
-<Accordion title="Fixes" icon="wrench">
-  * Fixed: EMV Core not working in Safe-Mode (issue #7077)
-  * Fixed: Upload/download from TMS now works in parallel with transactions (issue #7043)
-  * Fixed: Log file lacked milliseconds on timestamps (issue #7051)
-</Accordion>
-
-<Accordion title="Known Issues" icon="exclamation-triangle">
-  ### **Unsupported API Commands**
-
-  `GetCardToken`, `CardTokenReceived`, and `GetAttribute` are not supported in this version.
-
-  ***
-
-  ### **Remote Update Failures**
-
-  Remote firmware and configuration updates fail intermittently.
-
-  ***
-
-  ### **TMS Socket Connection (issue #7087)**
-
-  Cannot connect socket to TMS in some cases.
-
-  ***
-
-  ### **Present Card Display (issue #7233)**
-
-  EMV Core sends 2 lines of "Present Card" instead of the price.
-</Accordion>
-
-### SDK Version 0.1
-
-_Released: 30 December 2024_
-
-This is the first SDK version for RTOS.
-
-<Accordion title="Known Issues" icon="exclamation-triangle">
-  ### **Unsupported API Commands**
-
-  `GetCardToken`, `CardTokenReceived`, and `GetAttribute` are not supported in this version.
-</Accordion>
+| Version | Date | Summary |
+|---|---|---|
+| SDK Version 0.9 | July 31, 2025 | **Added**:<ul><li>A portable Linux sample app</li><li>A framed Datalink layer</li><li>`GetCardToken`/`CardTokenReceived`/`GetAttribute` commands</li></ul>**Fixed** (#7052, #7054, #7056, #7072, #7233):<ul><li>LED bugs</li><li>Core-version bugs</li><li>Present Card display bugs</li></ul> |
+| SDK Version 0.2 | March 24, 2025 | **Added**:<ul><li>UART TTL communication</li><li>UNO-8 Manager v4.0.0</li></ul>**Fixed** (#7077, #7043, #7051):<ul><li>Safe-Mode startup</li><li>Parallel TMS transfers during transactions</li><li>Millisecond log timestamps</li></ul> |
+| SDK Version 0.1 | December 30, 2024 | First RTOS SDK release |
