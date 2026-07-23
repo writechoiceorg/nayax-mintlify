@@ -36,7 +36,7 @@ Which COM have you connected to your board? Is it COM2 as mentioned in the "Inst
 
 12V is on the verge of not being sufficient power for the device to operate (it would make it hard for the device to distinguish between '0' and '1'). It can also cause packets to be sent/received improperly (leading to retries) and result in CRC errors. It can also cause the device to crash during powerup as during the powerup process there is a spike in energy consumption. In addition, if you are using Chipi-x, it also consumes energy, making the 12V even less likely to be sufficient for the device's valid operation.
 
-## VPOSM - Activating the Device
+## VPOSM (4S, 5) - Activating the Device
 
 The first step is to scan the QR code displayed on the device screen with the phone’s camera.
 
@@ -54,7 +54,7 @@ Next, you will be redirected to a landing page where you will be required to ent
   **Note:** VPOSM 4S is not yet supported (only VPOSM5 as of now).
 </Note>
 
-## VPOSM (5, 4S): Getting the Device's Details (Serial Number, IP)
+## VPOSM (4S, 5): Getting the Device's Details (Serial Number, IP)
 
 You'd tap the top left corner of the screen 7 times, and a menu would appear:
 
@@ -62,8 +62,7 @@ You'd tap the top left corner of the screen 7 times, and a menu would appear:
   ![](/images/docs/faq/image3.png)
 </Frame>
 
-Then you'd click on the Device Info, and you'd get the device's serial number as well as information about its communication details, both cellular and Ethernet.\
-In this example, the device has an eSIM (as in this example, it's VPOSM 4S, which will always have an eSIM,) and it's also connected to WIFI, so you can see that it's connected to the WIFI and the device's IP address:
+Then you'd click on the Device Info, and you'd get the device's serial number as well as information about its communication details, both cellular and Ethernet.<br />In this example, the device has an eSIM (as in this example, it's VPOSM 4S, which will always have an eSIM,) and it's also connected to WIFI, so you can see that it's connected to the WIFI and the device's IP address:
 
 <Frame>
   ![](/images/docs/faq/image4.png)
@@ -71,10 +70,27 @@ In this example, the device has an eSIM (as in this example, it's VPOSM 4S, whic
 
 Should you like to return to the device's idle screen (to make transactions), click the top-left arrow, then select the Payment APP screen.
 
-- VPOSM over Marshall supports either DHCP or Static IP (depends how the client wants to work).
-  DHCP is the default for the device, but it can be changed to Static IP from the device menu:\
-  click a couple of times on the top-left corner of the screen and select "Technician Menu" and insert the code (by default it's 123123) and scroll down to the "Communication" section:\
-  Then go into Wifi or LAN (depending on your connection type) and into the desired network and edit its' settings: go to the "Advanced" section and under it you'd see "IP settings"- which would be DHCP by default, or changed to "Static"
+### VPOSM- configuring communication (Wifi / LAN)
+
+VPOSM over Marshall supports either DHCP or Static IP (depends how the client wants to work). DHCP is the default for the device, but it can be changed to Static IP from the device menu:<br />click a couple of times on the top-left corner of the screen and select "Technician Menu":
+
+<Frame>
+  ![Image](/images/image-4.png "Image")
+</Frame>
+
+And insert the code (by default it's 123123) and scroll down to the "Communication" section:<br />
+
+<Frame>
+  ![Image](/images/image-5.png "Image")
+</Frame>
+
+<br />Then go into Wifi or LAN (depending on your connection type):<br />
+
+<Frame>
+  ![Image](/images/image-6.png "Image")
+</Frame>
+
+<br />And into the desired network and edit its' settings: go to the "Advanced" section and under it you'd see "IP settings"- which would be DHCP by default, or changed to "Static".
 
 ## Changing Idle Screen/Customization of Screens/UI Control
 
@@ -153,11 +169,11 @@ Removing the X option can be done by changing the "VPOST button function" to "VP
 
 ## Hardware questions
 
-Q: Is it an actual RS232 interface with a level shifter or UART signals with voltage level 5V/3.3V? 
+Q: Is it an actual RS232 interface with a level shifter or UART signals with voltage level 5V/3.3V?
 
 A: Yes, true RS232 with level shifter. (The RS-232 standard talks about −15 to −3 V and \+3 to \+15 V. The electric components that we are using are working about ±7V.)
 
-Q: Are any HW handshaking signals (RTS/CTC) needed? 
+Q: Are any HW handshaking signals (RTS/CTC) needed?
 
 A: No, only RxD/TxD/GnD is used.
 
