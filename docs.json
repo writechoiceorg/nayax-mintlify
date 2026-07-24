@@ -134,6 +134,14 @@
                         "root": "docs/integrate-pos-device/marshall/marshall-faqs/index"
                       }
                     ]
+                  },
+                  {
+                    "group": "Marshall Release Notes",
+                    "pages": [
+                      "docs/integrate-pos-device/marshall/marshall-java-release-notes",
+                      "docs/integrate-pos-device/marshall/marshall-csharp-release-notes",
+                      "docs/integrate-pos-device/marshall/marshall-c-release-notes"
+                    ]
                   }
                 ]
               },
@@ -414,30 +422,6 @@
                       "docs/integrate-pos-device/emv-core/rtos/rtos-release-notes"
                     ]
                   }
-                ]
-              },
-              {
-                "group": "Marshall Release Notes",
-                "pages": [
-                  "docs/integrate-pos-device/marshall/marshall-java-release-notes",
-                  "docs/integrate-pos-device/marshall/marshall-csharp-release-notes",
-                  "docs/integrate-pos-device/marshall/marshall-c-release-notes"
-                ]
-              }
-            ]
-          },
-          {
-            "item": "Marshall Pro (Fuel)",
-            "icon": "gas-pump",
-            "groups": [
-              {
-                "group": "Marshall Pro Guides",
-                "pages": [
-                  "docs/integrate-pos-device/marshall-pro/getting-started/index",
-                  "docs/integrate-pos-device/marshall-pro/getting-started/marshall-pro-integration-process",
-                  "docs/integrate-pos-device/marshall-pro/getting-started/forecourt-architecture",
-                  "docs/integrate-pos-device/marshall-pro/getting-started/best-practices",
-                  "docs/integrate-pos-device/marshall-pro/getting-started/security-digital-signatures"
                 ]
               },
               {
@@ -1114,33 +1098,9 @@
                 ]
               },
               {
-                "group": "EMV Core Release Notes",
-                "pages": [
-                  "docs/integrate-pos-device/emv-core/emv-core-android-linux-release-notes",
-                  "docs/integrate-pos-device/emv-core/emv-core-rtos-release-notes"
-                ]
-              }
-            ]
-          },
-          {
-            "item": "Spark",
-            "icon": "bolt",
-            "groups": [
-              {
-                "group": "Spark Guides",
-                "pages": [
-                  "docs/integrate-pos-device/spark/spark",
-                  "docs/integrate-pos-device/spark/spark-integration-process",
-                  "docs/integrate-pos-device/spark/spark-network-requirement",
-                  {
-                    "group": "Security & Authentication",
-                    "pages": [
-                      "docs/integrate-pos-device/spark/security-authentication/spark-authentication",
-                      "docs/integrate-pos-device/spark/security-authentication/spark-legacy-authentication",
-                      "docs/integrate-pos-device/spark/security-authentication/spark-auth-tool"
-                    ],
-                    "root": "docs/integrate-pos-device/spark/security-authentication/index"
-                  },
+                "item": "EMV Core",
+                "icon": "credit-card",
+                "groups": [
                   {
                     "group": "EMV Core Guides",
                     "pages": [
@@ -1603,17 +1563,14 @@
             ]
           },
           {
-            "group": "API Reference",
-            "pages": [
-              "reference/cortina/overview",
-              {
-                "group": "Endpoints",
-                "openapi": {
-                  "source": "/openapi/cortina.yaml",
-                  "directory": "reference/cortina"
-                }
-              }
-            ]
+            "tab": "Release Notes",
+            "icon": "newspaper",
+            "href": "https://www.nayax.com/product-updates/integrated-pos/integrated-vpos-touch-onyx/"
+          },
+          {
+            "tab": "Help Center",
+            "icon": "circle-question",
+            "href": "https://nayax-u.nayax.com/"
           }
         ]
       }
