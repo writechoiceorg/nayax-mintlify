@@ -20,7 +20,7 @@ export const McpPromo = () => {
               <span className="text-xs font-semibold bg-[#FCC705] text-gray-900 px-2 py-0.5 rounded-full">New</span>
             </h2>
             <p className="text-purple-200 text-sm">
-              Connect your AI assistant to Nayax documentation with our MCP server, or install agent skills that guide it through Nayax API integrations.
+              Connect your AI assistant to Nayax documentation with our MCP server for real-time, accurate answers about any Nayax API.
             </p>
           </div>
         </div>
