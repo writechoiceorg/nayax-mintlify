@@ -1,15 +1,15 @@
 ---
-title: "Scoped Access Tokens"
-keywords: ["scoped token", "refresh token", "appScope", "internalScope", "scope", "access token lifetime", "Cortex Gateway", "customer token management", "token claims", "issue access token"]
+title: "Customer-Managed Access Tokens"
+keywords: ["customer-managed token", "customer-managed access token", "refresh token", "appScope", "internalScope", "scope", "access token lifetime", "Cortex Gateway", "customer token management", "token claims", "issue access token"]
 metadata:
-  og:description: "Learn how to request scoped, time-limited access tokens for downstream integrations and use them with the Lynx API and Cortex Gateway."
+  og:description: "Learn how to request customer-managed, time-limited access tokens for downstream integrations and use them with the Lynx API and Cortex Gateway."
 ---
 
-Scoped access tokens let you grant limited, time-boxed API access to your own
-downstream customers or integrations. Unlike the single account-level token
-described in [Security & Token](/docs/manage-data-operations/lynx-api/security),
-a scoped token carries specific permissions and an expiration date that you
-define.
+Customer-managed access tokens let you grant limited, time-boxed API access
+to your own downstream customers or integrations. Unlike the single
+account-level token described in [Security & Token](/docs/manage-data-operations/lynx-api/security),
+a customer-managed token carries specific permissions and an expiration date
+that you define.
 
 ## Token Types
 
@@ -45,8 +45,8 @@ integration.
 
 ## Claim Types
 
-A scoped token carries its permissions in one of three claim types, each
-with its own priority and validation behavior.
+A customer-managed token carries its permissions in one of three claim
+types, each with its own priority and validation behavior.
 
 | Claim | Purpose | Priority | Validation |
 | --- | --- | --- | --- |
@@ -57,10 +57,10 @@ with its own priority and validation behavior.
 For most customer integrations, set `appScope` on the token to describe the
 machines, devices, or orders the integration needs to access.
 
-## Requesting a Scoped Token
+## Requesting a Customer-Managed Token
 
-Nayax provisions scoped tokens on your behalf; you don't call an API to
-generate one yourself. To request a scoped token for a downstream
+Nayax provisions customer-managed tokens on your behalf; you don't call an
+API to generate one yourself. To request a token for a downstream
 integration, contact your Nayax account representative or open a request
 through Nayax Core.
 
@@ -162,7 +162,8 @@ to `machines:read`.
 
 ## Security Best Practices
 
-Follow these practices when requesting and managing scoped tokens.
+Follow these practices when requesting and managing customer-managed
+tokens.
 
 ### Storage
 
@@ -182,8 +183,8 @@ Nayax limits each user to 50 tokens.
 
 ## Troubleshooting
 
-If a request using a scoped or access token fails, check the following
-common causes.
+If a request using a customer-managed refresh or access token fails, check
+the following common causes.
 
 ### 401 Unauthorized
 
