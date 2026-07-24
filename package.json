@@ -1,0 +1,13 @@
+{
+  "name": "nayax-mintlify",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "openapi:scaffold": "node tools/openapi-i18n/scaffold.mjs",
+    "openapi:build": "node tools/openapi-i18n/build.mjs"
+  },
+  "devDependencies": {
+    "openapi-format": "^1.33.5",
+    "yaml": "^2.9.0"
+  }
+}

@@ -1,0 +1,758 @@
+overlay: 1.0.0
+info:
+  title: zh translation overlay
+  version: 1.0.0
+actions:
+  - target: $.info.description
+    update: RemoteStart V2
+  - target: $.servers[0].variables.domain.description
+    update: Your Nayax-assigned domain (e.g., nayax-spark-dmz.nayax.com). Nayax provides a QA domain during sandbox onboarding and a production domain after certification.
+  - target: $.paths['/Version'].get.summary
+    update: Get Version
+  - target: $.paths['/Version'].get.responses['200'].description
+    update: Success
+  - target: $.paths['/ExternalCancel'].post.summary
+    update: ExternalCancel
+  - target: $.paths['/ExternalCancel'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/ExternalSettlement'].post.summary
+    update: ExternalSettlement
+  - target: $.paths['/ExternalSettlement'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/StartAuthentication'].post.summary
+    update: StartAuthentication
+  - target: $.paths['/StartAuthentication'].post.requestBody.description
+    update: The request payload for transaction authentication.
+  - target: $.paths['/StartAuthentication'].post.responses['200'].description
+    update: Success. The transaction request was successfully authenticated.
+  - target: $.paths['/StartSession'].post.summary
+    update: StartSession
+  - target: $.paths['/StartSession'].post.requestBody.description
+    update: The payload to initiate a new session.
+  - target: $.paths['/StartSession'].post.responses['200'].description
+    update: Success. A new session has been successfully initiated.
+  - target: $.paths['/TriggerTransaction'].post.summary
+    update: TriggerTransaction
+  - target: $.paths['/TriggerTransaction'].post.requestBody.description
+    update: The request payload containing the details to trigger a transaction.
+  - target: $.paths['/TriggerTransaction'].post.responses['200'].description
+    update: Success. The transaction was successfully triggered.
+  - target: $.paths['/TransactionCallback'].post.summary
+    update: TransactionCallback
+  - target: $.paths['/TransactionCallback'].post.requestBody.description
+    update: The request payload including the result of the card scan operation.
+  - target: $.paths['/TransactionCallback'].post.responses['200'].description
+    update: Success. A simple 200 OK server acknowledgment is sufficient.
+  - target: $.paths['/TransactionNotify'].post.summary
+    update: TransactionNotify
+  - target: $.paths['/TransactionNotify'].post.requestBody.description
+    update: The request payload containing final session details.
+  - target: $.paths['/TransactionNotify'].post.responses['200'].description
+    update: Success. The transaction notification was received.
+  - target: $.paths['/Settlement'].post.summary
+    update: Settlement
+  - target: $.paths['/Settlement'].post.requestBody.description
+    update: The request payload containing the final transaction amount and optional e-receipt data.
+  - target: $.paths['/Settlement'].post.responses['200'].description
+    update: Success. The transaction has been successfully settled.
+  - target: $.paths['/TimeoutCallback'].post.summary
+    update: TimeoutCallback
+  - target: $.paths['/TimeoutCallback'].post.requestBody.description
+    update: The request payload containing details of the timed-out session.
+  - target: $.paths['/TimeoutCallback'].post.responses['200'].description
+    update: Success. A simple 200 OK server acknowledgment is sufficient.
+  - target: $.paths['/CancelTransaction'].post.summary
+    update: CancelTransaction
+  - target: $.paths['/CancelTransaction'].post.requestBody.description
+    update: The request to cancel a transaction.
+  - target: $.paths['/CancelTransaction'].post.responses['200'].description
+    update: Success. The transaction has been successfully canceled.
+  - target: $.paths['/StopNotify'].post.summary
+    update: StopNotify
+  - target: $.paths['/StopNotify'].post.requestBody.description
+    update: The request payload containing card and terminal identifiers to validate a stop request.
+  - target: $.paths['/StopNotify'].post.responses['200'].description
+    update: Success. The stop request was successfully processed.
+  - target: $.paths['/AvailabilityCheck'].post.summary
+    update: AvailabilityCheck
+  - target: $.paths['/AvailabilityCheck'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/StopCallback'].post.summary
+    update: StopCallback
+  - target: $.paths['/StopCallback'].post.requestBody.description
+    update: The request payload containing details of the card and session to be stopped.
+  - target: $.paths['/StopCallback'].post.responses['200'].description
+    update: Success. A simple 200 OK server acknowledgment is sufficient.
+  - target: $.paths['/DeclineCallback'].post.summary
+    update: DeclineCallback
+  - target: $.paths['/DeclineCallback'].post.requestBody.description
+    update: The request payload containing details of the failed transaction.
+  - target: $.paths['/DeclineCallback'].post.responses['200'].description
+    update: Success. A simple 200 OK server acknowledgment is sufficient.
+  - target: $.paths['/InfoQuery'].post.summary
+    update: InfoQuery
+  - target: $.paths['/InfoQuery'].post.requestBody.description
+    update: The request payload containing details to query for.
+  - target: $.paths['/InfoQuery'].post.responses['200'].description
+    update: Success. The requested information has been successfully retrieved.
+  - target: $.components.schemas.AuthStatus.description
+    update: The object containing the card authorization result.
+  - target: $.components.schemas.AuthStatus.properties.Verdict.description
+    update: The authorization decision, which can be `"Approved"`, `"Declined"`, etc.
+  - target: $.components.schemas.AuthStatus.properties.ErrorCode.description
+    update: An optional numeric error code if the card was declined.
+  - target: $.components.schemas.AuthStatus.properties.ErrorDescription.description
+    update: An explanation of the error, if any.
+  - target: $.components.schemas.AuthStatus.properties.StatusMessage.description
+    update: A status message returned by Spark.
+  - target: $.components.schemas.StartAuthenticationRequest.description
+    update: |
+      The request payload for the `/spark/StartAuthentication` endpoint. This call is the initial step for a transaction, authenticating the request and preparing the session.
+  - target: $.components.schemas.StartAuthenticationRequest.properties.TokenId.description
+    update: |
+      A unique token provided by Nayax to identify your integration.
+  - target: $.components.schemas.StartAuthenticationRequest.properties.TerminalId.description
+    update: |
+      The unique device ID of the target terminal.
+  - target: $.components.schemas.StartAuthenticationRequest.properties.TerminalIdType.description
+    update: |
+      Defines the type of `TerminalId` being used. Use `1` for the hardware serial number (`HW Serial`) or `2` for the Nayax Machine ID.
+  - target: $.components.schemas.StartAuthenticationRequest.properties.Random.description
+    update: |
+      A random string used as part of the encryption handshake.
+  - target: $.components.schemas.StartAuthenticationRequest.properties.Cipher.description
+    update: |
+      The AES-256 ECB encrypted payload. This is a Base64-encoded string that contains the Spark Transaction ID, a random string, and a timestamp.
+  - target: $.components.schemas.StartSessionRequest.description
+    update: |
+      The request payload sent by the Spark platform to the integrator's configured `StartSession` endpoint to initiate a transaction session.
+  - target: $.components.schemas.StartSessionRequest.properties.HwSerial.description
+    update: |
+      The serial number of the payment terminal hardware.
+  - target: $.components.schemas.StartSessionRequest.properties.MachineId.description
+    update: |
+      The unique identifier for the Nayax machine.
+  - target: $.components.schemas.StartSessionRequest.properties.TokenId.description
+    update: |
+      A unique token provided by Nayax for secure authentication.
+  - target: $.components.schemas.StartSessionRequest.properties.Random.description
+    update: |
+      A random alphanumeric string used for session verification.
+  - target: $.components.schemas.StartSessionResponse.description
+    update: |
+      The response payload from the `StartSession` endpoint, containing encrypted data and the session status.
+  - target: $.components.schemas.StartSessionResponse.properties.Cipher.description
+    update: |
+      The encrypted data used to authenticate and initiate the session.
+  - target: $.components.schemas.StartSessionResponse.properties.SparkTransactionId.description
+    update: |
+      The unique identifier for this transaction, which is echoed in all subsequent calls throughout the transaction's lifecycle.
+  - target: $.components.schemas.TriggerTransactionRequest.description
+    update: |
+      The request payload for the `/spark/TriggerTransaction` endpoint. This call initiates user interaction with a physical terminal and provides the necessary details for the transaction.
+  - target: $.components.schemas.TriggerTransactionRequest.properties.SparkTransactionId.description
+    update: |
+      The unique session ID received from Spark during the `StartAuthentication` process.
+  - target: $.components.schemas.TriggerTransactionRequest.properties.TerminalId.description
+    update: |
+      The unique ID of the target terminal.
+  - target: $.components.schemas.TriggerTransactionRequest.properties.TerminalIdType.description
+    update: |
+      Defines the ID type used for the `TerminalId`. Use `1` for the HW Serial or `2` for the Nayax Machine ID.
+  - target: $.components.schemas.TriggerTransactionRequest.properties.Amount.description
+    update: |
+      The amount to be pre-authorized or charged for the transaction. This value is required for the Pre-Selection flow.
+  - target: $.components.schemas.TriggerTransactionRequest.properties.PosDisplay.description
+    update: |
+      An optional custom message to show on the terminal's display.
+  - target: $.components.schemas.TriggerTransactionRequest.properties.EReceiptData.description
+    update: |
+      Optional JSON-formatted string representing e-receipt details for machine operators who wish to provide digital receipts.
+  - target: $.components.schemas.TriggerTransactionRequest.properties.TransactionTimeout.description
+    update: |
+      The timeout in seconds for the terminal to wait for a card to be presented. This value must be greater than `0`.
+  - target: $.components.schemas.TriggerTransactionResponse.description
+    update: |
+      The response payload from the `/spark/TriggerTransaction` endpoint, which confirms the result of the request to initiate user interaction with a physical terminal.
+  - target: $.components.schemas.TriggerTransactionResponse.properties.SparkTransactionId.description
+    update: |
+      The unique transaction ID, echoed from the request.
+  - target: $.components.schemas.TriggerTransactionResponse.properties.Status.description
+    update: |
+      An object containing the resulting verdict and an optional error description.
+  - target: $.components.schemas.TransactionCallbackRequest.description
+    update: |
+      The request payload sent by the Spark platform to the integrator's configured `TransactionCallback` endpoint. This request includes the full result of the card scan operation and is essential for proceeding with transaction confirmation or rejection handling.
+  - target: $.components.schemas.TransactionCallbackRequest.properties.NayaxTransactionId.description
+    update: |
+      The unique internal transaction ID assigned by Nayax.
+  - target: $.components.schemas.TransactionCallbackRequest.properties.SparkTransactionId.description
+    update: |
+      The unique session ID generated in `StartAuthentication`.
+  - target: $.components.schemas.TransactionCallbackRequest.properties.SiteId.description
+    update: |
+      The ID of the vending site or Spark location.
+  - target: $.components.schemas.TransactionCallbackRequest.properties.TerminalId.description
+    update: |
+      The unique ID of the terminal that read the card.
+  - target: $.components.schemas.TransactionCallbackRequest.properties.MachineId.description
+    update: |
+      The identifier of the vending machine or device.
+  - target: $.components.schemas.TransactionCallbackRequest.properties.HwSerial.description
+    update: |
+      The hardware serial number of the terminal.
+  - target: $.components.schemas.TransactionCallbackRequest.properties.MachineAuTime.description
+    update: |
+      The timestamp from the machine in the format `yyyyMMddHHmmssSSS`.
+  - target: $.components.schemas.TransactionCallbackRequest.properties.AuthStatus.description
+    update: |
+      The object containing the card authorization result.
+  - target: $.components.schemas.TransactionCallbackRequest.properties.CardLast4Digits.description
+    update: |
+      The last four digits of the presented card.
+  - target: $.components.schemas.TransactionCallbackRequest.properties.CardHash.description
+    update: |
+      The one-way hash of the full card number.
+  - target: $.components.schemas.TransactionCallbackRequest.properties.CardUid.description
+    update: |
+      The unique identifier of the card (for prepaid cards).
+  - target: $.components.schemas.TransactionCallbackRequest.properties.Amount.description
+    update: |
+      The transaction amount in the main currency unit (decimal place 0, e.g., 15 for $15.00).
+  - target: $.components.schemas.TransactionCallbackOutcome.description
+    update: |
+      The response payload from the integrator to Nayax's `TransactionCallback`, confirming the receipt of the transaction result. This callback is triggered when a user presents a card and an authorization flow is initiated.
+  - target: $.components.schemas.TransactionCallbackOutcome.properties.SparkTransactionId.description
+    update: |
+      The unique identifier for the Spark session. This ID is generated during `StartAuthentication`.
+  - target: $.components.schemas.TransactionNotifyRequest.description
+    update: |
+      The request payload for the `TransactionNotify` endpoint, which provides final details of a charging session. This request is made after a session has been prepared and the charger is ready for use.
+  - target: $.components.schemas.TransactionNotifyRequest.properties.HwSerial.description
+    update: |
+      The hardware serial number of the terminal.
+  - target: $.components.schemas.TransactionNotifyRequest.properties.MachineId.description
+    update: |
+      The ID of the vending machine or service device.
+  - target: $.components.schemas.TransactionNotifyRequest.properties.NayaxTransactionId.description
+    update: |
+      The unique Nayax internal transaction ID.
+  - target: $.components.schemas.TransactionNotifyRequest.properties.SparkTransactionId.description
+    update: |
+      The unique ID generated in `StartAuthentication`.
+  - target: $.components.schemas.TransactionNotifyRequest.properties.Amount.description
+    update: |
+      The final amount to charge in central currency units (e.g., dollars).
+  - target: $.components.schemas.TransactionNotifyRequest.properties.CardLast4Digits.description
+    update: |
+      The last four digits of the card presented.
+  - target: $.components.schemas.TransactionNotifyRequest.properties.CardHash.description
+    update: |
+      The one-way hash of the whole card number.
+  - target: $.components.schemas.TransactionNotifyRequest.properties.CardUid.description
+    update: |
+      The UID of the card (for prepaid cards).
+  - target: $.components.schemas.TransactionNotifyRequest.properties.ServiceStationNumber.description
+    update: |
+      The number identifying the service station.
+  - target: $.components.schemas.TransactionNotifyRequest.properties.SiteId.description
+    update: |
+      The identifier for the Spark site.
+  - target: $.components.schemas.TransactionNotifyRequest.properties.MachineAuTime.description
+    update: |
+      The timestamp from the device in `yyyyMMddHHmmssSSS` format.
+  - target: $.components.schemas.TransactionNotifyResponse.description
+    update: |
+      The response payload from the integrator to the `TransactionNotify` request. This response confirms the session status and echoes key identifiers.
+  - target: $.components.schemas.TransactionNotifyResponse.properties.NayaxTransactionId.description
+    update: |
+      The Nayax internal unique identifier of the transaction, echoed from the request.
+  - target: $.components.schemas.TransactionNotifyResponse.properties.SparkTransactionId.description
+    update: |
+      The unique session ID, echoed from the request.
+  - target: $.components.schemas.TransactionNotifyResponse.properties.HwSerial.description
+    update: |
+      The unique hardware serial number of the terminal, echoed from the request.
+  - target: $.components.schemas.TransactionNotifyResponse.properties.MachineId.description
+    update: |
+      The unique ID of the machine, echoed from the request.
+  - target: $.components.schemas.TransactionNotifyResponse.properties.SiteId.description
+    update: |
+      The ID of the site where the transaction originated, echoed from the request.
+  - target: $.components.schemas.TransactionNotifyResponse.properties.ServiceStationNumber.description
+    update: |
+      The identifier of the service station, echoed from the request.
+  - target: $.components.schemas.TransactionNotifyResponse.properties.Status.description
+    update: |
+      An object confirming how to proceed. The `Verdict` is typically `"Approved"` or `"Declined"`.
+  - target: $.components.schemas.SettlementRequest.description
+    update: |
+      The request payload to finalize a pre-authorized transaction after the session ends and the final amount is known. This method is only relevant for transactions using the Pre-Authorization flow.
+  - target: $.components.schemas.SettlementRequest.properties.NayaxTransactionId.description
+    update: |
+      The unique transaction ID assigned by Nayax for the transaction being settled.
+  - target: $.components.schemas.SettlementRequest.properties.SparkTransactionId.description
+    update: |
+      The unique session ID from the initial `/StartAuthentication` request. This ID links the settlement to the original transaction.
+  - target: $.components.schemas.SettlementRequest.properties.SiteId.description
+    update: |
+      The identifier of the site where the transaction occurred. This value is an echo from the initial authorization callback.
+  - target: $.components.schemas.SettlementRequest.properties.TerminalId.description
+    update: |
+      The serial or external ID of the terminal used for the transaction.
+  - target: $.components.schemas.SettlementRequest.properties.TerminalIdType.description
+    update: |
+      Defines the ID type used for the `TerminalId`. Use `1` for the HW Serial and `2` for the Nayax Machine ID.
+  - target: $.components.schemas.SettlementRequest.properties.Amount.description
+    update: |
+      The final transaction amount to be settled, specified in major currency units (e.g., dollars or euros).
+  - target: $.components.schemas.SettlementRequest.properties.EReceiptData.description
+    update: |
+      An optional JSON-formatted string containing additional e-receipt details. This data can be used to provide digital receipts to consumers via the Nayax eReceipt platform.
+  - target: $.components.schemas.SettlementResponse.description
+    update: |
+      The response payload returned by Spark upon a successful `Settlement` request. This payload includes final transaction details such as the settled amount, card information, and timestamps.
+  - target: $.components.schemas.SettlementResponse.properties.SparkTransactionId.description
+    update: |
+      The unique ID used for this transaction session, which is an echo of the value sent in the request.
+  - target: $.components.schemas.SettlementResponse.properties.CardBrand.description
+    update: |
+      The brand of the card used for the transaction, such as `Visa` or `MasterCard`.
+  - target: $.components.schemas.SettlementResponse.properties.CardLast4Digits.description
+    update: |
+      The last four digits of the payment card used.
+  - target: $.components.schemas.SettlementResponse.properties.AuthCode.description
+    update: |
+      The authorization code returned by the payment provider for the transaction.
+  - target: $.components.schemas.SettlementResponse.properties.MachineAuTime.description
+    update: |
+      The device timestamp at the moment of authorization, formatted as `yyyyMMddHHmmssSSS`.
+  - target: $.components.schemas.SettlementResponse.properties.AuTime.description
+    update: |
+      The authorization server's timestamp.
+  - target: $.components.schemas.SettlementResponse.properties.SeTime.description
+    update: |
+      The timestamp from the settlement server, formatted as `yyyyMMddHHmmssSSS`.
+  - target: $.components.schemas.SettlementResponse.properties.CurrencyCode.description
+    update: |
+      The ISO currency code for the transaction, such as `EUR`.
+  - target: $.components.schemas.SettlementResponse.properties.CurrencyNumeric.description
+    update: |
+      The ISO 4217 numeric currency code, such as `978` for EUR.
+  - target: $.components.schemas.SettlementResponse.properties.FiscalRrn.description
+    update: |
+      The fiscal reference number for the transaction, used for receipt and audit purposes.
+  - target: $.components.schemas.SettlementResponse.properties.NayaxRRN.description
+    update: |
+      The internal Nayax settlement reference number.
+  - target: $.components.schemas.SettlementResponse.properties.Amount.description
+    update: |
+      The final settled amount, approved by the Payment Provider.
+  - target: $.components.schemas.TimeoutCallbackRequest.description
+    update: |
+      The request payload sent by Spark to a configured `TimeoutCallback` endpoint. This notification is sent when a payment session times out due to inactivity or failure to complete the flow within a set period.
+  - target: $.components.schemas.TimeoutCallbackRequest.properties.TerminalId.description
+    update: |
+      The identifier of the terminal that initiated the transaction.
+  - target: $.components.schemas.TimeoutCallbackRequest.properties.MachineId.description
+    update: |
+      The unique ID of the vending machine or device.
+  - target: $.components.schemas.TimeoutCallbackRequest.properties.HwSerial.description
+    update: |
+      The hardware serial number of the terminal.
+  - target: $.components.schemas.TimeoutCallbackRequest.properties.SparkTransactionId.description
+    update: |
+      The unique Spark transaction identifier for the timed-out session. This ID should be used to reconcile or log the timeout event.
+  - target: $.components.schemas.TimeoutCallbackOutcome.description
+    update: |
+      The response payload from the integrator to Nayax's `TimeoutCallback`, confirming the receipt of the timeout notification. This callback signals that a pre-authorized payment session has timed out due to inactivity.
+  - target: $.components.schemas.TimeoutCallbackOutcome.properties.SparkTransactionId.description
+    update: |
+      The unique identifier for the Spark transaction that has timed out. This ID should be used to reconcile or log the timeout event.
+  - target: $.components.schemas.ExternalSettlementRequest.description
+    update: Settlement request details for an external transaction.
+  - target: $.components.schemas.ExternalSettlementRequest.properties.NayaxTransactionId.description
+    update: Nayax Internal Unique identifier for the transaction.
+  - target: $.components.schemas.ExternalSettlementRequest.properties.SparkTransactionId.description
+    update: Unique identifier for this transaction, used by Spark.
+  - target: $.components.schemas.ExternalSettlementRequest.properties.MachineAuTime.description
+    update: |
+      The date time string of when the `/Authorization` took place, in local (machine) time. 
+  - target: $.components.schemas.ExternalSettlementRequest.properties.SiteId.description
+    update: Optional. Echo value from Authorization Callback. Represents the Site ID.
+  - target: $.components.schemas.ExternalSettlementRequest.properties.TerminalId.description
+    update: Unique Identifier for the Nayax Terminal.
+  - target: $.components.schemas.ExternalSettlementRequest.properties.TerminalIdType.description
+    update: Indicates the type of TerminalId. 1 - Nayax HW serial, 2 - Nayax Machine ID
+  - target: $.components.schemas.ExternalSettlementRequest.properties.Amount.description
+    update: The value to be provided to the Terminal for transaction initiation. Decimal (max 2 digits for cents)
+  - target: $.components.schemas.ExternalSettlementRequest.properties.EReceiptData.description
+    update: Optional. Transaction's 3rd party data for receipt generation.
+  - target: $.components.schemas.ExternalSettlementRequest.properties.ProductInfo.description
+    update: Array of products associated with the settlement.
+  - target: $.components.schemas.ProductInfo.description
+    update: Information about a single product in the transaction.
+  - target: $.components.schemas.ProductInfo.properties.Value.description
+    update: Mandatory. The monetary amount of the product.
+  - target: $.components.schemas.ProductInfo.properties.Code.description
+    update: Represents the product code in the product's map.
+  - target: $.components.schemas.ProductInfo.properties.Quantity.description
+    update: Quantity of the product purchased.
+  - target: $.components.schemas.ExternalSettlementResponse.description
+    update: Response details for an external settlement request.
+  - target: $.components.schemas.ExternalSettlementResponse.properties.SparkTransactionId.description
+    update: The Spark unique identifier for this transaction.
+  - target: $.components.schemas.ExternalSettlementResponse.properties.Status.description
+    update: The status of the settlement request.
+  - target: $.components.schemas.ExternalSettlementResponse.properties.AuthCode.description
+    update: For Credit card implementation, when the transaction is approved, this is the External (usually Card issuer's) Authorization Code.
+  - target: $.components.schemas.ExternalSettlementResponse.properties.MachineAuTime.description
+    update: The date time string of when the `/Authorization` or `/Sale` took place, in local (machine) time.
+  - target: $.components.schemas.ExternalSettlementResponse.properties.Amount.description
+    update: The value Settled by the card issuer during the Settlement phase.
+  - target: $.components.schemas.CancelTransactionRequest.description
+    update: The request body for canceling a transaction. This is used to cancel a pre-authorized transaction or void a pre-selected one, providing details such as the transaction ID, the reason for cancellation, and the amount.
+  - target: $.components.schemas.CancelTransactionRequest.properties.NayaxTransactionId.description
+    update: The unique transaction ID assigned by Nayax, provided in the `/TransactionCallback`.
+  - target: $.components.schemas.CancelTransactionRequest.properties.SparkTransactionId.description
+    update: The unique session ID from the initial `/StartAuthentication` request.
+  - target: $.components.schemas.CancelTransactionRequest.properties.SiteId.description
+    update: The ID of the site where the transaction occurred.
+  - target: $.components.schemas.CancelTransactionRequest.properties.MachineAuTime.description
+    update: The timestamp of the cancellation from the device in its local timezone. The format is `yyyyMMddHHmmssSSS`.
+  - target: $.components.schemas.CancelTransactionRequest.properties.TerminalId.description
+    update: The serial or external ID of the terminal used.
+  - target: $.components.schemas.CancelTransactionRequest.properties.TerminalIdType.description
+    update: Defines the type of ID used for the `TerminalId` parameter. Use `1` for the HW Serial or `2` for the Nayax Machine ID.
+  - target: $.components.schemas.CancelTransactionRequest.properties.CancellationType.description
+    update: Indicates which cancellation flow is being implemented. Use `1` for a Pre-Authorization Cancel or `2` for a Pre-Selection Void.
+  - target: $.components.schemas.CancelTransactionRequest.properties.ReasonCode.description
+    update: The internal code explaining the reason for the cancellation.
+  - target: $.components.schemas.CancelTransactionRequest.properties.ReasonText.description
+    update: A human-readable explanation of the cancellation reason. This parameter is optional.
+  - target: $.components.schemas.CancelTransactionRequest.properties.CancelAmount.description
+    update: The amount to be canceled in major currency units (e.g., dollars or euros).
+  - target: $.components.schemas.CancelTransactionResponse.description
+    update: The response object for a canceled transaction, confirming the outcome of the cancellation and providing key details such as transaction identifiers, timestamps, and payment information.
+  - target: $.components.schemas.CancelTransactionResponse.properties.SparkTransactionId.description
+    update: The ID of the canceled session.
+  - target: $.components.schemas.CancelTransactionResponse.properties.Status.description
+    update: An object containing the final verdict of the cancellation and a descriptive message.
+  - target: $.components.schemas.CancelTransactionResponse.properties.Status.properties.Verdict.description
+    update: The outcome of the cancellation. It will be `"Approved"` if successful or `"Declined"` if it failed.
+  - target: $.components.schemas.CancelTransactionResponse.properties.Status.properties.ErrorDescription.description
+    update: Provides additional information if the verdict is `"Declined"`, or `"No Errors"` for a successful request.
+  - target: $.components.schemas.CancelTransactionResponse.properties.Status.properties.ErrorCode.description
+    update: A numeric code that specifies the type of error that occurred. This field is present only in error responses.
+  - target: $.components.schemas.CancelTransactionResponse.properties.CardBrand.description
+    update: The brand of the card used for the transaction (e.g., `"Visa"`, `"MasterCard"`).
+  - target: $.components.schemas.CancelTransactionResponse.properties.CardLast4Digits.description
+    update: The last four digits of the card used.
+  - target: $.components.schemas.CancelTransactionResponse.properties.AuthCode.description
+    update: The authorization code for the cancellation.
+  - target: $.components.schemas.CancelTransactionResponse.properties.MachineAuTime.description
+    update: The timestamp of the cancellation from the device, in the format `yyyyMMddHHmmssSSS`.
+  - target: $.components.schemas.CancelTransactionResponse.properties.AuTime.description
+    update: The timestamp from the authorization server.
+  - target: $.components.schemas.CancelTransactionResponse.properties.CancelTime.description
+    update: The server timestamp of the cancellation confirmation, in the format `yyyyMMddHHmmssSSS`.
+  - target: $.components.schemas.CancelTransactionResponse.properties.CurrencyCode.description
+    update: The ISO currency code (e.g., `"EUR"`).
+  - target: $.components.schemas.CancelTransactionResponse.properties.CurrencyNumeric.description
+    update: The ISO numeric currency code (e.g., `"978"` for EUR).
+  - target: $.components.schemas.CancelTransactionResponse.properties.FiscalRrn.description
+    update: The fiscal reference number for the receipt or audit trail.
+  - target: $.components.schemas.CancelTransactionResponse.properties.NayaxRRN.description
+    update: The Nayax reference number of the transaction.
+  - target: $.components.schemas.StopNotifyRequest.description
+    update: desc
+  - target: $.components.schemas.StopNotifyRequest.properties.StopSiteId.description
+    update: Indication for Nayax Engine in which Site the transaction originated
+  - target: $.components.schemas.StopNotifyRequest.properties.MachineId.description
+    update: |
+      - Length: 255
+      - Unique Identifier for the Nayax Machine
+  - target: $.components.schemas.StopNotifyRequest.properties.HwSerial.description
+    update: |
+      - Length: 255
+      - Unique Identifier for the Nayax Device
+  - target: $.components.schemas.StopNotifyRequest.properties.CardLast4Digits.description
+    update: Payment card's last 4 digits
+  - target: $.components.schemas.StopNotifyRequest.properties.CardUid.description
+    update: Payment card's Unique identifier
+  - target: $.components.schemas.StopNotifyRequest.properties.ServiceStationNumber.description
+    update: |
+      - Identifies the Spark Provider’s Point of Interaction number
+      - Will be provided by Nayax when the Nayax Device is configured to support several service points via the Nayax backoffice system
+  - target: $.components.schemas.StopNotifyResponse.description
+    update: |
+      The response sent by the integrator to Nayax's `StopNotify` request, which indicates whether the card presented can be used to stop a session on the terminal. A `Verdict` of `"Approved"` indicates that the card matches an ongoing session and the flow can proceed.
+  - target: $.components.schemas.StopNotifyResponse.properties.SparkTransactionId.description
+    update: |
+      The Spark session identifier for the matched transaction.
+  - target: $.components.schemas.StopNotifyResponse.properties.NayaxTransactionId.description
+    update: |
+      The unique ID for the Nayax transaction.
+  - target: $.components.schemas.StopNotifyResponse.properties.SiteId.description
+    update: |
+      The original site ID where the transaction was initiated.
+  - target: $.components.schemas.StopNotifyResponse.properties.StopSiteId.description
+    update: |
+      The site ID where the card was presented to stop the session.
+  - target: $.components.schemas.StopNotifyResponse.properties.MachineId.description
+    update: |
+      The ID of the machine where the card was presented.
+  - target: $.components.schemas.StopNotifyResponse.properties.HwSerial.description
+    update: |
+      The serial number of the machine.
+  - target: $.components.schemas.StopNotifyResponse.properties.MachineAuTime.description
+    update: |
+      The local machine timestamp of the authorization in the format `yyyyMMddHHmmssSSS`.
+  - target: $.components.schemas.AvailabilityCheckRequest.description
+    update: This object is used to check the availability of a service station and retrieve details to display on the Nayax device before initiating a transaction. It's sent after a successful StartSession response to gather information for the POS device.
+  - target: $.components.schemas.AvailabilityCheckRequest.properties.HwSerial.description
+    update: The unique serial number of the hardware terminal, used to identify the Nayax device.
+  - target: $.components.schemas.AvailabilityCheckRequest.properties.MachineId.description
+    update: The unique ID of the vending machine or terminal, as configured in the Nayax system.
+  - target: $.components.schemas.AvailabilityCheckRequest.properties.SparkTransactionId.description
+    update: The unique transaction ID assigned by Spark for the open session. This ID is provided in the `/StartSession` and `/StartAuthentication` responses and must be used for all subsequent calls within the same transaction lifecycle.
+  - target: $.components.schemas.AvailabilityCheckRequest.properties.Amount.description
+    update: The estimated amount for the session, to be displayed on the terminal. This value is used for Pre-Authorization and Pre-Selection flows to provide the consumer with a transaction estimate.
+  - target: $.components.schemas.AvailabilityCheckRequest.properties.ServiceStationNumber.description
+    update: The identifier for the selected service station or point of interaction. This parameter is included when the Nayax device is configured to support multiple service points.
+  - target: $.components.schemas.AvailabilityCheckRequest.properties.SiteId.description
+    update: The ID of the site where the transaction originated. This value helps the Nayax Engine route the transaction to the correct location.
+  - target: $.components.schemas.AvailabilityCheckResponse.description
+    update: The response object for the InfoQuery API, providing status, availability, and display information to the Nayax device before a transaction begins.
+  - target: $.components.schemas.AvailabilityCheckResponse.properties.SparkTransactionId.description
+    update: The unique transaction ID from the original request.
+  - target: $.components.schemas.AvailabilityCheckResponse.properties.HwSerial.description
+    update: The unique serial number of the Nayax hardware terminal.
+  - target: $.components.schemas.AvailabilityCheckResponse.properties.MachineId.description
+    update: The unique identifier for the machine or device.
+  - target: $.components.schemas.AvailabilityCheckResponse.properties.SiteId.description
+    update: The ID of the site where the terminal is operating.
+  - target: $.components.schemas.AvailabilityCheckResponse.properties.ServiceStationNumber.description
+    update: Identifies the selected service station or point of interaction number. This parameter is provided by Nayax when the device supports multiple service points.
+  - target: $.components.schemas.AvailabilityCheckResponse.properties.ServiceStationAvailability.description
+    update: The availability status of the service station. A value of `1` indicates it's `Available`, `2` means `Busy`, and `3` signifies `Out of Service`.
+  - target: $.components.schemas.AvailabilityCheckResponse.properties.PosDisplay.description
+    update: A custom message to be displayed on the terminal screen, formatted as a semicolon-delimited string.
+  - target: $.components.schemas.AvailabilityCheckResponse.properties.Amount.description
+    update: The estimated total amount for the session, in major currency units.
+  - target: $.components.schemas.AvailabilityCheckResponse.properties.Status.description
+    update: An object containing the verdict of the availability check and a descriptive message.
+  - target: $.components.schemas.AvailabilityCheckResponse.properties.Status.properties.Verdict.description
+    update: The result of the request. This will be `"Approved"` if the service station is available, or `"Declined"` if not.
+  - target: $.components.schemas.AvailabilityCheckResponse.properties.Status.properties.StatusMessage.description
+    update: A human-readable message providing more context about the status, such as "Charger is available for charging".
+  - target: $.components.schemas.ExternalCancelRequest.description
+    update: Request details for canceling an external payment transaction (e.g., voiding a pre-authorization).
+  - target: $.components.schemas.ExternalCancelRequest.properties.NayaxTransactionId.description
+    update: Nayax Internal Unique identifier for the transaction being cancelled.
+  - target: $.components.schemas.ExternalCancelRequest.properties.SparkTransactionId.description
+    update: Spark Unique identifier for this transaction.
+  - target: $.components.schemas.ExternalCancelRequest.properties.SiteId.description
+    update: Optional. Indication for the Nayax Engine in which Site the transaction originated. Echo value from Authorization Callback.
+  - target: $.components.schemas.ExternalCancelRequest.properties.MachineAuTime.description
+    update: The date time string of when the `/Authorization` or `/Sale` took place, in local (machine) time.
+  - target: $.components.schemas.ExternalCancelRequest.properties.TerminalId.description
+    update: Unique Identifier for the Nayax Terminal.
+  - target: $.components.schemas.ExternalCancelRequest.properties.TerminalIdType.description
+    update: Indicates the type of TerminalId. 1 - Nayax HW serial, 2 - Nayax Machine ID
+  - target: $.components.schemas.ExternalCancelRequest.properties.CancellationType.description
+    update: Indicates which cancellation flow is implemented. 1 - Pre-Authorization Cancel, 2 - Pre-Selection Void
+  - target: $.components.schemas.ExternalCancelRequest.properties.ReasonCode.description
+    update: Conditional. Cancel reason code.
+  - target: $.components.schemas.ExternalCancelRequest.properties.ReasonText.description
+    update: Conditional. Detailed description or text of the cancel reason. Either ReasonCode or ReasonText must be provided. ExternalCancel request without both will cause failure.
+  - target: $.components.schemas.ExternalCancelRequest.properties.CancelAmount.description
+    update: Always mandatory. Amount to be cancelled. Can’t be higher than the authorized amount.
+  - target: $.components.schemas.ExternalCancelResponse.description
+    update: Response details for an external transaction cancellation request.
+  - target: $.components.schemas.ExternalCancelResponse.properties.SparkTransactionId.description
+    update: The Spark unique identifier for this transaction.
+  - target: $.components.schemas.ExternalCancelResponse.properties.Status.description
+    update: The status of the cancellation request.
+  - target: $.components.schemas.ExternalCancelResponse.properties.AuthCode.description
+    update: For Credit card implementation, when the transaction is approved, this is the External (usually Card issuer's) Authorization Code.
+  - target: $.components.schemas.ExternalCancelResponse.properties.MachineAuTime.description
+    update: |
+      The date time string of when the `/Authorization` or `/Sale` took place, in local (machine) time. 
+  - target: $.components.schemas.StopCallbackRequest.description
+    update: |
+      The request payload sent by Spark to an integrator's configured `StopCallback` endpoint to notify that a consumer has presented a card to stop an ongoing session. This is used to validate and match the card against an active session.
+  - target: $.components.schemas.StopCallbackRequest.properties.StopSiteId.description
+    update: |
+      The ID of the site where the session stop was triggered.
+  - target: $.components.schemas.StopCallbackRequest.properties.MachineId.description
+    update: |
+      The unique ID of the vending machine or device where the card was presented.
+  - target: $.components.schemas.StopCallbackRequest.properties.HwSerial.description
+    update: |
+      The hardware serial number of the terminal.
+  - target: $.components.schemas.StopCallbackRequest.properties.CardLast4Digits.description
+    update: |
+      The last four digits of the card used for the transaction.
+  - target: $.components.schemas.StopCallbackRequest.properties.CardHash.description
+    update: |
+      The hashed value of the payment card presented.
+  - target: $.components.schemas.StopCallbackRequest.properties.SparkTransactionId.description
+    update: |
+      The Spark transaction identifier of the original initiated session.
+  - target: $.components.schemas.StopCallbackRequest.properties.NayaxTransactionId.description
+    update: |
+      The unique Nayax transaction ID associated with the open session.
+  - target: $.components.schemas.StopCallbackRequest.properties.CardUid.description
+    update: |
+      A unique identifier of the card, if available.
+  - target: $.components.schemas.StopCallbackRequest.properties.MachineAuTime.description
+    update: |
+      The terminal's local timestamp in the format `yyyyMMddHHmmssSSS`.
+  - target: $.components.schemas.StopCallbackRequest.properties.ServiceStationNumber.description
+    update: |
+      The identifier of the charging point or station used.
+  - target: $.components.schemas.StopCallbackOutcome.description
+    update: |
+      The response payload from the integrator to Nayax's `StopCallback`, acknowledging the request and providing a status.
+  - target: $.components.schemas.StopCallbackOutcome.properties.SparkTransactionId.description
+    update: |
+      The unique identifier for the Spark transaction that was requested to be stopped.
+  - target: $.components.schemas.StopCallbackOutcome.properties.ServiceStationNumber.description
+    update: |
+      The number identifying the service station where the session stop was attempted. This value is provided by Nayax if the device is configured to support multiple service points.
+  - target: $.components.schemas.StartAuthenticationResponse.description
+    update: |
+      The response payload from the `/spark/StartAuthentication` endpoint. It provides a unique hashed transaction ID and the authentication status.
+  - target: $.components.schemas.StartAuthenticationResponse.properties.HashedSparkTransactionId.description
+    update: |
+      A SHA256 hash of the `SparkTransactionId` sent in the request. This ID must be used for all subsequent steps of the transaction.
+  - target: $.components.schemas.DeclineCallbackRequest.description
+    update: |
+      The request payload sent by Spark to the integrator's `/spark/DeclineCallback` endpoint to report a failed transaction.
+  - target: $.components.schemas.DeclineCallbackRequest.properties.MachineId.description
+    update: |
+      The unique ID of the vending machine or terminal where the transaction occurred.
+  - target: $.components.schemas.DeclineCallbackRequest.properties.HwSerial.description
+    update: |
+      The serial number of the hardware terminal.
+  - target: $.components.schemas.DeclineCallbackRequest.properties.SparkTransactionId.description
+    update: |
+      The unique identifier of the failed Spark transaction. This ID is typically generated during the `StartAuthentication` process.
+  - target: $.components.schemas.DeclineCallbackOutcome.description
+    update: |
+      The response payload from the `DeclineCallback` endpoint, providing details about a failed Spark transaction. This payload confirms the transaction's failure and provides contextual information.
+  - target: $.components.schemas.DeclineCallbackOutcome.properties.SparkTransactionId.description
+    update: |
+      The unique identifier for the failed Spark transaction session. This ID is initially generated during the `StartAuthentication` process and is used to track the session throughout its lifecycle.
+  - target: $.components.schemas.InfoQueryRequest.description
+    update: |
+      The request payload sent by Spark to the integrator's configured `InfoQuery` endpoint to retrieve information about a service and its availability.
+  - target: $.components.schemas.InfoQueryRequest.properties.HwSerial.description
+    update: |
+      The serial number of the hardware terminal where the `InfoQuery` originated.
+  - target: $.components.schemas.InfoQueryRequest.properties.MachineId.description
+    update: |
+      The unique identifier for the machine or device.
+  - target: $.components.schemas.InfoQueryRequest.properties.SparkTransactionId.description
+    update: |
+      The unique transaction ID assigned by Spark. This ID is used to track the session throughout its lifecycle.
+  - target: $.components.schemas.InfoQueryRequest.properties.ServiceStationNumber.description
+    update: |
+      An identifier for the selected service station (e.g., a charging point number). This value identifies the Point of Interaction number provided by the Spark Provider.
+  - target: $.components.schemas.InfoQueryRequest.properties.SiteId.description
+    update: |
+      The ID of the site where the terminal is operating. This indicates the location where the transaction flow originated.
+  - target: $.components.schemas.InfoQueryResponse.description
+    update: desc
+  - target: $.components.schemas.InfoQueryResponse.properties.SparkTransactionId.description
+    update: |
+      - Transaction ID generated in the /StartSession response
+  - target: $.components.schemas.InfoQueryResponse.properties.HwSerial.description
+    update: |
+      - Length: 255
+      - Unique Identifier for the Nayax Device
+      - Echo value from InfoQuery Request
+  - target: $.components.schemas.InfoQueryResponse.properties.MachineId.description
+    update: |
+      - Length: 255
+      - Unique Identifier for the Nayax Machine
+      - Echo value from InfoQuery Request
+  - target: $.components.schemas.InfoQueryResponse.properties.ServiceStationNumber.description
+    update: |
+      - Identifies the Spark Provider’s Point of Interaction number
+      - Will be provided by Nayax when the Nayax Device is configured to support several service points via the Nayax backoffice system
+      - Echo value from InfoQuery Request
+  - target: $.components.schemas.InfoQueryResponse.properties.ServiceStationAvailability.description
+    update: |
+      - Indictaes if selected Service Station is (1) Available, (2) In Session / Busy, (3) Out of Service
+  - target: $.components.schemas.InfoQueryResponse.properties.PosDisplay.description
+    update: |
+      - Optional
+      - Allows presenting information on the payment terminal screen
+  - target: $.components.schemas.InfoQueryResponse.properties.Amount.description
+    update: |
+      - Length: 3
+      - A value that will be provided to the Terminal for transaction initiation
+  - target: $.components.schemas.InfoQueryResponse.properties.SiteId.description
+    update: |
+      - Mandatory
+      - Echo value from InfoQuery Request
+  - target: $.components.schemas.Status.description
+    update: Transaction Status Details
+  - target: $.components.schemas.Status.properties.Verdict.description
+    update: Status of the request (Approved / Declined)
+  - target: $.components.schemas.Status.properties.ErrorCode.description
+    update: |
+      - Conditional
+      - Reason for declined request
+  - target: $.components.schemas.Status.properties.ErrorDescription.description
+    update: |
+      - Conditional
+      - Length: 255
+      - Error description
+  - target: $.components.schemas.Status.properties.StatusMessage.description
+    update: |
+      - Optional
+      - Length: 255
+      - Transaction status message as free text field
+  - target: $.components.schemas.ResponseCode.description
+    update: |
+      Error description
+      * 0   - NoErrors,
+      * 20  - Machine Has No Device,
+      * 21  - Machine Not Connected To MQTT Server,
+      * 22  - Missing Device IP,
+      * 23  - IP Is Non VPN,
+      * 24  - Machine Not Responding,
+      * 25  - Unknown Machine ID,
+      * 26  - Validation Error,
+      * 27  - Unknown Transaction ID
+      * 28  - Already Cancelled,
+      * 29  - Not Allowed To Wake Device,
+      * 30  - Spark Integrator Not Active,
+      * 31  - Cancellation Failed,
+      * 32  - Transaction Not Found Or Old,
+      * 33  - Fail To Authenticate,
+      * 34  - Missing Amount,
+      * 35  - Settlement Failed,
+      * 36  - Site ID Not Found,
+      * 37  - Authorization Failed,
+      * 38  - Transaction Callback Failed
+      * 39  - Start Session Failed
+      * 40  - Timeout Callback Failed
+      * 41  - Transaction Notify Failed
+      * 42  - Service Availability Check Failed
+      * 43  - No Token for Spark Integrator
+      * 44  - Timeout on POS Device
+      * 45  - Cancelled on POS Device
+      * 46  - Info Query Failed
+      * 47  - Spark Device Start V2 Not Supported
+      * 48  - Spark Device Start V1 Not Supported
+      * 49  - Spark Remote Start and Spark Device Start Combination Not Supported
+      * 801 - Device Stop Request Approved
+      * 802 - Device Stop Request Failed
+      * 990 - Transaction Cancelled by Spark Provider,
+      * 992 - TimeOutError,
+      * 997 - Nayax Validation Error,
+      * 999 - GeneralError

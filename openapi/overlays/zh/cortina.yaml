@@ -1,0 +1,1467 @@
+overlay: 1.0.0
+info:
+  title: zh translation overlay
+  version: 1.0.0
+actions:
+  - target: $.components.schemas.ActorInfo.description
+    update: Merchant (Actor) details.
+  - target: $.components.schemas.ActorInfo.properties.DynamicURL.description
+    update: |
+      Optional URL configuration at the actor level. Supports dynamic URLs. 
+      - Max length: 255.
+  - target: $.components.schemas.ActorInfo.properties.Id.description
+    update: |
+      Unique ID of the actor (merchant) as defined in the Nayax backoffice.
+  - target: $.components.schemas.ActorInfo.properties.MCC.description
+    update: |
+      Merchant Category Code (MCC), classifies businesses by type of goods or services provided.
+  - target: $.components.schemas.ActorInfo.properties.MerchantId.description
+    update: |
+      Merchant identifier as defined in the Nayax backoffice. Contact Nayax to configure. 
+      - Max length: 255.
+  - target: $.components.schemas.ActorInfo.properties.Name.description
+    update: |
+      Merchant name as registered in the Nayax backoffice. Max length: 255.
+  - target: $.components.schemas.ActorInfo.properties.OperatorId.description
+    update: |
+      ID of the operator associated with the merchant. Max length: 255.
+  - target: $.components.schemas.ActorInfo.properties.OperatorName.description
+    update: |
+      Name of the operator associated with the merchant. Max length: 255.
+  - target: $.components.schemas.ActorInfo.properties.SubMerchantId.description
+    update: |
+      Identifier for a sub-merchant under the main merchant. Contact Nayax to configure. Max length: 255.
+  - target: $.components.schemas.ActorOnboardingData.description
+    update: Echo and/or Updated onboarding actor data (Merchant data)
+  - target: $.components.schemas.ActorOnboardingData.properties.ApiKey.description
+    update: |
+      - Optional
+      - Length: 40
+  - target: $.components.schemas.ActorOnboardingData.properties.AppId.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.ActorOnboardingData.properties.CertPass.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.ActorOnboardingData.properties.CertPath.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.ActorOnboardingData.properties.Key.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.ActorOnboardingData.properties.MerchantId.description
+    update: |
+      - Optional
+      - Length: 40
+  - target: $.components.schemas.ActorOnboardingData.properties.OnboardingTransactionId.description
+    update: |
+      - Optional
+  - target: $.components.schemas.ActorOnboardingData.properties.Password.description
+    update: |
+      - Optional
+      - Length: 50
+  - target: $.components.schemas.ActorOnboardingData.properties.SubMerchantId.description
+    update: |
+      - Optional
+      - Length: 50
+  - target: $.components.schemas.ActorOnboardingData.properties.SubMerchantNumber.description
+    update: |
+      - Optional
+  - target: $.components.schemas.ActorOnboardingData.properties.TerminalId.description
+    update: |
+      - Optional
+      - Length: 255
+  - target: $.components.schemas.ActorOnboardingData.properties.URL.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.ActorOnboardingData.properties.UserName.description
+    update: |
+      - Optional
+      - Length: 40
+  - target: $.components.schemas.Balance.properties.RegularCredit.description
+    update: Regular Credit amount or amounts of transactions based on RegularCreditType.
+  - target: $.components.schemas.Balance.properties.RevalueCredit.description
+    update: |-
+      Revalue credit amount.
+      - Only if card is configured a revalue-able
+  - target: $.components.schemas.BasicInfo.description
+    update: Basic transaction information.
+  - target: $.components.schemas.BasicInfo.properties.AgeLimitation.description
+    update: |
+      Minimum age required for transaction approval.
+  - target: $.components.schemas.BasicInfo.properties.Amount.description
+    update: |
+      Transaction amount. Use decimal format (e.g. 0.01 for 1 cent). Currencies without decimal places should also be expressed as a double (e.g. 234.0).
+  - target: $.components.schemas.BasicInfo.properties.AuditNumber.description
+    update: |
+      For internal Nayax use.
+  - target: $.components.schemas.BasicInfo.properties.BillingProviderId.description
+    update: |
+      ID of the billing provider (assigned by Nayax).
+  - target: $.components.schemas.BasicInfo.properties.CurrencyCode.description
+    update: |
+      ISO 4217 currency code in Alpha-3 format (e.g. USD, EUR, ILS).
+  - target: $.components.schemas.BasicInfo.properties.CurrencyNumeric.description
+    update: |
+      ISO 4217 currency code in Numeric-3 format.
+  - target: $.components.schemas.BasicInfo.properties.IsDeferredAuthorization.description
+    update: |
+      Indicates whether the authorization is deferred.
+  - target: $.components.schemas.BasicInfo.properties.IsProductSelected.description
+    update: |
+      Indicates whether a product was pre-selected before payment.
+  - target: $.components.schemas.BasicInfo.properties.IsSoftDeclineCompletion.description
+    update: |
+      Indicates whether the transaction was completed after a soft decline.
+  - target: $.components.schemas.BasicInfo.properties.MachineAuTime.description
+    update: |
+      Timestamp of machine authorization (DDMMYYHHMMSS).
+  - target: $.components.schemas.BasicInfo.properties.NayaxRRN.description
+    update: |
+      Reference number for external identification. Should be visible to the end-user or external parties (e.g. card issuer, app provider). Echoed in `/Inquiry` requests.
+  - target: $.components.schemas.BasicInfo.properties.NayaxTransactionId.description
+    update: |
+      Internal Nayax ID used to track the transaction in future requests.
+  - target: $.components.schemas.BasicInfo.properties.PaymentMethodID.description
+    update: |
+      ID of the payment method provider (assigned by Nayax).
+  - target: $.components.schemas.BasicInfo.properties.SiteId.description
+    update: |
+      Region identifier for the Nayax server.
+  - target: $.components.schemas.BasicInfo.properties.TimeoutMS.description
+    update: |
+      Server timeout in milliseconds.
+  - target: $.components.schemas.BasicInfo.properties.TransactionId.description
+    update: |
+      Unique identifier for the transaction.
+      - If `/StartSession` was used, this echoes the encrypted transaction ID (`TranIDCipher`).
+      - If not, the Nayax engine generates this value.
+  - target: $.components.schemas.Batch.properties.AddToBatch.description
+    update: |
+      Denote on whether to add to the batch
+  - target: $.components.schemas.Batch.properties.BatchId.description
+    update: |
+      Batch id relevant to the transaction
+  - target: $.components.schemas.Batch.properties.BatchTransactionId.description
+    update: |
+      The transaction id inside the batch (id)
+  - target: $.components.schemas.Batch.properties.DeleteFromBatch.description
+    update: |
+      Denote on whether to delete from batch
+  - target: $.components.schemas.BatchOperation.description
+    update: |
+      * 1 - Open
+      * 3 - Close
+  - target: $.components.schemas.BatchStatus.description
+    update: |
+      *  0 - Missing
+      *  1 - Open
+      *  2 - InProgress
+      *  3 - Close
+      *  4 - Reopen
+      *  5 - Closed
+      *  6 - Declined
+      * 99 - Unknown
+  - target: $.components.schemas.CardBrandInfo.properties.PrimaryDescription.description
+    update: Primary Brand Description
+  - target: $.components.schemas.CardBrandInfo.properties.PrimaryId.description
+    update: Primary Brand Id
+  - target: $.components.schemas.CardBrandInfo.properties.SecondaryDescription.description
+    update: Secondary Brand Description
+  - target: $.components.schemas.CardBrandInfo.properties.SecondaryId.description
+    update: Secondary Brand Id
+  - target: $.components.schemas.CardData.description
+    update: Additional data we read from the card (EMV data, expiration date, cvv2, etc.)
+  - target: $.components.schemas.CardData.properties.CVV2.description
+    update: |
+      Optional, cvv2
+  - target: $.components.schemas.CardData.properties.CardHolderName.description
+    update: Card Holder Name
+  - target: $.components.schemas.CardData.properties.CardNumber.description
+    update: |
+      - String ()
+      - Mandatory
+      - For card present Authorization and Sale, the full Track2 will be sent in this field.
+      - For card not present, Settlement, Cancel, Void, Refund - The card PAN only will be sent.
+  - target: $.components.schemas.CardData.properties.EMVData.description
+    update: |
+      String of emv tags in TLV format
+  - target: $.components.schemas.CardData.properties.EntryMode.description
+    update: |
+      String (4)
+      Mandatory
+      Optional Value:
+      * MCR - Card number read from the card magnetic stripe.
+      * CON - Card details read from the chip via the contact interface (insert).
+      * CLS - Card details read from the chip via the contactless interface (tap).
+      * NFC - Card details read from the phone via the contactless interface (phone tap).
+      * CLM - Card track2 read from the chip via the contactless interface (contactless magstripe\\legacy mode).
+      * MIF\\MIFH - MIFARE\\MIFARE received as Hexadecimal
+      * QR - Card number read from a QR by the [DOT](https://www.nayax.com/solution/dot/)
+
+      Other values may also be sent in specific edge case, for more information please consult your Nayax POC.
+  - target: $.components.schemas.CardData.properties.ExpMonth.description
+    update: Conditional only when Interface is 1 or 10, (MM)
+  - target: $.components.schemas.CardData.properties.ExpYear.description
+    update: Conditional only when Interface is 1 or 10, (YY)
+  - target: $.components.schemas.CardData.properties.IDNumber.description
+    update: ID Number
+  - target: $.components.schemas.CardData.properties.IsDebitCard.description
+    update: Indication if card is Debit or Prepaid
+  - target: $.components.schemas.CountryInfo.description
+    update: |
+      Actor and Machine Country information
+  - target: $.components.schemas.CountryInfo.properties.Alpha2Code.description
+    update: |
+      String(2)
+      Mandatory
+      ISO-3166-1 format: Alpha-2 code
+  - target: $.components.schemas.CountryInfo.properties.Alpha3Code.description
+    update: |
+      String(3)
+      Mandatory
+      ISO-3166-1 format: Alpha-3 code
+  - target: $.components.schemas.CountryInfo.properties.Intra.description
+    update: |
+      String
+      Mandatory
+      An Intra Region refers to a geographical diversification across countries within a single 'Intra region'.
+      E.g. 'France' is country within the 'European Union' Intra Region.
+  - target: $.components.schemas.CountryInfo.properties.Name.description
+    update: |
+      String
+      Mandatory
+      Country Full Name
+  - target: $.components.schemas.CountryInfo.properties.NumericCode.description
+    update: |
+      String(3)
+      Mandatory
+      ISO-3166-1 format: Numeric-3 code
+  - target: $.components.schemas.CurrentKeyData.description
+    update: |
+      - Current Key Data
+  - target: $.components.schemas.CurrentKeyData.properties.AlgorithmId.description
+    update: |
+      - AlgorithmId ID
+  - target: $.components.schemas.CurrentKeyData.properties.ExternalKeyId.description
+    update: |
+      - External Key ID
+  - target: $.components.schemas.CurrentKeyData.properties.Kcv.description
+    update: |
+      - Key Check value (content is bytes)
+  - target: $.components.schemas.CurrentKeyData.properties.KeyExpirationDt.description
+    update: |
+      - Key Expiration Datetime
+  - target: $.components.schemas.CurrentKeyData.properties.KeyFormatId.description
+    update: |
+      - Key Format ID
+  - target: $.components.schemas.CurrentKeyData.properties.KeyProviderId.description
+    update: |
+      - Key Provider ID
+  - target: $.components.schemas.CurrentKeyData.properties.KeyRenewalDt.description
+    update: |
+      - Key Renewal Datetime
+  - target: $.components.schemas.CurrentKeyData.properties.ProviderId.description
+    update: |
+      - Provider ID
+  - target: $.components.schemas.CurrentKeyData.properties.ZmkId.description
+    update: |
+      - Internal ID for the ZMK Key
+  - target: $.components.schemas.CurrentKeyData.properties.ZpkId.description
+    update: |
+      - Internal ID for the ZPK Key
+  - target: $.components.schemas.CustomData.description
+    update: Custom Fields Information, Contact Nayax TPOC to define.
+  - target: $.components.schemas.CustomData.properties.Actor.description
+    update: |
+      Actor custom data (String in json format)
+  - target: $.components.schemas.CustomData.properties.DirectActor.description
+    update: |
+      Direct actor custom data (String in json format)
+  - target: $.components.schemas.CustomData.properties.Distributor.description
+    update: |
+      Distributor custom data (String in json format)
+  - target: $.components.schemas.CustomData.properties.Machine.description
+    update: |
+      Machine custom data (String in json format)
+  - target: $.components.schemas.CustomData.properties.Operator.description
+    update: |
+      Operator custom data (String in json format)
+  - target: $.components.schemas.CustomData.properties.SoftDecline.description
+    update: |
+      Soft Decline custom data (String in json format)
+  - target: $.components.schemas.DenyListIndication.description
+    update: |
+      * 0 - unknown/ no effect
+      * 1 - Decline will cause consumer to be added to the deny list
+      * 2 - Approval shall cause the consumer to be removed from deny list.
+  - target: $.components.schemas.DeviceInfo.description
+    update: Hardware and firmware information of the Nayax device.
+  - target: $.components.schemas.DeviceInfo.properties.FWVersion.description
+    update: |
+      Firmware version installed on the device.
+  - target: $.components.schemas.DeviceInfo.properties.HwSerial.description
+    update: |
+      Hardware serial number of the Nayax device.
+  - target: $.components.schemas.DeviceInfo.properties.Type.description
+    update: |
+      Device type as defined in the Nayax system.
+  - target: $.components.schemas.DukptInfo.description
+    update: Contains encryption details using the DUKPT (Derived Unique Key Per Transaction) method.
+  - target: $.components.schemas.DukptInfo.properties.Algorithm.description
+    update: |
+      Encryption algorithm used:
+      - `1` = TDEA
+      - `2` = 2TDEA
+      - `3` = AES-128
+      - `4` = AES-256
+      - `5` = 3TDEA
+  - target: $.components.schemas.DukptInfo.properties.ExternalKeyId.description
+    update: External key identifier.
+  - target: $.components.schemas.DukptInfo.properties.KSN.description
+    update: Key serial number used for DUKPT encryption.
+  - target: $.components.schemas.DukptInfo.properties.PINBlock.description
+    update: |
+      Encrypted PIN data provided by the cardholder. Encrypted using the key received from the TMS.
+  - target: $.components.schemas.DukptInfo.properties.PINBlockFormat.description
+    update: |
+      * 1 - ISO 0
+      * 5 - ISO 1
+      * 34 - ISO 2
+      * 47 - ISO 3
+      * 48 - ISO 4
+  - target: $.components.schemas.DynamicInquiryRequest.properties.Polling.description
+    update: Optional Polling Information
+  - target: $.components.schemas.DynamicInquiryRequest.properties.Products.items.description
+    update: Mandatory Products details
+  - target: $.components.schemas.DynamicInquiryResponse.properties.Status.description
+    update: |
+      Use 993 to keep polling.
+      See status description for more info
+  - target: $.components.schemas.DynamicQrRequest.properties.ChannelId.description
+    update: |
+      - Conditional, for Multi-channel integration, Contact Nayax TPOC to define.
+      - Channel Values shall be provided by Nayax, and cannot be altered.
+  - target: $.components.schemas.DynamicQrResponse.properties.QRCode.description
+    update: |
+      - Mandatory
+      - QR URL for device
+  - target: $.components.schemas.DynamicRefundRequest.properties.ReasonCode.description
+    update: |
+      - Optional
+      - length: Short integer (16)
+      - Refund reason code as saved in Nayax system
+  - target: $.components.schemas.DynamicRefundRequest.properties.ReasonText.description
+    update: |
+      - Optional
+      - length: 64
+      - Refund description as saved in Nayax system
+  - target: $.components.schemas.DynamicVoidRequest.properties.ReasonCode.description
+    update: |
+      - Optional
+      - length: Short integer (16)
+      - Refund reason code as saved in Nayax system
+  - target: $.components.schemas.DynamicVoidRequest.properties.ReasonText.description
+    update: |
+      - Optional
+      - length: 64
+      - Refund description as saved in Nayax system
+  - target: $.components.schemas.ECIType.description
+    update: |
+      Electronic Commerce Indicator (ECI), used to identify the type of transaction authentication performed.
+      Only applicable when `interface = 01`.
+      Possible values: - `1` – Mail Order/Telephone Order (MOTO), no 3DS - `5` – Fully authenticated CAVV/UCAFF verification - `6` – Attempted authentication at a 3DS-capable merchant (proof of attempt) - `7` – Non-authenticated e-commerce transaction
+  - target: $.components.schemas.ECom3DSInfo.description
+    update: |
+      Contains 3-D Secure (3DS) data used for Strong Customer Authentication (SCA) in electronic commerce transactions.
+  - target: $.components.schemas.ECom3DSInfo.properties.ECom3DSAdditionalData.description
+    update: Additional 3DS-specific data in string format.
+  - target: $.components.schemas.ECom3DSInfo.properties.ECom3DSCallbackUrl.description
+    update: URL for receiving the callback from the acquirer.
+  - target: $.components.schemas.ECom3DSInfo.properties.ECom3DSRequested.description
+    update: Indicates whether SCA verification is requested for this transaction.
+  - target: $.components.schemas.ECom3DSInfo.properties.ECom3DSUCAFFCAVV.description
+    update: |
+      Base64-encoded authentication value (CAVV/UCAFF). Required only if `ECI = 05`.
+  - target: $.components.schemas.ECom3DSInfo.properties.ECom3DSVersion.description
+    update: |
+      Specifies the supported 3DS version. Typically set to `1`.
+  - target: $.components.schemas.ECom3DSInfo.properties.XID.description
+    update: Base64-encoded transaction ID used in 3DS authentication.
+  - target: $.components.schemas.ECom3DSResponseInfo.properties.ECom3DSRedirectUrl.description
+    update: where the requester should redirect the customer for the SCA verification
+  - target: $.components.schemas.ECom3DSResponseInfo.properties.ECom3DSStatus.description
+    update: |
+      Conditional - when ECom3DSRequested was true.
+        * 0/null/missing - no 3DS attempted
+        * 1 - 3DS attempted & No SCA Required (Frictionless or waived by the issuer)
+        * 2 - 3DS attempted - SCA Required (Redirect URL must be used)
+        * 3 - 3DS attempt could not be completed with provider
+        * 4 - SCA performed and Failed
+        * 5 - SCA performed and Completed
+        * 6 - SCA could not be completed by Issuer
+  - target: $.components.schemas.ECom3DSType.description
+    update: |
+      3DS version supported by the merchant:
+      * 0 - Not supported
+      * 1 - 3DS version 1.0
+      * 2 - 3DS version  2.0
+  - target: $.components.schemas.EMVTags.description
+    update: Response EMV tags, Mandatory for Contact.
+  - target: $.components.schemas.EMVTags.properties.Tag71.description
+    update: EMV Tag 71 (Issuer Script Template 1). Tags 71 and 72 are optional and in any case should only be sent on Contact flow.
+  - target: $.components.schemas.EMVTags.properties.Tag72.description
+    update: EMV Tag 72 (Issuer Script Template 2). Tags 71 and 72 are optional and in any case should only be sent on Contact flow.
+  - target: $.components.schemas.EMVTags.properties.Tag8A.description
+    update: EMV Tag 8A (Authorisation Response Code), Mandatory for Contact. Value must be sent in ASCII value, e.g.value of 00 (HEXA) should be sent as 3030 (ASCII) and value of 05 (HEXA) should be sent as 3035 .
+  - target: $.components.schemas.EMVTags.properties.Tag91.description
+    update: EMV Tag 91 (Issuer Authentication Data), Mandatory for Contact.
+  - target: $.components.schemas.EncryptInfo.description
+    update: |
+      Contains encryption metadata used for secure transmission.
+  - target: $.components.schemas.EncryptInfo.properties.CertificateFileName.description
+    update: |
+      Name of the certificate file used for encryption (filename only, without path).
+  - target: $.components.schemas.EncryptInfo.properties.EncryptedMessage.description
+    update: Encrypted JSON message payload.
+  - target: $.components.schemas.EncryptInfo.properties.EncryptedSessionKey.description
+    update: AES session key encrypted with the recipient's public key.
+  - target: $.components.schemas.EncryptInfo.properties.RandomNumber.description
+    update: Random number generated for encryption operations.
+  - target: $.components.schemas.FreeInfo.description
+    update: |
+      - This field is relevant only to certain integrations
+      - Please contact our integration team for further assistance
+  - target: $.components.schemas.GeoLocation.description
+    update: Actor and Machine Geo location information
+  - target: $.components.schemas.GeoLocation.properties.Address.description
+    update: |
+      String(255)
+      Optional
+      Address as defined in the Nayax backoffice
+  - target: $.components.schemas.GeoLocation.properties.City.description
+    update: |
+      - String(255)
+      - Optional
+      - City as defined in the Nayax backoffice
+  - target: $.components.schemas.GeoLocation.properties.CountryCode.description
+    update: |
+      String
+      Optional
+      Country code (ISO3) as defined in the Nayax backoffice
+  - target: $.components.schemas.GeoLocation.properties.Latitude.description
+    update: |
+      - Machine Location Latitude as defined in the Nayax backoffice
+  - target: $.components.schemas.GeoLocation.properties.Longitude.description
+    update: |
+      - Machine Location Longitude as defined in the Nayax backoffice
+  - target: $.components.schemas.GeoLocation.properties.State.description
+    update: |
+      - String
+      - Optional
+      - Actor geo state code as defined in the Nayax backoffice
+  - target: $.components.schemas.GeoLocation.properties.ZipCode.description
+    update: |
+      String(255)
+      Optional
+      Zip code defined in the Nayax backoffice
+  - target: $.components.schemas.MachineInfo.description
+    update: Information about the machine involved in the transaction.
+  - target: $.components.schemas.MachineInfo.properties.City.description
+    update: |
+      City where the machine is located, as defined in the Nayax backoffice. Maximum length: 255 characters.
+  - target: $.components.schemas.MachineInfo.properties.DecimalPlace.description
+    update: |
+      Number of decimal places for transaction amounts.
+      - For example, `2` means values like 123.45. - A value of `0` means 12345 (no decimal).
+  - target: $.components.schemas.MachineInfo.properties.ExternalId.description
+    update: |
+      External machine ID as provided by the operator in the Nayax backoffice. Maximum length: 200 characters.
+  - target: $.components.schemas.MachineInfo.properties.GroupId.description
+    update: |
+      Internal Nayax group ID.
+  - target: $.components.schemas.MachineInfo.properties.Id.description
+    update: |
+      Unique machine ID as allocated in the Nayax backoffice.
+  - target: $.components.schemas.MachineInfo.properties.Name.description
+    update: |
+      Machine name as defined in the Nayax backoffice. Maximum length: 255 characters.
+  - target: $.components.schemas.MachineInfo.properties.Offset.description
+    update: |
+      UTC timezone offset. Maximum length: 255 characters.
+  - target: $.components.schemas.MachineInfo.properties.OperatorId.description
+    update: |
+      Merchant ID as defined in the Nayax backoffice. Maximum length: 255 characters.
+  - target: $.components.schemas.MachineInfo.properties.Region.description
+    update: |
+      Region assigned to the machine in the Nayax backoffice. Maximum length: 255 characters.
+  - target: $.components.schemas.MachineInfo.properties.TerminalId.description
+    update: |
+      Optional terminal identifier defined in the Nayax backoffice. Contact Nayax TPOC to configure. Maximum length: 255 characters.
+  - target: $.components.schemas.MachineInfo.properties.Type.description
+    update: |
+      Machine type as defined in the Nayax backoffice. Maximum length: 50 characters.
+  - target: $.components.schemas.MachineInfo.properties.ZipCode.description
+    update: |
+      Zip or postal code for the machine location. Maximum length: 255 characters.
+  - target: $.components.schemas.MachineOnboardingData.description
+    update: Echo and/or Updated onboarding machine data
+  - target: $.components.schemas.MachineOnboardingData.properties.ActorId.description
+    update: |
+      - Optional
+  - target: $.components.schemas.MachineOnboardingData.properties.MachineId.description
+    update: |
+      - Optional
+  - target: $.components.schemas.MachineOnboardingData.properties.Password.description
+    update: |
+      - Optional
+      - Length: 25
+  - target: $.components.schemas.MachineOnboardingData.properties.QrString.description
+    update: |
+      - Optional
+  - target: $.components.schemas.MachineOnboardingData.properties.TerminalId.description
+    update: |
+      - Optional
+      - Length: 255
+  - target: $.components.schemas.MachineOnboardingData.properties.UserName.description
+    update: |
+      - Optional
+      - Length: 40
+  - target: $.components.schemas.NewKeyData.description
+    update: |
+      - New Key Data
+  - target: $.components.schemas.NewKeyData.properties.EncryptedKeyValue.description
+    update: |
+      - Encrypted Key Value
+  - target: $.components.schemas.NewKeyData.properties.ExternalKeyId.description
+    update: |
+      - New External Key Id
+  - target: $.components.schemas.NewKeyData.properties.Kcv.description
+    update: |
+      - New Key Check value (content is bytes)
+  - target: $.components.schemas.OnboardActorInfo.description
+    update: Actor info for onboarding
+  - target: $.components.schemas.OnboardActorInfo.properties.ApiKey.description
+    update: |
+      - Optional
+      - Length: 40
+  - target: $.components.schemas.OnboardActorInfo.properties.AppId.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.OnboardActorInfo.properties.CertPass.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.OnboardActorInfo.properties.CertPath.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.OnboardActorInfo.properties.ContactName.description
+    update: |
+      - Optional
+      - Length: 200
+  - target: $.components.schemas.OnboardActorInfo.properties.DynamicURL.description
+    update: |
+      - Optional, support different url's.
+      - Length: 255
+      - Actor level url configuration
+  - target: $.components.schemas.OnboardActorInfo.properties.Id.description
+    update: |
+      - Optional
+      - Length: 255
+      - Actor ID as saved as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardActorInfo.properties.Key.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.OnboardActorInfo.properties.MCC.description
+    update: |
+      - Optional
+      - classify merchants and businesses by the type of goods or services provided. Payment brands, issuers and acquirers.
+  - target: $.components.schemas.OnboardActorInfo.properties.MerchantContactMobile.description
+    update: |
+      - Optional
+  - target: $.components.schemas.OnboardActorInfo.properties.MerchantContactPhone.description
+    update: |
+      - Optional
+  - target: $.components.schemas.OnboardActorInfo.properties.MerchantEmail.description
+    update: |
+      - Optional
+      - Length: 400
+  - target: $.components.schemas.OnboardActorInfo.properties.MerchantId.description
+    update: |
+      - Optional, Contact Nayax TPOC to define.
+      - Length: 255
+      - Merchant identifier as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardActorInfo.properties.MerchantMobileCountryCode.description
+    update: |
+      - Optional
+  - target: $.components.schemas.OnboardActorInfo.properties.MerchantPhoneCountryCode.description
+    update: |
+      - Optional
+  - target: $.components.schemas.OnboardActorInfo.properties.Name.description
+    update: |
+      - Optional
+      - Length: 255
+      - Direct Merchant name as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardActorInfo.properties.OperatorId.description
+    update: |
+      - Optional
+      - Length: 255
+      - Merchant Operator ID as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardActorInfo.properties.OperatorName.description
+    update: |
+      - Optional
+      - Length: 255
+      - Merchant Operator name  as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardActorInfo.properties.Password.description
+    update: |
+      - Optional
+      - Length: 50
+  - target: $.components.schemas.OnboardActorInfo.properties.SubMerchantId.description
+    update: |
+      - Optional
+      - Length: 50
+  - target: $.components.schemas.OnboardActorInfo.properties.SubMerchantNumber.description
+    update: |
+      - Optional
+  - target: $.components.schemas.OnboardActorInfo.properties.TerminalId.description
+    update: |
+      - Optional
+      - Length: 255
+  - target: $.components.schemas.OnboardActorInfo.properties.URL.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.OnboardActorInfo.properties.UserName.description
+    update: |
+      - Optional
+      - Length: 40
+  - target: $.components.schemas.OnboardCountryInfo.description
+    update: |
+      Actor and Machine Country information
+  - target: $.components.schemas.OnboardCountryInfo.properties.Alpha2Code.description
+    update: |
+      String(2)
+      Mandatory
+      ISO-3166-1 format: Alpha-2 code
+  - target: $.components.schemas.OnboardCountryInfo.properties.Alpha3Code.description
+    update: |
+      String(3)
+      Mandatory
+      ISO-3166-1 format: Alpha-3 code
+  - target: $.components.schemas.OnboardCountryInfo.properties.Name.description
+    update: |
+      String
+      Mandatory
+      Country Full Name
+  - target: $.components.schemas.OnboardCountryInfo.properties.NumericCode.description
+    update: |
+      String(3)
+      Mandatory
+      ISO-3166-1 format: Numeric-3 code
+  - target: $.components.schemas.OnboardCustomData.description
+    update: Custom Fields Information, Contact Nayax TPOC to define.
+  - target: $.components.schemas.OnboardCustomData.properties.Actor.description
+    update: |
+      Actor custom data (String in json format)
+  - target: $.components.schemas.OnboardCustomData.properties.DirectActor.description
+    update: |
+      Direct actor custom data (String in json format)
+  - target: $.components.schemas.OnboardCustomData.properties.Distributor.description
+    update: |
+      Distributor custom data (String in json format)
+  - target: $.components.schemas.OnboardCustomData.properties.Machine.description
+    update: |
+      Machine custom data (String in json format)
+  - target: $.components.schemas.OnboardCustomData.properties.Operator.description
+    update: |
+      Operator custom data (String in json format)
+  - target: $.components.schemas.OnboardDistributorInfo.description
+    update: Distributor info for onboarding
+  - target: $.components.schemas.OnboardDistributorInfo.properties.ApiKey.description
+    update: |
+      - Optional
+      - Length: 40
+  - target: $.components.schemas.OnboardDistributorInfo.properties.AppId.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.OnboardDistributorInfo.properties.CertPass.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.OnboardDistributorInfo.properties.CertPath.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.OnboardDistributorInfo.properties.DynamicURL.description
+    update: |
+      - Optional, support different url's.
+      - Length: 255
+      - Actor level url configuration
+  - target: $.components.schemas.OnboardDistributorInfo.properties.Id.description
+    update: |
+      - Optional
+      - Length: 255
+      - Actor ID as saved as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardDistributorInfo.properties.Key.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.OnboardDistributorInfo.properties.MCC.description
+    update: |
+      - Optional
+      - classify merchants and businesses by the type of goods or services provided. Payment brands, issuers and acquirers.
+  - target: $.components.schemas.OnboardDistributorInfo.properties.MerchantId.description
+    update: |
+      - Optional, Contact Nayax TPOC to define.
+      - Length: 255
+      - Merchant identifier as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardDistributorInfo.properties.Name.description
+    update: |
+      - Optional
+      - Length: 255
+      - Direct Merchant name as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardDistributorInfo.properties.OperatorId.description
+    update: |
+      - Optional
+      - Length: 255
+      - Merchant Operator ID as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardDistributorInfo.properties.OperatorName.description
+    update: |
+      - Optional
+      - Length: 255
+      - Merchant Operator name  as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardDistributorInfo.properties.Password.description
+    update: |
+      - Optional
+      - Length: 50
+  - target: $.components.schemas.OnboardDistributorInfo.properties.SubMerchantId.description
+    update: |
+      - Optional
+      - Length: 50
+  - target: $.components.schemas.OnboardDistributorInfo.properties.SubMerchantNumber.description
+    update: |
+      - Optional
+  - target: $.components.schemas.OnboardDistributorInfo.properties.TerminalId.description
+    update: |
+      - Optional
+      - Length: 255
+  - target: $.components.schemas.OnboardDistributorInfo.properties.URL.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.OnboardDistributorInfo.properties.UserName.description
+    update: |
+      - Optional
+      - Length: 40
+  - target: $.components.schemas.OnboardGeoLocation.description
+    update: Actor and Machine Geo location information
+  - target: $.components.schemas.OnboardGeoLocation.properties.Address.description
+    update: |
+      String(255)
+      Optional
+      Address as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardGeoLocation.properties.City.description
+    update: |
+      - String(255)
+      - Optional
+      - City as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardGeoLocation.properties.CountryCode.description
+    update: |
+      String
+      Optional
+      Country code (ISO3) as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardGeoLocation.properties.Latitude.description
+    update: |
+      - Machine Location Latitude as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardGeoLocation.properties.Longitude.description
+    update: |
+      - Machine Location Longitude as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardGeoLocation.properties.State.description
+    update: |
+      - String
+      - Optional
+      - Actor geo state code as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardGeoLocation.properties.ZipCode.description
+    update: |
+      String(255)
+      Optional
+      Zip code defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardMachineInfo.description
+    update: Machine info for onboarding
+  - target: $.components.schemas.OnboardMachineInfo.properties.City.description
+    update: |
+      - Optional
+      - Length: 255
+      - Machine City as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardMachineInfo.properties.ExternalId.description
+    update: |
+      - Optional
+      - Length: 200
+      - Optional filed, it reflects the Machine External ID as it has been provided by the operator in the Nayax back-office system (Machine number - operator).
+  - target: $.components.schemas.OnboardMachineInfo.properties.Id.description
+    update: |
+      - Mandatory
+      - Machine entity unique ID allocated in the Nayax backoffice.
+  - target: $.components.schemas.OnboardMachineInfo.properties.Name.description
+    update: |
+      - Mandatory
+      - Length: 255
+      - Machine Name as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardMachineInfo.properties.Offset.description
+    update: |
+      - Optional
+      - Length: 255
+      - UTC timezone offset
+  - target: $.components.schemas.OnboardMachineInfo.properties.OperatorId.description
+    update: |
+      - Optional
+      - Length: 255
+      - Merchant ID as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardMachineInfo.properties.Password.description
+    update: |
+      - Optional
+      - Length: 25
+  - target: $.components.schemas.OnboardMachineInfo.properties.QrString.description
+    update: |
+      - Optional
+  - target: $.components.schemas.OnboardMachineInfo.properties.Region.description
+    update: |
+      - Optional
+      - Length: 255
+      - Region as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardMachineInfo.properties.TerminalId.description
+    update: |
+      - Optional, Contact Nayax TPOC to define.
+      - Length: 255
+      - Optinal Terminal identifier as deifned in the Nayax backoffice.
+  - target: $.components.schemas.OnboardMachineInfo.properties.Type.description
+    update: |
+      - Length: 50
+      - Machine Type as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardMachineInfo.properties.UserName.description
+    update: |
+      - Optional
+      - Length: 40
+  - target: $.components.schemas.OnboardMachineInfo.properties.ZipCode.description
+    update: |
+      - Optional
+      - Length: 255
+      - Machine ZipCode as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardOperatorInfo.description
+    update: Operator info for onboarding
+  - target: $.components.schemas.OnboardOperatorInfo.properties.ApiKey.description
+    update: |
+      - Optional
+      - Length: 40
+  - target: $.components.schemas.OnboardOperatorInfo.properties.AppId.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.OnboardOperatorInfo.properties.CertPass.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.OnboardOperatorInfo.properties.CertPath.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.OnboardOperatorInfo.properties.DynamicURL.description
+    update: |
+      - Optional, support different url's.
+      - Length: 255
+      - Actor level url configuration
+  - target: $.components.schemas.OnboardOperatorInfo.properties.Id.description
+    update: |
+      - Optional
+      - Length: 255
+      - Actor ID as saved as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardOperatorInfo.properties.Key.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.OnboardOperatorInfo.properties.MCC.description
+    update: |
+      - Optional
+      - classify merchants and businesses by the type of goods or services provided. Payment brands, issuers and acquirers.
+  - target: $.components.schemas.OnboardOperatorInfo.properties.MerchantId.description
+    update: |
+      - Optional, Contact Nayax TPOC to define.
+      - Length: 255
+      - Merchant identifier as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardOperatorInfo.properties.Name.description
+    update: |
+      - Optional 
+      - Length: 255
+      - Direct Merchant name as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardOperatorInfo.properties.OperatorId.description
+    update: |
+      - Optional
+      - Length: 255
+      - Merchant Operator ID as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardOperatorInfo.properties.OperatorName.description
+    update: |
+      - Optional
+      - Length: 255
+      - Merchant Operator name  as defined in the Nayax backoffice
+  - target: $.components.schemas.OnboardOperatorInfo.properties.Password.description
+    update: |
+      - Optional
+      - Length: 50
+  - target: $.components.schemas.OnboardOperatorInfo.properties.SubMerchantId.description
+    update: |
+      - Optional
+      - Length: 50
+  - target: $.components.schemas.OnboardOperatorInfo.properties.SubMerchantNumber.description
+    update: |
+      - Optional
+  - target: $.components.schemas.OnboardOperatorInfo.properties.TerminalId.description
+    update: |
+      - Optional
+      - Length: 255
+  - target: $.components.schemas.OnboardOperatorInfo.properties.URL.description
+    update: |
+      - Optional
+      - Length: 250
+  - target: $.components.schemas.OnboardOperatorInfo.properties.UserName.description
+    update: |
+      - Optional
+      - Length: 40
+  - target: $.components.schemas.OnboardStatus.description
+    update: Transaction status
+  - target: $.components.schemas.OnboardStatus.properties.Code.description
+    update: |
+      Indicates the onboarding status:
+          0 - Null-none
+          1 - Pending
+          2 - Success
+          3 - Failed
+          4 - Expired
+          5 - Skip
+       - enum
+       - Mandatory
+       - Indicates the onboarding status.
+  - target: $.components.schemas.OnboardStatus.properties.StatusMessage.description
+    update: |
+      - Optional
+      - Length: 255
+      - Onboarding status message free text field / additional varying data
+  - target: $.components.schemas.OnboardStatus.properties.Verdict.description
+    update: |
+      - Mandatory
+      - Const string values:
+      - Status of the request ('Approved'/'Declined')
+  - target: $.components.schemas.OnboardingBasicInfo.description
+    update: Describing the onboarding Operation details
+  - target: $.components.schemas.OnboardingBasicInfo.properties.BillingProviderID.description
+    update: |
+      - Mandatory
+  - target: $.components.schemas.OnboardingBasicInfo.properties.OnboardingOperation.description
+    update: |
+      Indicates the possible onboarding operation:
+          1 - Register
+          2 - Unregister
+          3 - Update
+          4 - GetStatus
+       - enum
+       - Mandatory
+       - Indicates the possible onboarding operation.
+  - target: $.components.schemas.OnboardingBasicInfo.properties.OnboardingRequestId.description
+    update: |
+      - Mandatory
+      - GUID Generated by Nayax
+  - target: $.components.schemas.OnboardingBasicInfo.properties.OnboardingTransactionId.description
+    update: |
+      - TransactionId from provider
+  - target: $.components.schemas.OnboardingBasicInfo.properties.PaymentMethodID.description
+    update: |
+      - Mandatory
+  - target: $.components.schemas.OnboardingBasicInfo.properties.RequestTime.description
+    update: |
+      - Mandatory
+      - The date time string of when the Onboarding took place
+      - Format: ddMMyyHHmmss
+  - target: $.components.schemas.OnboardingBasicInfo.properties.SiteId.description
+    update: Mandatory
+  - target: $.components.schemas.OnboardingBasicInfo.properties.TransactionID.description
+    update: |
+      - Mandatory
+      - Generated by the integrator on startSession
+  - target: $.components.schemas.OnboardingStatusEnum.description
+    update: |
+      * 0 - None
+      * 1 - Pending
+      * 2 - Success
+      * 3 - Failed
+      * 4 - Expired
+      * 5 - Skip
+  - target: $.components.schemas.PPAuthResponse.properties.Balance.description
+    update: |
+      Type of Balance object
+      Optional Pre-Paid balance details
+  - target: $.components.schemas.PPCancelResponse.properties.Balance.description
+    update: |
+      Type of Balance object
+      Optional Pre-Paid balance details
+  - target: $.components.schemas.PPRefundResponse.properties.Balance.description
+    update: |
+      Type of Balance object
+      Optional Pre-Paid balance details
+  - target: $.components.schemas.PPRevalueResponse.properties.Balance.description
+    update: |
+      Type of Balance object
+  - target: $.components.schemas.PPSaleResponse.properties.Balance.description
+    update: |
+      Type of Balance object
+      Optional Pre-Paid balance details
+  - target: $.components.schemas.PPSaleResponse.properties.PosDisplay.description
+    update: |
+      In this feature, MOL will have the ability to send Nayax two strings with free texting
+      according to the API requirements.
+  - target: $.components.schemas.PPSettResponse.properties.Balance.description
+    update: |
+      Type of Balance object
+      Optional Pre-Paid balance details
+  - target: $.components.schemas.PPVoidResponse.properties.Balance.description
+    update: |
+      Type of Balance object
+      Optional Pre-Paid balance details
+  - target: $.components.schemas.PaymentInfo.description
+    update: |
+      Identifies transaction information and references. Included in all response messages for payment calls.
+      When used in requests (e.g. `/Settlement`, `/Void`, `/Refund`, `/Inquiry`), this object should match the `PaymentInfo` returned in a previous call.
+  - target: $.components.schemas.PaymentInfo.properties.SrvTranId.description
+    update: |
+      Integrator's internal transaction ID. Use only if `/StartSession` was not used. If `/StartSession` was used, this should be empty or echo the transaction ID from the request.
+  - target: $.components.schemas.PaymentInfo.properties.AuthCode.description
+    update: |
+      External authorization code (usually from the card issuer). In dynamic QR, the approval code from the `/Inquiry` response overrides previous values.
+  - target: $.components.schemas.PaymentInfo.properties.AuthAmount.description
+    update: |
+      Original amount requested in `/Authorization` or `/Sale`. Optional in other cases.
+  - target: $.components.schemas.PaymentInfo.properties.SettAmount.description
+    update: |
+      Final settled amount, used in `/Settlement`, `/Inquiry`, or `/Sale`. In Cortina External Prepaid, this may reflect a discounted amount and is used for reporting only.
+  - target: $.components.schemas.PaymentInfo.properties.RRN.description
+    update: |
+      Reference Retrieval Number. Should be visible to the cardholder and match the one in the `/GenerateQR` response.
+  - target: $.components.schemas.PaymentInfo.properties.Token.description
+    update: |
+      Unique token for the transaction. For internal Nayax use only.
+  - target: $.components.schemas.PaymentInfo.properties.AuthDateTime.description
+    update: |
+      Date and time of the `/Authorization` or `/Sale`. Format: `ddMMyyHHmmss`
+  - target: $.components.schemas.PaymentInfo.properties.SettDateTime.description
+    update: |
+      Date and time of the `/Settlement` or `/Sale`. Format: `ddMMyyHHmmss`
+  - target: $.components.schemas.PaymentInfo.properties.TraceNumber.description
+    update: |
+      Trace number. For internal Nayax use only.
+  - target: $.components.schemas.PaymentInfo.properties.AdditionalData.description
+    update: |
+      Optional custom data in JSON format. Contact Nayax to configure.
+  - target: $.components.schemas.PaymentInfo.properties.IsGatewayTimeout.description
+    update: |
+      Indicates whether there was a gateway timeout.
+  - target: $.components.schemas.PaymentInfo.properties.ProviderExternalData.description
+    update: |
+      External data from provider in JSON format.
+  - target: $.components.schemas.PaymentInfo.properties.InitiateTranReference.description
+    update: |
+      References the original Nayax transaction ID when reattempting a prepaid loyalty card transaction.
+  - target: $.components.schemas.PaymentInfo.properties.IsRevalueCard.description
+    update: |
+      Indicates whether the card supports revalue.
+  - target: $.components.schemas.Polling.properties.IsLastPolling.description
+    update: |
+      Flag indicator of last polling attempt
+  - target: $.components.schemas.Polling.properties.PollingAttemptCounter.description
+    update: |
+      Current polling attempt number
+  - target: $.components.schemas.Product.description
+    update: Details of the product selected in the transaction.
+  - target: $.components.schemas.Product.properties.CatalogProductId.description
+    update: |
+      External unique identifier of the product (catalog number) as defined in the Nayax backoffice.
+  - target: $.components.schemas.Product.properties.Code.description
+    update: |
+      Numeric code of the product, as defined in the Nayax backoffice or vending machine.
+  - target: $.components.schemas.Product.properties.Group.description
+    update: |
+      Product group name as defined in the product map.
+  - target: $.components.schemas.Product.properties.Measurement.description
+    update: |
+      Quantity of the product in the specified unit of measurement.
+  - target: $.components.schemas.Product.properties.Name.description
+    update: |
+      Product name as defined in the Nayax backoffice.
+  - target: $.components.schemas.Product.properties.Price.description
+    update: |
+      Product price in the machine’s currency. This is the base price before adjustments (e.g. surcharges or loyalty discounts).
+  - target: $.components.schemas.Product.properties.ProductGroupId.description
+    update: |
+      Code of the product group as defined in the product map.
+  - target: $.components.schemas.Product.properties.PulseLineNumber.description
+    update: |
+      Line number used for remote vend via pulse. Must be a non-negative integer.
+  - target: $.components.schemas.Product.properties.UnitOfMeasurement.description
+    update: |
+      Unit of measurement for the product (e.g. "unit", "liter").
+  - target: $.components.schemas.QRData.properties.ChannelId.description
+    update: |
+      - Conditional for multi channel integrations
+      - Echo of the value provided by Nayax in the request.
+  - target: $.components.schemas.QRData.properties.RRN.description
+    update: |
+      - Mandatory
+      - Reference Retrieval Number, Used as External Transaction Identification for external parties (Usually Card schemes, or App service providers).From support perspective - It is highly recommended that this ID shall be the one visible to the end consumer/Card holder and the card's Issuer (e.g. Bank) or Application service provider (e.g. Alipay, WeChat). If none of the above is applicable, the Integrator shall generate an additional String.
+      - This Value shall be echoed in the `/Inquiry` request.
+  - target: $.components.schemas.QRData.properties.SrvTranId.description
+    update: |
+      - the Integrator's internal transaction id.
+      - Conditional, only if /StartSession was **not** Used.
+      - If /StartSession was used, this should be either empty or Echo the Transaction ID sent in the request.
+  - target: $.components.schemas.RegularCreditType.description
+    update: |
+      * 0 - transactions
+      * 1 - amount
+  - target: $.components.schemas.ResponseCode.description
+    update: |
+      Error description
+      *   -9 - Onboarding Failure
+      *   0 - Success
+      *   4 - Insufficient funds
+      *   5 - Onboarding Success
+      *   8 - Onboarding In Progress
+      * 80 - AgeVerification approved
+      * 81 - AgeVerification declined
+      * 82 - AgeVerification data not available on client side (For ex. card not recognized)
+      * 83 - AgeVerification provider not responding
+      * 84 - AgeVerification data invalid (The requested age cannot be verified because it does not match any age group)
+      * 85 - AgeVerification command data invalid
+      * 990 - CertificateFileName not found
+      * 991 - Failed to decipher message body
+      * 992 - Timeout
+      * 993 - Keep polling
+      * 994 - Card Brand Not supported
+      * 995 - Device Skip Site
+      * 996 - Transaction ID unknown / Duplicate Transaction ID (Start Session Error)
+      * 997 - Missing mandatory parameters
+      * 998 - Validation/request cannot be parsed
+      * 999 - General system failure
+      * 1010 - Public Key Certificate not found
+      * 1011 - Method not Implemented
+      * 1021 - Switch Interface
+  - target: $.components.schemas.RevalueCardData.description
+    update: Revalue Card Data
+  - target: $.components.schemas.RevalueCardData.properties.CardNumber.description
+    update: |
+      - String ()
+      - Mandatory
+  - target: $.components.schemas.RevalueCardData.properties.EntryMode.description
+    update: |
+      String (4)
+      Mandatory
+      Optional Value:
+      * MCR - Card number read from the card magnetic stripe.
+      * CON - Card details read from the chip via the contact interface (insert).
+  - target: $.components.schemas.RevaluePaymentInfo.description
+    update: |
+      - This Object Identifies Revalue Transaction Information and references (RRNs,Transaction IDs, AUth Code, original amounts etc..)
+  - target: $.components.schemas.RevaluePaymentInfo.properties.AdditionalData.description
+    update: |
+      - Optional, Contact Nayax TPOC on order define.
+      - String in JSON format.
+  - target: $.components.schemas.RevaluePaymentInfo.properties.CreditCardNumber.description
+    update: |
+      - String ()
+      - Mandatory
+  - target: $.components.schemas.RevaluePaymentInfo.properties.IsGatewayTimeout.description
+    update: |
+      Was there was a gateway timeout (valid in response)
+  - target: $.components.schemas.RevaluePaymentInfo.properties.RRN.description
+    update: |
+      Reference Retrieval Number, Used as External Transaction Identification for external parties (Usually Card schemes)
+      From support perspective - It is highly recommended that this ID shall be the one visible to the end consumer/Card holder.
+  - target: $.components.schemas.RevaluePaymentInfo.properties.RevalueAmount.description
+    update: |
+      - The original amount requested in /Revalue requested.
+  - target: $.components.schemas.RevaluePaymentInfo.properties.RevalueAuthCode.description
+    update: |
+      - String (40)
+      - External (usually Card issuer's)Authorization Code
+  - target: $.components.schemas.RevaluePaymentInfo.properties.RevalueDateTime.description
+    update: |
+      - The date time string of when the /Revalue took place
+      - Format: ddMMyyHHmmss
+  - target: $.components.schemas.RevaluePaymentInfo.properties.RevalueFinalAmount.description
+    update: |
+      - The Revalue Final Amount.
+  - target: $.components.schemas.RevaluePaymentInfo.properties.SrvTranId.description
+    update: |
+      - the Integrator's internal transaction id.
+  - target: $.components.schemas.SaleEndNotificationRequest.properties.DynamicURL.description
+    update: |
+      - Optional, support different url's.
+      - Length: 255
+      - Actor level url configuration
+  - target: $.components.schemas.StartSessionRequest.properties.DynamicURL.description
+    update: |
+      - Optional, support different url's.
+      - Length: 255
+      - Actor level url configuration
+  - target: $.components.schemas.StartSessionRequest.properties.RandomNumber.description
+    update: |
+      Nayax will create 27 char Random Number
+  - target: $.components.schemas.StartSessionRequest.properties.TokenId.description
+    update: |
+      3rd party Secret Token reference number
+  - target: $.components.schemas.StartSessionResponse.properties.TranIDCipher.description
+    update: |
+      - Mandatory
+      - The Integrator Generates transaction ID of 36 Chars (or 288 bits).
+      - The Integrator then appends the char = and RandomNumber to create the ciphertext of 64 chars
+      - Format TransactionId=RandomNumber
+      - The integrator encrypts the ciphertexts with the Secret Token in AES ECB.
+      - The AES key will be the last (right most) 256 bits (or 32 chars) of the Secret Token the matches the TokenID provided in the request.
+      - Nayax will AES ECB decrypt and extract transaction id
+      - The transaction Id value will then be used for all further requests
+  - target: $.components.schemas.StaticCancelRequest.properties.ReasonCode.description
+    update: |
+      - Optional
+      - Cancellation reason code (by nayax system table of error codes)
+  - target: $.components.schemas.StaticCancelRequest.properties.ReasonText.description
+    update: |
+      - Optional
+      - Length: 255
+      - Cancellation reason description (by nayax system table of error codes)
+  - target: $.components.schemas.StaticNotifyRequest.properties.AppUserId.description
+    update: |
+      - Mandatory
+      - Length: 40
+      - Unique identifier of the consumer in Mobile App provider system
+  - target: $.components.schemas.StaticNotifyRequest.properties.Balance.description
+    update: |
+      - Optional
+      - Decimal (max 3 digits for cents)
+      - The balance of user's account.
+  - target: $.components.schemas.StaticNotifyRequest.properties.Data.description
+    update: |
+      - Data received from a third party and will be sent back in response
+  - target: $.components.schemas.StaticNotifyRequest.properties.SecretToken.description
+    update: |
+      - Mandatory
+      - Length: 64
+      - Unique key for the your system.
+      This value will be Provided by Nayax in advance.
+      You should keep this value as a secret in your system.
+  - target: $.components.schemas.StaticNotifyRequest.properties.TerminalId.description
+    update: |
+      - Conditional, must be sent if UniQR is not sent.
+      - Length: 255
+      - Unique Identifier for the vending machine printed on a
+      sticker or encoded in the QR (HW-Serial of the device)
+  - target: $.components.schemas.StaticNotifyRequest.properties.TransactionId.description
+    update: |
+      - Mandatory
+      - Length: 40
+      - Unique identifier for the transaction which will be echoed
+      in further requests and responses. Minimum of 8 chars.
+  - target: $.components.schemas.StaticNotifyRequest.properties.UniQR.description
+    update: |
+      - Conditional, must be sent if TerminalId is not sent.
+      - Machine reference unique qr number
+  - target: $.components.schemas.StaticRefundRequest.properties.ReasonCode.description
+    update: |
+      - Optional
+      - Refund reason code (by nayax system table of error codes)
+  - target: $.components.schemas.StaticRefundRequest.properties.ReasonText.description
+    update: |
+      - Optional
+      - Length: 255
+      - Refund reason description (by nayax system table of error codes)
+  - target: $.components.schemas.StaticSaleRequest.properties.Products.description
+    update: Mandatory Products details
+  - target: $.components.schemas.StaticSettRequest.properties.PaymentInfo.description
+    update: Products details
+  - target: $.components.schemas.StaticVoidRequest.properties.ReasonCode.description
+    update: |
+      - Optional
+      - Cancellation reason code (by nayax system table of error codes)
+  - target: $.components.schemas.StaticVoidRequest.properties.ReasonText.description
+    update: |
+      - Optional
+      - Length: 255
+      - Cancellation reason description (by nayax system table of error codes)
+  - target: $.components.schemas.Status.description
+    update: Transaction status
+  - target: $.components.schemas.Status.properties.Code.description
+    update: |
+      - Conditional - Only if verdict value is declined
+      - Please refer to the Decline Reasons Code List in the relevant Overview section for full list of allowed decline codes
+  - target: $.components.schemas.Status.properties.CustomDeclineCode.description
+    update: |
+      - Always mirrors the value of the Code field when Code is present, regardless of Verdict.
+      - Included in all responses (Approved or Declined) whenever Code is present.
+  - target: $.components.schemas.Status.properties.StatusMessage.description
+    update: |
+      - Optional
+      - Length: 255
+      - Transaction status message free text field / additional varying data
+  - target: $.components.schemas.Status.properties.Verdict.description
+    update: |
+      - Mandatory
+      - Const string values:
+      - Status of the request ('Approved'/'Declined')
+  - target: $.components.schemas.TransitElement.description
+    update: Transit Element Information
+  - target: $.components.schemas.TransitTransactionType.description
+    update: |
+      * 1 - Prefunded
+      * 2 - Realtime Authorization
+      * 3 - Post-Authorization Aggregated Transaction
+      * 7 - Debt Recovery
+  - target: $.info.description
+    update: Credit Card, Prepaid, DynamicQR, StaticQR APIs
+  - target: $.paths['/Cortina/AgeVerification'].post.description
+    update: Cortina Age Verification
+  - target: $.paths['/Cortina/AgeVerification'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/AgeVerification'].post.summary
+    update: Cortina Age Verification
+  - target: $.paths['/Cortina/CreditCard/Authorization'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/CreditCard/Authorization'].post.summary
+    update: Cortina Credit Card Authorization
+  - target: $.paths['/Cortina/CreditCard/Cancel'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/CreditCard/Cancel'].post.summary
+    update: Cortina Credit Card Cancel
+  - target: $.paths['/Cortina/CreditCard/IncrementalAuth'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/CreditCard/IncrementalAuth'].post.summary
+    update: Cortina Credit Card Incremental Auth
+  - target: $.paths['/Cortina/CreditCard/Inquiry3DS'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/CreditCard/Inquiry3DS'].post.summary
+    update: Cortina Credit Card Inquiry3DS
+  - target: $.paths['/Cortina/CreditCard/Refund'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/CreditCard/Refund'].post.summary
+    update: Cortina Credit Card Refund
+  - target: $.paths['/Cortina/CreditCard/Sale'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/CreditCard/Sale'].post.summary
+    update: Cortina Credit Card Sale
+  - target: $.paths['/Cortina/CreditCard/Settlement'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/CreditCard/Settlement'].post.summary
+    update: Cortina Credit Card Settlement
+  - target: $.paths['/Cortina/CreditCard/Void'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/CreditCard/Void'].post.summary
+    update: Cortina Credit Card Void
+  - target: $.paths['/Cortina/DynamicQR/GenerateQR'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/DynamicQR/GenerateQR'].post.summary
+    update: Cortina DynamicQR GenerateQR
+  - target: $.paths['/Cortina/DynamicQR/Inquiry'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/DynamicQR/Inquiry'].post.summary
+    update: Cortina DynamicQR Inquiry
+  - target: $.paths['/Cortina/DynamicQR/Refund'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/DynamicQR/Refund'].post.summary
+    update: Cortina DynamicQR Refund
+  - target: $.paths['/Cortina/DynamicQR/Void'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/DynamicQR/Void'].post.summary
+    update: Cortina DynamicQR Void
+  - target: $.paths['/Cortina/Prepaid/Authorization'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/Prepaid/Authorization'].post.summary
+    update: Cortina Prepaid Authorization
+  - target: $.paths['/Cortina/Prepaid/Cancel'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/Prepaid/Cancel'].post.summary
+    update: Cortina Prepaid Cancel
+  - target: $.paths['/Cortina/Prepaid/Refund'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/Prepaid/Refund'].post.summary
+    update: Cortina Prepaid Refund
+  - target: $.paths['/Cortina/Prepaid/Sale'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/Prepaid/Sale'].post.summary
+    update: Cortina Prepaid Sale
+  - target: $.paths['/Cortina/Prepaid/Settlement'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/Prepaid/Settlement'].post.summary
+    update: Cortina Prepaid Settlement
+  - target: $.paths['/Cortina/Prepaid/Void'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/Prepaid/Void'].post.summary
+    update: Cortina Prepaid Void
+  - target: $.paths['/Cortina/RenewKey'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/RenewKey'].post.summary
+    update: Post Renew Key
+  - target: $.paths['/Cortina/SaleEndNotification'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/SaleEndNotification'].post.summary
+    update: Post Sale End Notification
+  - target: $.paths['/Cortina/StartSession'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/StartSession'].post.summary
+    update: Post Start Session
+  - target: $.paths['/Cortina/StaticQR/Authorization'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/StaticQR/Authorization'].post.summary
+    update: Cortina StaticQR Authorization
+  - target: $.paths['/Cortina/StaticQR/Cancel'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/StaticQR/Cancel'].post.summary
+    update: Cortina StaticQR Cancel
+  - target: $.paths['/Cortina/StaticQR/Refund'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/StaticQR/Refund'].post.summary
+    update: Cortina StaticQR Refund
+  - target: $.paths['/Cortina/StaticQR/Sale'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/StaticQR/Sale'].post.summary
+    update: Cortina StaticQR Sale
+  - target: $.paths['/Cortina/StaticQR/Settlement'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/StaticQR/Settlement'].post.summary
+    update: Cortina StaticQR Settlement
+  - target: $.paths['/Cortina/StaticQR/Void'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/StaticQR/Void'].post.summary
+    update: Cortina StaticQR Void
+  - target: $.paths['/Cortina/{integratorName}/start'].post.parameters[0].description
+    update: Integrator name assigned by Nayax
+  - target: $.paths['/Cortina/{integratorName}/start'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/Cortina/{integratorName}/start'].post.summary
+    update: Cortina StaticQR Start
+  - target: $.paths['/OnboardActor'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/OnboardActor'].post.summary
+    update: Onboard Actor
+  - target: $.paths['/OnboardMachine'].post.responses['200'].description
+    update: Success
+  - target: $.paths['/OnboardMachine'].post.summary
+    update: Onboard Machine
+  - target: $.paths['/Version'].get.responses['200'].description
+    update: Success
+  - target: $.paths['/Version'].get.summary
+    update: Get Version
+  - target: $.servers[0].variables.domain.description
+    update: Customer ID assigned by the service provider
