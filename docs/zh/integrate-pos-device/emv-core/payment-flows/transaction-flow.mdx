@@ -1,0 +1,28 @@
+---
+title: 付款流程
+mode: wide
+metadata:
+  og:description: 该 SDK 支持多种交易流程,以适应从单步支付到多步预授权等各种使用场景。
+---
+
+该SDK支持多种交易流程，以满足各种不同的使用场景，从单步支付到多步骤预授权和确认流程。这种灵活性使开发人员能够选择最符合其应用程序需求的流程，同时确保安全性和可靠性。
+
+可用的交易流程有：
+
+<Columns cols={3}>
+  <Card icon="link" title="预授权付款" href="/docs/integrate-pos-device/emv-core/payment-flows/payment-with-authorization">
+    两步流程，先预授权交易金额，再确认结算。非常适合最终金额未知的场景（例如电动汽车充电）。
+  </Card>
+
+  <Card icon="link" title="闭环交易" href="/docs/integrate-pos-device/emv-core/payment-flows/closed-loop-transaction">
+    闭环交易是指使用MIFARE卡进行的操作，其应用服务器使用MIFARE卡的UID来处理操作，不涉及银行交易。
+  </Card>
+
+  <Card icon="link" title="单步付款" href="/docs/integrate-pos-device/emv-core/payment-flows/single-step-payment">
+    单步支付流程允许在一次操作中立即进行授权和结算，从而简化了需要快速、直接交易的用例的支付流程。
+  </Card>
+
+  <Card icon="link" title="预授权与外部结算" href="/docs/integrate-pos-device/emv-core/payment-flows/pre-authorization-with-external-settlement">
+    将授权和结算阶段分开。第三方服务器通过 Nayax API 处理最终结算，让您可以控制充电时间和金额。非常适合电动汽车充电和类似的可变金额使用场景。
+  </Card>
+</Columns>

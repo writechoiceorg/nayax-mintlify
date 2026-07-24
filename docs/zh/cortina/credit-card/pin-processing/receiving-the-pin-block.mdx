@@ -1,0 +1,32 @@
+---
+title: 接收 PIN Block
+metadata:
+  og:description: Nayax 将在 Authorization Sale 请求中的 DukptInfo 对象下发送加密后的 PIN Block，如下例所示：其中。
+---
+
+Nayax 将在 Authorization/Sale 请求中的 `DukptInfo` 对象下发送加密后的 PIN Block，如下例所示：
+
+```json
+"DukptInfo": {
+    "Algorithm": 1,
+    "PINBlock": "xxxxxxxx",
+    "PINBlockFormat": 48,
+    "ExternalKeyId": "372"}
+```
+
+在哪里：
+
+- `Algorithm` = 用于加密的算法。
+  - `1`:	TDEA
+  - `2`: 2TDEA
+  - `3`: AES-128
+  - `4`: AES-256
+  - `5`:	3TDEA
+- `PINBlock` = 加密后的 PIN Block
+- `PINBlockFormat` = 所使用的 PIN block 格式。
+  - `1`: ISO\_0
+  - `5`: ISO\_1
+  - `34`: ISO\_2
+  - `47`: ISO\_3
+  - `48`: ISO\_4
+- `ExternalKeyId` = 动态密钥交换格式中所使用密钥的外部 ID。

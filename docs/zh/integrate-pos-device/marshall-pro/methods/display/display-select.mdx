@@ -1,0 +1,86 @@
+---
+title: 显示选择
+description: 在终端屏幕上向客户展示一份可供选择的选项列表。
+metadata:
+  og:description: displaySelect 方法允许客户端应用程序向客户展示菜单或选项列表。这是关键组成部分。
+---
+
+`displaySelect` 方法允许客户端应用程序向客户展示菜单或选项列表。这是交互式工作流程的关键组成部分,在这种流程中,用户必须先做出选择,交易才能继续进行。
+
+使用此方法可以：
+
+- 在不同油品等级之间提供产品选择,例如普通、中级或高级。
+- 启用语言选择功能,让客户为本次会话选择偏好的语言。
+- 展示服务选项,例如添加洗车服务或选择特定的加油机编号。
+- 提供会员选项,例如询问用户“使用积分”或“稍后使用”。
+
+Nayax 设备上菜单显示提示的示例:
+
+<Frame>
+  <div className="flex gap-4">
+    <img src="/images/select-fuel-type.png" />
+
+    <img src="/images/select-language.png" />
+  </div>
+</Frame>
+
+## 请求
+
+All requests must include a `title` for the menu and an array of `options`. Each option should have a label that the customer will see.
+
+以下示例展示了一个典型的请求：
+
+```json
+{
+"command": "displaySelect",
+"requestId": "req-009",
+"data": {
+"title": "Please Select Fuel Type",
+"options": [
+{"tag": "87", "label": "Unleaded 87"},
+{"tag": "89", "label": "Unleaded 89"},
+{"tag": "93", "label": "Unleaded 93"},
+{"tag": "DSL", "label": "Diesel"},
+{"tag": "BIO", "label": "Bio-diesel"}
+],
+"showTags": true
+}
+}
+```
+
+### 参数定义
+
+下表描述了此请求可用的参数：
+
+| 姓名      | 类型     | 必需的 | 描述                           |
+| :------ | :----- | :-- | :--------------------------- |
+| 命令      | string | 是的  | 设置为`"displaySelect"`。        |
+| 请求 ID   | string | 是的  | 用于跟踪响应的唯一标识符。                |
+| title   | string | 是的  | 显示在选项列表上方的标题文本。              |
+| options | array  | 是的  | 表示用户可选选项的字符串列表。              |
+| 暂停      | 整数     | 不   | 如果未做出选择,菜单自动关闭前的持续时间(以秒为单位)。 |
+
+## 回应
+
+终端返回客户所选选项的索引或值。
+
+以下示例展示了一个典型的响应：
+
+```json
+{
+"requestId": "req-009",
+"data": {
+"selectedIndex": 0
+}
+}
+```
+
+### 响应参数
+
+`data` 对象包含客户交互的结果:
+
+| 姓名            | 类型     | 描述                                            |
+| :------------ | :----- | :-------------------------------------------- |
+| selectedIndex | 整数     | 所选选项在原始列表中从零开始的索引。                            |
+| selectedValue | string | 所选选项的文本标签。                                    |
+| 状态            | string | 选择完成后返回 `COMPLETED`,如果用户退出菜单,则返回 `CANCELLED`。 |

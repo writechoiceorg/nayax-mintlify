@@ -1,0 +1,71 @@
+---
+title: 显示QR
+metadata:
+  og:description: displayQR 方法用于在终端屏幕上显示二维码。它支持可选的标题、副标题和取消按钮。该二维码必须
+---
+
+`displayQR` 方法用于在终端屏幕上显示二维码。它支持可选的标题、副标题和取消按钮。该二维码必须属于预定义的域。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+要调用此方法，请将 `method` 字段设置为 `displayQR`，并按下方所示包含服务名称和参数。
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "displayQR",
+    "params": [
+        "device",
+        {
+            "title": "displayQRtitle",
+            "subtitle": "displayQRSubtitle",
+            "isCancellable": false,
+            "urlData": "https://stackoverflow.com",
+            "timeout": 60
+        }
+    ],
+    "id": "32323453"
+}
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+| 姓名              | 类型        | 描述                 |
+| --------------- | --------- | ------------------ |
+| `title`         | `string`  | 显示在二维码上方的标题文本      |
+| `subtitle`      | `string`  | 标题下方的副标题文本         |
+| `isCancellable` | `boolean` | 是否显示取消按钮（默认值：true） |
+| `urlData`       | `string`  | 编码为二维码的 URL（必填）    |
+| `timeout`       | `integer` | 显示超时时间（秒）（默认值：30）  |
+
+## 回复
+
+成功的请求将返回以下响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "1",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "ok"
+    }
+}
+```
+
+### 响应参数
+
+下表说明了此方法的响应参数：
+
+| 姓名                     | 类型        | 描述           |
+| ---------------------- | --------- | ------------ |
+| `statusCode`           | `integer` | 操作状态（0 = 成功） |
+| `statusMessage`        | `string`  | 指示操作结果的消息    |

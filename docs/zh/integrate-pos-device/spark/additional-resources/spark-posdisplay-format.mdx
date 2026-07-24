@@ -1,0 +1,23 @@
+---
+title: PosDisplay 格式
+metadata:
+  og:description: 本页详细说明了发送到 Nayax POS 设备以供显示的数据所需的格式。遵循此格式可确保信息正确呈现。
+---
+
+本页详细说明了发送到 Nayax POS 设备以供显示的数据所需的格式。遵循此格式可确保信息在终端屏幕上正确呈现，从而提升用户体验。
+
+## 格式规范
+
+Each display element must consist of a `label` and a `value`, separated by a colon (`:`). Elements are then delimited by a semicolon (`;`). Complete values may optionally arrive empty.
+
+整体结构如下：
+
+```
+str0{label}:str0{value};str1{label}:str1{value};str2{label}:str2{value};str3{label}:str3{value};...;str5{label}:str5{value};\`
+```
+
+在哪里：
+
+- `str0`：此元素比较特殊，保存将在 POS 设备屏幕标题中呈现的值。如果未提供 `str0`，则显示的默认标题为 "Tariff"。
+
+- `str1`：此元素比较特殊，保存一个值，当请求呈现支付页面时，该值将传播到下一个用户界面（UI）滑动页。如果未提供 `str1`，后续字符串（`str2`、`str3` 等）将在显示中上移一行。

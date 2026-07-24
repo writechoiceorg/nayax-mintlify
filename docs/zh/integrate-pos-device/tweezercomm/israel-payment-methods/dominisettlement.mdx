@@ -1,0 +1,61 @@
+---
+title: 进行迷你结算
+metadata:
+  og:description: 使用 doMiniSettlement 方法结算交易。支持的处理器：CG、PC。JSON-RPC 2.0 TweezerComm 中的所有方法均遵循 JSON-RPC 2.0。
+---
+
+`doMiniSettlement` 方法用于结算交易。
+
+<Note>
+  支持的处理器：CG、PC。
+</Note>
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“集成”部分](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started)。
+</Note>
+
+请在请求中确保配置以下内容：
+
+- `method` 字段必须设置为 `doMiniSettlement`。
+- The service must be set to `ashrait` in the `params`.
+
+```json
+{
+    "jsonrpc":"2.0",
+    "method":"doMiniSettlement",
+    "params":[
+        "ashrait"
+    ],
+    "id":1
+}
+```
+
+## 回复
+
+成功的请求将返回以下响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "statusCode": 0,
+        "ackNumber": "1234567",
+        "queriedTransactions": ["12345","12345"]
+    },
+    "id": 1
+}
+```
+
+### 响应参数
+
+下表描述了该方法的响应参数。
+
+| 姓名                     | 类型               | 描述                                                    |
+| :--------------------- | :--------------- | :---------------------------------------------------- |
+| `statusCode`           | 整数               | 操作状态。值为 `0` 表示成功。所有其他值均表示错误。                          |
+| `ackNumber`            | string           | 处理器的参考编号。                                             |
+| `queriedTransactions`  | 字符串数组            | 成功传输的交易 UID 列表。                                       |

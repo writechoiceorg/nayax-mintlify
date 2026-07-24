@@ -1,0 +1,55 @@
+---
+title: 选择列表
+metadata:
+  og:description: Nayax 中的拣货单（Pick List）是生成的列表，列明在特定自动售货机或库存地点需要补货或补充的产品。
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+拣货单会根据机器当前的库存水平和销售数据，列明其补货所需的产品和数量。
+
+在 Nayax Core 中，您可以按照以下步骤创建选择列表：
+
+1. 在您的仪表板中，转到**操作 > 库存仪表板**。
+2. 使用搜索过滤器来查找您想要的机器。
+3. 右键单击机器并选择**“选择列表” > 生成挑选清单**。
+
+<Frame>![](/images/docs/pick-lists/image1.png)</Frame>
+
+### 为多台机器生成
+
+要一次性为多台机器生成拣货单（例如某条特定 Route 下的所有机器）：
+
+1. 将过滤器添加到搜索功能。
+2. 选择列表中的所有机器（您也可以单独选择您想要的机器）。
+3. 点击 Actions > Generate Pick List。
+
+<Frame>
+  <img src="/images/docs/pick-lists/image2.png" />
+</Frame>
+
+## 通过 API 生成拣货单
+
+使用 [Create Pick List](/reference/lynx/machine-inventory/create-pick-list) 端点，根据特定机器当前的库存水平和销售数据为其生成拣货单。
+
+<EndpointCard title="创建选择列表" href="/reference/lynx/machine-inventory/create-pick-list" method="post" />
+
+<Warning>
+  验证
+
+  请参阅本文档的[“安全和令牌”](/docs/manage-data-operations/lynx-api/security)页面，了解如何访问您的令牌以及如何正确使用它们来验证您的 API 请求。
+</Warning>
+
+<br />
+
+发送 POST 请求，将 `MachineID` 作为路径参数。成功时该端点返回 `204 No Content`，不返回响应正文。
+
+```sh Request
+curl -X POST "https://qa-lynx.nayax.com/operational/v1/machines/<MACHINE_ID>/pickLists" \
+-H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+-H "Content-Type: application/json"
+```
+
+该端点还接受可选的查询参数以细化拣货单——详见 [Create Pick List](/reference/lynx/machine-inventory/create-pick-list) 参考页面。
+
+生成拣货单后，请参阅 [Pick List Actions](/docs/manage-data-operations/lynx-api/inventory-management/pick-list-actions) 以检索、更新或删除该拣货单。

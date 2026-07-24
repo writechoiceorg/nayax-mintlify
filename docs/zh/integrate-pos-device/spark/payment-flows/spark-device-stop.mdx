@@ -1,0 +1,32 @@
+---
+title: 设备停止
+metadata:
+  og:description: Spark API 通过 Nayax 销售点（POS）终端支持卡片验证和比对。集成方在处理卡片时有两种选择。
+---
+
+Spark API 可通过 Nayax 销售点 (POS) 终端进行卡片验证和比对。集成商在设备停止流程期间有两种处理卡片验证的选项：
+
+- `StopNotify`：当您希望自行处理卡片验证时应使用此方法。
+- `StopCallback`：此选项允许您将卡片验证交由 Nayax 处理。
+
+无论哪种情况，Nayax 都不会管理会话生命周期；这项责任完全由您承担。您仍然需要自行结束会话。
+
+## `StopNotify`
+
+如果您选择自行执行卡片比对，Nayax 将发送 `StopNotify` 请求。其中提供了用于停止事件的卡片详情。随后您需要将这些卡片与正在进行的会话相匹配，并返回该会话对应的 Spark 和 Nayax 交易 ID 以停止会话。
+
+拒绝 `StopNotify` 请求会导致 Nayax 终端向消费者显示拒绝消息。但由于 Nayax 不管理会话，此拒绝不会影响实际的会话状态。您仍需在自己一端执行必要操作以停止该会话。
+
+## `StopCallback`
+
+如果您希望由 Nayax 执行卡片比对，Nayax 将发送 `StopCallback`。在此情况下，Nayax 会搜索与停止请求所用卡片相关联的未结算交易。如果找到匹配项，Nayax 将向您发送通知，附带相关的 Spark 和 Nayax 交易 ID，指明需要停止哪个会话。
+
+您仍需负责实际停止会话。
+
+在以下页面了解有关此端点的更多信息：
+
+<Card icon="link" title="停止回调" href="/docs/integrate-pos-device/spark/webhook-callbacks/stopcallback" arrow />
+
+## 参见
+
+<Card icon="link" title="安全与身份验证" href="/docs/integrate-pos-device/spark/security-authentication/spark-authentication" arrow />

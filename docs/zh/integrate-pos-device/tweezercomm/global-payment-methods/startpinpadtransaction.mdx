@@ -1,0 +1,272 @@
+---
+title: 开始密码键盘交易
+metadata:
+  og:description: startPinpadTransaction 方法在支付终端上启动 PinPad 流程，指示终端准备好通过
+---
+
+`startPinpadTransaction` 方法在支付终端上启动 PinPad 流程，指示终端准备好通过磁条读卡（MSR）、非接触式（Tap）或接触式方式接收卡片信息。如果是接触式交易，交易将继续进入 doPinPadTransaction，否则不会——详见 [Pinpad Mode](/docs/integrate-pos-device/tweezercomm/pinpad-mode) 相关内容。响应将通过 `panEntryMode` 参数提供所使用的支付方式。
+
+此方法从物理设备采集原始卡片数据（Track 2 或 EMV 标签），为后续的授权步骤做好准备。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+请在请求中确保配置以下内容：
+
+- `method` 字段必须设置为 `startPinpadTransaction`。
+- The service must be set to `engine` in the `params`.
+
+该请求包含一个参数列表，第一个参数是服务名称，目前固定为 `engine`，第二个参数是包含所有其他交易相关详细信息的字典。
+
+```json
+{
+    "jsonrpc":"2.0",
+    "method":"startPinpadTransaction",
+    "id":"123454352",
+    "params": [
+        "engine",{
+            "vuid": "{{$guid}}",
+            "amount":100,
+            "tranType":1
+        }
+    ]
+}
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+| 姓名         | 类型     | 描述                    |
+| :--------- | :----- | :-------------------- |
+| `vuid`     | string | 供应商（客户）唯一交易标识符。       |
+| `amount`   | 整数     | 交易金额（以分为单位）。          |
+| `tranType` | float  | 交易类型代码。例如，`1` 表示标准交易。 |
+
+## 回复
+
+成功的请求将返回一个包含所采集卡片数据的响应，具体内容取决于卡片是通过磁条还是非接触式（EMV）方式读取的。
+
+### 磁条读卡响应
+
+当卡片通过磁条读卡器成功刷卡时，将返回此响应。
+
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "123454352",
+   "result": {
+       "statusCode": 0,
+       "statusMessage": "ok",
+       "panEntryMode": 0,
+     		"track2": "65458643975398",
+
+   }
+}
+```
+
+#### 响应参数
+
+下表描述了发生磁条读卡时该方法的响应参数。
+
+<table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        姓名
+      </th>
+
+      <th>
+        类型
+      </th>
+
+      <th>
+        描述
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `statusCode`          
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        PinPad 交易状态。值为 `0` 表示成功。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `statusMessage`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        交易消息（例如 `ok`）。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `panEntryMode`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        POS 输入方式，指示银行卡的读取方式。
+
+        - `0` 表示磁条读取。
+        - `1` 表示接触式读取。
+        - `3` 表示非接触式读取。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `track2`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        从磁条采集到的原始 Track 2 卡片数据。
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+### 非接触式读卡响应
+
+当卡片通过非接触式读卡器成功读取时，将返回此响应。
+
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "123454352",
+   "result": {
+       "statusCode": 0,
+       "statusMessage": "ok",
+       "panEntryMode": 3,
+       "tags": {
+           "95": "tag value",
+           "9F02": "tag value",
+           "5A": "tag value",
+           "5F34": "tag value",
+           "5F2A": "tag value",
+           "9F02": "tag value",
+           "9F03": "tag value",
+           "9A": "tag value",
+           "9C": "tag value",
+           "9F1A": "tag value",
+           "9F21": "tag value",
+           "9F37": "tag value",
+           "9F36": "tag value",
+           "9F26": "tag value",
+           "9F27": "tag value"
+       }
+   }
+}
+```
+
+#### 响应参数
+
+下表描述了发生非接触式读卡时该方法的响应参数。
+
+<table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        姓名
+      </th>
+
+      <th>
+        类型
+      </th>
+
+      <th>
+        描述
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `statusCode`          
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        PinPad 交易状态。值为 `0` 表示成功。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `statusMessage`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        交易消息（例如 `ok`）。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `panEntryMode`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        POS 输入方式，指示银行卡的读取方式。
+
+        - `0` 表示磁条读取。
+        - `1` 表示接触式读取。
+        - `3` 表示非接触式读取。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `tags`
+      </td>
+
+      <td>
+        字符串的 json
+      </td>
+
+      <td>
+        包含从非接触式芯片采集到的原始 EMV 标签-值对的字典。
+      </td>
+    </tr>
+  </tbody>
+</table>

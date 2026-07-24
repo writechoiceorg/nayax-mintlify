@@ -1,0 +1,151 @@
+---
+title: 退款
+metadata:
+  og:description: doTransaction 方法允许您处理退款。此操作主要有两种场景：标准退款：在同一
+---
+
+`doTransaction` 方法允许您处理退款。此操作主要有两种场景：
+
+- **标准退款**：在原交易发生的同一终端上进行。
+- **外部退款**：在不同的终端上完成，需要额外的元数据进行服务器端验证。
+
+<Note>
+  要执行退款交易，请保存原始交易中的 `originalTransactionId`。
+</Note>
+
+## 标准退款
+
+当需要使用处理原始销售的同一终端撤销或部分退款时，将采用标准退款。
+
+### 要求
+
+以下示例显示了标准退款的典型请求正文：
+
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "method": "doTransaction",
+  "id": "123454352",
+  "params": [
+    "engine",
+    {
+      "vuid": "80b45894",
+      "amount": 100,
+      "originalTransactionId": "2022052432",
+      "tranType": 2
+    }
+  ]
+}
+```
+
+## 外部退款（来自其他设备）
+
+要退还通过其他终端发起的交易，系统需要原始交易的以下元数据，以确保安全性和有效性：
+
+- `transactionOriginalTime`
+- `transactionOriginalAmount`
+- `transactionOriginalRequestId`
+- `mainBoardSerial`
+- `hwSerial`
+
+### 要求
+
+以下示例显示了外部退款的典型请求正文：
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "doTransaction",
+  "id": "123454352",
+  "params": [
+    "engine",
+    {
+      "vuid": "$guid",
+      "amount": 13,
+      "originalTransactionId": "2037037300",
+      "originalSiteId": 1,
+      "transactionOriginalTime": "2025-02-17 03:04:40.760",
+      "transactionOriginalAmount": 13,
+      "transactionOriginalRequestId": "afbae618-678f-45a9-ad87-5073c36419a2",
+      "mainBoardSerial": "543654645",
+      "hwSerial": "1231412",
+      "tranType": 2
+    }
+  ]
+}
+```
+
+### 回复
+
+成功的请求将返回类似于以下代码块中的响应：
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "123454352",
+  "result": {
+    "statusCode": 0,
+    "statusMessage": "TRANSACTION APPROVED",
+    "appVersion": "01.06.62",
+    "vuid": "123454",
+    "amount": 100,
+    "transactionId": "2022052432",
+    "entryMode": 1,
+    "transactionOriginalRequestId": "6439809e-619f-414b-8c3e-f1a9f3c3bc49",
+    "transactionOriginalTime": "0001-01-01 00:00:00.000",
+    "transactionOriginalAmount": 100,
+    "serverResultMessage": "Refund is Approved",
+    "tranType": 2,
+    "dtId": "1741246498022399011",
+    "currencyCode": "USD",
+    "currencyISOCode": "840",
+    "mainBoardSerial": "000177234933444",
+    "hwSerial": "0900044624102737"
+  }
+}
+```
+
+### 退款请求参数
+
+To perform a refund, you must include the following parameters within the `params` object of the `doTransaction` method.
+
+| 姓名                             | 类型     | 描述                                         |
+| :----------------------------- | :----- | :----------------------------------------- |
+| `jsonrpc`                      | string | JSON-RPC 协议版本（例如，“2.0”）。                   |
+| `method`                       | string | 要调用的 API 方法：`doTransaction`。               |
+| `vuid`                         | string | 供应商唯一标识符。                                  |
+| `amount`                       | 整数     | 退款金额（以最小货币单位表示，例如，分）。                      |
+| `originalTransactionId`        | string | **必填项。**待退款交易的ID。                   |
+| `tranType`                     | 整数     | 必填。退款交易请设置为 `2`。                           |
+| `originalSiteId`               | 整数     | **有条件限制。**外部退款时需要提供来源网站信息。          |
+| `transactionOriginalTime`      | string | 条件性必填。原始时间戳，格式为 `YYYY-MM-DD HH:MM:SS.mmm`。 |
+| `transactionOriginalAmount`    | 整数     | **有条件。**初始交易的原始金额。                  |
+| `transactionOriginalRequestId` | string | **条件性。**原始请求 GUID/ID。               |
+| `mainBoardSerial`              | string | **条件性。**原设备主板序列号。                   |
+| `hwSerial`                     | string | **条件性。**原始设备的硬件序列号。                 |
+
+### 退款响应参数
+
+以下是退款请求后 `result` 对象中返回的参数：
+
+| 姓名                             | 类型     | 描述                      |
+| :----------------------------- | :----- | :---------------------- |
+| `statusCode`                   | 整数     | `0` 表示成功；非零值表示错误或拒绝。    |
+| `statusMessage`                | string | 高级状态文本（例如，“交易已批准”）。     |
+| `appVersion`                   | string | 应用程序的当前版本。              |
+| `vuid`                         | string | 交易的供应商唯一标识符。            |
+| `amount`                       | 整数     | 已处理的退款金额。               |
+| `transactionId`                | string | 分配给本次退款尝试的唯一 ID。        |
+| `entryMode`                    | 整数     | 输入卡片数据的方法。              |
+| `transactionOriginalRequestId` | string | 与原始交易的请求 ID 匹配。         |
+| `transactionOriginalTime`      | string | 原始交易记录的时间戳。             |
+| `transactionOriginalAmount`    | 整数     | 原始交易的总金额。               |
+| `serverResultMessage`          | string | 处理器发送的详细信息（例如，“退款已批准”）。 |
+| `tranType`                     | 整数     | 交易类型标识符（例如 `2`）。        |
+| `dtId`                         | string | 设备特定的交易标识符。             |
+| `currencyCode`                 | string | 字母数字货币代码（例如，“USD”）。     |
+| `currencyISOCode`              | string | 数字 ISO 货币代码（例如，“840”）。  |
+| `mainBoardSerial`              | string | 处理设备主板的序列号。             |
+| `hwSerial`                     | string | 处理设备的硬件序列号。             |
+
+<br />

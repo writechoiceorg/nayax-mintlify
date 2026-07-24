@@ -1,0 +1,51 @@
+---
+title: 外部结算配置
+description: 在 Nayax Core 中配置一台机器，以支持 Spark External Settlement，即由服务器结算或取消一笔终端已授权的交易。
+---
+
+本页面上的设置用于为 Spark External Settlement 准备机器，此流程下，您的服务器可完成或取消一笔直接在终端上授权的交易。大多数属性组无需更改即可支持此功能。
+
+## 分子数据
+
+MDB Flags 设置用于告知服务器该设备支持哪种支付流程：
+
+- 预授权用于在消费者选择
+  产品或服务之前、且最终金额尚未确定时启动交易。请将 MDB Flags 设置为
+  \* Flags Disabled。
+- 预选是在出示银行卡时价格已知的
+  情况下使用的流程。请将 MDB Flags 设置为 02 PreSelection Enabled。
+
+<Frame>
+  预授权流程中 MDB Flags 设置为 Flags Disabled
+</Frame>
+
+## VPOS Touch
+
+VAS configurations 设置对于 External Settlement 而言是可选的。您可以添加标识，表明该机器执行 Spark External Settlement。该设置并非流程正常工作所必需，仅用于管理目的。
+
+<Warning>
+  Spark External Settlement 不能与同一机器上的任何其他 Spark 流程（Remote Start、Device Start 或 Device Stop）共存。
+</Warning>
+
+完成后，点击 Save 以保存配置。
+
+## 配置摘要
+
+使用此表作为 External Settlement 设置的快速参考：
+
+| 团体         | 属性        | 价值                                         |
+| :--------- | :-------- | :----------------------------------------- |
+| 分子数据       | MDB Flags | 预授权：Flags Disabled。预选：PreSelection Enabled |
+| VPOS Touch | VAS 配置    | 可选：Spark External Settlement               |
+
+## 后续步骤
+
+<CardGroup cols={2}>
+  <Card title="外部结算" icon="money-check" href="/docs/integrate-pos-device/spark/payment-flows/external-settlement">
+    了解 External Settlement 流程在 API 层面的运作方式。
+  </Card>
+
+  <Card title="外部取消" icon="ban" href="/docs/integrate-pos-device/spark/payment-flows/external-cancel">
+    了解在未提供服务时如何释放已捕获的资金。
+  </Card>
+</CardGroup>

@@ -1,0 +1,47 @@
+---
+title: 强客户身份验证 (SCA)
+metadata:
+  og:description: 强客户认证（Strong Customer Authentication，SCA）是欧盟 PSD2 指令下的一项监管要求，旨在减少欺诈并提升安全性，适用于。
+---
+
+强客户认证（Strong Customer Authentication，SCA）是欧盟 PSD2 指令下的一项监管要求，旨在减少电子支付过程中的欺诈行为并提升安全性。
+
+在有卡交易中，当交易金额超过 CVM 限额时，SCA 通常通过持卡人验证方式（Cardholder Verification Method，CVM）执行，例如输入 PIN、生物识别验证（通过移动钱包）或签名。
+
+## 软拒绝
+
+在某些情况下，低于 CVM 限额的交易也会被以软拒绝（Soft Decline）方式拒绝。
+
+这种情况发生在交易在技术上已被发卡行授权（即卡片有效且余额充足），但发卡行仍要求在授权支付前执行强客户认证（SCA）。这种情况常见于发卡行怀疑存在风险时（例如，在多次先前的小额免验证非接触交易之后又出现一次非接触交易），或交易超出监管限额时。
+
+### 需要 PIN 的拒绝
+
+在这些情况下，收单机构会收到一个拒绝代码，表示交易批准需要联机 PIN（Online PIN）。此时，终端会保持交易会话，并要求持卡人在 PIN 键盘上输入 PIN。加密后的 PIN 随后会被发送回收单机构进行验证，之后交易才能结算。
+
+To implement it, return a `Verdict=Declined` with `Code 983` to the Authorization/Sale request.
+
+如果交易使用联机 PIN 完成，Nayax engine 将返回一个回显的 Authorization/Sale 请求，其中在 `DukptInfo` 对象下包含 PIN Block。
+
+```json
+"Status": {
+  "Verdict": "Declined",
+  "Code": 983,
+  "StatusMessage": "SCA- Soft Declined"
+}
+```
+
+### 需要交换接口的拒绝
+
+在这些情况下，收单机构会收到一个拒绝代码，表示必须使用接触式接口（Contact Interface）重新发起交易。此时，终端会提示用户插入卡片，并使用 PIN（脱机或联机）完成交易。
+
+To implement it, return a `Verdict=Declined` with `Code 1021` to the Authorization/Sale request.
+
+如果交易通过接触式接口完成，Nayax engine 将发送一个新的 Authorization/Sale 请求。如果执行了联机 PIN，PIN Block 将在 `DukptInfo` 对象下发送。
+
+```json
+"Status": {
+  "Verdict": "Declined",
+  "Code": 1021,
+  "StatusMessage": "SCA- Switch Interface"
+}
+```

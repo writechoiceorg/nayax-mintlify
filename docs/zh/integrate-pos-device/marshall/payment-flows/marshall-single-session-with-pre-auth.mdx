@@ -1,0 +1,130 @@
+---
+title: 预授权单次会话
+metadata:
+  og:description: 本指南介绍了预授权贩售流程。此流程是降低风险的关键，因为它在客户之前就批准了付款。
+---
+
+本指南解释了**预授权**自动售货流程。此流程是最大限度降低风险的关键，因为它会在顾客选择商品之前批准付款。
+
+## 付款流程
+
+下图直观地展示了预授权流程，该图展示了单个自动售货会话流程的每个步骤，从产品选择到付款授权和分配。
+
+<Frame>
+  <img src="/images/docs/marshall-single-session-with-pre-auth/image1.png" />
+</Frame>
+
+以下是该图的细分：
+
+1. 消费者将卡出示给 Nayax 设备。
+2. Nayax 设备向 Nayax 服务器发送授权请求。
+3. Nayax 服务器将授权请求转发给计费提供商。
+4. 计费提供商向 Nayax 服务器发送授权响应（已批准）。
+5. Nayax 服务器将授权响应（已批准）发送回 Nayax 设备。
+6. 外设的SDK启动会话并触发“会话开始”事件：
+
+<CodeGroup>
+  ```c C
+  vmc_vend_event_handler_cb(vm_vend_event_on_session_begin)
+  ```
+
+  ```csharp C#
+  vend_callbacks(onBeginSession(funds_avail))
+  ```
+
+  ```java Java
+  vmc_vend_events()
+  (via onBeginSession(funds_avail))
+  ```
+</CodeGroup>
+
+7. 致消费者的信息：“请选择产品。”
+8. 消费者选择产品。
+9. 外设的 SDK 向 Nayax 设备发送“供应商请求”：
+10. 外围设备的 SDK 处理通过传输数据命令从 Nayax 设备接收的交易数据（所述数据包括有关 Nayax 交易 ID 和消费者卡详细信息的信息）：
+
+<CodeGroup>
+  ```c C
+  vmc_vend_event_handler_cb(vm_vend_event_on_transaction_info)
+  ```
+
+  ```csharp C#
+  vend_callbacks(onTransactionInfo(data))
+  ```
+
+  ```java Java
+  vmc_vend_events()
+  (via onTransactionInfo(data))
+  ```
+</CodeGroup>
+
+11. 外设的 SDK 触发“厂商已批准”事件：
+
+<CodeGroup>
+  ```c C
+  vmc_vend_event_handler_cb(vm_vend_event_on_vend_approved)
+  ```
+
+  ```csharp C#
+  vend_callbacks()
+  (via onVendApproved(session))
+  ```
+
+  ```java Java
+  vmc_vend_events()
+  (via onVendApproved(session))
+  ```
+</CodeGroup>
+
+12. 外围设备向消费者分发产品/提供服务
+13. SDK 报告销售成功：
+
+<CodeGroup>
+  ```c C
+  vmc_vend_vend_status(&session, __true)
+  ```
+
+  ```csharp C#
+  vmc_vend_events()
+  (via onVendApproved(session) -which would return "true")
+  ```
+
+  ```java Java
+  vmc_vend_events()
+  (via onVendApproved(session) -which would return "true")
+  ```
+</CodeGroup>
+
+并完成销售会话：
+
+<CodeGroup>
+  ```c C
+  vmc_vend_vend_session_complete_lowlevel()
+  ```
+
+  ```csharp C#
+  no such function in C# or Java due to the nature of the languages
+  ```
+
+  ```java Java
+  no such function in C# or Java due to the nature of the languages
+  ```
+</CodeGroup>
+
+14. 致消费者的信息：“请取走产品。”
+15. Nayax设备向Nayax服务器发送结算请求。
+16. Nayax服务器将结算请求转发给计费提供商。
+17. 计费提供商向 Nayax 服务器发送结算响应（OK）。
+18. Nayax 服务器将结算响应（OK）发送回 Nayax 设备。
+
+## 参见
+
+<Columns cols={3}>
+  <Card icon="link" title="付款流程" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-payment-flows" arrow />
+
+  <Card icon="link" title="开始" href="/docs/integrate-pos-device/marshall/get-started/marshall-get-started" arrow />
+
+  <Card icon="link" title="方法和功能" href="/docs/integrate-pos-device/marshall/methods-functions/marshall-methods-and-functions" arrow />
+</Columns>
+
+<br />

@@ -1,0 +1,110 @@
+---
+title: 静态二维码
+metadata:
+  og:description: 静态二维码提供了一种简单、安全的方式,通过钱包应用程序处理支付,使客户能够扫描显示在。
+---
+
+静态二维码提供了一种简单、安全的方式，可以通过钱包应用程序处理付款，使客户能够扫描自动售货机或终端上显示的代码。
+
+## 工作原理
+
+在选择产品之前,用户需扫描机器上显示的二维码,如下图所示。
+
+<Frame>
+  ![](/images/docs/staticqr-flows/image1.png)
+</Frame>
+
+扫描后,客户的移动设备将与支付系统交互以处理交易,提供无需额外硬件的无缝支付体验。
+
+## 交易流程
+
+Cortina 支持两种类型的 StaticQR 交易流程:
+
+- 预选
+- 预授权
+
+详情请参阅以下各节。
+
+### 预选
+
+预选流程将产品/服务选择和授权步骤合并为一个交易，从而简化了支付流程。此流程通常用于小额或快速交易，客户选择和支付授权在一个步骤中即可完成。
+
+参见下图：
+
+<Frame>
+  <img src="/images/docs/staticqr-flows/Cortina Static QR - Pre-select.png" />
+</Frame>
+
+该过程的步骤如下：
+
+1. 用户扫描二维码或在手机应用程序中输入机器编号。
+2. 移动应用程序与集成商的后端服务器建立连接。
+3. 集成器通过[StaticQR Start](/reference/cortina/staticqr/cortina-staticqr-start)端点向 Nayax 服务器发送 /Notify (TerminalID) 请求。
+4. Nayax 服务器向 Nayax 设备发送 WakeUpDevice 请求。
+5. Nayax 设备向 Nayax 服务器返回唤醒设备响应。
+6. Nayax 服务器向集成器发送通知成功消息。
+7. Nayax 设备向服务机发送开始售货会话命令。
+8. 用户在服务机上选择产品。
+9. 服务机器向 Nayax 设备发送销售请求。
+10. Nayax 设备向 Nayax 服务器发送授权响应。
+11. Nayax 服务器通过[StaticQR 销售](/reference/cortina/staticqr/cortina-staticqr-sale)端点向集成商发送 /Sale（最终金额）请求。
+12. （可选）集成商可以在用户的​​移动设备上显示提示。
+13. 集成商向 Nayax 服务器发送销售响应成功。
+14. Nayax 服务器向 Nayax 设备发送授权已批准消息。
+15. Nayax 设备向服务机器发送 Vend 批准响应。
+16. 服务机成功分发产品。
+17. 服务机向 Nayax 设备发送销售成功通知。
+18. Nayax 设备显示“谢谢”信息。
+19. Nayax 设备向 Nayax 服务器发送结算命令。
+20. Nayax 服务器通过[销售结束通知端点向集成商发送 /销售结束](/reference/cortina/cortina/post-sale-end-notification)通知（TransactionId）。
+21. （可选）集成商可以在用户的​​移动设备上显示最终提示。
+22. 集成器向 Nayax 服务器发送成功确认响应。
+
+由于授权已被授予，因此此响应通常始终在此流程中获得批准。
+
+<Warning>
+  **Void**
+
+  如果产品未能交付给客户，或者在超时前没有收到销售响应，Nayax 引擎将使用[StaticQR Void](https://devzone.nayax.com/docs/cortina/staticqr/static-qr-void)端点来取消付款请求。
+</Warning>
+
+### 预授权
+
+静态二维码的预授权流程涉及多个关键步骤,以使用静态二维码对支付进行身份验证和授权。此流程确保在发放产品或服务之前交易是有效的。
+
+参见下图：
+
+<Frame>
+  <img src="/images/docs/staticqr-flows/Cortina Static QR - Pre-auth.png" />
+</Frame>
+
+在哪里：
+
+1. 用户扫描二维码或在手机应用程序中输入机器编号。
+2. 移动应用程序与集成商的后端服务器建立连接。
+3. 集成器通过[StaticQR Start](/reference/cortina/staticqr/cortina-staticqr-start)端点向 Nayax 服务器发送 /Notify (TerminalID) 请求。
+4. Nayax 服务器向 Nayax 设备发送 WakeUpDevice 请求。
+5. Nayax 设备向 Nayax 服务器返回唤醒设备响应。
+6. Nayax 服务器向集成器发送通知成功消息。
+7. Nayax 设备向 Nayax 服务器发送授权请求。
+8. Nayax 服务器通过[StaticQR 授权](/reference/cortina/staticqr/cortina-staticqr-authorization)端点向集成商发送 /Authorization（默认金额）请求。
+9. （可选）集成商可以在用户的​​移动设备上显示提示。
+10. 集成器向 Nayax 服务器发送授权响应成功。
+11. Nayax 服务器向 Nayax 设备发送授权已批准消息。
+12. Nayax 设备向服务机发送开始售货会话命令。
+13. 用户在服务机上选择所需产品。
+14. 服务机器向 Nayax 设备发送销售请求。
+15. Nayax 设备向服务机器发送 Vend 批准响应。
+16. 服务机成功分发产品。
+17. 服务机向 Nayax 设备发送销售成功通知。
+18. Nayax 设备显示“谢谢”信息。
+19. Nayax 设备向 Nayax 服务器发送结算命令。
+20. Nayax 服务器通过[StaticQR 结算](/reference/cortina/staticqr/cortina-staticqr-settlement)端点向集成商发送 /Settlement（最终金额）请求。
+21. （可选）集成商可以在用户的​​移动设备上显示最终提示。
+22. 集成商向 Nayax 服务器发送结算响应成功。
+
+<Warning>
+  取消
+
+  如果产品未能交付给客户，或者在超时前未收到授权响应，Nayax 引擎将使用[StaticQR Cancel](/reference/cortina/staticqr/cortina-staticqr-cancel)端点取消预授权和交易。
+</Warning>

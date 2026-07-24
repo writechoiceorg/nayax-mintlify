@@ -1,0 +1,89 @@
+---
+title: 获取属性
+metadata:
+  og:description: getProperty 方法用于获取特定的终端详细信息，例如终端序列号（S/N）、DCS 硬件序列号或 Agamento
+---
+
+`getProperty` 方法用于获取特定的终端详细信息，例如终端序列号（S/N）、DCS 硬件序列号或 Agamento 应用程序版本。如果未指定属性类型，则会返回一个包含更广泛终端相关属性的字典。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“集成”部分](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started)。
+</Note>
+
+要调用此方法，请将 method 字段设置为 `getProperty`，并包含 params 数组：
+
+```json
+{
+    "jsonrpc":"2.0",
+    "method":"getProperty",
+    "id":"123454352",
+    "params": [
+        "device", 1
+    ]
+}
+```
+
+### 请求参数
+
+该请求必须包含带有以下参数的 params 数组：
+
+- 第一个参数是服务名称：`device`。
+- 第二个参数（可选）是数字属性类型：
+  - `1` 表示终端序列号（S/N）
+  - `2` 表示 DCS 硬件序列号
+  - `3` 表示 Agamento 版本
+
+## 回复
+
+响应会根据输入而有所不同：
+
+- 如果指定了属性类型，则 result 为单个字符串值。
+  ```json
+  {
+      "jsonrpc": "2.0",
+      "id": "123454352",
+      "result": "209QCA8T4597"
+  }
+  ```
+- 如果未指定属性类型，则 result 为包含多个设备属性的字典。
+  ```json
+  {
+      "jsonrpc": "2.0",
+      "id": "123454352",
+      "result": {
+          "retailerNumber": "0883232",
+          "nayaxSN": "0907042423158538",
+          "isActiveDes": "Active",
+          "emvConfigFileId": 0,
+          "emvProvider": 1,
+          "paymentMethods": "1;2;4;5;9;22;72;",
+          "cibusEnabled": "",
+          "cibusRestaurantId": 0,
+          "cibusPosId": 0,
+          "multipassEnabled": "",
+          "multipassPosId": 0
+      }
+  }
+  ```
+
+### 响应参数
+
+下表说明了此方法的响应参数：
+
+| 姓名                  | 类型     | 描述               |
+| ------------------- | ------ | ---------------- |
+| `retailerNumber`    | string | 零售商标识符           |
+| `nayaxSN`           | string | Nayax序列号         |
+| `isActiveDes`       | string | 激活状态             |
+| `emvConfigFileId`   | 整数     | EMV 配置文件 ID      |
+| `emvProvider`       | 整数     | EMV 提供商 ID       |
+| `paymentMethods`    | string | 已启用的支付方式代码       |
+| `cibusEnabled`      | string | Cibus 支持状态       |
+| `cibusRestaurantId` | 整数     | Cibus 餐厅 ID      |
+| `cibusPosId`        | 整数     | Cibus POS ID     |
+| `multipassEnabled`  | string | Multipass 支持状态   |
+| `multipassPosId`    | 整数     | Multipass POS ID |

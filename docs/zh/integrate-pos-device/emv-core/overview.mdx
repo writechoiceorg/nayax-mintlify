@@ -1,0 +1,74 @@
+---
+title: 概述
+keywords:
+  - EMV Core
+  - EMV-Core SDK
+  - Nayax Embedded
+  - OEM POS
+  - UNO-8
+  - UNO-mini
+metadata:
+  og:description: Nayax 嵌入式解决方案使 OEM 制造商能够将安全、经济实惠且全球通用的支付能力集成到其机器中。
+---
+
+import McpNote from '/snippets/zh/mcp-server-note.mdx';
+
+Nayax嵌入式解决方案使OEM厂商能够将安全、经济实惠的全球支付功能集成到其设备中。该解决方案包含功能强大的硬件读卡器、灵活的软件SDK和强大的支付处理服务。无论您是开发Android或Linux应用程序，还是基于MCU或RTOS嵌入式平台，Nayax都能提供相应的工具来简化集成并确保交易顺畅。
+
+<McpNote />
+
+## 主要优点
+
+- **全球支付接受**：支持借记卡、信用卡、预付卡和移动支付。
+- **开发人员友好集成**：JSON 和 Java API 带有示例代码，可快速设置。
+- **可靠且可扩展**：冗余 PCI 认证服务器和 50 多个国家/地区全天候一级支持。
+
+## 解决方案组件
+
+Nayax Embedded 解决方案由以下组件组成：
+
+<Columns cols={3}>
+  <Card title="Nayax EMV 读卡器">
+    一种低成本、经 EMV 认证的读卡器，可安全读取卡数据并与 EMV 核心进行专门通信以进行处理。
+  </Card>
+
+  <Card title="Nayax EMV Core">
+    安装在主机（Android、Linux 或 RTOS 嵌入式平台）上的 SDK，用于处理 EMV 读卡器和 Nayax 服务器之间的通信。
+  </Card>
+
+  <Card title="主机应用程序">
+    由OEM制造商开发，用于管理整个支付系统，它连接到Nayax EMV Core进行交易处理和管理。
+  </Card>
+</Columns>
+
+<Frame>
+  <img src="/images/docs/overview-2/image1.png" />
+</Frame>
+
+## Nayax 提供什么
+
+当您选择使用 Nayax Embedded 解决方案时，Nayax 将提供以下服务：
+
+- 硬件：
+  - **UNO-8/mini** ：经 EMV 认证的读卡器，具有 L1、L2、TQM 认证。
+- 软件：
+  - Nayax EMV Core SDK，包含适用于 Android、Linux 和 RTOS 嵌入式平台的示例代码。
+  - 支持 EMV 支付、预付费和远程固件更新。
+- 网关服务：
+  - 安全处理所有主要卡品牌和移动支付。
+  - 冗余 PCI 认证服务器，正常运行时间为 99.9%。
+  - 使用可定制的警报和报告工具进行远程管理。
+
+## 选择您的 SDK
+
+根据目标平台选择集成路径：
+
+<Columns cols={2}>
+  <Card title="Android 和 Linux SDK" href="/docs/integrate-pos-device/emv-core/get-started/emv-core-get-started-1">
+    适用于 Android 和 Linux 应用的 Java 和原生二进制 SDK。包含预构建的支付流程、完整的 Java API 和演示应用。
+  </Card>
+
+  <Card title="RTOS SDK" href="/docs/integrate-pos-device/emv-core/rtos/rtos-overview">
+    适用于MCU和RTOS嵌入式平台的便携式C库（C99）。可通过UART或USB HID与UNO-mini读卡器通信。
+  </Card>
+</Columns>

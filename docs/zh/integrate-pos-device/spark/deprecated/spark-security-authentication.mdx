@@ -1,0 +1,127 @@
+---
+title: 身份验证版本 1.0
+metadata:
+  og:description: Spark 使用双重安全机制：基于 Token 的身份识别，用于将请求与您的账户关联；使用共享密钥的 HMAC 签名。
+---
+
+Spark 使用两部分安全机制：
+
+- 基于令牌的识别将请求与您的帐户关联起来。
+- 使用共享密钥（`Sign Key`）的 HMAC 签名，以确保请求正文在传输过程中未被篡改。
+
+本页面将指导您使用 Nayax 的自定义 HMAC 签名机制安全地对 Spark API 请求进行身份验证。这包括使用共享的 `Sign Key` 对每个请求正文进行签名，并附加两个必需的请求头：`Signature` 和 `IntegratorId`。
+
+## 前提条件
+
+开始之前，请确保您拥有以下资源：
+
+- 有效的签名密钥（由 Nayax 共享，通常为 16 个字符）
+- 关联的签名密钥 ID
+
+<Warning>
+  强制的
+
+  所有 Spark 端点都要求使用此签名机制。没有有效签名的请求将被拒绝，并返回 `401 Unauthorized`。
+</Warning>
+
+## 验证请求
+
+拥有所需的资源后，您可以按照以下步骤开始向 Spark 验证您的 API 请求：
+
+1. 准备包含所有必要字段（例如 `TerminalId`、`Cipher` 等）的 JSON 正文。以下是 [StartAuthentication](/reference/spark/transactions/startauthentication) 端点的简化示例：
+
+   ```json
+   {
+     "TokenId": 116383,  
+     "TerminalId": "0434334921100366",
+     "TerminalIdType": 1,
+     "Random": "123456789qwertyui",
+     "Cipher": "X305dITNTAw2vHsxE+taVcn6UvgBC3fdI6QbqeABgHbo8CKsoZhqISJfslehCiA+L7XYrqvKFci7C6BNj/trzBuNJwBEjgBzKhhgpJ5ggnw="
+   }
+
+   ```
+2. 序列化 JSON 请求内容，删除空格和换行符。请勿更改值或添加转义符，除非它们是实际负载的一部分。
+
+   <Frame>
+     <img src="/images/reference/spark-security-authentication/image1.png" />
+   </Frame>
+
+   我们在示例中使用了这款[JSON 代码检查工具](https://jsonlint.com/)。结果如下。
+
+   ```json
+   {"TokenId":116383,"TerminalId":"0434334921100366","TerminalIdType":1,"Random":"123456789qwertyui","Cipher":"X305dITNTAw2vHsxE+taVcn6UvgBC3fdI6QbqeABgHbo8CKsoZhqISJfslehCiA+L7XYrqvKFci7C6BNj/trzBuNJwBEjgBzKhhgpJ5ggnw="}
+   ```
+3. 请按照以下步骤生成 `Signature` 头：
+   1. 将序列化的请求和签名密钥连接起来，用“;”分隔。
+      ```json
+      {"TokenId":116383,...,"Cipher":"..."};RbtdDsiVNjkAeRty
+      ```
+   2. 使用 SHA-256 算法（UTF-8 编码）对结果进行哈希处理：
+
+      <Frame>
+        <img src="/images/reference/spark-security-authentication/image2.png" />
+      </Frame>
+
+      We used [this tool](https://emn178.github.io/online-tools/sha256.html) to do so in the example. Use the output as your `Signature` header.
+
+      ```json
+      536a5813206bcb663d98715d10a6b2612364245c865cdd5f781ff4428c4a6137
+      ```
+4. 将 `IntegratorId` 和 `Signature` 头添加到您的请求中。
+   ```json
+   curl -X POST https://api-sandbox.nayax.com/spark/StartAuthentication \
+   --header 'IntegratorId: 927' \
+   --header 'Signature: 536a5813206bcb663d98715d10a6b2612364245c865cdd5f781ff4428c4a6137' \
+   --header 'Content-Type: application/json' \
+   --data '{
+     "TokenId": 116383,	
+     "TerminalId": "0434334921100366",
+     "TerminalIdType": 1,
+     "Random": "123456789qwertyui",
+     "Cipher": "X305dITNTAw2vHsxE+taVcn6UvgBC3fdI6QbqeABgHbo8CKsoZhqISJfslehCiA+L7XYrqvKFci7C6BNj/trzBuNJwBEjgBzKhhgpJ5ggnw="
+   }'
+   ```
+
+For this example, the [`/StartAuthentication`](/reference/spark/transactions/startauthentication) method was used, but the process is relevant for any Spark endpoint request and response.
+
+<Warning>
+  UTF-8 编码
+
+  确保签名是从最小化的 JSON 和 UTF-8 哈希正确生成的。
+</Warning>
+
+### 构建 `cipher`
+
+您的密文由以下部分组成：
+
+- 一个 36 个字符的 Spark 事务 ID（一个带有连字符的 GUID）。
+- 单个 "=" 字符。
+- 一个 17 个字符的字母数字随机字符串。
+- 一个 10 个字符的 `YYMMDDhhmm` 格式 UTC 时间戳。
+
+请按照以下步骤生成并加密您的密文：
+
+1. 将 Spark 事务 ID、“=”字符、随机字符串和时间戳连接起来，形成 64 个字符的密文，如下例所示：
+   ```
+   12c7cec2-c690-4425-9a1f-db0db60e2d8c=123456789qwertyui2306061021
+   ```
+2. 从提供的令牌中提取最右侧的 32 个字符，以创建 256 位 AES 加密密钥。例如，假设令牌如下：
+   ```
+   some_long_token_wRvTVTkungMIKThTVbj_fiXdfoGclhn0
+   ```
+   加密密钥如下：
+   ```
+   wRvTVTkungMIKThTVbj_fiXdfoGclhn0
+   ```
+3. 使用 ECB 模式的 AES 加密 64 个字符的密文。确保明文已填充（例如，使用 PKCS7）至 16 字节的倍数。对生成的加密字节进行 Base64 编码以进行传输，这将产生类似于以下示例的输出：
+   ```
+   X305dITNTAw2vHsxE+taVcn6UvgBC3fdI6QbqeABgHbo8CKsoZhqISJfslehCiA+L7XYrqvKFci7C6BNj/trzBuNJwBEjgBzKhhgpJ5ggnw=
+   ```
+
+## 参见
+
+<Columns cols={3}>
+  <Card icon="link" title="交易流程" href="/docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark" arrow />
+
+  <Card icon="link" title="API 方法" href="/docs/integrate-pos-device/spark/deprecated/api-methods-spark" arrow />
+</Columns>

@@ -1,0 +1,290 @@
+---
+title: SDK 标志
+keywords:
+  - sdk
+  - SDK flags
+  - marshall sdk
+  - marshal
+  - vend_denied_policy
+  - configuration flags
+  - multi_vend_support
+  - multi_session_support
+  - reader_always_on
+  - always_idle
+  - explicit_vend_success
+  - mifare card support
+  - qr_approved_by_vmc_support
+metadata:
+  og:description: vmcconfiguration 对象允许您设置各种配置标志。使用 Marshall SDK 时,这些标志决定了行为和功能。
+---
+
+`vmc_configuration` object 允许您设置各种配置标志。使用 Marshall SDK 时，这些标志决定了外围设备（最初用于自动售货机控制器 -VMC）的行为和功能。
+
+## Configuration Flags
+
+您可以在 `main` 方法中初始化这些标志，如以下代码所示：
+
+<CodeGroup>
+  ```java Java
+  public static void main(string[] args) {
+          vmc_config.multi_vend_support = false;
+          vmc_config.multi_session_support = false;
+          vmc_config.price_not_final_support = false;
+          vmc_config.reader_always_on = false;
+          vmc_config.always_idle = false;
+          vmc_config.vend_denied_policy = vmc_configuration.vend_denied_policy_cancel;
+          vmc_config.explicit_vend_success = false;
+          vmc_config.long_price = false;
+
+          vmc_config.mifare_approved_by_vmc_support = false;
+          vmc_config.mag_card_approved_by_vmc_support = false;
+          vmc_config.qr_approved_by_vmc_support = false;
+
+          vmc_config.dump_packets_level = vmc_configuration.debug_level_dump_moderate;
+          vmc_config.debug = true;
+  }
+  ```
+
+  ```csharp C#
+  public class vend_machine
+              vmc_config.multi_session_support = false;
+              vmc_config.multi_vend_support = false;
+              vmc_config.price_not_final_support = false;
+              vmc_config.reader_always_on = false;
+              vmc_config.always_idle = false;
+              vmc_config.explicit_vend_success = false;
+              vmc_config.vend_denied_policy = vmc_configuration.vend_denied_policy_cancel;
+              vmc_config.long_price = true;
+
+              vmc_config.mag_card_approved_by_vmc_support = false;
+              vmc_config.mifare_approved_by_vmc_support = false;
+  ```
+
+  ```c C
+  static void vmc_init(void)
+  {
+  	config.multi_vend_support = __false;
+  	config.multi_session_support = __false;
+  	config.price_not_final_support = __false;
+  	config.reader_always_on = __false;
+  	config.always_idle = __false;
+  	config.explicit_vend_success = __false;
+  	config.vend_denied_policy = vend_denied_policy_persist_e;
+
+  	config.mifare_approved_by_vmc_support = __false;
+  	config.mag_card_approved_by_vmc_support = __false;
+  	config.qr_approved_by_vmc_support  = __false;
+
+  	config.dump_packets_level = debug_level_dump_moderate;
+    config.debug = __true;
+  }
+  ```
+</CodeGroup>
+
+### 旗帜说明
+
+下表提供了这些标志的更详细说明。
+
+<table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        范围
+      </th>
+
+      <th>
+        类型
+      </th>
+
+      <th>
+        描述
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `multi_vend_support`
+      </td>
+
+      <td>
+        布尔值
+      </td>
+
+      <td>
+        支持在单笔交易中销售和区分多个产品。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `multi_session_support`
+      </td>
+
+      <td>
+        布尔值
+      </td>
+
+      <td>
+        使设备能够同时处理多个会话,这对于可能同时存在多笔未结交易的场景非常有用。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `price_not_final_support`
+      </td>
+
+      <td>
+        布尔值
+      </td>
+
+      <td>
+        仅适用于多会话（预选）流程。这表明从服务器收到的授权价格并非最终价格，这意味着将其与多会话流程结合使用时，其行为类似于预授权流程，确保余额在几天内不会被冻结。您可以在[多会话](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session#/)页面了解更多信息。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `reader_always_on`
+      </td>
+
+      <td>
+        布尔值
+      </td>
+
+      <td>
+        它能确保设备的读卡器始终保持开启状态，随时准备从设备端而非外围设备发起交易。使用此功能时，触发产品选择的条件是刷卡或触摸设备上的按钮，而无需在外围设备上选择产品。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `always_idle`
+      </td>
+
+      <td>
+        布尔值
+      </td>
+
+      <td>
+        交易开始时，消费者在终端设备上选择商品。终端设备无需等待“会话开始”触发器即可发送“销售请求”命令。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `vend_denied_policy`
+      </td>
+
+      <td>
+        布尔值
+      </td>
+
+      <td>
+        不相关,不适用。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `explicit_vend_success`
+      </td>
+
+      <td>
+        布尔值
+      </td>
+
+      <td>
+        如果您的出货操作耗时较长,可以将此标志设置为 true,然后在收到 onVendApproved() 后执行缓慢的出货操作,再在您方便的时候调用 vend\_status(true/false) 以表示出货成功或失败,从而结束该交易。
+
+        （onVendApproved 会返回一个虚拟的“true”，这意味着它会释放线程，但 SDK 仍会等待您关于售货结果的实际响应，这正是您在“vend\_status”命令中要执行的操作。）
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `long_price`
+      </td>
+
+      <td>
+        布尔值
+      </td>
+
+      <td>
+        仅适用于 VPOSM——允许 price 字段为 4 字节而非 2 字节。尚不支持
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `mifare_approved_by_vmc_support`
+      </td>
+
+      <td>
+        布尔值
+      </td>
+
+      <td>
+        允许第三方服务器对Mifare（预付）卡进行授权。卡片数据将被转发至外围设备，由外围设备决定是否批准或拒绝该卡。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `mag_card_approved_by_vmc_support`
+      </td>
+
+      <td>
+        布尔值
+      </td>
+
+      <td>
+        允许使用经第三方服务器授权的磁条专用卡。卡片数据将被转发至外围设备，由外围设备决定是否批准或拒绝该卡。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `qr_approved_by_vmc_support`
+      </td>
+
+      <td>
+        布尔值
+      </td>
+
+      <td>
+        允许第三方服务器对二维码进行授权。卡片数据将被转发至外围设备，由外围设备决定是否批准或拒绝该卡片。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `debug`
+      </td>
+
+      <td>
+        布尔值
+      </td>
+
+      <td>
+        启用或禁用日志生成。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `dump_packets_level`
+      </td>
+
+      <td>
+        `vmc_configuration`
+      </td>
+
+      <td>
+        确定记录 SDK 生成的消息所需的详细程度。您可以在[“日志生成”](/docs/integrate-pos-device/marshall/additional-resources/log-generation)页面中了解更多信息。
+      </td>
+    </tr>
+  </tbody>
+</table>

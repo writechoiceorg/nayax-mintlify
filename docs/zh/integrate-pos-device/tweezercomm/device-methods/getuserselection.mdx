@@ -1,0 +1,69 @@
+---
+title: getUserSelection
+metadata:
+  og:description: getUserSelection 方法提示用户从预定义列表中选择一个选项。当存在多个
+---
+
+`getUserSelection` 方法提示用户从预定义列表中选择一个选项。当存在多个可选项时，此方法有助于收集用户输入。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+要调用此方法，请将 `method` 字段设置为 `getUserSelection`，并按下方所示包含服务名称和参数。
+
+```json
+{
+    "jsonrpc":"2.0",
+    "method":"getUserSelection",
+    "id":"1234567890",
+    "params": [
+            "device",{
+                "title": "Choose item:",
+                "itemsKeys": ["1","2","3","4"],
+                "itemsValues": ["Option1","Option2","Option3","Option4"],
+                "timeout": 60
+            }
+        ]
+}
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+| 姓名            | 类型     | 描述         |
+| ------------- | ------ | ---------- |
+| `title`       | string | 要显示的主标题。   |
+| `itemsKeys`   | 字符串数组  | 用作返回键的值。   |
+| `itemsValues` | 字符串数组  | 向用户展示的可见值。 |
+| `timeout`     | 整数     | 超时时长（秒）。   |
+
+## 回复
+
+成功的请求将返回以下响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "1234567890",
+    "result": {
+        "statusCode": 0,
+        "selection": "1"
+    }
+}
+```
+
+### 响应参数
+
+下表说明了此方法的响应参数：
+
+| 姓名                     | 类型     | 描述            |
+| ---------------------- | ------ | ------------- |
+| `statusCode`           | 整数     | 操作状态（0 = 成功）。 |
+| `statusMessage`        | string | 操作消息（可选）。     |
+| `selection`            | string | 用户选择的键。       |

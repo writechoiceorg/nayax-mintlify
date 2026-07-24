@@ -1,0 +1,147 @@
+---
+title: 连接接口
+description: UNO-mini 的连接器引脚定义、USB 2.0 及 UART TTL 连接规格。
+metadata:
+  og:description: UNO-mini 与主控制器之间 USB 2.0 全速及 UART TTL 连接的连接器引脚定义和接口规格。
+---
+
+UNO-mini 通过一个 8 针 Molex 连接器与主控制器连接，该连接器复用了 USB 2.0 和 UART TTL 接口。
+
+## 连接器
+
+Molex 5054330871 8 针连接器同时承载 USB 和 UART 接口。同一时间应只有一种通信接口处于激活状态。
+
+<Frame>
+  <img src="/images/docs/uno-mini/connections-molex-connector-3d.png" alt="Molex 5054330871 8 针连接器 3D 视图" width="240" />
+</Frame>
+
+下图显示了从连接器配合面观察到的引脚编号。
+
+<Frame>
+  <img src="/images/docs/uno-mini/connections-molex-connector-pinout.png" alt="Molex 连接器引脚布局，引脚编号从 1 到 8" width="300" />
+</Frame>
+
+下表列出了所有引脚分配。
+
+| 引脚 | 信号              |
+| :- | :-------------- |
+| 1  | 主机 UART RX      |
+| 2  | 主机 UART TX      |
+| 3  | 测试 LED          |
+| 4  | GND             |
+| 5  | GND\_EXT        |
+| 6  | USB-P           |
+| 7  | 外部输入电压 (5–12 V) |
+| 8  | USB-N           |
+
+## SDK 接口线缆
+
+Nayax 可提供用于集成和测试的参考 SDK 接口线缆。
+
+<Frame>
+  <img src="/images/docs/uno-mini/connections-sdk-cable-schematic.png" alt="SDK 接口线缆组装示意图，显示连接器、线规及所有引脚连接" />
+</Frame>
+
+该参考线缆不包含在 UNO-mini 量产物料清单（BOM）中。
+
+## USB 2.0 连接
+
+UNO-mini 支持与主控制器进行 USB 2.0 全速（12 Mbps）通信。
+
+### 信号线
+
+使用以下引脚分配连接 USB 接口：
+
+- 将 USB D+ 连接到引脚 6（USB-P）。
+- 将 USB D- 连接到引脚 8（USB-N）。
+- 将 GND 同时连接到引脚 4 和引脚 5。
+- 通过引脚 7（外部输入电压）从主机提供设备的全部功率（峰值最高 3 W）。
+
+### 枚举
+
+USB 连接后，UNO-mini 会枚举为 CDC（通信设备类）虚拟串行端口。主机操作系统会在 Windows 上分配一个 COM 端口，或在 Linux 和 Android 上分配一个 `/dev/ttyACMx` 设备节点。
+
+- Linux 和 Android：不需要自定义 USB 驱动程序。
+- Windows：使用标准 CDC 驱动程序（`usbser.sys`）。如果未自动加载，请手动安装。
+
+### 线缆要求
+
+设计或选择 USB 线缆时应遵循以下要求：
+
+- USB D+ 和 D- 线必须为双绞线对，阻抗为 90 Ω ±15 Ω。
+
+  <Frame>
+    <img src="/images/docs/uno-mini/connections-usb-twisted-pair.png" alt="USB Data+ 和 Data- 线绞合成对" />
+  </Frame>
+
+- 最大线缆长度：3 米（依据 USB 2.0 全速设备规格）。
+
+- 使用屏蔽线缆以最大限度地减少电磁干扰（EMI）。仅在主机端将屏蔽层连接到机箱接地（单点接地）。
+
+- 请勿将 USB 线缆与大电流电源线布置在同一线槽中。
+
+<Note>
+  正常运行期间不应出现 USB 线缆热插拔的情况。请确保主机应用程序能够妥善处理 USB 断开和重新连接事件，并自动恢复通信会话。
+</Note>
+
+## UART TTL 连接
+
+UNO-mini 支持 UART TTL 通信，作为 USB 的替代方案。
+
+<Warning>
+  请勿在没有电平转换器的情况下将 UNO-mini 的 UART RX/TX 线直接连接到 5 V 逻辑系统。这样做会超过绝对最大输入电压，并可能对 UNO-mini 造成永久性损坏。如果主机 UART 工作在 5 V，请使用双向电平转换器，例如 TXS0102 或 SN74LVC2T45。
+</Warning>
+
+### 信号线
+
+使用以下引脚分配连接 UART 接口：
+
+- 将 UNO-mini 的 UART TX（主机 RX）连接到引脚 1（主机 UART RX）。
+- 将 UART RX 连接到 UNO-mini（主机 TX）的引脚 2（主机 UART TX）。
+- 在引脚 7 上提供电源（Vin），并将 GND 连接到引脚 4 和引脚 5。
+
+### UART 参数
+
+下表列出了 UART 接口参数。
+
+| 范围      | 价值                   | 笔记                      |
+| :------ | :------------------- | :---------------------- |
+| 波特率     | 115,200 bps          | 默认值；如有需要可配置             |
+| 数据位     | 8                    |                         |
+| 停止位     | 1                    |                         |
+| 校验位     | 没有任何                 |                         |
+| 流控制     | 没有任何                 | 无硬件或软件流控制               |
+| 电压电平    | 3.3 V TTL            | 请勿直接连接 5 V 逻辑           |
+| TX 串联电阻 | 470 Ω（位于 UNO-mini 上） | 主机 RX 输入阻抗必须至少为数千欧姆（kΩ） |
+
+### 主机 RX 输入阻抗
+
+UNO-mini 的 TX 输出线包含一个作为 RC 滤波器一部分的 470 Ω 串联电阻。为避免 TX 线上出现过大的电压降，主机 RX 输入阻抗必须满足以下要求：
+
+- 最小值：5 kΩ
+- 建议值：10 kΩ 至 100 kΩ（确保在 470 Ω 串联电阻上的电压降小于 10%）
+
+<Frame>
+  <img src="/images/docs/uno-mini/connections-uart-schematic.png" alt="UART 电路示意图，显示 UNO-mini TX 输出端的 470 Ω 串联电阻及主机 RX 连接" />
+</Frame>
+
+### 线缆建议
+
+布线 UART 时请遵循以下准则：
+
+- 最大线缆长度：在 115,200 波特率下，无需额外线路调节时为 1 米。
+- UART TX/RX 线使用屏蔽双绞线。如果出现通信错误，请降低波特率。
+- 使 UART 布线远离大电流电源线和开关电源，以最大限度地减少噪声耦合。
+- 在噪声较大的环境中，在 UART 线两端添加铁氧体磁珠。
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="EMV核心入门" href="/docs/integrate-pos-device/emv-core/get-started/emv-core-get-started-1" icon="link">
+    安装 EMV Core SDK 并开始您的软件集成。
+  </Card>
+
+  <Card title="EMV Core 集成流程" href="/docs/integrate-pos-device/emv-core/get-started/emv-core-integration-process" icon="link">
+    查看您的 EMV Core 项目的集成与认证里程碑。
+  </Card>
+</CardGroup>

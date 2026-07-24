@@ -1,0 +1,19 @@
+---
+title: 增量授权
+metadata:
+  og:description: 增量授权（Incremental authorization）是一项支付功能，允许商户在先前已授权的交易上申请额外资金，而无需。
+---
+
+增量授权是一种支付功能，允许商家在之前授权的交易中请求额外资金，而无需客户重新输入其支付凭证。
+
+<Note>
+  启用增量授权
+
+  增量授权需要在 Nayax 端进行额外配置。如果您希望支持此功能，请联系您指定的 Nayax 集成工程师。
+</Note>
+
+## 如何实现
+
+在授权成功后，如果商户请求增量授权，您的端点将收到一个或多个 [Cortina Credit Card Incremental Auth](/reference/cortina/cortina-credit-card/cortina-credit-card-incremental-auth) 请求。该请求中的 `BasicInfo.Amount` 即为增量金额。`PaymentInfo` 对象将包含关联授权的详细信息。
+
+此请求的响应与常规 Authorization 响应类似。最终结算金额将通过 Cortina Credit Card Settlement 请求中的 `BasicInfo.Amount` 字段发送。

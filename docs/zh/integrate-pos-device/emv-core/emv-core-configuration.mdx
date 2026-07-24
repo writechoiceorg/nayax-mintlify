@@ -1,0 +1,51 @@
+---
+title: 配置参数
+metadata:
+  og:description: EMV Core 配置决定了您的终端如何运行、处理交易以及与外部系统交互的方式。为确保兼容性。
+---
+
+The EMV Core configuration determines how your terminal functions, handles transactions, and interacts with external systems. Settings use a standard `<Parameter Name>=<Value>` format (e.g., `TMS_SVC_URL=tms.otiglobal.com`).
+
+## 管理设置
+
+配置通过 Nayax Core 服务器集中处理。要调整这些设置:
+
+1. 导航至**操作** > **机器**。
+2. 找到**“嵌入式”**和**“嵌入式高级”**部分。
+3. 点击特定字段旁的 ? 图标,以了解该页面上的选项对应哪些配置参数。
+
+<Frame>
+  <img src="/images/docs/emv-core-configuration/image1.png" />
+</Frame>
+
+保存后,服务器会生成一个配置文件,并自动将其推送到设备。
+
+<Warning>
+  该配置文件由 Nayax Core 管理。请勿在设备上手动编辑或删除它:这样做可能导致设备无法正常工作。如果不慎发生此情况,请在 Nayax Core 中使用 Actions > Reload Configuration,重新从服务器推送配置。
+</Warning>
+
+下表列出了两个平台通用的主要配置键:
+
+| 类别                | 参数名称                          | 描述                                                                        | 类型       | 默认值                           | Platform Notes                                                                                                                                                                                       |
+| :---------------- | :---------------------------- | :------------------------------------------------------------------------ | :------- | :---------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Network & System  | `ETH_INTERFACE`               | 用于报告的网络接口;为空时自动检测。                                                        | String   | 空的                            | 回退到 eth0。                                                                                                                                                                                            |
+|                   | `KIOSK_USE_TCP_SOCKETS`       | 设置为 1 以使用 TCP 端口 10000(命令)和 10001(事件)。                                    | 布尔值（1/0） | 0                             | 设置后将禁用域套接字(domain socket)。                                                                                                                                                                           |
+|                   | `DAILY_RESTART_HOUR`          | 自动每日重启的时间(0-23);0 表示禁用。                                                   | U8       | 0                             | 重启会在设定时间的 30 分钟内发生。                                                                                                                                                                                  |
+|                   | `KIOSK_TCP_LOCALHOST`         | 将 EMV Core 套接字限制在 localhost 接口上。                                          | 布尔值（1/0） | 0                             | 在 SDK v0.7 中引入。                                                                                                                                                                                      |
+|                   | `DNS_ENTRY_1` … `DNS_ENTRY_5` | 静态主机名到 IP 的映射条目;在启动时注入到 `/etc/hosts` 中(例如 `192.168.1.10 myserver.local`)。 | String   | none                          | 在 SDK v1.5 中引入。                                                                                                                                                                                      |
+|                   | `SOCKET_OPEN_MAX_TIMEOUT`     | 最大套接字连接超时时间,以秒为单位。                                                        | Int(秒)   | none                          | 在 SDK v1.5 中引入。                                                                                                                                                                                      |
+|                   | `TEST_COMMANDS_ENABLED`       | 解锁用于测试自动化的 `TEST_*` JSON-RPC 命令。                                          | 布尔值（1/0） | 0                             | 在 SDK v1.5 中引入。请勿在生产环境中启用。                                                                                                                                                                           |
+|                   | `NO_READER_RESTART_TIMEOUT`   | 重启前等待读卡器响应的时间。                                                            | Int(秒)   | 3600                          | 在 SDK v1.5 中引入。最小值为 60 秒。                                                                                                                                                                            |
+| TMS & Payment     | `TMS_SVC_URL`                 | Terminal Management System 的 URL。                                         | URL字符串   | tms.otiglobal.com             | 对于 Nayax Core,请使用 tms-c.otiglobal.com。                                                                                                                                                               |
+|                   | `PAYMENT_SVC_URL`             | 支付处理服务器的 URL。                                                             | URL字符串   | payment-nayax-p.otiglobal.com | 最多 256 个字符。                                                                                                                                                                                          |
+|                   | `SERVER_POLL_INTERVAL`        | 向服务器请求更新之间的间隔秒数。                                                          | U16      | 600                           | 较低的值会增加数据用量。                                                                                                                                                                                         |
+| 阅读器设置             | `READER_IS_SERIAL`            | 0=USB,1=Serial,2=自动检测。                                                    | 0/1/2    | 2                             | 在 SDK v1.4 中移除;请使用 `READER_SERIAL_PORT`。                                                                                                                                                             |
+|                   | `READER_SERIAL_PORT`          | 设置实际的端口设备(例如 /dev/ttyS0)。                                                 | String   | 无(USB)                        | Android SDK 不支持。                                                                                                                                                                                     |
+|                   | `CURRENCY_CODE`               | ISO 4217 代码(例如 USD 对应 840)。                                               | String   | 840                           | v1.4 会自动从 Nayax Core 获取该值。SDK v1.5 增加了进一步的回退机制:在首笔交易时使用读卡器内核的货币标签(9F3C),然后再回退到默认值 840。                                                                                                               |
+|                   | `AUDIO_PERCENTAGE`            | 设置读卡器的音量(仅限 UNO-8/PLUS)。                                                  | U8       | unset                         | 在 SDK v1.5 中引入。                                                                                                                                                                                      |
+| Open Loop Payment | `OPEN_LOOP_ENABLED`           | 启用/禁用开环支付(open-loop payment)。                                             | 布尔值（1/0） | 0                             | 在 SDK v0.7 中引入。默认值在 SDK v`1`.5 中从 1 更改为 `0`。                                                                                                                                                         |
+|                   | `PMT_ACCEPT_OFFLINE`          | 在网络中断时自动批准授权(Store & Forward)。                                            | 布尔值（1/0） | 0                             | 0=Disabled, 1=No comm, 2=Always. Deprecated in SDK v1.5; use the [`deferred`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#preauthorize) parameter in `PreAuthorize` instead. |
+|                   | `PRE_AUTH_AMOUNT`             | 如果 API 未提供,则使用的默认预授权金额。                                                   | 整数       | 0                             | 以分(cent)为单位提供。                                                                                                                                                                                       |
+| Closed Loop (CLP) | `CLP_MIFARE_ENABLED`          | 启用将 Mifare 检测为 closed loop。                                               | 整数       | 2                             | 0=关闭,1=服务器批准,2=Local Host API。                                                                                                                                                                       |
+| 日志记录              | `LOG_FILE_SIZE`               | 每个日志文件的最大大小(KB)。                                                          | 整数       | 1024                          | 在 SDK v1.2 之前默认值为 256 KB。                                                                                                                                                                            |
+|                   | `LOG_NO_OF_FILES`             | 轮转前保留的日志文件数量。                                                             | 整数       | 10                            | 在 SDK v1.2 之前默认值为 6。                                                                                                                                                                                 |

@@ -1,0 +1,50 @@
+---
+title: 概述
+metadata:
+  og:description: Spark 是 Nayax 的服务器到服务器 API，使第三方系统能够远程发起和管理 Nayax 终端上的支付交易。
+---
+
+import McpNote from '/snippets/zh/mcp-server-note.mdx';
+
+Spark 是 Nayax 的服务器到服务器 API，使第三方系统能够远程发起和管理 Nayax 终端上的支付交易。它专为无法或不希望与终端直接通信（例如通过 Marshall）的用例而设计，例如远程控制的电动汽车 (EV) 充电器、智能自动售货机或联网自助服务终端。
+
+Spark 使开发人员能够从其后端系统发起会话、处理身份验证、授权付款并触发结算。同时，Nayax 通过其 POS 设备（例如 VPOS Touch）管理实际的卡交互。
+
+Spark 允许您：
+
+- 通过互联网远程控制终端。
+- 提供灵活的用户体验：远程命令、自我管理的会员卡和动态定价。
+- 当 Nayax 处理支付处理和合规性时，保留对业务逻辑的控制。
+
+<McpNote />
+
+## 远程和设备启动
+
+作为集成商，您将利用 Spark API 来管理不同的交易流程，远程或直接从设备发起会话。
+
+- 通过远程启动，您的服务器会请求 Nayax 激活特定设备来发起交易，这种流程有利于应用程序/计算机驱动的交易。
+- 通过 Device Start（设备发起），当消费者与 Nayax 终端交互时，交易流程直接从终端开始，这使您能够在会话正式在机器上开始之前，通过 Nayax 的 `InfoQuery` API 方法向用户展示诸如费率或服务站可用性等关键信息。
+
+起始点的这种区别对于根据您想要提供的特定用户体验定制集成至关重要。
+
+## 指南
+
+本节提供一些指南，帮助您使用 Spark API，概述集成流程、身份验证方法、可用的 API 方法以及其他相关信息。请参阅以下页面了解更多信息：
+
+<Columns cols={3}>
+  <Card icon="link" title="一体化" href="/docs/integrate-pos-device/spark/spark-integration" />
+
+  <Card icon="link" title="网络要求" href="/docs/integrate-pos-device/spark/spark-network-requirement" />
+
+  <Card icon="link" title="安全与身份验证" href="/docs/integrate-pos-device/spark/security-authentication/index" />
+
+  <Card icon="link" title="付款流程" href="/docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark" />
+
+  <Card icon="link" title="Spark API 参考" href="/reference/integrate-pos-device/spark/overview#" />
+
+  <Card icon="link" title="Webhook 回调" href="/docs/integrate-pos-device/spark/webhook-callbacks/index" />
+
+  <Card icon="link" title="其他资源" href="/docs/integrate-pos-device/spark/additional-resources/index" />
+
+  <Card icon="link" title="示例代码" href="/docs/integrate-pos-device/spark/sample-codes/spark-authentication-code-sample" />
+</Columns>

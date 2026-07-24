@@ -1,0 +1,153 @@
+---
+title: 如何支持翻译
+description: 将您的 Core Extension 的 UI 字符串暴露给 Nayax，以便用户能够以自己的语言查看您的应用。
+---
+
+Nayax Core 会以多种语言向用户提供您的扩展。要参与此系统，您的应用需要在启动时调用 Nayax 翻译 API，获取当前用户语言对应的翻译字符串，并在整个 UI 中使用这些字符串。您无需管理语言文件：Nayax 会集中管理所有已注册应用的翻译。
+
+## 先决条件
+
+- 您的 Core Extension 已在 Nayax 注册,并拥有一个型号名称(例如 `Apps/YourAppName`)
+- Your app is served through the Nayax Core reverse proxy (required for the translation API to be reachable; see [Reverse proxy requirement](#reverse-proxy-requirement))
+
+<Steps>
+  <Step title="在启动时调用翻译 API">
+    当您的应用加载时，从 Nayax Core 翻译端点获取翻译：
+
+    ```bash
+    GET /core/apps/translate?model=Apps/YourAppName
+    ```
+
+    该端点返回一个 JSON 对象，将原始英文字符串映射到用户语言对应的翻译：
+
+    ```json
+    {
+      "Welcome": "ברוכים הבאים",
+      "Save": "שמור",
+      "Cancel": "ביטול",
+      "No data available": "אין נתונים זמינים"
+    }
+    ```
+
+    如果某个字符串不存在翻译，则该键会被省略。在这种情况下，您的应用将回退使用原始字符串。
+
+    以下是一个在启动时获取并存储翻译的示例实现：
+
+    ```typescript
+    async function loadTranslations(model: string): Promise<Record<string, string>> {
+      const response = await fetch(`/core/apps/translate?model=${model}`);
+      const data: Record<string, string> = await response.json();
+
+      const normalized: Record<string, string> = {};
+      for (const key of Object.keys(data)) {
+        normalized[key.toLowerCase()] = data[key];
+      }
+      return normalized;
+    }
+    ```
+
+    <Warning>
+      即使您的原始字符串包含大小写混合，Nayax 后端也会以小写形式存储翻译键。请始终将存储的键和查找操作规范化为小写，否则翻译将无法匹配。
+    </Warning>
+  </Step>
+
+  <Step title="实现一个翻译函数">
+    创建一个函数，在已加载的翻译中查找字符串，如果未找到翻译则回退使用原始字符串：
+
+    ```typescript
+    let translations: Record<string, string> = {};
+
+    function t(text: string): string {
+      return translations[text.toLowerCase()] ?? text;
+    }
+    ```
+
+    在应用启动时调用 `loadTranslations`，并存储结果以便 `t` 可以使用它：
+
+    ```typescript
+    translations = await loadTranslations("Apps/YourAppName");
+    ```
+  </Step>
+
+  <Step title="包装您的 UI 字符串">
+    您 UI 中每一个用户可见的字符串都必须经过 `t()` 处理。这包括标签、按钮、表格标题、占位符、空状态以及错误消息。
+
+    ```typescript
+    t('Welcome')
+    t('No data available')
+    t('Save')
+    t('Cancel')
+    t('Search...')
+    ```
+
+    需要包装：
+
+    - 标签和标题：`t('Welcome')`、`t('No data available')`
+    - 按钮文本：`t('Save')`、`t('Cancel')`
+    - 占位符、空状态和错误消息：`t('Search...')`
+
+    无需包装：
+
+    - 用于代码比较的状态值：`if (status === 'completed')`
+    - CSS 类名：`className="bg-green-500"`
+    - 控制台或调试消息：`console.log('Debug info')`
+    - 带变量的模板字符串：`t(\`Machine $id\`)\` — 动态键无法被可靠匹配
+  </Step>
+
+  <Step title="始终保持模型名称一致">
+    您 API 调用中的模型名称必须与在 Nayax 注册的模型完全一致。如果不一致，API 仍会返回 HTTP 200，但会返回一个空对象——不会有错误提示、没有翻译，也没有任何说明问题所在的指示。
+
+    ```typescript
+    await loadTranslations("Apps/YourAppName");
+    ```
+
+    常见错误：
+
+    | 错误           | 正确           |
+    | ------------ | ------------ |
+    | `App/MyApp`  | `Apps/MyApp` |
+    | `apps/myapp` | `Apps/MyApp` |
+    | `MyApp`      | `Apps/MyApp` |
+
+    如果您的应用加载后所有文本仍显示为英文，请确认您的模型名称与 Nayax 注册的名称完全一致，包括大小写。
+  </Step>
+
+  <Step title="向 Nayax 提供您的字符串">
+    Nayax 需要获取您应用中所有可翻译字符串的列表，以便为每种支持的语言添加翻译。请在注册应用或添加新字符串时向 Nayax 提供此列表。
+  </Step>
+</Steps>
+
+## 反向代理要求
+
+翻译端点使用相对于您应用来源（origin）解析的绝对路径。您的应用必须通过 Nayax Core 反向代理提供服务，此功能才能正常工作。
+
+| 您的应用的访问方式          | 起源                     | 翻译 API 解析为                                 | 是否可用  |
+| ------------------ | ---------------------- | ------------------------------------------ | ----- |
+| 通过 Nayax Core 反向代理 | `dev.nayax.com`        | `dev.nayax.com/core/apps/translate`        | 是的    |
+| 直接通过您自己的域名         | `your-app.example.com` | `your-app.example.com/core/apps/translate` | 否，404 |
+
+如果翻译端点返回 404，最可能的原因是您的应用是被直接访问，而不是通过 Nayax Core 反向代理访问的。请联系 Nayax 以核实您的反向代理配置。
+
+## 故障排除
+
+如果翻译未按预期工作，请使用下表来查明原因：
+
+| 症状                 | 可能原因            | 使固定                           |
+| ------------------ | --------------- | ----------------------------- |
+| API 返回 404         | 应用未通过反向代理提供服务   | 通过 Nayax Core 访问您的应用，而不是直接访问。 |
+| API 返回空对象（`{}`）    | 模型名称不匹配         | 确认模型名称与 Nayax 注册信息完全一致        |
+| 翻译已加载，但 UI 仍显示原始语言 | 键的大小写不匹配        | 将键和查找操作规范化为小写                 |
+| 部分字符串未被翻译          | 字符串未包装在 `t()` 中 | 检查您的 UI 中是否存在硬编码文本            |
+| 模板字符串未被翻译          | 动态键无法被静态匹配      | 在 `t()` 中使用静态字符串参数            |
+
+## 后续步骤
+
+<CardGroup cols={2}>
+  <Card title="基于角色的可见性" icon="shield-halved" href="/docs/core-extension/role-based-visibility">
+    声明管理员可以按角色显示或隐藏哪些 UI 元素。
+  </Card>
+
+  <Card title="验证" icon="key" href="/docs/core-extension/authentication">
+    了解您的应用如何从 Nayax 接收 JWT 令牌。
+  </Card>
+</CardGroup>

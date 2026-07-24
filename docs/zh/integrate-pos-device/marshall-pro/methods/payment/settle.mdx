@@ -1,0 +1,75 @@
+---
+title: 定居
+description: 以实际加油金额完成预授权交易。
+metadata:
+  og:description: settle 方法是燃油交易生命周期中的最后一步。它在 a 完成后“捕获”或完成先前已授权的交易。
+---
+
+`settle` 方法是燃油交易生命周期中的最后一步。它在加油过程完成后“捕获”或完成先前已授权的交易，确保客户仅按实际配送的燃油量计费。
+
+使用此方法可以：
+
+- 将临时预授权冻结转换为最终的资金收费。
+- 以通常小于或等于原始授权冻结金额的金额完成交易。
+- 完成交易序列以生成最终日志并释放会话。
+
+## 请求
+
+To call this method, you must provide the `transactionId` received during the `authorize` or `detectAndAuth` phase, along with the final `amount`.
+
+以下示例展示了一个典型的请求：
+
+```json
+{
+"command": "settle",
+"requestId": "req-003",
+"data": {
+"transactionId": "TXN-20260113-003000",
+"amount": 42000,
+"volume": 30000,
+"product": "Diesel"
+}
+}
+
+```
+
+### 参数定义
+
+下表描述了结算请求所需的字段：
+
+| 姓名    | 类型     | 必需的 | 描述                              |
+| :---- | :----- | :-- | :------------------------------ |
+| 数量    | 整数     | 是的  | 待收取的最终实际金额（请参阅 `decimalPlace`）。 |
+| 交易 ID | string | 是的  | 先前授权响应返回的唯一标识符。                 |
+
+---
+
+## 回应
+
+终端返回响应，确认交易已成功结算且财务记录已更新。
+
+以下示例展示了一个典型的响应：
+
+```json
+{
+"requestId": "req-003",
+"data": {
+"transactionId": "TXN-20260113-003000",
+"state": "SETTLED",
+"settledAmount": 42000,
+"timeStamp": "2026-01-13T11:00:00Z"
+}
+}
+```
+
+### 响应参数
+
+以下是成功结算后 `data` 对象中返回的参数：
+
+| 姓名              | 类型     | 描述                              |
+| :-------------- | :----- | :------------------------------ |
+| 交易 ID           | string | 已结算交易的唯一标识符。                    |
+| 数量              | 整数     | 已捕获的最终金额。                       |
+| 状态              | string | 成功时返回 `SETTLED`（或 `COMPLETED`）。 |
+| 批准码             | string | 银行网络提供的授权码。                     |
+| responseMessage | string | 结算结果的文本描述(例如“交易已批准”)。           |

@@ -1,0 +1,33 @@
+---
+title: 交互式身份验证工具
+metadata:
+  og:description: 无需编写任何代码即可处理 Spark 身份验证。直接在浏览器中构建和检查密文与签名请求头。
+---
+
+import { SparkAuthTool } from "/snippets/SparkAuthTool.jsx";
+
+使用此工具无需编写任何代码即可处理 Spark 身份验证。一切都在您的浏览器中运行，因此您的令牌和签名密钥不会离开您的机器。
+
+顶部的选项卡涵盖了该工具执行的三种操作：
+
+- **StartAuthentication**: build or inspect the cipher and the
+  `TransactionSignature` header for the `StartAuthentication` call, the
+  integrator's first request to open a transaction. The **Auth** and **Legacy
+  Auth (v1)** sub-tabs cover the current and legacy signature flows.
+- **StartSession**: build or inspect the `Cipher` your server returns when
+  Nayax sends a `StartSession` request to open a session.
+- Header Signature：生成用于验证 Spark API 请求身份的 `IntegratorId` 和 `TransactionSignature` 请求头。
+
+<SparkAuthTool />
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="验证" href="/docs/integrate-pos-device/spark/security-authentication/spark-authentication">
+    当前所有新集成的标准方式。基于请求头的签名。
+  </Card>
+
+  <Card icon="link" title="传统身份验证" href="/docs/integrate-pos-device/spark/security-authentication/spark-legacy-authentication">
+    用于维护现有集成。对 JSON 正文进行 HMAC 签名。
+  </Card>
+</Columns>

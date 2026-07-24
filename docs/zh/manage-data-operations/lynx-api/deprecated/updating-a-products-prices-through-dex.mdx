@@ -1,0 +1,66 @@
+---
+title: 通过 DEX 更新产品价格
+metadata:
+  og:description: 本页面介绍如何通过 DEX 更新产品价格，或使用 Lynx API 向机器发送 DEX 文件。在下面的分步指南中
+---
+
+本页面介绍如何通过 DEX 更新产品价格，或使用 Lynx API 向机器发送 DEX 文件。在下面的分步指南中，您将使用以下端点：
+
+<EndpointCard title="更新特定机器属性" href="/reference/lynx/machine-attribute/update-specific-machine-attribute" method="put" />
+
+<Warning>
+  验证
+
+  请参阅本文档的[“安全和令牌”](/docs/manage-data-operations/lynx-api/security)页面，了解如何访问您的令牌以及如何正确使用它们来验证您的 API 请求。
+</Warning>
+
+## 更新价格
+
+使用 [Update Specific Machine Attribute](/reference/lynx/machine-attribute/update-specific-machine-attribute) 端点向机器发送 DEX 文件，以更新价格和其他产品信息。
+
+```sh Request
+curl -X PUT "https://lynx.nayax.com/operational/api/v1/machines/<MACHINE_ID>/attributes/<DEVICE_ATTRIBUTE_ID>" \
+-H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+-H "Content-Type: application/json" \
+-d '{
+  "DeviceAttributeID": "900",
+  "MachineID": "<MACHINE_ID>",
+  "DeviceAttributeValue": "<NEW_VALUE>"
+}'
+```
+
+<Note>
+  Replace `<MACHINE_ID>` with the actual identifier of the machine, `<DEVICE_ATTRIBUTE_ID>` with the attribute you want to update (in this example, "900" for DEX updates), and `<NEW_VALUE>` with the updated value. Use a valid access token for `<YOUR_ACCESS_TOKEN>`.
+</Note>
+
+- DeviceAttributeID：在此示例中，属性 ID “900” 可能对应于与 DEX 相关的更新，例如发送新的价格数据。
+- MachineID：指定接收 DEX 数据更新的机器。
+- DeviceAttributeValue：指定属性的新值，例如更新后的价格或 DEX 内容。
+
+此 API 调用的响应确认了更新后的属性详细信息。
+
+```json Response
+{
+  "DeviceAttributeID": 900,
+  "MachineID": 5001,
+  "DeviceAttributeValue": "2.99",
+  "DeviceAttributeCodeID": 1234,
+  "DeviceAttributeName": "PriceUpdateDEX",
+  "DeviceAttributeGroup": "Pricing",
+  "DeviceAttributeReadOnlyBit": false,
+  "MachineAttributeRef": "MACH001",
+  "MachineRef": "MACH001"
+}
+```
+
+在哪里：
+
+- DeviceAttributeID：更新后属性的 ID。
+- MachineID：发生属性更新的机器的标识符。
+- DeviceAttributeValue：为该属性设置的新值。
+- DeviceAttributeCodeID：与更新后属性关联的代码。
+- DeviceAttributeName：更新后属性的名称。
+- DeviceAttributeGroup：该属性所属的组/类别，例如“Pricing”。
+- DeviceAttributeReadOnlyBit：指示该属性是否为只读（在本例中为 `false`）。
+- MachineAttributeRef：机器属性的引用标识符。
+- MachineRef：机器的引用标识符。

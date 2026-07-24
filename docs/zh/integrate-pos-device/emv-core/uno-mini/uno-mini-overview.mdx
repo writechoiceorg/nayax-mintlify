@@ -1,0 +1,68 @@
+---
+title: UNO迷你版概述
+description: Nayax UNO-mini 非接触式 EMV 读卡器的硬件概述和规格。
+metadata:
+  og:description: Nayax UNO-mini 是一款面向 OEM 和自助终端集成商的紧凑型非接触式 EMV 读卡器。请查看其硬件规格、系统架构及支持的支付方式。
+---
+
+UNO-mini 是 Nayax 为 OEM 制造商和自助服务终端集成商推出的紧凑型非接触式 EMV 读卡器，适用于需要在其硬件中实现经认证的 EMV 支付功能的厂商。
+
+<Frame>
+  <img src="/images/docs/uno-mini/overview-product-photo.png" alt="UNO-mini 非接触式 EMV 读卡器" width="200" />
+</Frame>
+
+## 系统架构
+
+UNO-mini 是 Nayax OEM POS 解决方案的一部分，该解决方案是一个三组件系统，可处理完整的支付堆栈，因此您可以专注于应用程序的用户界面和业务逻辑。
+
+这三个组成部分是：
+
+- **UNO-mini** ：非接触式读卡器硬件。可在设备层面处理非接触式读卡和EMV芯片卡支付。
+- **EMV Core** ：运行在自助服务终端控制器（Android、Linux 或 RTOS）上的客户端软件。它作为您的应用程序、支付处理网关和 UNO-mini 之间的集成层。
+- **Nayax Core** ：预集成云服务，用于远程管理终端和全球清算交易。
+
+Nayax 还提供文档和示例代码，以支持系统集成商完成整个集成过程。
+
+## 规格
+
+下表列出了主要硬件规格。
+
+| 范围            | 价值                                                                         |
+| :------------ | :------------------------------------------------------------------------- |
+| 力量            | 5–14 VDC；空闲 0.7 W，峰值 3 W                                                   |
+| 中央处理器         | 具备 TrustZone 和增强安全功能的 Arm 32 位 Cortex-M33 处理器                              |
+| CPU速度         | 160 MHz                                                                    |
+| CPU内存         | 闪存：2 MB；内存：786 KB                                                          |
+| 外部存储器         | 闪存：8 MB                                                                    |
+| 主机通信          | USB 2.0 FS；UART TTL                                                        |
+| 非接触式EMV芯片     | 兼容EMVCo L1 v3.x；完全支持NFC，包括卡模拟                                              |
+| 安全            | 2 个 AES 协处理器（其中一个具有 DPA 抗性）；公钥加速器（具有 DPA 抗性）；真随机数生成器（符合 NIST SP800-90B 标准） |
+| SAM接口         | 1 x 微型 SAM                                                                 |
+| LED灯          | 4个绿色（EMV）                                                                  |
+| 工作温度          | -35°C 至 70°C                                                               |
+| 湿度            | 10%–90%，无冷凝                                                                |
+| 尺寸（高 x 宽 x 深） | 49.5 x 49.5 x 10.8/13.4 毫米                                                 |
+| 主连接器          | Molex 5054330871，8 针                                                       |
+| 附加连接器         | 1 个 micro SIM 卡槽 (3FF)                                                     |
+| 监管            | FCC、CE、UL、RoHS、TQM                                                         |
+| EMV认证         | 1级、2级和3级                                                                   |
+
+## 支持的支付方式
+
+UNO-mini 接受所有主流非接触式支付方式：
+
+- 借记卡和信用卡
+- 移动和NFC非接触式支付
+- 预付卡和闭环支付解决方案
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="机械集成" href="/docs/integrate-pos-device/emv-core/uno-mini/uno-mini-mechanical" icon="link">
+    将 UNO-mini 安装到硬件外壳中，并配置序列号显示。
+  </Card>
+
+  <Card title="EMV核心入门" href="/docs/integrate-pos-device/emv-core/get-started/emv-core-get-started-1" icon="link">
+    安装 EMV Core SDK 并从主机应用程序连接到 UNO-mini。
+  </Card>
+</CardGroup>

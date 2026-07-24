@@ -1,0 +1,220 @@
+---
+title: 多会话预授权与外部结算
+metadata:
+  og:description: 本指南介绍了带外部结算的多会话预授权流程。此方法允许多笔交易被管理。
+---
+
+本指南介绍了带外部结算的多会话预授权流程。此方法允许多笔交易与一个外部服务器并行管理，该服务器负责管理每笔交易的结算流程（决定何时进行结算以及最终价格）。
+
+<Note>
+  先决条件
+
+  要使此流程正常运行，Nayax 必须启用[ExternalSettlement](/reference/spark/transactions/externalsettlement)设置。
+</Note>
+
+## 配置和设备行为
+
+启用后，Nayax Engine 会改变物理设备处理交易的方式：
+
+- 授权成功后，设备将不再发送自己的结算命令。
+- 交易在收到外部请求之前将保持未结算状态。
+- 结算交易的唯一方法是通过[ExternalSettlement](/reference/spark/transactions/externalsettlement)命令。
+- 对于多会话流程，“Close Session”命令不再适用；请改用 [ExternalSettlement](/reference/spark/transactions/externalsettlement)。
+
+这为集成商提供了灵活性，可以根据自身的业务逻辑在外部触发结算阶段，并支持所有流程类型（预选/预授权）。
+
+下表列出了基于该功能的技术要求：
+
+| 特征   | 要求                                           |
+| :--- | :------------------------------------------- |
+| 结算窗口 | 交易必须在发起后 48 小时内完成结算。                         |
+| 到期日  | 超过 48 小时窗口期后尝试的结算将会失败。                       |
+| 自动清洁 | 超过 48 小时未结算的交易将根据卡组织规定被自动取消（不应依赖此机制）。        |
+| 增量授权 | 最终结算价格不得超过为运营商/机器设置的 Maximum Default Credit。 |
+
+<Note>
+  增量授权
+
+  外部结算支持增量授权。请确保您的逻辑符合最大默认信用额度限制，以避免结算失败。更多信息请参阅[增量授权文档](/docs/integrate-pos-device/marshall/payment-flows/sub-flows-features#incremental-authorization)。
+</Note>
+
+## 管理未结算交易
+
+当没有提供产品或服务时，需要主动管理交易以维持良好的用户体验。
+
+- 外部取消：如果已知不会发生结算，您必须立即发送 External Cancel。
+- **对消费者的影响：**如果交易在未取消或结算的情况下仍保持授权状态，消费者的资金将一直保留在其支付方式中，从而导致潜在的纠纷。
+
+### 多会话支付流程
+
+以下顺序展示了多会话交易的完整过程：
+
+#### 交易发起
+
+<Frame>![](/images/docs/multi-session-pre-authorization-with-external-settlement/image1.png)</Frame>
+
+1. 持卡人在外围设备上选择商品。
+
+2. 外围设备向 VPOS Touch 发送 `Reader Enable`。
+
+3. Nayax 设备向持卡人显示“Present Card”动画。
+
+4. 持卡人出示付款方式。
+
+5. Nayax 的设备向外围设备发送 `Begin Session`，外围设备的 SDK 会触发 “session begin” 事件：
+
+   <CodeGroup>
+     ```java Java
+     vmc_vend_events() (via onBeginSession(funds_avail))
+     ```
+
+     ```csharp C#
+     vend_callbacks(onBeginSession(funds_avail))
+     ```
+
+     ```c C
+     vmc_vend_event_handler_cb(vm_vend_event_on_session_begin)
+     ```
+   </CodeGroup>
+
+   这是向外围设备（例如自动售货机）发出的信号，以准备批准付款。
+
+   <CodeGroup>
+     ```java Java
+     m_sessions[0] = new vmc_vend_t.vend_session_t((short) 0, 1, (byte) 0, 10);
+     //the fields are (from left to right): produce code (2 bytes long,meaning value up to 65535), quantity (2 byte), unit of measure (1 byte), price (2 bytes, meaning value up to 65535)
+     ```
+
+     ```csharp C#
+     List<vmc_vend_t.vend_item_t> list = new List<vmc_vend_t.vend_item_t> ();
+     list.Add(new vmc_vend_t.vend_item_t(0, 10, 1, 1));
+     //the fields are (from left to right): produce code (2 bytes long,meaning value up to 65535), price (2 bytes, meaning value up to 65535), quantity (2 bytes), unit of measure (1 byte), .
+     session = new vmc_vend_t.vend_session_t(list);
+     ```
+
+     ```c C
+     session_product.code = 1;
+     session_product .qty = 1;
+     session_product.price = 10;
+     session_product.unit = 1;
+     session->products = &session_product;
+     session->total_products = 1;
+     ```
+   </CodeGroup>
+
+6. 机器显示屏显示：“Please Select a Product.”，客户选择一个商品后，会促使外围设备的 SDK 向 Nayax Device 发送 `Vend Request`。
+   <CodeGroup>
+     ```java Java
+     m_vmc.vend.vend_request(m_sessions[m_active_session]);
+     ```
+
+     ```csharp C#
+     vmc_instance.vend.vend_request(session);
+     ```
+
+     ```c C
+     vmc_vend_vend_request(session);
+     ```
+   </CodeGroup>
+
+7. 设备显示“Please Wait For Authorization”。
+
+8. 设备联系 Nayax 服务器。
+
+9. Nayax 服务器将请求转发给银行/网关。
+
+10. 银行/网关返回批准/拒绝结果。
+
+11. Nayax 服务器发送授权响应。
+
+<Frame>![](/images/docs/multi-session-pre-authorization-with-external-settlement/image2.png)</Frame>
+
+12. 外围设备的 SDK 处理通过 `Transfer Data` 命令接收的交易数据（包括 Nayax 交易 ID 和卡片详细信息）：
+
+<CodeGroup>
+  ```java Java
+  vmc_vend_events() (via onTransactionInfo(data))
+  ```
+
+  ```csharp C#
+  vend_callbacks(onTransactionInfo(data))
+  ```
+
+  ```c C
+  vmc_vend_event_handler_cb(vm_vend_event_on_transaction_info)
+  ```
+</CodeGroup>
+
+此时，外围设备必须保留收到的（Nayax 的）Transaction ID 和 Site ID，以便稍后用于 External Settlement/External Cancel。
+
+13. 可选：外围设备的 SDK 可以向 Nayax 设备回传其自有的 Transaction 编号（此信息不会在任何地方被使用，仅供外围设备希望在其 SDK 日志中显示自己的 Transaction ID 时使用）。
+
+14. Nayax 的设备发送 `Vend Approved`，触发外围设备 SDK 的 “vend approved” 事件：
+    <CodeGroup>
+      ```java Java
+      vmc_vend_events() (via onVendApproved(session))
+      ```
+
+      ```csharp C#
+      vend_callbacks(via onVendApproved(session))
+      ```
+
+      ```c C
+      vmc_vend_event_handler_cb(vm_vend_event_on_vend_approved)
+      ```
+    </CodeGroup>
+
+15. 外围设备向消费者分发商品或提供服务，SDK 报告 `Vend Success` 并完成本地会话：
+    <CodeGroup>
+      ```java Java
+      onVendApproved(session)
+      ```
+
+      ```csharp C#
+      onVendApproved(session)
+      ```
+
+      ```c C
+      vmc_vend_vend_status(&session, __true)` and `vmc_vend_vend_session_complete_lowlevel()
+      ```
+    </CodeGroup>
+
+16. 外围设备发送 `Session Complete` 以表示当前交易过程已完成（尚未结算）。
+
+17. Nayax 的设备向外围设备发送 `End Session`。
+
+18. 外围设备发送 `Reader Disable`，使读卡器进入待机状态。
+
+<br />
+
+#### 结算交易（外部结算）
+
+<Danger>
+  重要说明
+
+  如果启用了外部结算，终端标准的“Close Session”行为将被更改。您必须完全依赖 External Settlement 或 External Cancel API 来管理交易的财务生命周期。
+</Danger>
+
+<Frame>![](/images/docs/multi-session-pre-authorization-with-external-settlement/image3.png)</Frame>
+
+如果提供了该服务：
+
+19. 持卡人结束交互或归还产品。
+20. 外围设备通知 Nayax 服务器流程已完成。
+21. 第三方服务器向 Nayax 服务器发起身份验证。
+22. Nayax 服务器确认身份验证状态。
+23. 第三方服务器请求最终结算。
+24. Nayax 服务器向银行/网关发送捕获请求。
+25. 银行/网关确认资金转账。
+26. Nayax 服务器向第三方服务器确认状态。
+
+<Frame>![](/images/docs/multi-session-pre-authorization-with-external-settlement/image4.png)</Frame>
+
+如果未提供服务：
+
+19. 第三方服务器向 Nayax 服务器请求身份验证。
+20. Nayax 服务器确认。
+21. 第三方服务器触发结算或状态变更。
+22. Nayax 服务器向银行/网关请求作废。
+23. 银行/网关确认取消。
+24. Nayax 服务器通知第三方服务器操作成功。

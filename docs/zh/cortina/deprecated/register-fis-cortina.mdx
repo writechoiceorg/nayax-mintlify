@@ -1,0 +1,31 @@
+---
+title: Register
+metadata:
+  og:description: 注册(Register)流程是交易生命周期中的一个关键合规步骤,确保销售正式向相关。
+---
+
+注册(Register)流程是交易生命周期中的一个关键合规步骤,确保销售因税务目的正式向相关政府机构进行登记。此流程通常在支付方式成功获得授权后,立即由系统的引擎(Engine,或后端服务器)发起。
+
+## 注册流程(Register Flow)
+
+此图展示了交易的端到端流程,从最初的支付授权到最终结算以及必要的财政/税务登记:
+
+<Frame>
+  <img src="/images/docs/register-fis-cortina/image1.png" />
+</Frame>
+
+在哪里：
+
+1. Nayax Engine 向财政集成商(Fiscal Integrator)发起 Start Session。
+2. Nayax 设备向 Nayax 引擎发送支付授权请求。
+3. Nayax 引擎将交易详情发送给支付提供商进行处理。
+4. 支付提供商将授权批准结果发回给 Nayax 引擎。
+5. Nayax 引擎通过向财政集成方(Fiscal Integrator)发送请求来发起财政登记。
+6. 财政集成方向财政提供商/税务机关登记该笔销售。
+7. 财政提供商/税务机关向财政集成方确认登记成功。
+8. 财政集成方将最终的财政批准结果发回给 Nayax 引擎。
+9. Nayax 引擎将最终的授权批准结果发送给 Nayax 设备(允许设备完成销售)。
+10. Nayax 设备向 Nayax 引擎发送命令以完成该交易。
+11. Nayax 引擎确认结算,并将交易收据发回给 Nayax 设备。
+
+此流程成功地将支付授权与财政登记相结合,完成了从批准到最终设备确认的整个销售生命周期。

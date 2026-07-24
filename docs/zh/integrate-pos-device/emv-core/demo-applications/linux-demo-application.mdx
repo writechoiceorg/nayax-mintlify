@@ -1,0 +1,153 @@
+---
+title: Linux 应用
+metadata:
+  og:description: SDK 提供了带源代码的演示应用程序,让您从第一天起就能测试集成。此演示提供功能齐全的体验。
+---
+
+该 SDK 提供了一个附带源代码的演示应用程序,让您从第一天起就能测试集成效果。此演示提供了一个功能完整的应用程序,通过 Nayax SDK API 与 EMV Core 通信。您可以将该源代码应用程序作为开发基于 Linux 的自有系统的基础。
+
+<Note>
+  在开始之前,请确保您的读卡器已在 Nayax Core 系统中注册。若未注册,则无法完成支付交易。要注册您的设备,请将其序列号(SN)提供给您的 Nayax 客户经理。
+</Note>
+
+## 安装
+
+SDK 包含以下文件:
+
+| 文件名                            | 描述                                 |
+| :----------------------------- | :--------------------------------- |
+| `otiKiosk`                     | EMV Core 服务可执行文件。                  |
+| `otiKioskDemo`                 | 客户端测试应用程序可执行文件。                    |
+| `kiosk-client-library-xxx.zip` | 库和示例应用程序的源代码(C)及项目文件。              |
+| `otikiosk-xxx-vvv.zip`         | 用于 TMS 远程更新的软件包(使用 `CON_PROG` 命令)。 |
+
+要安装该 SDK,请按以下步骤操作:
+
+1. 使用您偏好的传输方式,将 `otiKiosk` 二进制文件复制到目标设备。
+
+<Warning>
+  该文件必须保持名称为 `otiKiosk`。请勿重命名该二进制文件。
+</Warning>
+
+2. 配置目标系统,使其在启动时自动启动 EMV Core 二进制文件,或将其作为受管服务运行。
+3. 授予应用程序对读卡器硬件的读写权限。这通常需要配置设备管理系统,例如为以下设备添加 udev 规则:
+   - USB 读卡器:USB HID
+   - RS232 读卡器:TTY 接口
+4. 更新包含应用程序二进制文件的目录的权限,确保该进程具有完整的读、写、执行(RWX)权限。
+5. 如果使用环境变量指定应用程序的文件夹路径:
+   - 如果这些目录不存在,请手动创建。
+   - 设置文件夹权限,使 EMV Core 应用程序具有完整的读、写、执行权限。
+
+## 使用演示应用程序
+
+该压缩包包含一个带有 makefile 的项目、一个库,以及带有 C 源代码的示例应用程序:
+
+- 库 `libotikiosk` 将 Socket JSON API 转换为 C 函数。
+- `otiKioskDemo` 支持两种运行模式:Single API flow 和 Auto Mode。
+
+### Single API flow
+
+1. 应用程序启动后处于空闲状态,并显示一个简单菜单,
+   允许用户使用键盘选择所需的命令。
+2. 选择命令后,应用程序会执行该命令,然后返回步骤 1。
+3. When selecting `Confirm Transaction` or `Void Transaction` after `Authorize Transaction`,
+   the application will use the last transaction ID.
+
+<Frame>
+  <img src="/images/docs/linux-demo-application/image1.png" />
+</Frame>
+
+### Auto Mode flow
+
+1. 使用命令选项 `--auto` 运行示例应用程序:
+   `$ ./otiKioskDemo --auto`
+2. 应用程序启动后进入 Idle 状态,并显示欢迎消息。
+3. 设备调用 `AuthorizeTransaction`,显示价格并提示用户出示银行卡。
+4. 出示银行卡后,设备会将卡数据发送到服务器,并显示等待消息。
+5. 设备显示交易结果,并返回 Idle 状态。
+
+<Frame>
+  <img src="/images/docs/linux-demo-application/image2.png" />
+</Frame>
+
+### 从源代码构建示例应用程序
+
+请按照以下步骤从源代码编译演示程序:
+
+1. 将源代码获取到目标系统。在 Ubuntu 上,解压以下文件:
+
+```text
+`EMV-Core Linux SDK v1.4\Linux\x86_64\Sources\Emv-Core-client-x86_64-1.4-97.zip`
+```
+
+这将解压出一个名为 `Emv-Core-client` 的文件夹,其中包含应用程序源代码和 makefile。
+
+2. 安装所需的构建依赖项(Ubuntu Linux):
+
+```shell
+sudo apt-get update
+sudo apt-get install build-essential automake
+```
+
+3. 构建 SDK 和演示程序。所提供的源代码已针对使用 GCC 和 automake 的 Ubuntu Linux x86\_64 预先配置:
+
+```shell
+autoreconf -fi
+./configure
+make
+```
+
+4. 构建过程将在以下目录下生成静态库和演示程序的二进制文件:`Emv-Core-client/demo/otiKioskDemo`。
+5. 要运行新生成的应用程序,请确保该二进制文件具有适当的执行权限,并按照特定环境的执行步骤进行操作。
+
+### 运行示例应用程序
+
+要在 Ubuntu 上运行测试应用程序可执行文件:
+
+1. 按照上一节所述启动 EMV Core(otiKiosk)。
+
+2. 在与 EMV Core 二进制文件相同的文件夹中运行 otiKioskDemo 示例应用程序(不要进入演示应用程序自身所在的文件夹)。
+
+3. 例如,如果您的文件夹结构如下:
+
+```text
+sdk/
+├── nayax-emb
+├── otiKiosk                 <-- File provided with SDK
+├── otiKioskDemo             <-- File provided with SDK
+├── Emv-Core-client/
+│   ├── libotikiosk/
+│   ├── demo/
+│   │   ├── otiKioskDemo     <-- Sample application from build
+│   │   ├── otiKioskDemo.c
+│   │   ├── Makefile.am
+│   │   └── .deps/
+│   ├── [Additional client files]           
+│   ├── .vscode/
+│   └── m4/
+└── [Root level files]               
+```
+
+您应使用以下命令运行应用程序:
+
+<Tabs>
+  <Tab title="终端 1(启动 EMV Core)">
+    ```bash
+    cd sdk
+    sudo ./otiKiosk
+    ```
+  </Tab>
+
+  <Tab title="终端 2(启动示例应用程序)">
+    ```bash
+    cd sdk
+    sudo ./Emv-Core-client/demo/otiKioskDemo
+    ```
+  </Tab>
+
+  <Tab title="自动运行">
+    ```bash
+    sudo ./Emv-Core-client/demo/otiKioskDemo --auto
+    ```
+  </Tab>
+</Tabs>

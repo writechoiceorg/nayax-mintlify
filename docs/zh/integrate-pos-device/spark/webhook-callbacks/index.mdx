@@ -1,0 +1,45 @@
+---
+title: Webhook 回调
+keywords:
+  - callback
+  - callbacks
+  - webhook
+  - webhooks
+  - webhook callback
+  - TransactionCallback
+  - DeclineCallback
+  - StopCallback
+  - TimeoutCallback
+  - custom headers
+  - webhook security
+  - Spark notifications
+metadata:
+  og:description: Webhook 是 Spark API 的重要组成部分，它们作为自动回调，在无需持续监控的情况下提醒您的系统重要事件。
+---
+
+Webhooks are a crucial part of the Spark API, as they serve as automatic callbacks that alert your system to important events without requiring constant monitoring. For example, the `DeclineCallback` is triggered if a transaction fails after a successful `TriggerTransaction` request. This could happen if a consumer cancels the transaction on the device or if the terminal times out. Other webhooks, like `TimeoutCallback` and `StopCallback`, let you know when a session has timed out or when a card has been presented to stop a session, respectively.
+
+通过使用这些回调函数，您可以快速处理故障和其他事件，确保系统的事务状态保持准确，而无需不断轮询。
+
+## 可用的 Webhook
+
+<Columns cols={2}>
+  <Card icon="link" title="TransactionCallback" href="/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback" arrow />
+
+  <Card icon="link" title="停止回调" href="/docs/integrate-pos-device/spark/webhook-callbacks/stopcallback" arrow />
+
+  <Card icon="link" title="超时回调" href="/docs/integrate-pos-device/spark/webhook-callbacks/timeoutcallback" arrow />
+
+  <Card icon="link" title="拒绝回调" href="/docs/integrate-pos-device/spark/webhook-callbacks/declinecallback" arrow />
+</Columns>
+
+### 启用自定义标头（可选）
+
+此功能允许 Nayax 在每次回调到您的系统时发送最多两个静态自定义标头（例如，用于共享密钥或路由 ID），以增强安全性和验证。
+
+要为您的集成启用自定义标头：
+
+1. **请求启用**– 联系您的 Nayax 集成支持工程师，并请求在 Nayax 后台中为您的集成启用自定义标头。
+2. 提供请求头详细信息——与您的集成支持工程师共享以下信息：
+   - 标题键 – 最多 2 个键（最少 1 个）。
+   - 标题值 – 最多 2 个值（最少 1 个）。

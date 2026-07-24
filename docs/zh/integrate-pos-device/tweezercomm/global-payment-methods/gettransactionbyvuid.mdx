@@ -1,0 +1,93 @@
+---
+title: 获取交易信息
+metadata:
+  og:description: getTransactionByVuid 方法可使用交易的供应商唯一标识符 (vuid) 检索交易。这使客户端应用程序能够获取
+---
+
+`getTransactionByVuid` 方法可使用交易的供应商唯一标识符 (vuid) 检索交易。这使客户端应用程序能够获取交易详情，包括状态、金额和处理详情。
+
+此方法有助于跟踪交易、确认其状态，并检索关键元数据，例如输入方式、时间戳和入账状态。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+在请求中，`method` 字段需要设置为 `getTransactionByVuid`，如下方示例请求所示：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getTransactionByVuid",
+    "id": "123454352",
+    "params": [
+        "engine",
+        {
+            "vuid": "48a70a44-a919-4587-901e-bafb073aef0e"
+        }
+    ]
+}
+```
+
+### 请求参数
+
+有关此方法可用的请求参数的描述，请参阅下表。
+
+| 姓名     | 类型     | 描述              |
+| ------ | ------ | --------------- |
+| `vuid` | string | 供应商（客户）唯一交易标识符。 |
+
+## 回复
+
+成功的请求将返回类似于以下代码块中的响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "TRANSACTION APPROVED",
+        "appVersion": "01.06.62",
+        "vuid": "48a70a44-a919-4587-901e-bafb073aef0e",
+        "amount": 100,
+        "transactionId": "2038587830",
+        "entryMode": 4,
+        "transactionOriginalRequestId": "fa19cf10-2294-441e-9739-9c8521801cff",
+        "transactionOriginalTime": "2025-03-05 23:41:32.963",
+        "transactionOriginalAmount": 100,
+        "isFinalAmount": 1,
+        "transactionDeposited": 1,
+        "tranType": 1,
+        "currencyCode": "840",
+        "originalSiteId": 1,
+        "mainBoardSerial": "000177234933444",
+        "hwSerial": "0900044624102737"
+    }
+}
+```
+
+### 响应参数
+
+下面是一个包含所有可能的响应参数及其描述的表格：
+
+| 姓名                             | 类型     | 描述                 |
+| ------------------------------ | ------ | ------------------ |
+| `id`                           | string | 请求标识符              |
+| `statusCode`                   | 整数     | 交易的状态代码            |
+| `statusMessage`                | string | 交易的状态消息            |
+| `appVersion`                   | string | 应用程序版本             |
+| `vuid`                         | string | 供应商唯一交易标识符         |
+| `amount`                       | 整数     | 交易金额               |
+| `transactionId`                | string | 交易标识符              |
+| `entryMode`                    | 整数     | 交易的输入方式（刷卡、插卡、NFC） |
+| `transactionOriginalRequestId` | string | 原始交易请求 ID          |
+| `transactionOriginalTime`      | string | 原始交易时间戳            |
+| `transactionOriginalAmount`    | 整数     | 原始交易金额             |
+| `isFinalAmount`                | 整数     | 金额是否为最终金额的指示符      |
+| `transactionDeposited`         | 整数     | 交易的入账状态            |
+| `mainBoardSerial`              | string | 设备的主板序列号           |
+| `hwSerial`                     | string | 设备的硬件序列号           |

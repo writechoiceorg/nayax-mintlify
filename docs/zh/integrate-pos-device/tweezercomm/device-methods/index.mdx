@@ -1,0 +1,65 @@
+---
+title: 设备方法
+mode: wide
+metadata:
+  og:description: 本节介绍用于管理支付终端的 API 方法。您可以：获取设备信息（如型号、序列号和软件
+---
+
+本节介绍管理支付终端的 API 方法。您可以：
+
+- 获取设备信息（如型号、序列号和软件版本）
+- 读取卡数据（来自磁条或 NFC Mifare 卡）
+- 配置终端设置（例如打印机使用或交易类型）
+- 发送诊断日志以进行故障排除
+
+这些工具可帮助您集成和控制支付设备，用于各种用途，包括会员计划、身份识别和系统维护。您还可以根据需要停止读卡操作。
+
+## 可用方法
+
+<Columns cols={3}>
+  <Card icon="link" title="getInfo" href="/docs/integrate-pos-device/tweezercomm/device-methods/getinfo" />
+
+  <Card icon="link" title="readCard" href="/docs/integrate-pos-device/tweezercomm/device-methods/readcard" />
+
+  <Card icon="link" title="abortReadCard" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortreadcard" />
+
+  <Card icon="link" title="getConfig" href="/docs/integrate-pos-device/tweezercomm/device-methods/getconfig" />
+
+  <Card icon="link" title="setConfig" href="/docs/integrate-pos-device/tweezercomm/device-methods/setconfig" />
+
+  <Card icon="link" title="getVersion" href="/docs/integrate-pos-device/tweezercomm/device-methods/getversion" />
+
+  <Card icon="link" title="uploadLogs" href="/docs/integrate-pos-device/tweezercomm/device-methods/uploadlogs" />
+
+  <Card icon="link" title="获取属性" href="/docs/integrate-pos-device/tweezercomm/device-methods/getproperty" />
+
+  <Card icon="link" title="getUserInput" href="/docs/integrate-pos-device/tweezercomm/device-methods/getuserinput" />
+
+  <Card icon="link" title="abortGetUserInput" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserinput" />
+
+  <Card icon="link" title="getUserSelection" href="/docs/integrate-pos-device/tweezercomm/device-methods/getuserselection" />
+
+  <Card icon="link" title="abortGetUserSelection" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserselection" />
+
+  <Card icon="link" title="showAnimation" href="/docs/integrate-pos-device/tweezercomm/device-methods/showanimation" />
+
+  <Card icon="link" title="hideAnimation" href="/docs/integrate-pos-device/tweezercomm/device-methods/hideanimation" />
+
+  <Card icon="link" title="displaySwipeCard" href="/docs/integrate-pos-device/tweezercomm/device-methods/displayswipecard" />
+
+  <Card icon="link" title="abortSwipe" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortswipe" />
+
+  <Card icon="link" title="显示QR" href="/docs/integrate-pos-device/tweezercomm/device-methods/displayqr" />
+
+  <Card icon="link" title="abortDisplayQR" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortdisplayqr" />
+
+  <Card icon="link" title="abortDisplay" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortdisplay" />
+
+  <Card icon="link" title="sendGeneralEvent" href="/docs/integrate-pos-device/tweezercomm/device-methods/sendgeneralevent" />
+</Columns>
+
+<Note>
+  发送请求
+
+  有关如何构建和发送请求的更多详细信息，请[参阅入门指南](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started)。
+</Note>

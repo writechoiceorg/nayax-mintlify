@@ -1,0 +1,60 @@
+---
+title: hideAnimation
+metadata:
+  og:description: 使用 hideAnimation 方法取消或隐藏设备上当前正在显示的、此前通过 showAnimation 发起的动画
+---
+
+`hideAnimation` 方法用于取消或隐藏设备上当前正在显示的、此前通过 showAnimation 方法发起的动画。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+要调用此方法，请将 `method` 字段设置为 `hideAnimation`，并包含服务名称。
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "hideAnimation",
+    "id": "123",
+    "params": [
+        "device"
+    ]
+}
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+| 姓名       | 类型       | 描述        |
+| -------- | -------- | --------- |
+| `device` | `string` | 服务名称（固定值） |
+
+## 回复
+
+成功的请求将返回以下响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "1234567890",
+    "result": {
+        "statusCode": 0,
+        "data": "12456"
+    }
+}
+```
+
+### 响应参数
+
+下表说明了此方法的响应参数：
+
+| 姓名                     | 类型     | 描述           |
+| ---------------------- | ------ | ------------ |
+| `statusCode`           | 整数     | 操作状态（0 = 成功） |
+| `statusMessage`        | string | 指示操作结果的消息。   |

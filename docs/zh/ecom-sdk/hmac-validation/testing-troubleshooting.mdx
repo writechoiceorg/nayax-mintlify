@@ -1,0 +1,61 @@
+---
+title: 测试与故障排查
+metadata:
+  og:description: 要确认您的验证逻辑是否正常工作，请执行以下检查：确认使用有效签名的请求返回 200 OK。
+---
+
+要确认您的验证逻辑是否正常工作，请执行以下检查：
+
+<CardGroup cols={3}>
+  <Card title="有效请求" icon="check-double">
+    确认使用有效签名的请求返回 `200 OK`。
+  </Card>
+
+  <Card title="无效签名" icon="xmark">
+    验证不正确的 HMAC 会被以 `401 Unauthorized` 拒绝。
+  </Card>
+
+  <Card title="篡改检查" icon="shield-slash">
+    修改 `MerchantRequestId` 中的一个字符，以确保 HMAC 验证失败。
+  </Card>
+</CardGroup>
+
+## 验证故障排查
+
+如果您计算出的哈希值与 Nayax 提供的不匹配，请按照此检查清单核查您的实现：
+
+<AccordionGroup>
+  <Accordion title="RequestType 与 RequestTypeName" icon="text-field">
+    确保您使用的是枚举名称字符串（例如 `"Sale"`、`"Auth"`），而不是整数值（`"0"`、`"1"`）。这是一个常见的失败点。
+  </Accordion>
+
+  <Accordion title="布尔值大小写" icon="font-case">
+    确保布尔值被转换为 `"True"` 或 `"False"`（首字母大写 T/F）。像 "true" 这样的小写字符串会导致签名不匹配。
+  </Accordion>
+
+  <Accordion title="缺失字段与分隔符" icon="brackets-curly">
+    如果 `NayaxTransactionId` 缺失，签名字符串必须以冒号开头（例如 `:MerchantId...`）。请确保使用冒号（`:`）作为分隔符。
+  </Accordion>
+
+  <Accordion title="密钥解码" icon="key">
+    在将 64 字符的十六进制字符串用作 HMAC-SHA256 密钥之前，请确认您已将其解码为 32 个原始字节。不要直接使用十六进制字符串。
+  </Accordion>
+
+  <Accordion title="严格的字段顺序" icon="list-ol">
+    请确认顺序严格如下：
+
+    1. `NayaxTransactionId`
+    2. `MerchantRequestId`
+    3. `MachineId`
+    4. `RequestTypeName`
+    5. `IsApproved`
+  </Accordion>
+</AccordionGroup>
+
+## 响应逻辑
+
+您的服务器对验证失败的响应方式会影响重试行为。
+
+<Note>
+  重要提示：如果 HMAC 验证失败，请勿返回 `500`。Nayax 会针对 500 响应进行重试，但不会针对 `401` 进行重试。由于签名不匹配通常是逻辑错误，重试并不能解决问题。
+</Note>

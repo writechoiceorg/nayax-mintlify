@@ -1,0 +1,430 @@
+---
+title: 事件回调
+metadata:
+  og:description: 该 SDK 会在 EMV Core SDK 中触发事件回调，以在交易生命周期内的特定事件发生时通知应用程序。
+---
+
+该 SDK 会在 EMV Core SDK 中触发事件回调，以在交易生命周期内的特定事件发生时通知应用程序。这些回调使开发者能够动态响应交易状态和系统事件的变化。它们提供实时更新，确保 SDK 与应用程序之间的无缝通信。
+
+这些是可用的回调。
+
+- [CardTokenReceived](#cardtokenreceived)
+- [ReaderMessageEvent](#readermessageevent)
+- [SystemStatusChanged](#systemstatuschanged)
+- [TransactionComplete](#transactioncomplete)
+
+您可以在以下部分中阅读每个回调事件的更详细描述。
+
+---
+
+## `CardTokenReceived`
+
+该事件会在成功检索到卡片令牌后触发。
+
+<Tabs>
+  <Tab title="JSON">
+    开环示例：
+
+    ```json
+    {"jsonrpc":"2.0", "method": "CardTokenReceived", "params": {"status": "OK",
+    "errorCode": 0, "errorDescription": "", "CardToken":
+    "WSAr79nKPywW3INXrWvr6IL3vgTgSJlwZBgseKDmMHM=", "PartialPan": "",
+    "CardType": "EMV"}, "id": 702}
+    ```
+
+    闭环示例：
+
+    ```json
+    {"jsonrpc":"2.0", "method": "CardTokenReceived", "params": {"status":
+    "LocalCLP", "errorCode": 0, "errorDescription": "", "CardToken": "73D0D1C5",
+    "PartialPan": "", "CardType": "Type A"}, "id": 702}
+    ```
+
+    参数：
+
+    | 范围           | 描述                                                               |
+    | :----------- | :--------------------------------------------------------------- |
+    | `status`     | 交易结果:`OK`、`Declined`、`Error`、`Timeout`、`Cancelled` 或 `LocalCLP`。 |
+    | `errorCode`  | 数字错误代码。无错误时为 `0`。                                                |
+    | `CardToken`  | 卡片令牌。对于支付卡为 Base64 字符串，对于闭环（Mifare）卡则为卡片 UID。                    |
+    | `PartialPan` | 掩码 PAN，显示卡账号的前六位和后四位数字。对于闭环卡此字段为空。                               |
+    | `CardType`   | 卡组织（例如 EMV、MasterCard、Visa）。对于闭环卡，则为卡片技术类型（例如 Type A、Mifare）。    |
+  </Tab>
+
+  <Tab title="安卓">
+    ```java Java
+    void CardTokenReceived(TokenDetails tokenDetails);
+    ```
+
+    在哪里：
+
+    | 范围             | 描述          |
+    | :------------- | :---------- |
+    | `tokenDetails` | 带有卡片令牌的字符串。 |
+  </Tab>
+
+  <Tab title="Linux">
+    ```c Linux
+    void LibOtiKiosk_Register_GetTokenResponse_Callback(GetTokenCb_t cb);
+    ```
+
+    参数：
+
+    `cb`：类型为 `void (*)(otiKioskGetTokenResponse* resp)` 的回调函数。当卡片令牌操作完成时，此函数会自动被触发。
+
+    该回调接收一个指向 `otiKioskGetTokenResponse` 结构体的指针，其中包含令牌结果：
+
+    ```c C
+    typedef struct {
+        otiTransactionStatus status;        // Operation status
+        int error_code;                      // Error code if failed
+        char error_message[100];             // Error description
+        char card_token[128];                // Generated card token
+        char card_type[32];                  // Card scheme (e.g., EMV, Visa, Mifare)
+    } otiKioskGetTokenResponse;
+    ```
+
+    结构体字段:
+
+    | 场地              | 描述                                                  |
+    | :-------------- | :-------------------------------------------------- |
+    | `status`        | 令牌操作的状态。与 JSON 中 `status` 字段的取值相同。                  |
+    | `error_code`    | 数字错误代码。无错误时为 `0`。                                   |
+    | `error_message` | 错误的简短技术描述，供开发人员和支持人员使用。请勿向用户展示。                     |
+    | `card_token`    | 生成的卡片令牌。对于支付卡为 Base64 字符串，对于闭环卡则为卡片 UID。            |
+    | `card_type`     | 支付卡的卡组织（例如 EMV、Visa），或闭环卡的卡片技术类型（例如 Type A、Mifare）。 |
+  </Tab>
+</Tabs>
+
+---
+
+## `ReaderMessageEvent`
+
+该回调提供来自读卡器的用户界面消息更新。
+
+<Tabs>
+  <Tab title="JSON">
+    ```json
+    {"jsonrpc": "2.0", "method": "ReaderMessageEvent", "params": {"index": 36,
+    "line1": "Authorizing", "line2": "Please wait"}}
+    ```
+
+    | 范围    | 描述                                                           |
+    | :---- | :----------------------------------------------------------- |
+    | index | 消息索引 – 根据消息索引表的十进制值。注意：读卡器显示屏上实际呈现的文本取决于 Kiosk 配置，可能与表中数值不同。 |
+  </Tab>
+
+  <Tab title="安卓">
+    ```java Java
+    public ReaderMessage(int index, String line1, String line2)
+    ```
+
+    参数：
+
+    | 范围      | 描述                                                                                                                                                                 |
+    | :------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | `index` | The index of the message. Decimal value according to the [Reader messages Index table](/docs/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages). |
+    | `line1` | 文本显示在读卡器显示屏的第一行。                                                                                                                                                   |
+    | `line2` | 文本显示在读卡器显示屏的第二行。                                                                                                                                                   |
+
+    <Warning>
+      读卡器配置
+
+      为了使此功能正常工作，必须将阅读器配置为发送外部显示消息事件（带有索引 04 的标签 DF 46）。
+    </Warning>
+  </Tab>
+
+  <Tab title="Linux">
+    ```c Linux
+    void on_reader_event(uint8_t msg_index, char* line1, char* line2) {
+    printf("Reader Display: %s | %s\n", line1, line2);
+    }
+    LibOtiKiosk_Register_ReaderEvent_Callback(on_reader_event);
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## `SystemStatusChanged`
+
+<Warning>
+  此方法仅适用于 Android 操作系统。
+</Warning>
+
+`SystemStatusChanged` 事件表示 SDK 或已连接设备运行状态的变化。
+
+```java Java
+void onTransactionComplete(TransactionResult result);
+```
+
+`SystemStatus` 是表示系统当前状态的枚举。可能的结果值见下表：
+
+| 结果                   | 描述            |
+| -------------------- | ------------- |
+| `Ready`              | SDK 已准备好进行交易。 |
+| `NotReady`           | SDK 无法运行。     |
+| `PaymentTransaction` | 交易目前正在进行中。    |
+| `Update`             | 固件或配置更新正在进行中。 |
+
+---
+
+## `TransactionComplete`
+
+当交易完成（无论成功或失败）时，EMV Core 都会调用 `TransactionComplete`。它为您的应用程序提供打印收据以及将交易与销售事件关联（例如在争议处理中）所需的详细信息。
+
+<Tabs>
+  <Tab title="JSON">
+    开环请求：
+
+    ```json JSON
+    {
+      "jsonrpc": "2.0",
+      "method": "TransactionComplete",
+      "params": {
+        "status": "OK",
+        "errorCode": 0,
+        "errorDescription": "",
+        "transactionId": "2046651064",
+        "authorizationDetails": {
+          "AmountAuthorized": 4.50,
+          "AmountRequested": 4.50,
+          "AuthorizationCode": "",
+          "PartialPan": "541333******4111",
+          "CardType": "MasterCard",
+          "IsTransactionApproved": true,
+          "eReceipt": "https://s.wee.ai/tr/...eIHT",
+          "Card_ID": "",
+          "Card_Balance": 0.00,
+          "RRN": "",
+          "TransactionDbID": "2046651064",
+          "Transaction_Referance": "2046651064",
+          "CardToken": "5VXkNqtUDJBxQj9p/qTGt74jWaPHlRs7xxWa1Yu0gDI=",
+          "Additional_Parameters": {
+            "hwSerial": "0207122525168550",
+            "SiteId": "6",
+            "AllowFundsOverAuthAmount": "false",
+            "IncrementalMaxDefaultCredit": "450.0",
+            "EntryMode": "4",
+            "MachineAuTime": "2026-05-10T16:53:39.017",
+            "NayaxTransactionId": "6811150712"
+          }
+        }
+      },
+      "id": 701
+    }
+    ```
+
+    带 mifare\_read 的闭环请求：
+
+    要使用 `mifare_read`，请在 Nayax Core 的 Embedded Advanced 中设置“Mifare Blocks to Read”属性。以下示例使用 `KA01B10B14`，通过密钥 A 读取块 1，以及块 10 和块 14。
+
+    显示 KA01B10B14 的 Mifare 待读取数据块配置
+
+    ```json JSON
+    {
+      "jsonrpc": "2.0",
+      "method": "TransactionComplete",
+      "params": {
+        "status": "LocalCLP",
+        "errorCode": 0,
+        "errorDescription": "",
+        "transactionId": "4701113B",
+        "authorizationDetails": {
+          "CardType": "Mifare",
+          "Card_ID": "4701113B",
+          "Card_Balance": 0.00,
+          "CardToken": "4701113B",
+          "Additional_Parameters": {}
+        }
+      },
+      "mifare_read": {
+        "UID": "4701113B",
+        "B10": "00000000000000000000000000000000",
+        "B14": "00000000000000000000000000000000"
+      },
+      "id": 701
+    }
+    ```
+
+    回复：
+
+    ```json JSON
+    {"jsonrpc":"2.0", "result":true, "id":701}
+    ```
+
+    参数：
+
+    | 范围                     | 描述                                                                     |
+    | :--------------------- | :--------------------------------------------------------------------- |
+    | ID                     | 命令 ID。                                                                 |
+    | **status**             | 交易结果:`OK`、`Declined`、`Error`、`Timeout`、`Cancelled` 或 `LocalCLP`。       |
+    | errorCode              | 数字错误代码。无错误时为 `0`。                                                      |
+    | errorDescription       | 错误的简短技术描述，供开发人员和支持人员使用。请勿向用户展示。                                        |
+    | 交易 ID                  | 交易 ID。在 `ConfirmTransaction` 或 `VoidTransaction` 中使用此值。                |
+    | authorizationDetails   | 授权详情，包括已授权金额、请求金额、授权码、部分 PAN、卡类型、批准状态以及卡片令牌。                           |
+    | Additional\_Parameters | 来自 PSP 的可选数据，格式为 `{"fieldName": "fieldValue"}`。这些值用于 Nayax 外部结算（远程结算）。 |
+    | mifare\_read           | 根据 `CLP_MIFARE_READ` 属性从 Mifare 卡读取的数据块。缺省时为空。                         |
+  </Tab>
+
+  <Tab title="安卓">
+    ```java Java
+    void TransactionComplete(AuthorizationDetails authorizationDetails);
+    ```
+
+    <Note>
+      如果没有回应
+
+      如果 EMV Core 没有收到应答，它将重新发送 2 次（共计 3 条消息）；如果仍未收到应答，它将假定消息已被接收，不会取消该交易。
+    </Note>
+
+    在哪里：
+
+    | 范围                            | 描述                                                                                                                                                                                    |
+    | :---------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+    | `errorDescription`            | 对错误的简短技术描述，旨在帮助开发者和技术支持人员识别问题。不应向用户展示此内容。                                                                                                                                             |
+    | `errorCode`                   | 描述错误的数字代码（如果发生错误）。有关每个代码的详细信息，请参见下表。                                                                                                                                                  |
+    | `status`                      | 可能的状态：OK、Declined、Error、Timeout、Cancelled、LocalCLP。                                                                                                                                   |
+    | `amountAuthorized`            | 以主要货币单位（例如美元，而非美分）表示的交易批准金额。如果是预付卡，该金额可能低于原始请求金额。                                                                                                                                     |
+    | `amountRequested`             | 以主要货币单位（例如美元，而非美分）表示的交易请求批准金额。                                                                                                                                                        |
+    | `authorization_Code`          | 为已批准交易（EVO、Apriva、Traderoot）颁发的 PSP 交易标识符。                                                                                                                                            |
+    | `partialPan`                  | 带掩码的 PAN,显示卡账号的前六位和后四位数字。                                                                                                                                                             |
+    | `cardType`                    | 卡组织（MasterCard、Visa、Amex 等）。对于闭环卡，则为卡片技术类型。请参见下方的闭环卡类型表。                                                                                                                              |
+    | `authID`                      | 来自处理器的批准代码（对于某些处理器）。                                                                                                                                                                  |
+    | `receiptID`                   | PSP 系统中的数字收据 ID。                                                                                                                                                                      |
+    | `Transaction_Referance`       | 已弃用。请改用 `transactionId`。                                                                                                                                                              |
+    | `TransactionDbID`             | 已弃用。请改用 `transactionId`。                                                                                                                                                              |
+    | `RRN`                         | 已批准交易的处理者参考编号。                                                                                                                                                                        |
+    | `card_ID`                     | 如果是 Mifare 卡且 `CLP_MIFARE_ENABLED=2`，则为 Mifare UID。                                                                                                                                   |
+    | `isTransactionApproved`       | 表示交易批准状态的布尔值。                                                                                                                                                                         |
+    | `eReceipt`                    | Nayax eReceipt 的 URL。所需配置请参阅 Nayax Core 中的 eReceipt 设置。                                                                                                                               |
+    | `CardToken`                   | 用于标识卡片的令牌。对于支付卡，返回 Base64 字符串；对于闭环卡（例如 Mifare），返回卡片 UID。                                                                                                                              |
+    | `Channel`                     | 用于读卡的通道（例如 Contactless、Magstripe、Contact）。                                                                                                                                            |
+    | `AID, TVR, IAD, TSI, ARC`     | 可用于收据的卡/交易参数。                                                                                                                                                                         |
+    | `transactionTime`             | 交易时间。                                                                                                                                                                                 |
+    | `application_Label`           | 卡组织方案（例如 Visa、MasterCard、American Express）。                                                                                                                                           |
+    | `currency`                    | 根据 ISO 4217 标准的货币代码（例如 840 表示美元）。                                                                                                                                                     |
+    | `CVM`                         | 卡验证方法。                                                                                                                                                                                |
+    | `additional_Parameters`       | 来自支付处理商的可选附加参数，用于 Nayax External Settlement（远程结算）。包括：`SiteId`、`EntryMode`、`MachineAuTime`、`NayaxTransactionId`、`hwSerial`、`AllowFundsOverAuthAmount` 和 `IncrementalMaxDefaultCredit`。 |
+    | `hwSerial`                    | 终端硬件序列号。                                                                                                                                                                              |
+    | `AllowFundsOverAuthAmount`    | 是否允许超出授权金额的增量扣款（`"true"` 或 `"false"`）。                                                                                                                                                |
+    | `IncrementalMaxDefaultCredit` | 增量授权允许的最大信用金额。                                                                                                                                                                        |
+    | `card_Balance`                | 由 Nayax 管理的闭环卡的卡余额。                                                                                                                                                                   |
+
+    ### `TransactionComplete` 闭环卡类型
+
+    对于闭环交易，`cardType` 字段可能返回以下卡片技术类型。
+
+    | 卡类型          | 描述                       |
+    | :----------- | :----------------------- |
+    | `Type A`     | ISO/IEC 14443 A型         |
+    | `Type B`     | ISO/IEC 14443 B型         |
+    | `Mifare`     | 米法尔                      |
+    | `Mifare-U`   | Mifare 超轻型               |
+    | `DesFire`    | Mifare DESFire           |
+    | `Mifare-P`   | Mifare Plus              |
+    | `Vicinity`   | ISO/IEC 15693            |
+    | `Vicinity-P` | ISO/IEC 15693 HID iClass |
+    | `Felica`     | FeliCa JIS X 6319-4      |
+
+    ### `TransactionComplete` 错误代码
+
+    这些是响应中可能出现的错误代码：
+
+    | 错误类型      | 错误代码             |
+    | --------- | ---------------- |
+    | JsonParse | -1               |
+    | 一般的       | -1               |
+    | 终止        | -1               |
+    | 暂停        | -1               |
+    | 交易被拒绝     | -1               |
+    | 正码        | 支付服务提供商 (PSP) 错误 |
+  </Tab>
+
+  <Tab title="Linux">
+    ```c Linux
+    void on_transaction_complete(otiKioskPaymentResponse* resp) {
+    if (resp->status == otiTransactionStatus_OK) {
+    printf("Transaction successful: %s\n", resp->transaction_reference);
+    } else {
+    printf("Transaction failed: %s\n", resp->error_message);
+    }
+    }
+    LibOtiKiosk_Register_TransactionComplete_Callback(on_transaction_complete);
+    ```
+
+    参数：
+
+    `cb`：类型为 `void (*)(otiKioskPaymentResponse* resp)` 的回调函数。当交易达到最终状态时，此函数会自动触发。
+
+    该回调接收一个指向 `otiKioskPaymentResponse` 结构体的指针，其中包含完整的交易结果：
+
+    ```c C
+    typedef struct {
+        otiTransactionStatus status;        // Transaction status
+        int error_code;                      // Error code if failed
+        char error_message[100];             // Error description
+        double amount_requested;             // Requested amount
+        double amount_authorized;            // Authorized amount
+        char transaction_reference[128];     // Unique transaction reference
+        char partial_PAN[20];                // Masked card number
+        char card_type[32];                  // Card type (Visa, MasterCard, etc.)
+        char card_id[32];                     // Card identifier
+        char card_token[128];                // Secure card token
+        char EReceipt[256];                   // Electronic receipt URL
+        char Additional_Parameters[256];      // Additional parameters, used for remote settlement
+        double card_balance;                  // RFU: card balance for closed-loop cards
+        bool is_transaction_approved;         // Approval status
+        char authorization_code[128];         // PSP authorization code
+        char rrn[128];                         // Processor reference number
+        NayaxTransactionIdInfo nayax_info;    // Fields for remote settlement
+        char mifare_read[256];                // Raw JSON of mifare_read params for CLP_MIFARE_READ, empty when absent
+    } otiKioskPaymentResponse;
+    ```
+
+    结构体字段:
+
+    | 场地                        | 描述                                                      |
+    | :------------------------ | :------------------------------------------------------ |
+    | `status`                  | 交易状态。与 JSON 的 `status` 字段值相同。                           |
+    | `error_code`              | 数字错误代码。无错误时为 `0`。                                       |
+    | `error_message`           | 错误的简短技术描述，供开发人员和支持人员使用。请勿向用户展示。                         |
+    | `amount_requested`        | 请求批准交易的金额，以主单位表示（例如美元，而非美分）。                            |
+    | `amount_authorized`       | 交易获批准的金额，以主单位表示。对于预付卡，可能低于请求的金额。                        |
+    | `transaction_reference`   | 交易 ID。在 `ConfirmTransaction` 或 `VoidTransaction` 中使用此值。 |
+    | `partial_PAN`             | 带掩码的 PAN,显示卡账号的前六位和后四位数字。                               |
+    | `card_type`               | 开环卡的卡组织方案，或闭环卡的卡片技术。                                    |
+    | `card_id`                 | 当卡片为 Mifare 卡且 `CLP_MIFARE_ENABLED=2` 时，为 Mifare UID。   |
+    | `card_token`              | 用于标识卡片的令牌。支付卡为 Base64 字符串，闭环卡为卡片 UID。                   |
+    | `EReceipt`                | Nayax eReceipt 的 URL。请参阅下方 Nayax Core 中的 eReceipt 设置。   |
+    | `Additional_Parameters`   | 来自 PSP 的可选数据，用于 Nayax External Settlement（远程结算）。        |
+    | `card_balance`            | RFU。由 Nayax 管理的闭环卡的卡余额。                                 |
+    | `is_transaction_approved` | 交易是否获批准。                                                |
+    | `authorization_code`      | 为已批准交易签发的 PSP 交易标识符。                                    |
+    | `rrn`                     | 已批准交易的处理者参考编号。                                          |
+    | `nayax_info`              | Nayax External Settlement（远程结算）所需的字段。                   |
+    | `mifare_read`             | 根据 `CLP_MIFARE_READ` 属性从 Mifare 卡读取的数据块的原始 JSON。不存在时为空。 |
+
+    <Note>
+      完整的闭环卡类型列表和错误代码列表，请参阅上方 Android 选项卡中的对应字段。
+    </Note>
+  </Tab>
+</Tabs>
+
+### Nayax Core 中的 eReceipt 设置
+
+要接收 eReceipt，请在 Nayax Core 中按以下设置配置运营商。
+
+<Steps>
+  <Step title="配置 VAS Provider 设置">
+    在运营商设置中，转到 VAS Provider 选项卡。在 eReceipt Platform 下，输入 Provider Name 和 Business ID。
+
+    运营商 VAS Provider 选项卡，显示 eReceipt Platform 下的 Provider Name 和 Business ID 字段
+  </Step>
+
+  <Step title="更新机器支付选项">
+    在机器设置中，转到 Payment 选项卡。在 Transaction Options 下，取消勾选 Enable eReceipt on Transaction end。
+
+    机器 Payment 选项卡，显示 Transaction Options 下的 Enable eReceipt on Transaction end 复选框
+  </Step>
+</Steps>

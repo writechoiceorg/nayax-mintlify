@@ -1,0 +1,168 @@
+---
+title: 创建队列访问用户
+metadata:
+  og:description: 设置队列权限后，AWS 需要一个用户账户以编程方式与队列进行交互。此用户将使用该。
+---
+
+设置队列权限后，AWS 需要一个用户账户以编程方式与队列进行交互。此用户将使用之前创建的策略来保护队列访问安全。
+
+## AWS 用户类型
+
+AWS 提供多种方法来管理用户并提供资源访问权限，包括在 IAM 中创建的用户、联合身份用户，以及通过 IAM Identity Center 管理的用户。
+
+1. IAM 用户（长期凭证）
+   - 说明：这些用户直接在 AWS IAM 中创建，拥有用于访问 AWS 资源的长期凭证（例如访问密钥）。
+   - 主要使用场景：
+     - 无法使用 IAM 角色的应用程序或服务。
+     - 需要编程访问密钥的第三方客户端。
+     - IAM Identity Center 不可用的场景。
+   - 注意事项：
+     - 不建议个人使用长期凭证，因为这会带来更大的安全风险。
+       请定期轮换访问密钥，以最大程度降低潜在的安全威胁。
+2. IAM Identity Center 用户（短期凭证）
+   - 说明：在 IAM Identity Center（原 AWS SSO）中创建的用户可以获取临时凭证以与 AWS 资源进行交互。
+   - 主要使用场景：
+     - 需要对多个 AWS 账户或应用程序进行集中、安全访问的员工用户（例如企业员工）。
+     - 与 Okta、Microsoft Entra 或 Active Directory 等外部身份提供商集成以进行访问管理。
+   - 优势：
+     - 支持 MFA（多因素身份验证）以增强安全性。
+     - 通过单点登录（SSO）和集中控制简化访问。
+3. 联合身份用户
+   - 说明：通过外部身份提供商（IdP）进行身份验证的用户，例如 Login with Amazon、Facebook、Google，或兼容 SAML 2.0 或 OIDC 的企业 IdP。
+   - 主要使用场景：
+     - 在不于 AWS 中创建 IAM 用户的情况下，集成来自企业目录或移动/网页应用的现有用户。
+   - 优势：
+     - 利用临时凭证提高安全性。
+     - 实现无缝单点登录，带来更流畅、更安全的用户体验。
+
+<Warning>
+  关键建议
+
+  - 对于个人用户或内部用户，建议使用 IAM Identity Center 来管理集中访问权限并提供临时凭证。
+  - 对于需要长期凭证的编程集成，请使用具有严格策略并频繁轮换密钥的 IAM 用户。
+  - Consider **federating users** if your organization already has an identity management system or for cases requiring access from mobile or web applications.
+    For more information, see [**Support programmatic user access**](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction_identity-management.html#gs-get-keys).
+</Warning>
+
+在此情况下，您将创建一个程序化访问用户。
+
+## 添加用户
+
+要创建用户，请按照以下步骤操作：
+
+1. 在“身份和访问管理（IAM）”左侧菜单中转到“用户”。
+2. 点击“创建用户”按钮。
+
+   <Frame>
+     <img src="/images/docs/create-user-for-queue-access/image1.png" />
+   </Frame>
+3. 为用户设置用户名。
+4. 单击**下一步**按钮。
+
+   <Frame>
+     <img src="/images/docs/create-user-for-queue-access/image2.png" />
+   </Frame>
+
+## 设置权限
+
+将之前创建的策略附加到该用户，以授予必要的权限。
+
+在“权限选项”部分：
+
+1. 选择“直接附加策略”。
+
+在“权限策略”部分：
+
+2. 输入之前创建的策略名称以筛选策略。
+3. 选择之前创建的策略。
+4. 单击**下一步**按钮。
+
+<Frame>
+  <img src="/images/docs/create-user-for-queue-access/image3.png" />
+</Frame>
+
+## 查看并创建用户
+
+（可选）AWS 标签有助于识别和跟踪资源使用情况，以用于定价和管理：
+
+1. 点击“添加新标签”按钮。
+2. 添加一个标签，键名类似 `NAME`，值用于跟踪资源。
+3. 查看所有设置以确保其正确无误。
+4. 点击“创建用户”按钮。
+
+<Frame>
+  <img src="/images/docs/create-user-for-queue-access/image4.png" />
+</Frame>
+
+用户创建完成后，您将收到一条确认消息，表明设置成功。
+
+<Frame>
+  <img src="/images/docs/create-user-for-queue-access/image5.png" />
+</Frame>
+
+## 分配程序化访问用户
+
+配置程序化访问的下一步是为已创建的用户生成访问凭证。这些凭证将允许以编程方式与队列进行交互。
+
+1. 要查看用户，您有 2 种方式：
+   a. 点击“用户创建成功”提示中的“查看用户”按钮。
+   b. 在“用户名”列中选择 TXQueueUser。
+
+   <Frame>
+     <img src="/images/docs/create-user-for-queue-access/image6.png" />
+   </Frame>
+2. 在“摘要”部分点击“创建访问密钥”。
+
+   <Frame>
+     <img src="/images/docs/create-user-for-queue-access/image7.png" />
+   </Frame>
+3. 选择“命令行界面”选项。
+
+   <Frame>
+     <img src="/images/docs/create-user-for-queue-access/image8.png" />
+   </Frame>
+4. 勾选复选框以确认您已理解相关建议。
+5. 然后，点击“下一步”按钮。
+
+   <Frame>
+     <img src="/images/docs/create-user-for-queue-access/image9.png" />
+   </Frame>
+6. 最后，点击“创建访问密钥”按钮。
+
+   <Frame>
+     <img src="/images/docs/create-user-for-queue-access/image10.png" />
+   </Frame>
+
+## 保存访问凭证
+
+创建访问密钥后，系统将显示 Access Key ID 和 Secret Access Key，这些是集成所必需的。
+
+执行以下一项或两项操作：
+
+1. 点击“显示”以查看密钥并手动复制。
+2. 点击“下载 CSV”将密钥保存到安全文件中。
+   建议同时执行这两项操作。
+
+<Warning>
+  凭证
+
+  这是最后一次可以下载这些凭证。不过，您可以随时创建新的凭证。
+</Warning>
+
+3. 点击“完成”按钮。
+
+<Frame>
+  <img src="/images/docs/create-user-for-queue-access/image11.png" />
+</Frame>
+
+## 概括
+
+完成后，您将获得访问队列所需的凭证。
+
+在 [Nayax Core](/docs/manage-data-operations/amazon-sqs/set-up-nayax-core/nayax-back-office-setup) 中继续设置所需的详细信息包括：
+
+- 队列 URL
+- Access Key ID
+- Secret Access Key
+
+<br />

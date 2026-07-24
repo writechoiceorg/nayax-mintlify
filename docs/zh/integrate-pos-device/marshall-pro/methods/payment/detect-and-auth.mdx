@@ -1,0 +1,94 @@
+---
+title: 检测和身份验证
+description: 在单阶段操作中完成检测、读取和预授权资金。
+metadata:
+  og:description: detectAndAuth 方法将卡检测和预授权合并为单一命令。它是用于泵上支付（Pay-at-the-Pump）的主要方法。
+---
+
+`detectAndAuth` 方法将卡检测和预授权合并为单一命令。它是用于泵上支付（Pay-at-the-Pump）交易的主要方法，通过一步激活读卡器并请求资金冻结来简化工作流程。
+
+使用此方法可以：
+
+- 同时激活读卡器并准备授权请求，以减少总交易时间。
+- 在刷卡、插卡或挥卡后立即预留资金，以便即时启动油泵。
+- 通过统一命令同时处理卡检测和授权，最大限度地减少两者之间所需的逻辑。
+
+## 请求
+
+All requests must include the `command`, `requestId`, and the `amount` to be held. The terminal will remain in a "Waiting for Card" state until a payment method is presented or a timeout occurs.
+
+以下示例展示了一个典型的请求：
+
+```json
+{
+"command": "detectAndAuth",
+"requestId": "req-1-3",
+"data": {
+"amount": 50000,
+"tranType": 1,
+"channels": ["CTLS", "CHIP", "SWIPE"]
+}
+}
+```
+
+### 参数定义
+
+下表描述了此请求可用的参数：
+
+| 姓名   | 类型    | 必需的 | 描述                                                                |
+| :--- | :---- | :-- | :---------------------------------------------------------------- |
+| 数量   | 整数    | 是的  | 以最小单位表示的待冻结/预授权金额（请参阅 `decimalPlace`）。                            |
+| 转换类型 | 整数    | 不   | `1`：预授权，`2`：预选（默认值为 `1`）。                                         |
+| 频道   | array | 不   | 定义允许的支付方式：`CTLS`（非接触）、`CHIP`（EMV）、`SWIPE`（磁条）或 `QR`。若省略，则默认为全部方式。 |
+
+## 回应
+
+终端仅在卡被成功读取且授权已由支付网关处理后才返回响应。
+
+以下示例展示了典型的**信用卡**响应：
+
+```json
+{
+"requestId": "req-1-3",
+"data": {
+"transactionId": "TXN-20260113-003000",
+"authorizedAmount": 50000,
+"state": "AUTHORIZED",
+"cardBrand": "MASTERCARD",
+"cardEntryMode": "CHIP",
+"maskedPan": "************5678",
+"aid": "A0000000031010"
+}
+}
+```
+
+以下示例展示了典型的**二维码**响应：
+
+```json
+{
+"requestId": "req-005",
+"data": {
+"state": "CARD_READ",
+"cardEntryMode": "QR",
+"qrCode": "1168743871706458"
+}
+}
+```
+
+<Info>
+  注意：如果使用 QR 码，客户端系统负责任何外部授权和结算逻辑。
+</Info>
+
+### 响应参数
+
+以下是成功交易后 `data` 对象中返回的参数：
+
+| 姓名               | 类型     | 描述                                      |
+| :--------------- | :----- | :-------------------------------------- |
+| 交易 ID            | string | 该已授权交易的唯一 ID。请保存此值以供 `settle` 命令使用。     |
+| authorizedAmount | 整数     | 银行批准并冻结的最终金额。                           |
+| 状态               | string | 成功时返回 `AUTHORIZED`。                     |
+| 卡品牌              | string | 检测到的卡的品牌（例如 MASTERCARD）。                |
+| 卡片输入模式           | string | 用于捕获数据的方式：`CTLS`、`CHIP`、`SWIPE` 或 `QR`。 |
+| 蒙面潘              | string | 用于收据和日志记录的掩码卡号。                         |
+| 援助               | string | 基于EMV的交易的应用程序标识符。                       |

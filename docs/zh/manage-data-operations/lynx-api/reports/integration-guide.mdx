@@ -1,0 +1,84 @@
+---
+title: 每台机器的收入：集成指南
+description: 一份分步指南，介绍如何使用 Widgets Dashboard API 检索按机器、按天和按月细分的营收数据。
+---
+
+Widgets Dashboard API 允许您检索按机器、按天和按月细分的营收数据。有关筛选条件和字段参考，请参阅 [Widget Filters Reference](/docs/manage-data-operations/lynx-api/reports/widget-filters)。
+
+所有请求都需要在 `Authorization` 标头中提供有效的访问令牌。请参阅 [Security & Token](/docs/manage-data-operations/lynx-api/security)，了解如何获取和使用您的令牌。
+
+## 发现组件 ID
+
+调用 list-widgets 端点以查看所有可用组件及其 ID：
+
+```bash
+curl -X GET "https://<host>/operational/v1/dashboard/widgets?screenTypeId=1" \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
+```
+
+从响应中找出与营收相关组件的 `widgetTypeId` 值（查找名称中包含 "Revenue"、"Sales" 或类似字样的组件）。
+
+## 每台机器每日营收
+
+使用 `groupBy: day` 筛选条件并配合日期范围来检索每日营收总额：
+
+```bash
+curl -X POST "https://<host>/operational/v1/dashboard/get-widget-data" \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "screenTypeId": 1,
+    "widgetTypeId": 193,
+    "entityId": <operatorId>,
+    "filters": [
+      { "name": "startDate", "value": "2025-01-01", "type": "Date" },
+      { "name": "endDate",   "value": "2025-01-31", "type": "Date" },
+      { "name": "groupBy",   "value": "day",        "type": "string" }
+    ]
+  }'
+```
+
+## 每台机器每月营收
+
+将 `groupBy` 切换为 `month` 并扩大日期范围，以检索每月营收总额：
+
+```bash
+curl -X POST "https://<host>/operational/v1/dashboard/get-widget-data" \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "screenTypeId": 1,
+    "widgetTypeId": 193,
+    "entityId": <operatorId>,
+    "filters": [
+      { "name": "startDate", "value": "2025-01-01", "type": "Date" },
+      { "name": "endDate",   "value": "2025-12-31", "type": "Date" },
+      { "name": "groupBy",   "value": "month",      "type": "string" }
+    ]
+  }'
+```
+
+## 特定机器的营收
+
+通过 `entityId` 传递机器 ID（如果组件的范围是机器级别），或通过 `MachineId` 筛选条件传递：
+
+```bash
+curl -X POST "https://<host>/operational/v1/dashboard/get-widget-data" \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "screenTypeId": 1,
+    "widgetTypeId": 193,
+    "entityId": null,
+    "filters": [
+      { "name": "startDate", "value": "2025-01-01", "type": "Date"   },
+      { "name": "endDate",   "value": "2025-12-31", "type": "Date"   },
+      { "name": "MachineId", "value": "<machineId>","type": "int"    },
+      { "name": "groupBy",   "value": "day",        "type": "string" }
+    ]
+  }'
+```
+
+<Note>
+  组件所支持的确切筛选条件名称和 `groupBy` 值取决于其在 Cortex Reports 中的存储过程。如果筛选条件名称无法识别，将被静默忽略。请分别在使用和不使用每个筛选条件的情况下进行测试，并比较响应结果。
+</Note>

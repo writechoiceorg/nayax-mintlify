@@ -1,0 +1,70 @@
+---
+title: 授权待处理交易
+metadata:
+  og:description: authorizePendingTransactions 方法用于处理并完成所有当前处于待处理状态的交易。此方法对于。
+---
+
+`authorizePendingTransactions` 方法用于处理并完成所有当前处于待处理状态的交易。
+
+此方法对于使用延迟支付交易的商户至关重要。它允许商户在一次批量操作中完成多笔待处理交易，并获取已批准或已拒绝交易的汇总信息。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+请在请求中确保配置以下内容：
+
+- `method` 字段需要设置为 `authorizePendingTransactions`。
+- The service must be set to `ashrait` in the `params`.
+
+```json
+{
+   "jsonrpc":"2.0",
+   "method":"authorizePendingTransactions",
+   "params":[
+      "ashrait",
+      {}
+   ],
+   "id":1
+}
+```
+
+此方法在 params 对象中不需要任何参数。
+
+## 回复
+
+成功的请求将返回类似于以下代码块中的响应：
+
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "1",
+   "result": {
+       "statusCode": 0,
+       "approvedTransactions": [
+           "25102113483608830127760"
+       ],
+       "declinedTransactions": [],
+       "totalAmount": 100,
+       "totalCount": 1
+   }
+}
+```
+
+### 响应参数
+
+下面是一个包含所有可能的响应参数及其描述的表格：
+
+| 姓名                     | 类型    | 描述                                |
+| :--------------------- | :---- | :-------------------------------- |
+| `statusCode`           | 整数    | 批量操作的整体状态。值为 `0` 表示批量操作处理成功。      |
+| `approvedTransactions` | 字符串数组 | 在此次授权尝试中成功获得授权并捕获的交易唯一标识符（UID）列表。 |
+| `declinedTransactions` | 字符串数组 | 在此次授权尝试中被拒绝的交易唯一标识符（UID）列表。       |
+| `totalAmount`          | 整数    | 此批次中所有已批准交易的总金额（以分为单位）。           |
+| `totalCount`           | 整数    | 此批次中已批准交易的总数。                     |
+
+<br />

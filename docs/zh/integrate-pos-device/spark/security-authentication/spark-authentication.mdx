@@ -1,0 +1,76 @@
+---
+title: 验证
+metadata:
+  og:description: 为确保通信安全，集成方发送的每个请求都必须包含两个特定的身份验证请求头。这些请求头用于验证您的身份。
+---
+
+为确保通信安全，集成商发送的每个请求都必须包含两个特定的身份验证标头。这些标头用于验证您的身份并确保交易数据的完整性。
+
+## 先决条件
+
+开始之前，请确保您已准备好以下资源：
+
+- 有效的签名密钥（由 Nayax 共享，通常为 16 个字符）
+- 关联的签名密钥 ID
+
+<Warning>
+  您的请求正文必须包含 `SparkTransactionId` 字段。
+</Warning>
+
+## 验证请求
+
+拥有所需的资源后，您可以按照以下步骤开始向 Spark 验证您的 API 请求：
+
+1. 将静态字符串 `IntegratorId` 与您的 ID 按以下格式组合：`IntegratorId: {SignKeyID}`。请参见下面的示例：
+   ```
+   IntegratorId: 927
+   ```
+2. 将请求正文中的 `SparkTransactionId` 与您的 `Sign Key` 用分号（`;`）连接，格式如下：`SparkTransactionId;SignKey`
+   ```
+   123456789123456789abcdefghijklmnopqr;RbtdDsiVNjkAeRty
+   ```
+3. 使用 UTF-8 编码对结果字符串执行 SHA-256 哈希运算。得到的哈希值：
+   ```
+   1b7dd1c4010698824de66f13e1387efc28a4bba00b720d4be8cdb3b598b9603e
+   ```
+4. 最终的标题应如下所示：
+   ```
+   TransactionSignature: 1b7dd1c4010698824de66f13e1387efc28a4bba00b720d4be8cdb3b598b9603e
+   ```
+
+## 请求示例（cURL）
+
+参见 `/StartAuthentication` 端点的示例请求：
+
+<Note>
+  基本 URL 和域名
+
+  Spark API 的基础 URL 为 `https://{domain}/api`，其中 `{domain}` 是 Nayax 分配给您的主机名。Nayax 会在沙盒设置期间提供 QA 域名，并在认证完成后提供生产域名。如果您尚未收到域名，请联系您的 Nayax 集成工程师。
+</Note>
+
+```bash
+curl --location 'https://{your-domain}/api/StartAuthentication' \
+--header 'IntegratorId: 927' \
+--header 'TransactionSignature: 1b7dd1c4010698824de66f13e1387efc28a4bba00b720d4be8cdb3b598b9603e' \
+--header 'Content-Type: application/json' \
+--data '{
+ "TokenId": 116383,
+ "TerminalId": "0434334921100366",
+ "TerminalIdType": 1,
+ "Random": "123456789qwertyui",
+ "Cipher": "X305dITNTAw2vHsxE+taVcn6UvgBC3fdI6QbqeABgHbo8CKsoZhqISJfslehCiA+L7XYrqvKFci7C6BNj/tr zBuNJwBEjgBzKhhgpJ5ggnw=",
+ "SparkTransactionId": "123456789123456789abcdefghijklmnopqr"
+}'
+```
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="bolt" title="交互式身份验证工具" href="/docs/integrate-pos-device/spark/security-authentication/spark-auth-tool">
+    在浏览器中构建和检查密文与签名请求头，无需编写代码。
+  </Card>
+
+  <Card icon="link" title="交易流程" href="/docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark">
+    身份验证如何融入完整的 Spark 交易流程。
+  </Card>
+</Columns>

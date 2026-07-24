@@ -1,0 +1,41 @@
+---
+title: 分词
+metadata:
+  og:description: 借助 eCom SDK，您可以安全存储持卡人的支付详细信息，并提供以下功能：订阅付款。自动充值。
+---
+
+借助 eCom SDK，您可以安全存储持卡人的支付详细信息，并提供以下功能：
+
+- 订阅付款。
+- 自动为购物者账户充值。
+- 为您的客户提供更快捷的结账体验。
+
+在获得客户同意后，使用一种称为“令牌化”的安全流程存储其支付详细信息。我们会生成一个包含支付详细信息的加密令牌。当客户选择使用其已存储的支付详细信息付款时，您可使用该令牌提交付款。
+
+<Note>
+  PCI 合规性
+
+  如果您未完全符合 PCI DSS 标准，我们建议您使用 Nayax 令牌处理支付，以缩小 PCI 合规范围。
+</Note>
+
+## 支付令牌化
+
+创建令牌后，您可以使用 [Charge Token](/reference/ecom/payments/charge-token) 端点通过该令牌执行定期扣款。
+
+<Note>
+  令牌类型行为
+
+  令牌的类型(subscription/COF/top-up)在其首次创建时设定并存储在我们的系统中。如果后续的 [Charge Token](/reference/ecom/payments/charge-token) 请求包含不同的令牌类型参数,该参数将被忽略。系统始终使用初始化请求中的原始令牌类型,无论后续扣款请求中提供何种值。
+</Note>
+
+有关如何管理令牌的更多详细信息，请参阅 [Nayax Tokens](/docs/ecom-sdk/back-end-integration/nayax-ecom-tokens)。
+
+## 参见
+
+<Columns cols={3}>
+  <Card icon="link" title="开始" href="/docs/ecom-sdk/get-started/ecom-sdk-get-started" />
+
+  <Card icon="link" title="前端集成" href="/docs/ecom-sdk/front-end-integration/front-end-sdk" />
+
+  <Card icon="link" title="后端集成" href="/docs/ecom-sdk/back-end-integration/ecom-sdk-back-end-integration" />
+</Columns>

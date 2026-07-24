@@ -1,0 +1,59 @@
+---
+title: 获取状态
+metadata:
+  og:description: getStatus 方法用于检查 AEA（支付应用程序）服务的状态，以查看其是否已准备好处理交易（与之相对的是。
+---
+
+`getStatus` 方法用于检查 AEA（支付应用程序）服务的状态，以查看其是否已准备好处理交易（与之相对的是 getInternalStatus，后者提供有关支付终端是否已准备好开始处理新交易第一部分的信息）。这是快速诊断终端健康状况的方法，但应避免频繁调用。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+请在请求中确保配置以下内容：
+
+- `method` 字段必须设置为 `getStatus`。
+- The service must be set to `ashrait` in the `params`.
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getStatus",
+    "params": [
+        "ashrait"
+    ],
+    "id": 1
+}
+```
+
+### 请求参数
+
+此方法除标准服务名称外不需要任何其他参数。
+
+## 回复
+
+成功调用会返回一个表示支付应用程序当前状态的字符串。
+
+```json
+{
+    "jsonrpc": "2.0",
+    "result": "ashraitReady",
+    "id": 1
+}
+```
+
+### 响应参数
+
+下表描述了该方法的响应参数。
+
+| 价值                      | 描述                          |
+| :---------------------- | :-------------------------- |
+| `ashraitReady`          | 已准备好进行交易。                   |
+| `ashraitNotEstablished` | 终端设置尚未完成。                   |
+| `ashraitReadyOnline`    | 已就绪，但由于数据库过旧，所有交易都将以在线方式处理。 |
+| `ashraitError`          | 发生一般性错误（例如数据库损坏）。           |
+| `ashraitNotReady`       | 尚未准备好进行交易。                  |

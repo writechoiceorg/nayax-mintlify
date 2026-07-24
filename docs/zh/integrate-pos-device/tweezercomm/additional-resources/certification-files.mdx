@@ -1,0 +1,46 @@
+---
+title: 认证与测试
+metadata:
+  og:description: 此页面提供必要的认证文件、API 测试工具以及支持您集成和验证的文档。
+---
+
+import { PostmanButton } from "/snippets/PostmanButton.jsx";
+
+此页面提供必要的认证文件、API 测试工具以及支持您集成和验证 TweezerComm 服务的文档。
+
+## 认证文件
+
+这些 Excel 文件是针对各种支付场景进行认证所需的。请在实施和认证过程中下载并使用它们：
+
+- [Pre-Selection Certification](https://docs-engine.modularity.co.il/_static/Retail_Certification_preSelection.xlsx): Validates terminal behavior before transaction authorization.
+- [Pre-Authorization Certification](https://docs-engine.modularity.co.il/_static/Retail_Certification_preAuthorization.xlsx): Verifies transaction handling up to the authorization phase.
+
+## Agamento 文档
+
+The [Agamento User Manual](https://docs-engine.modularity.co.il/_static/Agamentoguidapp_v1.pdf) is a comprehensive guide for using the Agamento payment application, including configuration, transaction flow, and troubleshooting tips.
+
+## IP 和端口
+
+如果您的 IT 环境存在防火墙或 IP 白名单，您需要开放一系列 IP 地址和端口，才能使用 TweezerComm。您可以在下方文件中查看此列表：
+
+- [IP & Port List](/)
+
+## Postman 集合
+
+Postman 是一款用于设计、测试和记录 API 的工具。使用 TweezerComm 的 Postman 集合，可以在开发过程中探索和验证端点行为。
+
+<Note>
+  下载 Postman
+
+  You can download Postman for Linux, Windows, or macOS, or use the [web version](https://web.postman.co/).
+</Note>
+
+要开始使用，请点击下方按钮打开 Postman 集合。
+
+<PostmanButton href="https://orange-water-45471.postman.co/workspace/2bd08c21-8393-42b6-b02a-8374c6e6887e/collection/36813629-e96e299f-a802-4859-931f-8e2fa3ce2b02?utm_source=email&utm_medium=view_collection" />
+
+<Warning>
+  `DeviceIP`
+
+  请记得在请求 URL 中将 `{DeviceIP}` 更改为您自己的地址。
+</Warning>

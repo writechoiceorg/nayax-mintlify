@@ -1,0 +1,108 @@
+---
+title: 退款
+metadata:
+  og:description: 此请求通过引用原始已捕获交易的唯一标识符来发起退款流程。
+---
+
+此请求通过引用原始已捕获交易的唯一标识符来发起退款流程。API 会确认原始交易存在，计算可退款金额，并指示支付处理机构将资金退还给持卡人。
+
+<Warning>
+  仅适用于已结算的交易
+
+  退款请求只能针对已捕获（已结算）的交易执行。
+</Warning>
+
+## 要求
+
+The Refund request uses the same endpoint as the initial [ `/close-transaction`](/reference/ecom/payments/close-transaction) request. The API determines it's a settlement based on the `RequestType` value within the `BasicInfo` object.
+
+请参阅下面的示例：
+
+```json
+{
+  "basicInfo": {
+    "requestType": 4,          // 4 for Full Refund, 5 for Partial Refund
+    "entryMode": 1,
+    "amount": 25.00,           // The amount to be refunded (can be partial)
+    "currency": "EUR",
+    "countryCode": "DE",
+    "tokenModel": 1,
+    "cvc": null,
+    "token": null,
+    "merchantRequestId": "NEW_REFUND_ID_002", // New unique ID for the refund request
+    "transactionId": "ORIGINAL_NAYAX_TRX_98765", // ID of the original CAPTURED transaction
+    "transactionTimeUtc": "2025-08-28T10:30:00Z", // Time of the original CAPTURED transaction
+    "isSaveTokenWithoutConsent": false
+  },
+  "machineInfo": {
+    "machineId": "0434334921100366"
+  },
+  "cardHolderInfo": {}, // Minimal data needed
+  "paymentInfo": {},    // Minimal data needed
+  "additionalInfo": {},
+  "validationKey": "AUTH_VALID_KEY_XYZ_REFUND"
+}
+```
+
+请注意，`RequestType` 应设置为对应于 Full Refund（4，全额退款）或 Partial Refund（5，部分退款）的值。`Amount` 用于指定退款金额（对于部分退款，该金额可以小于原始捕获金额）。
+
+### 请求参数
+
+下表列出了定义退款请求所需的关键字段：
+
+| 范围                   | 地点   | 类型       | 描述                                                                     | 退款所需 |
+| :------------------- | :--- | :------- | :--------------------------------------------------------------------- | :--- |
+| `RequestType`        | 基本信息 | Int32    | The request type can be 4 for `Full Refund` or 5 for `Partial Refund`. | 是的   |
+| `Amount`             | 基本信息 | 小数       | 退款金额。必须小于或等于原始交易可退款的金额。                                                | 是的   |
+| `MerchantRequestId`  | 基本信息 | String   | 此次退款请求的新唯一 ID。                                                         | 是的   |
+| `TransactionId`      | 基本信息 | String   | 在原始 CAPTURE/SALE 响应中返回的唯一 Nayax ID。                                    | 是的   |
+| `TransactionTimeUtc` | 基本信息 | DateTime | 在原始 CAPTURE/SALE 响应中返回的 UTC 时间戳。                                       | 是的   |
+| `ValidationKey`      | Root | String   | 用于验证此次退款请求真实性的加密密钥（HMAC）。                                              | 是的   |
+
+## 回复
+
+验证成功将返回 `200 OK` 状态，以及包含已验证商户详细信息的正文：
+
+```json
+{
+  "status": {
+    "verdict": "Approved",
+    "code": 0,
+    "statusMessage": "Payment processed successfully."
+  },
+  "basicInfo": {
+    "amount": 25.5,
+    "currency": "EUR",
+    "merchantRequestId": "MERCHANT_MIT_001",
+    "transactionId": "NAYAXTRANS98765",
+    "transactionTimeUtc": "2025-08-28T10:30:00Z"
+  },
+  "paymentInfo": {
+    "amount": 25.5,
+    "currency": "EUR",
+    "nayaxTokenId": "NAYAXTOK12345",
+    "siteId": 1,
+    "providerTransactionId": "PSP_TRANS_ABC",
+    "decimalPlace": 2
+  }
+}
+```
+
+### 响应参数
+
+下表说明了响应的参数：
+
+| 范围                      | 地点     | 类型       | 描述                                              |
+| :---------------------- | :----- | :------- | :---------------------------------------------- |
+| `verdict`               | status | String   | 'Approved' 或 'Declined'。最终判定结果。                 |
+| `code`                  | status | Int32    | 响应代码：0 表示已批准，否则为相应的拒绝代码。                        |
+| `statusMessage`         | status | String   | 有关交易结果的描述性消息。                                   |
+| `amount`                | 基本信息   | 小数       | 已处理的交易金额。                                       |
+| `currency`              | 基本信息   | String   | 交易的货币。                                          |
+| `merchantRequestId`     | 基本信息   | String   | 原始请求中的唯一 ID。                                    |
+| `transactionId`         | 基本信息   | String   | 由 Nayax 系统分配的唯一交易 ID。                           |
+| `transactionTimeUtc`    | 基本信息   | DateTime | 交易完成时的 UTC 时间戳。                                 |
+| `nayaxTokenId`          | 支付信息   | String   | 用于本次扣款的 token ID。                               |
+| `siteId`                | 支付信息   | Int32    | 与本次付款关联的站点 ID。                                  |
+| `providerTransactionId` | 支付信息   | String   | 由支付服务提供商（Payment Service Provider，PSP）分配的唯一 ID。 |
+| `decimalPlace`          | 支付信息   | Int32    | 该货币/金额所使用的小数位数。                                 |

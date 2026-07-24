@@ -1,0 +1,89 @@
+---
+title: SDK 的日志生成
+metadata:
+  og:description: 日志记录对于调试和监控 SDK 的行为及其与外围设备的交互至关重要。它是 Nayax 用于理解。
+---
+
+日志记录对于调试和监控 SDK 的行为及其与外围设备的交互至关重要。它是 Nayax 用于了解外围设备端发生的情况,以及设备与外围设备之间连接情况的主要工具。
+
+## 配置
+
+要获取 SDK 的日志，您需要在 `main` 方法中配置以下标志：
+
+- `dump_packets_level` (`vmc_configuration`)：确定记录 SDK 生成的消息所需的详细程度。以下是可用选项：
+  - `debug_level_dump_none`：不生成日志。
+  - `debug_level_dump_all`：记录所有消息。
+  - `debug_level_dump_moderate`：记录除保活消息 (keep-alive) 及其 ACK 之外的所有消息。
+- `debug`（boolean）：启用或禁用日志生成。
+
+您可以将这些标志添加到主方法中，如下例所示。
+
+<CodeGroup>
+  ```java Java
+  public static void main(string[] args) {
+      vmc_config.dump_packets_level = vmc_configuration.debug_level_dump_moderate;
+      vmc_config.debug = true;
+  }
+  ```
+
+  ```csharp C#
+  public class vend_machine
+      vmc_config.debug = true;
+      vmc_config.dump_packets_level = vmc_configuration.debug_level_dump_moderate;
+
+  ```
+
+  ```c C
+  vmc_init()
+  	config.dump_packets_level = debug_level_dump_none;
+  ```
+</CodeGroup>
+
+## 日志文件位置
+
+SDK 日志会被写入特定的文件位置。
+
+- 在 C# SDK 中，日志会自动保存在您运行 SDK 的同一目录下的 `bin\Debug` 文件夹中。
+  例如：
+
+  <Frame>
+    <img src="/images/docs/log-generation/image1.jpg" />
+  </Frame>
+- 在**C SDK**上，通过调用下面的函数来确定日志位置。
+  ```c C
+  printk_register_puts(terminal_tx_str);
+  ```
+
+SDK 写入的信息会被重定向到您选择的板卡/控制台,即您希望保存该文件的位置。由您(开发人员)决定在何处写入输出的 SDK 日志:命令行——如 x86/Linux 示例所示。
+UART 端口——如 STM 示例所示。
+或您所需要的任何其他选择。
+
+```c C
+static void terminal_tx_str(char *str)
+{
+    #if defined(__PLATFORM_X86) || defined(__PLATFORM_LINUX)
+        printf("%s", str);
+    #elif defined(__PLATFORM_STM32)
+        drv_usart_tx_data(&terminal_usart, (uint8_t*)str, strlen(str));
+    #endif
+}
+```
+
+(C SDK 的演示应用程序默认将日志生成到命令行)
+
+- 在 Java SDK 中，默认日志文件路径在 `FileWriter` 初始化时指定。请参见以下示例。
+
+  ```java Java
+  if (vmc_config.debug) {
+    BufferedWriter out = null;
+    try {
+        FileWriter fstream = new FileWriter("c:\\out.txt", true); // true to append data
+        out = new BufferedWriter(fstream);
+        Log.initialize(out);
+    } catch (Exception ex) {
+        // Handle exception
+    }
+  }
+  ```
+
+在上面的代码中，日志文件创建在 C 盘根目录下，文件名为`out.txt`。`true`构造函数中的`FileWriter`参数表示如果日志文件已存在，数据将被追加到现有日志文件中。

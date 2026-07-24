@@ -1,0 +1,52 @@
+---
+title: 概述
+keywords:
+  - marshall pro
+  - Marshall Pro (Fuel)
+  - fuel dispenser protocol
+  - forecourt controller
+  - FCC
+  - JSON
+  - two-phase authorization
+  - authorize capture
+metadata:
+  og:description: Marshall Pro(燃油)是 Nayax 面向加油站控制器(FCC)和加油机集成的 JSON 协议,支持在加油机端进行两阶段的授权与扣款交易。需要自动售货机集成方案?请参阅 Marshall。
+---
+
+import McpNote from '/snippets/zh/mcp-server-note.mdx';
+
+Marshall Pro（Fuel）协议是一个基于命令的 JSON 接口，旨在实现销售点（POS）或前台控制器（FCC）与 VPOS 支付终端之间的清晰通信。
+
+该协议专为加油和服务行业而设计，使您的系统能够精准地管理整个客户旅程。它提供了一种统一的方式，通过稳定的网络连接，使用标准的 UTF-8 JSON 消息来处理硬件交互。
+
+<McpNote />
+
+<Note>
+  需要自动售货机集成方案?
+
+  本页介绍 [Marshall](/docs/integrate-pos-device/marshall/marshall-sdk) Pro(燃油),这是 Nayax 面向加油站控制器(FCC)和加油机集成的 JSON 协议。有关自动售货机控制器(VMC)集成,请参阅 Marshall。
+</Note>
+
+## 主要能力
+
+<CardGroup cols={2}>
+  <Card title="卡片检测" icon="magnifying-glass">
+    通过会员卡或二维码识别顾客和会员卡用户，无需立即授权。
+  </Card>
+
+  <Card title="灵活支付" icon="gas-pump">
+    执行快速、单阶段销售或针对燃油加注量身定制的复杂两阶段授权。
+  </Card>
+
+  <Card title="自定义用户界面" icon="desktop">
+    控制终端屏幕以显示品牌信息、自定义菜单，并收集用户特定数据。
+  </Card>
+
+  <Card title="硬件实用程序" icon="print">
+    直接使用集成热敏打印机生成收据、凭证和会话摘要。
+  </Card>
+</CardGroup>
+
+### 为什么选择 Marshall Pro？
+
+该协议将复杂的加油站逻辑简化为可预测的 JSON 数据交换。无论您管理的是大型加油站还是独立加油亭，Marshall Pro 都能确保您的支付和会员流程保持同步和安全。

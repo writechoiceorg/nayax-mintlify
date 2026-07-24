@@ -1,0 +1,75 @@
+---
+title: 创建沙盒账户
+description: 提交 Lynx 集成申请表以获取您的沙盒凭据并开始构建。
+---
+
+要使用 Lynx API 进行开发，您需要由 Nayax 配置的沙盒账户。提交集成申请表后，您的沙盒环境将自动配置。
+
+## 提交申请表
+
+前往 [lynx-integration-request.nayax.com](https://lynx-integration-request.nayax.com) 并完成两步表单。
+
+<Steps>
+  <Step title="填写您的集成详细信息">
+    输入以下信息：
+
+    | 场地                        | 描述               |
+    | ------------------------- | ---------------- |
+    | 国家/地区                     | 您的运营所在国家/地区      |
+    | First Name                | 您的名字             |
+    | Last Name                 | 您的姓氏             |
+    | 电子邮件地址                    | 您开发者账户的电子邮件地址    |
+    | 企业名称                      | 您的公司或组织名称        |
+    | Nayax Core 中的 Operator ID | 您的数字 Operator ID |
+
+    <Accordion title="如何在 Nayax Core 中查找您的 Operator ID">
+      1. 打开 Nayax Core，进入左侧边栏中的 Operator。
+      2. 从列表中选择一个条目并点击 Search。
+      3. 您的 ID 会在 Company Info 下以 Operator Id 的形式列出。
+
+      如果您无法访问 Nayax Core，请联系您的 Nayax 客户经理或销售代表。
+    </Accordion>
+  </Step>
+
+  <Step title="验证您的电子邮件">
+    勾选复选框以确认您同意 Privacy Policy。
+    返回电子邮件字段，点击 Send Code。系统会向您提供的电子邮件地址发送一次性验证码。
+    输入该验证码以验证您的电子邮件，并继续下一步。
+  </Step>
+
+  <Step title="查看并签署条款和条件">
+    阅读 General Terms and Conditions for Professional Services（v. 1.05），然后完成签名部分：
+
+    | 场地                       | 描述              |
+    | ------------------------ | --------------- |
+    | 企业名称                     | 您的公司或组织名称       |
+    | 标题                       | 您的职位            |
+    | First Name and Last Name | 您的全名            |
+    | 电子邮件地址                   | 您在上一步中验证的电子邮件地址 |
+    | 电子签名                     | 您手绘或输入的签名       |
+
+    点击 Sign and Submit 以完成申请。
+  </Step>
+</Steps>
+
+## 提交后会发生什么
+
+Nayax 会自动处理您的申请。提交后，您将收到一封欢迎邮件，其中包含：
+
+- Lynx API 的集成说明
+- Nayax Core 沙盒环境的访问凭据
+- 沙盒 Lynx 平台的链接
+
+Nayax 会为您的沙盒账户配置独立的层级结构和完整的 Lynx 平台权限。
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="概述" icon="book-open" href="/docs/manage-data-operations/lynx-api/lynx-overview">
+    了解 Lynx API 涵盖的内容及其在 Nayax 生态系统中的作用。
+  </Card>
+
+  <Card title="安全与令牌" icon="key" href="/docs/manage-data-operations/lynx-api/security">
+    获取您的访问令牌并对您的首个 API 请求进行身份验证。
+  </Card>
+</CardGroup>

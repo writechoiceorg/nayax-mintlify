@@ -1,0 +1,189 @@
+---
+title: 触发交易
+metadata:
+  og:description: 使用 TriggerTransaction 端点发起与物理终端的用户交互。它会向指定设备发送唤醒信号。
+---
+
+`TriggerTransaction` 端点用于发起与物理终端的用户交互。它会向指定设备发送唤醒信号。请求应包含一个值，Nayax 将使用该值对消费者的支付卡进行授权（预授权）或收费（预选）。
+
+- 如果实现了预授权（Pre-Authorization）流程，则可以从 Nayax Core 管理和检索授权值。
+- 如果实现了预选（Pre-Selection）流程，缺少金额的请求将返回错误。
+
+## 要求
+
+集成方向 `/TriggerTransaction` 端点发送 POST 请求。正文参数需如下例所示：
+
+```json
+{
+  "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+  "TerminalId": "0434334921100366",
+  "TerminalIdType": 1,
+  "Amount": 15.00,
+  "PosDisplay": ";Charging Station:3;Day:30.52p;Night:9p;Standing charge:52.18p/day; Off-peak:12:30-04:30;",
+  "TransactionTimeout": 60
+}
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+<table align={["left","left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        场地
+      </th>
+
+      <th>
+        类型
+      </th>
+
+      <th>
+        必需的
+      </th>
+
+      <th>
+        描述
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `SparkTransactionId`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        身份验证期间从 Spark 收到的唯一会话 ID
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TerminalId`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        目标终端的 ID
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TerminalIdType`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        定义所使用的 ID 类型。`1` 表示硬件序列号（HW Serial），`2` 表示 Nayax 机器 ID。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `Amount`
+      </td>
+
+      <td>
+        数字
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        待预授权的金额（例如 15.00）
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `PosDisplay`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        要在终端显示屏上显示的自定义消息（以分号分隔的格式）。请参阅 [PosDisplay Format](/docs/integrate-pos-device/spark/additional-resources/spark-posdisplay-format) 了解如何设置消息格式。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TransactionTimeout`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        终端一侧刷卡的超时时间。
+        必须大于 0。
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## 回复
+
+成功的响应将返回以下正文：
+
+```json
+
+{
+ "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+ "Status": {
+ "Verdict": "Approved",
+ "ErrorDescription": " No Errors "
+ }
+}
+```
+
+### 响应参数
+
+下表说明了响应的参数：
+
+| 场地                        | 类型     | 描述                                      |
+| :------------------------ | :----- | :-------------------------------------- |
+| `SparkTransactionId`      | String | 回显请求中的交易 ID                             |
+| `Status`                  | Object | 包含最终判定结果和可选的错误描述                        |
+| `Status.Verdict`          | String | 请求的结果（`Approved`、`Rejected` 等）          |
+| `Status.ErrorDescription` | String | 提供发生的任何错误的人类可读描述；若请求成功，则显示 `No Errors`。 |
+| `Status.ErrorCode`        | 数字     | 指示交易期间发生的特定错误类型的数字代码。此字段仅出现在错误响应中。      |

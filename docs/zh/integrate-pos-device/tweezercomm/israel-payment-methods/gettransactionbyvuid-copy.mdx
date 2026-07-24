@@ -1,0 +1,413 @@
+---
+title: 获取交易信息
+metadata:
+  og:description: getTransactionByUid 方法可通过唯一标识符 (UID) 返回交易。如果未提供 UID，该方法将返回最后一笔交易。
+---
+
+`getTransactionByUid` 方法可通过唯一标识符 (UID) 返回交易。如果未提供 UID，该方法将返回最后一笔交易。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+请在请求中确保配置以下内容：
+
+- `method` 字段必须设置为 `getTransactionByUid`。
+- The service must be set to `ashrait` in the `params`.
+
+```json
+{
+    "jsonrpc":"2.0",
+    "method":"getTransactionByUid",
+    "params":[
+        "ashrait",
+        {
+           "originalUID":"24071711405408830122531"
+        }
+    ],
+    "id":"123454352"
+}
+```
+
+### 请求参数
+
+<br />
+
+下表描述了此方法的请求参数。
+
+| 姓名            | 类型     | 描述                             |
+| :------------ | :----- | :----------------------------- |
+| `originalUID` | string | 可选。要检索的交易的 UID。如果省略，将返回最近一笔交易。 |
+
+## 回复
+
+成功的请求将返回类似于以下代码块中的响应：
+
+```json
+{  
+   "jsonrpc":"2.0",
+   "result":{  
+    "statusCode": 0,
+    "statusMessage": "TRANSACTION APPROVED",
+    "appVersion": "01.05.22",
+    "retailerId": "0883012013",
+    "ecrNo": "1",
+    "vuid": "ee5e7af5-7719-4726-992f-0eb2915b992a",
+    "tranCode": 1,
+    "currency": "376",
+    "amount": 100,
+    "mutag": 1,
+    "mutagName": "Mastercard",
+    "manpik": 2,
+    "solek": 2,
+    "cardNumber": "*********",
+    "cardNumberOriginalLength": "************************",
+    "expDate": "2305",
+    "cardName": "Mastercard",
+    "tokenizedCardNumber": "c8ae19356dd1d7e946165fab67a14516",
+    "tranType": 1,
+    "posEntryMode": 5,
+    "isClub": false,
+    "isPrepaid": false,
+    "creditTerms": 1,
+    "uid": "23031212432508830123729",
+    "rrn": "948767075   ",
+    "authCodeManpik": 1,
+    "issuerAuthNum": "0652073",
+    "acquirerMerchantID": "6543505",
+    "sysTraceNumber": "01001001",
+    "authorizationCommStat": "{\"connectRetries\":0,\"connectTotalTime\":555,\"authorizationTotalTime\":744,\"smallBlockedTotalTime\":0}",
+    "merchantReceipt":[  
+         {"fieldName":"׳¡׳›׳•׳","fieldValue":"1000"},
+         {"fieldName":"ATC","fieldValue":"0289"}
+      ],
+      "customerReceipt":[  
+         {"fieldName":"׳¡׳›׳•׳","fieldValue":"1000"},
+         {"fieldName":"ATC","fieldValue":"0289"}
+      ]
+   },
+   "id":1
+}
+```
+
+### 响应参数
+
+下表描述了该方法的响应参数。
+
+<table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        姓名
+      </th>
+
+      <th>
+        类型
+      </th>
+
+      <th>
+        描述
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `statusCode`          
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        交易状态。值为 `0` 表示交易成功（已批准）。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `statusMessage`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        交易消息（例如 `ok`）
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `mutag`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        卡片品牌
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `solek`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        收购方
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `manpik`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        发卡机构
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `uid`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        交易唯一标识符
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `posEntryMode`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        POS 输入方式（POS Entry Mode），即卡片交易的类型。取值包括：
+        `0`（MSR，磁条读卡）,
+        `5`（CTLS MSR，非接触式磁条读卡）,
+        `40`（Contact EMV，接触式 EMV）,
+        `50`（Phone，电话）,
+        `51`（Signature only，仅签名）,
+        `80`（Fallback (err)，降级 (错误)）,
+        `81`（Fallback (no AID)，降级 (无 AID)）
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `cardNumber`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        已屏蔽的个人账号（PAN）
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `rrn`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        来自授权实体的交易授权号
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `issuerAuthNum`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        发卡机构授权号
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `acquirerMerchantID`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        收单系统中的商户 ID
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `authCodeManpik`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        授权代码。可选值为：`0`（未授权交易），`1`（发卡方已授权），
+        `2`（发卡方已拒绝），
+        `3`（ABS Stip 已批准），
+        `4`（ABS Stip 已拒绝），
+        `5`（语音批准），
+        `6`（语音拒绝），
+        `7`（预授权发卡方已批准），
+        `8`（银行卡已批准）
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `gatewayToken`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        卡的网关令牌
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `appVersion`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        支付应用程序版本
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `retailerId`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        终端零售商 ID
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `ecrNo`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        POS 标识符
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `vuid`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        供应商唯一标识符
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `tranCode`
+      </td>
+
+      <td>
+        string
+      </td>
+
+      <td>
+        交易代码
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `merchantReceipt`
+      </td>
+
+      <td>
+        键/值数组
+      </td>
+
+      <td>
+        商家收据，可打印或保存
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `customerReceipt`
+      </td>
+
+      <td>
+        键/值数组
+      </td>
+
+      <td>
+        打印客户收据
+      </td>
+    </tr>
+  </tbody>
+</table>
