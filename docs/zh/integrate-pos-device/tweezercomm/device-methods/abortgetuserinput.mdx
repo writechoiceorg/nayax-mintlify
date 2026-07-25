@@ -1,0 +1,52 @@
+---
+title: abortGetUserInput
+metadata:
+  og:description: abortGetUserInput 方法用于取消由 getUserInput 方法发起的正在进行的用户输入请求。此方法在交易被取消时使用。
+---
+
+The `abortGetUserInput` method cancels an ongoing user input request initiated by the [`getUserInput`](/docs/integrate-pos-device/tweezercomm/device-methods/getuserinput) method. This is used when a transaction is canceled or when input is no longer needed.
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+要调用此方法，请将 `method` 字段设置为 `abortGetUserInput`。
+
+```json
+{
+    "jsonrpc":"2.0",
+    "method":"abortGetUserInput",
+    "id":"123",
+    "params": [
+        "device",{}
+    ]
+}
+```
+
+## 回复
+
+成功的请求将返回以下响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "canceled"
+    }
+}
+```
+
+### 响应参数
+
+下表说明了此方法的响应参数：
+
+| 姓名                     | 类型     | 描述                  |
+| ---------------------- | ------ | ------------------- |
+| `statusCode`           | 整数     | 操作状态（0 = 正常）        |
+| `statusMessage`        | string | 状态消息（例如 "canceled"） |

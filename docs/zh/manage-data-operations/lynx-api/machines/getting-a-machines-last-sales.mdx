@@ -1,0 +1,101 @@
+---
+title: 获取机器的最近销售记录
+metadata:
+  og:description: 在某些情况下，您可能希望查看机器的最近销售记录，以获取特定交易的信息。Nayax Core 允许您在
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+在某些情况下，您可能希望查看某台机器的最近销售记录，以检索特定交易的信息。Nayax Core 允许您通过以下方式执行此操作：
+
+1. 前往**“操作” > 机器**。
+2. 选择您的机器，然后点击**“信息”。 > 最新销售情况**。
+
+<Frame>
+  <img src="/images/docs/getting-a-machines-last-sales/image1.png" />
+</Frame>
+
+您将看到包含最新机器交易的列表。
+
+## Lynx API
+
+Lynx API 允许您通过 GET 请求以编程方式执行此过程。本页面将指导您如何使用以下端点执行此操作。
+
+<EndpointCard title="根据 MachineID 获取机器的最新销售额" href="/reference/lynx/machines/get-last-sales-for-machine-by-machineid" method="get" />
+
+<Warning>
+  验证
+
+  请参阅本文档的[“安全和令牌”](/docs/manage-data-operations/lynx-api/security)页面，了解如何访问您的令牌，以及如何正确使用它来验证您的 API 请求。
+</Warning>
+
+### 检索最后的销售数据
+
+您将使用[“获取机器最新销售记录”](/reference/lynx/machines/get-last-sales-for-machine-by-machineid)端点，并将机器的唯一标识符作为路径参数添加，以检索有关相应机器的详细信息。这样，您就可以查看与所搜索机器关联的最新销售活动。请参阅以下代码块中的示例请求：
+
+```sh Request
+curl -X GET "https://qa-lynx.nayax.com/operational/v1/machines/<MachineID>/lastSales" \
+-H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
+```
+
+<Note>
+  路径参数
+
+  代替`<MachineID>`使用您要搜索的实际机器唯一标识符。
+</Note>
+
+请求成功后，端点将返回与该机器相关的近期销售列表。此响应 JSON 将具有以下格式：
+
+```json Response
+[
+  {
+    "TransactionID": 2108816976,
+    "PaymentServiceTransactionID": "PS123456789",
+    "PaymentServiceProviderName": "Stripe",
+    "MachineID": 942488501,
+    "MachineName": "Marshall Vending",
+    "MachineNumber": "MV001",
+    "InstituteLocationName": "New York Warehouse",
+    "AuthorizationValue": 10.00,
+    "SettlementValue": 9.50,
+    "CurrencyCode": "USD",
+    "PaymentMethod": "Credit Card",
+    "RecognitionMethod": "Chip",
+    "CardNumber": "************1234",
+    "CardBrand": "Visa",
+    "CLI": "+1234567890",
+    "ProductName": "Bottled Water",
+    "MultivendTransactionBit": true,
+    "MultivendNumverOfProducts": 2,
+    "UnitOfMeasurement": "Item",
+    "Quantity": 2,
+    "EnergyConsumed": 0,
+    "AuthorizationDateTimeGMT": "2024-10-09T16:53:51.225Z",
+    "MachineAuthorizationTime": "2024-10-09T16:53:51.225Z",
+    "SettlementDateTimeGMT": "2024-10-09T16:54:51.225Z",
+    "SiteID": 2,
+    "SiteName": "IL1"
+  }
+]
+```
+
+下表描述了响应中的参数：
+
+| 场地                            | 描述                     |
+| ----------------------------- | ---------------------- |
+| `TransactionID`               | `2108816976`，用于标识该交易。  |
+| `PaymentServiceTransactionID` | 提供有关支付处理器交易的详细信息。      |
+| `PaymentServiceProviderName`  | 指示支付处理器的名称。            |
+| `MachineID`                   | 指发生交易的机器。              |
+| `MachineName`                 | 发生交易的机器的名称。            |
+| `AuthorizationValue`          | 授权交易金额。                |
+| `SettlementValue`             | 已结算的交易金额。              |
+| `CurrencyCode`                | 交易中使用的货币（例如 `USD`）。    |
+| `PaymentMethod`               | 用于付款的方式。               |
+| `RecognitionMethod`           | 如何确认付款。                |
+| `CardNumber`                  | 用于付款的卡号。               |
+| `CardBrand`                   | 用于付款的卡的品牌。             |
+| `ProductName`                 | 指定交易中出售的商品。            |
+| `Quantity`                    | 售出商品的数量。               |
+| `AuthorizationDateTimeGMT`    | GMT 中的授权时间戳。           |
+| `SettlementDateTimeGMT`       | 格林威治标准时间 (GMT) 的结算时间戳。 |

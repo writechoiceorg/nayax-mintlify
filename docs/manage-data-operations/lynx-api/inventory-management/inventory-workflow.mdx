@@ -4,17 +4,17 @@ metadata:
   og:description: "The inventory management workflow in Nayax is designed to streamline the process of managing products, tracking stock levels, and ensuring machines."
 ---
 
-The inventory management workflow in Nayax is designed to streamline the process of managing products, tracking stock levels, and ensuring machines are consistently replenished. This structured approach covers everything from organizing product catalogs to planning efficient restocking trips. Here’s how the workflow operates:
+Inventory management in Nayax follows a four-step sequence where each step must be completed before the next.
 
-1. **[Create Product Groups](/docs/manage-data-operations/lynx-api/inventory-management/create-product-group)**: To simplify organization and improve product management, group products into logical categories, such as "Beverages," "Snacks," or "Confectionery."
-2. **[Create Products](/docs/manage-data-operations/lynx-api/inventory-management/create-products)**: Add individual items to the operator’s catalog, specifying key details such as the product name, price, and group association. Examples include "Soda" for beverages or "Chips" for snacks.
-3. **[Map Products to Machines](/docs/manage-data-operations/lynx-api/inventory-management/machine-products-1)**: Assign products to each vending machine's specific bins or selections. This defines the machine’s layout and helps track which products are available in each machine.
-4. **[Generate Pick Lists](/docs/manage-data-operations/lynx-api/inventory-management/pick-lists)**: Create a list to prepare for restocking trips. This report identifies the products to be collected from the warehouse and specifies the quantities required for each machine, ensuring efficient restocking.
-
-This workflow ensures seamless inventory management and keeps machines fully stocked, meeting customer demands while minimizing operational inefficiencies.
+1. **[Create Product Groups](/docs/manage-data-operations/lynx-api/inventory-management/create-product-group)**: Group products into logical categories such as "Beverages," "Snacks," or "Confectionery" to organize your catalog.
+2. **[Create Products](/docs/manage-data-operations/lynx-api/inventory-management/create-products)**: Add individual items to the operator’s catalog with details like product name, price, and group association.
+3. **[Map Products to Machines](/docs/manage-data-operations/lynx-api/inventory-management/machine-products-1)**: Assign products to each machine’s bins or selections to define its layout and track available stock.
+4. **[Pick Lists](/docs/manage-data-operations/lynx-api/inventory-management/pick-lists)**: Create a restocking list that identifies the products and quantities needed from the warehouse for each machine.
 
 <Warning>
 **Products and Operators**
 
 Product groups and their products are directly associated to an operator, and cannot be added to other operators.
 </Warning>
+
+Once the workflow is complete, see [Pick List Actions](/docs/manage-data-operations/lynx-api/inventory-management/pick-list-actions) for how to update, retrieve, or delete existing pick lists.

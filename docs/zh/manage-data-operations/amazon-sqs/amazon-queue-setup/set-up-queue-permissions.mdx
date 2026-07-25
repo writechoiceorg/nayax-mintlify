@@ -1,0 +1,104 @@
+---
+title: 队列权限
+metadata:
+  og:description: 在上一步创建队列后，下一项任务是配置权限以管理访问。这包括创建策略、设置。
+---
+
+在上一步创建队列后，下一步是配置权限以管理访问。这涉及创建策略、设置用户访问权限以及将策略分配给创建的用户。策略定义了允许在队列上执行的操作，对于控制对 AWS 资源的访问至关重要。
+
+## 管理对 AWS 资源的访问
+
+要开始配置对队列的访问，您首先需要：
+
+1. 单击位于 AWS 控制台左上角的**三行**图标。
+2. 选择**所有服务**选项。
+3. 搜索**“安全、身份和合规性”**类别，然后选择**IAM** （身份和访问管理）。
+
+   <Frame>
+     <img src="/images/docs/set-up-queue-permissions/image1.png" />
+   </Frame>
+4. 单击左侧菜单上的**“策略”** 。
+
+   <Frame>
+     <img src="/images/docs/set-up-queue-permissions/image2.png" />
+   </Frame>
+
+## 创建策略
+
+创建策略是为了定义用户可以在您的队列上执行哪些操作。请按照以下步骤创建新策略：
+
+1. 单击**创建策略**按钮。
+
+   <Frame>
+     <img src="/images/docs/set-up-queue-permissions/image3.png" />
+   </Frame>
+2. 在**服役 > 选择服务**领域，搜索并选择**SQS** 。
+
+   <Frame>
+     <img src="/images/docs/set-up-queue-permissions/image4.png" />
+   </Frame>
+
+## 设置 SQS 的权限
+
+既然您已选择 SQS 作为服务，请定义队列所需的权限：
+
+1. 在**“操作”**下，选择队列所需的权限。
+
+   <Frame>
+     <img src="/images/docs/set-up-queue-permissions/image5.png" />
+   </Frame>
+
+## 将策略设置为特定 ARN
+
+您正在创建的策略可以分配给任何队列。在本例中，您将把它分配给之前创建的特定队列。
+
+<Note>
+  资源
+
+  请确保已选择**特定**资源。
+</Note>
+
+要添加先前创建的队列的 ARN，请按照以下步骤操作：
+
+1. 单击**添加 ARN** 。
+
+   <Frame>
+     <img src="/images/docs/set-up-queue-permissions/image6.png" />
+   </Frame>
+2. Enter the copied ARN in the **Resource ARN** field. You can find this value from the confirmation screen displayed at the end of the [**Create New Queue**](/docs/manage-data-operations/amazon-sqs/amazon-queue-setup/create-new-queue) process.
+3. 单击**添加 ARN**按钮。
+
+   <Frame>
+     <img src="/images/docs/set-up-queue-permissions/image7.png" />
+   </Frame>
+4. 单击**下一步**按钮。
+
+   <Frame>
+     <img src="/images/docs/set-up-queue-permissions/image8.png" />
+   </Frame>
+
+## 审查并创建策略
+
+在最终确定策略之前，请检查其详细信息以确保所有配置正确无误。此步骤至关重要，可以避免潜在的权限问题。
+
+在**“策略详细信息”**部分中：
+
+1. 输入一个唯一的**名称**来标识此策略。
+2. 添加此策略的描述**（可选）** 。
+
+   <Frame>
+     <img src="/images/docs/set-up-queue-permissions/image9.png" />
+   </Frame>
+3. 最后，单击**创建策略**按钮。
+
+   <Frame>
+     <img src="/images/docs/set-up-queue-permissions/image10.png" />
+   </Frame>
+
+一旦创建了策略，您将收到已成功设置的确认。
+
+<Frame>
+  <img src="/images/docs/set-up-queue-permissions/image11.png" />
+</Frame>
+
+<br />

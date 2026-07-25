@@ -1,0 +1,22 @@
+---
+title: 动态密钥交换
+metadata:
+  og:description: 一旦密钥需要更新（更新间隔将在项目搭建阶段讨论确定），系统会发送 Cortina RenewKey 请求。
+---
+
+一旦密钥需要更新（更新间隔将在项目搭建阶段讨论确定），系统会发送 Cortina RenewKey 请求。该请求将在 `CurrentKeyData` 对象中包含当前密钥的所有详细信息。Payment Gateway 应在响应的 `NewKeyData` 对象中发送新密钥数据，如下例所示：
+
+```json
+"NewKeyData": {
+    "EncryptedKeyValue": "D0112P0AB01N00008C27C2DD44ACF35513DCA16B10B7FB9AD47550091AF4FF37C01002E5BA04A1D05057291A4B0EBCA6EE46940224BCE55F",
+    "Kcv": "BC4012",
+    "ExternalKeyId": "376",
+    "additionalProperties": {}
+  }
+```
+
+在哪里：
+
+- EncryptedKeyValue	= 加密后的密钥值，使用共享的 ZMK 进行加密。
+- Kcv = 新的密钥校验值（内容为字节）
+- ExternalKeyId = 支付网关系统中新的外部密钥 ID。

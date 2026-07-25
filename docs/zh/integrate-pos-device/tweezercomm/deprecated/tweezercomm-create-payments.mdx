@@ -1,0 +1,97 @@
+---
+title: 创建付款
+metadata:
+  og:description: 本指南将向您展示如何为预授权和单步支付创建 doTransaction 请求。您将学习如何配置。
+---
+
+This guide shows you how to create [`doTransaction`](/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction) requests for both pre-authorization and single-step payments. You will learn to configure the JSON-RPC parameters and specify transaction-specific details.
+
+## 前提条件
+
+在开始之前，请确保您已具备以下条件：
+
+- 客户端应用程序的访问权限。
+- 已完成 Nayax Core 设置。
+- 对 JSON-RPC 2.0 结构的基本了解。
+
+<Note>
+  JSON-RPC 2.0
+
+  有关如何构建和发送请求的更多详细信息，请[参阅入门指南](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started)。
+</Note>
+
+## 创建预授权请求
+
+请参见下方的预授权请求示例。
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "doTransaction",
+    "id": "1696161997899",
+    "params": [
+        "engine",
+        {
+            "vuid": "80b458684",
+            "tranCode": 3,
+            "amount": 100
+        }
+    ]
+}
+```
+
+请按照以下步骤创建此请求：
+
+1. 首先，配置 JSON-RPC 参数：
+   1. `jsonrpc`：将其设置为 2.0。
+   2. `method`：将其设置为 `doTransaction`。
+   3. `id`：在此输入您的请求 ID。
+2. 添加 `params` 对象，输入所使用的支付服务，本示例中为 `engine`。
+3. 现在，添加该方法的参数：
+   1. `vuid`：这是供应商（客户端）分配的唯一交易标识符。
+   2. `amount`：交易金额（以分为单位）。
+   3. `tranCode`：此参数定义交易类型。对于预授权交易，必须将其设置为 3。
+
+请求准备就绪后，即可将其发送到服务器端点。
+
+## 创建预选择请求
+
+请参见下方的预选择请求示例。
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "doTransaction",
+    "id": "123454352",
+    "params": [
+        "engine",
+        {
+            "vuid": "44d96006",
+            "amount": 100,
+            "tranCode": 1
+        }
+    ]
+}
+```
+
+请按照以下步骤创建此请求：
+
+1. 首先，配置 JSON-RPC 参数：
+   1. `jsonrpc`：将其设置为 2.0。
+   2. `method`：将其设置为 `doTransaction`。
+   3. `id`：在此输入您的请求 ID。
+2. 添加 `params` 对象，输入所使用的支付服务，本示例中为 `engine`。
+3. 现在，添加该方法的参数：
+   1. `vuid`：这是供应商（客户端）分配的唯一交易标识符。
+   2. `amount`：交易金额（以分为单位）。
+   3. `tranCode`：此参数定义交易类型。对于单步交易，必须将其设置为 1。
+
+请求准备就绪后，即可将其发送到服务器端点。
+
+## 参见
+
+<Columns cols={3}>
+  <Card icon="link" title="执行交易" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction" arrow />
+
+  <Card icon="link" title="付款流程" href="/docs/integrate-pos-device/tweezercomm/global-payment-flows/payment-flows-copy-1" arrow />
+</Columns>

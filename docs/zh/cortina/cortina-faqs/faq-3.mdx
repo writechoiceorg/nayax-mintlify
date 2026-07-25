@@ -1,0 +1,115 @@
+---
+title: 动态二维码
+metadata:
+  og:description: 快速查找关于 Nayax API 集成、设备配置、交易跟踪等常见问题的答案和分步指南。
+---
+
+快速查找关于 Nayax API 集成、设备配置、交易跟踪和部署流程等常见问题的答案和分步指南。浏览下方分类以查找解决方案和最佳实践。
+
+### 如何将徽标上传到设备？
+
+<Accordion title="答案" icon="info-circle">
+  完整的徽标包由五个单独的文件组成，每个文件在设备上承担不同的用途（例如，DQR 支付方式、品牌选择界面）。
+
+  ### 1. 文件交付与传输
+
+  1. 接收 FTP 链接：徽标文件最终确定后，您将收到每个文件对应的唯一 FTP 链接。
+  2. 单独传输文件：您必须使用各自对应的 FTP 链接，将每个文件分别发送到您的设备。
+  3. 等待处理：发送一个文件后，您必须等待设备上的烧录过程完成，然后才能发送下一个文件。
+
+  <Frame>
+    <img src="/images/docs/faq-3/image1.png" />
+  </Frame>
+
+  ### 2. 监控烧录过程
+
+  您可以在设备管理系统的 Last Alerts（最新警报）部分查看文件传输和烧录过程的结果。
+
+  结果由警报第一行显示的返回代码（Return Code，RC）指示。
+
+  | 返回代码  | Status | 描述                     |
+  | :---- | :----- | :--------------------- |
+  | RC0   | 成功     | 文件已成功烧录并安装。            |
+  | RC17  | 未成功    | 该文件在设备上已存在。            |
+  | RC41  | 未成功    | 未从我们的服务器收到响应，或收到的响应有误。 |
+  | 任何其他值 | 未成功    | 表示烧录过程失败。              |
+
+  FTP 链接的格式如下：
+
+  ```
+  4010000;devicecoreftp.nayax.net;21;embeddedro;Ioh1Eqgv;/PaymentIcons/CustomerName/PI/CustomerNameButton.png;;8b41;PI\CustomerNameButton.png;
+
+
+  4010000;devicecoreftp.nayax.net;21;embeddedro;Ioh1Eqgv;/PaymentIcons/CustomerName/PI/CustomerNameLargerot.png;;5168;PI\CustomerNameLargerot.png;
+
+
+  4010000;devicecoreftp.nayax.net;21;embeddedro;Ioh1Eqgv;/PaymentIcons/CustomerName/PI/CustomerNameMediumrot.png;;624f;PI\CustomerNameMediumrot.png;
+
+
+  4010000;devicecoreftp.nayax.net;21;embeddedro;Ioh1Eqgv;/PaymentIcons/CustomerName/PI/CustomerNameSmallrot.png;;f8c4;PI\CustomerNameSmallrot.png;
+
+
+  4010000;devicecoreftp.nayax.net;21;embeddedro;Ioh1Eqgv;/PaymentIcons/CustomerName/QrLogo/CustomerNameSquare_105.png;;b290;QrLogo\CustomerNameSquare_105.png;
+
+  ```
+
+  如果您有多个渠道，每个渠道都会有对应的 "CustomerName" 位置。例如，如果我有两个渠道，分别名为 "ChannelA" 和 "ChannelB"，那么您将获得 10 个文件（每个渠道 5 张图片），格式大致如下：
+
+  ```
+  4010000;devicecoreftp.nayax.net;21;embeddedro;Ioh1Eqgv;/PaymentIcons/ChannelA/PI/CustomerNameButton.png;;8b41;PI\ChannelAButton.png;
+
+  4010000;devicecoreftp.nayax.net;21;embeddedro;Ioh1Eqgv;/PaymentIcons/ChannelA/PI/CustomerNameLargerot.png;;5168;PI\ChannelALargerot.png;
+
+  4010000;devicecoreftp.nayax.net;21;embeddedro;Ioh1Eqgv;/PaymentIcons/ChannelA/PI/CustomerNameMediumrot.png;;624f;PI\ChannelAMediumrot.png;
+
+  4010000;devicecoreftp.nayax.net;21;embeddedro;Ioh1Eqgv;/PaymentIcons/ChannelA/PI/CustomerNameSmallrot.png;;f8c4;PI\ChannelASmallrot.png;
+
+  4010000;devicecoreftp.nayax.net;21;embeddedro;Ioh1Eqgv;/PaymentIcons/ChannelA/QrLogo/CustomerNameSquare_105.png;;b290;QrLogo\ChannelASquare_105.png;
+
+
+
+  4010000;devicecoreftp.nayax.net;21;embeddedro;Ioh1Eqgv;/PaymentIcons/ChannelB/PI/CustomerNameButton.png;;8b41;PI\ChannelBButton.png;
+
+  4010000;devicecoreftp.nayax.net;21;embeddedro;Ioh1Eqgv;/PaymentIcons/ChannelB/PI/CustomerNameLargerot.png;;5168;PI\ChannelBLargerot.png;
+
+  4010000;devicecoreftp.nayax.net;21;embeddedro;Ioh1Eqgv;/PaymentIcons/ChannelB/PI/CustomerNameMediumrot.png;;624f;PI\ChannelBMediumrot.png;
+
+  4010000;devicecoreftp.nayax.net;21;embeddedro;Ioh1Eqgv;/PaymentIcons/ChannelB/PI/CustomerNameSmallrot.png;;f8c4;PI\ChannelBSmallrot.png;
+
+  4010000;devicecoreftp.nayax.net;21;embeddedro;Ioh1Eqgv;/PaymentIcons/ChannelB/QrLogo/CustomerNameSquare_105.png;;b290;QrLogo\ChannelBSquare_105.png;
+  ```
+</Accordion>
+
+### 我应该什么时候发送徽标？
+
+<Accordion title="答案" icon="info-circle">
+  每台设备只需发送一次徽标文件。
+
+  发送徽标并确认烧录成功（在 Last Alerts 中显示 RC0）后，这些文件将永久存储在该设备上。
+
+  - 即使您对机器执行简单重置或完全恢复出厂设置，徽标仍会保留在设备上。
+  - 除非徽标设计本身发生变化，需要重新部署文件，否则您无需再次发送。
+</Accordion>
+
+### 对于徽标，您应该向我们发送哪种图像类型？
+
+<Accordion title="答案" icon="info-circle">
+  为确保在所有设备上都能获得最佳显示效果，我们对您应提交的图像文件类型有强烈的偏好。
+
+  ### 1. 首选格式：SVG（可缩放矢量图形）
+
+  - 格式：SVG
+  - 主要优势：SVG 是一种矢量格式，这意味着其分辨率与尺寸无关。您可以对其进行无限缩放，而不会有任何质量损失或出现像素化，且其文件体积始终很小。
+
+  ### 2. 备选格式：PNG
+
+  - 格式：PNG
+  - 要求：如果无法提供 SVG，请提供尺寸最大、分辨率最高的 PNG 图像。
+
+  ### 3. 图像引用
+
+  - 格式：图像引用（URL/来源）
+  - 使用场景：如果直接提交文件有困难，也可以发送指向源图像的链接或引用。
+
+  收到您的图像或引用后，我们会在内部对其进行处理，以确保其在我们的设备上得到优化并正确显示。
+</Accordion>

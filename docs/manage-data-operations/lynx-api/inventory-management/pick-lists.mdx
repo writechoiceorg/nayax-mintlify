@@ -6,7 +6,7 @@ metadata:
 
 import {EndpointCard} from "/snippets/EndpointCard.jsx";
 
-A Pick List in Nayax is a generated list of products that need to be restocked or replenished in a specific vending machine or inventory location. It is designed to simplify restocking by identifying the required products and their quantities, ensuring that vending machines are always fully stocked and operational.
+A pick list identifies the products and quantities a machine needs for restocking, based on its current stock levels and sales data.
 
 In Nayax Core, you can create pick lists following the steps below:
 
@@ -16,29 +16,23 @@ In Nayax Core, you can create pick lists following the steps below:
 
 <Frame>![](/images/docs/pick-lists/image1.png)</Frame>
 
-This will generate the list of the machines you choose.
+### Generate for multiple machines
 
-<Note>
-**Pick List for Multiple Machines**
-
-Nayax Core allows you to generate the pick list for more than one machine, for example if you want to generate the pick list for all the machines under a specific Route, follow the steps below:
+To generate a pick list for more than one machine at once, for example all machines under a specific Route:
 
 1. Add the filter to the search feature.
 2. Select all the machines in the list (you can also individually select the machines you want).
-3. Click **Actions > Generate Pick List**
+3. Click **Actions > Generate Pick List**.
 
 <Frame><img src="/images/docs/pick-lists/image2.png" /></Frame>
-</Note>
 
-<br />
+## Generate a pick list via API
 
-## Lynx API
-
-Lynx API allows you to programmatically create a pick list for a specific machine using the endpoint below:
+Use the [Create Pick List](/reference/lynx/machine-inventory/create-pick-list) endpoint to generate a pick list for a specific machine based on its current stock levels and sales data.
 
 <EndpointCard
   title="Create Pick List"
-  href="/reference/lynx/machine-inventory/generate-pick-list"
+  href="/reference/lynx/machine-inventory/create-pick-list"
   method="post"
 />
 
@@ -48,19 +42,17 @@ Lynx API allows you to programmatically create a pick list for a specific machin
 Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens and how to properly use them to authenticate your API requests.
 </Warning>
 
-### Generate a New Pick List Request
+<br />
 
-Use the [Create Pick List](/reference/lynx/machine-inventory/generate-pick-list) endpoint to create a list for a specified machine based on its current stock levels and sales data.
+Send a POST request with the `MachineID` as a path parameter. The endpoint returns `204 No Content` on success — no response body is returned.
 
-```bash
+```sh Request
 curl -X POST "https://qa-lynx.nayax.com/operational/v1/machines/<MACHINE_ID>/pickLists" \
 -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
--H "Content-Type: application/json" 
+-H "Content-Type: application/json"
 ```
 
-<Note>
-**Path Params**
+The endpoint also accepts optional query parameters to refine the pick list — see the [Create Pick List](/reference/lynx/machine-inventory/create-pick-list) reference page for details.
 
-Replace `<MACHINE_ID>` with the actual identifier of the machine for which you want to generate the pick list.
-</Note>
+After generating a pick list, see [Pick List Actions](/docs/manage-data-operations/lynx-api/inventory-management/pick-list-actions) to retrieve, update, or delete it.
 

@@ -1,0 +1,40 @@
+---
+title: API简介
+keywords:
+  - marshall pro api
+  - forecourt controller
+  - fuel dispenser
+  - two-phase authorization
+metadata:
+  og:description: Marshall Pro（Fuel）协议是一种高性能的命令式接口，专为燃油零售环境设计。它允许您的销售点（POS）系统。
+---
+
+Marshall Pro（Fuel）协议是一种高性能的命令式接口，专为燃油零售环境设计。它允许您的销售点（POS）或加油站控制器（FCC）管理交易的完整生命周期——从检测到卡片到最终结算。
+
+与云端 API 不同，Marshall Pro（Fuel）协议在您站点的本地网络上运行。VPOS 终端充当持续运行的 TCP/IP 服务器，等待您的应用程序连接。
+
+该 API 分为四个功能区域，以帮助您构建完整的客户流程：
+
+<CardGroup cols={2}>
+  <Card title="支付处理" icon="credit-card">
+    Supports single-phase (`pay`) and two-phase (`authorize` + `settle`) fuel transactions.
+  </Card>
+
+  <Card title="卡片检测" icon="magnifying-glass">
+    读取卡数据而不立即收费——非常适合会员忠诚度和客户 ID 场景。
+  </Card>
+
+  <Card title="用户界面" icon="desktop">
+    控制终端屏幕以显示自定义菜单、燃油类型或提示信息。
+  </Card>
+
+  <Card title="外围设备支持" icon="print">
+    直接触发集成的热敏打印机以打印客户收据。
+  </Card>
+</CardGroup>
+
+See [Request and Response Format](/docs/integrate-pos-device/marshall-pro/messaging-protocol/request-response-format) for more information.
+
+<Note>
+  套接字（Socket）管理：VPOS 服务器只维护一个活动会话。如果您的应用程序打开新的套接字，服务器会自动终止先前的连接以确保数据完整性。
+</Note>

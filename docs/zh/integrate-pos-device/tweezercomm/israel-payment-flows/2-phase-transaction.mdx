@@ -1,0 +1,42 @@
+---
+title: 两阶段交易
+metadata:
+  og:description: SHVA 支付服务的两阶段交易流程将单笔交易分为两个不同的步骤：初始信息检索。
+---
+
+SHVA 支付服务的两阶段交易流程将单笔交易分为两个不同的步骤：
+
+- 初始信息检索阶段
+- 后续授权阶段
+
+此流程常用于实现忠诚度机制的客户端，因为它允许在两个阶段之间进行用户交互，例如取消或更改交易金额。
+
+## 交易流程
+
+要理解两阶段交易流程，请参考以下事件顺序：
+
+<Frame>
+  <img src="/images/docs/2-phase-transaction/image1.png" />
+</Frame>
+
+以下是每个步骤的详细说明：
+
+1. The client application (labeled as DC) initiates the first phase of the transaction by sending a [`doTransactionPhase1`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase1) request to the Nayax Device.
+2. Nayax 设备通过插入、展示或刷卡的方式提示持卡人出示其卡片。
+3. The Nayax Device responds to the DC with a [`doTransactionPhase1`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase1) response, which contains the card and transaction properties.
+4. After any necessary user interaction (e.g., changes or cancellations), the DC sends a [`doTransactionPhase2`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase2) request to the Nayax Device to complete the transaction.
+5. Nayax 设备向支付服务器发送授权请求。
+6. 支付服务器处理该请求，并将授权响应发送回 Nayax 设备，Nayax 设备随后将该授权响应转发给 DC。
+7. At the end of the day, the DC sends a [`doPeriodic`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) request to the Nayax Device, which communicates with the payment server to complete the day's batch process. The Nayax Device then sends a [`doPeriodic`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) response back to the DC.
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="常规交易" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/single-phase-transaction" arrow />
+
+  <Card icon="link" title="预授权（以色列）" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-pre-authorization-israel" arrow />
+
+  <Card icon="link" title="延迟付款" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-deferred-payment" arrow />
+
+  <Card icon="link" title="拆分交易" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-split-transaction" arrow />
+</Columns>

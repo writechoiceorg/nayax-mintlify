@@ -1,0 +1,125 @@
+---
+title: 验证
+description: 了解 Nayax 如何向您的核心扩展程序提供 JWT 令牌，以及如何将其用于 API 调用。
+---
+
+当用户打开您的 Core Extension 时，Nayax 会向其传递一个包含用户身份和权限的已签名 JWT token。您的应用使用此 token 代表已登录用户发起 Nayax API 调用。您无需管理登录或会话：Nayax 负责处理身份验证，并在加载时向您的应用提供一个可直接使用的 token。对于 Screen、Button with Popup 和 Tab 扩展，该 token 会通过来自父窗口（parent frame）的 `postMessage` 传递。如果您正在构建 Fullscreen 扩展，请联系 Nayax 以确认传递方式。
+
+## 通过 postMessage 接收令牌
+
+对于 Screen、Button with Popup 和 Tab 扩展，请在 window 上监听 `message` 事件。Nayax 会发送一个包含 token、Cortex 基础 URL 以及（对于 Button with Popup 和 Tab）选择上下文（selection context）的对象。
+
+```typescript
+useEffect(() => {
+  const handleMessage = (event: MessageEvent) => {
+    const { token, cortexUrl, selection } = event.data;
+
+    if (token) {
+      setToken(token);
+      setCortexUrl(cortexUrl);
+
+      if (selection?.machineId) {
+        setMachineId(selection.machineId);
+      }
+    }
+  };
+
+  window.addEventListener("message", handleMessage);
+  return () => window.removeEventListener("message", handleMessage);
+}, []);
+```
+
+`selection` 对象仅在 Button with Popup 和 Tab 扩展中存在。Screen 扩展仅接收 `token` 和 `cortexUrl`。Nayax 也可以通过 URL hash 传递上下文（例如，`/YourApp/index.html#machineId=12345`）。
+
+## 令牌有效载荷
+
+该令牌使用 RS256 进行签名。以下是一个示例有效载荷：
+
+```json
+{
+  "id": "22",
+  "name": "nayaxvend\\User",
+  "actor": "27594",
+  "OperatorId": "27594",
+  "DistributorId": "27594",
+  "IsAdmin": "True",
+  "ActorHierarchy": "27594",
+  "AppName": "cortex",
+  "realUserId": "22",
+  "email": "user@nayax.com",
+  "nbf": 1768379518,
+  "exp": 1768469518,
+  "iat": 1768379518,
+  "iss": "NayaxMomaApi",
+  "aud": "moma2"
+}
+```
+
+## 代币声明
+
+| 宣称               | 描述             |
+| ---------------- | -------------- |
+| `id`             | 用户身份           |
+| `name`           | 带域名的用户名        |
+| `actor`          | 演员 ID          |
+| `OperatorId`     | 操作员 ID         |
+| `DistributorId`  | 分销商 ID         |
+| `IsAdmin`        | 管理员标志          |
+| `ActorHierarchy` | 演员层级链          |
+| `AppName`        | 应用程序名称         |
+| `realUserId`     | 真实用户ID         |
+| `email`          | 用户邮箱           |
+| `nbf`            | 不早于（Unix 时间戳）  |
+| `exp`            | 过期时间（Unix 时间戳） |
+| `iat`            | 发布时间（Unix 时间戳） |
+| `iss`            | 发行人            |
+| `aud`            | 观众             |
+
+## 验证令牌
+
+使用适用于您环境的 RSA 公钥验证 JWT 签名。
+
+<Tabs>
+  <Tab title="质量保证/开发">
+    ```text
+    -----BEGIN PUBLIC KEY-----
+    MIIBCgKCAQEApd1+J2fE9kmt354EKyTqFLhPRgfzBU2vqpzZ5A2BAkhxcBs5/X5pB50Q6XVxibErAofqvv+zyEsPOnfAOKVu+s/mguYMiHuCJJ8Eu7X4VyaT/USYTA1sUI+cY+821RJ8zKhme+vDMStVE668C8Vwn7fZEPm7GU34HN1A+YQEe007ItwIx7tQtnrXql7gzlYU2zcHVrBToC3FaOdkrFX3zgzrJ+RCucAiAAjiK7TKc0YV+/uS8aXeQZD71TDGEcdbPYXogrZjIDudis4tmCLnqHC9m2ePdpjnpnVE/Vs56yK1ExOjkIlJ+kCR5WC3PZyVWv+oS7VMuFS4QaXsRSbHWQIDAQAB
+    -----END PUBLIC KEY-----
+    ```
+  </Tab>
+
+  <Tab title="生产">
+    ```text
+    -----BEGIN PUBLIC KEY-----
+    MIIBCgKCAQEAyUVRih9bb22lCTu/FEviqfJgPv3jwzWsXYDCdr+pz0i/BOAVAWUoA2xSBDbbmyUOT2KsEn1/WHhxpUS/ybi81VnhGkRocLuGxAV0LvvPOO774iAygRhlgzSedbt2z1qdgEs7d2c12Ae4LtCxQ2WV3Aaa1YVLWpeT8ZCdekgonzYFXvEK0ES+KFOaifnspMIQA7ek5K1BnojmjHQ7qI3DbYNydSOFqvhbnItFcXSqo+oiBx82HHqr0jAR6DatOfiV3zVXRbsJLaFK0pQFZPV9Ip6uarYofQV2mhlCudB5o+M/axYjnPf0wK4b3P6To9aM+lKpGq9LBnb8IyvpbSgVVQIDAQAB
+    -----END PUBLIC KEY-----
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+  在沙盒开发期间使用测试密钥。部署到生产环境时切换到生产密钥。
+</Note>
+
+## 瞄准镜
+
+作用域控制着您的应用可以访问哪些 Nayax 资源。Nayax 会在您的应用注册时将它们注入到 JWT 令牌中。作用域有两种类型：
+
+| 价值         | 类型 | 行为                                                         |
+| ---------- | -- | ---------------------------------------------------------- |
+| `scope`    | 限制 | 您的应用只能访问用户权限范围内的资源以及指定范围内的资源。即使用户拥有更广泛的权限，也可以使用此功能来限制访问权限。 |
+| `appScope` | 覆盖 | 无论用户是否拥有正常权限，您的应用都将获得指定的权限范围。利用此功能，您可以授予应用用户通常无法访问的权限。     |
+
+权限范围由 Nayax 在您的应用注册时配置。请联系您的 Nayax 代表，申请您的应用所需的权限范围。
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="扩展类型" icon="window-restore" href="/docs/core-extension/extension-types">
+    了解哪种显示类型适合您的应用，以及每种显示类型的工作原理。
+  </Card>
+
+  <Card title="开始" icon="rocket" href="/docs/core-extension/get-started">
+    完整体验从沙盒环境到生产环境的开发者历程。
+  </Card>
+</CardGroup>

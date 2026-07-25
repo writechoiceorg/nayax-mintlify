@@ -1,0 +1,119 @@
+---
+title: 开始
+metadata:
+  og:description: 安装 EMV Core RTOS SDK,设置 UNO-mini 读卡器固件,并获取您的设备 ID。
+---
+
+验证您的硬件和构建要求,安装读卡器固件,并获取终端注册所需的设备 ID。
+
+## 要求
+
+### 硬件
+
+您的设置需要以下硬件:
+
+| 要求   | 细节                       |
+| :--- | :----------------------- |
+| 设备连接 | USB HID 或 UART TTL       |
+| 内存   | 最小 64 KB RAM(可为更小系统配置)   |
+| 读者力量 | 5-12 VDC;空闲 0.7 W,峰值 3 W |
+
+### 网络要求
+
+主机平台必须支持具有以下特性的 IPv4 TCP 网络:
+
+- 仅 IPv4 TCP 套接字
+- 最多并行 3 个套接字
+- DNS 解析
+- 网络状态指示
+- 仅客户端(无需服务器功能)
+- 低延迟的数据包发送和接收(最多 10 ms)
+- 套接字使用情况:
+  - 1 个持续打开的套接字,每 2-30 分钟交换少量数据(Keep-alive)。可能随时接收数据。
+  - 2 个短生命周期套接字(几秒钟,一次或多次请求/响应循环),可并行工作。
+  - 每次下载 1.5 MB;每次上传约 1 MB,通过单个套接字以 1.5 KB 的块传输。
+
+#### 传输层
+
+- EMV Core 与主机之间的通道是串行通道或 USB 通道。
+- 消息发送时字节之间(RS-232/TTL)或数据块之间(USB)不应有中断。
+- 序列中的中断表示消息完成。在 RS-232/TTL 上,中断定义为 11 个 ETU:
+  - 9600 波特率下为 1.15 ms
+  - 115200 波特率下为 0.1 ms
+
+### 构建系统
+
+主机示例代码需要:
+
+| 要求   | 细节                                             |
+| :--- | :--------------------------------------------- |
+| 编译器  | 支持 C99 的 GCC 4.8+ 或 Clang 3.5+                 |
+| 构建工具 | GNU Autotools(`autoconf`、`automake`、`libtool`) |
+| 操作系统 | Linux(主要),或其他具有平台层实现的系统                        |
+| 依赖项  | 用于 Linux 参考平台实现的 POSIX 线程(`pthread`)           |
+
+<Note>
+  使用 SDK 附带的主机示例实现,而不是从头编写。
+</Note>
+
+## SDK 交付内容
+
+SDK 包分为三个顶层文件夹:
+
+```text
+SDK Package/
+├── Linux Sample Application/      Portable C sources and demo application
+│   ├── ecod_sdk/                  Core SDK headers and sources
+│   │   ├── platform/              Platform abstraction layer
+│   │   ├── src/                   SDK implementation
+│   │   └── include/               Internal and public headers
+│   └── demo/                      Example demo application
+├── Firmware and Configuration/    Reader firmware and config files
+│   ├── Reader Firmware/           EMV Core FW file (EMVSC_v0xxxxx.oef)
+│   └── Reader Configuration/      Regional configuration files
+└── Utilities/
+    └── UNO-8 Manager/             Tool for local firmware and configuration updates
+```
+
+### EMV Core 通信协议
+
+运行在 UNO Reader 上的 EMV Core 固件会根据主机应用程序自动适配两种协议:
+
+| 协议                  | 使用者                    |
+| :------------------ | :--------------------- |
+| 带 Datalink 封装的 JSON | Linux 示例应用程序(可移植 C 代码) |
+| 低级 TLV 读卡器协议        | UNO-8 Manager 工具       |
+
+<Warning>
+  从一种协议切换到另一种协议时,必须重启 UNO Reader。
+</Warning>
+
+## 在 UNO-mini 上安装固件
+
+### EMV核心安装
+
+EMV Core 模块随 UNO Reader 固件一起提供。
+
+- 首次安装使用 UNO-8 Manager 完成。
+- 后续更新可以使用 Nayax Terminal Management System (TMS) 远程完成。
+
+固件文件(`EMVSC_v0xxxxx.oef`)可在 SDK 的 `Firmware and Configuration\Reader Firmware` 文件夹中找到。
+
+<Warning>
+  读卡器必须注册到 Nayax Core 系统。如果未注册,您将无法完成支付交易。要注册您的设备,请将其设备 ID(读卡器序列号)提供给您的 Nayax 客户经理。
+</Warning>
+
+## 获取设备 ID
+
+Kiosk ID 即读卡器序列号(SN)。可通过以下方式获取:
+
+a) 从读卡器背面读取序列号:扫描条形码以避免错误。
+
+b) 在 Linux 上使用 EMV Core Test 应用程序:
+
+1. 运行 Linux 测试应用程序。
+2. 选择选项 8 并按 Enter 以显示设备 ID。
+
+<Note>
+  请记录您的设备 ID。在处理实际交易之前,您需要将其提供给 Nayax 客户经理以进行终端注册。
+</Note>

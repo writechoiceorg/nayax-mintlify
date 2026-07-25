@@ -1,0 +1,36 @@
+---
+title: 机器
+mode: wide
+metadata:
+  og:description: 机器（Machine）是在 Nayax Core 中管理的实体，代表实体自动售货设备。机器与其他系统组件（例如
+---
+
+机器（Machine）是在 Nayax Core 中管理的实体，代表实体自动售货设备。机器会与运营商和设备等其他系统组件交互以执行任务，并且可以使用 Lynx API 访问或修改其详细信息。
+
+本节包含帮助您通过 Lynx API 管理机器的指南。以下是可用指南列表：
+
+<Columns cols={2}>
+  <Card icon="circle-plus" title="创建新机器" href="/docs/manage-data-operations/lynx-api/machines/create-new-machine-guides">
+    通过界面或以编程方式通过 Lynx API POST 请求，在 Nayax Core 中创建新机器。
+  </Card>
+
+  <Card icon="circle-info" title="检索机器信息" href="/docs/manage-data-operations/lynx-api/machines/retrieve-machine-information">
+    通过 Nayax Core 或 Lynx API 查看和查询机器属性，例如运营商、型号、ID 和状态。
+  </Card>
+
+  <Card icon="receipt" title="获取机器的最近销售记录" href="/docs/manage-data-operations/lynx-api/machines/getting-a-machines-last-sales">
+    通过界面或 Lynx API GET 请求检索特定机器的最新交易。
+  </Card>
+
+  <Card icon="fingerprint" title="获取 Monyx ID" href="/docs/manage-data-operations/lynx-api/machines/get-monyx-id">
+    使用 Lynx API GET 请求查找机器的 Monyx ID。
+  </Card>
+
+  <Card icon="sliders" title="机器属性" href="/docs/manage-data-operations/lynx-api/machines/updating-a-machines-attribute">
+    通过 Lynx API 端点单独或批量更新机器属性。
+  </Card>
+
+  <Card icon="barcode" title="通过设备 ID 获取机器 ID" href="/docs/manage-data-operations/lynx-api/machines/getting-a-machines-id-by-the-devices-serial-number">
+    使用 Lynx API GET 请求，通过配对设备的序列号解析出机器的 ID。
+  </Card>
+</Columns>

@@ -1,0 +1,1159 @@
+---
+title: 销售结束通知
+metadata:
+  og:description: Cortina 使用 SaleEndNotification 命令通知集成方有关 Cortina 支付的交易请求已完成的信息。
+---
+
+Cortina 使用 `SaleEndNotification` 命令通知集成方有关 Cortina 支付提供商的交易请求已完成的信息。
+
+## 要求
+
+Nayax 的服务器会向您配置的 `SaleEndNotification` 端点发送 POST 请求,其格式如下:
+
+`(customer's URL)/Cortina/SaleEndNotification`
+
+有效载荷包含以下详细信息：
+
+```json
+{
+  "BasicInfo": {
+    "TransactionId": "N99O4XURDQYJZIK4OTCAWF1RHHA40TZWVCRB",
+    "NayaxTransactionId": 3584697384,
+    "Amount": 5,
+    "CurrencyCode": "ILS",
+    "CurrencyNumeric": "376",
+    "SiteId": 1,
+    "MachineAuTime": "071221132914",
+    "TimeoutMS": 15000,
+    "IsProductSelected": true,
+    "PaymentMethodID": 1,
+    "BillingProviderId": 1,
+    "AuditNumber": 342,
+    "NayaxRRN": "111111",
+    "IsDeferredAuthorization": true,
+    "AgeLimitation": 18,
+    "IsSoftDeclineCompletion": true,
+    "TransitElement": {
+      "TransitTransactionType": 1,
+      "DenyListIndication": 0
+    }
+  },
+  "PaymentInfo": {
+    "SrvTranId": "3584697388",
+    "AuthCode": "333333",
+    "AuthAmount": 5.5,
+    "SettAmount": 5.5,
+    "RRN": "111111",
+    "Token": "string",
+    "AuthDateTime": "071221133300",
+    "SettDateTime": "071221133330",
+    "TraceNumber": "4444",
+    "AuthSource": "string",
+    "AdditionalData": "string",
+    "IsGatewayTimeout": false,
+    "ProviderExternalData": "string",
+    "InitiateTranReference": 11223344,
+    "IsRevalueCard": false
+  },
+  "DynamicURL": "string",
+  "CustomData": {
+    "DirectActor": "String",
+    "Operator": "String",
+    "Distributor": "String",
+    "Actor": "String",
+    "Machine": "String",
+    "SoftDecline": "String"
+  }
+}
+```
+
+### 请求参数
+
+下表描述了请求的所有参数：
+
+<table align={["left","left","left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        场地
+      </th>
+
+      <th>
+        类型
+      </th>
+
+      <th>
+        必需的
+      </th>
+
+      <th>
+        描述
+      </th>
+
+      <th />
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `BasicInfo`
+      </td>
+
+      <td>
+        `TransactionId`
+      </td>
+
+      <td>
+        String(36)
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        此交易的**唯一标识符**。
+
+        如果使用了 /StartSession,则会回显加密在 'TranIDCipher' 中的交易 ID。如果未使用 /StartSession,Nayax 引擎将生成此值。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `NayaxTransactionId`
+      </td>
+
+      <td>
+        Int(64)
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        Nayax 内部用于该交易的唯一标识符,将在后续请求中回显。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `Amount`
+      </td>
+
+      <td>
+        双倍的
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        十进制(小数部分最多 3 位)支付金额,例如:1 分 = 0.01,20 分 = 0.20
+
+        - 注意:没有小数位的货币也应表示为双精度数,例如:234 JYN = 234.0。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `CurrencyCode`
+      </td>
+
+      <td>
+        String(3)
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        根据 ISO 4217 的货币代码,属性格式为:字母 3 位。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `CurrencyNumeric`
+      </td>
+
+      <td>
+        String(3)
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        根据 ISO 4217 的货币代码,属性格式为:数字 3 位。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `SiteId`
+      </td>
+
+      <td>
+        整数(16)
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        **Nayax服务器**区域。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `MachineAuTime`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        机器授权时间戳
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `TimeoutMS`
+      </td>
+
+      <td>
+        Int(32)
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        Nayax 服务器超时配置,单位为毫秒
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `IsProductSelected`
+      </td>
+
+      <td>
+        Bool
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        表示产品是否已被预先选择
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `PaymentMethodID`
+      </td>
+
+      <td>
+        Int(32)
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        支付提供商的 Nayax 标识符
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `BillingProviderId`
+      </td>
+
+      <td>
+        Int(32)
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        计费提供商的 Nayax 标识符
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `AuditNumber`
+      </td>
+
+      <td>
+        Int(64)
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        仅供 Nayax 内部使用。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `NayaxRRN`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        用于生成 Nayax Number 的参考值,用作面向外部方(通常是卡组织或应用服务提供商)的外部交易标识。从支持角度而言,强烈建议此 ID 应为最终消费者/持卡人以及卡片发卡行(例如银行)或应用服务提供商(例如支付宝、微信)可见的 ID。如果以上均不适用,集成方应生成一个额外的字符串。
+
+        - 该值将在 /Inquiry 请求中回显。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `IsDeferredAuthorization`
+      </td>
+
+      <td>
+        Bool
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        暂无更多信息。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `AgeLimitation`
+      </td>
+
+      <td>
+        整数(16)
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        允许交易所需的最低年龄。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `IsSoftDeclineCompletion`
+      </td>
+
+      <td>
+        Bool
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        暂无更多信息。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TransitElement` inside `BasicInfo`
+      </td>
+
+      <td>
+        `TransitTransactionType`
+      </td>
+
+      <td>
+        Int(32)
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        枚举值:1 2 3 7
+
+        1 - 预付资金
+
+        2 - 实时授权
+
+        3 - 后授权聚合交易
+
+        7 - 债务追收
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `TransitElement` inside `BasicInfo`
+      </td>
+
+      <td>
+        `DenyListIndication`
+      </td>
+
+      <td>
+        Int(32)
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        枚举值:0 1 2
+
+        0 - 未知/无影响
+
+        1 - 拒绝将导致消费者被加入拒绝名单
+
+        2 - 批准将导致消费者从拒绝名单中移除。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `PaymentInfo`
+      </td>
+
+      <td>
+        `SrvTranId`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        集成方的内部交易 ID。
+
+        条件性字段,仅在未使用 /StartSession 时需要。
+
+        如果使用了 /StartSession,此字段应为空,或回显请求中发送的交易 ID。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `AuthCode`
+      </td>
+
+      <td>
+        字符串(40)
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        外部(通常是发卡行的)授权码
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `AuthAmount`
+      </td>
+
+      <td>
+        双倍的
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        在 /Authorization 请求中请求的原始金额。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `SettAmount`
+      </td>
+
+      <td>
+        双倍的
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        在 /Settlement 或 /Sale 流程中请求的原始金额。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `RRN`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        参考检索编号,用作面向外部方(通常是卡组织)的外部交易标识。从支持角度而言,强烈建议此 ID 应为最终消费者/持卡人可见的 ID。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `Token`
+      </td>
+
+      <td>
+        String(256)
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        该交易的唯一令牌。仅供 Nayax 内部使用
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `AuthDateTime`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        /Authorization 发生时的日期时间字符串
+        格式:ddMMyyHHmmss
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `SettDateTime`
+      </td>
+
+      <td>
+        双倍的
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        与 Authorization 命令无关。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `TraceNumber`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        跟踪编号。仅供 Nayax 内部使用
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `AuthSource`
+      </td>
+
+      <td>
+        String(5)
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        仅供 Nayax 内部使用
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `AdditionalData`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        JSON 格式的字符串。请就此顺序定义联系 Nayax TPOC。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `IsGatewayTimeout`
+      </td>
+
+      <td>
+        Bool
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        是否发生了网关超时(在响应中有效)
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `ProviderExternalData`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        JSON 格式的字符串。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `InitiateTranReference`
+      </td>
+
+      <td>
+        Int(64)
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        条件性字段,在给定交易中重新尝试于终端使用预付忠诚卡的情况下,该字段将反映此次尝试最初所属的交易(Nayax 交易 ID)。
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `IsRevalueCard`
+      </td>
+
+      <td>
+        Bool
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        表示该卡是否允许充值
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `BasicInfo`
+      </td>
+
+      <td>
+        `DynamicURL`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        Actor 级别的 URL 配置
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `CustomData`
+      </td>
+
+      <td>
+        `DirectActor`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        直接 Actor 自定义数据(JSON 格式的字符串)
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `Operator`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        运营商自定义数据(JSON 格式的字符串)
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `Distributor`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        分销商自定义数据(JSON 格式的字符串)
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `Actor`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        Actor 自定义数据(JSON 格式的字符串)
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `Machine`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        Machine 自定义数据(JSON 格式的字符串)
+      </td>
+    </tr>
+
+    <tr>
+      <td />
+
+      <td>
+        `SoftDecline`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        Soft Decline 自定义数据(JSON 格式的字符串)
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## 回复
+
+客户支付方式将发送给 Nayax 服务器的 `SaleEndNotification` 响应。其负载应如下所示:
+
+```json
+{
+  "Status": {
+    "Verdict": "string",
+    "Code": 0,
+    "StatusMessage": "string",
+    "CustomDeclineCode": "string"
+  }
+}
+```
+
+### 响应参数
+
+下表描述了响应中的所有参数:
+
+<table align={["left","left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        场地
+      </th>
+
+      <th>
+        类型
+      </th>
+
+      <th>
+        必需的
+      </th>
+
+      <th>
+        描述
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `TranIDCipher`
+      </td>
+
+      <td>
+        String(36)
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        集成方生成一个 36 个字符(即 288 位)的交易 ID。
+        随后集成方附加字符 = 和 RandomNumber,以生成 64 个字符的密文。
+        格式:TransactionId=RandomNumber
+        集成方使用 AES ECB 模式,以 Secret Token 对密文进行加密。
+        AES 密钥为与请求中提供的 TokenID 匹配的 Secret Token 的最后(最右侧)256 位(即 32 个字符)。
+        Nayax 将使用 AES ECB 解密并提取交易 ID
+        该交易 ID 值随后将用于所有后续请求。
+
+        Information regarding how to generate the TranIDCipher (via encrypting the token alongside the Random Number and the customer's Transaction ID can be reviewed under [Start Session authentication process](/docs/cortina/start-session/cortina-auth#/)
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `Verdict` inside `Status`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        常量字符串。请求的状态('Approved'/'Declined')
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `Code` inside `Status`
+      </td>
+
+      <td>
+        Int(32)
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        条件性字段 - 仅当 verdict 值为 declined 时适用。
+
+        有效的拒绝代码(必须是此列表中的代码):
+
+        <br />
+
+        1 - 余额不足
+
+        <br />
+
+        2 - 交易 ID 未知
+
+        <br />
+
+        3 - 持卡人超过每日/每周/每月交易次数限制
+
+        <br />
+
+        4 - 持卡人超过交易金额限制
+
+        <br />
+
+        5 - 疑似欺诈
+
+        <br />
+
+        6 - 系统一般性故障
+
+        <br />
+
+        7 - 金额无效
+
+        <br />
+
+        8 - 请求无法解析(格式错误)
+
+        <br />
+
+        9 - 该持卡人不允许进行此交易
+
+        <br />
+
+        40 - 仅供 Nayax 内部使用。
+
+        <br />
+
+        990 - 未找到 CertificateFileName
+
+        <br />
+
+        991 - 消息正文解密失败
+
+        <br />
+
+        992 - 超时异常
+
+        <br />
+
+        994 - 不支持该卡品牌
+
+        <br />
+
+        996 - 交易 ID 未知/交易 ID 重复(Start Session 错误)
+
+        <br />
+
+        997 - 缺少必填参数
+
+        <br />
+
+        998 - 验证失败/请求无法解析
+
+        <br />
+
+        999 - 一般性异常
+
+        <br />
+
+        1010 - 未找到公钥证书
+
+        <br />
+
+        1011 - 方法未实现
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `StatusMessage` inside `Status`
+      </td>
+
+      <td>
+        字符串(255)
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        交易状态信息自由文本字段/其他可变数据
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `CustomDeclineCode` inside `Status`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        此字段用于指定自定义拒绝代码(例如 Soft Decline 或 Switch Interface)。
+        该值可能与收单机构的响应代码相同,也可能由其他数据组合而成。
+      </td>
+    </tr>
+  </tbody>
+</table>

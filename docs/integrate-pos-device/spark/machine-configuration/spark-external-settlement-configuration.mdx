@@ -1,0 +1,55 @@
+---
+title: "External Settlement Configuration"
+description: "Configure a machine in Nayax Core to support Spark External Settlement, where a server settles or cancels a terminal-authorized transaction."
+---
+
+The settings on this page prepare a machine for Spark External Settlement, where your
+server completes or cancels a transaction that was authorized directly on the terminal.
+Most attribute groups need no change to support this feature.
+
+## MDB
+
+The **MDB Flags** setting tells the server which payment flow the device supports:
+
+- **Pre-Authorization** is used when the transaction starts before the consumer chooses
+  a product or service and before the final amount is known. Set **MDB Flags** to
+  **\* Flags Disabled**.
+- **Pre-Selection** is the flow used when the price is known when the card is
+  presented. Set **MDB Flags** to **02 PreSelection Enabled**.
+
+<Frame>
+  ![MDB Flags set to Flags Disabled for the Pre-Authorization flow](/images/docs/spark-machine-configuration/mdb-flags-disabled.png)
+</Frame>
+
+## VPOS Touch
+
+The **VAS configurations** setting is optional for External Settlement. You can add an
+indication that the machine performs Spark External Settlement. This is not required
+for the flow to work and is only for management purposes.
+
+<Warning>
+  Spark External Settlement cannot coexist with any other Spark flow (Remote Start,
+  Device Start, or Device Stop) on the same machine.
+</Warning>
+
+After you finish, click **Save** to store the configuration.
+
+## Configuration Summary
+
+Use this table as a quick reference for the External Settlement settings:
+
+| Group | Property | Value |
+| :-- | :-- | :-- |
+| MDB | MDB Flags | Pre-Authorization: Flags Disabled. Pre-Selection: PreSelection Enabled |
+| VPOS Touch | VAS configurations | Optional: Spark External Settlement |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="External Settlement" icon="money-check" href="/docs/integrate-pos-device/spark/payment-flows/external-settlement">
+    See how the External Settlement flow works at the API level.
+  </Card>
+  <Card title="External Cancel" icon="ban" href="/docs/integrate-pos-device/spark/payment-flows/external-cancel">
+    Learn how to release captured funds when no service is delivered.
+  </Card>
+</CardGroup>

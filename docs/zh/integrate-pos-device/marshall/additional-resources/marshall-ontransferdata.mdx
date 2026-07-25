@@ -1,0 +1,754 @@
+---
+title: 传输数据
+metadata:
+  og:description: onTransferData 是用于 Marshall “Transfer Data” 命令的函数,该命令允许与交易相关的信息双向发送——。
+---
+
+onTransferData 是用于 Marshall “Transfer Data” 命令的函数,该命令允许与交易相关的信息双向发送——通常是从设备(VPOS Touch / VPOS Media)端发送到外围设备,但也可以从外围设备发送到设备。
+
+在 `void onTransferData(byte[] data)` 函数中，数据遵循 TLV（Tag-Length-Value，标签-长度-值）格式，其组成部分为：
+
+- 标签（1 个字节）：标识数据的类型。
+- 长度（1 个字节）：指定值的长度。
+- 值（N 字节）：包含实际数据。
+
+传输的数据可以是一个或多个 TLV 结构，具体取决于所交换的信息。
+
+## 例子
+
+如果 `onTransferData(byte\[] data)` 接收到以下字节：
+
+```text
+5 6 345678 
+```
+
+- 5 是 Card BIN 的标签
+- 6 是长度，在本例中为 6 字节。
+- 345678 是卡号前6位数字的值。
+
+系统提取的 Card BIN 为 “345678”。
+
+## 标签描述
+
+下表描述了可以使用此功能传输的不同类型的数据：
+
+<table align={["left","left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        标签
+      </th>
+
+      <th>
+        标签名称
+      </th>
+
+      <th>
+        数据大小
+      </th>
+
+      <th>
+        描述
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `1`
+      </td>
+
+      <td>
+        交易 ID
+      </td>
+
+      <td>
+        8字节
+      </td>
+
+      <td>
+        交易的唯一标识符。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `2`
+      </td>
+
+      <td>
+        “Choose Product” 超时
+      </td>
+
+      <td>
+        2个字节
+      </td>
+
+      <td>
+        “Choose Product” 提示的超时时间。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `3`
+      </td>
+
+      <td>
+        卡类型
+      </td>
+
+      <td>
+        1字节
+      </td>
+
+      <td>
+        识别所用卡的类型。详情见下文。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `4`
+      </td>
+
+      <td>
+        卡片输入模式
+      </td>
+
+      <td>
+        1字节
+      </td>
+
+      <td>
+        识别卡片的输入方式（刷卡、轻触、插入等）。详情见下文。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `5`
+      </td>
+
+      <td>
+        卡片箱
+      </td>
+
+      <td>
+        6个字节
+      </td>
+
+      <td>
+        卡号的前 6 位数字（ASCII）。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `6`
+      </td>
+
+      <td>
+        卡 PAN 哈希
+      </td>
+
+      <td>
+        20字节
+      </td>
+
+      <td>
+        整个卡片 PAN 的 SHA1 哈希值（用于保护卡片数据）。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `7`
+      </td>
+
+      <td>
+        专有卡UID
+      </td>
+
+      <td>
+        MiFare卡：4、7或10字节；磁条卡：最大40字节；二维码：最大255字节
+      </td>
+
+      <td>
+        专用卡的唯一标识符。二维码仅包含数字。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `8`
+      </td>
+
+      <td>
+        VMC 授权状态
+      </td>
+
+      <td>
+        1字节
+      </td>
+
+      <td>
+        授权结果（0 = 批准，1 = 拒绝）。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `9`
+      </td>
+
+      <td>
+        COM状态
+      </td>
+
+      <td>
+        1字节
+      </td>
+
+      <td>
+        服务器与设备之间的通信状态。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `10`
+      </td>
+
+      <td>
+        超光速数据
+      </td>
+
+      <td>
+        最多 500 字节
+      </td>
+
+      <td>
+        原始数据在较低级别（MDB 级别 3）传输。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `11`
+      </td>
+
+      <td>
+        创建布局
+      </td>
+
+      <td>
+        4个字节
+      </td>
+
+      <td>
+        布局创建请求。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `12`
+      </td>
+
+      <td>
+        更新布局
+      </td>
+
+      <td>
+        最多 500 字节
+      </td>
+
+      <td>
+        使用 ExtraData 字段更新现有布局。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `13`
+      </td>
+
+      <td>
+        信用卡后四位数字
+      </td>
+
+      <td>
+        4 个字节 (ASCII)
+      </td>
+
+      <td>
+        信用卡号的后四位数字（ASCII 码）。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `14`
+      </td>
+
+      <td>
+        产品代码
+      </td>
+
+      <td>
+        2个字节
+      </td>
+
+      <td>
+        识别所购买产品的代码。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `15`
+      </td>
+
+      <td>
+        产品价格
+      </td>
+
+      <td>
+        4个字节
+      </td>
+
+      <td>
+        产品的价格。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `16`
+      </td>
+
+      <td>
+        定制数据/通用
+      </td>
+
+      <td>
+        最多 500 字节
+      </td>
+
+      <td>
+        JSON 格式的自定义数据（具体细节有待确定）。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `17`
+      </td>
+
+      <td>
+        消费者 ID
+      </td>
+
+      <td>
+        最多 500 字节
+      </td>
+
+      <td>
+        唯一消费者标识符（例如，护照号码、身份证号码）。ASCII 字符串。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `18`
+      </td>
+
+      <td>
+        主软件版本
+      </td>
+
+      <td>
+        14字节
+      </td>
+
+      <td>
+        设备上运行的 Main 软件版本。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `19`
+      </td>
+
+      <td>
+        POS软件版本
+      </td>
+
+      <td>
+        10字节
+      </td>
+
+      <td>
+        设备上运行的 POS 软件版本。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `20`
+      </td>
+
+      <td>
+        违约信用
+      </td>
+
+      <td>
+        2个字节
+      </td>
+
+      <td>
+        Nayax Core中预设的信用额度。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `21`
+      </td>
+
+      <td>
+        Monyx ID
+      </td>
+
+      <td>
+        9字节
+      </td>
+
+      <td>
+        与 Nayax Core 中定义的 Monyx 支付系统相关的 ID。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `22`
+      </td>
+
+      <td>
+        最终价格
+      </td>
+
+      <td>
+        4个字节
+      </td>
+
+      <td>
+        折扣后的最终成交价格。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `23`
+      </td>
+
+      <td>
+        卡子类型
+      </td>
+
+      <td>
+        1字节
+      </td>
+
+      <td>
+        更详细的卡片类型分类。详情请见下文。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `24`
+      </td>
+
+      <td>
+        卡余额
+      </td>
+
+      <td>
+        4个字节
+      </td>
+
+      <td>
+        该信用卡上的剩余余额。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `25`
+      </td>
+
+      <td>
+        Transfer to BLE
+      </td>
+
+      <td>
+        N 字节
+      </td>
+
+      <td>
+        数据将通过蓝牙/BLE传输。与Nayax EV相关（Nayax内部请求）。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `26`
+      </td>
+
+      <td>
+        选择品牌
+      </td>
+
+      <td>
+        8字节
+      </td>
+
+      <td>
+        *仅适用于日本市场！*外设->设备：选择要付款的品牌，无需事先显示品牌选择界面。设备 > 外设：配对过程完成后，更新已配置品牌的 64 位位域中的外设。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `27`
+      </td>
+
+      <td>
+        专有卡名称
+      </td>
+
+      <td>
+        N（最多 500）字节
+      </td>
+
+      <td>
+        来自 Nayax 服务器 tag 239 的专有卡片描述
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `28`
+      </td>
+
+      <td>
+        站点 ID
+      </td>
+
+      <td>
+        1 字节
+      </td>
+
+      <td>
+        从 Nayax 服务器返回的 Site ID 信息,包含在授权响应中
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+按卡类型划分的数据传输格式：
+
+<table>
+  <thead>
+    <tr>
+      <th>
+        信用卡
+      </th>
+
+      <th>
+        专用卡
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        Tag 3:Card Type(取值范围 “2”-“6”)
+
+        <br />
+
+        标签 4：进入模式
+
+        <br />
+
+        Tag 5:Card BIN
+
+        <br />
+
+        标签 6：卡片 PAN 哈希
+
+        <br />
+
+        标签 13：信用卡后四位数字
+
+        <br />
+
+        标签 1：交易 ID
+
+        <br />
+
+        标签 9：COM 状态
+      </td>
+
+      <td>
+        Tag 3:Card Type(取值为 “1”)
+
+        <br />
+
+        Tag 4:Entry Mode(Magstripe 时为 “1”,
+        MiFare 时为 “4”,HID 时为 “5”,QR 时为 “10”)
+
+        <br />
+
+        标签 7：专有卡 UID
+
+        <br />
+
+        标签 1：交易 ID
+
+        <br />
+
+        标签 9：COM 状态
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+卡片类型：
+
+```
+typedef enum E_MarshallApi_TDCardType_tag
+{
+    MARSHALLAPI_TRANSFER_DATA_UNKOWN_CARD_TYPE = 0,                 /* Unknown	            */
+    MARSHALLAPI_TRANSFER_DATA_PROPRIETARY_CARD_TYPE,                /* Proprietary	        */
+    MARSHALLAPI_TRANSFER_DATA_VISA_CARD_TYPE,                       /* Visa	                */
+    MARSHALLAPI_TRANSFER_DATA_MASTER_CARD_CARD_TYPE,                /* Master Card          */
+    MARSHALLAPI_TRANSFER_DATA_CHINA_UNION_PAY_CARD_TYPE,            /* China Union Pay	    */
+    MARSHALLAPI_TRANSFER_DATA_MAESTRO_CARD_TYPE = 5,                /* Maestro  	        */
+    MARSHALLAPI_TRANSFER_DATA_INTERAC_CARD_TYPE,                    /* Interac  	        */
+    MARSHALLAPI_TRANSFER_DATA_MONYX_CARD_TYPE,                      /* Monyx  	            */
+    MARSHALLAPI_TRANSFER_DATA_AMEX_CARD_TYPE,                   	/* American Express     */
+    MARSHALLAPI_TRANSFER_DATA_DINERS_CARD_TYPE,                 	/* Diners               */
+    MARSHALLAPI_TRANSFER_DATA_DISCOVER_CARD_TYPE = 10,              /* Discover             */
+    MARSHALLAPI_TRANSFER_DATA_EFTPOS_CARD_TYPE,                 	/* EFTPOS               */
+    MARSHALLAPI_TRANSFER_DATA_JCB_CARD_TYPE,                    	/* JCB                  */
+    MARSHALLAPI_TRANSFER_DATA_MAGSTRIPE_CARD_TYPE,              	/* swiped payment       */
+    MARSHALLAPI_TRANSFER_DATA_MONYX_APP_PREPAID_CARD_TYPE,			/* Monyx App Prepaid 	*/
+    MARSHALLAPI_TRANSFER_DATA_MONYX_APP_BALANCE_CARD_TYPE = 15,     /* Monyx App Balance 	*/
+    MARSHALLAPI_TRANSFER_DATA_EMONEY_CARD_TYPE,                     /* E-money              */
+    MARSHALLAPI_TRANSFER_DATA_PURE_CARD_TYPE,                       /* Pure	                */
+    MARSHALLAPI_TRANSFER_DATA_CARD_TYPE_MAX,
+
+}E_MarshallApi_TDCardType;
+```
+
+刷卡模式：
+
+```
+typedef enum E_MarshallApi_TDCardEntryType_tag
+{
+    MARSHALLAPI_TRANSFER_DATA_MSR_SWIPE_CARD_ENTRY_TYPE = 1,         /* Mag stripes	        */
+    MARSHALLAPI_TRANSFER_DATA_CONTACTLESS_CARD_ENTRY_TYPE,           /* Contactless	        */
+    MARSHALLAPI_TRANSFER_DATA_CONTACT_CARD_ENTRY_TYPE,               /* Contact	            */
+    MARSHALLAPI_TRANSFER_DATA_MIFARE_CARD_ENTRY_TYPE,                /* MiFare	            */
+    MARSHALLAPI_TRANSFER_DATA_HID_CARD_ENTRY_TYPE,                   /* HID	                */
+    MARSHALLAPI_TRANSFER_DATA_NFC_CARD_ENTRY_TYPE,                   /* NFC	                */
+    MARSHALLAPI_TRANSFER_DATA_CNOUS_CARD_ENTRY_TYPE,                 /* CNOUS	            */
+    MARSHALLAPI_TRANSFER_DATA_KEYPAD_ENTRY_TYPE,                     /* Keypad	            */
+    MARSHALLAPI_TRANSFER_DATA_MOBILE_ENTRY_TYPE,                     /* Mobile	            */
+    MARSHALLAPI_TRANSFER_DATA_QR_ENTRY_TYPE,                         /* QR	                */
+    MARSHALLAPI_TRANSFER_DATA_BLE_ENTRY_TYPE,                        /* BLE	                */
+    MARSHALLAPI_TRANSFER_DATA_LEGIC_CARD_ENTRY_TYPE,                 /* LEGIC               */
+    MARSHALLAPI_TRANSFER_DATA_CARD_ENTRY_TYPE_MAX,
+
+}E_MarshallApi_TDCardEntryType;
+```
+
+卡片子类型：
+
+```
+typedef enum E_MarshallApi_TDSelectCardBrand_tag
+{
+    MARSHALLAPI_BRAND_EMPTY                                 = 0x0000000000000000,              /* Unknown/Empty brand Sub-Type card */
+
+    /* 1st 2nd bytes: Japanese e-money brands */
+    MARSHALLAPI_BRAND_EMONEY_EDY                            = 0x0000000000000001,              /* Proprietary Japanese e-money */
+    MARSHALLAPI_BRAND_EMONEY_WAON                           = 0x0000000000000002,              /* Proprietary Japanese e-money */
+    MARSHALLAPI_BRAND_EMONEY_TRANSPORT_IC                   = 0x0000000000000004,              /* Proprietary Japanese Transportation e-money - see below */
+    MARSHALLAPI_BRAND_EMONEY_ID                             = 0x0000000000000008,              /* Proprietary Japanese e-money */
+    MARSHALLAPI_BRAND_EMONEY_QUICPAY                        = 0x0000000000000010,             /* Proprietary Japanese e-money */
+    MARSHALLAPI_BRAND_EMONEY_NANACO                         = 0x0000000000000020,             /* Proprietary Japanese e-money */
+    MARSHALLAPI_BRAND_EMONEY_PITAPA                         = 0x0000000000000040,             /* Proprietary Japanese e-money */
+                                                                        
+                                                                        
+    /* 3rd 4th bytes: Credit card brands */                                            
+    MARSHALLAPI_BRAND_EMV_VISA                              = 0x0000000000000100,              /* Visa */
+    MARSHALLAPI_BRAND_EMV_MASTERCARD                        = 0x0000000000000200,              /* Mastercard*/
+    MARSHALLAPI_BRAND_EMV_AMEX                              = 0x0000000000000400,              /* American express */
+    MARSHALLAPI_BRAND_EMV_JCB                               = 0x0000000000000800,              /* JCB */
+    MARSHALLAPI_BRAND_EMV_GENERAL                           = 0x0000000000001000,              /* Generic credit card (VEND_PAY_METHOD_CREDIT_CARD)*/
+    MARSHALLAPI_BRAND_EMV_DISCOVER                          = 0x0000000000002000,              /* Discover*/
+    MARSHALLAPI_BRAND_EMV_DINERS                            = 0x0000000000004000,              /* Diners*/
+    MARSHALLAPI_BRAND_EMV_VISA_MASTER                       = 0x0000000000008000,              /* VisaMaster combined brand*/
+
+    /* 5th 6th bytes: Free*/
+                
+    /* 7th-14th bytes: QR brands */
+    /* 7,8: Japan */
+    MARSHALLAPI_BRAND_QR_PAYPAY                             = 0x0000000001000000,              /* PayPay */
+    MARSHALLAPI_BRAND_QR_LINE_PAY                           = 0x0000000002000000,              /* LinePay*/
+    MARSHALLAPI_BRAND_QR_RAKUTEN_PAY                        = 0x0000000004000000,              /* RakutenPay*/
+    MARSHALLAPI_BRAND_QR_AU_PAY                             = 0x0000000008000000,              /* AUPay*/
+    MARSHALLAPI_BRAND_QR_AEON_PAY                           = 0x0000000010000000,              /* AEONPay */
+    MARSHALLAPI_BRAND_QR_D_BARAI                            = 0x0000000020000000,              /* D Barai*/
+    MARSHALLAPI_BRAND_QR_MERUPAY                            = 0x0000000040000000,             /*  MeruPay */
+    MARSHALLAPI_BRAND_QR_J_COIN                             = 0x0000000080000000,              /* J-Coin*/
+    
+
+    /*9-13: East asia*/
+    MARSHALLAPI_BRAND_QR_WECHAT_PLUS                        = 0x0000000010000000,              /* Monyx */
+    MARSHALLAPI_BRAND_QR_WECHAT                             = 0x0000000020000000,              /* EFTPOS */
+    MARSHALLAPI_BRAND_QR_ALIPAY                             = 0x0000000040000000,              /* INTERAC */
+    MARSHALLAPI_BRAND_QR_ALIPAY_PLUS                        = 0x0000000080000000,              /*  */
+    MARSHALLAPI_BRAND_QR_ALIPAY_HK                          = 0x0000000100000000,              /*  */
+    MARSHALLAPI_BRAND_QR_MAE_PAY                            = 0x0000000200000000,              /*  */
+    MARSHALLAPI_BRAND_QR_PROMPT_PAY                         = 0x0000000400000000,              /*  */
+    MARSHALLAPI_BRAND_QR_DUIT_PAY                           = 0x0000000800000000,              /*  */
+    MARSHALLAPI_BRAND_QR_TOUNCHNGO                          = 0x0000001000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_BOOST                              = 0x0000002000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_TRUE_MONEY                         = 0x0000004000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_ZALO_PAY                           = 0x0000008000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_SHOPEE_PAY                         = 0x0000010000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_VIET                               = 0x0000020000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_MOMO                               = 0x0000040000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_GRAB_PAY                           = 0x0000080000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_UNION_PAY                          = 0x0000100000000000,              /*  */
+                               
+    /*14: Other countries*/
+    MARSHALLAPI_BRAND_QR_SWISH                              = 0x0001000000000000,              /*  */
+    MARSHALLAPI_BRAND_QR_SATISPAY                           = 0x0002000000000000,              /*  */
+
+    
+    /* 15th~ bytes: Other brands */
+    MARSHALLAPI_BRAND_OFFICE_PAY                            = 0x0100000000000000,              /* Office Pay */
+    MARSHALLAPI_BRAND_NAYAX_PAY                             = 0x0200000000000000,              /* Nayax Pay (VEND_PAY_METHOD_NAYAX_PREPAID)*/
+    MARSHALLAPI_BRAND_MONYX                                 = 0x0400000000000000,              /* Monyx */
+    MARSHALLAPI_BRAND_EFTPOS                                = 0x0800000000000000,              /* EFTPOS */
+    MARSHALLAPI_BRAND_INTERAC                               = 0x1000000000000000,              /* INTERAC */
+    MARSHALLAPI_BRAND_PURE                                  = 0x2000000000000000,              /* PURE */}E_MarshallApi_TDSelectCardBrand;
+```

@@ -1,0 +1,77 @@
+---
+title: 创建新队列
+metadata:
+  og:description: 创建 Amazon SQS 队列是设置与 Nayax 集成的第一步。## 选择 AWS 区域 完成先决条件后。
+---
+
+创建 Amazon SQS 队列是设置与 Nayax 集成的第一步。
+
+## 选择 AWS 区域
+
+一旦满足先决条件，您就可以继续选择将创建队列的 AWS 区域。
+
+1. 转到 AWS 控制台的右上角。
+2. 选择您将创建队列的区域。
+
+<Warning>
+  区域定价和延迟
+
+  需要注意的是，您选择的地区会影响价格和延迟。
+</Warning>
+
+<Frame>
+  <img src="/images/docs/create-new-queue/image1.png" />
+</Frame>
+
+## 创建队列
+
+现在您已经选择了一个区域，下一步就是创建一个新的队列。
+
+1. 单击位于 AWS 控制台左上角的**三行**图标。
+2. 选择**所有服务**选项。
+
+   <Frame>
+     <img src="/images/docs/create-new-queue/image2.png" />
+   </Frame>
+3. 搜索**应用程序集成**类别并选择**简单队列服务**(SQS)。
+
+   <Frame>
+     <img src="/images/docs/create-new-queue/image3.png" />
+   </Frame>
+4. 然后，单击**创建队列**。
+
+   <Frame>
+     <img src="/images/docs/create-new-queue/image4.png" />
+   </Frame>
+5. 在**详细信息**部分中：a. 选择**标准**作为队列类型。b. 为您的队列输入一个唯一的名称。
+
+   <Frame>
+     <img src="/images/docs/create-new-queue/image5.png" />
+   </Frame>
+6. 根据您的需要配置附加部分：
+   - **配置：**定义队列的基本设置。
+   - **加密：**使用加密技术保护您的队列消息。
+   - **访问策略：**设置访问队列的权限。
+   - **重新驱动允许策略（可选）：**启用或禁用消息重新驱动的策略。
+   - **死信队列（可选）：**为无法送达的消息配置队列。
+   - **标签（可选）：**添加标签以对您的队列进行分类和管理。
+
+<Note>
+  可选部分
+
+  诸如重发邮件允许策略、死信队列和标签等可选部分应根据您的具体需求填写。它们有助于自定义队列的功能和管理。
+</Note>
+
+7. 单击**创建队列**按钮。
+
+   <Frame>
+     <img src="/images/docs/create-new-queue/image6.png" />
+   </Frame>
+
+成功创建队列后，屏幕上将显示一条确认消息，其中包含**队列 URL**和**ARN（Amazon 资源名称）** 。复制这些值，后续步骤中的集成和权限设置将需要用到它们。
+
+<Frame>
+  <img src="/images/docs/create-new-queue/image7.png" />
+</Frame>
+
+<br />

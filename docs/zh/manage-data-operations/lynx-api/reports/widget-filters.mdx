@@ -1,0 +1,101 @@
+---
+title: 小部件筛选器参考
+description: Widgets Dashboard API 所使用的组件参数、筛选条件名称和筛选条件类型的字段参考。
+---
+
+本页面介绍调用 Widgets Dashboard API 端点时所使用的组件参数和筛选条件的字段参考。
+
+## 字段参考
+
+### ScreenTypeId 值
+
+`screenTypeId` 用于标识该组件所属的仪表板屏幕上下文：
+
+| 价值  | 屏幕                   | 描述          |
+| --- | -------------------- | ----------- |
+| `1` | Reports / Dashboard  | 主运营商级别报表仪表板 |
+| `2` | Operations / Machine | 机器级别运营屏幕    |
+
+对于营收、销售和汇总类组件，请使用 `screenTypeId=1`。对于按机器划分的运营类组件，请使用 `screenTypeId=2`。
+
+### 实体ID
+
+`entityId` 将组件数据限定于特定实体的范围内。其含义取决于组件类型：
+
+- 运营商级别组件：传递 Operator ID（ActorID）
+- 机器级别组件：传递 Machine ID
+- 省略该参数或传递 `null`，以检索经身份验证用户有权访问的所有实体的数据
+
+### WidgetTypeId
+
+通过调用以下接口获取给定屏幕的有效组件类型 ID 列表：
+
+```text
+GET /v1/dashboard/widgets?screenTypeId=1
+```
+
+响应数组中的每一项都包含 `widgetTypeId` 和 `widgetName`。请使用名称来确定您需要哪个组件，然后在后续的数据请求中使用其 ID。这些 ID 定义在 Cortex Reports 服务数据库中，可能因环境而异。
+
+<Note>
+  请参阅完整的 [Widgets ID List](/docs/manage-data-operations/lynx-api/reports/available-widgets)，查看所有已知组件 ID 的参考表。
+</Note>
+
+<Warning>
+  Devzone 中 “Retrieve Widget Data” 的参考页面在其示例中使用了 `widgetTypeId: 5`（“Top Events For Period”），但却将其呈现为营收组件。这是不正确的。请使用 `GET /v1/dashboard/widgets` 来发现您环境中营收组件的正确 `widgetTypeId`（通常为 ID `19`）。
+</Warning>
+
+### 筛选条件名称
+
+筛选条件名称因组件而异。以下是营收和报表类组件中常用的筛选条件：
+
+| 姓名           | 描述                      | 示例值                 |
+| ------------ | ----------------------- | ------------------- |
+| `startDate`  | 日期范围的起始日期（含）            | `"2025-01-01"`      |
+| `endDate`    | 日期范围的结束日期（含）            | `"2025-12-31"`      |
+| `TimePeriod` | 以天为单位的预定义时间段（日期范围的替代方案） | `"30"`              |
+| `MachineId`  | 筛选特定机器的数据               | `"98765"`           |
+| `groupBy`    | 分组粒度                    | `"day"` / `"month"` |
+
+<Warning>
+  `startDate`/`endDate` 与 `TimePeriod` 互斥 —— 同时提供两者可能导致错误。每个请求请仅采用其中一种方式。
+</Warning>
+
+<Note>
+  通过 `entityId` 与筛选条件传递 MachineId：部分组件通过 `entityId` 字段接受机器 ID，另一些则将其作为 `MachineId` 筛选条件接受。如果组件范围为机器屏幕（`screenTypeId=2`），建议优先使用 `entityId`。如果是仪表板组件（`screenTypeId=1`），则使用 `MachineId` 筛选条件。确切的行为取决于该组件的存储过程实现。
+</Note>
+
+### 筛选条件类型
+
+The `type` field in a filter is a hint used by the backend to parse the `value` string:
+
+| 类型         | 描述                           |
+| ---------- | ---------------------------- |
+| `"Date"`   | ISO 8601 日期字符串（`YYYY-MM-DD`） |
+| `"int"`    | 整数值                          |
+| `"string"` | 自由文本字符串                      |
+
+## 单个请求中的多个筛选条件
+
+`filters` 字段是一个数组 —— 单个请求中可以组合多个筛选条件。例如，在一次调用中按日期范围、机器 ID 和分组方式进行筛选：
+
+```json
+{
+  "screenTypeId": 1,
+  "widgetTypeId": 19,
+  "entityId": null,
+  "filters": [
+    { "name": "startDate", "value": "2025-01-01", "type": "Date"   },
+    { "name": "endDate",   "value": "2025-12-31", "type": "Date"   },
+    { "name": "MachineId", "value": "98765",      "type": "int"    },
+    { "name": "groupBy",   "value": "day",        "type": "string" }
+  ]
+}
+```
+
+这些筛选条件会被转发给 Cortex Reports 服务，该服务会在该组件类型对应的存储过程中应用它们。
+
+## 笔记
+
+- The shape of the `data` field in `WidgetDataResponseDto` is dynamic and varies per widget type.
+- 组件类型 ID 定义在 Cortex Reports 服务数据库中，并通过 `widget_dashboard_compatibility` 列（`ScreenTypeId`）映射到屏幕类型。
+- Lynx API 充当 Cortex Reports 的经身份验证的透传代理。除基本的反序列化外，它不会修改或验证筛选条件的内容。

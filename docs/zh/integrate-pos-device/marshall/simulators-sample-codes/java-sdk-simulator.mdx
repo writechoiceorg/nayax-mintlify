@@ -1,0 +1,229 @@
+---
+title: Java SDK模拟器
+metadata:
+  og:description: Nayax Marshall SDK 包含一个模拟器,可帮助开发人员测试和调试其与 Nayax 支付系统的集成实现。该模拟器。
+---
+
+import {TerminalBlock} from "/snippets/TerminalBlock.jsx";
+
+Nayax Marshall SDK 包含一个模拟器，可帮助开发者测试和调试其与 Nayax 支付系统的实现。该模拟器可模拟实际硬件和软件交互的行为，让您无需实体硬件即可验证自动售货流程。
+
+## 模拟器
+
+当 Java SDK 模拟器在终端上启动时，其菜单将如下所示：
+
+<TerminalBlock variant="ios">
+  \[0]: 开始售货会话 0 \[1]: 取消会话 \[2]: 关闭会话 0 \[3]: 会话信息 \[4]: 查询余额 \[5]: 查询已打开的会话 \[6]: 查询读取器状态 \[7]: 现金交易 \[8]: 提示 \[9]: 选择品牌 \[10]: 转账自定义交易 ID \[11]: 显示消息 \[12]: 打开套接字 \[13]: 关闭套接字 \[14]: UI 控制 \[15]: 编组解析器 \[q]: 退出
+</TerminalBlock>
+
+<TerminalBlock>
+  \[0]: 启动销售会话 0 \[1]: 取消会话 \[2]: 关闭会话 0 \[3]: 查询已打开的会话 \[4]: 查询阅读器状态 \[5]: 现金销售 \[6]: 警报 \[7]: 显示消息 \[8]: 打开套接字 \[9]: 关闭套接字 \[10]: UI 控制 \[q]: 退出
+</TerminalBlock>
+
+下表描述了每种选项：
+
+<table align={["left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        命令
+      </th>
+
+      <th>
+        描述
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        开始销售会话 0
+      </td>
+
+      <td>
+        使用产品代码 0 启动会话（交易）。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        取消会话
+      </td>
+
+      <td>
+        从外围设备端取消交易。此操作可在消费者银行卡获得授权之前执行。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        关闭会话 0
+      </td>
+
+      <td>
+        仅适用于多会话。交易结束时关闭会话（结算）。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        信息会议
+      </td>
+
+      <td>
+        检索卡详细信息（BIN、PAN-HASH、4 位数字），无需向消费者收费或出售产品
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        查看余额
+      </td>
+
+      <td>
+        仅与日本市场相关（TMN）
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        查询已打开的会话
+      </td>
+
+      <td>
+        提供有关当前打开的会话的信息。*此选项适用于 4.0.0.22 及以上版本*。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        查询阅读器状态
+      </td>
+
+      <td>
+        提供读卡器是否`enabled (1)/ disabled (0)`的信息。此选项自 4.0.0.22 及以上版本起适用。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        现金出售
+      </td>
+
+      <td>
+        模拟现金销售。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        警报
+      </td>
+
+      <td>
+        向 DCS 发送警报。可在“最新警报”中查看。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        选择品牌
+      </td>
+
+      <td>
+        仅适用于日本市场和固件版本。如果在开始交易前选择此选项，然后再选择产品，则会自动选择所需的品牌（无需进入品牌选择界面）。为了让外设知道设备端设置的品牌，设备会在配对过程中发送品牌信息。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        转账自定义transaction\_id
+      </td>
+
+      <td>
+        允许客户发送自定义交易 ID。需要在交易进行过程中（授权前或授权后）发送。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        显示消息
+      </td>
+
+      <td>
+        目前，此选项不可用。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        打开套接字
+      </td>
+
+      <td>
+        对于外围设备，请使用 Nayax 的调制解调器满足其自身需求。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        关闭套接字
+      </td>
+
+      <td>
+        关闭为外围设备打开的套接字。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        UI 控件
+      </td>
+
+      <td>
+        测试显示控制功能。需要在 Nayax Core 中进行配置。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        马歇尔解析器
+      </td>
+
+      <td>
+        Irrelevant，一款内部测试工具
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        辞职
+      </td>
+
+      <td>
+        退出模拟器程序。
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## 交易流程示例
+
+以下是每种交易类型的流程示例：
+
+1. 常规交易（单一会话）：
+   1. 启动会话：使用`[0]: Start session`。
+   2. 出示银行卡，等待授权和“谢谢”屏幕。
+2. 多会话交易：
+   1. 使用`[0]: Start session 0`启动会话。
+   2. 出示银行卡，等待授权和“谢谢”屏幕。
+   3. 关闭相关会话——在此情况下，使用`[2]: Close Session 0`。
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="C# SDK 模拟器" href="/docs/integrate-pos-device/marshall/simulators-sample-codes/csharp-sdk-simulator" arrow />
+
+  <Card icon="link" title="C SDK 模拟器" href="/docs/integrate-pos-device/marshall/simulators-sample-codes/c-sdk-simulator" arrow />
+</Columns>

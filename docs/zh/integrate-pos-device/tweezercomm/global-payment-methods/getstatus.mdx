@@ -1,0 +1,59 @@
+---
+title: 获取状态
+metadata:
+  og:description: getStatus 方法返回当前 AEA 服务状态，并告知客户端支付引擎是否已准备好处理交易（与
+---
+
+`getStatus` 方法返回当前 AEA（Agamento Engine Application）服务状态，并告知客户端支付引擎是否已准备好处理交易（与 getInternalStatus 不同，后者提供的是支付终端是否已准备好执行新交易第一部分处理的相关信息）。该方法旨在不频繁调用（例如每天调用几次），以检查引擎的运行状态。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+在请求中，`method` 字段需要设置为 `getStatus`，如下方示例请求所示：
+
+```json
+{
+   "jsonrpc": "2.0",
+   "method": "getStatus",
+   "params": [
+      "engine"
+   ],
+   "id": 1
+}
+```
+
+### 请求参数
+
+有关此方法可用的请求参数的描述，请参阅下表。
+
+| 姓名       | 类型     | 描述      |
+| :------- | :----- | :------ |
+| `engine` | string | 固定的服务名称 |
+
+## 回复
+
+成功的请求将返回类似于以下代码块中的响应：
+
+```json
+{
+   "jsonrpc": "2.0",
+   "result": "engineReady",
+   "id": 1
+}
+```
+
+### 响应参数
+
+下面是一个包含所有可能的响应参数及其描述的表格：
+
+| 价值                     | 描述                          |
+| ---------------------- | --------------------------- |
+| `engineReady`          | 引擎已准备好处理交易                  |
+| `engineNotEstablished` | 不存在已建立的设置（引擎未初始化）。          |
+| `engineReadyOnline`    | 引擎已就绪，但由于数据库版本较旧，所有交易均在线处理。 |
+| `engineError`          | 一般性引擎错误（例如数据库损坏）。           |

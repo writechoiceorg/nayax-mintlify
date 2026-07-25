@@ -1,0 +1,168 @@
+---
+title: C# 和 Java SDK 集成
+metadata:
+  og:description: 本指南将向您展示如何将 Marshall SDK 集成到您的 C# 或 Java 应用程序中。您将学习如何:将 SDK 包导入您的。
+---
+
+本指南介绍如何将**Marshall SDK**集成到您的**C#**或**Java**应用程序中。您将学习如何：
+
+- 将 SDK 包导入到你的项目中
+- 创建并配置 VMC 设置对象
+- 设置串行（ **COM** ）端口进行通信
+- 注册事件监听器并启动SDK
+
+两种语言的说明并列显示。
+
+## 先决条件
+
+在开始之前，请确保您已：
+
+- 已下载相应的 SDK 文件，Java 使用 `.jar`，C# 使用 `.dll`。
+- 确定了 Marshall 电缆的正确**COM**端口。
+- 对于 Java，请确保您已安装 Java 8（也称为 Java 1.8）或更高版本。请注意，最新版本的 Nayax Java SDK (0.1.6.8) 需要 Java 11，但如果您需要，我们可以考虑使用 Java 8 进行编译。
+
+## 整合 Marshall
+
+要执行集成，请按照以下步骤操作：
+
+1. 将提供的 `.JAR` 或 SDK DLL 文件导入到您的项目中。
+
+2. 在代码中导入必要的命名空间。
+   <CodeGroup>
+     ```java Java
+     import com.bitmick.marshall.models.*;
+     ```
+
+     ```csharp C#
+     using com.bitmick.marshall.models;
+     ```
+   </CodeGroup>
+
+3. 实例化 VMC 配置对象：
+
+   <CodeGroup>
+     ```java Java
+     public vmc_configuration vmc_config = new vmc_configuration();
+     ```
+
+     ```csharp C#
+     vmc_configuration vmc_config = new vmc_configuration();
+     ```
+   </CodeGroup>
+
+4. 填写相应的字段。以下代码块展示了一个标准配置：
+
+   <CodeGroup>
+     ```java Java
+     public static void main(string[] args) {
+             vmc_config.multi_vend_support = false;
+             vmc_config.multi_session_support = false;
+             vmc_config.price_not_final_support = false;
+             vmc_config.reader_always_on = false;
+             vmc_config.always_idle = false;
+             vmc_config.vend_denied_policy = vmc_configuration.vend_denied_policy_cancel;
+             vmc_config.explicit_vend_success = false;
+             vmc_config.long_price = false;
+
+             vmc_config.mifare_approved_by_vmc_support = false;
+             vmc_config.mag_card_approved_by_vmc_support = false;
+             vmc_config.qr_approved_by_vmc_support = false;
+
+             vmc_config.dump_packets_level = vmc_configuration.debug_level_dump_moderate;
+             vmc_config.debug = true;
+     }
+     ```
+
+     ```csharp C#
+     public class vend_machine
+                 vmc_config.multi_session_support = false;
+                 vmc_config.multi_vend_support = false;
+                 vmc_config.price_not_final_support = false;
+                 vmc_config.reader_always_on = false;
+                 vmc_config.always_idle = false;
+                 vmc_config.explicit_vend_success = false;
+                 vmc_config.vend_denied_policy = vmc_configuration.vend_denied_policy_cancel;
+                 vmc_config.long_price = false;
+
+                 vmc_config.mag_card_approved_by_vmc_support = false;
+                 vmc_config.mifare_approved_by_vmc_support = false;
+
+                 vmc_config.debug = true;
+                 vmc_config.dump_packets_level = vmc_configuration.debug_level_dump_moderate;
+
+     ```
+   </CodeGroup>
+
+<Warning>
+  必填字段
+
+  客户机器信息是 VMC 配置所必需的。这些信息包括 `model`、`serial`、`hw_ver` 和 `manuf_code`。有关这些字段的更多信息，请参阅 [VMC Configuration Object](/docs/integrate-pos-device/marshall/get-started/vmc-configuration-object)。
+</Warning>
+
+5. 设置**COM**端口。
+   <CodeGroup>
+     ```java Java
+     m_vmc.link.set_serial_port(new pc_port("COM18", 115200))
+     ```
+
+     ```csharp C#
+     m_vmc.link.set_serial_port(new pc_port("COM18", 115200))
+     ```
+   </CodeGroup>
+
+<Warning>
+  COM 端口
+
+  请确保将 `COM` 参数更改为您的 Marshall 电缆所连接的端口。
+</Warning>
+
+- 注意——在不久的将来，我们计划提供通过以太坊使用 Marshall 的功能（仅支持 VPOSM）——在这种情况下，将没有 COM 端口，而是一个 IP 地址，该地址将与 Nayax 设备位于同一本地网络，并且可以选择相关的 IP 端口（默认情况下应保持不变\[默认值为“12345”，这是无意义的]）。
+  <CodeGroup>
+    ```java Java
+    m_vmc.link.set_serial_port(new eth_port("192.168.112.127", (short) 12345, false));
+    ```
+
+    ```csharp C#
+    vmc_instance = marshall_init(new eth_port("192.168.68.101", 12345));
+    ```
+  </CodeGroup>
+
+6. 配置SDK并注册链接事件。
+
+<CodeGroup>
+  ```java Java
+  m_vmc.link.configure(vmc_config);
+  m_vmc.link.set_events(new vmc_link_events());
+  ```
+
+  ```csharp C#
+  m_vmc.link.configure(vmc_config);
+  m_vmc.link.set_events(new vmc_link_events());
+  ```
+</CodeGroup>
+
+7. 启动 SDK 并等待 `onReady()` 事件：
+
+<CodeGroup>
+  ```java Java
+  vmc_instance .start();
+  ```
+
+  ```csharp C#
+  m_vmc.link.start();
+  ```
+</CodeGroup>
+
+<Note>
+  使用 Android
+
+  在安卓系统上，您需要获得运营商的支持，或者使用我们已提供移植实现的FTDI芯片。（请参阅JAVA SDK发行版中的“android”文件夹）
+</Note>
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="C SDK 集成" href="/docs/integrate-pos-device/marshall/get-started/c-sdk-integration" arrow />
+
+  <Card icon="link" title="方法和功能" href="/docs/integrate-pos-device/marshall/methods-functions/marshall-methods-and-functions" arrow />
+</Columns>

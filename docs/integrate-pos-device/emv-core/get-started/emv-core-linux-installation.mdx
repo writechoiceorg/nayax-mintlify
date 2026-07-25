@@ -9,18 +9,23 @@ The Nayax EMV Core SDK supports a wide range of Linux-based platforms. Each deli
 <Accordion title="Supported Platforms" icon="info-circle">
   The following table has all supported Linux platforms:
 
-  | Target Name          | Description            | Bits | PIE | CPU ABI     | Min Kernel | GLIBC | libCurl |
-  | :------------------- | :--------------------- | :--- | :-- | :---------- | :--------- | :---- | :------ |
-  | **x86\_64**          | Ubuntu 64-bit          | 64   | Yes | AMD64       | 3.2.0      | 2.34  | 7.81.0  |
-  | **armhf**            | ARM32 GCC "hard float" | 32   | Yes | ARM v7-A    | 3.2.0      | 2.34  | 7.81.0  |
-  | **armhf\_7.5**       | Linaro 7.5 toolchain   | 32   | No  | ARM v7-A    | 3.2.0      | 2.17  | 7.86.0  |
-  | **armv8a**           | Poky Linux (Yocto)     | 64   | Yes | ARM AArch64 | 5.15.0     | 2.38  | 8.4.0   |
-  | **aarch64-nuvoton**  | Nuvoton (Buildroot)    | 64   | No  | ARM AArch64 | 5.10.0     | 2.28  | 7.79.1  |
-  | **arm-inj**          | Buildroot              | 32   | Yes | ARM v7-A VE | -          | -     | 7.83.1  |
-  | **ql\_oe\_mdm9607**  | Quectel MDM9607        | 32   | No  | ARM v7-A    | 2.6.32     | 2.17  | 7.44.0  |
-  | **cortexa53-poky**   | Poky Linux             | 64   | Yes | ARM AArch64 | 3.14.0     | 2.34  | 7.82.0  |
-  | **openwrt**          | Open-source firmware   | 32   | No  | MIPS        | -          | -     | 8.0.1   |
-  | **aarch64-gnu-13.2** | GNU toolchain 13.2     | 64   | -   | ARM AArch64 | 3.7.0      | 2.34  | 8.9.0   |
+  | Target Name              | Description                             | Bits | PIE | CPU ABI     | Min Kernel | GLIBC | libCurl |
+  | :----------------------- | :-------------------------------------- | :--- | :-- | :---------- | :--------- | :---- | :------ |
+  | **x86\_64**              | X86 64-bit (Ubuntu)                     | 64   | Yes | AMD64       | 3.2.0      | 2.34  | 7.81.0  |
+  | **armhf**                | ARM32 GCC "hard float"                  | 32   | Yes | ARM v7-A    | 3.2.0      | 2.34  | 7.81.0  |
+  | **armhf\_7.5**           | ARM32 GCC "hard float" (Linaro 7.5)     | 32   | No  | ARM v7-A    | 3.2.0      | 2.17  | 7.86.0  |
+  | **armv8a**               | ARM64 Poky Linux (Yocto)                | 64   | Yes | ARM AArch64 | 5.15.0     | 2.38  | 8.4.0   |
+  | **aarch64-nuvoton**      | ARM64 for Nuvoton (Buildroot)           | 64   | No  | ARM AArch64 | 5.10.0     | 2.28  | 7.79.1  |
+  | **arm-inj**              | ARM32 (Buildroot)                       | 32   | Yes | ARM v7-A VE | -          | -     | 7.83.1  |
+  | **ql\_oe\_mdm9607**      | Quectel MDM9607 OpenEmbedded            | 32   | No  | ARM v7-A    | 2.6.32     | 2.17  | 7.44.0  |
+  | **cortexa53-poky-linux** | ARM64 based on Poky Linux               | 64   | Yes | ARM AArch64 | 3.14.0     | 2.34  | 7.82.0  |
+  | **cortexa53-hardknott**  | ARM64 using Hardknott build             | 64   | Yes | ARM AArch64 | 3.14.0     | 2.33  | 7.75.0  |
+  | **openwrt**              | Open-source firmware for embedded MIPS  | 32   | No  | MIPS        | -          | -     | 8.0.1   |
+  | **nuvoton\_NUC970**      | ARM32 for Nuvoton NUC970                | 32   | -   | ARM         | -          | -     | 7.52.1  |
+  | **openwrt-arm**          | Open-source firmware for embedded ARM32 | 32   | -   | ARM         | -          | -     | 7.82.0  |
+  | **aarch64-ndk23**        | ARM64 using Android NDK                 | 64   | Yes | ARM AArch64 | -          | -     | 7.86.0  |
+  | **aarch64-13.2**         | ARM64 using GNU toolchain 13.2          | 64   | -   | ARM AArch64 | 3.7.0      | 2.34  | 8.9.0   |
+  | **aarch64-musl**         | ARM64 OpenWRT MUSL                      | 64   | -   | ARM AArch64 | -          | -     | 8.15.0  |
 </Accordion>
 
 ### Package Contents
@@ -74,7 +79,7 @@ Verify these requirements before deploying the SDK:
 <Note>
 **Communication Configuration**
 
-By default, the SDK uses Internal (Unix domain) sockets, creating `socket_cmd` and `socket_events` in the application’s `/var` folder.
+By default, the SDK uses Internal (Unix domain) sockets, creating `socket_cmd` and `socket_events` in the application's `/var` folder.
 
 If you prefer TCP communication, set the configuration option `KIOSK_USE_TCP_SOCKETS=1`. This will use ports **10000** for commands and **10001** for events.
 </Note>

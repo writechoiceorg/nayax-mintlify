@@ -155,3 +155,8 @@ table {
   color: #4b5563;
 }
 /* End separator bar */
+
+/* Hide "Ask Assistant" chip inside the search modal; keep #assistant-entry (topbar) and the assistant panel intact */
+[data-component-part="search-ask-ai-button"] {
+  display: none !important;
+}

@@ -1,0 +1,60 @@
+---
+title: 请求和响应格式
+metadata:
+  og:description: Marshall Pro 协议对每条消息都使用统一的 JSON 结构。这种一致性使您能够在代码中构建单一的“包装器”。
+---
+
+Marshall Pro 协议对每条消息都使用统一的 JSON 结构。这种一致性使您能够在代码中构建单一的“包装器”来处理所有终端通信。
+
+## Request 对象
+
+从您的系统发送到 VPOS 的每个命令都必须遵循此结构:
+
+| 场地    | 类型       | 必需的 | 描述                               |
+| :---- | :------- | :-- | :------------------------------- |
+| 命令    | `string` | 是的  | API 方法的名称(例如`"status"`、`"pay"`)。 |
+| 请求 ID | `string` | 是的  | 用于跟踪响应的唯一 ID。                    |
+| data  | `object` | 不   | 用于存放命令具体参数的容器。                   |
+
+### 请求示例
+
+```json
+{
+  "command": "<command_name>",
+  "requestId": "<unique_request_id>",
+  "data": {
+    "param1": "value1",
+    "param2": "value2"
+  }
+}
+```
+
+## Response 对象
+
+终端的响应始终会返回您的 `requestId`,以便您的系统准确知道正在响应哪个命令。
+
+### 成功响应
+
+如果命令处理成功,终端会在 `data` 对象中返回所请求的信息。
+
+```json
+{
+  "requestId": "<request_id_echo>",
+  "data": {
+    "status": "success",
+    "details": "..."
+  }
+}
+```
+
+## 错误响应
+
+如果发生问题,响应中将包含错误代码和描述性消息。
+
+```json
+{
+  "requestId": "<request_id_echo>",
+  "errorCode": 400,
+  "errorMessage": "Invalid command parameters"
+}
+```

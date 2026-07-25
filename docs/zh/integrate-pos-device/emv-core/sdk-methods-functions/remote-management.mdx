@@ -1,0 +1,521 @@
+---
+title: 远程管理
+keywords:
+  - kibana
+  - remote management
+  - TMS
+  - terminal management system
+  - diagnostics
+  - monitoring
+  - GetKioskID
+  - GetStatus
+  - GetVersion
+  - firmware version
+metadata:
+  og:description: EMV Core SDK 包含管理功能，可简化设备配置、固件更新和诊断。这些功能可以减少。
+---
+
+EMV核心SDK包含一系列管理功能，可简化设备配置、固件更新和诊断流程。这些功能通过Nayax终端管理系统（TMS）实现集中控制，并在必要时进行本地更新，从而降低维护成本并提高可靠性。
+
+以下方法用于管理 SDK：
+
+- [Destroy](#destroy)
+- [GetAttribute](#getattribute)
+- [GetKioskID](#getkioskid)
+- [GetPollStatus](#getpollstatus)
+- [GetStatus](#getstatus)
+- [GetVersion](#getversion)
+- [Initialize](#initialize)
+- [isEMVCoreConnected](#isemvcoreconnected)
+- [SetManagementCallbacks](#setmanagementcallbacks)
+- [SetPaymentCallbacks](#setpaymentcallbacks)
+- [ShowMessage](#showmessage)
+- [UpdateMachineAttributes](#updatemachineattributes)
+
+有关每种方法的更多详细信息，请参阅以下各节。
+
+---
+
+## `Destroy`
+
+<Warning>
+  此方法仅适用于 Android SDK。
+</Warning>
+
+终止与读取器的会话并释放所有关联资源。在应用程序关闭期间或不再需要读取器时使用此功能，可防止资源泄漏并确保正确清理与 SDK 相关的进程。
+
+请参阅下方代码中 `Destroy` 的 API Signature：
+
+```java Android
+void Destroy();
+```
+
+---
+
+## `GetAttribute`
+
+由 POS 应用程序调用，从 EMV 核心配置文件中检索特定属性值。
+
+请参阅下方代码中 `GetAttribute` 的 API Signature：
+
+<Tabs>
+  <Tab title="JSON">
+    要求：
+
+    ```json
+    {"jsonrpc":"2.0","method":"GetAttribute", "params": {"Key":"PRE_AUTH_AMOUNT"}, "id":12}
+    ```
+
+    当请求的属性存在于配置文件中时，响应如下：
+
+    ```json
+       {"jsonrpc":"2.0", "result":"150", "id":12}
+    ```
+
+    当请求的属性在配置文件中不存在时，响应如下：
+
+    ```json
+     {"jsonrpc":"2.0", "error":{"code": -1, "message": "Get attribute key not found"}, "id":12}
+    ```
+
+    参数：
+
+    | 范围      | 描述                                |
+    | :------ | :-------------------------------- |
+    | ID      | 命令 ID。                            |
+    | **key** | 所请求配置属性的标签（例如 `PRE_AUTH_AMOUNT`）。 |
+  </Tab>
+
+  <Tab title="安卓">
+    ```java Java
+    String GetAttribute(String key) throws EmvCoreException;
+    ```
+
+    参数：
+
+    | 范围    | 描述                                                                           |
+    | :---- | :--------------------------------------------------------------------------- |
+    | `key` | 配置文件中的属性键。例如，如果配置文件包含 `PRE_AUTH_AMOUNT=100`，提供键 `PRE_AUTH_AMOUNT` 将返回 `100`。 |
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    KIOSK_RET LibOtiKiosk_GetAttribute(char* attribute_name, char* out_value,
+    int max_out_size);
+    ```
+
+    参数：
+
+    | 范围               | 描述                                                    |
+    | :--------------- | :---------------------------------------------------- |
+    | `attribute_name` | 表示配置文件中属性键的以空字符结尾的字符串（例如 `"PRE_AUTH_AMOUNT"`）。        |
+    | `out_value`      | 指向调用者分配的缓冲区的指针，属性值将以空字符结尾的字符串形式存储在该缓冲区中。              |
+    | `max_out_size`   | `out_value` 缓冲区的最大容量（以字节为单位）。这可防止在获取的值超出预期长度时发生缓冲区溢出。 |
+  </Tab>
+</Tabs>
+
+---
+
+## `GetKioskID`
+
+返回设备的唯一识别号码，Nayax 服务器使用该号码将交易、配置和监控与该设备关联起来。
+
+请参阅下方代码中 `GetKioskID` 的 API Signature：
+
+<Tabs>
+  <Tab title="JSON">
+    要求：
+
+    ```json
+    {"jsonrpc": "2.0", "method": "GetKioskID", "params": {}, "id": 902}
+    ```
+
+    回复：
+
+    ```json
+       {"jsonrpc":"2.0", "result":"00130226001C9C69", "id":902}
+    ```
+  </Tab>
+
+  <Tab title="安卓">
+    ```java Java
+    String GetKioskID() throws EmvCoreException;
+    ```
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    KIOSK_RET LibOtiKiosk_GetKioskId(char* out_id, int max_out_size);
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## `GetPollStatus`
+
+分别返回读卡轮询状态以及读卡器和网络资源可用性的状态值。
+
+请参阅下方代码中 `GetPollStatus` 的 API Signature：
+
+<Tabs>
+  <Tab title="JSON">
+    要求：
+
+    ```json
+    {"jsonrpc": "2.0", "method": "GetPollStatus", "params": {}, "id": 14}
+    ```
+
+    回复：
+
+    ```json
+    {"jsonrpc":"2.0", "result":{"Polling":false, "Resources":"Ready"}, "id":14}
+    ```
+
+    可能的值为：`Polling`：`true` 或 `false`。`Resources`：`Ready`、`NoReader` 或 `NoNetwork`。
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    KIOSK_RET LibOtiKiosk_GetPollStatus(otiKioskPollStatus *out_poll_status);
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## `GetStatus`
+
+获取读卡器的当前状态，包括其交易就绪状态和连接状态。这对于在集成或部署期间监控设备状态非常有用。
+
+请参阅下方代码中 `GetStatus` 的 API Signature：
+
+<Tabs>
+  <Tab title="JSON">
+    要求：
+
+    ```json
+    {"jsonrpc": "2.0", "method": "GetStatus", "id": 805}
+    ```
+
+    回复：
+
+    ```json
+     {"jsonrpc": "2.0", "result": "Ready", "id": 805}
+    ```
+  </Tab>
+
+  <Tab title="安卓">
+    ```java Java
+    EmvCoreStatus GetStatus() throws EmvCoreException;
+    ```
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    KIOSK_STATUS status;
+    KIOSK_RET result = LibOtiKiosk_GetStatus(&status);
+    if (result == KIOSK_RET_OK) {
+    switch (status) {
+    case OK_READY:
+    printf("Kiosk is ready for transactions\n");
+    break;
+    case OK_NOT_READY:
+    printf("Kiosk is not ready\n");
+    break;
+    // Handle other status values...
+    }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+可能的结果值为：`NotReady`、`Ready`、`PaymentTransaction`、`Update`、`NoReader`、`NoTerminalId`、`NoNetwork` 和 `NoTransaction`。
+
+<Note>
+  - `Update`：表示 EMV Core 正忙于处理 TMS 更新（例如新固件或新配置）。
+  - `NoTerminalId`：表示 EMV Core 尚未配置 Terminal ID。
+</Note>
+
+<Warning>
+  如果 `GetStatus` 超时，请以五秒为间隔最多重试三次。如果仍然没有响应，则假定 EMV Core 无响应，并重新启动该进程。
+</Warning>
+
+---
+
+## `GetVersion`
+
+获取读卡器的固件版本和EMV核心SDK版本。这用于验证是否已应用最新更新。
+
+<Tabs>
+  <Tab title="JSON">
+    要求：
+
+    ```json
+    {"jsonrpc": "2.0", "method": "GetVersion", "params":{"SoftwareComponent":
+    "Reader"}, "id": 5}
+
+    ```
+
+    回复：
+
+    ```json
+    {"jsonrpc": "2.0", "result": "EMVS_v071585", "id": 5}
+
+    ```
+
+    | 范围                | 描述                                                    |
+    | :---------------- | :---------------------------------------------------- |
+    | ID                | 命令 ID。                                                |
+    | SoftwareComponent | 要检查的软件组件。可接受的值为：`otiKiosk`（用于 EMV Core 版本）或 `Reader`。 |
+  </Tab>
+
+  <Tab title="安卓">
+    ```java Java
+    String GetEmvCoreVersion() throws EmvCoreException;
+    String GetReaderVersion() throws EmvCoreException;
+    ```
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    KIOSK_RET LibOtiKiosk_GetKioskVersion(char* out_version, int max_out_size);
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## `Initialize`
+
+初始化 EMV Core SDK 并与读卡器建立会话。在应用程序启动期间，执行任何交易或管理任务之前，请调用此函数一次。
+
+请参阅下方代码中 `Initialize` 的 API Signature：
+
+<Tabs>
+  <Tab title="安卓">
+    ```java Java
+    void Initialize(Context context);
+    ```
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    // TCP connection to localhost
+    bool success = LibOtiKiosk_Init(NULL, false);
+    // TCP connection to specific server
+    bool success = LibOtiKiosk_Init("192.168.1.100", false);
+    // Unix domain socket
+    bool success = LibOtiKiosk_Init("/tmp/kiosk_sockets", true);
+    ```
+
+    ### 参数
+
+    | 范围               | 描述                                                                           |
+    | :--------------- | :--------------------------------------------------------------------------- |
+    | `server_address` | **Unix 域套接字：**包含套接字的文件夹路径（可以为空）。TCP**套接字：** IP 地址或主机名（默认为 localhost）。 |
+    | `is_local`       | 对于 Unix 域套接字设为 `true`，对于 TCP 套接字设为 `false`。                                  |
+
+    ### 返回
+
+    - `true`：初始化成功。
+    - `false`：初始化失败。
+
+    ### 用法示例
+
+    ```c C
+    // TCP connection to localhost
+    bool success = LibOtiKiosk_Init(NULL, false);
+
+    // TCP connection to a specific server
+    bool success = LibOtiKiosk_Init("192.168.1.100", false);
+
+    // Unix domain socket connection
+    bool success = LibOtiKiosk_Init("/tmp/kiosk_sockets", true);
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## `isEMVCoreConnected`
+
+<Warning>
+  此方法仅适用于 Android SDK。
+</Warning>
+
+获取读卡器的当前状态，包括其事务就绪状态和连接状态。
+
+请参阅下方代码中 `isEMVCoreConnected` 的 API Signature：
+
+```java Android
+boolean isEmvCoreConnected();
+```
+
+---
+
+## `SetManagementCallbacks`
+
+<Warning>
+  此方法仅适用于 Android SDK。
+</Warning>
+
+为系统级 EMV Core 事件注册回调。其中包括 `SystemStatusChanged` 事件，该事件让应用程序能够监控 SDK 的运行状况和维护状态。
+
+请参阅下方代码中 `SetManagementCallbacks` 的 API Signature：
+
+```java Android
+void SetManagementCallbacks(IManagementCallbacks iMaintenanceCallbacks);
+```
+
+参数：
+
+`iMaintenanceCallbacks`：维护详情和系统事件处理程序。
+
+<Note>
+  要了解更多实现信息，请参阅[事件回调](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks)文档。
+</Note>
+
+---
+
+## `SetPaymentCallbacks`
+
+注册由 EMV Core 调用、并由销售应用程序实现的与支付功能相关的回调。其中包括处理 `TransactionComplete` 和 `ReaderMessage` 等事件。
+
+请参阅下方代码中 `SetPaymentCallbacks` 的 API Signature：
+
+<Tabs>
+  <Tab title="安卓">
+    ```java Java
+    void SetPaymentCallbacks(IPaymentCallbacks iPaymentCallbacks);
+    ```
+
+    参数：
+
+    - `iPaymentCallbacks`：支付交易详情和事件处理程序。
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    void LibOtiKiosk_Register_TransactionComplete_Callback(TransactionCompleteCb_t
+    cb);
+
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## `ShowMessage`
+
+在阅读器屏幕上显示自定义消息（仅当阅读器具有显示屏时可用）。
+
+请参阅下方代码中 `ShowMessage` 的 API Signature：
+
+<Tabs>
+  <Tab title="JSON">
+    要求：
+
+    ```json
+    {"jsonrpc": "2.0", "method": "ShowMessage", "params":
+    {"line1": "Please Select", "line2": "Your Product"}, "id": 901}
+    ```
+
+    回复：
+
+    ```json
+       {"jsonrpc": "2.0", "result": true, "id": 901}
+    ```
+
+    | 范围  | 描述                       |
+    | :-- | :----------------------- |
+    | ID  | 命令 ID。                   |
+    | 第1行 | 在阅读器显示屏第一行显示的文本（限16个字符）。 |
+    | 行2  | 在阅读器显示屏第二行显示的文本（限16个字符）。 |
+  </Tab>
+
+  <Tab title="安卓">
+    ```java Java
+    void ShowMessage(String line1, String line2) throws EmvCoreException;
+    ```
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    KIOSK_RET result = LibOtiKiosk_ShowMessage("Welcome!", "Tap Card");
+    ```
+  </Tab>
+</Tabs>
+
+<Warning>
+  此方法仅适用于**UNO-PLUS**阅读器。
+</Warning>
+
+---
+
+## `UpdateMachineAttributes`
+
+更新 Nayax Core 中的主机属性。这些值仅供参考，不影响支付处理。它们可在 Nayax Core 中用于报告和诊断。
+
+<Tabs>
+  <Tab title="JSON">
+    要求：
+
+    ```json
+    {
+      "jsonrpc": "2.0",
+      "method": "UpdateMachineAttributes",
+      "params": [
+        {"id": 542, "value": "AC Charger 1"},
+        {"id": 543, "value": "ACC1-1234567"},
+        {"id": 544, "value": "1.0.35-A"},
+        {"id": 593, "value": "1.2-G3"},
+        {"id": 541, "value": "manuf-123"}
+      ],
+      "id": 801
+    }
+    ```
+
+    回复：
+
+    ```json
+    {"jsonrpc": "2.0", "result": true, "id": 801}
+    ```
+  </Tab>
+
+  <Tab title="安卓">
+    ```java Java
+    String UpdateMachineAttributes(List<NayaxMachineAttribute> attributes) throws EmvCoreException;
+    ```
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    KIOSK_RET LibOtiKiosk_UpdateMachineAttributes(NayaxMachineAttribute attributes[], int count, char* result, int max_result_size);
+    ```
+  </Tab>
+</Tabs>
+
+参数：
+
+`key`：要在 Nayax Core 上更新的机器属性列表。相关属性 ID 如下：
+
+| ID    | 属性                 | 必需的 |
+| :---- | :----------------- | :-- |
+| `541` | Manufacturer Code  | 是的  |
+| `542` | 机器型号               | 是的  |
+| `543` | Serial Number      | 是的  |
+| `544` | Machine SW Version | 是的  |
+| `551` | 类型                 | 不   |
+| `593` | VMC HW Version     | 不   |
+
+<Warning>
+  您必须在每次调用中发送属性 `541`、`542`、`543` 和 `544`：
+
+  - `541` Manufacturer Code：制造商的英文名称（例如 `myCompanyName`）。
+  - `542` Machine Model：机器型号。
+  - `543` Serial Number：机器上标示的机器序列号。
+  - `544` Machine SW Version：机器软件版本。
+
+  遗漏这些属性中的任何一个都可能导致 Nayax Core 中的报告和诊断数据不完整。
+</Warning>

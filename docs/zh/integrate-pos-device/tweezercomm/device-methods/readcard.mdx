@@ -1,0 +1,107 @@
+---
+title: readCard
+metadata:
+  og:description: readCard 方法使用磁条刷卡读卡器（MSR）或非接触式 NFC 读卡器从卡片中读取数据。它仅支持 Mifare 卡。
+---
+
+`readCard` 方法使用磁条刷卡器（MSR）或非接触式 NFC 读卡器从卡片中读取数据。对于 NFC，仅支持 Mifare 卡。此方法通常用于会员积分或身份识别场景。
+
+如果用户取消操作或请求超时，可以使用 abortReadCard 方法中止该操作。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+在请求中，method 字段应设置为 `readCard`，parameters 应定义读卡器配置和用户界面消息。
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "readCard",
+    "id": "1234567890",
+    "params": [
+        "device",
+        {
+            "readMsr": true,
+            "readMifare": true,
+            "message1": "SWIPE OR PRESENT CARD",
+            "message2": "",
+            "message3": "",
+            "timeout": 40,
+            "cancelable": true,
+            "mifare": {
+                "type": "classic",
+                "commType": 2,
+                "appId": "A12345",
+                "appKey": "00000000000000000000000000000123",
+                "appKeyNo": 0,
+                "appCryptoMethod": 1,
+                "fileNo": 0,
+                "fileType": 0,
+                "expectedDataLen": 4
+            }
+        }
+    ]
+}
+```
+
+### 请求参数
+
+有关此方法可用的请求参数的描述，请参阅下表。
+
+| 姓名           | 类型     | 描述                       |
+| ------------ | ------ | ------------------------ |
+| `readMsr`    | bool   | 是否启用磁条读卡器。               |
+| `readMifare` | bool   | 是否启用 NFC 读卡器（仅限 Mifare）。 |
+| `message1`   | string | 显示给用户的主消息。               |
+| `message2`   | string | 显示给用户的第一条副标题。            |
+| `message3`   | string | 显示给用户的第二条副标题。            |
+| `timeout`    | 整数     | 超时时间（秒）。                 |
+| `cancelable` | bool   | 是否允许取消操作。                |
+
+Mifare 对象参数
+
+| 姓名                | 类型     | 描述                        |
+| ----------------- | ------ | ------------------------- |
+| `type`            | string | 卡类型（classic、desfireev2 等） |
+| `commType`        | 整数     | 通信类型                      |
+| `appId`           | string | 应用程序 ID                   |
+| `appKey`          | string | 应用程序密钥                    |
+| `appKeyNo`        | 整数     | 应用程序密钥编号                  |
+| `appCryptoMethod` | 整数     | 加密方法                      |
+| `fileNo`          | 整数     | 文件编号                      |
+| `fileType`        | 整数     | 文件类型                      |
+| `expectedDataLen` | 整数     | 预期数据长度                    |
+
+## 回复
+
+成功的请求将返回类似于以下代码块中的响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "ok",
+        "cardEntryMode": 1,
+        "cardId": "string"
+    }
+}
+```
+
+### 响应参数
+
+下面是一个包含所有可能的响应参数及其描述的表格：
+
+| 姓名                     | 类型     | 描述                   |
+| ---------------------- | ------ | -------------------- |
+| `statusCode`           | 整数     | 操作状态（0 = 成功）         |
+| `statusMessage`        | string | 操作结果消息               |
+| `cardEntryMode`        | 整数     | 读卡方式：0 = 刷卡，1 = 非接触式 |
+| `track2`               | string | Track 2 数据（仅限刷卡）     |
+| `cardId`               | string | 卡 ID（仅限非接触式）         |

@@ -1,0 +1,141 @@
+---
+title: Webhook 通知
+metadata:
+  og:description: Webhook 通知是 Nayax 发送给您后端的自动消息，用于告知交易的最终状态。这可确保您。
+---
+
+Webhook 通知是 Nayax 发送给您后端的自动消息，用于告知交易的最终状态。
+这可确保您始终掌握最新的交易信息。
+
+<Note>
+  Webhook URL：
+  您将在入驻阶段提供用于接收 webhook 的 URL。
+</Note>
+
+## Webhook 请求
+
+根据 `RequestType` 的不同，商户通知分为两种类型。
+
+### 类型 1 — 销售或授权（RequestType：0）
+
+完整的通知结构包含卡片数据、3DS 信息、重试次数以及所有交易字段。
+以下 JSON 示例展示了一个典型的成功销售通知：
+
+```json JSON 
+{
+    "CardInfo": {
+        "IssuerBin": "",
+        "Brand": "amex",
+        "CardBin": "370000",
+        "CardFinalDigits": "0002",
+        "ExpiryDate": "03/2030",
+        "IssuingCountry": "NL",
+        "IsCardCommercial": "unknown",
+        "CardHolderName": "PayWithGoogle PlaceHolder",
+        "Alias": "B760792471216187",
+        "AliasType": "Default"
+    },
+    "Ecom3DSInfo": {
+        "Is3DSOffered": "false",
+        "Is3DSOfferedResponse": "N/A",
+        "Is3DSAuthenticated": "false",
+        "Is3DSAuthenticatedResponse": "N/A",
+        "LiabilityShift": "false",
+        "CardEnrolled": "false",
+        "Eci": "N/A",
+        "Xid": "N/A"
+    },
+    "RetryAttempts": [
+        {
+            "Acquirer": "TestPmmAcquirer",
+            "AcquirerAccount": "TestPmmAcquirerAccount",
+            "ResponseCode": "Approved"
+        }
+    ],
+    "NayaxSession": "20000069048",
+    "ExternalTransactionStatus": 13,
+    "AuthCode": "007539",
+    "PaymentAccountReference": "Ck0v20P40EoneUnZG18SNNNYpw7l6",
+    "ShopperCountry": "IL",
+    "ShopperLocale": "en-US",
+    "ShopperIp": "46.120.69.156",
+    "PaymentMethod": "amex",
+    "PaymentMethodVariant": "amex_googlepay",
+    "Currency": "USD",
+    "Amount": "1.97",
+    "Cavv": "N/A",
+    "CavvAlgorithm": "N/A",
+    "CvcResult": "6 No CVC/CVV provided",
+    "NayaxTransactionId": "20000121692",
+    "MerchantRequestId": "5fbeb1ba-263f-4fe6-a109-642b562020c9",
+    "MachineId": "1001316721",
+    "FollowUpRequestOptions": [2, 4],
+    "RequestType": 0,
+    "RequestDate": "2026-03-05T11:09:01.000",
+    "IsApproved": true,
+    "Hmac": "uET4OAwxvSN6lwVEwzQ1qRWbMkxo4KR9JbUIcG0qqo0="
+}
+```
+
+### 类型 2 — 所有其他请求类型（RequestType：1、2、3…）
+
+这是一种仅包含核心字段的最简通知。字段是否存在取决于请求类型。
+有关负载结构，请参见下方示例：
+
+```json JSON 
+{
+  "NayaxTransactionId": "...",
+  "MerchantRequestId": "e84e9e10-6223-4e45-8da1-243d2d55b25e",
+  "MachineId": "1000968111",
+  "RequestType": 1,
+  "RequestDate": "2026-03-05T10:47:56.000",
+  "IsApproved": true,
+  "AdditionalInfo": {},
+  "FollowUpRequestOptions": [],
+  "Hmac": "D4Ni+IqJev32uHlNPzz6oW8AFiGyZq7kQ8xh3QyLy8g="
+}
+```
+
+## Webhook 请求参数
+
+以下参数定义了传入 webhook 通知的结构：
+
+| 字段名称                     | 类型          | 描述                                                                                  |
+| :----------------------- | :---------- | :---------------------------------------------------------------------------------- |
+| `NayaxTransactionId`     | String      | 由 Nayax 生成的唯一交易 ID。                                                                 |
+| `MerchantRequestId`      | String      | 发起方的交易参考 ID。                                                                        |
+| `MachineId`              | String      | 虚拟终端/机器的唯一 ID。                                                                      |
+| `RequestType`            | 整数          | 交易类型标识符（例如，0 表示 Sale，1 表示 Auth）。注意：计算 HMAC 时，应使用对应的枚举名称（例如 "Sale" 或 "Auth"），而不是整数值。 |
+| `IsApproved`             | 布尔值         | 指示交易是否被批准。                                                                          |
+| `CardInfo`               | Object      | 包含支付卡详情的根对象。                                                                        |
+| `IsCardCommercial`       | String      | 取值："true"、"false"、"unknown"。注意：可能存在其他取值。                                            |
+| `PaymentMethodVariant`   | String      | 支付方式变体（例如 "amex\_googlepay"）。                                                       |
+| `RetryAttempts`          | Array       | 包含 `Acquirer`、`AcquirerAccount` 和 `ResponseCode` 的对象列表。                             |
+| `FollowUpRequestOptions` | Array\[Int] | 可用的后续请求类型（例如 \[2, 4] 表示可执行结算和退款）。                                                   |
+| `Hmac`                   | String      | 可选。用于验证真实性的 HMAC-SHA256 签名。请参阅 HMAC 验证。                                             |
+
+### 条件字段
+
+以下字段为条件字段，并非始终存在：
+
+- NayaxToken：当发起方使用 Charge Token 时存在。
+- AdditionalInfo：如果发起方在原始请求中包含此字段，则会存在。该字段同时出现在 `MerchantNotification` 和 `MerchantTransactionNotification` 中。
+- EReceiptUrl：当启用 eReceipt 功能时存在。
+
+## Webhook 传送与重试
+
+Nayax 会将 webhook 通知发送到您在入驻期间提供的 URL。系统会根据您服务器返回的 HTTP 响应代码做出以下反应：
+
+| 响应代码   | 行为                                 |
+| :----- | :--------------------------------- |
+| 200 OK | 通知已成功接收。Nayax 停止发送。                |
+| 500    | 服务器端错误。Nayax 将以不同的时间间隔重试，最多重试 3 次。 |
+| 其他任何情况 | （例如 401、404）Nayax 停止发送，不再重试。       |
+
+<Note>
+  If HMAC validation fails on your end, **do not return 500**. A broken HMAC implementation will not be fixed by retrying. Fix the implementation and test with the examples on the [HMAC Validation](/docs/hmac-validation) page.
+</Note>
+
+## 参见
+
+<Card icon="link" title="Nayax 令牌" href="/docs/ecom-sdk/back-end-integration/nayax-ecom-tokens" />

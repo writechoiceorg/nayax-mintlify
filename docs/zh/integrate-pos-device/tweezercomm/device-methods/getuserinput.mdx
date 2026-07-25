@@ -1,0 +1,83 @@
+---
+title: getUserInput
+metadata:
+  og:description: getUserInput 方法用于在支付终端上提示用户输入数字或字母数字内容。此方法通常用于采集 ID、金额
+---
+
+`getUserInput` 方法用于在支付终端上提示用户输入数字或字母数字内容。此方法通常用于采集交易或流程所需的 ID、金额，或任何自由格式的输入。
+
+See also the [`abortGetUserInput`](/docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserinput) method to cancel a pending input request.
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+要调用此方法，请将 `method` 字段设置为 `getUserInput`，并按下方所示包含服务名称和参数。
+
+```json
+{
+    "jsonrpc":"2.0",
+    "method":"getUserInput",
+    "id":"1234567890",
+    "params": [
+            "device",{
+                "title": "Main-Title",
+                "subtitle": "Sub-Title",
+                "type": "numeric",
+                "minLength": 2,
+                "maxLength": 10,
+                "timeout": 5
+            }
+        ]
+}
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+| 范围          | 类型     | 描述                                           |
+| ----------- | ------ | -------------------------------------------- |
+| `title`     | string | 向用户显示的主标题。                                   |
+| `subtitle`  | string | 显示在标题下方的副标题。                                 |
+| `type`      | string | Type of input (`numeric` or `alphanumeric`). |
+| `minLength` | 整数     | 允许的最小字符数。                                    |
+| `maxLength` | 整数     | 允许的最大字符数。                                    |
+| `timeout`   | 整数     | 请求过期前的超时时间（秒）。                               |
+
+## 回复
+
+成功的请求将返回以下响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "1234567890",
+    "result": {
+        "statusCode": 0,
+        "data": "12456"
+    }
+}
+```
+
+### 响应参数
+
+下表说明了此方法的响应参数：
+
+| 范围                  | 类型     | 描述                |
+| ------------------- | ------ | ----------------- |
+| `retailerNumber`    | string | 零售商标识符。           |
+| `nayaxSN`           | string | Nayax 序列号。        |
+| `isActiveDes`       | string | 激活状态。             |
+| `emvConfigFileId`   | 整数     | EMV 配置文件 ID。      |
+| `emvProvider`       | 整数     | EMV 提供商 ID。       |
+| `paymentMethods`    | string | 已启用的支付方式代码。       |
+| `cibusEnabled`      | string | Cibus 支持状态。       |
+| `cibusRestaurantId` | 整数     | Cibus 餐厅 ID。      |
+| `cibusPosId`        | 整数     | Cibus POS ID。     |
+| `multipassEnabled`  | string | Multipass 支持状态。   |
+| `multipassPosId`    | 整数     | Multipass POS ID。 |

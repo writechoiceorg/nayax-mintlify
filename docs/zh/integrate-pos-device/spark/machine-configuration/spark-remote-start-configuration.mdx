@@ -1,0 +1,116 @@
+---
+title: 远程启动配置
+description: 在 Nayax Core 中配置一台机器以支持 Spark Remote Start 功能，即由您的服务器远程在终端上启动交易。
+---
+
+本页面上的设置用于为 Spark Remote Start 准备机器，此流程下，由您的服务器在终端上启动交易，而非由消费者在设备上操作。请将这些设置应用于您在 [Machine Configuration](/docs/integrate-pos-device/spark/machine-configuration) 中选择的机器。
+
+## 读卡器
+
+这些设置用于控制设备硬件以及交易的启动方式：
+
+- 小数位：定义 Nayax 设备并影响 Default Credit 值。
+  通常为 `2`。
+- Transaction Start Method：设置为 Accept Nothing。此设置定义了读卡器在空闲状态下可通过什么方式启动交易。对于 Remote Start，由服务器调用读卡器，因此无需任何物理操作，且物理启动方式将被阻止。
+
+<Frame>
+  Transaction Start Method 设置为 Accept Nothing 的 Card Readers 设置
+</Frame>
+
+<Note>
+  如果您在此机器上使用 Device Stop，Transaction Start Method 的设置方式将有所不同。请参见 [Device Stop Configuration](/docs/integrate-pos-device/spark/machine-configuration/spark-device-stop-configuration)。
+</Note>
+
+## 通信
+
+此设置定义了 Nayax 设备与 Nayax 服务器的通信方式：
+
+- Communication Mode：设置为 MQTT Enabled。对于 Remote Start，服务器需要唤醒设备，因此设备必须监听来自服务器的请求。MQTT 协议支持这一点。另一种选择是 VPN Enabled，但需要支持该协议的 SIM 卡。
+- MQTT - Primary Address：请联系您的 Nayax 支持代表，获取适合您设备所在位置的地址。
+
+其余的 MQTT 设置均保留默认值。除非另有指示，请勿更改。
+
+<Frame>
+  Communication Mode 设置为 MQTT Enabled 的 Communication 设置
+</Frame>
+
+## 分子数据
+
+MDB Flags 设置用于告知服务器该设备支持哪种支付流程：
+
+- 预授权用于在消费者选择
+  产品或服务之前、且最终金额尚未确定时启动交易。请将 MDB Flags 设置为
+  \* Flags Disabled。
+- 预选是在出示银行卡时价格已知的
+  情况下使用的流程。请将 MDB Flags 设置为 02 PreSelection Enabled。
+
+<Frame>
+  预授权流程中 MDB Flags 设置为 Flags Disabled
+</Frame>
+
+## 支付
+
+这些设置控制授权金额以及设备等待刷卡的时长：
+
+- **Default Credit**: set the authorization amount. This applies to the
+  Pre-Authorization flow only. It is the amount authorized when the `Amount` field in
+  the `TriggerTransaction` request is empty. The value is in cents and is affected by
+  the **Decimal Place** value. The settlement value cannot be higher than this amount.
+- Present Card Timeout：服务器唤醒设备后，设备等待刷卡的时间（以秒为单位）。默认值为 15 秒。我们建议设置为 30 到 60 秒，以便消费者有足够时间到达终端并出示卡片。
+
+<Warning>
+  当设备达到 Present Card Timeout 且未出示卡片时，不会发送 `TransactionCallback`。请同时设置您自己的超时时间，且不短于此值，以便您的系统能够处理缺失回调的情况。
+</Warning>
+
+## Pulse/ccTalk
+
+以下设置定义了每个脉冲适用的信用额度：
+
+- 每脉冲信用额度 `1`：设置为 1。
+- 每次出货脉冲数 `1`：设置为 1。
+
+## VPOS Touch
+
+VAS configurations 设置对于 Remote Start 而言是可选的。您可以添加标识，表明该机器执行 Spark Remote Start。该设置并非流程正常工作所必需，仅用于管理目的。
+
+<Note>
+  Spark Remote Start 和 Spark Device Start 不能在同一机器上共存。
+</Note>
+
+完成后，点击 Save 以保存配置。
+
+## 配置摘要
+
+使用下表作为 Remote Start 设置的快速参考：
+
+| 团体           | 属性                     | 价值                                                                                                                                                      |
+| :----------- | :--------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 读卡器          | 小数位数                   | 通常为 2                                                                                                                                                   |
+| 读卡器          | 交易启动方式                 | Accept Nothing（若用于 Device Stop，请参见 [Device Stop Configuration](/docs/integrate-pos-device/spark/machine-configuration/spark-device-stop-configuration)） |
+| 通信           | Communication Mode     | MQTT Enabled 或 VPN Enabled                                                                                                                              |
+| 通信           | MQTT - Primary Address | 请联系您的 Nayax 支持代表                                                                                                                                        |
+| 分子数据         | MDB Flags              | 预授权：Flags Disabled。预选：PreSelection Enabled                                                                                                              |
+| 支付           | 违约信用                   | 授权金额（结算金额不能高于此值）                                                                                                                                        |
+| 支付           | Present Card Timeout   | 建议：30 到 60 秒                                                                                                                                            |
+| 打印收据格式       | 收据按钮显示时长               | 可选，用于 eReceipt。建议值：15                                                                                                                                   |
+| 打印收据格式       | 收据二维码显示时长              | 可选，用于 eReceipt。建议值：60                                                                                                                                   |
+| Pulse/ccTalk | 每脉冲信用额度 1              | 大于 0                                                                                                                                                    |
+| Pulse/ccTalk | 每次出货脉冲数 1              | 1                                                                                                                                                       |
+| VPOS Touch   | 批准按钮 UI 显示持续时间         | 0 to 60 seconds (see [Additional Features](/docs/integrate-pos-device/spark/machine-configuration/additional-features#pos-display-tariff))              |
+| VPOS Touch   | 信息状态显示超时               | 0 to 10 seconds (see [Additional Features](/docs/integrate-pos-device/spark/machine-configuration/additional-features#pos-display-tariff))              |
+| VPOS Touch   | VAS 配置                 | 可选：Spark Remote Start                                                                                                                                   |
+| VPOS Touch   | 出货流程选项                 | 可选，用于 eReceipt：动态收据                                                                                                                                     |
+| VPOS Touch   | 空闲模式自定义图像              | 参见 [Additional Features](/docs/integrate-pos-device/spark/machine-configuration/additional-features#idle-mode-custom-image)                             |
+| VPOS Touch   | 空闲模式屏幕                 | 请联系您的 Nayax 支持代表                                                                                                                                        |
+
+## 后续步骤
+
+<CardGroup cols={2}>
+  <Card title="远程启动" icon="bolt" href="/docs/integrate-pos-device/spark/payment-flows/spark-remote-start">
+    了解 Remote Start 交易流程在 API 层面的运作方式。
+  </Card>
+
+  <Card title="设备停止配置" icon="hand" href="/docs/integrate-pos-device/spark/machine-configuration/spark-device-stop-configuration">
+    添加从设备停止交易的设置。
+  </Card>
+</CardGroup>

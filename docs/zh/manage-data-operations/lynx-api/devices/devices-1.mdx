@@ -1,0 +1,21 @@
+---
+title: 设备
+metadata:
+  og:description: 在 Nayax 中，设备（Device）是集成到您业务运营中的硬件组件或设备，可能包括支付终端或已连接的硬件
+---
+
+在 Nayax 中，设备是集成到您业务运营中的硬件组件或设备，可能包括用于促成交易、管理库存或提供客户服务的支付终端或已连接硬件。每个设备在 Nayax 平台内都具有唯一可识别性，从而实现无缝的管理、监控和配置。
+
+<Columns cols={2}>
+  <Card icon="circle-info" title="检索设备信息" href="/docs/manage-data-operations/lynx-api/devices/getting-all-devices-under-an-operator">
+    通过 Nayax Core 或 Lynx API 查看设备属性，例如运营商、型号、ID 和状态。
+  </Card>
+
+  <Card icon="circle-stop" title="禁用设备" href="/docs/manage-data-operations/lynx-api/devices/disabling-a-device">
+    通过 Lynx API PUT 请求禁用设备，使其停止处理支付和订单。
+  </Card>
+
+  <Card icon="arrow-right-arrow-left" title="在操作员之间移动设备" href="/docs/manage-data-operations/lynx-api/devices/moving-device-between-operators">
+    使用 Lynx API 端点，在您的 Nayax 层级结构中将设备从一个运营商重新分配给另一个运营商。
+  </Card>
+</Columns>

@@ -1,0 +1,63 @@
+---
+title: 停止回调
+metadata:
+  og:description: 启用 StopCallback 此功能必须在集成过程中于 Nayax Core 中启用。StopCallback 端点用于通知集成方。
+---
+
+<Warning>
+  启用 `StopCallback`
+
+  集成过程中必须在 Nayax Core 中启用此功能。
+</Warning>
+
+`StopCallback` 端点用于通知集成方，消费者已在终端出示其支付卡，尝试停止正在进行的会话。此过程使 Spark 集成方能够对照最初在同一终端上授权的活动会话来验证和匹配该卡片。这主要用于预授权交易流程中（如果您选择实现该流程）。
+
+当支付终端处于空闲（Idle）模式时，它可以接受卡片出示。如果 Nayax 识别出该卡片属于某个活动交易，它会发送包含交易详情的 `StopCallback`。如果找到匹配的会话，您需要发送 `Settlement` 请求以完成会话终止。
+
+<Warning>
+  暂停
+
+  如果在 5 秒内没有收到 ACK，则视为消费者体验失败。
+</Warning>
+
+## 要求
+
+Spark 会向您配置的 `StopCallback` 端点发送 POST 请求。正文参数如下例所示：
+
+```json
+{
+  "StopSiteId": 4,
+  "MachineId": 71234996,
+  "HwSerial": "0434334921100366",
+  "CardLast4Digits": "1234",
+  "CardHash": "7f2082ba5dbccf706b6987e75b62083f65b5695bc2d8c827c3e46769d007a9e6",
+  "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+  "NayaxTransactionId": 2004545072,
+  "CardUid": "1288528281124927",
+  "MachineAuTime": "20240205194122328",
+  "ServiceStationNumber": "5"
+}
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+| 场地                     | 类型     | 必需的 | 描述                                                                                                   |
+| ---------------------- | ------ | --- | ---------------------------------------------------------------------------------------------------- |
+| `StopSiteId`           | 整数     | 是的  | 触发会话停止的站点 ID。                                                                                        |
+| `MachineId`            | 整数     | 是的  | 自动售货机或设备的唯一标识符。                                                                                      |
+| `HwSerial`             | String | 是的  | 终端硬件序列号。                                                                                             |
+| `CardLast4Digits`      | String | 是的  | 用于交易的银行卡的后四位数字。                                                                                      |
+| `CardHash`             | String | 是的  | 支付卡的哈希值。                                                                                             |
+| `SparkTransactionId`   | String | 是的  | Spark 事务标识符，用于标识最初发起的会话。                                                                             |
+| `NayaxTransactionId`   | 整数     | 是的  | Nayax 唯一交易 ID。                                                                                       |
+| `CardUid`              | String | 不   | 卡片的唯一标识符（如有）。更多详细说明请参见[SMC 支持](/docs/integrate-pos-device/spark/additional-resources/smc-support)页面。 |
+| `MachineAuTime`        | String | 是的  | 终端本地时间戳，格式为 `yyyyMMddHHmmssSSS`。                                                                     |
+| `ServiceStationNumber` | String | 不   | 所用充电桩或充电站的标识符。                                                                                       |
+
+<Note>
+  Nayax 回调
+
+  这是来自 Nayax 的回调，不需要响应体。简单的 200 OK 服务器确认就足够了。
+</Note>

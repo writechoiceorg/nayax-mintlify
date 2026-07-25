@@ -1,14 +1,15 @@
 ---
 title: "Security & Token"
+keywords: ["api key", "API key", "credentials", "credential", "credentials for test", "bearer token", "access token", "authorization header", "test credentials", "sandbox credentials", "generate token", "user token", "show token", "account settings", "security and login", "how to get an access token"]
 metadata:
-  og:description: "Authentication using an access token is required to interact securely with the Lynx API. This guide provides an overview of generating and using."
+  og:description: "Learn how to generate a Lynx API access token (API key) from Nayax Core and use it as a Bearer credential to authenticate requests in QA and production."
 ---
 
 Authentication using an access token is required to interact securely with the Lynx API. This guide provides an overview of generating and using access tokens and best practices for ensuring API security.
 
 ## Access Token
 
-An access token is a security credential used to authenticate API requests. Each request to the Lynx API must include a valid access token in the `Authorization` header.
+An access token is a security credential used to authenticate API requests. Each request to the Lynx API must include a valid access token in the `Authorization` header. This access token is also known as an API key or API token, and appears as a User Token in Nayax Core.
 
 <Warning>
 **Keep your Tokens Safe**
@@ -41,8 +42,7 @@ Include the access token in the `Authorization` header for each API request:
 
 ```sh
 curl -X GET "https://qa-lynx.nayax.com/operational/v1/devices" \
--H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
--H "Content-Type: application/json"
+-H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
 ```
 
 * Replace `<YOUR_ACCESS_TOKEN>` with your actual token retrieved from Nayax Core.

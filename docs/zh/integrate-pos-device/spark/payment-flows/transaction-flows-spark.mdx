@@ -1,0 +1,21 @@
+---
+mode: wide
+title: 付款流程
+metadata:
+  og:description: Spark 支持多种支付流程，以根据支付流程的发起方式处理不同的使用场景。Remote Start：该交易。
+---
+
+Spark 支持多种支付流程，根据支付流程的启动方式来处理不同的用例。
+
+- **远程启动**：交易由集成商的服务器远程发起，通常是由消费者在物理支付设备之外的操作触发（例如，插入电动汽车充电器）。
+- **设备启动**：交易直接从 Nayax 支付终端开始，消费者在该终端与设备交互以选择服务点或产品。
+
+每个流程都涉及一系列特定的 API 调用和设备交互，分别针对集成方主导或设备主导的控制方式而设计，并使用一组标准的 Spark API 方法，例如 `StartAuthentication`、`TriggerTransaction` 和 `Settlement`。但根据发起方和逻辑所有者的不同，时序和职责也有所不同。要了解每种流程的更多信息，请参阅以下页面。
+
+<Columns cols={3}>
+  <Card icon="link" title="设备启动" href="/docs/integrate-pos-device/spark/payment-flows/spark-device-start" arrow />
+
+  <Card icon="link" title="远程启动" href="/docs/integrate-pos-device/spark/payment-flows/spark-remote-start" arrow />
+
+  <Card icon="link" title="设备停止" href="/docs/integrate-pos-device/spark/payment-flows/spark-device-stop" arrow />
+</Columns>

@@ -1,0 +1,63 @@
+---
+title: 闭环卡支持
+metadata:
+  og:description: SMC（Self-Managed Cards，自管理卡）是 Spark 的一项功能，使集成方能够使用封闭式循环卡，例如 RFID 标签、公司发行的工牌。
+---
+
+SMC（自管理卡）是 Spark 的一项功能，它使集成商能够在 Spark 的远程/设备启动流程和设备停止流程中使用闭环卡，例如 RFID 标签、公司发放的徽章或会员卡。您的系统负责验证和授权卡片，而无需依赖 Nayax 或收单银行。它非常适合以下情况：
+
+- 您希望提供免费访问权限（例如，针对员工或 VIP）
+- 您正在使用会员卡或现有的 RFID 解决方案
+- 您无需获得外部收单机构的授权（无需银行批准）。
+
+这使得内部支付系统、免费访问程序或基于自定义逻辑的验证具有更大的灵活性。
+
+<Note>
+  启用 SMC
+
+  要支持此功能，您必须使用专用的“支付方式”。支持此支付方式的机器仅支持 Spark 自管卡和信用卡（不支持其他供应商的预付卡）。
+
+  请向您的 Nayax 集成工程师咨询更多信息和配置方面的帮助。
+</Note>
+
+## SMC 的工作原理
+
+启用 SMC 后：
+
+- Spark 将所有刷卡行为视为自动授权
+- 您的后端将决定是否继续或取消会话
+- Spark 仍会执行正常的回调流程（`TransactionCallback`、`TransactionNotify`、`StopNotify`）
+
+这使得卡片交互变得快速而无缝，同时将责任转移到后端以将卡片数据与您的内部系统进行匹配并决定是否继续、取消或记录会话。
+
+## 卡号
+
+支付卡的唯一 ID（Card UID）是 Spark 自管理卡（self-managed cards）的关键标识符。虽然 Nayax 会自动批准这些卡，但验证其真实性和服务授权是集成方的责任。如果集成方判定某张卡无效或未获授权，则必须发起 `/CancelTransaction` 请求。
+
+<Warning>
+  卡验证
+
+  如果您不在自己一方验证卡片，未经授权的用户可能会启动会话。请始终比对回调中的 `UID` 数据。
+</Warning>
+
+## 用例示例
+
+典型的 SMC 交易如下所示：
+
+1. 该卡已被 Spark 检测并接受。
+2. 您的后端会收到一个带有卡哈希值和 UID 的 `/TransactionCallback`。
+3. 您可以在内部员工系统中查找徽章。
+4. 如果批准，会话将继续，随后会发送 `/Settlement`。
+   1. 如果拒绝，您的后端将发送 `/CancelTransaction`。
+
+<Warning>
+  完成
+
+  `/Settlement` 是必需的，用于表明呈现的是有效的 Spark 自管理卡。
+
+  `/CancelTransaction` 是必需的，用于表明呈现的卡无效，或交易在未收费的情况下完成（未提供服务 / settlement=0）。
+</Warning>
+
+## 参见
+
+<Card icon="link" title="TransactionCallback" href="/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback" arrow />

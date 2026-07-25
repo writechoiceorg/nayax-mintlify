@@ -1,0 +1,31 @@
+---
+title: 库存管理
+metadata:
+  og:description: 本节提供了在 Nayax 系统中管理库存的全面指南，涵盖了库存管理的所有关键阶段。
+---
+
+在深入了解各个具体指南之前，请先从 Inventory Workflow 开始，以了解必须遵循的四步流程。
+
+<Card title="库存工作流程" icon="diagram-project" href="/docs/manage-data-operations/lynx-api/inventory-management/inventory-workflow">
+  设置库存的四步流程，从产品组到拣货单（Pick List）。
+</Card>
+
+<CardGroup cols={2}>
+  <Card title="产品组" icon="layer-group" href="/docs/manage-data-operations/lynx-api/inventory-management/create-product-group">
+    为您的产品创建逻辑类别，例如 Beverages 或 Snacks。
+  </Card>
+
+  <Card title="运营商产品" icon="box" href="/docs/manage-data-operations/lynx-api/inventory-management/create-products">
+    将产品添加到您的目录中，包括定价、条形码和分组归属。
+  </Card>
+
+  <Card title="机械产品" icon="map" href="/docs/manage-data-operations/lynx-api/inventory-management/machine-products-1">
+    将目录产品映射到机器货位（bin），以定义每台机器的布局。
+  </Card>
+
+  <Card title="选择列表" icon="clipboard-list" href="/docs/manage-data-operations/lynx-api/inventory-management/pick-lists">
+    生成补货单，列明每台机器所需的产品和数量。
+  </Card>
+</CardGroup>
+
+请参阅 [Pick List Actions](/docs/manage-data-operations/lynx-api/inventory-management/pick-list-actions)，了解如何更新、检索或删除现有拣货单。

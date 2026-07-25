@@ -1,0 +1,224 @@
+---
+title: 停止通知
+metadata:
+  og:description: 启用 StopNotify 此功能必须在集成期间于 Nayax Core 中启用。StopNotify 端点使 Spark 能够判断 a。
+---
+
+<Warning>
+  启用 `StopNotify`
+
+  集成过程中必须在 Nayax Core 中启用此功能。
+</Warning>
+
+`StopNotify` 端点使 Spark 能够判断在支付终端空闲时刷卡是否被授权用于停止正在进行的会话。这主要用于预授权（Pre-Authorization）流程，在该流程中必须再次刷同一张卡才能终止会话并进入结算阶段。
+
+Nayax 将在 `/TransactionCallback` 和 `/TransactionNotify` 中连同终端标识符一起发送先前捕获的哈希卡值和后四位数字。提供方需要验证该卡是否与该终端上正在进行的会话匹配。匹配的卡应返回 Approved 响应；否则，Spark 集成方应返回 Declined 判定结果。
+
+此功能必须通过 Nayax Core 启用。如果在 5 秒内未收到 Spark 集成方的响应，则该流程从消费者的角度将被视为失败。
+
+## 要求
+
+向 Spark 的 `/spark/StopNotify` 端点发送 POST 请求，正文如下：
+
+```json
+{
+ "StopSiteId": 4,
+ "MachineId": 71234996,
+ "HwSerial": "0434334921100366",
+ "CardLast4Digits": "1234",
+ "CardHash": "7f2082ba5dbccf706b6987e75b62083f65b5695bc2d8c827c3e46769d007a9e6",
+ "CardUid": "1288528281124927",
+ "ServiceStationNumber": "5"
+}
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+<table>
+  <thead>
+    <tr>
+      <th>
+        场地
+      </th>
+
+      <th>
+        类型
+      </th>
+
+      <th>
+        必需的
+      </th>
+
+      <th>
+        描述
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `StopSiteId`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        刷卡以停止会话所在站点的 ID
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `MachineId`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        自动售货机或设备的唯一 ID
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `HwSerial`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        终端的硬件序列号
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `CardLast4Digits`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        所刷支付卡的后 4 位数字
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `CardHash`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        原始交易中所用卡的哈希值
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `CardUid`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        不
+      </td>
+
+      <td>
+        Unique identifier of the card. See a more detailed explanation on the [SMC Support](/docs/integrate-pos-device/spark/additional-resources/smc-support) page.
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `ServiceStationNumber`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        是的
+      </td>
+
+      <td>
+        消费者希望从中获得服务的服务站标识符，从 Nayax 设备显示屏中选择。
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## 回复
+
+成功的响应将返回以下正文：
+
+```json
+{
+  "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+  "NayaxTransactionId": 2004545072,
+  "SiteId": 2,
+  "StopSiteId": 4,
+  "MachineId": 71234996,
+  "HwSerial": "0434334921100366",
+  "MachineAuTime": "20240205194122328",
+  "Status": {
+    "Verdict": "Approved",
+    "ErrorDescription": "No Errors"
+  }
+}
+```
+
+### 响应参数
+
+下表说明了响应的参数：
+
+| 场地                        | 类型     | 描述                                 |
+| :------------------------ | :----- | :--------------------------------- |
+| `SparkTransactionId`      | String | 匹配交易的 Spark 会话标识符                  |
+| `NayaxTransactionId`      | 整数     | Nayax 交易的唯一 ID                     |
+| `SiteId`                  | 整数     | 发起交易的原始站点                          |
+| `StopSiteId`              | 整数     | 刷卡以停止会话的站点                         |
+| `MachineId`               | 整数     | 刷卡所在机器的 ID                         |
+| `HwSerial`                | String | 机器的序列号                             |
+| `MachineAuTime`           | String | 授权的本地机器时间戳，格式为 `yyyyMMddHHmmssSSS` |
+| `Status.Verdict`          | String | 表示停止请求是被批准还是被拒绝                    |
+| `Status.ErrorDescription` | String | 包含附加上下文的可读消息（如适用）                  |
+| `Status.ErrorCode`        | 数字     | 指示交易期间发生的特定错误类型的数字代码。此字段仅出现在错误响应中。 |

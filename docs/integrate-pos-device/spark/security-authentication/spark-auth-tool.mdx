@@ -1,0 +1,34 @@
+---
+title: "Interactive Authentication Tool"
+metadata:
+  og:description: "Handle Spark authentication without writing any code. Build and inspect ciphers and signature headers directly in your browser."
+---
+
+import { SparkAuthTool } from "/snippets/SparkAuthTool.jsx";
+
+Use this tool to handle Spark authentication without writing any code. Everything runs in your browser, so your token and sign key never leave your machine.
+
+The tabs at the top cover the three operations the tool performs:
+
+- **StartAuthentication**: build or inspect the cipher and the
+  `TransactionSignature` header for the `StartAuthentication` call, the
+  integrator's first request to open a transaction. The **Auth** and **Legacy
+  Auth (v1)** sub-tabs cover the current and legacy signature flows.
+- **StartSession**: build or inspect the `Cipher` your server returns when
+  Nayax sends a `StartSession` request to open a session.
+- **Header Signature**: generate the `IntegratorId` and `TransactionSignature`
+  headers that authenticate a Spark API request.
+
+<SparkAuthTool />
+
+## See Also
+
+<Columns cols={2}>
+  <Card icon="link" title="Authentication" href="/docs/integrate-pos-device/spark/security-authentication/spark-authentication">
+    The current standard for all new integrations. Header-based signature.
+  </Card>
+
+  <Card icon="link" title="Legacy Authentication" href="/docs/integrate-pos-device/spark/security-authentication/spark-legacy-authentication">
+    For maintaining existing integrations. HMAC signature over the JSON body.
+  </Card>
+</Columns>

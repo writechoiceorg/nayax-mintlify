@@ -1,0 +1,21 @@
+---
+title: 安全与身份验证
+metadata:
+  og:description: 为确保每笔交易的安全性和完整性，Spark API 需要一个两部分的身份验证流程。所有请求都必须标识以下内容。
+---
+
+为了确保每笔交易的安全性和完整性，Spark API 要求采用双重身份验证流程。所有请求都必须标识发送者，并包含数字签名，以验证请求体未被篡改。
+
+## 身份验证选项
+
+选择与项目状态相符的集成路径：
+
+<Columns cols={2}>
+  <Card icon="link" title="验证" href="/docs/integrate-pos-device/spark/security-authentication/spark-authentication">
+    这是所有新集成的当前标准。此版本使用简化的基于标头的签名。
+  </Card>
+
+  <Card icon="link" title="传统身份验证" href="/docs/integrate-pos-device/spark/security-authentication/spark-legacy-authentication">
+    仅用于维护现有集成。此版本需要根据 JSON 正文内容生成 HMAC 签名。
+  </Card>
+</Columns>

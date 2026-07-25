@@ -1,0 +1,67 @@
+---
+title: getInfo
+metadata:
+  og:description: getInfo 方法用于获取支付设备的基本元数据，包括硬件和制造商信息、序列号以及
+---
+
+`getInfo` 方法用于获取支付设备的基本元数据，包括硬件和制造商信息、序列号以及当前时间戳。这对设备诊断、远程库存管理和配置验证非常有用。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+在请求中，`method` 字段需要设置为 `getInfo`，如下方示例所示：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getInfo",
+    "params": [
+        "device"
+    ],
+    "id": "4309656"
+}
+```
+
+### 请求参数
+
+下表描述了此方法的请求参数：
+
+| 姓名       | 类型    | 描述             |
+| -------- | ----- | -------------- |
+| `params` | array | 必须包含值 `device` |
+
+## 回复
+
+成功的请求将返回以下响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "4309656",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "ok",
+        "manufacturer": "LANDI",
+        "model": "APOS A8OVS",
+        "serialNumber": "215RCA893253",
+        "nayaxSerialNumber": "0904041822134284",
+        "timeStampEpoch": 1721214919337,
+        "timeStampString": "17/07/2024 14:15:19"
+    }
+}
+```
+
+### 响应参数
+
+下表说明了此方法的响应参数：
+
+| 姓名                     | 类型     | 描述                     |
+| ---------------------- | ------ | ---------------------- |
+| `statusCode`           | 整数     | 操作状态（0 = 正常，其他 = 待定错误） |
+| `statusMessage`        | string | 状态描述（例如 “ok”）          |
+| `data`                 | string | 用户提供的输入数据              |

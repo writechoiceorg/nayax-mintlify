@@ -1,0 +1,338 @@
+---
+title: 交易消息字段
+description: 用于 Amazon SQS 传递的交易 JSON 消息示例及字段说明。
+---
+
+每次处理交易时，Nayax Core 都会向您的 SQS 队列传递一条 JSON 消息。该消息包含两个层级：
+
+- 根字段（`TransactionId`、`MachineId`、`SiteId` 等）在较高层级上标识该交易和机器。
+- `Data` 对象包含完整的交易详情，包括支付方式、卡片信息、时间戳、定价，以及一个列出每个已售出商品的嵌套 `Products` 数组。
+
+下方的 [JSON Message Fields Description](#json-message-fields-description) 表格中包含每个字段的完整说明。
+
+以下是一个消息示例：
+
+```json
+{
+  "TransactionId": 3804536984,
+  "RemoteStartTransactionId": null,
+  "PaymentMethodId": 2,
+  "SiteId": 6,
+  "MachineTime": "2020-04-20T10:34:05.063",
+  "Void": false,
+  "MachineId": 54265,
+  "Data": {
+    "Card String": "0077020491",
+    "Settlement Time (Date only)": "2020-04-20",
+    "Settlement Time (Time only)": "07:34:15",
+    "SeValue": 1.0000,
+    "Operator Identifier": "500905",
+    "Machine Group": "Snack's",
+    "Raw ENI Loyalty Num": null,
+    "Machine Name": "Oleg's Simulator 1",
+    "Machine AuTime": "2020-04-20T10:34:05.063",
+    "Machine SeTime": "2020-04-20T10:34:15.433",
+    "Currency": "EUR",
+    "Brand": null,
+    "CLI": null,
+    "Extra Charge": 0.0000,
+    "Payment Service (Mobile using Credit Card)": "Prepaid Credit using Prepaid Credit",
+    "Payment Method ID (1)": 2,
+    "Recognition Method ID (3)": 3,
+    "Catalog Number": "",
+    "Device Number": "0000000000500902",
+    "Actor Hierarchy": "Dually / Nayax Test Bunny / Connect 2020 Rocks /",
+    "Payment Method Description": "Prepaid Credit",
+    "Recognition Description": "Prepaid Credit",
+    "Card First 4 Digits": "0077",
+    "Card Last 4 Digits": null,
+    "Card Type": "MIFARE received as Hexadecimal",
+    "Transaction ID": 3804536984,
+    "Site ID": 6,
+    "Authorization Time": "2020-04-20T07:34:05.063",
+    "Authorization Value": 6.0000,
+    "PayServTransid": "200420073405",
+    "sePayServTransId": null,
+    "Settlement Time": "2020-04-20T07:34:15.433",
+    "Cancel Type": null,
+    "Is Revalue Transaction": false,
+    "Preselection Status": 0,
+    "Is Phone Registration": false,
+    "Is Multivend": false,
+    "Settlment Failed": null,
+    "Sale ID": -1,
+    "Sale Value": 0.0000,
+    "Updated DT": "2020-04-20T07:34:15.433",
+    "Constant Preauthorization Value": null,
+    "Is Partial Confirmation": null,
+    "Authorization Code": null,
+    "Authorization Date and Time": null,
+    "Authorization RRN": "200420073405",
+    "Event Code": null,
+    "Guest Name": null,
+    "Token": null,
+    "Zip Code": null,
+    "Billing Provider ID": null,
+    "AVS Only": null,
+    "BOD Transaction Key": null,
+    "Disable Debit Cards": null,
+    "Force Transactions Terminal": null,
+    "Use Phone Transaction": null,
+    "License ID": null,
+    "Merchant ID": null,
+    "Billing Site ID": null,
+    "Terminal ID": null,
+    "User Password": null,
+    "With ZIP": null,
+    "Use Phone Contactless": false,
+    "Use Phone Contact": false,
+    "Debit Card Prefix": null,
+    "Actor Description": "Connect 2020 Rocks",
+    "Institute Description": "NAYAX US",
+    "Location Code": 234234,
+    "Location Description": "Booth 134",
+    "Operator Institute Code": 4,
+    "Area Description": "Connect 2020 Rocks",
+    "OP Button Code": "Z1",
+    "Barcode": null,
+    "Cost Price": null,
+    "Card Price": null,
+    "Prepaid Price": null,
+    "Machine Price": 4.0000,
+    "Cash Price": null,
+    "Default Price": null,
+    "Actor Code": 12,
+    "Display Card Number": "0077020491",
+    "Card Holder Name": "Automatically Created",
+    "User Identity": "1",
+    "Billing Provider Name": null,
+    "Is Offline Transaction": null,
+    "Is EMV Transaction": null,
+    "Machine AuTime (Date only)": "2020-04-20",
+    "Machine AuTime (Time only)": "10:34:05",
+    "Machine SeTime (Date only)": "2020-04-20",
+    "Machine SeTime (Time only)": "10:34:15",
+    "Updated DT (Date only)": "2020-04-20",
+    "Updated DT (Time only)": "07:34:15",
+    "Customer Type": 1,
+    "Actor ID": 32622,
+    "Client Id": "",
+    "Contract Name": null,
+    "Payout Day": null,
+    "Contract Id": null,
+    "Airport Id": null,
+    "Is Refund Card": false,
+    "Contract Number": null,
+    "Airport Code": null,
+    "Payed Value": 1.0000,
+    "Consumer ID": 1906814004668638903,
+    "Discount Card ID": 340897206534728,
+    "Discount Card Number": "1424243531",
+    "Discount Card User Identity": "",
+    "Discount Card Physical Type ID": 30000531,
+    "Discount Card Activation Date": null,
+    "Discount Card Expiration Date": null,
+    "Products": [
+      {
+        "Product(Product Name(MDB Code,PA Code))": "Bounty(0,A1)",
+        "Product Group": "Snacks",
+        "Product Code in Map": 0,
+        "Product PA Code": "A1",
+        "Product Volume Type": "600 ml",
+        "Product Name": "Bounty",
+        "Product VAT Id": null,
+        "Product Tax Value": null,
+        "Product Tax Code": null,
+        "Product Vat Amount": null,
+        "Product Net Price": null,
+        "Product External Prepaid Price": null,
+        "Product Group Code": null,
+        "Product Group Sub Code": null,
+        "Product Retail Price": null,
+        "Product Discount Percentage": 0.00,
+        "Product Discount Amount": 0.0000,
+        "Product Bruto": 1.0000,
+        "Product Catalog Number": ""
+      }
+    ]
+  }
+}
+```
+
+## JSON 消息字段描述
+
+下表描述了交易 JSON 消息中包含的字段：
+
+| 字段名称                                           | 类型          | 描述                                                                                    |
+| ---------------------------------------------- | ----------- | ------------------------------------------------------------------------------------- |
+| 机器名称                                           | `String`    | 机器/POS 名称，如 Operations > Machines > Machine Name 中所定义                                 |
+| 机器型号                                           | `String`    | 所用机器的型号。                                                                              |
+| 运营商标识符                                         | `String`    | 机器/POS 编号，如 Operations > Machines > Machine Number 中所定义                               |
+| Machine AuTime（机器授权时间）                         | `Date Time` | 基于机器所在时区的机器授权日期和时间                                                                    |
+| Machine SeTime（机器结算时间）                         | `Date Time` | 基于机器所在时区的机器结算日期和时间                                                                    |
+| Currency（货币）                                   | `String`    | 基于机器配置的交易货币                                                                           |
+| Card String（卡片字符串）                             | `String`    | 支付卡的前 4 位和后 4 位数字                                                                     |
+| Brand（品牌）                                      | `String`    | 信用卡品牌名称                                                                               |
+| CLI                                            | `String`    | 消费者电话号码，适用于通过移动端进行的交易                                                                 |
+| SeValue                                        | `Decimal`   | 结算金额，即所收取的金额                                                                          |
+| Extra Charge（附加费用）                             | `Decimal`   | 附加的便利费（Convenience fee）                                                               |
+| Payment Service（移动端使用信用卡支付）                    | `String`    | 所使用的支付服务，例如通过移动端使用信用卡支付。                                                              |
+| Payment Method ID（1）                           | `Integer`   | 支付方式 ID（Nayax 内部标识符）                                                                  |
+| Recognition Method ID（3）                       | `Integer`   | 识别方式 ID（Nayax 内部标识符）                                                                  |
+| Catalog Number（目录编号）                           | `String`    | 产品目录编号，如 Administration > Products > Product ID 中所定义                                  |
+| Product（Product Name(MDB Code, PA Code=Price)） | `String`    | 已售出产品的名称，包含 MDB Code 和 PA Code 标识符（如机器产品映射表中所定义）以及已售商品的价格                             |
+| Device Number（设备编号）                            | `String`    | Nayax 设备序列号                                                                           |
+| Actor Hierarchy（Actor 层级结构）                    | `String`    | 以面包屑形式呈现的 Actor 层级结构                                                                  |
+| Payment Method Description（支付方式说明）             | `String`    | 支付方式名称                                                                                |
+| Recognition Description（识别方式说明）                | `String`    | 识别方式名称                                                                                |
+| Card First 4 Digits（卡片前 4 位数字）                 | `String`    | 信用卡前 4 位数字                                                                            |
+| Card Last 4 Digits（卡片后 4 位数字）                  | `String`    | 信用卡后 4 位数字                                                                            |
+| 卡类型                                            | `String`    | 本次交易所使用的卡片类型说明                                                                        |
+| Machine Group（机器组）                             | `String`    | 机器上定义的机器组名称                                                                           |
+| Product Group（产品组）                             | `String`    | 已售商品的产品组名称                                                                            |
+| 交易 ID                                          | `Integer`   | Transaction ID（交易 ID，Nayax 内部标识符）                                                     |
+| 站点 ID                                          | `Integer`   | Nayax 服务器站点 ID                                                                        |
+| Authorization Time（授权时间）                       | `Date Time` | 交易授权日期和时间（GMT）                                                                        |
+| Authorization Value（授权金额）                      | `Decimal`   | 交易授权金额                                                                                |
+| PayServTransid                                 | `String`    | 支付服务提供商交易 ID                                                                          |
+| sePayServTransId                               | `String`    | 支付服务提供商结算交易 ID                                                                        |
+| Settlement Time（结算时间）                          | `Date Time` | 交易结算日期和时间（GMT）                                                                        |
+| Product Code in Map（映射中的产品代码）                  | `Integer`   | 产品选择项目编号（MDB Code）                                                                    |
+| Cancel Type（取消类型）                              | `Integer`   | 存储在交易层级的交易取消类型值，用于指示交易被取消时的取消原因（例如 Product Selection Timeout）；值为 255 表示交易成功结算         |
+| Is Revalue Transaction（是否为增值交易）                | `Boolean`   | 指示该交易是否为增值交易的位值                                                                       |
+| Preselection Status（预选状态）                      | `Integer`   | 交易预选状态，服务器端用于指示交易在服务器侧的状态的值（供交易处理选项内部使用）                                              |
+| Is Phone Registration（是否为电话注册）                 | `Boolean`   | 指示该交易是否属于电话注册（Phone Registration，已弃用的旧功能）的一部分的位值                                      |
+| Is Multivend（是否为多重出货）                          | `Boolean`   | 指示该交易是否为 Multivend（多选择销售/出货）的位值                                                       |
+| Settlment Failed（结算失败）                         | `Boolean`   | 指示结算过程是否失败。                                                                           |
+| Sale ID（销售 ID）                                 | `Integer`   | 销售/折扣 ID，若交易应用了折扣则会保存该值                                                               |
+| Sale Value（销售金额）                               | `Decimal`   | 销售/折扣金额                                                                               |
+| Updated DT（更新日期时间）                             | `Date Time` | 交易更新日期和时间（GMT）                                                                        |
+| Constant Preauthorization Value（固定预授权金额）       | `Decimal`   | 如 Operations > Machines > Machine Payment Tab > Constant Preauthorization 字段中所定义的授权金额 |
+| Is Partial Confirmation（是否为部分确认）               | `Boolean`   | 指示交易是否为部分确认的位值（仅当所定义的账单提供方为 Credit Call 时适用）                                          |
+| Authorization Code（授权码）                        | `String`    | 授权代码。                                                                                 |
+| Authorization Date and Time（授权日期和时间）           | `Date Time` | 授权日期和时间（GMT）                                                                          |
+| Authorization RRN（授权 RRN）                      | `String`    | 授权检索参考号（Retrieval Reference Number）——交易的参考编号                                          |
+| 事件代码                                           | `Integer`   | 与事件关联的代码。                                                                             |
+| Guest Name（访客姓名）                               | `String`    | 访客姓名（如适用）。                                                                            |
+| Token                                          | `String`    | 与该交易关联的 token。                                                                        |
+| Zip Code（邮政编码）                                 | `String`    | 该地点的邮政编码（如适用）。                                                                        |
+| Billing Provider ID（账单提供方 ID）                  | `Integer`   | 账单提供方的标识符。                                                                            |
+| AVS Only（仅 AVS）                                | `Boolean`   | 指示该交易是否仅为 AVS 验证。                                                                     |
+| BOD Transaction Key（BOD 交易密钥）                  | `String`    | BOD 交易的密钥。                                                                            |
+| Disable Debit Cards（禁用借记卡）                     | `Boolean`   | 指示是否禁用借记卡。                                                                            |
+| Force Transactions Terminal（强制终端交易）            | `String`    | 指示是否在终端上强制执行交易。                                                                       |
+| Use Phone Transaction（使用电话交易）                  | `Boolean`   | 指示是否使用基于电话的交易。                                                                        |
+| License ID（许可证 ID）                             | `Integer`   | 许可证的标识符。                                                                              |
+| Merchant ID（商户 ID）                             | `String`    | 商户的标识符。                                                                               |
+| Billing Site ID（账单站点 ID）                       | `Integer`   | 账单站点的标识符。                                                                             |
+| Terminal ID（终端 ID）                             | `Integer`   | 终端的唯一标识符。                                                                             |
+| User Name（用户名）                                 | `String`    | 与该交易关联的用户名。                                                                           |
+| User Password（用户密码）                            | `String`    | 用户的密码。                                                                                |
+| With ZIP（含邮政编码验证）                              | `Boolean`   | 指示是否执行了邮政编码（ZIP）验证。                                                                   |
+| Use Phone Contactless（使用电话非接触式支付）              | `Boolean`   | 指示是否使用非接触式电话交易。                                                                       |
+| Use Phone Contact（使用电话接触式支付）                   | `Boolean`   | 指示是否使用接触式电话交易。                                                                        |
+| Debit Card Prefix（借记卡前缀）                       | `String`    | 借记卡的前缀。                                                                               |
+| Actor Description（Actor 说明）                    | `String`    | 机器的直接 Actor 的层级实体名称                                                                   |
+| Institute Description（机构说明）                    | `String`    | 机构/客户名称                                                                               |
+| 位置代码                                           | `Integer`   | 机构位置代码                                                                                |
+| 位置描述                                           | `String`    | 机构位置名称                                                                                |
+| 运营商机构代码                                        | `Integer`   | 运营商机构代码，如“管理 > 运营商 > 运营商机构 > 代码”列中定义的那样                                               |
+| 区域描述                                           | `String`    | 交易发生区域的描述。                                                                            |
+| 产品 PA 代码                                       | `String`    | 产品 PA 代码，如“运营 > 机器 > 机器产品映射 > PA 代码”列中定义的那样                                           |
+| OP 按钮代码                                        | `String`    | 产品 OP 按钮代码，如“运营 > 机器 > 机器产品映射 > OP 按钮代码”列中定义的那样                                       |
+| 产品容量类型                                         | `String`    | 产品容量类型，如“管理 > 产品 > 产品容量类型”字段中定义的那样                                                    |
+| 条形码                                            | `String`    | 产品条形码，如“管理 > 产品 > 产品条形码”字段中定义的那样                                                      |
+| 成本价                                            | `Decimal`   | 产品成本价，如“管理 > 产品 > 产品成本价”字段中定义的那样                                                      |
+| 卡片价格                                           | `Decimal`   | 产品信用卡价格，如“运营 > 机器 > 机器产品映射 > 信用卡价格”列中定义的那样                                            |
+| 预付价格                                           | `Decimal`   | 产品预付卡价格，如“运营 > 机器 > 机器产品映射 > 信用卡价格”列中定义的那样                                            |
+| 机器价格                                           | `Decimal`   | 产品机器价格，如“运营 > 机器 > 机器产品映射 > 机器价格”列中显示的那样                                              |
+| 现金价格                                           | `Decimal`   | 产品现金显示价格，如“运营 > 机器 > 机器产品映射 > 现金显示价格”列中定义的那样                                          |
+| 默认价格                                           | `Decimal`   | 产品默认零售价，如“运营 > 机器 > 机器产品映射 > 默认零售价”列中定义的那样                                            |
+| 产品名称                                           | `String`    | 产品名称，如“管理 > 产品 > 产品名称”字段中定义的那样                                                        |
+| 参与方代码                                          | `Integer`   | 运营商内部代码字段，如“管理 > 运营商 > 运营商内部代码”中定义的那样                                                 |
+| 显示卡号                                           | `String`    | Nayax 预付卡显示卡号                                                                         |
+| 持卡人姓名                                          | `String`    | Nayax 预付卡持卡人姓名                                                                        |
+| 用户身份                                           | `String`    | Nayax 预付卡持卡人用户身份                                                                      |
+| 计费提供商名称                                        | `String`    | 计费提供商名称，如机器参与方层级中定义的那样                                                                |
+| 是否为离线交易                                        | `Boolean`   | 指示是否为 EMV 离线交易的位标志                                                                    |
+| 是否为 EMV 交易                                     | `Boolean`   | 指示是否为 EMV 交易的位标志                                                                      |
+| 机器授权时间（仅日期）                                    | `Date`      | 基于机器时区的机器授权日期                                                                         |
+| 机器授权时间（仅时间）                                    | `Time`      | 基于机器时区的机器授权时间                                                                         |
+| 机器结算时间（仅日期）                                    | `Date`      | 基于机器时区的机器结算日期                                                                         |
+| 机器结算时间（仅时间）                                    | `Time`      | 基于机器时区的机器结算时间                                                                         |
+| 结算时间（仅日期）                                      | `Date`      | 机器结算日期（GMT）                                                                           |
+| 结算时间（仅时间）                                      | `Time`      | 机器结算时间（GMT）                                                                           |
+| 更新日期时间（仅日期）                                    | `Date`      | 交易更新日期（GMT）                                                                           |
+| 更新日期时间（仅时间）                                    | `Time`      | 交易更新时间（GMT）                                                                           |
+| 原始 ENI 忠诚度编号                                   | `String`    | 原始 ENI 忠诚度编号。                                                                         |
+| 解析后的 ENI 忠诚度编号                                 | `String`    | 解析后的 ENI 忠诚度编号。                                                                       |
+| 产品                                             | `Object`    | 勾选此复选框后，报告中将不会显示以“Product”为前缀的列。                                                      |
+| 产品增值税 ID                                       | `Integer`   | 产品的增值税标识符。                                                                            |
+| 产品税值                                           | `Decimal`   | 产品税值，如“管理 > 产品 > 产品组增值税信息 > 税值”字段中定义的那样                                               |
+| 产品税码                                           | `Integer`   | 产品税码，如“管理 > 产品 > 产品组增值税信息 > 税码”字段中定义的那样                                               |
+| 产品增值税金额                                        | `Decimal`   | 根据产品组中定义的税值计算得出的产品增值税金额                                                               |
+| 产品净价                                           | `Decimal`   | 从结算价值中扣除额外费用和产品增值税金额后计算得出的产品净价                                                        |
+| 产品外部预付价格                                       | `Decimal`   | 产品外部预付价格，如“运营 > 机器 > 机器产品映射 > 外部预付价格”列中定义的那样                                          |
+| 客户类型                                           | `Integer`   | 参与交易的客户类型。                                                                            |
+| 产品组代码                                          | `Integer`   | 产品组代码，如“管理 > 产品 > 产品组信息 > 代码”字段中定义的那样                                                 |
+| 演员 ID                                          | `Integer`   | 机器直接参与方的参与方层级实体 ID                                                                    |
+| 产品组子代码                                         | `Integer`   | 产品组子代码，如“管理 > 产品 > 产品组信息 > 子代码”字段中定义的那样                                               |
+| 产品零售价                                          | `Decimal`   | 产品零售价，如“运营 > 机器 > 机器产品映射 > 零售价”列中定义的那样                                                |
+| 产品折扣百分比                                        | `Decimal`   | 应用于产品的折扣百分比。                                                                          |
+| 产品折扣金额                                         | `Decimal`   | 应用于产品的折扣金额。                                                                           |
+| 产品毛值                                           | `Decimal`   | 产品的毛值。                                                                                |
+| 产品目录编号                                         | `String`    | 产品目录编号，如“管理 > 产品 > 产品 ID”字段中定义的那样                                                     |
+| 客户端 ID                                         | `String`    | 客户端的唯一 ID。                                                                            |
+| 合同名称                                           | `String`    | 与交易关联的合同名称。                                                                           |
+| 付款日                                            | `Integer`   | 计划付款的日期。                                                                              |
+| 合同 ID                                          | `String`    | 与交易关联的合同 ID。                                                                          |
+| 机场 ID                                          | `Integer`   | 机场的唯一 ID（如适用）。                                                                        |
+| 会员类型                                           | `String`    | 与交易关联的会员类型。                                                                           |
+| 是否为退款卡                                         | `Boolean`   | 指示是否为 Nayax 退款卡的位标志                                                                   |
+| 合同编号                                           | `String`    | 与交易关联的合同编号。                                                                           |
+| 机场代码                                           | `String`    | 参与方机场代码，如“管理 > 运营商 > 运营商机场代码”字段中定义的那样                                                 |
+| 已付金额                                           | `Decimal`   | 交易收费金额                                                                                |
+| 消费者 ID                                         | `Integer`   | 唯一消费者标识符                                                                              |
+| 折扣卡 ID                                         | `Integer`   | 折扣计数卡 ID（Nayax 内部唯一标识符）                                                               |
+| 折扣卡号                                           | `String`    | 折扣卡号 —— 卡片唯一标识符                                                                       |
+| 折扣卡用户身份                                        | `String`    | 折扣卡用户身份，如“消费者 > 卡片管理 > 折扣卡用户身份”字段中定义的那样                                               |
+| 折扣卡实体类型 ID                                     | `String`    | 折扣卡实体类型 Lut 值 ID，例如：30000531 - 非接触式贴纸                                                 |
+| 折扣卡激活日期                                        | `Date Time` | 折扣卡激活日期，如“消费者 > 卡片管理 > 折扣卡激活日期”字段中定义的那样                                               |
+| 折扣卡到期日期                                        | `Date Time` | 折扣卡到期日期，如“消费者 > 卡片管理 > 折扣卡到期日期”字段中定义的那样                                               |
+| 是否为货币交易                                        | `Boolean`   | 指示该交易是否为货币交易。                                                                         |
+| 预付卡当前常规信用额度                                    | `Decimal`   | 预付卡上的当前常规信用余额。                                                                        |
+| 预付信用额度收费金额                                     | `Decimal`   | 从预付信用额度中扣除的收费金额。                                                                      |
+| 预付信用额度交易费用                                     | `Decimal`   | 应用于预付信用额度的交易费用。                                                                       |
+| 预付卡当前增值信用额度                                    | `Decimal`   | 预付卡上的当前增值信用余额。                                                                        |
+| 预付增值信用额度收费金额                                   | `Decimal`   | 针对预付增值信用额度收取的金额。                                                                      |
+| 是否为增值奖励交易                                      | `Boolean`   | 指示该交易是否为增值奖励交易。                                                                       |
+| 预付卡每月信用额度使用金额                                  | `Decimal`   | 预付卡每月的信用额度使用金额。                                                                       |
+| 预付卡每月信用交易使用次数                                  | `Integer`   | 预付卡每月的信用交易笔数。                                                                         |
+| 忠诚度卡号                                          | `String`    | 与交易关联的忠诚度卡号。                                                                          |
+| 产品计量单位                                         | `String`    | 产品的计量单位。                                                                              |
+| 产品数量                                           | `Integer`   | 交易中产品的数量。                                                                             |
+| 活动 ID                                          | `Integer`   | 当前交易中使用的活动 ID（Nayax 内部标识符）。                                                           |
+| 活动类型                                           | `String`    | 当前交易中使用的活动类型说明（1-打卡卡，2-折扣）。                                                           |
+| 产品 ID                                          | `Integer`   | 产品 ID（Nayax 内部标识符）。                                                                   |
+| 卡片 ID                                          | `Integer`   | 当前交易中使用的卡片 ID（Nayax 内部标识符）。                                                           |
+| 机器序列号                                          | `String`    | 机器序列号，由机器运营商提供                                                                        |
+| 机器 ID                                          | `Integer`   | 机器 ID，由 Nayax 自动生成的机器内部 ID                                                            |
+| 交易状态 ID                                        | `Integer`   | 交易状态 ID，以数值表示交易状态                                                                     |
+| 交易状态名称                                         | `String`    | 交易状态名称，表示交易状态的名称                                                                      |
+| 设备交易 ID（DTID）                                  | `Integer`   | 由设备生成的设备交易 ID                                                                         |
+| 供应商交易 UID（VUID）                                | `String`    | 由支付提供商生成的交易 ID                                                                        |
+| 卡片箱                                            | `Integer`   | 信用卡 BIN（银行识别码），用于识别发卡机构和银行的 6-8 位数字                                                   |
+| 批次参考编号                                         | `String`    | 批次参考编号                                                                                |
+| 运营商交易 ID                                       | `String`    | 通过 Marshal 请求在设备授权命令中接收到的运营商交易 ID                                                     |
+| 零售商店 ID                                        | `String`    | 来自运营商并显示在 Nayax 报表中的数据                                                                |
+| 零售 POS ID                                      | `String`    | 来自运营商并显示在 Nayax 报表中的数据                                                                |
+| 运营商数据 1                                        | `String`    | 来自运营商并显示在 Nayax 报表中的数据                                                                |
+| 信用卡类型                                          | `String`    | 信用卡类型，指示这是借记卡还是信用卡                                                                    |
+| 原始授权时间                                         | `Date Time` | 原始授权时间                                                                                |
+| 是否为离线支付                                        | `Boolean`   | 指示是否为延迟交易的位标志                                                                         |
+| 已消耗能量 (kWh)                                    | `Decimal`   | 已消耗能量 (kWh)                                                                           |
+| 产品提供商                                          | `String`    | 产品提供商，如“管理 > 产品 > 提供商”字段中定义的那样                                                        |
+| 原始交易 ID                                        | `Integer`   | 原始交易 ID（Nayax 内部标识符）                                                                  |
+| 处理费总额                                          | `Decimal`   | 处理费总额                                                                                 |
+| 不含消费税和手续费总额的净价                                 | `Decimal`   | 不含消费税（增值税）和手续费总额的净价                                                                   |
+| 增值类型                                           | `String`    | 增值类型 —— 可以是现金增值或信用卡增值                                                                 |

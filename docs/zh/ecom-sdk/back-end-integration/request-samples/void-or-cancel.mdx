@@ -1,0 +1,108 @@
+---
+title: Void 或 Cancel
+metadata:
+  og:description: Void 和 Cancel 请求都会撤销一笔交易,但其使用方式关键取决于原始交易的状态。
+---
+
+Void 和 Cancel 请求都会撤销一笔交易,但其使用方式关键取决于原始交易的状态。两种操作使用相同的请求结构,但 RequestType 不同。
+
+<Note>
+  已结算交易
+
+  如果交易已被捕获且结算批次已关闭(例如,已是次日),则无法执行 Void。此时必须改用 Refund 请求。
+</Note>
+
+## 要求
+
+The Void or Cancel request uses the same endpoint as the initial [`/close-transaction`](/reference/ecom/payments/close-transaction) request. The API determines it's a void or cancel based on the `RequestType` value within the `BasicInfo` object.
+
+请参阅下面的示例：
+
+```json
+{
+  "basicInfo": {
+    "requestType": 3,          // 3 for Void, 7 for Cancel
+    "entryMode": 1,
+    "amount": 25.00,           // The full amount of the original transaction
+    "currency": "EUR",
+    "countryCode": "DE",
+    "tokenModel": 1,
+    "cvc": null,
+    "token": null,
+    "merchantRequestId": "NEW_CANCEL_VOID_ID_003", // New unique ID for this reversal request
+    "transactionId": "ORIGINAL_NAYAX_TRX_98765", // ID of the original transaction being reversed
+    "transactionTimeUtc": "2025-08-28T10:30:00Z", // Time of the original transaction
+    "isSaveTokenWithoutConsent": false
+  },
+  "machineInfo": {
+    "machineId": "0434334921100366"
+  },
+  "cardHolderInfo": {},
+  "paymentInfo": {},
+  "additionalInfo": {},
+  "validationKey": "AUTH_VALID_KEY_XYZ_REVERSAL"
+}
+```
+
+请注意,`RequestType` 应设置为对应 Void(3)或 Cancel(7)的值。`Amount` 指定原始授权/销售的全额。
+
+### 请求参数
+
+下表列出了定义 Void 或 Cancel 请求所需的关键字段:
+
+| 范围                   | 类型       | 描述                              |
+| :------------------- | :------- | :------------------------------ |
+| `RequestType`        | Int32    | 请求类型可以是 3(`Void`)或 7(`Cancel`)。 |
+| `Amount`             | 小数       | 必须是原始授权/销售的全额。                  |
+| `MerchantRequestId`  | String   | 此次特定撤销尝试的新的唯一 ID。               |
+| `TransactionId`      | String   | 在原始响应中返回的唯一 Nayax ID。           |
+| `TransactionTimeUtc` | DateTime | 原始交易的 UTC 时间戳。                  |
+| `ValidationKey`      | String   | 用于验证此特定撤销请求的加密密钥。               |
+
+## 回复
+
+验证成功将返回 `200 OK` 状态，以及包含已验证商户详细信息的正文：
+
+```json
+{
+  "status": {
+    "verdict": "Approved",
+    "code": 0,
+    "statusMessage": "Payment processed successfully."
+  },
+  "basicInfo": {
+    "amount": 25.5,
+    "currency": "EUR",
+    "merchantRequestId": "MERCHANT_MIT_001",
+    "transactionId": "NAYAXTRANS98765",
+    "transactionTimeUtc": "2025-08-28T10:30:00Z"
+  },
+  "paymentInfo": {
+    "amount": 25.5,
+    "currency": "EUR",
+    "nayaxTokenId": "NAYAXTOK12345",
+    "siteId": 1,
+    "providerTransactionId": "PSP_TRANS_ABC",
+    "decimalPlace": 2
+  }
+}
+```
+
+### 响应参数
+
+下表说明了响应的参数：
+
+| 范围                      | 类型       | 描述                                              |
+| :---------------------- | :------- | :---------------------------------------------- |
+| `verdict`               | String   | `Approved` 或 `Declined`。最终决定结果。                 |
+| `code`                  | Int32    | 响应代码:`0` 表示已批准;否则为相应的拒绝代码。                      |
+| `statusMessage`         | String   | 有关交易结果的描述性消息。                                   |
+| `amount`                | 小数       | 已处理的交易金额。                                       |
+| `currency`              | String   | 交易的货币。                                          |
+| `merchantRequestId`     | String   | 原始请求中的唯一 ID。                                    |
+| `transactionId`         | String   | 由 Nayax 系统分配的唯一交易 ID。                           |
+| `transactionTimeUtc`    | DateTime | 交易完成时的 UTC 时间戳。                                 |
+| `nayaxTokenId`          | String   | 用于本次扣款的 token ID。                               |
+| `siteId`                | Int32    | 与本次付款关联的站点 ID。                                  |
+| `providerTransactionId` | String   | 由支付服务提供商（Payment Service Provider，PSP）分配的唯一 ID。 |
+| `decimalPlace`          | Int32    | 该货币/金额所使用的小数位数。                                 |

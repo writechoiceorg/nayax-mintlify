@@ -1,0 +1,67 @@
+---
+title: "Additional Features"
+description: "Optional Nayax Core settings for Spark machines, including POS display timeouts, idle mode images, Auto Cancel, and eReceipt."
+---
+
+These optional settings extend a Spark machine beyond the core start, stop, and
+settlement flows. Apply the ones that fit your integration on top of the configuration
+for the feature you set up.
+
+## POS Display (Tariff)
+
+This feature uses the Spark `PosDisplay` field to show dynamic text on the device while
+it is triggered to start a payment, such as tariff information. Two settings control how
+long the device shows this information:
+
+- **Approve button UI display duration**: the display timeout of an **OK** button on
+  the device screen. For example, you can show tariff information with an **OK** button
+  for the consumer to approve before the transaction continues. If the timeout is
+  reached and the button is not pressed, the flow is cancelled. After a button press,
+  the display changes to a present card state. The limit is 0 to 60 seconds. The
+  default is `0`, which means do not display.
+- **Informative State Display Timeout**: how long, in seconds, an informative state
+  such as tariff information is displayed. Set this when **Approve button UI display
+  duration** is `0`, so no approve button is shown. A red **X** lets the consumer
+  cancel the flow. The limit is 0 to 10 seconds. The default is `4`. A value of `0`
+  means do not display.
+
+The two settings combine as follows:
+
+| Approve button UI display duration | Informative State Display Timeout | Expected behavior |
+| :-: | :-: | :-- |
+| 45 | 0 | The tariff is shown with an **OK** button. After 45 seconds with no action, the flow is cancelled. If the consumer presses **OK**, the display changes to the present card state. |
+| 0 | 10 | The tariff is shown for 10 seconds, then the display moves to the present card state automatically. |
+| 0 | 0 | The tariff is not displayed at all. |
+
+## Idle Mode Custom Image
+
+You can set a custom image on the device screen while it is in idle mode to tell
+consumers how to act. Create the image yourself, then contact your Nayax Support
+representative to have it uploaded to your machine.
+
+## Auto Cancel
+
+Auto Cancel is an automatic service that cancels unsettled transactions left in a
+pending settlement or cancellation state. It runs automatically for all Nayax
+acquirers, based on a default configuration per acquirer.
+
+To set Auto Cancel for your Operator to fit your type of business, contact your Nayax
+Support representative. Provide the minimum time after which, if no settlement or
+cancellation has reached the Nayax gateway, it is safe to cancel the transaction.
+
+## eReceipt
+
+For eReceipt support, contact your Nayax Support representative for assistance with the
+relevant configuration. For the data format used in settlement requests, see
+[eReceiptData Format](/docs/integrate-pos-device/spark/additional-resources/spark-ereceiptdata-format).
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="PosDisplay Format" icon="display" href="/docs/integrate-pos-device/spark/additional-resources/spark-posdisplay-format">
+    See the structure of the PosDisplay field used for tariff text.
+  </Card>
+  <Card title="Payment Flows" icon="arrow-right-arrow-left" href="/docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark">
+    Review the Spark transaction flows at the API level.
+  </Card>
+</CardGroup>

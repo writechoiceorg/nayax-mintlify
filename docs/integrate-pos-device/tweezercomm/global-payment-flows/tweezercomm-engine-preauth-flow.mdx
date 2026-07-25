@@ -14,14 +14,14 @@ To understand the pre-authorization flow, see the diagram below:
 
 Here's a breakdown of each step:
 
-1. After the cardholder selects the product or service, the Machine sends a [`doTransaction()`](/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction) Request to the Agamento Application through TweezerComm.
+1. After the cardholder selects the product or service, the ECR/POS sends a [`doTransaction()`](/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction) Request to the Nayax Device (Agamento App) through TweezerComm.
 2. The device then displays a prompt for the cardholder, requesting him to insert or swipe a card.
-3. The cardholder inserts, swipes, or taps their card on the Host Machine.
-4. The Agamento Application communicates with the Nayax Server for payment authorization.
-5. The Nayax Server responds with the authorization result, which is then returned to the Host Machine.
-6. Depending on the outcome of the approval, the Host Machine sends a `doTransaction(tranType=6/7)` Request to the Agamento Application to settle or cancel the transaction.
+3. The cardholder inserts, swipes, or taps their card on the ECR/POS.
+4. The Nayax Device communicates with the Nayax Server for payment authorization.
+5. The Nayax Server responds with the authorization result, which is then returned to the ECR/POS.
+6. Depending on the outcome of the approval, the ECR/POS sends a `doTransaction(tranType=6/7)` Request to the Nayax Device to settle or cancel the transaction.
 7. The settlement or cancellation request is sent to the Nayax Server, which responds with the final transaction status.
-8. The Agamento App then relays this status back to the Host Machine, completing the process.
+8. The Nayax Device then relays this status back to the ECR/POS, completing the process.
 
 <Warning>
 **Resilience Mechanism**

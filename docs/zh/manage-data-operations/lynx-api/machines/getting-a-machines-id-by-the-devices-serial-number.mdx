@@ -1,0 +1,136 @@
+---
+title: 通过设备 ID 获取机器 ID
+metadata:
+  og:description: 本页面介绍了如何使用 Lynx API 以及 Nayax Core，通过机器的 Device ID 检索其 ID。本指南将使用以下
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+本页面介绍了如何使用 Lynx API 以及 Nayax Core，通过机器的 Device ID 检索其 ID。本指南将使用以下端点：
+
+<EndpointCard title="Get All Machines" href="/reference/lynx/machines/get-all-machine-basic-info" method="get" />
+
+<Warning>
+  验证
+
+  请参阅本文档的[“安全和令牌”](/docs/manage-data-operations/lynx-api/security)页面，了解如何访问您的令牌，以及如何正确使用它来验证您的 API 请求。
+</Warning>
+
+## 检索机器的 ID
+
+要通过序列号检索机器的 ID，您需要使用 [Get All Machines](/reference/lynx/machines/get-all-machine-basic-info) 端点。通过在请求中提供设备的序列号，您可以检索到相应机器的唯一标识符。
+
+以下代码块展示了请求示例，使用 `DeviceSerial` 作为查询参数来过滤结果：
+
+```sh
+curl -X GET "https://qa-lynx.nayax.com/operational/v1/machines?DeviceSerial=<DEVICE_SERIAL_NUMBER>" \
+-H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
+```
+
+<Note>
+  Remember to replace `<DEVICE_SERIAL_NUMBER>` with the actual device's serial number.
+</Note>
+
+响应将包含有关该机器的详细信息，包括机器的 ID。
+
+```json
+[
+  {
+    "MachineID": 942488501,
+    "ActorID": 2001492652,
+    "CountryID": 1,
+    "CurrencyID": 2,
+    "InstituteID": 3001,
+    "LocationID": 4001,
+    "MachineGroupID": 210631347,
+    "MachineModelID": 305,
+    "MachineName": "Marshall Vending",
+    "MachineNumber": "MV001",
+    "MachineStatusBit": 1,
+    "LanguageID": 7,
+    "OperatorActorID": 2001492652,
+    "DistributorActorID": 3001492652,
+    "AreaActorID": 4001492652,
+    "SalesSourceID": 30000512,
+    "MachineTypeID": 555001,
+    "SerialNumber": "SN12345X",
+    "VPOSSerialNumber": "VP12345",
+    "DeviceSerialNumber": "SN12345X",
+    "VPOSID": 98765,
+    "DeviceID": 123456,
+    "UseLocationFrom": 1,
+    "GeoCountry": 1,
+    "GeoState": "New York",
+    "GeoCity": "New York City",
+    "GeoAddress": "123 Main St",
+    "GeoStreetNumber": "123",
+    "GeoLongitude": -73.935242,
+    "GeoLatitude": 40.730610,
+    "GeoZoom": 15,
+    "GeoZipCode": "10001",
+    "SearchAddress": "123 Main St, New York, NY",
+    "Remarks": "High-traffic area",
+    "DexType": 2,
+    "DexMidnightReadsEnableBit": true,
+    "DexG85CheckEnableBit": true,
+    "DexDivideBillsBy": 100,
+    "DexG85CheckParsingFilterEnableBit": true,
+    "UseCardPriceCorrectCashPriceBit": false,
+    "MachineTimeZoneOffset": -5,
+    "DexReadInterval": 30,
+    "LocationType": 1,
+    "ApplyDisplayPickListSelectionsToReportsBit": true,
+    "DisplayPickListSelectionsAs": 1,
+    "LastUpdated": "2024-10-09T14:38:53.474Z",
+    "MachineProfile": 0,
+    "CityID": 101,
+    "RegionID": 201,
+    "CountryDialingCode": 1,
+    "DexIgnoreCRCCheckBit": true,
+    "DexParseLABit": false,
+    "ProductMapID": 501,
+    "Longitude": -73.935242,
+    "Latitude": 40.730610,
+    "DexTotalSalesMinusCardSalesBit": true,
+    "RouteActorID": 5001492652,
+    "MachineLogicAlertEnableBit": true,
+    "AlertRuleSetId": 601,
+    "MachineMemberTypePricingEnableBit": false,
+    "DexMultiplyCoinsBy": 10,
+    "DexMultiplyTubesBy": 5,
+    "CustomerID": 12345,
+    "CommissionType": 2,
+    "CommissionDefaultValue": 0.05,
+    "CreatedBy": 105,
+    "CreatedOn": "2023-06-01T12:00:00.000Z",
+    "UpdateBy": 107,
+    "TubeSource": 2,
+    "BillSource": 3,
+    "SmartStickerId": 8080,
+    "EnableRemoveVendBit": true,
+    "EnableEreceiptBit": true,
+    "ProductMapAutomaticCreationBit": true,
+    "Refs": {
+      "Documentation": "https://lynx.docs.com/machine/942488501"
+    }
+  }
+]
+
+```
+
+<br />
+
+## Nayax Core
+
+您也可以在 Nayax Core 中该机器的详细信息里找到 Machine ID，请按以下步骤操作：
+
+1. 访问 Operations > Machines。
+2. 使用搜索功能查找该机器。
+3. 从列表中选择该机器。
+4. 访问 General Information 选项卡，在 Hardware 部分查找 Machine ID。
+
+<Frame>
+  <img src="/images/docs/getting-a-machines-id-by-the-devices-serial-number/image1.png" />
+</Frame>
+
+<br />

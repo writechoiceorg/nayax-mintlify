@@ -1,0 +1,82 @@
+---
+title: 初始化交易
+metadata:
+  og:description: /initialize 端点是在 Nayax 系统内处理电子商务交易的第一步。其主要功能是发起一笔。
+---
+
+`/initialize` 端点是在 Nayax 系统内处理电子商务交易的第一步。其主要功能是从 Nayax SDK 发起支付请求，本质上是为客户完成购买做好准备。
+
+<Note>
+  分词
+
+  The `/initialize` endpoint is also part of the process for tokenizing a card. If a Card-on-File (COF) initialization is triggered, the eCom API will respond with a Nayax card token to the Nayax SDK. See [Nayax Tokens](/docs/ecom-sdk/back-end-integration/nayax-ecom-tokens) for more details.
+</Note>
+
+## 销售请求
+
+Here is an example of a JSON request for the POST [`/initialize`](/reference/ecom/payments/initialize-an-e-commerce-transaction) endpoint, demonstrating a simple sale transaction.
+
+```json
+{
+  "BasicInfo": {
+    "SessionExpiration": "2025-08-15T10:00:00Z",
+    "RedirectURL": "https://www.examplemerchant.com/return",
+    "Amount": 1500,
+    "DecimalPlace": 2,
+    "Currency": "USD",
+    "Country": "US",
+    "RequestType": 0,
+    "EntryMode": "ECOM",
+    "MachineId": "0434334921100366"
+  },
+  "MachineInfo": {
+    "CardholderCountry": "US"
+  },
+  "CardHolderInfo": {
+    "PaymentPageLan": "en",
+    "CardholderEmail": "customer@example.com"
+  },
+  "eReceipt data": {
+    "AdditionalReceiptData": "[{\"key\":\"orderNumber\",\"value\":\"12345\"}]"
+  }
+}
+```
+
+For more details on each parameter, see the [`/initialize`](/reference/ecom/payments/initialize-an-e-commerce-transaction) endpoint API reference page.
+
+## 交易类型
+
+The `RequestType` parameter specifies the type of transaction to be performed. Different values apply to different endpoints. Use codes `0`–`1` when calling `/initialize`. Use codes `2`–`8` when calling [`/close-transaction`](/reference/ecom/payments/close-transaction).
+
+### /initialize 请求类型
+
+The table below displays the `RequestType` codes accepted by the `/initialize` endpoint.
+
+| 代码  | 交易类型     | 描述                              |
+| --- | -------- | ------------------------------- |
+| `0` | 销售       | 一步完成授权和资金捕获。用于即时的完整购买。          |
+| `1` | Auth（授权） | 在卡上预留资金但不捕获。用于在最终金额确定之前进行预授权保留。 |
+
+### /close-transaction 请求类型
+
+The table below displays the `RequestType` codes accepted by the [`/close-transaction`](/reference/ecom/payments/close-transaction) endpoint. These are second-step operations that act on an existing authorized transaction.
+
+| 代码  | 交易类型 | 描述                                                                                      |
+| --- | ---- | --------------------------------------------------------------------------------------- |
+| `2` | 沉降   | 捕获此前已授权的资金，完成交易。                                                                        |
+| `3` | Void | 在交易结算之前将其取消。                                                                            |
+| `4` | 退款   | 在销售完成后将资金退还给客户。                                                                         |
+| `5` | 部分退款 | 将原始交易金额的一部分退还给客户。                                                                       |
+| `6` | 增量授权 | 增加现有预授权的金额。必须引用原始的 `transactionId` 和 `transactionTimeUtc`。`amount` 字段必须包含新的总金额，而不是增量差值。 |
+| `7` | 取消授权 | 取消预授权交易，释放已预留的资金。                                                                       |
+| `8` | 部分捕获 | 仅捕获预授权金额的一部分，而非全部金额。                                                                    |
+
+<Note>
+  Codes `2`–`8` are not valid on `/initialize`. Sending them to `/initialize` will not perform the intended operation. Always use `POST /close-transaction` for second-step operations. See the [request samples](/docs/ecom-sdk/back-end-integration/request-samples) for full examples.
+</Note>
+
+<Columns cols={2}>
+  <Card icon="link" title="Nayax 令牌" arrow href="/docs/ecom-sdk/back-end-integration/nayax-ecom-tokens" />
+
+  <Card icon="link" title="Webhook 通知" arrow href="/docs/ecom-sdk/back-end-integration/webhook-notifications" />
+</Columns>

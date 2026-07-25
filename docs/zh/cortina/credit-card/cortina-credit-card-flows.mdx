@@ -1,0 +1,100 @@
+---
+title: 信用卡
+metadata:
+  og:description: Cortina 支持信用卡支付处理。该流程包括标准的卡片验证步骤，包括预授权、销售。
+---
+
+Cortina 支持信用卡支付处理。该流程包括标准的卡片验证步骤，包括预授权、销售、取消（撤销）和作废，适用于刷卡和芯片支付以及非刷卡交易。
+
+Cortina 支持两种类型的信用卡交易流程：
+
+- 预选
+- 预授权
+
+这两个流程都涉及组件之间的交互，包括 Nayax 设备、Nayax 引擎和集成器。有关每个流程的更多详细信息，请参阅以下部分。
+
+## 预选
+
+预选流程将产品/服务选择和授权步骤合并为一个交易，从而简化了支付流程。此流程通常用于小额或快速交易，客户选择和支付授权在一个步骤中即可完成。
+
+参见下图：
+
+<Frame>
+  <img src="/images/docs/cortina-credit-card-flows/Cortina V2 Credit Card API - Pre-select.png" />
+</Frame>
+
+该过程的步骤如下：
+
+1. 消费者将卡片（插入、轻触或刷卡）出示给 Nayax 设备。
+2. Nayax 设备向操作员服务机发送开始售货会话命令。
+3. 用户选择产品后，操作员服务机向 Nayax 设备发送销售请求。
+4. Nayax 设备向 Nayax 服务器发送授权命令请求。
+5. Nayax 服务器通过[“开始会话”](/reference/cortina/cortina/post-start-session)端点向支付提供商发送“开始会话”请求。
+6. Nayax 服务器通过[信用卡销售](/reference/cortina/cortina-credit-card/cortina-credit-card-sale)端点向支付提供商发送 /Sale 请求。
+7. Nayax 服务器向 Nayax 设备返回授权命令响应（已批准）。
+8. Nayax 设备向操作员服务机发送 Vend Approved 命令。
+9. 产品已分发，操作员服务机向 Nayax 设备发送销售成功通知。
+10. Nayax 设备向 Nayax 服务器发送结算命令请求。
+11. （可选）Nayax 服务器通过[销售结束通知](/reference/cortina/cortina/post-sale-end-notification)端点向支付提供商发送 /SaleEndNotification。
+12. Nayax 服务器向 Nayax 设备返回结算命令响应（始终批准），然后 Nayax 设备显示“谢谢”消息。
+
+由于授权已被授予，因此此响应通常始终在此流程中获得批准。
+
+### 异常处理
+
+如果任何关键节点（图中以黑圈标记）发生故障，交易将终止。由于在此流程中，**销售**发生在产品发放之前，因此需要特定的作废逻辑来确保持卡人不会因交易失败而被收费。
+
+| 设想     | 图示步骤参考 | 技术决议                                                                                                                                                                                                                                                                                                |
+| :----- | :----- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 选择超时   | 3.b    | 如果用户在机器允许的时间内未能选择有效商品，则会发生这种情况。会话在发出任何付款请求之前结束。                                                                                                                                                                                                                                                     |
+| 会话启动失败 | 5.b    | 如果 `/Start Session` 请求超时或返回错误，则会发生此情况。该流程会在 Sale 请求之前中止。                                                                                                                                                                                                                                            |
+| 销售请求失败 | 6.b    | If the `/Sale` request fails, returns an error, or receives a **`992`** response code, the session is aborted. In cases of a gateway timeout, the [Credit Card Void](/reference/cortina/cortina-credit-card/cortina-credit-card-void) endpoint is triggered with the flag `isGatewayTimeout: True`. |
+| 销售失败   | 9.b    | 如果机器在成功销售后无法出货（例如，机械堵塞），Nayax 引擎会触发[信用卡作废](/reference/cortina/cortina-credit-card/cortina-credit-card-void)端点来撤销交易。                                                                                                                                                                                 |
+| 通知失败   | 11.b   | 如果可选的 `/SaleEndNotification` 失败，则会发生此情况。这是一个非关键的报告步骤；由于用户已经收到产品，因此该错误仅会被记录以供对账使用。                                                                                                                                                                                                                   |
+
+<Note>
+  有关完整的财务响应代码和授权失败原因列表，请参阅[信用卡拒绝原因](/docs/cortina/credit-card/credit-card-decline-reasons)页面。
+</Note>
+
+## 预授权
+
+预授权流程用于需要两步处理的交易。首先，系统会发起会话，然后进行授权检查。此流程可确保交易有效，并在结算前确认客户账户中有足够的资金。
+
+参见下图：
+
+<Frame>
+  <img src="/images/docs/cortina-credit-card-flows/Cortina V2 Credit Card API - Pre-auth.png" />
+</Frame>
+
+在哪里：
+
+1. 消费者将卡片（插入、轻触或刷卡）出示给 Nayax 设备。
+2. Nayax 设备向 Nayax 服务器发送授权命令请求。
+3. Nayax 服务器通过[“开始会话”](/reference/cortina/cortina/post-start-session)端点向支付提供商发送“开始会话”请求。
+4. 支付提供商向 Nayax 服务器返回“启动会话响应成功”。
+5. Nayax 服务器通过[信用卡授权](/reference/cortina/cortina-credit-card/cortina-credit-card-authorization)端点向支付提供商发送 /Authorization 请求（默认金额）。
+6. Nayax 服务器向 Nayax 设备返回授权命令响应（已批准）。
+7. Nayax 设备向操作员服务机发送开始售货会话命令。
+8. 用户选择产品后，操作员服务机向 Nayax 设备发送销售请求（代码、价格）。
+9. Nayax 设备向操作员服务机发送 Vend Approved（始终批准）响应。
+10. 产品已分发，操作员服务机向 Nayax 设备发送销售成功通知。
+11. Nayax 设备向 Nayax 服务器发送结算命令。
+12. Nayax 服务器通过[信用卡结算](/reference/cortina/cortina-credit-card/cortina-credit-card-settlement)端点向支付提供商发送 /Settlement 请求（最终金额）。
+13. Nayax 服务器向 Nayax 设备返回结算命令响应（已批准），然后 Nayax 设备显示“谢谢”消息。
+
+### 异常处理
+
+如果在任何关键节点（图中以黑圈标记）发生故障，交易将被终止。由于在授权步骤中会冻结持卡人的资金，因此如果交易未完成，则需要采取特定的清理措施（取消交易）。
+
+| 设想        | 图示步骤参考 | 技术决议                                                                                                                                                                                                                                           |
+| :-------- | :----- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 会话启动失败    | 4.b    | 如果 `/Start Session` 请求超时或返回错误，则会发生此情况。会话会在任何资金被授权之前中止。                                                                                                                                                                                         |
+| 授权失败      | 5.b    | 如果服务提供商拒绝支付默认信用额度，则会发生这种情况。交易将被终止，用户通常会在设备上收到通知。                                                                                                                                                                                               |
+| 选择超时      | 8.b    | 如果用户在机器允许的时间内未能选择有效商品，则会发生这种情况。会话将被关闭。                                                                                                                                                                                                         |
+| 销售失败      | 10.b   | 如果机器无法出货（例如，机械堵塞），系统将触发[信用卡取消](/reference/cortina/cortina-credit-card/cortina-credit-card-cancel)端点以解除预授权冻结。                                                                                                                                   |
+| 结算失败      | 12.b   | 如果最终结算请求失败或超时，则会发生这种情况。这需要内部记录，以便与服务提供商进行人工核对。                                                                                                                                                                                                 |
+| 超时/992 代码 | 不适用    | If no sale response is received within the timeout period, or a `992` code is returned, the [Credit Card Cancel](/reference/cortina/cortina-credit-card/cortina-credit-card-cancel) endpoint is called with the flag `isGatewayTimeout: True`. |
+
+<Note>
+  有关完整的财务响应代码和授权失败原因列表，请参阅[信用卡拒绝原因](/docs/cortina/credit-card/credit-card-decline-reasons)页面。
+</Note>

@@ -1,0 +1,64 @@
+---
+title: endPinpadTransaction
+metadata:
+  og:description: 使用 endPinpadTransaction 方法终止支付终端上的 PinPad 模式会话。这是读卡/PIN 采集的最后一步
+---
+
+`endPinpadTransaction` 方法用于终止支付终端上的 PinPad 模式会话。这是读卡/PIN 采集流程的最后一步，无论交易是成功、被取消，还是在 PinPad 步骤中失败，都应调用此方法。成功结束会话可确保终端被重置并准备好进行下一次操作。
+
+<Warning>
+  仅限接触式交易
+
+  此方法适用于接触式交易（插卡），需要终端与 PIN 密码键盘之间进行受控的多步骤 EMV 交互。
+</Warning>
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+请在请求中确保配置以下内容：
+
+- `method` 字段必须设置为 `endPinpadTransaction`。
+- params 中的 `service` 必须设置为 `engine`。
+
+该请求采用固定格式，第二个对象中没有具体参数。
+
+```json
+{
+   "jsonrpc": "2.0",
+   "method": "endPinpadTransaction",
+   "id": "123454353",
+   "params": [
+       "engine",
+       {}
+   ]
+}
+```
+
+## 回复
+
+成功的响应表示终端已成功退出 PinPad 模式，设备已恢复到空闲状态。
+
+```json
+{
+   "jsonrpc": "2.0",
+   "id": "123454353",
+   "result": {
+       "statusCode": 0,
+       "statusMessage": "ok"
+   }
+}
+```
+
+### 响应参数
+
+下面是一个包含所有可能的响应参数及其描述的表格：
+
+| 姓名                     | 类型     | 描述                                |
+| :--------------------- | :----- | :-------------------------------- |
+| `statusCode`           | 整数     | 命令的状态。值为 `0` 表示终端已成功结束 PinPad 会话。 |
+| `statusMessage`        | string | 确认状态的消息（例如 `ok`）。                 |

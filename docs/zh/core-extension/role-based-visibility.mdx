@@ -1,0 +1,182 @@
+---
+title: 如何实现基于角色的用户界面可见性
+description: 允许 Nayax Core 管理员根据用户角色显示或隐藏您的核心扩展程序的部分内容。
+---
+
+Nayax Core 拥有角色管理系统，管理员可以根据用户的角色控制其可见内容和可执行操作。您可以将 Core 扩展程序连接到此系统，以便根据登录用户的角色自动显示或隐藏应用程序中的特定 UI 元素（例如选项卡、按钮、小部件、设置部分等）。
+
+您的应用在启动时从 Nayax 获取隐藏元素列表，然后在整个 UI 中应用可见性。
+
+## 先决条件
+
+- 您的 Core Extension 已在 Nayax 注册,并拥有一个型号名称(例如 `Apps/YourAppName`)
+- 您已确定应用程序中应由角色控制的 UI 元素。
+
+<Steps>
+  <Step title="定义您的 UI 元素 ID。">
+    为每个需要角色控制的 UI 元素分配一个字符串 ID。请使用以下命名约定：
+
+    ```text
+    {category}.{name}
+    ```
+
+    - 类别：`tab`、`widget`、`action`、`settings`、`sidebar`、`topMenu` 之一
+    - **名称：**元素的驼峰式标识符
+
+    例如：
+
+    ```text
+    tab.overview
+    tab.settings
+    action.restartDevice
+    action.exportReport
+    widget.salesSummary
+    settings.notifications
+    ```
+
+    请保留一份您定义的所有元素 ID 的列表。您需要将此列表提供给 Nayax，以便管理员可以为每个元素配置角色权限。
+
+    <Note>
+      元素 ID 区分大小写。请在您的应用程序和提交给 Nayax 的列表中使用一致的大小写形式。
+    </Note>
+  </Step>
+
+  <Step title="启动时获取隐藏元素">
+    当你的应用加载时，调用 Nayax UI 元素端点，获取应该对当前用户隐藏的元素列表：
+
+    ```bash
+    GET /core/apps/ui-elements?model=Apps/YourAppName
+    ```
+
+    该端点返回一个包含 `hide` 数组的 JSON 对象：
+
+    ```json
+    {
+      "hide": [
+        "action.restartDevice",
+        "tab.settings",
+        "widget.communication"
+      ]
+    }
+    ```
+
+    将结果存储为集合以便快速查找：
+
+    ```typescript
+    async function fetchHiddenElements(model: string): Promise<Set<string>> {
+      try {
+        const response = await fetch(
+          `/core/apps/ui-elements?model=${model}`,
+          { credentials: "include" }
+        );
+
+        if (!response.ok) {
+          return new Set();
+        }
+
+        const data: { hide: string[] } = await response.json();
+        return new Set(data.hide);
+      } catch {
+        return new Set();
+      }
+    }
+    ```
+
+    <Note>
+      对于可以查看所有内容的用户（例如管理员），该端点会返回一个空的 `hide` 数组。空数组是有效的响应，而非错误。
+    </Note>
+  </Step>
+
+  <Step title="在用户界面中应用可见性">
+    创建一个辅助函数，用于检查元素是否应该可见，然后在渲染每个角色可控元素之前，在整个用户界面中使用该函数：
+
+    ```typescript
+    let hiddenElements: Set<string> = new Set();
+
+    function isVisible(elementId: string): boolean {
+      return !hiddenElements.has(elementId);
+    }
+    ```
+
+    在应用启动时调用 `fetchHiddenElements`，并在渲染之前存储结果：
+
+    ```typescript
+    hiddenElements = await fetchHiddenElements("Apps/YourAppName");
+    ```
+
+    然后，在您的用户界面中应用可见性检查：
+
+    ```typescript
+    // Filter a tab list
+    const visibleTabs = allTabs.filter(tab => isVisible(tab.elementId));
+
+    // Conditionally render a widget
+    {isVisible("widget.salesSummary") && <SalesSummaryWidget />}
+
+    // Filter an actions dropdown
+    const visibleActions = allActions.filter(action => isVisible(action.elementId));
+    ```
+  </Step>
+
+  <Step title="处理加载状态">
+    API 调用需要时间。请决定在权限加载期间应用的行为。最稳妥的做法是在 API 调用完成之前不渲染任何内容，然后在完成之后再应用可见性：
+
+    ```typescript
+    let permissionsLoaded = false;
+
+    async function initApp() {
+      hiddenElements = await fetchHiddenElements("Apps/YourAppName");
+      permissionsLoaded = true;
+      renderApp();
+    }
+    ```
+
+    或者，您可以立即渲染所有元素，并在权限加载后重新渲染。两种方法都可行，但第一种方法可以避免可见内容的闪烁。
+  </Step>
+
+  <Step title="向 Nayax 提供您的元素 ID">
+    Nayax 管理员使用您的元素 ID 配置角色权限。您必须向 Nayax 提供您的应用程序公开的所有元素 ID 的完整列表，以便将其添加到角色管理系统中。
+  </Step>
+</Steps>
+
+## 元素 ID 命名参考
+
+定义元素 ID 时请使用以下类别：
+
+| 类别         | 用于                                              |
+| ---------- | ----------------------------------------------- |
+| `tab`      | 选项卡视图中的选项卡（例如 `tab.overview`、`tab.reports`）     |
+| `action`   | 触发操作的按钮或菜单项（例如 `action.export`、`action.delete`） |
+| `widget`   | 仪表盘卡片或数据面板（例如 `widget.salesChart`）              |
+| `settings` | 设置界面中的各个部分（例如 `settings.notifications`）         |
+| `sidebar`  | 侧边栏导航项（例如 `sidebar.filters`）                    |
+| `topMenu`  | 顶部导航栏中的项目（例如 `topMenu.userMenu`）                |
+
+## 错误处理
+
+UI元素端点设计为失败后仍可正常显示。如果请求因任何原因（网络错误、身份验证问题、服务器错误）失败，您的应用应该显示所有元素，而不是全部隐藏。在无法确认权限的情况下隐藏元素会导致用户无法访问您的应用。
+
+The example in [Step 2](#fetch-hidden-elements-at-startup) implements this behavior by returning an empty `Set` on any error.
+
+## 故障排除
+
+如果基于角色的可见性未按预期运行，请使用下表来确定原因。
+
+| 症状                | 可能原因                | 使固定                                                           |
+| ----------------- | ------------------- | ------------------------------------------------------------- |
+| 尽管角色配置不同，所有元素仍然可见 | API 返回空数组或请求失败      | 在浏览器 DevTools 的网络（network）选项卡中检查 `/core/apps/ui-elements` 的响应 |
+| 特定元素未隐藏           | 元素 ID 不在 `hide` 数组中 | 请核对您的元素 ID 是否与 Nayax 配置的完全一致（区分大小写）。                          |
+| API 返回 404        | 应用未通过反向代理提供服务       | 通过 Nayax Core 访问您的应用，而不是直接访问。                                 |
+| 角色管理中没有元素 ID      | 未向 Nayax 提交的 ID     | 请将您的元素 ID 列表提供给 Nayax 进行注册                                    |
+
+## 后续步骤
+
+<CardGroup cols={2}>
+  <Card title="翻译" icon="language" href="/docs/core-extension/translations">
+    公开您的 UI 字符串以支持多语言。
+  </Card>
+
+  <Card title="验证" icon="key" href="/docs/core-extension/authentication">
+    了解您的应用从 Nayax 收到的 JWT 令牌。
+  </Card>
+</CardGroup>

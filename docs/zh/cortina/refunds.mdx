@@ -1,0 +1,26 @@
+---
+title: 退款
+metadata:
+  og:description: 退款功能允许商户直接通过系统为符合条件的交易向客户退还资金。它支持全额。
+---
+
+退款功能允许商家直接通过系统将符合条件的交易款项退还给客户。该功能支持全额退款和部分退款，有助于高效解决纠纷、处理取消订单或纠正错误。
+
+退款可通过 Nayax Core 或 Lynx API 触发，并以 MOTO 交易（仅包含 PAN 和到期日）的形式进行，金额为负数。退款请求是一个独立的操作，其中包含原始交易的详细信息。
+
+所有Cortina集成类型均可获得退款。
+
+<Note>
+  启用退款
+
+  退款需要在 Nayax 端进行额外配置。如果您希望支持退款,请联系您指定的 Nayax 集成工程师。
+</Note>
+
+## 如何实施
+
+针对所使用的特定集成类型，可以使用[Cortina 退款请求](/reference/cortina/cortina-credit-card/cortina-credit-card-refund)在原始交易日期起 180 天内发放退款。
+
+- 退款金额将在 `BasicInfo.Amount` 中发送。
+- `PaymentInfo` 对象将包含原始授权的详情。
+
+对此请求的响应与常规销售响应类似。
