@@ -1,0 +1,93 @@
+---
+title: "Restart a Machine"
+metadata:
+  og:description: "Trigger a remote restart of a Nayax device through the Lynx API by updating device attribute 144."
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+Restart a Nayax device remotely by updating a device attribute on the machine. The device picks up the change on its next poll and restarts, then reconnects to the server on its own.
+
+<EndpointCard
+  title="Update Specific Machine Attribute"
+  href="/reference/lynx/machine-attribute/update-specific-machine-attribute"
+  method="put"
+/>
+
+<Warning>
+**Authentication**
+
+Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use them to authenticate your API requests.
+</Warning>
+
+## Restart a Machine
+
+Use the [Update Specific Machine Attribute](/reference/lynx/machine-attribute/update-specific-machine-attribute) endpoint to set device attribute `144` on the machine. Provide the `MachineID` and the attribute's `DeviceAttributeID` as path parameters, and the attribute value as a body parameter:
+
+```bash Request
+curl -X PUT "https://qa-lynx.nayax.com/operational/v1/machines/<MACHINE_ID>/attributes/144" \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "DeviceAttributeID": 144,
+    "MachineID": <MACHINE_ID>,
+    "DeviceAttributeValue": "1"
+  }'
+```
+
+<Note>
+  Replace `<MACHINE_ID>` with your machine's unique identifier, and `<YOUR_ACCESS_TOKEN>` with your Lynx API token.
+</Note>
+
+This table outlines the body parameters:
+
+| **Name**               | **Type** | **Description**                                                       |
+| :--------------------- | :------- | :---------------------------------------------------------------------- |
+| `DeviceAttributeID`    | `int`    | The device attribute to update. Use `144` to restart the device.         |
+| `MachineID`            | `int`    | The unique identifier of the machine, matching the path parameter.       |
+| `DeviceAttributeValue` | `string` | The value to assign to the attribute. Use `"1"` to trigger the restart.  |
+
+The endpoint returns the updated attribute on success:
+
+```json Response
+{
+  "DeviceAttributeID": 144,
+  "MachineID": <MACHINE_ID>,
+  "DeviceAttributeValue": "1",
+  "DeviceAttributeCodeID": null,
+  "DeviceAttributeName": "Restart device",
+  "DeviceAttributeGroup": "Communication",
+  "DeviceAttributeReadOnlyBit": false,
+  "MachineAttributeRef": "/v1/machines/<MACHINE_ID>/attributes/144",
+  "MachineRef": "/v1/machines/<MACHINE_ID>"
+}
+```
+
+The device restarts within a few minutes once it polls the queue. Restarting also applies any other configuration changes waiting in the queue.
+
+<Note>
+  If attribute `144` has never been set on the machine, a `GET` request for it returns `204 No Content` instead of an error, and the attribute is omitted from the machine's full attribute list until you set it.
+</Note>
+
+## Restart Versus Reboot
+
+A restart is the lighter of the two power operations. It powers the device off and on and applies any other pending configuration. A reboot is heavier: it activates the bootloader. Use a restart unless you specifically need the bootloader.
+
+<Warning>
+Do not trigger a restart during an active transaction. Wait until the device is idle so you do not interrupt a payment in progress.
+</Warning>
+
+## Confirm the Restart
+
+After the device restarts, it sends a `PowerUp` event back to the server confirming it is online again. Use this event to verify the restart completed.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Machine Attributes" icon="sliders" href="/docs/manage-data-operations/lynx-api/machines/updating-a-machines-attribute">
+    Update other machine attributes through the Lynx API.
+  </Card>
+  <Card title="Retrieve Machine Information" icon="magnifying-glass" href="/docs/manage-data-operations/lynx-api/machines/retrieve-machine-information">
+    Look up a machine's details and current status.
+  </Card>
+</CardGroup>
