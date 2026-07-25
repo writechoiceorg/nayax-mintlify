@@ -55,8 +55,8 @@ The endpoint returns the updated attribute on success:
   "MachineID": <MACHINE_ID>,
   "DeviceAttributeValue": "1",
   "DeviceAttributeCodeID": null,
-  "DeviceAttributeName": null,
-  "DeviceAttributeGroup": null,
+  "DeviceAttributeName": "Restart device",
+  "DeviceAttributeGroup": "Communication",
   "DeviceAttributeReadOnlyBit": false,
   "MachineAttributeRef": "/v1/machines/<MACHINE_ID>/attributes/144",
   "MachineRef": "/v1/machines/<MACHINE_ID>"
@@ -64,6 +64,10 @@ The endpoint returns the updated attribute on success:
 ```
 
 The device restarts within a few minutes once it polls the queue. Restarting also applies any other configuration changes waiting in the queue.
+
+<Note>
+  If attribute `144` has never been set on the machine, a `GET` request for it returns `204 No Content` instead of an error, and the attribute is omitted from the machine's full attribute list until you set it.
+</Note>
 
 ## Restart Versus Reboot
 
