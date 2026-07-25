@@ -1,10 +1,18 @@
 ---
 title: "Restart a Machine"
 metadata:
-  og:description: "Trigger a remote restart of a Nayax device through the Lynx API using the machine configuration endpoint and attribute 144."
+  og:description: "Trigger a remote restart of a Nayax device through the Lynx API by updating device attribute 144."
 ---
 
-Restart a Nayax device remotely by pushing a configuration attribute into the machine's queue. The device picks up the change on its next poll and restarts, then reconnects to the server on its own.
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+Restart a Nayax device remotely by updating a device attribute on the machine. The device picks up the change on its next poll and restarts, then reconnects to the server on its own.
+
+<EndpointCard
+  title="Update Specific Machine Attribute"
+  href="/reference/lynx/machine-attribute/update-specific-machine-attribute"
+  method="put"
+/>
 
 <Warning>
 **Authentication**
@@ -14,15 +22,16 @@ Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) 
 
 ## Restarting a Machine
 
-Push attribute `144` into the machine's configuration queue. Provide the `MachineID` as a path parameter, and the attribute you want to set as body parameters, as shown below:
+Use the [Update Specific Machine Attribute](/reference/lynx/machine-attribute/update-specific-machine-attribute) endpoint to set device attribute `144` on the machine. Provide the `MachineID` and the attribute's `DeviceAttributeID` as path parameters, and the attribute value as a body parameter, as shown below:
 
 ```bash Request
-curl -X PUT "https://lynx.nayax.com/operational/v1/machines/<MACHINE_ID>/configuration" \
+curl -X PUT "https://qa-lynx.nayax.com/operational/v1/machines/<MACHINE_ID>/attributes/144" \
   -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
   -H "Content-Type: application/json" \
   -d '{
-    "AttributeID": 144,
-    "Value": "1"
+    "DeviceAttributeID": 144,
+    "MachineID": <MACHINE_ID>,
+    "DeviceAttributeValue": "1"
   }'
 ```
 
@@ -32,10 +41,27 @@ curl -X PUT "https://lynx.nayax.com/operational/v1/machines/<MACHINE_ID>/configu
 
 This table outlines the body parameters:
 
-| **Name**      | **Type** | **Description**                                                            |
-| :------------ | :------- | :------------------------------------------------------------------------ |
-| `AttributeID` | `int`    | The configuration attribute to push. Use `144` to restart the device.     |
-| `Value`       | `string` | The value assigned to the attribute. Use `"1"` to trigger the restart.    |
+| **Name**               | **Type** | **Description**                                                       |
+| :--------------------- | :------- | :---------------------------------------------------------------------- |
+| `DeviceAttributeID`    | `int`    | The device attribute to update. Use `144` to restart the device.         |
+| `MachineID`            | `int`    | The unique identifier of the machine, matching the path parameter.       |
+| `DeviceAttributeValue` | `string` | The value assigned to the attribute. Use `"1"` to trigger the restart.   |
+
+The endpoint returns the updated attribute on success:
+
+```json Response
+{
+  "DeviceAttributeID": 144,
+  "MachineID": <MACHINE_ID>,
+  "DeviceAttributeValue": "1",
+  "DeviceAttributeCodeID": null,
+  "DeviceAttributeName": null,
+  "DeviceAttributeGroup": null,
+  "DeviceAttributeReadOnlyBit": false,
+  "MachineAttributeRef": "/v1/machines/<MACHINE_ID>/attributes/144",
+  "MachineRef": "/v1/machines/<MACHINE_ID>"
+}
+```
 
 The device restarts within a few minutes once it polls the queue. Restarting also applies any other configuration changes waiting in the queue.
 
