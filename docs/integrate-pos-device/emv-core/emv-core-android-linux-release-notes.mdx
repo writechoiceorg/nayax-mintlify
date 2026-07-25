@@ -1,0 +1,104 @@
+---
+title: "EMV Core Android & Linux SDK Release Notes"
+sidebarTitle: "Android & Linux"
+description: "Track EMV Core Android & Linux SDK changes as they ship."
+rss: true
+---
+
+Nayax logs EMV Core Android & Linux SDK changes on this page as they ship.
+Subscribe to the RSS feed using the icon at the top of the page to get
+notified of new entries.
+
+Release notes are organized into three categories to help you evaluate the
+impact of each update:
+
+* **Improvements**: New API commands, expanded platform and card support, and
+  performance enhancements.
+* **Fixes**: Resolved bugs and reliability improvements.
+* **Known Issues**: Current limitations or pending features, with recommended
+  workarounds.
+
+<Note>
+  **Platform-Specific Features**
+
+  While most updates are universal, platform-specific improvements or fixes are marked with **(Android Only)** or **(Linux Only)** in the section titles.
+</Note>
+
+<Update
+  label="SDK Version 1.4 (Latest)"
+  rss={{
+    title: "SDK Version 1.4: automatic currency code, server failover, and local serial port management",
+    description: "Improvements: automated currency code management, Nayax Core/OTI TMS server failover, and local serial port management (Linux). Fixes: reader message event delivery and reader reconnection, sample app token reporting, and sample app resources. Known issues: offline acceptance limitation, terminal ID update delay, and an intermittent authorizing status event."
+  }}
+>
+
+This version includes the following improvements, fixes, and known issues for the SDK:
+
+<Accordion title="Improvements" icon="rocket">
+  ### **Automated Currency Code Management (#7473)**
+
+  The SDK now sets the currency code automatically from the Nayax Core. The host application no longer needs to set it manually.
+
+  ***
+
+  ### **Server Connectivity and Automatic Failover (#7474)**
+
+  The EMV Core now automatically attempts connections to both the Nayax Core (`tms-c.otiglobal.com`) and the OTI TMS (`tms.otiglobal.com`). You can omit the `TMS_SVC_URL` attribute from your configuration when migrating a device from OTI TMS management to the Nayax Core system.
+
+  ***
+
+  ### **Local Serial Port Management (#7308) (Linux Only)**
+
+  Host applications can now manage the reader serial port locally through a configuration file located at `/etc/oti_kiosk/init.cfg`. By defining the `READER_SERIAL_PORT` attribute (e.g., `READER_SERIAL_PORT=/dev/ttyS0`), the SDK can pinpoint the hardware interface immediately.
+</Accordion>
+
+<Accordion title="Fixes" icon="wrench">
+  ### **Event Delivery and Reader Stability (#7443, #7497)**
+
+  Fixed an intermittent issue where [`ReaderMessageEvent`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages) would stop arriving at the host application. Additionally, we resolved a connectivity bug where the EMV Core was unable to reconnect to a serial reader following a POS firmware update.
+
+  ### **Sample Application Token Reporting (Linux Only)**
+
+  Fixed a logic error in the Sample application that prevented card tokens from being returned in the `TransactionComplete` event for open-loop cards.
+
+  ### **Sample Application Resources (Android Only)**
+
+  Fixed an issue in the previous distribution where incorrect sample application source files were included. The SDK v1.4 package now contains the verified and updated source code.
+</Accordion>
+
+<Accordion title="Known Issues" icon="exclamation-triangle">
+  ### **Offline Acceptance Limitation (#6918)**
+
+  The `PMT_ACCEPT_OFFLINE` command currently only functions for DEMO purposes. Transactions processed under this flag are not yet sent to the server and will remain local to the device until a future update.
+
+  ***
+
+  ### **Terminal ID Update Delay (#7211, #7030)**
+
+  If you swap readers without manually resetting the EMV Core, the Terminal ID will not update. Reset the EMV Core whenever you replace hardware to ensure the correct terminal identity is registered.
+
+  ***
+
+  ### **Authorizing Status Event (#7510)**
+
+  There is a known intermittent issue where the EMV Core may fail to send the [`ReaderMessageEvent`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages) with index 36 (“Authorizing”). Applications should handle the transaction flow even if this specific status update is missing.
+</Accordion>
+
+</Update>
+
+### Version history
+
+Every earlier Android & Linux SDK version, condensed to one line. See the
+current version above for full detail and links.
+
+| Version | Summary |
+|---|---|
+| SDK Version 1.2 | **Added** (#6782, #7139, #7346, #7269, #6888):<ul><li>e-Receipt/Remote Settlement support</li><li>Nayax Core-managed attribute/limit control and CLP cards</li><li>Enhanced logging</li></ul>**Fixed** (#7385, #7371, #7199, #7272):<ul><li>Offline display sync and reader-boot/core-invocation issues</li><li>Deprecated `PayTransaction` in favor of `PreAuthorize`/`ConfirmTransaction`</li></ul> |
+| SDK Version 1.1 (Linux Only) | **Shipped** (#6813, #7165, #7157):<ul><li>Official UNO-8 firmware v54227</li><li>Beta UNO-mini firmware v071514</li></ul>**Fixed** (#7144, #7331):<ul><li>Serial reader stability</li><li>TMS independence</li><li>A socket resource leak</li></ul> |
+| SDK Version 1.0 | **Added** (#71156, #7129, #7117):<ul><li>`GetAttribute`</li><li>Enhanced Android logging and config reporting</li><li>Linux sample app improvements</li></ul>**Fixed** (#6960, #7136, #7091, #7169, #7180, #6658, #7200, #7204, #7130, #7210):<ul><li>Log truncation</li><li>CLP card mapping</li><li>Timing/sync issues</li><li>Android diagnostics/UI bugs</li></ul> |
+| SDK Version 0.9 | **Added** (#6550, #6838, #6978):<ul><li>Mifare UID support to `GetCardToken`</li><li>Automatic EMV Core startup/recovery</li><li>`GetCardToken` continuous mode on Android</li></ul>**Fixed** (#6980, #6987, #7001, #6961, #6658):<ul><li>Closed-loop UID reporting</li><li>UI/input stability</li><li>UNO-mini firmware events</li><li>Pre-authorization logic</li></ul> |
+| SDK Version 0.8 | **Added**:<ul><li>`GetCardToken` with continuous polling</li><li>Expanded CLP/Vicinity card support</li><li>Offline CLP UID retrieval</li></ul>**Fixed** (#6550, #6919, #6938, #6862):<ul><li>A crash with no internet connection</li><li>A `Void`-after-`PreAuthorize` bug</li><li>TMS/reader connectivity</li><li>A Linux serial-port config bug</li></ul> |
+| SDK Version 0.7 | First official Android SDK release.<br/>**Added**:<ul><li>Linux configuration attributes (`OPEN_LOOP_ENABLED`, `PRE_AUTH_AMOUNT`, `KIOSK_TCP_LOCALHOST`)</li><li>`GetAttribute()` retrieval</li></ul><ul><li>Switched Linux to internal sockets by default</li><li>Fixed TMS production-info retrieval (#6705)</li></ul> |
+| SDK Version 0.6.03 (Linux Only) | **Improved**:<ul><li>UART stability</li><li>Closed-loop Mifare support (Ultralight, 7-byte UIDs)</li></ul><ul><li>Fixed a config-parsing crash on empty lines</li><li>Confirmed sequential `PreAuthorize` rejection is intentional</li></ul> (#6560, #6576) |
+| SDK Version 0.6.00 (Linux Only) | Introduced foundational Closed Loop Mifare support |
+| SDK Version 0.1 (Linux Only) | First Lite SDK release for Linux, built in C for low-resource embedded environments |

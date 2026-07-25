@@ -1,0 +1,46 @@
+---
+title: 概述
+metadata:
+  og:description: Cortina API 允许第三方集成方(如支付提供商或支付网关)安全高效地处理支付交易。
+---
+
+import McpNote from '/snippets/zh/mcp-server-note.mdx';
+
+Cortina API 允许第三方集成方(如支付提供商或支付网关)安全高效地处理支付交易。它充当一个通信层,使 Nayax 的设备能够通过明确定义的请求/响应流程与外部支付平台交互。
+
+<McpNote />
+
+## 交易流程组件
+
+Cortina API 是支付流程的核心层，确保交易有效、安全并得到处理。
+
+<Frame>
+  <img src="/images/docs/overview-cortina/image1.png" />
+</Frame>
+
+该流程包含四个关键组成部分：
+
+1. 客户:客户在 POS(销售点)终端出示其支付方式以发起支付。
+2. POS(销售点):POS 终端接收信用卡详情和交易金额,然后将卡片和交易详情发送到 Nayax 服务器进行进一步处理。
+3. **Nayax** ：Nayax 接收支付请求，并使用 Cortina API 验证交易。该 API 处理交易的身份验证、授权和最终结算。
+4. **支付网关**：支付网关处理交易详情、授权付款并清算资金。
+
+Nayax 使用 Cortina API 对交易进行授权和清算,确保支付有效且处理安全。
+
+## 参见
+
+本节提供关于理解和集成 Cortina 的全面指南。
+
+有关 Cortina 及其功能的更多信息，请参阅以下页面。
+
+<Columns cols={3}>
+  <Card icon="link" title="集成过程" href="/docs/cortina/cortina-integration" arrow />
+
+  <Card icon="link" title="验证" href="/docs/cortina/start-session/cortina-auth" arrow />
+
+  <Card icon="link" title="Cortina 预付" href="/docs/cortina/prepaid-card/prepaid-card-flows" arrow />
+
+  <Card icon="link" title="静态二维码" href="/docs/cortina/staticqr/staticqr-flows" arrow />
+</Columns>
+
+<br />

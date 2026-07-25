@@ -1,0 +1,199 @@
+---
+title: "Marshall Java SDK Release Notes"
+sidebarTitle: "Java"
+description: "Track Marshall Java SDK changes as they ship."
+rss: true
+---
+
+Nayax logs Marshall Java SDK changes on this page as they ship. Subscribe to
+the RSS feed using the icon at the top of the page to get notified of new
+entries.
+
+Release notes are organized into two categories to help you evaluate the
+impact of each update:
+
+* **Improvements**: New APIs, expanded feature support, and performance
+  enhancements.
+* **Fixes**: Resolved bugs and reliability improvements.
+
+<Update
+  label="Java 0.1.6 (Current)"
+  rss={{
+    title: "Java SDK 0.1.6: pre-auth amount config, QR third-party auth, and link reliability fixes",
+    description: "Improvements: pre-authorization amount config, external reader and display control, multi-vend/multi-session pricing, QR-code and third-party authorization support, and vend/session API changes. Fixes: link and retransmission reliability, message encode/decode bugs, and vend/session safeguards."
+  }}
+>
+  <Note>
+  Some features in this version require VPOS version 4.0.8.23-RC3 or newer.
+  </Note>
+
+This version spans patches 0.1.6.01 through 0.1.6.23.
+
+<Accordion title="Improvements" icon="rocket">
+### Pre-authorization amount config
+
+Added the `pre_auth_amount_config` (0x8c) vend sub-command, including the message class, decode/encode support, a factory method, and event handling in the public API. The demo application now includes a menu option to test pre-authorization amount configuration.
+
+***
+
+### External reader and display control
+
+Added an external reader command and extended the [display control](/docs/integrate-pos-device/marshall/additional-resources/marshall-display) API to support additional layouts.
+
+* The display control API signature now takes a `layout_t` instance directly.
+* The SDK version string now also reports the SDK language.
+
+***
+
+### Multi-vend, multi-session, and pricing
+
+Added `long_price` support, a 4-byte price capability relevant for VPOS Media.
+
+* Fixed the display of negative prices.
+* Multi-session now works together with multi-vend in the same session.
+* Added a `final_price` field to `onSessionInfo`.
+* Real-time price changes are now supported in always-idle mode, even after the reader is already enabled.
+* The SDK gained file-system management support, since VPOS now provides those services.
+
+***
+
+### Transfer data and QR/third-party authorization
+
+Site ID and brand name are now transferred to the machine through [transfer data](/docs/integrate-pos-device/marshall/additional-resources/marshall-ontransferdata).
+
+* Added a brands-selection bit for the Japanese market.
+* Added support for the QR-code card type and third-party authorization for QR-code readers.
+* Added a technician-mode command to open the door remotely.
+
+***
+
+### Vend and session API improvements
+
+`vend_request` and `close_session` now return a boolean value, with a sanity check that price does not exceed the permitted amount (65k when `long_price` is disabled).
+
+* Machine sub type can now be set explicitly instead of being hard-coded.
+* `vend_session_data_t` now exposes all nullable fields, so the caller can tell whether a value was assigned.
+* The VPOS serial number is now provided as a correctly arranged string instead of raw bytes.
+
+***
+
+### Low-level serial and internal cleanup
+
+The SDK no longer bundles `lowlevel_serial.java` directly. Instead, you inject a `serial_port_i` implementation (a certified FTDI and PC-port implementation is provided).
+
+* Removed a false warning on `vmc_vend_t` when no callback handler was registered, replacing it with a null check shared between `marshall_sdk` and `marshall_master_sdk`.
+* Optimized `eth_port` logging.
+</Accordion>
+
+<Accordion title="Fixes" icon="wrench">
+### Link and retransmission reliability
+
+Fixed a missed-ack issue that stopped keepalive and the related link-down issue.
+
+* Fixed a race condition between the rx and tx threads on `m_pending_tx_msg` access.
+* Eliminated false retransmissions.
+* Improved [`vmc_link`](/docs/integrate-pos-device/marshall/methods-functions/link-and-events-configuration) buffer management to prevent a possible retransmission and frame loss.
+* Fixed the `session_end` timeout expiring too soon, which previously caused `reader_always_on` to fire early.
+
+***
+
+### Message encoding and decoding
+
+Fixed several [message encode/decode bugs](/docs/integrate-pos-device/marshall/methods-functions/data-structures):
+
+* `msg_remote_selection_t` encode was an empty stub; now encodes all fields (funds available, payment media ID, payment type, payment data, item number, item options).
+* `msg_setup_max_min_prices_t` encode was missing its sub-command byte and had a currency-code encoding typo; both are fixed.
+* `msg_expansion_t` now null-checks the body before decode/encode.
+* `msg_mdb_rsp_t` decode now correctly instantiates `msg_ftl_retry_deny_t`.
+* Fixed `fw_info` string copy, which could append garbage to the end of strings.
+* Fixed a `msg_alert` string decode error.
+* Fixed an encoding bug affecting multi-session multi-vend frames.
+* Fixed incorrect session ID encoding in `vend_multi_close_session` and multi-vend multi-session close.
+* Fixed a frame-size detection issue affecting varying Marshall message sizes.
+* Fixed a typo in `marshall_func_code_transfer_data`.
+
+***
+
+### Vend and session safeguards
+
+Fixed the reader state command so it also works in always-idle mode.
+
+* Added protection against vend, socket, and general actions being issued when there is no link.
+* Fixed a bug where card info from a previous session was not cleared once a session completed.
+</Accordion>
+
+</Update>
+
+### Version history
+
+Every earlier Java SDK patch, condensed to one line. See the current version above for full detail and links.
+
+| Version | Summary |
+|---|---|
+| 0.1.5.27 | Fixed a re-transmission bug where two packets arriving at once could be lost, plus fixes in `mdb_rsp` parsing and `lowlevel_serial` buffer management |
+| 0.1.5.26 | Added `session_id` to `vend_session_t` for multi-session reference, more logging, fixed a `msg_display_event_t` parsing error that skipped the user callback |
+| 0.1.5.25 | Fixed `card_balance` decoding, transfer_data parsing crashes, and final_price parsing; added logs to decoded transfer_data fields |
+| 0.1.5.24 | Fixed a stall/deadlock while waiting for `end_session`, added transfer data messages throughout the transaction, added SDK configuration logging |
+| 0.1.5.23 | Fixed an undefined state machine state when `on_begin_session` arrived without a session actually starting |
+| 0.1.5.22 | Logs a possible exception in case it occurs |
+| 0.1.5.20-21 | Fixed a possible crash when losing communication while sending `reader_enable`; cleaned up logs |
+| 0.1.5.19 | Fixed a race condition between rx/tx threads causing retransmission of an already-acked packet; improved log readability |
+| 0.1.5.18 | Fixed e-receipt on multi-session setups; can now switch to info session on always-idle setups |
+| 0.1.5.17 | Added check-balance session type, card sub type and card balance transfer_data, and vend discount/final price calculation |
+| 0.1.5.16 | Fixed item price/code API type (integer to short); fixed a crash when cancelling a session after card presented but before vend requested |
+| 0.1.5.15 | Fixed session cancel on always-idle mode and unfilled `transaction_id_len`; `session_status` is now filled by the SDK; optimized `low_level_serial` CPU usage |
+| 0.1.5.14 | Dumps packets on rx re-arrangement for debugging; improved `lowlevel_serial` handling under stress |
+| 0.1.5.13 | Added `vend_status(bool)` for explicit vend success, fixed a vend-cancel timing bug, added total charged/discount on the session, absolute POSIX timestamps in logs, and an aux logging callback |
+| 0.1.5.12 | `onStatus` gained an extra data parameter, added `device_not_available_reason` enums, fixed faulty transfer_data parsing, improved sample app status reporting |
+| 0.1.5.11 | Added `Log.console(boolean)`, new transfer_data fields (firmware versions), new device status enums, and the `onSessionTimeout(id)` event |
+| 0.1.5.10 | Fixed vend-deny persist mode staying on after successful transactions; added `unit_of_measure` enum values and new device status enums |
+| 0.1.5.9 | Fixed `fw_info` field arrangement and a vend session status request bug; improved `low_level_serial` link reliability; added remote vend support |
+| 0.1.5.8 | Fixed `vmc_socket` busy/retransmit timeout handling |
+| 0.1.5.7 | Fixed a race condition on user cancel right after a card swipe, a `lowlevel_serial` hang on faulty packet length, and a `vmc_socket` busy-modem retransmit bug |
+| 0.1.5.6 | Removed the EV extension, fixed minor API bugs and a CPU starvation detection print bug |
+| 0.1.5.5 | Aligned with Marshall 3.0: session status query, reader state API, entry type enum, QR e-receipt, and a device Marshall-version query |
+| 0.1.5.4 | Fixed a UI API bug, improved CPU profiling, added VMC info fields to `fw_info`, limited multi-vend products to avoid buffer overflow |
+| 0.1.5.3 | Added VMC info fields to `fw_info`, limited multi-vend products to avoid buffer overflow |
+| 0.1.5.2 | Added CPU monitoring for starvation debugging; logs the packet byte stream on CRC error |
+| 0.1.5.1 | Fixed a UI event callback API bug |
+| 0.1.5.0 | Added the `onStatus` vend callback and updated close-session status messages |
+| 0.1.4.8 | Updated to the latest Marshall spec, adding product code and product price TLV fields |
+| 0.1.4.7 | Enabled multi-instance SDK use, connecting several VPOSes to a single VMC machine |
+| 0.1.4.6 | Special encoding handling for Mifare card UIDs |
+| 0.1.4.5 | Improved MSR handling for cards encoded as integer or ASCII string |
+| 0.1.4.4 | Updated the EV extension; `onReady()` now returns the ended session; renamed `requestTime`/`setDisplayText`; added display control to `vmc_general` |
+| 0.1.4.2 | Updated the sample application's paymarket demo |
+| 0.1.4.1 | Added log redirection to a file stream; fixed an invalid date from `get_transaction_id()` in `onTransactionInfo` |
+| 0.1.4.0 | Added a serial packet dump-level parameter and a vend-denied policy parameter |
+| 0.1.3.5 | Updated to the latest Marshall protocol; link establishment now reports merchant ID, terminal ID, and machine location; sample app got multi-session/multi-vend demos |
+| 0.1.3.4 | Fixed an always-idle bug requiring the reader to stay enabled |
+| 0.1.3.3 | Fixed a crash on the `alert` API; fixed `reader_always_on` to apply only when always-idle is explicitly disabled |
+| 0.1.3.2 | Added a debug flag to silence log output and always-idle sample code |
+| 0.1.3.1 | Updated `libjserial` in the demo application |
+| 0.1.3.0 | Reorganized sample code and added documentation to the folder |
+| 0.1.2.9 | Fixed the always-on feature, which had been removed by mistake |
+| 0.1.2.8 | Minor cleanup; added the paymarket machine type; changed the EV-charger machine type |
+| 0.1.2.7 | Added socket MTU/timeout configuration, Marshall protocol 2.0 support, always-idle MDB mode, a comm-timeout fix, and a fund-available conversion fix |
+| 0.1.2.6 | Added an SDK version method, a TCP socket sample, machine type configuration, and improved logging |
+| 0.1.2.5 | Improved socket handling, removed a false mismatch warning, added a lowlevel reset on CRC error for reliability |
+| 0.1.2.4 | Fixed a link bug transmitting from an empty queue; SDK now ships as a `.JAR` with a demo application |
+| 0.1.2.3 | Updated the pay API |
+| 0.1.2.2 | Added transfer_data structure parsing on vend sessions for readable data; updated the sample application |
+| 0.1.2.1 | Improved logging, added a multi-vend example, added the `multi_vend_support` flag, fixed an `onReady` API bug |
+| 0.1.2.0 | Unified the multi-vend API into a single `vend_request` for both single and multi-vend cases |
+| 0.1.1.6 | Handles async socket-close and session-close requests from VPOS; fixed cancel/close timing bugs |
+| 0.1.1.5 | Reports quantity to DCS (requires VPOS 4.0.1.5 rc9+); added a transaction ID report API |
+| 0.1.1.4 | Aligned close session to the new format |
+| 0.1.1.3 | Fixed model/version reporting to DCS; separated the keep-alive timer from the configured timeout |
+| 0.1.1.2 | Added link statistics, fixed a tight-timing retransmission issue and a buffer-index parsing bug |
+| 0.1.1.1 | Fixed issues in the low-level serial template file |
+| 0.1.1.0 | Fixed a re-transmit index bug |
+| 0.1.0.9 | Handles piggy-back Marshall messages |
+| 0.1.0.8 | Improved `lowlevel_serial` and response time during heavy socket work |
+| 0.1.0.7 | Added multi-vend support, a prepaid `pay` API, and CC last-4-digits transfer data |
+| 0.1.0.6 | Fixed a rare high-load bug causing out-of-order Marshall messages |
+| 0.1.0.5 | Added the `reader_always_on` configuration parameter |
+| 0.1.0.4 | Added a cash sale notification API and link event callbacks; fixed an incorrect session status bug |
+| 0.1.0.3 | Added socket callbacks for session control and display message/alert/time-request messages |
+| 0.1.0.2 | Moved `lowlevel_serial` outside the SDK as an application-specific concern; added configuration reporting to the vending client |
+| 0.1.0.1 | Fixed an FTP socket closing issue; added VPOS configuration notification for the client |

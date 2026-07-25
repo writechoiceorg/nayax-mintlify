@@ -1,0 +1,89 @@
+---
+title: 授权
+description: 对先前检测到的支付方式发起金融预授权。
+metadata:
+  og:description: authorize 方法对先前识别的卡进行资金冻结（预授权）。这是两阶段 a 的第二阶段。
+---
+
+`authorize` 方法对先前识别的卡进行资金冻结（预授权）。这是两阶段交易的第二阶段，发生在成功调用 `cardDetect` 之后。
+
+使用此方法可以：
+
+- 在加油会话开始前，通过预留最高金额来保证付款。
+- 在启动油泵之前验证卡的有效性和资金可用性。
+- 捕获小于或等于初始冻结金额的最终金额。
+
+Nayax 设备上授权提示的示例：
+Authorize
+
+## 请求
+
+This command relies on the card data stored in the terminal's session buffer from the preceding detection phase. A `data` object is not required, but optional fields can be included to pass product and user context to the terminal.
+
+以下示例展示了一个最简请求：
+
+```json
+{
+"command": "authorize",
+"requestId": "req-002"
+}
+```
+
+以下示例展示了带有可选数据字段的请求：
+
+```json
+{
+"command": "authorize",
+"requestId": "req-002",
+"data": {
+"products": ["Diesel", "Unleaded", "CNG"],
+"userData": ["NYX-1234", "932747"]
+}
+}
+```
+
+### 参数定义
+
+下表描述了授权请求的字段：
+
+| 姓名       | 类型     | 必需的 | 描述                                      |
+| :------- | :----- | :-- | :-------------------------------------- |
+| 命令       | string | 是的  | 设置为 `"authorize"`。                      |
+| 请求 ID    | string | 是的  | 用于跟踪响应的唯一标识符。                           |
+| products | 字符串数组  | 不   | 允许的产品名称列表（例如 `["Diesel", "Unleaded"]`）。 |
+| userData | 字符串数组  | 不   | 与交易关联的任意用户数据，例如车牌号或里程表读数。               |
+
+## 回应
+
+终端在与金融网关通信后返回响应。成功的响应包含 `transactionId`，该字段是后续结算所必需的。
+
+以下示例展示了一个典型的响应：
+
+```json
+{
+"requestId": "req-002",
+"data": {
+"transactionId": "TXN-20260113-003000",
+"authorizedAmount": 50000,
+"state": "AUTHORIZED",
+"cardBrand": "MASTERCARD",
+"cardEntryMode": "CHIP",
+"maskedPan": "************5678",
+"aid": "A0000000031010"
+}
+}
+```
+
+### 响应参数
+
+以下是成功授权后 `data` 对象中返回的参数：
+
+| 姓名               | 类型     | 描述                                      |
+| :--------------- | :----- | :-------------------------------------- |
+| 交易 ID            | string | 此次授权冻结的唯一 ID。请保存此值以供 `settle` 命令使用。     |
+| authorizedAmount | 整数     | 银行批准并冻结的确切金额（请参阅 `decimalPlace`）。       |
+| 状态               | string | 成功时返回 `AUTHORIZED`。                     |
+| 卡品牌              | string | 所用卡的品牌（例如 MASTERCARD）。                  |
+| 卡片输入模式           | string | 读取卡所用的方式（例如 CHIP）。                      |
+| 蒙面潘              | string | 用于日志记录和收据打印的掩码卡号。                       |
+| 援助               | string | 该 EMV 交易的应用标识符（Application Identifier）。 |

@@ -1,0 +1,53 @@
+---
+title: 延迟付款
+metadata:
+  og:description: 延迟交易流程分为两个不同的阶段处理支付请求：1. 预授权阶段 2. 最终授权。
+---
+
+延迟交易流程分为两个不同的阶段处理支付请求：
+
+1. 预授权阶段
+2. 最终授权与结算阶段
+
+这种两步方式特别适用于最初刷卡交互后最终金额或细节可能发生变化的交易。
+
+## 交易流程
+
+要理解延迟交易流程，请参考以下事件顺序：
+
+<Note>
+  绿色区域内的步骤为在线执行，红色区域内的步骤为离线执行。
+</Note>
+
+<Frame>
+  <img src="/images/docs/tweezercomm-deferred-payment/image1.png" />
+</Frame>
+
+以下是每个步骤的详细说明：
+
+1. After the client application (POS) performs its [`doPeriodic()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) to settle the stored card transactions.
+2. `setConfig()` 会将设备切换为使用离线模式的延迟工作模式。
+3. The POS sends a [`doTransaction()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransaction-ashrait) request to the Nayax Device, triggering a new transaction.
+4. 持卡人轻触其非接触式卡片。
+5. The Nayax Device checks for "Deferred pre-conditions" and, upon approval, returns the transaction result as `Approved->Pending`. This means the transaction is approved.
+   <Note>
+     延迟模式的工作完成后，继续执行第 6 步。
+   </Note>
+6. 客户端应用程序调用 `setConfig()`，将离线模式设置为 false。
+7. 客户端应用程序调用 `authorizePendingTransactions()`，将待处理交易发送给 Nayax 设备，请求对其进行结算（但此时尚未执行结算）。
+8. Nayax 设备与 SHVA 通信，以发起待处理交易的授权。
+9. 交易结果被返回给设备。
+10. 交易结果被返回给客户端应用程序。
+11. The flow concludes with a final [`doPeriodic()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) call from the client application, to settle all authorized transactions.
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="常规交易" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/single-phase-transaction" arrow />
+
+  <Card icon="link" title="两阶段交易" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/2-phase-transaction" arrow />
+
+  <Card icon="link" title="预授权（以色列）" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-pre-authorization-israel" arrow />
+
+  <Card icon="link" title="拆分交易" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-split-transaction" arrow />
+</Columns>

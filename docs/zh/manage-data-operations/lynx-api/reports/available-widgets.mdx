@@ -1,0 +1,64 @@
+---
+title: 小部件 ID 列表
+---
+
+Widget Type ID 是每个组件的唯一数字标识符。它是所有 API 数据请求所需的主键，因为 `widget_type_id` 参数会明确指定您希望从应用程序代码中提取哪个组件的数据。
+
+下表按范围列出了所有可用的组件 ID。请根据您的使用场景查找所需的 ID。
+
+<Accordion title="运营商/Actor 级别（多机器数据）">
+  这些组件为您的整体业务或特定机器组提供“全局”视图。
+
+  | ID    | 组件名称                                                                                                                             |
+  | :---- | :------------------------------------------------------------------------------------------------------------------------------- |
+  | `2`   | 过去 30 天销售图表                                                                                                                      |
+  | `3`   | [Last Year vs This Year Monthly Sales](/docs/manage-data-operations/lynx-api/reports/widget-last-year-vs-this-year)              |
+  | `5`   | 期间热门事件                                                                                                                           |
+  | `6`   | 期间 KeepAlive 记录                                                                                                                  |
+  | `20`  | 地图上的机器                                                                                                                           |
+  | `22`  | [(Operator) 10 Most Popular Machines Sales/Vends](/docs/manage-data-operations/lynx-api/reports/widget-10-most-popular-machines) |
+  | `23`  | （两者）机器评级                                                                                                                         |
+  | `24`  | 10 台最不受欢迎机器的销售/出货量                                                                                                               |
+  | `33`  | 期间按产品划分的销售/出货量                                                                                                                   |
+  | `43`  | 仪表板活跃机器统计框                                                                                                                       |
+  | `53`  | [Dashboard Sales Table](/docs/manage-data-operations/lynx-api/reports/widget-dashboard-sales-table)                              |
+  | `193` | [Sales By Period](/docs/manage-data-operations/lynx-api/reports/widget-sales-by-period)                                          |
+  | `244` | 机器警报                                                                                                                             |
+  | `331` | 毛利润 / 毛利率                                                                                                                        |
+  | `333` | 按期间划分的产品销售额                                                                                                                      |
+  | `335` | 产品表现                                                                                                                             |
+  | `350` | 期间未访问的机器                                                                                                                         |
+  | `351` | 期间无现金销售的机器                                                                                                                       |
+  | `352` | 期间无非现金销售的机器                                                                                                                      |
+  | `353` | 机器库存水平                                                                                                                           |
+  | `355` | 预付卡摘要                                                                                                                            |
+  | `396` | 新老消费者                                                                                                                            |
+</Accordion>
+
+<Accordion title="机器级别（单机数据）">
+  这些组件专注于单台设备的“健康状况”和性能。
+
+  | ID    | 组件名称                     |
+  | :---- | :----------------------- |
+  | `4`   | 机器状态                     |
+  | `7`   | 机器最后访问 KPI               |
+  | `8`   | 机器现金箱水平 KPI              |
+  | `9`   | 机器库存水平 - 现有量 / PAR KPI   |
+  | `11`  | 机器距上次非现金交易天数 KPI         |
+  | `12`  | 机器距上次现金交易天数 KPI          |
+  | `13`  | 机器空货道数量 KPI              |
+  | `21`  | （机器）VPOS 现有 / 请求固件版本 KPI |
+  | `23`  | 过去 24 小时逐时销售/出货量         |
+  | `26`  | EV 机器销售额                 |
+  | `27`  | EV 充电桩状态                 |
+  | `31`  | 自上次访问以来的销售额              |
+  | `32`  | 自上次访问以来按产品划分的销售/出货量      |
+  | `63`  | 设备现有 / 请求固件版本 KPI        |
+  | `73`  | 距上次 DEX 读取天数 KPI         |
+  | `83`  | 最后心跳 KPI                 |
+  | `93`  | 找零管状态 KPI                |
+  | `103` | 距上次 VMC 错误的时间 KPI        |
+  | `330` | 产品地图建议                   |
+  | `334` | 产品表现                     |
+  | `376` | 产品热力图                    |
+</Accordion>

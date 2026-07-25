@@ -1,0 +1,21 @@
+---
+title: Apple Pay 集成设置
+description: 通过验证您的商户域名并托管域名关联文件，为 Nayax eCom SDK 设置 Apple Pay。
+metadata:
+  og:description: 要在 Nayax eCom SDK 中启用 Apple Pay 作为支付方式，您必须验证您的商户域名。请按照以下步骤完成集成。
+---
+
+要在 Nayax eCom SDK 中启用 Apple Pay 作为支付方式，您必须验证您的商户域名。请按照以下步骤完成集成：
+
+1. 向您的 Nayax 解决方案架构师提供发起 Apple Pay 交易的 URL（即您的商户域名）。
+
+2. 托管一个域名关联文件以证明您对该域名的所有权。
+   - 请在此处下载证书文件：
+     [https://nayax-ecom-apple-pay.nayax.com/.well-known/apple-developer-merchantid-domain-association](https://nayax-ecom-apple-pay.nayax.com/.well-known/apple-developer-merchantid-domain-association)
+
+   - 请将该文件托管在您服务器上以下确切路径：
+     `https://your-domain.com/.well-known/apple-developer-merchantid-domain-association`
+
+3. Ensure the URL hosting the certificate is accessible from the public internet. At a minimum, it must be open to Apple's validation servers. See [Apple Pay IP Addresses](https://developer.apple.com/documentation/applepayontheweb/setting-up-your-server#Allow-Apple-Pay-IP-Addresses) to learn more.
+
+4. 完成步骤 1-3 后，请发送电子邮件给您的 Nayax 解决方案架构师。他们将在 Nayax 一端完成最终配置。

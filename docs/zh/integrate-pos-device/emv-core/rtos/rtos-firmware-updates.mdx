@@ -1,0 +1,162 @@
+---
+title: 固件和配置更新
+metadata:
+  og:description: 通过 Nayax Core 或 TMS 远程更新 EMV Core 读卡器固件和配置,或通过 UNO-8 Manager 本地更新。
+---
+
+您可以更新无卡支付读卡器的固件和配置:
+
+- 远程:通过 Nayax Core 或 OTI Terminal Management System (TMS)
+- 本地:使用 Windows PC 上的 UNO-8 Manager
+
+## 从 Nayax Core 远程更新
+
+### 更新读卡器(POS)固件
+
+<Steps>
+  <Step title="选择所需的机器" />
+
+  <Step title="选择 操作 | 更新设备版本" />
+
+  <Step title="选择所需的主固件版本(Main Requested FW Version)">
+    选择 EMV Core v1.x。
+  </Step>
+
+  <Step title="选择所需的 POS 固件版本(POS Requested FW Version)">
+    选择所需的固件:
+
+    - 对于 UNO-mini:
+      - RTOS SDK 固件以 `EMVSC_` 开头(例如 `EMVSC_v07652`)
+      - 第一个 RTOS SDK 版本名为 `EMVS_v071558_ec`
+      - Linux 或 Android SDK 固件以 `EMVS_` 开头
+    - 如果您的设备有多个可用固件,请选择最新的一个。
+
+    <Frame>
+      <img src="/images/docs/rtos-firmware-updates/nayax-core-fw-update.png" />
+    </Frame>
+  </Step>
+
+  <Step title="选择 应用">
+    这会将该操作添加到队列中。
+  </Step>
+</Steps>
+
+### 读卡器(POS)内核配置
+
+内核配置由 Nayax Core 根据国家/地区、账单提供商和设备类型自动选择。请按以下步骤触发更新:
+
+1. 确保机器的常规设置中设置了正确的国家/地区。
+2. 确保机器的支付设置中设置了正确的账单提供商。
+3. 选择 操作 | 重启设备 以启动设备的开机。
+4. 等待 5-10 分钟,让设备接收其内核配置,然后在 POS 配置版本名称(POS Configuration Version Name)下的 Embedded Advanced 部分进行验证。
+
+预期的配置名称:
+
+| 国家/地区   | 账单提供商                   | POS 配置版本前缀 | 例子      |
+| :------ | :---------------------- | :--------- | :------ |
+| 美国      | Heartland Nayax EMV     | `HTL_`     | HTL\_25 |
+| 加拿大     | CityCardPayment(Nuvei)  | `NUV_`     | NUV\_12 |
+| 欧洲、英国   | Credorax(Finaro/Shift4) | `FIN_`     | FIN\_14 |
+| 其他国家/地区 | Stubb billing(仅测试用)     | `FIN_`     | FIN\_14 |
+
+### 机器配置
+
+要将新配置推送到设备:
+
+<Steps>
+  <Step title="更新机器属性">
+    打开 Embedded 或 Embedded Advanced 部分并更新相关属性。
+
+    <Frame>
+      <img src="/images/docs/rtos-firmware-updates/nayax-core-ui.png" />
+    </Frame>
+  </Step>
+
+  <Step title="按 保存">
+    这会将更改的属性添加到队列中。
+
+    <Note>
+      任何属性更改都会导致所有机器属性的完整更新。
+    </Note>
+  </Step>
+</Steps>
+
+---
+
+## 从 TMS 远程更新
+
+### 更新读卡器固件
+
+1. 登录 OTI TMS 并选择 Terminals 选项卡。
+2. 选择要更新的终端。
+3. 打开 Command builder。
+4. 选择 SAT\_PROG 命令。
+5. 选择固件文件(`*.Oef`),位于 `.\Firmware and Configuration` 中。
+6. 按 发送 并等待流程完成,或使用 Add Command 将其批处理到其他命令中。
+
+<Frame>
+  <img src="/images/docs/rtos-firmware-updates/tms-fw-update.png" />
+</Frame>
+
+### 更新阅读器配置
+
+按照上述流程操作,但使用:
+
+- 命令:SAT\_CONFIG
+- 配置文件:对于 UNO-8/PLUS,请使用 `*.zip` 配置包(例如 `EVO_UNO8_135.zip`)。
+- SDK 配置文件位于 `.\Firmware and Configuration` 中。
+
+更新完成后,发送 GET\_VERSIONS 命令,以便所有更改都反映在 TMS 中。
+
+---
+
+## 从 Windows PC 本地更新
+
+### UNO-8 和 UNO-mini
+
+1. 从 SDK 的 `.\Utilities\UNO-8 Manager` 文件夹安装 UNO-8 Manager v4.0 或更高版本。
+2. 将读卡器连接到 PC。
+
+### 更新固件
+
+1. 打开 UNO-8 Manager 并选择 Upgrade FW 选项卡。
+2. 选择固件文件(`.\Firmware and Configuration`)。
+3. 按 Upgrade 并等待流程完成。
+
+### 更新配置
+
+<Steps>
+  <Step title="打开 UNO-8 Manager">
+    选择“文件系统”选项卡。
+
+    <Frame>
+      <img src="/images/docs/rtos-firmware-updates/uno8-manager-local-update.png" />
+    </Frame>
+  </Step>
+
+  <Step title="导航到 CONFIG 文件夹">
+    打开 Windows 文件资源管理器并导航到读卡器 `CONFIG` 文件夹(例如 `.\Firmware and Configuration\Reader Configuration\USA\CONFIG`)。
+  </Step>
+
+  <Step title="拖动配置文件">
+    将 3 个配置文件从文件资源管理器拖动到 UNO-8 Manager 中的 `S:\CONFIG` 文件夹。
+
+    <Frame>
+      <img src="/images/docs/rtos-firmware-updates/uno8-manager-local-update-2.png" />
+    </Frame>
+  </Step>
+
+  <Step title="删除之前的配置文件">
+    右键单击旧文件并选择 Delete file。
+
+    <Frame>
+      <img src="/images/docs/rtos-firmware-updates/uno8-config-delete-reset.png" />
+    </Frame>
+  </Step>
+
+  <Step title="重置设备">
+    <Frame>
+      <img src="/images/docs/rtos-firmware-updates/uno8-config-delete-reset-2.png" />
+    </Frame>
+  </Step>
+</Steps>

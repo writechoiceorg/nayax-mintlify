@@ -1,0 +1,104 @@
+---
+title: C SDK 集成
+metadata:
+  og:description: 仅适用于 C SDK 本页面上的功能和信息仅适用于 C SDK。本指南将向您展示如何将 Marshall C SDK 集成到。
+---
+
+<Warning>
+  仅限 C SDK
+
+  本页上的功能和信息仅与**C SDK**相关。
+</Warning>
+
+本指南将向您展示如何将 Marshall C SDK 集成到您的平台中。您将学习如何配置必要的串口功能、实现所需的定时器 tick,并设置 VMC 配置对象以使 SDK 运行起来。
+
+C SDK 包含适用于 Linux、Windows 或 STM32 微控制器的可行实现。如果您的平台不同，请参考这些实现，并根据您自己的平台调整 SDK。
+
+## 前提条件
+
+在运行 C SDK 之前,请确保配置以下平台特定的元素:
+
+- 串口通信:实现从您平台的串口读取和写入字节的方法,该串口用于连接到 Nayax 的设备。SDK 通过该串行接口与硬件交互。您必须实现以下函数:
+  - `drv_usart_rx_byte()`：从串口读取单个字节。
+  - `drv_usart_rx_chunk()`：在一次操作中读取多个字节。
+  - `drv_usart_get_rx_pending()`：返回串口缓冲区中待处理字节的数量。
+  - `drv_usart_tx_data()`：向 VPOS 设备发送数据字节。
+- 定期计时器触发 (Periodic Timer Tick)：实现一个定期计时器触发以调用 `vmc_link_background()` 函数。该函数应以 5 毫秒到 10 毫秒的间隔调用。此外，请确保 `cpu_platform_get_time()` 函数返回自系统启动以来持续递增的毫秒计数器。
+- UART 通信验证:验证与 Nayax 设备的 UART 通信是否完全正常。
+  - 检查数据发送和接收是否正常。
+  - 验证事件回调是否被正确触发。
+
+## 整合 Marshall
+
+要开始使用 C SDK，请按照以下步骤操作。您可以参考提供的 `mymain.c` 文件，获取示例代码以及有关将必要命名空间导入项目的指导。
+
+1. 实例化 VMC 配置对象：
+
+   ```c C
+   vmc_config_t   	config;
+   ```
+
+2. 填写相应的字段。以下代码块展示了一个标准配置：
+
+   ```c C
+   vmc_init()
+   	__strcpy(config.model, "marshall-c-sdk-demo");
+   	__strcpy(config.serial, "01234567");
+   	__strcpy(config.sw_ver, "vmc app version");
+   	__strcpy(config.vmc_hw_ver, “01234567”);
+   	__strcpy(config. vmc_manuf_code, “manuf”);
+
+   	config.multi_vend_support = __false;
+   	config.multi_session_support = __false;
+   	config.price_not_final_support = __false;
+   	config.reader_always_on = __false;
+   	config.always_idle = __false;
+   	config.explicit_vend_success = __false;
+   	config.vend_denied_policy = vend_denied_policy_persist_e;
+
+   	config.mifare_approved_by_vmc_support = __false;
+   	config.mag_card_approved_by_vmc_support = __false;
+   	config.qr_approved_by_vmc_support  = __false;
+
+   	config.dump_packets_level = debug_level_dump_moderate;
+   	config.debug = __true;
+
+   ```
+
+<Note>
+  必填字段
+
+  客户机器信息字段是 VMC 配置所必需的。这些字段包括 `model`、`serial`、`hw_ver` 和 `manuf_code`。有关这些字段的更多信息，请参阅 [VMC Configuration Object](/docs/integrate-pos-device/marshall/get-started/vmc-configuration-object)。
+</Note>
+
+3. 配置SDK并注册链接事件。
+   ```c C
+   vmc_link_register_callback((vmc_link_event_handler_cb_t)vmc_link_event_handler_cb);
+   vmc_vend_register_callback((vmc_vend_event_handler_cb_t)vmc_vend_event_handler_cb);
+   vmc_general_register_callback((vmc_general_event_handler_cb_t)vmc_general_event_handler_cb);
+   ```
+
+4. 启动 SDK 并等待 `onReady()` 事件：
+   ```c C
+   vmc_link_start()
+   ```
+
+## 实现支付流程
+
+如 [Payment Flows](/docs/integrate-pos-device/marshall/payment-flows/marshall-payment-flows) 中所述，Marshall SDK 支持多种支付流程。以下页面说明了如何使用 C SDK 在您的 VMC 中实现每种流程。
+
+<Columns cols={3}>
+  <Card icon="link" title="Single Session" href="/docs/integrate-pos-device/marshall/simulators-sample-codes/single-session" arrow />
+
+  <Card icon="link" title="多会话" href="/docs/integrate-pos-device/marshall/simulators-sample-codes/multi-session" arrow />
+
+  <Card icon="link" title="Multi-Vend" href="/docs/integrate-pos-device/marshall/simulators-sample-codes/multi-vend" arrow />
+</Columns>
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="C SDK 集成" href="/docs/integrate-pos-device/spark/security-authentication/spark-authentication" arrow />
+
+  <Card icon="link" title="方法和功能" href="/docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark" arrow />
+</Columns>

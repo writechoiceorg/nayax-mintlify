@@ -1,0 +1,145 @@
+---
+title: Android SDK
+metadata:
+  og:description: Nayax 提供了 eCom SDK 的 Android 版本。本指南将向您展示如何将其集成到您的应用程序中。您将学习如何安装。
+---
+
+Nayax 提供了 eCom SDK 的 Android 版本。本指南将向您展示如何将其集成到您的应用程序中。您将学习如何安装、初始化并准备该 SDK，以便创建支付。
+
+## 前提条件
+
+为确保兼容性和最佳性能，您的 Android 项目必须满足以下最低要求：
+
+- Android 5.0（API 级别 21）。
+- Nayax eCom SDK 使用 Android API 级别 34 编译。该 SDK 已在 Android 14 及以下版本上经过测试和验证
+- 有效的 Sign Key(由 Nayax 提供,通常为 16 个字符)。
+- 关联的 Sign Key ID。
+- `securityTokenId` 和 `securityTokenValue`。
+
+## 集成 eCom SDK
+
+集成 eCom Android SDK 包含四个步骤：
+
+1. 安装 SDK
+2. 初始化 SDK
+3. 添加配置类
+4. 注册支付结果
+
+以下各部分详细描述了每个步骤。
+
+### 步骤 1：安装 SDK
+
+第一步是安装 SDK。为此：
+
+<Warning>
+  敏感信息
+
+  此文件不应提交到您的源代码控制系统中，因为它包含敏感凭据。Nayax eCom 团队将提供一个只读访问令牌。
+</Warning>
+
+1. 根据从 Nayax 收到的凭据，在项目根目录下创建一个 `ecomsdk.properties` 文件，并添加以下几行：
+   ```
+   RepositoryUrl=https://gitlab.nayax-sdk.nayax.com/api/v4/projects/6/packages/maven
+   readOnlyToken=<your-private-access-token>
+   ```
+2. 将 Maven 仓库添加到您的 `settings.gradle`（旧版 Gradle 中为 `build.gradle`）中。
+3. 在您的项目级 `build.gradle.kts` 中，添加以下 Maven 配置：
+
+```kotlin
+allprojects {
+  repositories {
+							...
+        maven {
+            val sdkProperties = Properties().apply {
+                load(File(rootDir, "ecomsdk.properties").inputStream())
+            }
+
+            name = sdkProperties["repositoryName"] as String
+            url = uri(sdkProperties["repositoryUrl"] as String)
+
+            credentials(HttpHeaderCredentials::class) {
+                name = "Private-Token"
+                value = sdkProperties["readOnlyToken"] as String
+            }
+
+            authentication {
+                create("header", HttpHeaderAuthentication::class)
+            }
+        }
+    }
+}
+```
+
+4. 将 SDK 依赖项添加到您的模块级 `build.gradle.kts` 中：
+   ```kotlin
+   dependencies {
+       implementation("com.nayax.ecom:android-ecom-sdk:x.y.z")
+   }
+   ```
+
+### 第 2 步:初始化 SDK
+
+使用 `initialize` 方法在您的应用程序中初始化 SDK。
+
+<Note>
+  Sign Key 和 ID
+
+  Nayax 会在您入驻期间提供 `signId`、`signKey`、`securityTokenId` 和 `securityTokenValue` 的值。请确保安全地处理这些值。
+</Note>
+
+```kotlin
+class App : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        ...        
+        val config = NayaxEcomConfig(	
+            environment = NayaxEcomEnvironment.stable,
+            signId = <sign_id>,
+            signKey = <sign_key>,
+            securityTokenId = <security_token_id>,
+						securityTokenValue = <security_token_value>,
+						enableLog = true
+        )
+        NayaxEcomSDK.initialize(this, config, object : InitializationResultCallback {
+            override fun onInitialized() {}
+            override fun onError(error: EcomError) {}
+        })
+    }
+}
+```
+
+### 步骤 3：添加配置类
+
+配置类定义了 SDK 的基本属性。下表提供了每个可用配置选项的说明：
+
+| 范围                   | 类型                     | 描述                                       |
+| :------------------- | :--------------------- | :--------------------------------------- |
+| `environment`        | `NayaxEcomEnvironment` | 目标服务器环境。可能的值为 `.stable` 或 `.production`。 |
+| `signId`             | `Int`                  | 用于签署 API 请求的 ID。                         |
+| `signKey`            | `String`               | 用于签署 API 请求的密钥。                          |
+| `securityTokenId`    | `Int`                  | 用于商户验证的安全令牌 ID。                          |
+| `securityTokenValue` | `String`               | 用于商户验证的安全令牌值。                            |
+| `enableLog`          | `Bool`                 | 用于启用或禁用 SDK 日志记录的标志。默认为 `false`。         |
+
+### 步骤 4：注册支付结果
+
+准备 SDK 以处理支付交易结果。在您的 `MainActivity` 中添加以下设置：
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+		override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		NayaxEcomSDK.registerForPaymentResult(this)
+    }
+}
+```
+
+Now that the eCom SDK is integrated into your Android application, you can start processing payments through it. See the [Front-End Integration](/docs/ecom-sdk/front-end-integration/front-end-sdk) guide for more details on how this works.
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="iOS SDK" href="/docs/ecom-sdk/get-started/ios-sdk" />
+
+  <Card icon="link" title="前端集成" href="/docs/ecom-sdk/front-end-integration/front-end-sdk" />
+</Columns>

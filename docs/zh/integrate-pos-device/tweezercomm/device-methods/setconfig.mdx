@@ -1,0 +1,65 @@
+---
+title: setConfig
+metadata:
+  og:description: setConfig 方法将配置设置应用于终端。这些设置可以包括存款服务器首选项、启用。
+---
+
+`setConfig` 方法将配置设置应用于终端。这些设置可以包括存款服务器首选项、启用手动界面或强制重置等。建议在每次设备初始化时调用 `setConfig`，以确保配置的一致性。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+在请求中，`method` 字段需要设置为 `setConfig`，且 params 必须包含服务名称和配置字段字典，如下方示例请求所示：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "setConfig",
+    "id": "1234567890",
+    "params": [
+        "device",
+        {
+            "ashraitServer": "NAYAX",
+            "manualInterface": true,
+            "reset": true
+        }
+    ]
+}
+```
+
+### 请求参数
+
+有关此方法可用的请求参数的描述，请参阅下表。
+
+| 姓名                | 类型     | 描述                     |
+| ----------------- | ------ | ---------------------- |
+| `ashraitServer`   | string | 要使用的存款服务器（例如 "NAYAX"）。 |
+| `manualInterface` | bool   | 启用或禁用手动输入卡信息。          |
+| `reset`           | bool   | 是否在应用配置时进行重置。          |
+
+## 回复
+
+成功的请求将返回类似于以下代码块中的响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "1234567890",
+    "result": {
+        "statusCode": 0
+    }
+}
+```
+
+### 响应参数
+
+下面是一个包含所有可能的响应参数及其描述的表格：
+
+| 姓名                     | 类型 | 描述           |
+| ---------------------- | -- | ------------ |
+| `statusCode`           | 整数 | 操作状态（0 = 成功） |

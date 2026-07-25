@@ -1,0 +1,71 @@
+---
+title: showAnimation
+metadata:
+  og:description: 使用 showAnimation 方法在设备上显示动画，以表示批准或拒绝的操作。这通常在。
+---
+
+`showAnimation` 方法用于在设备上显示动画，以表示批准或拒绝的操作。这通常在交易处理完成后显示。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+要调用此方法，请将 `method` 字段设置为 `showAnimation`，并包含服务名称和参数，如下所示。
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "showAnimation",
+    "id": "1",
+    "params": [
+        "device",
+        {
+            "name": "approved",
+            "repeat": false,
+            "hideAfter": 4,
+            "string1": "stringDisplay1",
+            "string2": "stringDisplay2"
+        }
+    ]
+}
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+| 姓名          | 类型     | 描述                             |
+| ----------- | ------ | ------------------------------ |
+| `name`      | string | 动画名称。有效值：`approved`、`declined` |
+| `repeat`    | 布尔值    | 动画是否应重复播放（默认值：false）           |
+| `hideAfter` | 整数     | 隐藏前等待的秒数（0 = 保持可见）             |
+| `string1`   | string | 作为第一条消息显示的可选文本                 |
+| `string2`   | string | 作为第二条消息显示的可选文本                 |
+
+## 回复
+
+成功的请求将返回以下响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "1",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "ok"
+    }
+}
+```
+
+### 响应参数
+
+下表说明了此方法的响应参数：
+
+| 姓名                     | 类型     | 描述              |
+| ---------------------- | ------ | --------------- |
+| `statusCode`           | 整数     | 操作状态（`0` = 成功）。 |
+| `statusMessage`        | string | 指示操作结果的消息。      |

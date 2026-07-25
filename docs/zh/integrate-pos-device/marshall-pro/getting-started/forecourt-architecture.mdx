@@ -1,0 +1,47 @@
+---
+title: 前庭建筑
+metadata:
+  og:description: Marshall Pro(燃油)集成到一个复杂的生态系统中,涉及本地硬件、加油站控制器和多个后端授权。
+---
+
+Marshall Pro(燃油)集成到一个复杂的生态系统中,涉及本地硬件、加油站控制器和多个后端授权引擎。
+
+<Frame>
+  前庭建筑
+</Frame>
+
+### 加油站现场(Forecourt)
+
+加油站现场由与客户和加油机进行交互的物理硬件组成。
+
+<CardGroup cols={2}>
+  <Card title="加油机付款终端" icon="gas-pump">
+    持卡人发起交易的 Nayax 终端。它通过蜂窝网络、以太网或 Wi-Fi 进行通信。
+    为确保互操作性,该系统支持行业标准协议:
+
+    - Marshall 协议:用于设备与应用程序之间的直接通信。
+    - IFSF / Conexxus:用于国际燃油零售环境的标准化通信协议。
+  </Card>
+
+  <Card title="加油站控制器(FCC)" icon="network-wired">
+    站点的“大脑”。它通过加油机通信协议(Pump Comms Protocol)管理加油机,并将其与 POS 和 Nayax 终端连接起来。
+  </Card>
+
+  <Card title="销售点(POS)" icon="cash-register">
+    在加油站环境中管理便利店的系统。
+  </Card>
+
+  <Card title="后台管理" icon="gears">
+    管理库存、定价和站点配置的本地服务器。
+  </Card>
+</CardGroup>
+
+## Nayax 支付服务器
+
+除物理站点外,Nayax 支付服务器还充当中央枢纽,使用 Amazon SQS 进行可靠的消息队列处理,以确保不会丢失任何交易数据。
+交易会根据卡片类型或客户资料被路由到不同的引擎:
+
+- 车队交易:针对商用车辆卡的专用处理。
+- 第三方授权引擎:连接到外部银行或支付处理机构。
+- 会员服务器:验证奖励、折扣和会员专属定价。
+- 支付网关/收单机构:对标准消费者信用卡/借记卡进行最终结算。

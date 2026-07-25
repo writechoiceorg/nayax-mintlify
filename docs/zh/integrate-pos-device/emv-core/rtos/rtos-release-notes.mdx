@@ -1,0 +1,274 @@
+---
+title: RTOS SDK 发行说明
+metadata:
+  og:description: Nayax EMV Core RTOS SDK 的发行说明:所有 SDK 版本中的新功能、变更、修复和已知问题。
+---
+
+本节提供了 EMV Core RTOS SDK 的更新、增强和稳定性改进的历史。
+
+发布说明分为三类：
+
+- **改进**：新增 API 命令、扩展平台支持和功能。
+- **修复**：解决了已知错误并提高了可靠性。
+- **已知问题**：当前存在的限制及推荐的解决方法。
+
+### SDK 版本 1.0
+
+发布日期：2026年2月11日
+
+此版本包含以下针对 RTOS SDK 的改进、修复和已知问题：
+
+<Accordion title="改进" icon="rocket">
+  ### Linux 示例应用程序（可移植 C 源代码）
+
+  SDK回调架构已重构，以提高编译器兼容性（RM7434）。示例应用程序现在默认记录JSON-RPC消息（RM7471）。
+
+  ---
+
+  ### TLS 支持
+
+  通过 TLS 实现 TMS 和支付服务连接的安全服务器通信（RM7021）。
+
+  ---
+
+  ### 外部结算（远程结算）
+
+  `TransactionComplete` 现在返回一个 `Additional_Parameters` 字段,其中包含 Nayax 服务器到服务器 External Settlement(RM7549)所需的数据:
+
+  - `SiteId`:交易站点的唯一标识符
+  - `EntryMode`:交易输入方式(Swipe、Contact、NFC)
+  - `MachineAuTime`:机器授权时间
+  - `NayaxTransactionId`:交易 ID
+
+  ---
+
+  ### 电子收据支持
+
+  `TransactionComplete` 现在返回 Nayax 电子小票(e-Receipt)所需的数据。
+
+  ---
+
+  ### CLP卡类型检测
+
+  `TransactionComplete` 现在返回闭环卡类型。
+
+  ---
+
+  ### 保留以备将来使用
+
+  以下功能已包含在内，但尚未经过全面测试，请勿使用：
+
+  - `UpdateMachineAttributes` API
+  - 增强了 `SendToReader` 功能,支持基于 TLS 的权限
+  - 推送服务集成
+</Accordion>
+
+<Accordion title="修复" icon="wrench">
+  ### libecodsdk 库
+
+  - 网络状态通知
+  - 线程模型：双线程架构
+  - `ecod_sdk_configs.h` 中的新配置选项:
+    - `EC_ACK_TIMEOUT_MS`:ACK 响应的超时时间(默认:1000 ms)
+    - `EC_ACK_MAX_RETRIES`:未确认帧的最大重试次数(默认:0)
+    - `EC_SUPPORT_LONG_LIVED_SOCKETS`:启用持久套接字连接
+  - 新状态值:`EC_DISABLED`,表示 EMV Core 处于禁用状态
+
+  ---
+
+  ### 平台层
+
+  - 新增 `ecod_platform_init()`,用于平台特定的初始化
+  - 串口打开时刷新串口数据
+  - Linux：SIGPIPE 信号处理，防止套接字断开连接时发生崩溃
+
+  ---
+
+  ### 日志记录
+
+  - 为保护关键操作，日志文件总量限制为 336 KB (RM7534)
+  - 修复：日志上传现在包含最新条目（问题 #7357）
+  - 配置更改时自动清理多余的日志文件（RM7539）
+  - 新日志级别:`EC_LOG_LEVEL_TRACE`,用于详细调试
+  - 新增文件日志记录支持
+  - 改进了日志格式，添加了模块前缀
+
+  ---
+
+  ### 配置与存储
+
+  - 定期清理文件系统以确保长期可靠性 (RM7527)
+  - 读取器文件系统清理以防止存储空间耗尽 (RM7531)
+  - 修复：更新过程中配置文件损坏 (RM7533)
+
+  ---
+
+  ### 支付参数(`emvCorePaymentParameters`)
+
+  - 已移除:`fee_cents` 和 `currency_code`
+  - 新增:`additional_receipt_data`、`is_final_amount`、`is_deferred`(RFU)
+
+  ---
+
+  ### 读者交流
+
+  - 向后兼容ECOD v0.9
+  - 当读卡器缺少配置文件时，设备会自动恢复（RM7573）
+  - 通过重试机制提高了读卡器配置更新的可靠性（RM7575）
+  - 改进了套接字响应超时处理（RM7578）
+  - ACK/NAK 处理及自动重传
+  - 更好地处理碎片化的串行消息
+  - 帧大小验证
+
+  ---
+
+  ### 网络桥接器（Socket API）
+
+  - 为降低小数据包的延迟，已禁用 Nagle 算法
+  - 优化的套接字数据到达通知
+  - 自动网络连接监控（Linux）
+
+  ---
+
+  ### 用户界面
+
+  - 修复:`ReaderMessage` 事件现在包含正确的消息索引(RM7470)
+  - 修复:“Present card” 消息现在在 `PreAuthorize` 后立即显示(RM7553)
+  - 修复：修正了轮询 EMV (RM7585) 期间 LED 闪烁行为的问题
+
+  ---
+
+  ### 读卡器固件
+
+  - 安全双模操作（TLV 和 JSON-RPC）（RM7571、RM7572、RM7584）
+  - 固件更新包大小已减小
+</Accordion>
+
+<Accordion title="已知问题" icon="exclamation-triangle">
+  ### 间歇性 TLV 消息 (RM7586)
+
+  设备可能会间歇性地发送 TLV 格式的消息，而不是 JSON-RPC 消息。
+
+  ---
+
+  ### 重置后首次响应速度慢 (RM7592)
+
+  串行通信：复位后的首次响应可能较慢。
+
+  ---
+
+  ### 虚拟机设备发现
+
+  在虚拟 Linux 机器（例如 WSL 或 VirtualBox）上，主机示例应用程序在重启后找不到设备：
+
+  ```
+  SERIAL [ERROR] failed to open HID port /dev/hidraw0: No such file or directory
+  ```
+
+  这是因为虚拟操作系统以不同的名称(例如 `hidraw1`)挂载读卡器。与物理操作系统无关。
+</Accordion>
+
+### SDK 版本 0.9
+
+发布日期：2025年7月31日
+
+此版本包含对 RTOS SDK 的以下改进和修复：
+
+<Accordion title="改进" icon="rocket">
+  ### Linux 示例应用程序
+
+  SDK 现在包含一个新的可移植 C Linux 示例应用程序。
+
+  ---
+
+  ### 数据链路层
+
+  新增了一个数据链路层，用于支持 ACK/NAK 的帧式串行通信。
+
+  ---
+
+  ### 新的API命令
+
+  新增对 `GetCardToken`、`CardTokenReceived` 和 `GetAttribute` 的支持。
+</Accordion>
+
+<Accordion title="修复" icon="wrench">
+  - 已修复：4 个 LED 指示灯始终亮着（问题 #7052）
+  - 已修复：获取核心版本信息返回空字符串的问题（问题 #7054）
+  - 已修复:`ReaderMessageEvent` JSON 之后发送了垃圾字节(问题 #7056)
+  - 已修复：下载文件时无法付款（问题 #7072）
+  - 已修复：EMV Core 发送两行“出示卡”信息而不是价格信息（问题 #7233）
+  - 已修复:从旧版本更新到 `EMVS_v071555_ec` 可能导致读卡器锁死且无法通信
+</Accordion>
+
+<Accordion title="已知问题" icon="exclamation-triangle">
+  ### 日志上传顺序（问题 #7357）
+
+  日志上传包含的是最早的条目，而不是最新的条目。
+
+  ---
+
+  ### 虚拟机设备发现
+
+  在 Linux 虚拟机（WSL/VirtualBox）上，主机示例应用程序在重启后无法找到设备。详情请参阅 v1.0 已知问题。
+</Accordion>
+
+### SDK 版本 0.2
+
+发布日期：2025年3月24日
+
+此版本包含对 RTOS SDK 的以下改进和修复：
+
+<Accordion title="改进" icon="rocket">
+  ### UART TTL 通信
+
+  增加了对UART TTL通信的支持。
+
+  ---
+
+  ### UNO-8 管理器 v4.0.0
+
+  更新了支持新设备文件系统结构(驱动器 S: 和 E:)的 UNO-8 Manager;安装文件位于 `\Utilities\UNO-8 Manager\UNO-8 Manager Setup.4.0.0.msi`。
+</Accordion>
+
+<Accordion title="修复" icon="wrench">
+  - 已修复：EMV Core 在安全模式下无法正常工作（问题 #7077）
+  - 已修复：TMS 的上传/下载现在可以与交易并行运行（问题 #7043）
+  - 已修复：日志文件时间戳缺少毫秒数（问题 #7051）
+</Accordion>
+
+<Accordion title="已知问题" icon="exclamation-triangle">
+  ### 不支持的 API 命令
+
+  此版本不支持 `GetCardToken`、`CardTokenReceived` 和 `GetAttribute`。
+
+  ---
+
+  ### 远程更新失败
+
+  远程固件和配置更新间歇性失败。
+
+  ---
+
+  ### TMS 套接字连接（问题 #7087）
+
+  某些情况下无法将套接字连接到TMS。
+
+  ---
+
+  ### 礼品卡展示（第 7233 期）
+
+  EMV Core 发送两行“出示卡”信息，而不是价格信息。
+</Accordion>
+
+### SDK 版本 0.1
+
+发布日期：2024年12月30日
+
+这是RTOS的第一个SDK版本。
+
+<Accordion title="已知问题" icon="exclamation-triangle">
+  ### 不支持的 API 命令
+
+  此版本不支持 `GetCardToken`、`CardTokenReceived` 和 `GetAttribute`。
+</Accordion>

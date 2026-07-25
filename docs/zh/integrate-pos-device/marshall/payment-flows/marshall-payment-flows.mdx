@@ -1,0 +1,52 @@
+---
+title: 付款流程
+keywords:
+  - marshall payment flows
+  - vending machine controller
+  - multi-vend
+  - multi-session
+metadata:
+  og:description: Nayax Marshall SDK 提供了多种支付流程，每种流程都是为满足特定的操作需求而设计，并精确规定了您的。
+---
+
+Nayax Marshall SDK 提供多种支付流程，每种流程都旨在满足特定的运营需求，并精确规定您的系统如何处理自动售货会话、支付授权和交易处理。
+
+以下页面将对每一项进行更详细的描述：
+
+<Columns cols={2}>
+  <Card icon="link" title="预选单场会议" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel" />
+
+  <Card icon="link" title="预授权单次会话" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-auth" />
+</Columns>
+
+<Columns cols={3}>
+  <Card icon="link" title="多供应商预选" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-vend-with-pre-sel" />
+
+  <Card icon="link" title="预授权多供应商" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-vend-with-pre-auth" />
+
+  <Card icon="link" title="多会话" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session" />
+</Columns>
+
+## 推荐流程
+
+如果您不确定哪种流量最适合您的机器类型，下表显示了推荐的流量和配置。
+
+| 机器类型      | 推荐流量                                                                                                                                                             | 推荐配置                                       |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| 售货机       | [单会话 + 预选](/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel)                                                               | 始终空闲                                       |
+| 硬币兑换器     | [单会话 + 预选](/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel)                                                               | 始终空闲                                       |
+| 棉花糖       | [单会话 + 预选](/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel)                                                               | 始终空闲 + 明确售卖成功                              |
+| 照相亭       | [单会话 + 预选](/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel)                                                               | 始终空闲                                       |
+| 咖啡机       | [单会话 + 预选](/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel)                                                               | 始终空闲                                       |
+| 按摩椅       | [单会话 + 预选](/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel)                                                               | 始终空闲                                       |
+| 洗车机       | [单会话 + 预选](/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel)                                                               | 始终空闲                                       |
+| 电动汽车充电器 1 | [多会话](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session)                                                                                  | 价格尚未最终确定                                   |
+| 电动汽车充电器 2 | [多会话](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session)                                                                                  | 价格未最终确定 + Mifare 已获 VMC 批准                 |
+| 电动汽车充电器 3 | [多会话](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session)                                                                                  | 价格尚未最终确定 + Mifare 已获 VMC 批准 + 信息发布会        |
+| 电动汽车充电器 4 | [多会话](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session)                                                                                  | 价格尚未最终确定 + Mifare 已获 VMC 批准 + 信息发布会 + 始终开启 |
+| 智能冰箱      | [多会话](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session)+[子流程/功能](/docs/integrate-pos-device/marshall/payment-flows/sub-flows-features#/) | 价格未最终确定 + 始终开启                             |
+| 充电宝       | [多会话](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session)+[子流程/功能](/docs/integrate-pos-device/marshall/payment-flows/sub-flows-features#/) | 价格未最终确定 + 始终开启                             |
+| 储物柜       | [多会话](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session)                                                                                  | 价格尚未最终确定                                   |
+| 球拍租赁机     | [多会话](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session)                                                                                  | 价格未最终确定 + 始终处于空闲状态                         |
+
+<br />

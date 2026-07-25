@@ -1,0 +1,36 @@
+export const McpPromo = () => {
+  const AIIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FCC705" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z" />
+      <circle cx="9" cy="14" r="1" fill="#FCC705" stroke="none" />
+      <circle cx="15" cy="14" r="1" fill="#FCC705" stroke="none" />
+    </svg>
+  );
+
+  return (
+    <section className="py-6 px-6 md:px-12 lg:px-20 bg-[#6352E0]">
+      <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-4 flex-1">
+          <div className="flex-shrink-0">
+            <AIIcon />
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
+              在 Nayax 上使用 AI 构建
+              <span className="text-xs font-semibold bg-[#FCC705] text-gray-900 px-2 py-0.5 rounded-full">全新</span>
+            </h2>
+            <p className="text-purple-200 text-sm">
+              通过我们的 MCP 服务器将您的 AI 助手连接到 Nayax 文档，或安装能够引导其完成 Nayax API 集成的代理技能。
+            </p>
+          </div>
+        </div>
+        <a
+          href="/docs/get-started/build-with-ai"
+          className="flex-shrink-0 bg-[#FCC705] hover:bg-yellow-300 text-gray-900 font-semibold py-2 px-6 rounded-lg transition-all no-underline whitespace-nowrap text-sm"
+        >
+          设置您的 AI 助手
+        </a>
+      </div>
+    </section>
+  );
+};

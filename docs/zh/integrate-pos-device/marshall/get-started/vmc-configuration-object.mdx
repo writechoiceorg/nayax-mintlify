@@ -1,0 +1,381 @@
+---
+title: VMC 配置对象
+keywords:
+  - vmc_link
+  - VMC
+  - vending machine controller
+  - MDB
+  - MDB protocol
+  - vmc_configuration
+  - mandatory fields
+  - machine serial number
+  - hw_ver
+  - manuf_code
+  - multi-session support
+  - multi-vend support
+metadata:
+  og:description: vmcconfiguration 类用于设置控制外围设备行为的各种参数和标志。正确的配置对于。
+---
+
+`vmc_configuration` 类用于设置控制外围设备行为的各种参数和标志。正确的配置对于确保顺畅运行以及与不同外围设备的兼容性至关重要。
+
+## Configuration Object
+
+以下代码块显示了各可用 SDK 语言的 `vmc_configuration` 类。
+
+<CodeGroup>
+  ```java Java
+  public class vmc_configuration 
+        public Object port_vpos;
+        public int port_vpos_baud;
+
+        public String serial;
+        public String model;
+        public String sw_ver;
+        public int    machine_type;
+        boolean explicit_vend_success;
+        public boolean price_not_final_support;
+        public boolean mag_card_approved_by_vmc_support;
+        public boolean mifare_approved_by_vmc_support;
+
+        public boolean debug;
+        public int dump_packets_level;
+
+        public boolean reader_always_on;
+        public boolean multi_session_support;
+        public boolean multi_vend_support;
+        public boolean always_idle;
+        public 
+  ```
+
+  ```csharp C#
+  public class vmc_configuration 
+        public string  port_vpos;
+        public int port_vpos_baud;
+
+        public string serial;
+        public string model;
+        public string sw_ver;
+        public int    machine_type;
+
+        public bool reader_always_on;
+        public bool multi_session_support;
+        public bool multi_vend_support;
+        public bool always_idle;
+        public bool explicit_vend_success;
+        public bool price_not_final_support;
+        public bool mag_card_approved_by_vmc_support;
+        public bool mifare_approved_by_vmc_support;
+
+        public bool debug;
+        public int dump_packets_level;
+  ```
+</CodeGroup>
+
+### Object Parameters
+
+下表描述了该类的参数。
+
+<table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th>
+        范围
+      </th>
+
+      <th>
+        类型
+      </th>
+
+      <th>
+        描述
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>
+        `port_vpos`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        Nayax 设备所连接的 PC COM 端口。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `port_vpos_baud`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        Nayax 设备通信端口的波特率。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `serial`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        机器的序列号。这可实现精确追踪、有效的库存管理和简化的维护计划安排。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `model`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        机器的型号名称。有助于在日志和报告中区分不同的机器类型,便于故障排查。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `sw_ver`
+      </td>
+
+      <td>
+        String
+      </td>
+
+      <td>
+        该外设的软件版本。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `machine_type`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        外围设备的类型。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `explicit_vend_success`
+      </td>
+
+      <td>
+        bool
+      </td>
+
+      <td>
+        用于指示售货状态（成功/失败）的标志。仅适用于售货过程较长的情况。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `price_not_final_support`
+      </td>
+
+      <td>
+        bool
+      </td>
+
+      <td>
+        表示价格并非最终价格，即结算价格可能与授权价格不同。仅适用于多会话流程。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `mag_card_approved_by_vmc_support`
+      </td>
+
+      <td>
+        bool
+      </td>
+
+      <td>
+        支持外围设备进行磁卡授权。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `mifare_approved_by_vmc_support`
+      </td>
+
+      <td>
+        bool
+      </td>
+
+      <td>
+        支持外围设备对 MIFARE 卡进行授权。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `debug`
+      </td>
+
+      <td>
+        bool
+      </td>
+
+      <td>
+        启用或禁用调试功能。启用它是生成 SDK 日志的必要条件。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `dump_packets_level`
+      </td>
+
+      <td>
+        整数
+      </td>
+
+      <td>
+        设置用于调试目的的数据包日志记录级别。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `reader_always_on`
+      </td>
+
+      <td>
+        bool
+      </td>
+
+      <td>
+        它使 Nayax 设备的读卡器始终保持启用并准备好进行交易。适用于外围设备希望以刷卡作为产品选择触发条件的情况。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `multi_session_support`
+      </td>
+
+      <td>
+        bool
+      </td>
+
+      <td>
+        启用对多会话流的支持
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `multi_vend_support`
+      </td>
+
+      <td>
+        bool
+      </td>
+
+      <td>
+        启用对多供应商流程的支持。
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        `always_idle`
+      </td>
+
+      <td>
+        bool
+      </td>
+
+      <td>
+        配置设备以产品选择方式开始交易,并使授权金额显示在 Nayax 设备屏幕上(而非动画)。
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## 必填字段
+
+配置 VMC(自动售货机控制器)时,有一些特定的必填字段对于正确识别机器至关重要。妥善管理这些字段有助于改善故障排查、增强系统集成并提高维护效率。
+
+请参阅下方代码块,查看这些必填字段的配置示例。
+
+<CodeGroup>
+  ```java Java
+  vmc_config = new vmc_configuration();
+
+  vmc_config.model = "marshall-java-sdk";
+  vmc_config.serial = "01234567";
+  vmc_config.hw_ver = "01234567";
+  vmc_config.manuf_code = "manuf";
+  ```
+
+  ```csharp C#
+  vmc_config = new vmc_configuration();
+
+  vmc_config.model = "marshall-java-sdk";
+  vmc_config.serial = "01234567";
+  vmc_config.hw_ver = "01234567";
+  vmc_config.manuf_code = "manuf";
+  ```
+
+  ```c C
+  vmc_init()
+  	__strcpy(config.model, "marshall-c-sdk-demo");
+  	__strcpy(config.serial, "01234567");
+  	__strcpy(config.sw_ver, "vmc app version");
+  	__strcpy(config.vmc_hw_ver, “01234567”);
+    __strcpy(config. vmc_manuf_code, “manuf”);
+  ```
+</CodeGroup>
+
+下表描述了这些参数:
+
+| 范围           | 类型     | 描述                                              |
+| :----------- | :----- | :---------------------------------------------- |
+| `model`      | String | 机器的型号名称。有助于在日志和报告中区分不同的机器类型,便于故障排查。             |
+| `serial`     | String | 机器的序列号。这可实现精确追踪、有效的库存管理和简化的维护计划安排。              |
+| `hw_ver`     | String | 机器的硬件版本。它确保使用正确的固件和软件。不同的硬件版本可能需要特定的驱动程序或兼容性调整。 |
+| `manuf_code` | String | 标识机器的制造商,以便提供适当的支持和运行保障。                        |
+
+### Nayax Core
+
+这些参数将保存在 Nayax Core 中。您可以在 Operations > Machines 中找到它们。找到并选择您的机器,打开 VMC 选项卡,如下图所示。
+
+<Frame>
+  <img src="/images/docs/vmc-configuration-object/image1.png" />
+</Frame>
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="C# 和 Java SDK 集成" href="/docs/integrate-pos-device/marshall/get-started/marshall-csharp-java-integration" arrow />
+
+  <Card icon="link" title="C SDK 集成" href="/docs/integrate-pos-device/marshall/get-started/c-sdk-integration" arrow />
+</Columns>

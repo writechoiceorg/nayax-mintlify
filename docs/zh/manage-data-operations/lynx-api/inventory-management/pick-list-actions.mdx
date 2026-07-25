@@ -1,0 +1,100 @@
+---
+title: 选择列表操作
+metadata:
+  og:description: 在 Nayax Core 中，可以对拣货单执行各种操作，例如更新、删除或从机器检索拣货单。
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+Nayax Core 中的拣货单操作可在 Operations > Machine Inventory 菜单中找到。
+
+<Frame>
+  <img src="/images/docs/pick-list-actions/image1.png" />
+</Frame>
+
+这些操作也可以通过 Lynx API 使用以下端点执行：
+
+<Columns cols={2}>
+  <EndpointCard title="获取选择列表" href="/reference/lynx/machine-inventory/get-pick-list" method="get" />
+
+  <EndpointCard title="更新选择列表" href="/reference/lynx/machine-inventory/update-pick-list" method="put" />
+
+  <EndpointCard title="删除选择列表" href="/reference/lynx/machine-inventory/delete-pick-list" method="delete" />
+</Columns>
+
+<Warning>
+  验证
+
+  请参阅本文档的[“安全和令牌”](/docs/manage-data-operations/lynx-api/security)页面，了解如何访问您的令牌，以及如何正确使用它来验证您的 API 请求。
+</Warning>
+
+## 获取拣货单
+
+使用 [Get Pick List](/reference/lynx/machine-inventory/get-pick-list) 端点检索与特定机器关联的拣货单。
+
+```sh Request
+curl --request GET \
+     --url https://qa-lynx.nayax.com/operational/v1/machines/{MachineID}/pickList \
+     --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
+     --header 'accept: application/json'
+```
+
+<Note>
+  路径参数
+
+  将 `MachineID` 更改为要从中检索拣货单的机器的实际 ID。
+</Note>
+
+成功的响应会返回该拣货单以及与机器关联的所有产品。
+
+## 更新拣货单
+
+使用 [Update Pick List](/reference/lynx/machine-inventory/update-pick-list) 端点修改机器拣货单中的产品数量或其他详细信息。
+
+```sh Request
+curl --request PUT \
+     --url https://qa-lynx.nayax.com/operational/v1/machines/inventory/picklists/update \
+     --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
+     --header 'accept: application/json' \
+     --header 'Content-Type: application/json' \
+     --data '{
+       "MachineId": 12345,
+       "Products": [
+         {
+           "MachineProductId": 67890,
+           "PickQty": 10
+         },
+         {
+           "MachineProductId": 54321,
+           "PickQty": 5
+         }
+       ]
+     }'
+```
+
+请求正文包含以下参数：
+
+| 范围          | 类型                 | 描述                                                                     |
+| :---------- | :----------------- | :--------------------------------------------------------------------- |
+| `MachineId` | `int64`            | 正在更新拣货单的机器的唯一标识符。                                                      |
+| `Products`  | `array of objects` | 要更新的产品列表。每个对象包含 `MachineProductId`（产品在机器中的唯一标识符）和 `PickQty`（更新后的拣选数量）。 |
+
+成功的响应会返回带有更新后拣选数量的拣货单。
+
+## 删除拣货单
+
+使用 [Delete Pick List](/reference/lynx/machine-inventory/delete-pick-list) 端点移除与特定机器关联的拣货单。
+
+```sh Request
+curl --request DELETE \
+     --url https://qa-lynx.nayax.com/operational/v1/machines/{MachineID}/pickList \
+     --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
+     --header 'accept: application/json'
+```
+
+`200 OK` 响应确认拣货单已被删除。
+
+## 参见
+
+- [Inventory Workflow](/docs/manage-data-operations/lynx-api/inventory-management/inventory-workflow)
+- [Pick Lists](/docs/manage-data-operations/lynx-api/inventory-management/pick-lists)

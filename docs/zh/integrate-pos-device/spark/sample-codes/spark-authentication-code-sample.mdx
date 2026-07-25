@@ -1,0 +1,121 @@
+---
+title: 身份验证码示例
+metadata:
+  og:description: 本页面提供了将 Spark 的身份验证机制集成到您的第三方应用程序中的详细示例代码流程。
+---
+
+本页面提供了将 Spark 身份验证机制集成到第三方应用程序的详细示例代码流程。所有对 Spark DMZ 的 API 调用都必须确保安全性和完整性，方法是生成加密的有效负载（Cipher）并使用 Signature 标头对请求进行身份验证。
+
+<Note>
+  C# 示例
+
+  以下代码片段以**C#**编写，仅供参考。开发人员应使用其选择的编程语言实现相同的逻辑（例如，AES-256 ECB 加密、SHA-256 哈希），才能成功与 Spark DMZ 通信。
+</Note>
+
+## 步骤 1：生成密码
+
+Cipher 字段是一个经过安全加密的有效载荷，必须包含在请求正文中。它提供了一种强大的机制，用于证明您拥有必要的密钥，而无需公开传输该密钥。
+
+此函数会生成最终的加密 Cipher 字符串，该字符串将包含在请求正文中。
+
+```csharp C#
+private string CreateCipher(string sparkTransactionId, string tokenSecretString, string random, bool needTimeStampInRandom = true)
+{
+    string timeStamp = needTimeStampInRandom ? $"{DateTime.UtcNow:yyMMddHHmm}" : string.Empty;
+    
+    // 1. Create the unencrypted payload string
+    string unencryptedCipher = $"{sparkTransactionId}={random}{timeStamp}";
+    
+    // 2. Encrypt the payload using AES-256 ECB
+    return CryptoUtils.EncryptAesECB256(unencryptedCipher, tokenSecretString);
+}
+```
+
+在哪里：
+
+- `sparkTransactionId`：交易标识符（测试时使用 "1234"）
+- `tokenSecretString`：您的密钥（Secret Token），用作 AES-256 ECB 加密密钥。
+- `random`：17 位随机数。
+- `timestamp`：UTC 时间，格式为 `yyMMddHHmm`（可选）
+
+## 步骤二：创建签名
+
+该签名通过将序列化的请求体与您的标头哈希密钥相结合，并计算 SHA-256 哈希值来验证每个请求。此签名与您的集成商 ID 一起包含在 HTTP 标头中，以验证请求的来源和完整性。
+
+该函数计算签名字符串并将其打包到所需的 HTTP 标头中。
+
+```csharp C#
+public Dictionary<string, string> CreateSignature<T>(T request, int integratorId) where T : class
+{
+		// 1. Serialize the entire request body to a JSON string
+  string serializedRequest = _jsonClient.Serialize(request, indent: false);
+
+    _integratorDictionary.TryGetValue(integratorId, out Dictionary<string, string> headerHashKeyDictionary);
+    if (headerHashKeyDictionary.IsNullOrEmpty() || serializedRequest.IsNullOrEmpty())
+    {
+        return null;
+    }
+  
+
+   // 2. Retrieve the Integrator's HeaderHashKey (integratorValue) 
+   // This value is shared and known only to the integrator and Nayax systems.
+    headerHashKeyDictionary.TryGetValue("HeaderHashKey", out string integratorValue);
+    if (integratorValue.IsNullOrEmpty())
+    {
+        return null;
+    }
+
+    return new Dictionary<string, string>
+    {
+        { "IntegratorId", integratorId.ToString() }, 
+        { "Signature", $"{ByteUtils.CalculateSHA256($"{serializedRequest};{integratorValue}")}" }
+    };
+}
+```
+
+在哪里：
+
+- `request`：整个请求正文对象（此处为 StartAuthenticationRequest3rdParty）
+- `integratorId`：您唯一的集成方 ID。
+- `IntegratorValue`：用于验证集成方身份的密钥 `HeaderHashKey`。
+
+输出将是一个包含两个必需 HTTP 请求头的字典：`IntegratorId` 和 `Signature`。
+
+## 请求模型
+
+该请求模型定义了发送给 Spark 以启动身份验证的数据结构。每个身份验证请求都必须包含您的令牌 ID、终端标识详情、加密密文（使用 `CreateCipher()` 方法生成），以及用于生成密文的 17 位随机数。
+
+```csharp C#
+public class StartAuthenticationRequest3rdParty
+{
+    public int TokenId { get; set; }
+    public string TerminalId { get; set; }
+    public int TerminalIdType { get; set; }
+    public string Cipher { get; set; }
+    public string Random { get; set; }
+}
+```
+
+## 响应模型
+
+响应模型定义了在通过 Spark 发起身份验证后返回的数据结构。它包括哈希后的事务 ID 和状态信息。
+
+```csharp C#
+public class StartAuthenticationResponse3rdParty
+{
+    [JsonProperty("HashedSparkTransactionId", Required = Required.Always)]
+    public string HashedSparkTransactionId { get; set; }
+
+    [JsonProperty("Status", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
+    public Status Status { get; set; }
+}
+
+public class Status
+{
+    public string Verdict { get; set; }
+    public int ErrorCode { get; set; }
+    public string StatusMessage { get; set; }
+}
+```
+
+<br />

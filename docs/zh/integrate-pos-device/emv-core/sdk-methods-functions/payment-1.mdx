@@ -1,0 +1,392 @@
+---
+title: 支付
+keywords:
+  - getcardtoken
+  - GetCardToken
+  - card token
+  - CancelTransaction
+  - ConfirmTransaction
+  - PreAuthorize
+  - VoidTransaction
+  - card tokenization
+  - pre-authorization
+  - CardTokenReceived
+metadata:
+  og:description: '# EMV Core SDK 支付管理 EMV Core SDK 提供强大的 API，用于管理支付交易。这些 API 可实现无缝集成。'
+---
+
+EMV Core SDK 提供强大的 API，用于管理支付交易。这些 API 可将无现金支付功能无缝集成到应用程序中，同时支持开放式和闭环系统。该 SDK 可确保安全、高效且灵活的支付处理，并将复杂的底层逻辑转移至 Nayax 后端。
+
+可用于付款管理的方法有：
+
+- [CancelTransaction](#canceltransaction)
+- [ConfirmTransaction](#confirmtransaction)
+- [GetCardToken](#getcardtoken)
+- [PreAuthorize](#preauthorize)
+- [VoidTransaction](#voidtransaction)
+
+以下部分对它们进行了更详细的描述。
+
+---
+
+## `CancelTransaction`
+
+`CancelTransaction` 方法会停止正在进行的 `PayTransaction` 或 `PreAuthorize` 调用的执行。在取消操作被接受并确认之前，系统会阻止进一步的请求。
+
+实施说明：
+
+- 呈现卡片之前：如果尚未呈现卡片，读卡器轮询序列将停止。显示屏将显示 "Cancelling"；随后主机应用程序必须使用 `ShowMessage` 命令更新界面。
+- 处理过程中：如果卡片已经呈现但处理尚未完成，系统会返回 `CannotCancel`。EMV Core 在等待联机结果时，可能需要几秒钟才能收到 `TransactionComplete` 事件。
+- 完成之后：如果交易已经完成，将返回 `NoTransaction`。
+- 撤销成功交易：要撤销已完成的交易，请使用 `VoidTransaction`。
+- 被拒绝的交易：如果 `TransactionComplete` 返回 `Decline` 状态，则无需发送 `VoidTransaction` 命令。
+- 事件：在所有情况下，EMV Core 最终都会发送 `TransactionComplete` 事件以确定最终状态。
+
+请参阅下方 `CancelTransaction` 方法的 API Signature：
+
+<Tabs>
+  <Tab title="JSON">
+    要求：
+
+    ```json
+     {"jsonrpc": "2.0", "method": "CancelTransaction", "id": 802}
+    ```
+
+    回复：
+
+    ```json
+      {"jsonrpc": "2.0", "result": true, "id": 802}
+    ```
+  </Tab>
+
+  <Tab title="安卓">
+    ```java Java
+    void CancelTransaction();
+    ```
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    KIOSK_RET LibOtiKiosk_CancelTransaction(void);
+    ```
+  </Tab>
+</Tabs>
+
+<Warning>
+  如果卡片已经呈现并处理完毕，系统将返回 `CannotCancel` 错误。
+</Warning>
+
+---
+
+## `ConfirmTransaction`
+
+确认请求是授权流程的第二阶段，用于确认预授权，以便进行结算。
+
+### API签名
+
+<Tabs>
+  <Tab title="JSON">
+    回复：
+
+    ```json JSON
+    {
+      "jsonrpc": "2.0",
+      "method": "TransactionComplete",
+      "params": {
+        "status": "OK",
+        "errorCode": 0,
+        "errorDescription": "",
+        "transactionId": "6103587330",
+        "authorizationDetails": {
+          "AmountAuthorized": 4.5,
+          "AmountRequested": 4.5,
+          "AuthorizationCode": "AuthOK",
+          "PartialPan": "541333******4111",
+          "CardType": "MasterCard",
+          "IsTransactionApproved": true,
+          "eReceipt": "",
+          "Card_ID": "2025-11-25 14:35:39.140|6|3",
+          "Card_Balance": 0.0,
+          "RRN": "251125123539",
+          "TransactionDbID": "6103587330",
+          "Transaction_Referance": "6103587330",
+          "CardToken": "5VXkNqtUDJBxQj9p/qTGt74jWaPHlRs7xxWa1Yu0gDI=",
+          "Additional_Parameters": {
+            "SiteId": "6",
+            "EntryMode": "4",
+            "MachineAuTime": "2025-11-25T14:35:38.885",
+            "NayaxTransactionId": "6103587330"
+          }
+        }
+      },
+      "id": 701
+    }
+    ```
+
+    要求：
+
+    ```json JSON
+    {"jsonrpc":"2.0","method":"ConfirmTransaction", "params": {"amount":450, "fee":0, "productID":42, "transaction_Reference":"6103587330", "AdditionalReceiptData":{"Message": "Purchase confirmed", "VAT_Percentage": 10}}, "id":8}
+    ```
+
+    回复：
+
+    ```json JSON
+        {"jsonrpc":"2.0", "result":true, "id":8}
+    ```
+
+    参数：
+
+    | 范围                    | 描述                                                                                                      |
+    | :-------------------- | :------------------------------------------------------------------------------------------------------ |
+    | ID                    | 命令 ID。                                                                                                  |
+    | 数量                    | 实际收费金额——以小数单位（分）表示。                                                                                     |
+    | 交易引用                  | Transaction reference from the PSP. Use the `transactionId` field from the `TransactionComplete` event. |
+    | 产品ID                  | 可选参数：消费者所选产品的ID。该编号将保存在服务器上，并可用于生成报告。                                                                   |
+    | 终端数据                  | 可选参数：`terminal_data=(key1=value1,key2=value2)`。                                                         |
+    | AdditionalReceiptData | 可选。包含确认时要附加的额外收据数据的 JSON 对象。                                                                            |
+  </Tab>
+
+  <Tab title="安卓">
+    ```java Java
+    void ConfirmTransaction(String transactionReference, int actualAmountMinorUnits, int productID) throws EmvCoreException;
+    ```
+
+    参数：
+
+    | 范围                       | 描述          |
+    | ------------------------ | ----------- |
+    | `transactionReference`   | 来自预授权的唯一参考。 |
+    | `actualAmountMinorUnits` | 最终结算金额。     |
+    | `productID`              | 产品标识符。      |
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    KIOSK_RET LibOtiKiosk_ConfirmTransaction(uint32_t amount_cents, uint32_t fee_cents, uint32_t product_id, char* transaction_reference, char* additional_receipt_data);
+    ```
+
+    参数：
+
+    | 范围                        | 描述                                       |
+    | ------------------------- | ---------------------------------------- |
+    | `amount_cents`            | 以小单位（美分，而非美元）计算的收费金额。                    |
+    | `fee_cents`               | 已弃用。未使用。                                 |
+    | `transaction_reference`   | 来自预授权的唯一参考。                              |
+    | `product_id`              | 产品标识符。                                   |
+    | `additional_receipt_data` | 可选。包含确认时要附加的额外收据数据的 JSON 字符串。可以为 `NULL`。 |
+  </Tab>
+</Tabs>
+
+---
+
+## `GetCardToken`
+
+`GetCardToken` 方法用于启动卡片令牌化流程，返回卡片令牌而不执行金融交易。
+
+EMV Core 等待呈现卡片，读取数据，并触发 `CardTokenReceived` 事件：
+
+- **支付卡：**返回包含卡令牌的 Base64 字符串。
+- CLP 卡（例如 Mifare）：返回卡片 UID。
+
+### API签名
+
+<Tabs>
+  <Tab title="JSON">
+    要求：
+
+    ```json
+    {
+    "method": "GetCardToken",
+    "params": {
+    "continuous": false,
+    "timeout": 60
+    },
+    "id": 5820
+    }
+
+    ```
+
+    回复：
+
+    ```json JSON
+       {"jsonrpc": "2.0", "result": true, "id": 5820}
+    ```
+
+    参数：
+
+    | 范围      | 描述                                                |
+    | :------ | :------------------------------------------------ |
+    | 超时时间（秒） | 等待的最长秒数。如果在此时间内没有卡片到达，则返回 `Timeout` 状态。最大值为 60 秒。 |
+  </Tab>
+
+  <Tab title="安卓">
+    ```java Java
+    void GetCardToken(int timeoutSeconds, boolean continuous) throws EmvCoreException;
+    ```
+
+    参数：
+
+    | 范围               | 描述                                                                                                                         |
+    | ---------------- | -------------------------------------------------------------------------------------------------------------------------- |
+    | `timeoutSeconds` | 最长等待秒数（最大 60 秒）。如果没有卡片到达，将返回 `Timeout` 状态。                                                                                 |
+    | `continuous`     | If true, polling restarts immediately after a timeout. A `TransactionComplete` event is sent with status `PollContinuous`. |
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    KIOSK_RET LibOtiKiosk_GetCardToken(otiKioskPaymentParameters *params);
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+## `PreAuthorize`
+
+使用 `PreAuthorize` 对支付处理商的卡片进行预授权。EMV Core 会等待卡片、读取卡片，并在需要时通过支付服务进行处理，然后发送 `TransactionComplete` 事件。
+
+### API签名
+
+<Tabs>
+  <Tab title="JSON">
+    要求：
+
+    ```json JSON
+    {"jsonrpc":"2.0","method":"PreAuthorize", "params": {"amount":450, "timeout":10, "productID":0, "continuous":false, "AdditionalReceiptData": {"Message": "Good Morning", "VAT_Percentage": 10}, "isFinalAmount":false, "deferred":false}, "id":801}
+    ```
+
+    回复：
+
+    ```json JSON
+       {"jsonrpc": "2.0", "result": true, "id": 801}
+
+    ```
+
+    参数：
+
+    | 范围                    | 描述                                                                                                                                                                                                                                                                                                                                                                   |
+    | :-------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | 数量                    | 以整数单位（美元，而非美分）表示的扣款金额。                                                                                                                                                                                                                                                                                                                                               |
+    | 费用                    | 已弃用。未使用。                                                                                                                                                                                                                                                                                                                                                             |
+    | 货币                    | 自 SDK v1.4 起从配置中获取。如果未设置 `CURRENCY_CODE`，SDK v1.5 会在首次交易时从读卡器的标签 `9F3C` 中读取货币；如果该标签也不可用，则回退为美元（840）。                                                                                                                                                                                                                                                                 |
+    | 产品ID                  | 可选参数：消费者所选产品的ID。该编号将保存在服务器中，并可用于生成报告。                                                                                                                                                                                                                                                                                                                                |
+    | 连续的                   | 如果 continuous 为 true，则读卡轮询将在交易超时后立即重新开始，并发送状态为 'PollContinuous' 的 `TransactionComplete` 事件。                                                                                                                                                                                                                                                                          |
+    | 暂停                    | 等待的最长秒数。如果没有卡片到达，请求将返回 `Timeout` 状态。                                                                                                                                                                                                                                                                                                                                 |
+    | AdditionalReceiptData | 可选。包含传递给 PSP 并包含在 eReceipt 中的额外收据数据的 JSON 对象。                                                                                                                                                                                                                                                                                                                        |
+    | isFinalAmount         | `true`: fixed amount, indicates `pre-selection` flow. `false`: amount may change, indicates `pre-authorization` flow. When used with `deferred=false`, the host must call `ConfirmTransaction` or `VoidTransaction` in both cases. When used with `deferred=true`, no need to call `ConfirmTransaction` or `VoidTransaction`. The transaction settles automatically. |
+    | deferred              | 可选。`true`：延迟授权（Transit 模式）。卡片离线读取，授权排队等待结算。详情请参阅 Deferred Transaction。                                                                                                                                                                                                                                                                                               |
+  </Tab>
+
+  <Tab title="安卓">
+    ```java Java
+    void PreAuthorize(int amountMinorUnits, int productID, int timeoutSeconds, boolean continuous) throws EmvCoreException;
+    ```
+
+    参数：
+
+    | 范围                 | 描述                               |
+    | ------------------ | -------------------------------- |
+    | `amountMinorUnits` | 以最小货币单位计的扣款金额(例如,以分而非元为单位)。      |
+    | `productID`        | 消费者所选产品的ID。该编号将保存在服务器上，并可用于生成报告。 |
+    | `timeoutSeconds`   | 出示卡片的最长等待时间。                     |
+    | `continuous`       | 是否启用持续轮询。                        |
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    otiKioskPaymentParameters params = {
+        .amount_cents = 1500, // $15.00
+        .product_id = 12345,
+        .timeout_sec = 60,
+        .continuous = false,
+        .additional_receipt_data = NULL,
+        .is_deferred = false,
+        .is_final_amount = false
+    };
+
+    KIOSK_RET result = LibOtiKiosk_PreAuthorize(&params);
+    if (result == KIOSK_RET_OK) {
+        printf("Payment initiated successfully\n");
+    }
+    ```
+
+    参数：
+
+    | 范围                        | 描述                                                        |
+    | ------------------------- | --------------------------------------------------------- |
+    | `amount_cents`            | 以最小货币单位计的扣款金额(例如,以分而非元为单位)。                               |
+    | `product_id`              | 消费者所选产品的ID。该编号将保存在服务器上，并可用于生成报告。                          |
+    | `timeout_sec`             | 出示卡片的最长等待时间。                                              |
+    | `continuous`              | 是否启用持续轮询。                                                 |
+    | `additional_receipt_data` | 可选。包含传递给 PSP 并包含在 eReceipt 中的额外收据数据的 JSON 字符串。可以为 `NULL`。 |
+    | `is_deferred`             | 可选。`true` 表示延迟授权（Transit 模式）：卡片离线读取，授权排队等待结算。             |
+    | `is_final_amount`         | `true`：固定金额，表示预选流程。`false`：金额可能变化，表示预授权流程。                |
+  </Tab>
+</Tabs>
+
+<Warning>
+  Setting `productID` to a non-zero value marks the pre-authorized amount as final; it cannot be changed in `ConfirmTransaction`. If the final amount is not yet known, set `productID = 0` in `PreAuthorize` and provide the actual ID in `ConfirmTransaction`.
+</Warning>
+
+如果交易获批准（`TransactionComplete` 事件返回状态为 `OK`），应用程序必须调用 `ConfirmTransaction` 或 `VoidTransaction` 以完成流程。
+
+---
+
+## `VoidTransaction`
+
+此请求用于在两种特定情况下撤销交易：
+
+1. **释放资金：**该交易已**获得预授权**但尚未**确认**。取消交易会在交易不再发生时释放已预留的资金。
+2. 冲正：交易已使用 `PayTransaction` 完成，但需要取消。
+
+### API签名
+
+<Tabs>
+  <Tab title="JSON">
+    要求：
+
+    ```json JSON
+     {"jsonrpc": "2.0", "method": "VoidTransaction", "params": {"transaction_Reference": "8453F02DFD33413EBA77334B696D5991"}, "id": 803}
+    ```
+
+    回复：
+
+    ```json JSON
+     {"jsonrpc": "2.0", "result": true, "id": 803}
+    ```
+
+    参数：
+
+    | 范围   | 描述                                       |
+    | :--- | :--------------------------------------- |
+    | ID   | 命令 ID。                                   |
+    | 交易引用 | 交易参考来自 PSP，随 `TransactionComplete` 事件返回。 |
+  </Tab>
+
+  <Tab title="安卓">
+    ```java Java
+    void VoidTransaction(String transactionReference) throws EmvCoreException;
+    ```
+
+    参数：
+
+    | 范围                     | 描述          |
+    | ---------------------- | ----------- |
+    | `transactionReference` | 来自预授权的唯一参考。 |
+  </Tab>
+
+  <Tab title="Linux">
+    ```c C
+    KIOSK_RET LibOtiKiosk_VoidTransaction(char* transaction_reference);
+    ```
+
+    参数：
+
+    | 范围                      | 描述          |
+    | ----------------------- | ----------- |
+    | `transaction_reference` | 来自预授权的唯一参考。 |
+  </Tab>
+</Tabs>
+
+<br />

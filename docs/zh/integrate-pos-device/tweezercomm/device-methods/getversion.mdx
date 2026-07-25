@@ -1,0 +1,56 @@
+---
+title: getVersion
+metadata:
+  og:description: getVersion 方法用于获取设备上安装的一个或多个应用程序的版本信息，例如 agamento、spi 或 ashrait。
+---
+
+`getVersion` 方法用于获取设备上安装的一个或多个应用程序的版本信息，例如 agamento、spi 或 ashrait。它会返回每个所请求应用程序的当前版本标签。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+在请求中，`method` 字段需要设置为 `getVersion`，且 params 必须包含一个应用程序名称数组，如下方示例请求所示：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getVersion",
+    "id": "123454352",
+    "params": [
+        [
+            "agamento",
+            "spi",
+            "ashrait"
+        ]
+    ]
+}
+```
+
+## 回复
+
+成功的请求将返回类似于以下代码块中的响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": [
+        "01.05.00",
+        "01_12_00",
+        "01_10_00"
+    ]
+}
+```
+
+### 响应参数
+
+下面是一个包含所有可能的响应参数及其描述的表格：
+
+| 姓名       | 类型     | 描述               |
+| -------- | ------ | ---------------- |
+| `result` | string | 查询的每个应用程序的版本标签数组 |

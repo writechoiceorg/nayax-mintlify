@@ -1,0 +1,127 @@
+---
+title: 数据链路层
+metadata:
+  og:description: EMV Core RTOS SDK 的数据链路成帧协议：数据帧、ACK/NAK 以及协议规则。
+---
+
+EMV核心和主机之间的通道可以是串行通道或USB通道。
+
+在 USB 接口中：
+
+- 该设备使用 HID 协议类，采用 64 字节块（在 HID 术语中称为“报告”）。
+- 每个 64 字节块的第一个字节是长度字节，表示接下来的 63 个字节中实际使用了多少个字节。
+- 如果长度字节小于 63，则应丢弃剩余字节。
+- 如果值为 63 或更大，则使用接下来的 63 个字节。
+
+## 数据链路协议
+
+### 命令序列示例（GetKioskId）
+
+以下交互展示了 `GetKioskID` 命令的完整 ACK/NAK 流程：
+
+```
+→  Host sends data:
+   <A0|0065{"jsonrpc":"2.0","method":"GetKioskID","params":{},"id":7}5C>
+
+←  EMV Core sends ACK:
+   <+0>
+
+←  EMV Core sends data response:
+   <A1|0054{"jsonrpc":"2.0","result":"1234567890123456","id":7}6D>
+
+→  Host sends NAK (e.g., LRC error):
+   <-1|8>
+
+←  EMV Core sends data response (retry):
+   <A1|0054{"jsonrpc":"2.0","result":"1234567890123456","id":7}6D>
+
+→  Host sends ACK:
+   <+1>
+```
+
+---
+
+## 数据框
+
+例子：
+
+```
+<A1|0065{"jsonrpc":"2.0","method":"GetKioskID","params":{},"id":7}5C>
+```
+
+**结构：** `<A[Frame-ID]|[Length][Data][LRC]>`
+
+| 场地           | 描述                                                                                |
+| :----------- | :-------------------------------------------------------------------------------- |
+| `<`          | 帧开始                                                                               |
+| `>`          | 帧结束                                                                               |
+| `A`          | 协议版本 A；固定值                                                                        |
+| `[Frame-ID]` | 帧的 ID：`0` 或 `1`，发送方在每个新帧时切换该值。重试时（NAK 或超时后），Frame-ID 保持不变。ACK/NAK 使用相同的 Frame-ID。 |
+| `[Length]`   | 4 位十进制数字：`[Data]` 字段的字节长度                                                         |
+| `[Data]`     | 传输的是更高层级的数据，通常是 JSON-RPC 消息。                                                      |
+| `[LRC]`      | 2-character hex LRC (XOR of all bytes from `<` through the last byte of `[Data]`) |
+
+### LRC 和长度计算示例
+
+```
+Message:
+<A1|0065{"jsonrpc":"2.0","result":"4207012624000108","id":6}63>
+
+Part for LRC:
+<A1|0065{"jsonrpc":"2.0","result":"4207012624000108","id":6}
+
+Hex: 3C 41 31 7C 30 30 36 35 7B 22 6A 73 6F 6E 72 70 63 22 3A 22 32
+     2E 30 22 2C 20 22 72 65 73 75 6C 74 22 3A 22 34 32 30 37 30 31
+     32 36 32 34 30 30 30 31 30 38 22 2C 20 22 69 64 22 3A 36 7D
+
+LRC: 63
+
+Length: 65 bytes → encoded as "0065"
+```
+
+---
+
+## ACK 帧
+
+发送以确认已成功接收并验证数据框。
+
+**例如：** `<+0>` ， `<+1>`
+
+**结构：** `<+[Frame-ID]>`
+
+`[Frame-ID]` 与正在确认的数据帧匹配。
+
+---
+
+## NAK框架
+
+当接收方无法解析数据帧时发送。
+
+**例如：** `<-0|1>` ， `<-1|7>`
+
+**结构：** `<-[Frame-ID]|[Err]>`
+
+| 错误代码 | 意义                                                     |
+| :--- | :----------------------------------------------------- |
+| `0`  | 未指定                                                    |
+| `1`  | Unsupported protocol (first byte after `<` is not `A`) |
+| `2`  | 长度字段无效（包含非数字字符）                                        |
+| `3`  | 长度字段过大                                                 |
+| `4`  | 数据字段无效（非 JSON-RPC）                                     |
+| `5`  | LRC字段无效（字符非十六进制AF，0-9）                                 |
+| `6`  | LRC错误                                                  |
+| `7`  | ETX无效                                                  |
+| `8`  | 超时：超时后帧未完全接收。                                          |
+
+发送方不会根据错误代码改变其行为；错误代码仅用于调试。
+
+---
+
+## 协议规则
+
+数据链路层遵循以下时序规则：
+
+- 预计在 **30 毫秒**内收到 ACK/NAK 确认。
+- 如果未收到 ACK，或者收到 NAK，发送方可以使用相同的帧 ID 重新发送帧。
+- 在等待 ACK/NAK 期间，发送方不得发送另一帧。
+- When receiving a frame: if the first bytes are not `<A0` or `<A1`, do not send a NAK. Instead, keep reading until receiving a valid start of frame.

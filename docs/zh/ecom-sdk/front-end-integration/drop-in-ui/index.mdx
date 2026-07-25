@@ -1,0 +1,60 @@
+---
+title: Drop-in UI
+metadata:
+  og:description: Drop-in UI 组件使您能够在网站的任何位置轻松显示一份完整、预配置的可用支付方式列表。
+---
+
+Drop-in UI 组件使您能够在网站的任何位置轻松显示一份完整、预配置的可用支付方式列表，从而最大限度地缩短集成开发时间。
+
+该 UI 的其他功能包括：
+
+- 新增的支付方式无需开发即可立即生效。
+- 对支付方式列表拥有完整的样式控制权。
+- 内置原生 3D Secure 2 支持。
+
+<Note>
+  实现 Drop-in UI
+
+  `startPayment` 方法会自动处理 Drop-in UI 的实现。
+</Note>
+
+## 工作原理
+
+Drop-in 的使用流程如下：
+
+1. 消费者进入结账页面。
+2. 这会使用来自服务器的会话数据创建一个 Drop-in 实例。
+3. Drop-in 会显示可用的支付方式并收集消费者的支付详情。
+
+   <Frame>
+     <img src="/images/docs/drop-in-ui/image1.png" />
+   </Frame>
+4. 支付完成后，UI 会向消费者展示支付结果。
+
+   <Frame>
+     <img src="/images/docs/drop-in-ui/image2.png" />
+   </Frame>
+
+<Note>
+  Webhook 通知
+
+  Your webhook server simultaneously receives the event containing the payment outcome. See [Webhook Notifications](/docs/ecom-sdk/back-end-integration/webhook-notifications) for more details.
+</Note>
+
+### 字段验证
+
+如果消费者在字段中输入了错误信息，drop-in UI 会执行验证检查并告知其错误。请参见以下示例：
+
+<Frame>
+  <img src="/images/docs/drop-in-ui/image3.png" />
+</Frame>
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="创建付款" href="/docs/ecom-sdk/front-end-integration/ecom-sdk-create-payments" />
+
+  <Card icon="link" title="处理支付结果" href="/docs/ecom-sdk/front-end-integration/handling-payment-results" />
+</Columns>
+
+<br />

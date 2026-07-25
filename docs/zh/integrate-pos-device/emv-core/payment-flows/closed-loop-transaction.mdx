@@ -1,0 +1,39 @@
+---
+title: 闭环交易
+metadata:
+  og:description: 闭环交易是指使用 MIFARE 卡进行的操作。在这种情况下,商户通常需要获取 MIFARE 卡的 UID 才能进行处理。
+---
+
+闭环交易使用MIFARE卡。商户读取卡片唯一标识符（UID），并在其自身的应用服务器上处理交易，无需银行网络参与。
+
+由于无需银行操作，闭环交易不使用 Nayax 服务器。相反，您的主机使用 EMV 读卡器读取卡片，并使用 EMV Core 与之交互。
+
+<Warning>
+  您的应用程序在读卡器扫描卡之前，无法得知用户将要出示的是开放式（信用卡或借记卡）卡还是封闭式（MIFARE）卡。您的应用程序必须能够同时处理这两种类型的卡。
+</Warning>
+
+## 交易流程
+
+下图显示了闭环交易的交易流程：
+
+<Frame>
+  <img src="/images/docs/closed-loop-transaction/image1.png" />
+</Frame>
+
+在哪里：
+
+1. The host machine calls the [`PreAuthorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#preauthorize) method using the EMV Core API. This is the only action performed by the host machine.
+2. EMV 核心将金额发送给读卡器。
+3. 您的应用程序提示用户轻触他们的银行卡。
+4. 购物者将卡插入 EMV 阅读器。
+5. Nayax EMV 读卡器将包含加密卡数据的响应拉取到 Nayax EMV 核心。
+6. Nayax EMV Core 将其识别为 MIFARE 卡（闭环交易）并通知主机应用程序交易已完成，返回卡 UID 和可选卡数据。
+
+<Note>
+  默认情况下，MIFARE 卡数据会与您的主机本地共享。您也可以配置 SDK，将数据发送到 Nayax 服务器，以便通过 Nayax Prepaid 进行处理。
+</Note>
+
+7. 您的应用程序使用卡唯一标识符 (UID) 向您的应用程序服务器授权交易。
+8. 一旦获得批准，交易就完成。
+9. 产品已成功交付给买家。
+10. EMV Core 允许将交易报告给 Nayax 服务器，该服务器发送专有支付金额和 UUID。

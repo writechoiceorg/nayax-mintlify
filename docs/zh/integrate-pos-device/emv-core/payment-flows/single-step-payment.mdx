@@ -1,0 +1,32 @@
+---
+title: 单步付款
+metadata:
+  og:description: 单步支付流程可在一次操作中完成即时授权和结算,从而为相应场景简化支付流程。
+---
+
+单步支付流程可在一次操作中完成即时授权和结算,从而为需要快速、简单交易的场景简化支付流程。虽然其稳健性不如两步流程(`PreAuthorize` 和 `ConfirmTransaction`),但适用于自动售货机或自助服务终端等低风险环境。
+
+<Warning>
+  Nayax 推荐 [使用预授权支付](/docs/integrate-pos-device/emv-core/payment-flows/payment-with-authorization) 方式，因为它能更可靠地处理通信故障。
+</Warning>
+
+## 交易流程
+
+下图显示了单步支付的交易流程：
+
+<Frame>
+  <img src="/images/docs/single-step-payment/image1.png" />
+</Frame>
+
+在哪里：
+
+1. The host application initiates a payment transaction by calling the [`PayTransaction`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#paytransaction) method. The total transaction amount, currency, and other parameters are specified to EMV Core upfront.
+2. EMV Core 会轮询读卡器以确定是否存在卡片。
+3. 用户点击或插入他们的卡。
+4. EMV核心会捕获卡的加密数据。
+5. 加密的卡数据被发送到 EMV 核心。
+6. EMV Core 确认交易并将详细信息发送到 Nayax 服务器。
+7. 服务器接收交易数据并进行结算，并向EMV Core确认。
+8. EMV Core receives the transaction result from the server and triggers the [`TransactionComplete`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#transactioncomplete) event, sending the transaction's data.
+9. 自动售货完成，产品交付给用户。
+10. 交易报告被发送到Kiosk应用程序服务器。

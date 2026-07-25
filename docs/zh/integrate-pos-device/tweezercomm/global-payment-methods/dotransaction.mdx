@@ -1,0 +1,431 @@
+---
+title: 执行交易
+metadata:
+  og:description: doTransaction 方法可在 TweezerComm 协议中发起并处理支付交易。它使客户端应用程序（例如
+---
+
+`doTransaction` 方法可在 TweezerComm 协议中发起并处理支付交易。它使销售点 (POS) 系统或电子收银机 (ECR) 等客户端应用程序能够与 Agamento 支付终端交互，以安全地执行交易。
+
+此方法支持多种交易类型，包括：
+
+- 常规交易（PreSelection）：使用信用卡或闭环支付方式进行的标准支付。
+- 预授权（发起）：在客户卡上预留指定金额，以便后续确认。
+- 预授权完成与取消：完成或撤销先前已授权的交易。
+- MOTO（邮购/电话订购）交易：安全处理无卡交易。
+- [Refunds](/docs/integrate-pos-device/tweezercomm/global-payment-methods/refunds-dotransaction): Partial or full refunds of previous transactions.
+- 延迟付款：即使在没有即时网络连接的情况下也能批准交易。
+
+以下各部分将详细介绍请求参数：
+
+## 请求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+在请求中，`method` 字段需要设置为 `doTransaction`。交易由 `tranCode` 参数定义。请在下方各选项卡中查看每种交易类型的示例请求：
+
+<Warning>
+  必填字段
+
+  `vuid`、`amount` 和 `tranType` 是所有请求的必填项。其他参数则取决于所进行的交易类型。
+</Warning>
+
+<Tabs>
+  <Tab title="常规交易">
+    对于常规交易，请将 `tranType` 参数设置为 `1`。以下代码块展示了常规交易的请求示例：
+
+    ```json
+    {
+        "jsonrpc": "2.0",
+        "method": "doTransaction",
+        "id": "123454352",
+        "params": [
+            "engine",
+            {
+                "vuid": "44d96006",
+                "amount": 100,
+                "tranType": 1
+            }
+        ]
+    }
+    ```
+
+    ### 参数定义
+
+    下表说明了此请求中所有可用的参数：
+
+    | 姓名         | 类型     | 描述                                      |   |
+    | :--------- | :----- | :-------------------------------------- | - |
+    | `vuid`     | string | 供应商（客户）唯一交易标识符。                         |   |
+    | `amount`   | 整数     | 金额（以分为单位）。                              |   |
+    | `tranType` | 整数     | 交易类型代码。1：单步交易（Single Step Transaction）。 |   |
+  </Tab>
+
+  <Tab title="预授权">
+    要发起预授权交易，请将 `tranType` 参数设置为 `3`。以下代码块展示了发起预授权交易的请求示例：
+
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "method": "doTransaction",
+    "id": "1696161997899",
+    "params": [
+    "engine",
+    {
+        "vuid": "80b458684",
+        "tranType": 3,
+        "amount": 100,
+        }
+    ]
+    }
+    ```
+
+    ### 参数定义
+
+    下表说明了此请求中所有可用的参数：
+
+    | 姓名         | 类型     | 描述              |
+    | :--------- | :----- | :-------------- |
+    | `vuid`     | string | 供应商（客户）唯一交易标识符。 |
+    | `tranType` | 整数     | 交易类型。3：预授权。     |
+    | `amount`   | 整数     | 金额（以分为单位）。      |
+  </Tab>
+
+  <Tab title="完成预授权">
+    要完成预授权交易，请将 `tranType` 参数设置为 `6`。以下代码块展示了完成预授权交易的请求示例：
+
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "method": "doTransaction",
+    "id": "1696161997899",
+    "params": [
+    "engine",
+    {
+        "vuid": "80b458654",
+        "tranType": 6,
+        "amount": 100,
+        "originalTransactionId":"2022052432"
+        }
+    ]
+    }
+    ```
+
+    ### 参数定义
+
+    下表说明了此请求中所有可用的参数：
+
+    | 姓名                      | 类型     | 描述              |
+    | :---------------------- | :----- | :-------------- |
+    | `vuid`                  | string | 供应商（客户）唯一交易标识符。 |
+    | `tranType`              | 整数     | 交易类型。6：完成预授权。   |
+    | `amount`                | 整数     | 金额（以分为单位）。      |
+    | `originalTransactionId` | string | 原始预授权交易的 ID。    |
+  </Tab>
+
+  <Tab title="取消预授权">
+    要取消已发起的预授权交易，请将 `tranType` 参数设置为 `7`。以下代码块展示了此类取消操作的请求示例：
+
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "method": "doTransaction",
+    "id": "1696161997899",
+    "params": [
+    "engine",
+    {
+        "vuid": "80b458654",
+        "tranType": 7,
+        "amount": 100,
+        "originalTransactionId":"2022052432"
+        }
+    ]
+    }
+    ```
+
+    ### 参数定义
+
+    下表说明了此请求中所有可用的参数：
+
+    | 姓名                      | 类型     | 描述              |
+    | :---------------------- | :----- | :-------------- |
+    | `vuid`                  | string | 供应商（客户）唯一交易标识符。 |
+    | `tranType`              | 整数     | 交易类型。7：取消预授权。   |
+    | `amount`                | 整数     | 金额（以分为单位）。      |
+    | `originalTransactionId` | string | 原始预授权交易的 ID。    |
+  </Tab>
+
+  <Tab title="MOTO">
+    对于 MOTO 交易，请将 `tranCode` 参数设置为 `5`。以下代码块展示了 MOTO 交易的请求示例：
+
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "method": "doTransaction",
+    "id": "1696161997899",
+    "params": [
+    "engine",
+    {
+        "vuid": "80b458654",
+        "tranType": 5,
+        "amount": 100,
+        "pan": "1234567812345678",
+        "exp": "0927",
+        "cvv": "987"
+        }
+    ]
+    }
+    ```
+
+    ### 参数定义
+
+    下表说明了此请求中所有可用的参数：
+
+    | 姓名         | 类型     | 描述              |
+    | :--------- | :----- | :-------------- |
+    | `vuid`     | string | 供应商（客户）唯一交易标识符。 |
+    | `tranType` | 整数     | 交易类型。5：MOTO。    |
+    | `amount`   | 整数     | 金额（以分为单位）。      |
+    | `pan`      | string | 必填：16 位卡号。      |
+    | `exp`      | string | 必填：卡片有效期（MMYY）。 |
+    | `cvv`      | string | 必填：3 位安全码。      |
+  </Tab>
+</Tabs>
+
+## 回应
+
+该服务将返回一个结构与下方代码块示例类似的响应：
+
+<Tabs>
+  <Tab title="常规交易">
+    ```json
+    {
+      "jsonrpc": "2.0",
+      "id": "123454352",
+      "result": {
+          "statusCode": 0,
+          "statusMessage": "TRANSACTION APPROVED",
+          "appVersion": "01.06.62",
+          "vuid": "12354",
+          "amount": 100,
+          "transactionId": "2038584332",
+          "entryMode": 4,
+          "transactionOriginalRequestId": "6439809e-619f-414b-8c3e-f1a9f3c3bc49",
+          "transactionOriginalTime": "2025-03-05 23:08:06.597",
+          "transactionOriginalAmount": 100,
+          "serverResultMessage": "Sale is Approved",
+          "tranType": 1,
+          "dtId": "1741244869236399011",
+          "rrn": "250306070806",
+          "maskedPan": "541333******4111",
+          "currencyCode": "USD",
+          "currencyISOCode": "840",
+          "originalSiteId": 1,
+          "mainBoardSerial": "000177234933444",
+          "hwSerial": "0900044624102737"
+      }
+    }
+    ```
+
+    ### 响应参数
+
+    下面是一个包含所有可能的响应参数及其描述的表格：
+
+    | 姓名                             | 类型     | 描述                   |
+    | :----------------------------- | :----- | :------------------- |
+    | `statusCode`                   | 整数     | 请求的结果（0 表示成功）。       |
+    | `statusMessage`                | string | 状态的文本描述。             |
+    | `appVersion`                   | string | 支付应用程序的版本。           |
+    | `vuid`                         | string | 供应商唯一交易标识符。          |
+    | `amount`                       | 整数     | 最终交易金额（以分为单位）。       |
+    | `transactionId`                | string | 唯一网关交易 ID。           |
+    | `entryMode`                    | 整数     | 读卡方式（例如芯片、非接触式）。     |
+    | `transactionOriginalRequestId` | string | 原始请求的 ID。            |
+    | `transactionOriginalTime`      | string | 原始交易的时间戳。            |
+    | `transactionOriginalAmount`    | 整数     | 原始请求金额。              |
+    | `serverResultMessage`          | string | 来自处理服务器的详细信息。        |
+    | `tranType`                     | 整数     | 交易类型代码（1 表示常规交易）。    |
+    | `dtId`                         | string | 设备交易标识符。             |
+    | `rrn`                          | string | 检索参考号。               |
+    | `maskedPan`                    | string | 用于该交易的掩码卡号。          |
+    | `currencyCode`                 | string | 字母数字货币代码（例如 USD）。    |
+    | `currencyISOCode`              | string | 数字 ISO 货币代码（例如 840）。 |
+    | `originalSiteId`               | 整数     | 发起站点的标识符。            |
+    | `mainBoardSerial`              | string | 设备主板的序列号。            |
+    | `hwSerial`                     | string | 硬件序列号。               |
+  </Tab>
+
+  <Tab title="预授权">
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "TRANSACTION APPROVED",
+        "appVersion": "01.06.38",
+        "vuid": "80b45894",
+        "tranType": 3,
+        "amount": 100,
+        "currencyCode": "GBP",
+        "currencyISOCode": "826",
+        "transactionId": "2022052432",
+        "dtId": "1721134022667243531",
+        "rrn": "240716123742",
+        "maskedPan": "374245*****1007"
+    }
+    }
+    ```
+
+    ### 响应参数
+
+    下面是一个包含所有可能的响应参数及其描述的表格：
+
+    | 姓名                     | 类型     | 描述               |
+    | :--------------------- | :----- | :--------------- |
+    | `statusCode`           | 整数     | 请求的结果（0 表示成功）。   |
+    | `statusMessage`        | string | 状态的文本描述。         |
+    | `appVersion`           | string | 支付应用程序的版本。       |
+    | `vuid`                 | string | 供应商唯一交易标识符。      |
+    | `tranType`             | 整数     | 交易类型代码（3 表示预授权）。 |
+    | `amount`               | 整数     | 预留金额（以分为单位）。     |
+    | `currencyCode`         | string | 字母数字货币代码。        |
+    | `currencyISOCode`      | string | 数字 ISO 货币代码。     |
+    | `transactionId`        | string | 唯一网关交易 ID。       |
+    | `dtId`                 | string | 设备交易标识符。         |
+    | `rrn`                  | string | 检索参考号。           |
+    | `maskedPan`            | string | 用于预留的掩码卡号。       |
+  </Tab>
+
+  <Tab title="完成预授权">
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "id": "1696161997899",
+    "result": {
+         "statusCode": 0,
+         "statusMessage": "TRANSACTION APPROVED",
+         "appVersion": "01.06.64",
+          "vuid": "80b458654",
+          "amount": 100,
+         "transactionId": "2022052432",
+         "entryMode": 4096,
+          "transactionOriginalAmount": 128,
+          "tranType": 6,
+          "dtId": "1743763936600399011",
+         "currencyCode": "USD",
+          "currencyISOCode": "840"
+    }
+    }
+
+    ```
+
+    ### 响应参数
+
+    下面是一个包含所有可能的响应参数及其描述的表格：
+
+    | 姓名                          | 类型     | 描述              |
+    | :-------------------------- | :----- | :-------------- |
+    | `statusCode`                | 整数     | 请求的结果。          |
+    | `statusMessage`             | string | 状态的文本描述。        |
+    | `appVersion`                | string | 支付应用程序的版本。      |
+    | `vuid`                      | string | 供应商唯一交易标识符。     |
+    | `amount`                    | 整数     | 最终扣款金额（以分为单位）。  |
+    | `transactionId`             | string | 唯一网关交易 ID。      |
+    | `entryMode`                 | 整数     | 扣款所使用的方式。       |
+    | `transactionOriginalAmount` | 整数     | 初始预授权中预留的金额。    |
+    | `tranType`                  | 整数     | 交易类型代码（6 表示完成）。 |
+    | `dtId`                      | string | 设备交易标识符。        |
+    | `currencyCode`              | string | 字母数字货币代码。       |
+    | `currencyISOCode`           | string | 数字 ISO 货币代码。    |
+  </Tab>
+
+  <Tab title="取消预授权">
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "TRANSACTION APPROVED",
+        "appVersion": "01.06.38",
+        "vuid": "80b45894",
+        "tranType": 7,
+        "amount": 100,
+        "currencyCode": "GBP",
+        "currencyISOCode": "826",
+        "transactionId": "2022052432",
+        "dtId": "1721134022667243531",
+        "rrn": "240716123742",
+        "maskedPan": "374245*****1007"
+    }
+    }
+    ```
+
+    ### 响应参数
+
+    下面是一个包含所有可能的响应参数及其描述的表格：
+
+    | 姓名                     | 类型     | 描述              |
+    | :--------------------- | :----- | :-------------- |
+    | `statusCode`           | 整数     | 请求的结果。          |
+    | `statusMessage`        | string | 状态的文本描述。        |
+    | `appVersion`           | string | 支付应用程序的版本。      |
+    | `vuid`                 | string | 供应商唯一交易标识符。     |
+    | `tranType`             | 整数     | 交易类型代码（7 表示取消）。 |
+    | `amount`               | 整数     | 释放金额（以分为单位）。    |
+    | `currencyCode`         | string | 字母数字货币代码。       |
+    | `currencyISOCode`      | string | 数字 ISO 货币代码。    |
+    | `transactionId`        | string | 唯一网关交易 ID。      |
+    | `dtId`                 | string | 设备交易标识符。        |
+    | `rrn`                  | string | 检索参考号。          |
+    | `maskedPan`            | string | 与该撤销操作关联的掩码卡号。  |
+  </Tab>
+
+  <Tab title="MOTO">
+    ```json
+    {
+    "jsonrpc": "2.0",
+    "id": "123454352",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "TRANSACTION APPROVED",
+        "appVersion": "01.06.38",
+        "vuid": "80b45894",
+        "tranType": 5,
+        "amount": 100,
+        "currencyCode": "GBP",
+        "currencyISOCode": "826",
+        "transactionId": "2022052432",
+        "dtId": "1721134022667243531",
+        "rrn": "240716123742",
+        "maskedPan": "374245*****1007"
+    }
+    }
+    ```
+
+    ### 响应参数
+
+    下面是一个包含所有可能的响应参数及其描述的表格：
+
+    | 姓名                     | 类型     | 描述                   |
+    | :--------------------- | :----- | :------------------- |
+    | `statusCode`           | 整数     | 请求的结果（0 表示成功）。       |
+    | `statusMessage`        | string | 状态的文本描述。             |
+    | `appVersion`           | string | 支付应用程序的版本。           |
+    | `vuid`                 | string | 供应商唯一交易标识符。          |
+    | `tranType`             | 整数     | 交易类型代码（5 表示 MOTO）。   |
+    | `amount`               | 整数     | 交易金额（以分为单位）。         |
+    | `currencyCode`         | string | 字母数字货币代码（例如 GBP）。    |
+    | `currencyISOCode`      | string | 数字 ISO 货币代码（例如 826）。 |
+    | `transactionId`        | string | 唯一网关交易 ID。           |
+    | `dtId`                 | string | 设备交易标识符。             |
+    | `rrn`                  | string | 检索参考号。               |
+    | `maskedPan`            | string | 手动输入的掩码卡号。           |
+  </Tab>
+</Tabs>
+
+<br />

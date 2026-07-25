@@ -1,0 +1,61 @@
+---
+title: 获取零售商信息
+metadata:
+  og:description: getRetailerInfo 方法允许客户端应用程序验证与该设备关联的商户（零售商）名称和 ID。
+---
+
+`getRetailerInfo` 方法允许客户端应用程序验证与该设备关联的商户（零售商）名称和 ID。此方法可在建立流程（由 Nayax 团队完成的流程）或客户端设置完成后使用，以确认由 ABS（Shva）提供的商户信息（如 ID 和名称）已正确配置。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+请在请求中确保配置以下内容：
+
+- `method` 字段必须设置为 `getRetailerInfo`。
+- The service must be set to `ashrait` in the `params`.
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getRetailerInfo",
+    "params": [
+        "ashrait"
+    ],
+    "id": "136bdaa3"
+}
+```
+
+### 请求参数
+
+此方法除标准服务名称外不需要任何其他参数。
+
+## 回复
+
+成功调用会返回零售商的身份识别详细信息。
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "136bdaa3",
+    "result": {
+        "id": "0883012013",
+        "name": "MODULARITY 12",
+        "transmitTime": 1721217720
+    }
+}
+```
+
+### 响应参数
+
+下表描述了该方法的响应参数。
+
+| 姓名             | 类型     | 描述                    |
+| :------------- | :----- | :-------------------- |
+| `id`           | string | 零售商的唯一标识符。            |
+| `name`         | string | 零售商的注册名称。             |
+| `transmitTime` | 整数     | 信息传输的时间，采用 Unix 纪元格式。 |

@@ -1,0 +1,28 @@
+---
+title: 部分批准授权
+metadata:
+  og:description: 此功能允许预付处理商在持卡人余额不足以支付全额时,批准较低的授权金额,以。
+---
+
+此功能允许预付处理商在持卡人余额不足以支付所请求的全额时,批准较低的授权金额,从而提高集成的批准率。
+
+部分批准的金额可用于购买,并将限制结算金额。
+
+## 如何实施
+
+在授权端点响应中,按以下方式设置该属性:
+
+- `Status.Verdict` = Approved
+- `Status.Code` = 0
+- `PaymentInfo.AuthAmount` = 预授权的批准金额。
+
+请参阅下面的示例：
+
+```json
+{"Status": {
+  "Verdict": "Approved",
+  "Code": 0,},
+  "PaymentInfo": {
+  "AuthAmount": 5}
+  }
+```

@@ -1,0 +1,52 @@
+---
+title: 超时回调
+metadata:
+  og:description: 仅限预授权 此方法仅适用于预授权交易。TimeoutCallback API 调用用于通知支付。
+---
+
+<Note>
+  仅限预授权
+
+  此方法仅适用于已进行预授权的交易。
+</Note>
+
+`TimeoutCallback` API 调用用于通知支付会话因不活动或未能在规定时间内完成预期流程而超时。此回调通常在用户完成预授权后未继续进行会话，且未收到 `CancelTransaction` 或 `Settlement` 等后续操作时触发。
+
+它作为该会话应被视为已终止的最终标志。
+
+<Warning>
+  超时会话
+
+  请勿对已超时的会话尝试任何进一步操作。使用 `SparkTransactionId` 来核对或记录该超时事件。
+</Warning>
+
+## 要求
+
+Spark 会向您配置的 `TimeoutCallback` 端点发送 POST 请求。请求正文如下例所示：
+
+```json
+{
+  "TerminalId": "0434334921100366",
+  "MachineId": 71234996,
+  "HwSerial": "0434334921100366",
+  "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c"
+}
+
+```
+
+### 请求参数
+
+下表描述了该请求的参数。
+
+| 场地                   | 类型     | 必需的 | 描述               |
+| -------------------- | ------ | --- | ---------------- |
+| `TerminalId`         | String | 是的  | 发起该交易的终端标识符。     |
+| `MachineId`          | 整数     | 是的  | 售货机或设备的 ID。      |
+| `HwSerial`           | String | 是的  | 终端硬件序列号。         |
+| `SparkTransactionId` | String | 是的  | 唯一的 Spark 交易标识符。 |
+
+<Note>
+  Nayax 回调
+
+  这是来自 Nayax 的回调，不需要响应体。简单的 200 OK 服务器确认就足够了。
+</Note>

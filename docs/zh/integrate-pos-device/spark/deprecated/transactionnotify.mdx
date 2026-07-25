@@ -1,0 +1,81 @@
+---
+title: 交易通知
+metadata:
+  og:description: 使用 TransactionNotify 端点将充电会话的最终详情通知给集成方，包括充电桩可用性、金额。
+---
+
+`TransactionNotify` 端点用于将充电会话的最终详情通知给集成方，包括充电桩可用性、金额和显示信息。此请求在会话已准备就绪且充电桩可供使用后发出。
+
+## 要求
+
+向 `TransactionNotify` 端点发送 POST 请求，负载如下：
+
+```json
+{
+  "HwSerial": "0434334921100366",
+  "MachineId": 71234996,
+  "NayaxTransactionId": 2004545072,
+  "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+  "Amount": 10.00,
+  "CardLast4Digits": "1234",
+  "CardHash": "7f2082ba5dbccf706b6987e75b62083f65b5695bc2d8c827c3e46769d007a9e6",
+  "CardUid": "1288528281124927",
+  "ServiceStationNumber": "5",
+  "SiteId": 2,
+  "MachineAuTime": "20240205194122328"
+}
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+| 场地                     | 类型     | 必需的 | 描述                                                                                                       |
+| :--------------------- | :----- | :-- | :------------------------------------------------------------------------------------------------------- |
+| `HwSerial`             | String | 是的  | 终端的硬件序列号                                                                                                 |
+| `MachineId`            | 整数     | 是的  | 自动售货机或服务设备的 ID                                                                                           |
+| `NayaxTransactionId`   | 整数     | 是的  | 内部 Nayax 交易 ID                                                                                           |
+| `SparkTransactionId`   | String | 是的  | 在 `StartAuthentication` 中生成的唯一 ID                                                                        |
+| `Amount`               | Float  | 是的  | 以中心货币单位计的最终收费金额（例如美元）                                                                                    |
+| `CardLast4Digits`      | String | 是的  | 所刷卡的后四位数字                                                                                                |
+| `CardHash`             | String | 是的  | 整个卡号的单向哈希值                                                                                               |
+| `CardUid`              | String | 是的  | 卡片的唯一标识符（适用于预付卡）。更多详细说明请参见[SMC 支持](/docs/integrate-pos-device/spark/additional-resources/smc-support)页面。 |
+| `ServiceStationNumber` | String | 是的  | 标识服务站的编号                                                                                                 |
+| `SiteId`               | 整数     | 是的  | Spark 站点的标识符                                                                                             |
+| `MachineAuTime`        | String | 是的  | 来自设备的时间戳（`yyyyMMddHHmmssSSS` 格式）                                                                         |
+
+## 回复
+
+成功的响应将返回以下正文：
+
+```json
+{
+  "NayaxTransactionId": 2004545072,
+  "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+  "HwSerial": "0434334921100366",
+  "MachineId": 71234996,
+  "SiteId": 2,
+  "ServiceStationNumber": "5",
+  "Status": {
+    "Verdict": "Approved",
+    "StatusMessage": "Session will begin immediately."
+  }
+}
+
+```
+
+### 响应参数
+
+下表说明了响应的参数：
+
+| 场地                     | 类型     | 描述                              |
+| ---------------------- | ------ | ------------------------------- |
+| `NayaxTransactionId`   | 整数     | 请求中收到的交易 ID 的回显                 |
+| `SparkTransactionId`   | String | 会话 ID 的回显                       |
+| `HwSerial`             | String | 终端硬件序列号的回显                      |
+| `MachineId`            | 整数     | 机器 ID 的回显                       |
+| `SiteId`               | 整数     | 站点 ID 的回显                       |
+| `ServiceStationNumber` | String | 服务站编号的回显                        |
+| `Status`               | Object | 关于如何继续操作的确认信息                   |
+| `Status.Verdict`       | String | 通常为 `"Approved"` 或 `"Declined"` |
+| `Status.StatusMessage` | String | 可读的状态消息                         |

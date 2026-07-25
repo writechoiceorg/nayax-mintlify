@@ -1,0 +1,189 @@
+---
+title: iOS SDK
+metadata:
+  og:description: Nayax 提供了 eCom SDK 的 iOS 版本。本指南将向您展示如何将其集成到您的应用程序中。您将学习如何安装。
+---
+
+Nayax 提供了 eCom SDK 的 iOS 版本。本指南将向您展示如何将其集成到您的应用程序中。您将学习如何安装、初始化并准备该 SDK，以便创建支付。
+
+## 前提条件
+
+为确保兼容性和最佳性能，您的 iOS 项目必须满足以下最低要求：
+
+- iOS 14 或更高版本
+- Swift 5.0
+- Xcode 14.0 版或更高版本
+- 有效的 Sign Key(由 Nayax 提供,通常为 16 个字符)。
+- 关联的 Sign Key ID。
+- `securityTokenId` 和 `securityTokenValue`。
+
+## 集成 eCom SDK
+
+eCom SDK 的集成包含四个步骤：
+
+1. 安装 SDK。
+2. 处理 URL 回调。
+3. 初始化 SDK。
+4. 添加配置类。
+
+以下各部分详细描述了每个步骤。
+
+### 步骤 1：安装 SDK
+
+要开始将 Nayax 电子商务功能集成到您的应用程序中，您首先需要设置对 GitLab 仓库的访问权限，然后按照下面所示安装 SDK。
+
+<Warning>
+  敏感信息
+
+  请勿将访问令牌提交到您的源代码控制系统中。该令牌应被视为敏感凭据。
+</Warning>
+
+1. 适用于 iOS 的 Nayax eCom SDK 托管在 Nayax 的私有 GitLab 仓库中。Nayax 团队将为您提供一个只读访问令牌。配置 git 以使用此令牌进行身份验证：
+   ```powershell
+   git config --global credential.helper store
+   echo "https://gitlab-ci-token:<YOUR-PROVIDED-TOKEN>@gitlab.nayax-sdk.nayax.com" > ~/.git-credentials
+   chmod 600 ~/.git-credentials # (Optional) Secure the credentials file
+   ```
+2. 使用以下代码设置您的 Podfile：
+
+```swift Podfile
+# Specify iOS platform version
+platform :ios, '13.4'
+
+# Add both the Nayax private Specs repo and the standard CocoaPods spec repo
+source 'https://gitlab.nayax-sdk.nayax.com/nayax/ecom/ios/pods.git'
+source 'https://github.com/CocoaPods/Specs.git'
+
+target 'YourAppName' do
+  # Use dynamic frameworks
+  use_frameworks!
+
+  # Add the NayaxEcomSDK
+  pod 'NayaxEcomSDK', 'x.y.z'
+
+  # Add any other dependencies your app needs
+  ...
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+    end
+  end
+end
+
+```
+
+3. 在安装之前，请移除任何先前的集成：
+
+```powershell Terminal
+pod deintegrate
+```
+
+4. 现在，安装这些 pod。
+   ```powershell Terminal
+   pod install --repo-update
+   ```
+
+### 步骤 2：处理 URL 回调
+
+将以下 URL Types 条目添加到您应用程序的 `Info.plist` 文件中。此配置使 SDK 能够处理回调 URL：
+
+```xml info.plist
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleTypeRole</key>
+    <string>Editor</string>
+    <key>CFBundleURLName</key>
+    <string>YourAppName</string>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>ecom-sdk</string>
+    </array>
+  </dict>
+</array>
+```
+
+根据您的项目设置，无论是否使用 scene，请修改您的 `SceneDelegate` 或 `AppDelegate` 以处理 URL 回调。
+
+- 如果您使用的是 `SceneDelegate`，请添加以下方法：
+  ```swift
+  func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+      guard let url = URLContexts.first?.url else { return }
+      NayaxEcomSdk.shared.applicationDidOpen(from: url)
+  }
+  ```
+- 如果您使用的是 `AppDelegate`（不使用 scene），请实现此方法：
+  ```swift
+  class AppDelegate: UIResponder, UIApplicationDelegate {
+      func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = 
+  [:]) -> Bool {
+          return NayaxEcomSdk.shared.applicationDidOpen(from: url)
+      }
+  }
+  ```
+
+### 步骤 3：初始化 SDK
+
+现在，使用 `initialize` 方法在您的应用程序中初始化 SDK。在您的 `AppDelegate`（或主应用程序入口点）中添加以下代码：
+
+<Note>
+  Sign Key 和 ID
+
+  Nayax 会在您入驻期间提供 `signId`、`signKey`、`securityTokenId` 和 `securityTokenValue` 的值。请确保安全地处理这些值。
+</Note>
+
+```swift Swift
+import NayaxEcomSDK
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate { 
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> 
+Bool {              ...
+        // Configure the SDK
+        let config = NayaxEcomConfig(
+            environment: NayaxEcomEnvironment.qa,
+            signId: <sign_id>,
+            signKey: <sign_key>,
+            securityTokenId: <security_token_id>,
+            securityTokenValue: <security_token_value>,
+            enableLog: true
+        )       
+        // Initialize the SDK and handle the result
+        NayaxEcomSdk.shared.initialize(config: config) { result in
+            switch result {
+            case .success:
+                // NayaxEcomSDK initialized
+            case .failure(let error):
+                // NayaxEcomSDK Initialization failed
+            }
+        }        
+        // Additional customization after application launch.
+        return true
+    }
+}
+```
+
+### 步骤 4：添加配置类
+
+添加 `NayaxEcomConfig` 结构体以设置 SDK 的基本属性。此表描述了初始化 `NayaxEcomConfig` 对象所需的参数。
+
+| 范围                   | 类型                     | 描述                                       |
+| :------------------- | :--------------------- | :--------------------------------------- |
+| `environment`        | `NayaxEcomEnvironment` | 目标服务器环境。可能的值为 `.stable` 或 `.production`。 |
+| `signId`             | `Int`                  | 用于签署 API 请求的 ID。                         |
+| `signKey`            | `String`               | 用于签署 API 请求的密钥。                          |
+| `securityTokenId`    | `Int`                  | 用于商户验证的安全令牌 ID。                          |
+| `securityTokenValue` | `String`               | 用于商户验证的安全令牌值。                            |
+| `enableLog`          | `Bool`                 | 用于启用或禁用 SDK 日志记录的标志。默认为 `false`。         |
+
+Now the eCom SDK is integrated into your iOS application, and you can start creating payments through it. Refer to the [Front-End Integration](/docs/ecom-sdk/front-end-integration/front-end-sdk) guide for more information on how this works.
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="Android SDK" href="/docs/ecom-sdk/get-started/android-sdk" />
+
+  <Card icon="link" title="前端集成" href="/docs/ecom-sdk/front-end-integration/front-end-sdk" />
+</Columns>

@@ -1,0 +1,322 @@
+---
+title: 集成指南
+metadata:
+  og:description: 为 EMV Core RTOS SDK 配置串行通信、线程、回调、错误处理和 SDK 设置。
+---
+
+使用此页面配置串行通信、设置线程和回调、处理错误以及调整 EMV Core RTOS SDK 的 SDK 设置。
+
+<Note>
+  即使不进行交易，也应定期检查设备状态，以保持用户界面同步并显示错误状态。您不能在回调函数中调用任何 SDK API。
+</Note>
+
+## 串行接口配置
+
+该SDK支持两种串口通信模式。请选择与您的硬件连接相匹配的模式。
+
+### UART 模式（默认）
+
+通过 RS-232/TTL 串口连接 UNO-mini。在平台层配置设备路径和波特率，使其与您的硬件匹配。
+
+```c
+// In platform/linux/ecod_platform_linux.c
+// Comment out USE_HID_INTERFACE to enable UART mode
+// #define USE_HID_INTERFACE
+
+// Linux reference implementation settings:
+// Device: /dev/ttyUSB0
+// Baud: 115200
+// Data bits: 8, Stop bits: 1, Parity: None
+```
+
+### HID模式
+
+通过 USB HID 连接 UNO-mini。每个 64 字节的报告使用第一个字节作为长度指示符；其余字节承载实际数据。
+
+```c
+// In platform/linux/ecod_platform_linux.c
+#define USE_HID_INTERFACE
+
+// Linux reference implementation settings:
+// Device: /dev/hidraw0
+// Report size: 64 bytes
+// First byte contains actual data length
+```
+
+## 螺纹要求
+
+SDK 需要专用的后台线程进行通信。当 `EC_USE_DATALINK_PROTOCOL=1` 时,需要两个线程:
+
+```c
+#include <pthread.h>
+#include <unistd.h>
+
+volatile int keep_running = 1;
+
+// Thread 1: Datalink layer maintenance (serial I/O, framing, ACK/NAK)
+void* maintenance_thread(void* arg) {
+    while (keep_running) {
+        EcodSdk_Maintain();
+        usleep(1000);  // 1ms sleep recommended
+    }
+    return NULL;
+}
+
+// Thread 2: JSON-RPC message processing (when EC_USE_DATALINK_PROTOCOL enabled)
+void* message_thread(void* arg) {
+    while (keep_running) {
+        // Process one message, wait up to 100ms if queue empty
+        EcodSdk_ProcessMessages(100);
+    }
+    return NULL;
+}
+
+int main() {
+    if (!EcodSdk_Init()) {
+        printf("Failed to initialize SDK\n");
+        return 1;
+    }
+
+    // Register callbacks before starting threads
+    EcodSdk_Register_TransactionComplete_Callback(on_transaction_complete);
+    EcodSdk_Register_ReaderEvent_Callback(on_reader_event);
+
+    // Start maintenance thread (required)
+    pthread_t maintain_tid;
+    pthread_create(&maintain_tid, NULL, maintenance_thread, NULL);
+
+    // Start message processing thread (required when EC_USE_DATALINK_PROTOCOL=1)
+    pthread_t message_tid;
+    pthread_create(&message_tid, NULL, message_thread, NULL);
+
+    // Your application logic here
+
+    keep_running = 0;
+    pthread_join(maintain_tid, NULL);
+    pthread_join(message_tid, NULL);
+    return 0;
+}
+```
+
+<Note>
+  当 `EC_USE_DATALINK_PROTOCOL` 被禁用时,仅需要维护线程。
+</Note>
+
+## 回调注册
+
+所有 SDK 操作均为异步操作。请在发起操作前注册回调函数：
+
+```c
+// Transaction completion callback — called when payment finishes
+void on_transaction_complete(emvCorePaymentResponse* resp) {
+    printf("Transaction %s: %s\n",
+           resp->is_transaction_approved ? "approved" : "declined",
+           resp->transaction_reference);
+    // Copy any data you need — resp is only valid during callback
+}
+
+// Reader display events (prompts shown to customer)
+void on_reader_event(uint8_t msg_index, char* line1, char* line2) {
+    printf("Reader: %s / %s\n", line1, line2);
+}
+
+// Token operation completion
+void on_token_response(emvCoreGetTokenResponse* resp) {
+    if (resp->status == emvCoreTransStatus_OK) {
+        printf("Token: %s\n", resp->card_token);
+    }
+}
+
+// Incremental authorization response (for variable-amount sessions, e.g. EV chargers)
+void on_incremental_auth(emvCorePaymentResponse* resp) {
+    printf("Incremental auth: %s\n",
+           resp->is_transaction_approved ? "approved" : "declined");
+}
+
+// Register all callbacks
+EcodSdk_Register_TransactionComplete_Callback(on_transaction_complete);
+EcodSdk_Register_ReaderEvent_Callback(on_reader_event);
+EcodSdk_Register_GetTokenResponse_Callback(on_token_response);
+EcodSdk_Register_IncrementalAuthorizationResponse_Callback(on_incremental_auth);
+```
+
+## 错误处理
+
+检查返回值并实现适当的错误处理：
+
+```c
+EC_RET result = EcodSdk_PreAuthorize(&params);
+if (result != EC_RET_OK) {
+    switch (result) {
+    case EC_RET_GENERAL_ERROR:  printf("General error\n");                    break;
+    case EC_RET_MEMORY_ERROR:   printf("Memory allocation failed\n");         break;
+    case EC_RET_PARSING_ERROR:  printf("Failed to parse response\n");         break;
+    case EC_RET_COMM_ERROR:     printf("Communication error with device\n");  break;
+    case EC_RET_NEGATIVE_RESP:  printf("Device returned error response\n");   break;
+    default:                    printf("Unknown error: %d\n", result);
+    }
+}
+
+// Also check device status before operations
+EC_STATUS status;
+if (EcodSdk_GetStatus(&status) == EC_RET_OK) {
+    switch (status) {
+    case EC_READY:         /* Ready for transactions */       break;
+    case EC_TRANSACTION:   /* Transaction in progress */      break;
+    case EC_UNCONFIRMED:   /* Pending confirmation */         break;
+    case EC_NO_EMVCORE:    /* Device not connected */         break;
+    case EC_NO_READER:     /* Reader not connected */         break;
+    case EC_DISABLED:      /* Device disabled */              break;
+    default: break;
+    }
+}
+```
+
+## 配置
+
+### 内存管理
+
+在 `ecod_sdk_configs.h` 中配置内存分配策略:
+
+```c
+// Heap allocation (recommended for desktop/server applications)
+#define EC_USE_HEAP 1
+
+// Static allocation (recommended for embedded systems)
+#define EC_USE_HEAP 0
+```
+
+### 缓冲区大小
+
+缓冲区大小在 `ecod_sdk_setup.h` 中定义:
+
+```c
+// JSON-RPC communication buffer (default: 2048)
+// Affects maximum message size; socket data uses hex encoding (2x expansion)
+#define EC_MAX_BUFFER_SIZE 2048
+
+// Per-socket receive buffer (default: 4096)
+#define EC_SOCKET_BUFFER_SIZE 4096
+
+// Maximum concurrent socket connections (default: 10)
+#define EC_MAX_SOCKETS 10
+```
+
+<Note>
+  JSON-RPC 的开销会使可用有效载荷减少约 64 字节。套接字数据采用十六进制编码，因此有效吞吐量减半。
+</Note>
+
+### 超时和计时
+
+在 `ecod_sdk_configs.h` 中配置通信超时:
+
+```c
+// Incomplete frame timeout (default: 500ms)
+#define EC_INCOMPLETE_FRAME_TIMEOUT_MS 500
+
+// ACK timeout (default: 1000ms)
+#define EC_ACK_TIMEOUT_MS 1000
+
+// Socket idle timeout (default: 10 seconds)
+#define EC_SOCKET_IDLE_TIMEOUT_MS 10000
+```
+
+### 日志记录
+
+开发过程中启用调试日志记录：
+
+```c
+// Set log level (default is EC_LOG_LEVEL_INFO)
+EcodSdk_SetLogLevel(EC_LOG_LEVEL_DEBUG);
+
+// Available log levels:
+// EC_LOG_LEVEL_ERROR (1) — Only errors
+// EC_LOG_LEVEL_INFO  (3) — Errors + informational messages
+// EC_LOG_LEVEL_DEBUG (5) — Errors + info + debug details
+// EC_LOG_LEVEL_TRACE (7) — All messages including protocol traces
+
+// Log modules in debug output:
+// "SERIAL" — Serial communication and framing
+// "JRPC"   — JSON-RPC protocol messages
+// "NET"    — Network bridge operations
+// "SOCK"   — Socket management
+```
+
+## 集成故障排除
+
+### 未检测到设备
+
+使用以下命令检查设备可见性和权限：
+
+```bash
+# Check if device is connected
+ls -la /dev/ttyUSB* /dev/hidraw*
+
+# Check permissions
+sudo chmod 666 /dev/ttyUSB0  # or /dev/hidraw0
+
+# Add user to dialout group (requires logout/login)
+sudo usermod -a -G dialout $USER
+```
+
+### 串行通信故障
+
+请检查以下常见原因：
+
+- 验证正确的设备路径(`/dev/ttyUSB0` 与 `/dev/hidraw0`)
+- 检查是否有其他进程正在使用串口
+- 确保平台代码中正确选择 HID/UART 模式
+- 验证波特率设置是否与设备配置匹配
+
+### 线程问题
+
+当线程行为不符合预期时，请检查以下内容：
+
+- 确保维护线程持续运行。
+- 检查回调函数中是否存在互斥锁死锁
+- 避免在回调处理程序中执行阻塞操作
+- 验证应用程序退出时线程是否已正确清理
+
+### 内存问题
+
+遇到内存相关故障时，请检查以下各项：
+
+- 使用 `EC_MAX_BUFFER_SIZE` 监控缓冲区溢出
+- 如果使用堆分配，请检查是否存在内存泄漏。
+- 确保正确清理 SDK 资源
+- 考虑嵌入式系统的静态分配
+
+### 调试日志
+
+启用全面日志记录以诊断问题：
+
+```c
+EcodSdk_SetLogLevel(EC_LOG_LEVEL_DEBUG);
+
+// Example debug output:
+// [DEBUG] SERIAL: Opening /dev/ttyUSB0
+// [DEBUG] JRPC: Sending frame: <A0|0042{"method":"preauth",...}E3>
+// [DEBUG] NET: Socket 1 connected to 192.168.1.100:8080
+// [DEBUG] SOCK: Received 1024 bytes on socket 1
+```
+
+### 性能调校
+
+应用以下调整以提高 SDK 的响应速度：
+
+- 将维护线程的休眠间隔设置为 1 毫秒
+- 在内存受限的环境中，请使用静态分配。
+- 尽量缩短回调处理时间
+- 根据您的使用场景配置合适的缓冲区大小
+- 对于使用大量套接字的应用程序，请考虑网络桥接设置。
+
+## 迁移清单（来自 SDK v0.9）
+
+如果从 SDK v0.9 升级，请对集成应用以下更改：
+
+1. 更新 `emvCorePaymentParameters` 的用法:
+   - 删除 `fee_cents` 和 `currency_code` 字段。
+   - 根据需要添加 `is_final_amount` 和 `additional_receipt_data`。`is_deferred` 保留供将来使用(RFU)。
+2. 处理新状态码:在状态处理中检查 `EC_DISABLED`。
+3. 双线程模式:如果使用 Datalink 协议,请实现调用 `EcodSdk_ProcessMessages()` 的第二个线程。
+4. 更新响应处理:利用 `emvCorePaymentResponse` 中的新字段。

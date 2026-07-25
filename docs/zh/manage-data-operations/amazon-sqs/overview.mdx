@@ -1,0 +1,40 @@
+---
+title: 概述
+metadata:
+  og:description: Nayax 支持两种接收交易报告的方法：通过 Amazon SQS 进行实时传递，或通过 SFTP 或电子邮件进行定期批量传递。
+---
+
+import McpNote from '/snippets/zh/mcp-server-note.mdx';
+
+Nayax 支持两种向您的系统发送交易报告的方法。请选择最符合您集成需求的方法：
+
+<CardGroup cols={2}>
+  <Card title="亚马逊SQS" icon="bolt" href="/docs/manage-data-operations/amazon-sqs/set-up-nayax-core/nayax-back-office-setup">
+    在线（实时交付）
+
+    事务发生后会立即推送到您的 Amazon SQS 队列。非常适合需要实时数据的系统。
+  </Card>
+
+  <Card title="SFTP/电子邮件" icon="clock" href="/docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-transaction-delivery#scheduled-file-report-sftp--email">
+    定期（批量交付）
+
+    交易报告会在每小时或每天结束时发送到 SFTP 服务器或电子邮件地址。非常适合后台批量处理。
+  </Card>
+</CardGroup>
+
+## 亚马逊 SQS（实时）
+
+Amazon SQS（简单队列服务）是一种队列机制，它提供了一种强大、冗余且可靠的方式，用于在系统之间传输数据，而无需管理重试逻辑。通过将 SQS 与 Nayax Core 集成，运营商可以安全地传输支付详情、机器事件和审计数据，同时保持数据完整性和加密性。
+
+SQS集成是一个两步过程：
+
+- [Setting up Amazon Queue in AWS](/docs/manage-data-operations/amazon-sqs/amazon-queue-setup/index)
+- [Configuring Nayax Core](/docs/manage-data-operations/amazon-sqs/set-up-nayax-core/nayax-back-office-setup)
+
+## 电子邮件/SFTP（定期）
+
+Nayax Core 可以配置为按周期（每小时或每天）将交易报告文件发送到 SFTP 服务器或电子邮件地址。该报告使用与 SQS 相同的交易字段，并支持 CSV 或 XML 输出，分隔符可配置。
+
+设置完全在 Nayax Core 中完成。请参阅交易交付指南中的[“计划文件报告（电子邮件/SFTP）”](/docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-transaction-delivery#scheduled-file-report-sftp--email)部分。
+
+<McpNote />

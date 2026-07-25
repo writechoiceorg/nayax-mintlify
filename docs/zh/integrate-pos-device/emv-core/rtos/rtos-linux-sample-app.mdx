@@ -1,0 +1,105 @@
+---
+title: Linux 示例应用程序
+metadata:
+  og:description: 构建并运行 EMV Core RTOS SDK 附带的可移植 C 语言 Linux 示例应用程序。
+---
+
+Linux 示例应用程序随 RTOS SDK 一起以可移植 C(C99)源代码形式提供。它为平台抽象层提供了一个可用的参考实现,并提供了用于测试 SDK 的演示应用程序。
+
+该示例代码是在 Ubuntu(x86\_64)上开发和测试的。移植到其他操作系统时,您必须调整平台抽象层。请参阅 [Platform Porting](/docs/integrate-pos-device/emv-core/rtos/rtos-platform-porting)。
+
+注意:
+
+- 所有源代码均采用标准 C(C99)编写。
+- 平台特定代码位于 `platform/` 下。
+- 强烈建议不要修改 `platform/` 文件夹之外的代码。
+
+## 目录结构
+
+示例应用程序的源代码组织如下:
+
+```
+ecod_sdk/          # Core SDK headers and sources
+  platform/        # Platform abstraction layer
+  src/             # SDK implementation
+  include/         # Internal and public headers
+demo/              # Example / demo application
+```
+
+## 建造
+
+### 获取源代码
+
+从您的 Nayax 客户经理处获取 SDK 包,并解压 `Linux Sample Application` 文件夹。
+
+### 安装构建依赖项(Ubuntu Linux)
+
+运行以下命令以安装所需的工具:
+
+```bash
+sudo apt-get update
+sudo apt-get install build-essential automake
+```
+
+### 构建 SDK 和演示程序
+
+提供的源代码和演示程序可在带有 GCC 和 automake 的 Ubuntu Linux x86\_64 上直接构建:
+
+```bash
+autoreconf -fi       # Generate autotools configuration
+./configure          # Configure build (respects CONFIGURE_FLAGS)
+make                 # Build SDK library and demo
+```
+
+构建会生成静态库和演示程序二进制文件。
+
+### 清理构建产物
+
+使用以下目标来移除已编译的输出:
+
+```bash
+make clean              # Remove build objects
+make maintainer-clean   # Remove all generated files
+```
+
+## 配置选项
+
+SDK 通过 `ecod_sdk_configs.h` 支持各种构建时配置:
+
+```c
+// Memory allocation strategy
+#define EC_USE_HEAP 1                    // Use malloc/free (0 = static allocation)
+
+// Protocol settings
+#define EC_USE_DATALINK_PROTOCOL 1       // Enable datalink framing with ACK/NAK
+#define EC_INCOMPLETE_FRAME_TIMEOUT_MS 500  // Timeout for incomplete frames
+#define EC_ACK_TIMEOUT_MS 1000           // Timeout waiting for ACK
+#define EC_ACK_MAX_RETRIES 0             // Max retransmissions on missing ACK
+
+// Network bridge settings
+#define EC_SUPPORT_LONG_LIVED_SOCKETS 1  // Support persistent connections
+```
+
+<Note>
+  计算得出的默认值位于 `ecod_sdk_setup.h` 中。请勿直接修改该文件。
+</Note>
+
+## 运行演示程序
+
+构建完成后,运行随附的演示应用程序以测试 SDK:
+
+手动模式:用户使用键盘选择操作:
+
+```bash
+./demo/ecodSdkDemo
+```
+
+自动模式:循环执行支付交易:
+
+```bash
+./demo/ecodSdkDemo --auto
+```
+
+在 `--auto` 模式下,交易会循环运行。如果获得授权,两笔交易中会确认一笔,作废另一笔,以演示两种使用场景。
+
+查看 `demo/main.c` 以获取示例代码和使用模式。

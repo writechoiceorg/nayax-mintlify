@@ -1,0 +1,79 @@
+---
+title: 支付
+description: 处理即时、单阶段支付交易。
+metadata:
+  og:description: pay 方法发起一次即时交易，其中检测、授权和结算在一个连续流程中完成。与两阶段 a 不同。
+---
+
+`pay` 方法发起一次即时交易，其中检测、授权和结算在一个连续流程中完成。与两阶段燃油工作流程不同，此方法用于固定价格销售或“店内支付”（Pay-Inside）场景，其中最终金额在出示卡片之前已知。
+
+使用此方法可以：
+
+- 便于即时完成洗车场、吸尘站或自助服务亭等价格固定的商品订单。
+- 简化集成流程，无需单独进行结算电话。
+- 在用户支付固定费用并快速离开的高流量环境中提高吞吐量。
+
+## 请求
+
+All requests must include the `command`, `requestId`, and the exact `amount` to be charged. The terminal will activate the reader and wait for the customer to present their payment method.
+
+以下示例展示了一个典型的请求：
+
+```json
+{
+"command": "pay",
+"requestId": "req-001",
+"data": {
+"channels": ["CTLS", "CHIP", "SWIPE"],
+"amount": 5000,
+"volume": 30000,
+"product": "Diesel"
+}
+}
+
+```
+
+### 参数定义
+
+下表描述了此请求可用的参数：
+
+| 姓名 | 类型    | 必需的 | 描述                                                   |
+| :- | :---- | :-- | :--------------------------------------------------- |
+| 数量 | 整数    | 是的  | 待收取的确切金额（请参阅 `decimalPlace`）。                        |
+| 频道 | array | 不   | 定义允许的支付方式：`CTLS`、`CHIP`、`SWIPE` 或 `QR`。若省略，则默认为全部方式。 |
+
+## 回应
+
+只有在支付完全获得授权并被支付网关捕获后，终端才会返回响应。
+
+以下示例展示了一个典型的响应：
+
+```json
+{
+"requestId": "req-001",
+"data": {
+"transactionId": "TXN-20260113-001234",
+"state": "SETTLED",
+"amount": 5000,
+"cardBrand": "VISA",
+"cardEntryMode": "CTLS",
+"maskedPan": "************1234",
+"aid": "A0000000031010",
+"timeStamp": "2026-01-13T14:30:05Z"
+}
+}
+```
+
+### 响应参数
+
+以下是成功支付后 `data` 对象中返回的参数：
+
+| 姓名     | 类型     | 描述                          |
+| :----- | :----- | :-------------------------- |
+| 交易 ID  | string | 已完成交易的唯一标识符。                |
+| 数量     | 整数     | 最终成功扣款的金额。                  |
+| 状态     | string | 成功时返回 `SETTLED`（或 `PAID`）。  |
+| 卡品牌    | string | 所用卡的品牌（例如，VISA、MASTERCARD）。 |
+| 卡片输入模式 | string | 读取卡片的方法（例如，CTLS）。           |
+| 蒙面潘    | string | 用于收据的已屏蔽卡号。                 |
+| 批准码    | string | 银行签发的付款授权码。                 |

@@ -1,0 +1,23 @@
+---
+title: 折扣
+metadata:
+  og:description: 折扣功能允许实现 Cortina 预付 API 的支付网关调整交易的最终结算金额,以表示一项。
+---
+
+折扣功能允许实现 Cortina 预付 API 的支付网关调整交易的最终结算金额,以表示(外部)预付提供商给予持卡人的折扣。
+
+## 如何实施
+
+To do so, the final amount (after the discount amount was deducted) should be sent in `SettAmount` fields, under the `PaymentInfo` object of the Settlement endpoint response or at the Sale endpoint response.
+
+发送的金额必须等于或低于原始金额,且绝不能高于原始授权金额。
+
+折扣金额将反映在该交易记录的交易结算金额中,可在 Nayax Core 提供的交易报告中查看。请注意,此字段仅用于报告目的,且仅可用于支付网关承担折扣成本的情况。
+
+请参阅下面的示例：
+
+```json
+{
+"PaymentInfo": {
+      "SettAmount": 0.1}}
+```

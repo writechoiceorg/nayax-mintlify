@@ -1,0 +1,104 @@
+---
+title: 事件和警报传递
+metadata:
+  og:description: 要设置通过 Amazon SQS 传递事件与警报，您必须具备访问 Nayax Core 的权限，并拥有相应的用户权限。具体而言，需要。
+---
+
+要设置通过 Amazon SQS 传递事件与警报，您必须具备访问 Nayax Core 的权限，并拥有相应的用户权限。具体而言，需要以下角色：
+
+- VMO - Manager
+
+此外，请确保您拥有在队列设置过程中获得的**Amazon SQS 队列 URL** 、**访问密钥**和**密钥**。
+
+## 操作员级别设置
+
+请按照以下步骤在 Nayax Core 中配置事件与警报传递：
+
+1. 前往**管理 > 操作员**。
+
+   <Frame>
+     <img src="/images/docs/set-up-events-delivery/image2.png" />
+   </Frame>
+2. 找到您想要设置的运营商。
+3. 单击**“搜索”**按钮。
+4. 选择操作员以显示所有选项卡和详细信息。
+
+   <Frame>
+     <img src="/images/docs/set-up-events-delivery/image3.png" />
+   </Frame>
+5. 前往 Events Report 选项卡。
+6. 通过 SQS 设置常规和警报：
+   a. 勾选 Is Active 旁边的复选框以启用此选项。
+   b. 输入 SQS 凭据（Access Key、Secret Key 和 Queue URL）。
+   c. 点击 Validate 按钮以确保队列凭据正确无误。
+   d. 启用加密（可选）。有关详细信息，请参见 [Set Up Encryption](/docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-encryption-on-amazon-sqs-delivery) 部分。
+
+   <Frame>
+     <img src="/images/docs/set-up-events-delivery/image4.png" />
+   </Frame>
+7. 为事件传递应用数据筛选器
+   a. 确保格式设置为 No Formatting。
+   b. 选择所需的 DEX Read Types。仅所选的 Dex Origins 会被发送到队列。
+8. 单击**“保存信息”**按钮以应用更改。
+
+   <Frame>![](/images/docs/set-up-events-delivery/image1.png)</Frame>
+
+## 事件/警报 JSON 消息示例
+
+以下是将发送到 Amazon SQS 的事件与警报 JSON 消息格式的示例：
+
+```json
+{  
+   "distributorld": "27594",  
+   "distributorName": "Nayax Demo",  
+   "operatorld": "2000144542",  
+   "operatorName": "Daniel_OP",  
+   "actorld": "2000144542",  
+   "actorName": "Daniel_OP",  
+   "machineld": "697356467",  
+   "machineName": "EX PP Machine",  
+   "machineNumber": null,  
+   "machineSerial": null,  
+   "deviceld": "25795395",  
+   "deviceSerial": "0404041919567757",  
+   "eventSourceld": "6",  
+   "eventSourceName": "Device",  
+   "eventCode": "1",  
+   "eventName": "Power up",  
+   "eventData": "Device Serial #:0404041919567757\nDevice FW Version:4.0.0.5-rc3 - Jan 9 2019\nDevice Hardware:4.13\nVPOS\nSerial #:\nVPOS FW Version:2009-rc07\nMDB Max Response Time:7\nDevice MDB Level:1\nDecimal Place:2\nManufacturer\nCode:4805701\nMachine MDB Level:1\nModem IMEI: 357036091438914\nModem Model (HW Revision): UE910-EUD\nModem FW\nVersion:12.00.414\nModem Type:3G\nSIM Card Serial #:89462008002001388010\nSIM Card Mobile Number:NO CLIn\nMobile\nOperator Name:42501\nModem CDMA SN (MEID):\nLast Power Down time: 23/03/2020 14:27:30",  
+   "eventDateTimeGMT": "2020-03-23T14:11:35.980",  
+   "eventDateTimeVMC": "2020-03-23T17:11:35.980",  
+   "enc_ver": "1",  
+   "enc_key": "63562b7245cb478cb38a509ec764e012"  
+}
+```
+
+## JSON 消息字段描述
+
+下表描述了事件/警报 JSON 消息中包含的字段：
+
+| 字段名称             | 类型       | 描述                  |
+| ---------------- | -------- | ------------------- |
+| distributorId    | `string` | 分销商的唯一标识符。          |
+| distributorName  | `string` | 分销商的名称。             |
+| operatorId       | `string` | 运营商的唯一标识符。          |
+| operatorName     | `string` | 运营商的名称。             |
+| actorId          | `string` | actor 的唯一标识符。       |
+| actorName        | `string` | actor 的名称。          |
+| machineId        | `string` | 机器的唯一标识符。           |
+| machineName      | `string` | 机器的名称。              |
+| machineNumber    | `string` | 分配给该机器的内部编号。        |
+| machineSerial    | `string` | 机器的序列号。             |
+| deviceId         | `string` | 设备的唯一标识符。           |
+| deviceSerial     | `string` | 设备的序列号。             |
+| eventSourceId    | `string` | 事件来源的唯一标识符。         |
+| eventSourceName  | `string` | 事件来源的名称。            |
+| eventCode        | `string` | 与事件关联的代码。           |
+| eventName        | `string` | 事件的名称。              |
+| eventData        | `string` | 与该事件关联的数据。          |
+| eventDateTimeGMT | `string` | 以 GMT 格式表示的事件日期和时间。 |
+| eventDateTimeVMC | `string` | 机器记录的事件日期和时间。       |
+| enc\_ver         | `string` | 用于该数据的加密版本。         |
+| enc\_key         | `string` | 用于保护数据安全的加密密钥。      |
+
+<br />

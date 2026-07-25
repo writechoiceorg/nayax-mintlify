@@ -1,0 +1,103 @@
+---
+title: 外部结算
+metadata:
+  og:description: Spark External Settlement 功能允许第三方服务器完成或取消直接在 Nayax 支付终端上授权的交易。
+---
+
+**Spark外部结算**功能允许第三方服务器完成或取消直接在Nayax支付终端上授权但并非通过标准Spark流程发起的交易。这使集成商能够根据自身业务逻辑灵活地从外部触发结算阶段，支持所有机器协议（Pulse、MDB、Marshall），但目前仅支持预授权流程。
+
+外部结算流程使用以下 Spark 方法：
+
+- [`StartAuthentication`](/reference/spark/transactions/startauthentication)
+- [`ExternalSettlement`](/reference/spark/transactions/externalsettlement)
+- [`ExternalCancel`](/reference/spark/transactions/externalcancel)
+
+## 外部结算流
+
+**外部结算**流程允许第三方完成直接在终端上授权的交易。
+
+<Note>
+  先决条件
+
+  要使此流程正常运行，Nayax 必须启用**外部结算**设置。
+</Note>
+
+启用后，Nayax 引擎会指示设备在成功授权后不要发送自己的结算命令，使交易保持未结算状态，直到收到外部请求。
+
+<Danger>
+  笔记
+
+  此功能仅适用于在 Spark 启动流程（远程启动或设备启动）之外授权的交易。
+
+  此外，如果使用 Marshall 多会话进行外部结算，请注意，您不应该发送“关闭会话”命令进行结算。
+</Danger>
+
+为了解外部结算流程，请参见下图：
+
+<Frame>
+  ![](/images/docs/external-settlement/image1.png)
+</Frame>
+
+以下是该图的细分：
+
+1. **授权请求：**该过程从 Nayax 设备上的交易发起开始，该设备向 Nayax 服务器发送授权请求。
+2. **授权响应：** Nayax 服务器向支付提供商执行授权，并将响应发送回设备，设备随后返回空闲状态。交易仍处于授权状态，但尚未结算。
+3. **/StartAuthentication：**服务或产品提供（或提供失败）后，第三方服务器会调用[StartAuthentication](/reference/spark/transactions/startauthentication)方法启动通信。此调用必须包含加密算法，以安全地验证 Nayax 和集成商的身份。
+4. Start Authentication Response：Nayax 服务器解密密文，验证凭据和时间戳，并返回经哈希处理的 `SparkTransactionId` 以确认真实性。
+5. /ExternalSettlement（如果已提供服务）：第三方服务器发送结算请求。
+   - 关键标识：请求中必须包含 `NayaxTransactionId` 和 `SiteId`，以正确匹配原始交易。
+   - **时限：**交易必须在发起后**48 小时**内完成结算。逾期结算尝试将失败。
+6. **外部结算响应：** Nayax 服务器与支付提供商进行结算，并向第三方服务器发送成功/失败响应。
+
+或者（如果未提供服务/产品）：
+
+5. **/ExternalCancel：**第三方服务器发送[ExternalCancel](/reference/spark/transactions/externalcancel)请求。如果未提供任何服务，则**必须**执行此操作以释放消费者的已扣款项。对于**预选**流程，此方法称为**Void** ，而对于**预授权流程**，则称为**Cancel** 。
+6. **外部取消响应：** Nayax 服务器向支付提供商发起财务取消，并向第三方服务器确认结果。
+
+## 结果与错误处理
+
+Integrators should monitor the `ErrorCode` and `StatusMessage` within the `Status` object to determine the result of a request and the necessary follow-up action.
+
+| 结果     |   事件代码  | 描述                        | 建议采取的措施                            |
+| :----- | :-----: | :------------------------ | :--------------------------------- |
+| 成功     |   不适用   | 交易已成功结算或取消。               | 无需采取进一步行动。                         |
+| 身份验证失败 |    33   | Nayax 无法验证第三方服务器的凭据。      | 立即重试身份验证请求。                        |
+| 能力验证失败 |    52   | 机器或增值服务提供商未配置外部结算。        | 检查 Nayax Core 配置；确保“支持外部结算”为 TRUE。 |
+| 外部结算失败 |    50   | 请求失败，原因是缺少字段、标识符不匹配或系统错误。 | 首次尝试后 24 小时内最多可重试 5 次。             |
+| 外部取消失败 |    51   | 取消操作失败，原因是缺少字段或处理错误。      | 无需手动操作。Nayax 将通过自动取消功能自动重试。        |
+| 交易已完成  | 50 / 51 | 交易已完成或已无效。                | 请在系统中验证交易状态。                       |
+
+### 故障排除技巧
+
+- 缺少必填字段：如果缺少 `SiteId` 等字段，系统将返回事件代码 50 或 51，并在 `StatusMessage` 中说明缺失的字段。
+- 未找到交易：如果收到“Transaction was not found”错误，请确保 `NayaxTransactionId` 和 `SiteId` 与原始交易数据完全匹配。
+- **卡组织合规性**：长时间未结算的交易将被系统自动取消。但是，集成商不应依赖此功能，如果无法完成结算，则应立即发送外部取消请求，以避免糟糕的用户体验和潜在的纠纷。
+
+## 高级结算功能
+
+### 电子收据（`eReceiptData`）
+
+对于使用 Nayax eReceipt 平台的运营商，`ExternalSettlement` 请求中包含 `eReceiptData` 字段。
+
+- 此字段允许您将自定义数据（JSON 格式）如公司名称、站点名称或支持信息直接添加到电子收据中。
+- 格式示例：`{"General":[{"Company":"Your Payments","Station Name":"812"}]}`。
+
+### 产品管理（`ProductInfo`）
+
+如果您在 Nayax Core 中管理产品地图，您可以包含一个对象数组来准确报告售出的商品：
+
+- **值**：单个产品的十进制数量。
+- **代码**：表示产品映射中产品代码的整数。
+- **数量**：所提供的单位数量。
+
+示例：`[{"Value": 6.50, "Code": 12, "Quantity": 3}]`。
+
+## 参见
+
+<Columns cols={3}>
+  <Card title="开始身份验证" icon="link" href="/reference/spark/transactions/startauthentication" />
+
+  <Card title="外部结算" icon="link" href="/reference/spark/transactions/externalsettlement" />
+
+  <Card title="外部取消" icon="link" href="/reference/spark/transactions/externalcancel" />
+</Columns>

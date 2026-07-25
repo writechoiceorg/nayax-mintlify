@@ -1,0 +1,56 @@
+---
+title: 外部取消
+metadata:
+  og:description: External Cancel 是针对已授权但未提供服务或商品的交易的必需操作。其目的是释放该。
+---
+
+对于已授权但未提供服务或产品的交易，**外部取消**操作是强制性的。其目的是立即释放消费者卡上已扣款的资金。
+
+如果未收到任何服务，您必须立即发送取消请求。否则，款项将被扣留，导致糟糕的客户体验，并可能引发纠纷。
+
+### 外部取消流方法
+
+外部取消流程使用了以下 Spark 方法：
+
+- [StartAuthentication](/reference/spark/transactions/startauthentication)
+- [ExternalCancel](/reference/spark/transactions/externalcancel)
+
+### 外部取消流
+
+当 Nayax 设备上已授权交易，但服务在交互点失败或被取消时，需要执行此流程。
+
+要了解外部取消流程，请参见下图：
+
+<Frame>
+  <img src="/images/docs/external-cancel/image1.png" />
+</Frame>
+
+<br />
+
+以下是该图的细分：
+
+1. **授权请求**：当 Nayax 设备上发起交易时，该过程开始，Nayax 设备会向 Nayax 服务器发送授权请求。
+2. **授权响应**：Nayax 服务器向支付提供商授权交易金额，并将响应发送给设备。之后，设备返回**空闲**状态。
+3. **服务故障**：发生故障，未向消费者提供任何服务或产品。
+4. **/StartAuthentication** ：为了解决失败的交易，**第三方服务器**通过调用[StartAuthentication](/reference/spark/transactions/startauthentication)方法来启动通信。
+5. **身份验证响应**：Nayax 服务器验证凭据并返回成功消息。
+6. /[ExternalCancel](/reference/spark/transactions/externalcancel)：第三方服务器发送 ExternalCancel 请求。请求中必须包含原始的 `NayaxTransactionId` 和 `SiteId`。
+7. **财务撤销**：收到请求后，Nayax 服务器会与支付提供商执行取消操作以释放资金。
+8. **外部取消响应**：Nayax 服务器向第三方服务器确认取消结果。
+
+## 故障处理和重试
+
+如果请求失败，后续操作取决于流程的哪个阶段失败：
+
+| 故障类型   | 描述                                                                            | 建议采取的措施                                                         |
+| :----- | :---------------------------------------------------------------------------- | :-------------------------------------------------------------- |
+| 身份验证失败 | [StartAuthentication](/reference/spark/transactions/startauthentication)调用失败。 | 第三方服务器应立即重试身份验证请求。                                              |
+| 外部取消失败 | [ExternalCancel](/reference/spark/transactions/externalcancel)调用失败或返回错误。      | **无需手动操作。**如果初始请求失败，Nayax 服务器会自动稍后重试取消操作（自动取消），从而提供安全保障。 |
+
+<Danger>
+  重要术语：
+
+  在**预授权**流程中，此操作为“取消”。在**预选**流程中，此操作为“作废”。您必须在请求负载中指定正确的类型。
+</Danger>
+
+<br />

@@ -1,0 +1,22 @@
+---
+title: 剩余预付余额
+metadata:
+  og:description: 此功能允许支付网关报告当前交易后持卡人剩余的预付余额,该余额会在。
+---
+
+此功能允许支付网关报告当前交易后持卡人剩余的预付余额,该余额会在交易结束时显示给用户。
+
+## 如何实施
+
+在 Settlement 端点响应或 Sale 端点响应中,按以下方式设置 Balance 对象:
+
+- `RegularCreditType` = 1
+- `RegularCredit` = 余额金额。
+
+请参阅下面的示例：
+
+```json
+{"Balance": {
+  "RegularCreditType": 1,
+  "RegularCredit": 50.0}}
+```
