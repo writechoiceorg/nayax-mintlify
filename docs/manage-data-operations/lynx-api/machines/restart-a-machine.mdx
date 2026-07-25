@@ -20,9 +20,9 @@ Restart a Nayax device remotely by updating a device attribute on the machine. T
 Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use them to authenticate your API requests.
 </Warning>
 
-## Restarting a Machine
+## Restart a Machine
 
-Use the [Update Specific Machine Attribute](/reference/lynx/machine-attribute/update-specific-machine-attribute) endpoint to set device attribute `144` on the machine. Provide the `MachineID` and the attribute's `DeviceAttributeID` as path parameters, and the attribute value as a body parameter, as shown below:
+Use the [Update Specific Machine Attribute](/reference/lynx/machine-attribute/update-specific-machine-attribute) endpoint to set device attribute `144` on the machine. Provide the `MachineID` and the attribute's `DeviceAttributeID` as path parameters, and the attribute value as a body parameter:
 
 ```bash Request
 curl -X PUT "https://qa-lynx.nayax.com/operational/v1/machines/<MACHINE_ID>/attributes/144" \
@@ -45,7 +45,7 @@ This table outlines the body parameters:
 | :--------------------- | :------- | :---------------------------------------------------------------------- |
 | `DeviceAttributeID`    | `int`    | The device attribute to update. Use `144` to restart the device.         |
 | `MachineID`            | `int`    | The unique identifier of the machine, matching the path parameter.       |
-| `DeviceAttributeValue` | `string` | The value assigned to the attribute. Use `"1"` to trigger the restart.   |
+| `DeviceAttributeValue` | `string` | The value to assign to the attribute. Use `"1"` to trigger the restart.  |
 
 The endpoint returns the updated attribute on success:
 
@@ -73,7 +73,7 @@ A restart is the lighter of the two power operations. It powers the device off a
 Do not trigger a restart during an active transaction. Wait until the device is idle so you do not interrupt a payment in progress.
 </Warning>
 
-## Confirming the Restart
+## Confirm the Restart
 
 After the device restarts, it sends a `PowerUp` event back to the server confirming it is online again. Use this event to verify the restart completed.
 
