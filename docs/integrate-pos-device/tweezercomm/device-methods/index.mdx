@@ -14,14 +14,12 @@ This section covers the API methods for managing payment terminals. You can:
 
 These tools help you integrate and control payment devices for various purposes, including loyalty programs, identification, and system maintenance. You can also stop a card reading operation if needed.
 
-## Available Methods
+## Device info & diagnostics
+
+Retrieve terminal metadata, configuration, and version details, or send logs and status events for monitoring.
 
 <Columns cols={3}>
   <Card icon="link" title="getInfo" href="/docs/integrate-pos-device/tweezercomm/device-methods/getinfo" />
-
-  <Card icon="link" title="readCard" href="/docs/integrate-pos-device/tweezercomm/device-methods/readcard" />
-
-  <Card icon="link" title="abortReadCard" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortreadcard" />
 
   <Card icon="link" title="getConfig" href="/docs/integrate-pos-device/tweezercomm/device-methods/getconfig" />
 
@@ -29,10 +27,34 @@ These tools help you integrate and control payment devices for various purposes,
 
   <Card icon="link" title="getVersion" href="/docs/integrate-pos-device/tweezercomm/device-methods/getversion" />
 
-  <Card icon="link" title="uploadLogs" href="/docs/integrate-pos-device/tweezercomm/device-methods/uploadlogs" />
-
   <Card icon="link" title="getProperty" href="/docs/integrate-pos-device/tweezercomm/device-methods/getproperty" />
 
+  <Card icon="link" title="uploadLogs" href="/docs/integrate-pos-device/tweezercomm/device-methods/uploadlogs" />
+
+  <Card icon="link" title="getLocation" href="/docs/integrate-pos-device/tweezercomm/device-methods/getlocation" />
+
+  <Card icon="link" title="sendGeneralEvent" href="/docs/integrate-pos-device/tweezercomm/device-methods/sendgeneralevent" />
+</Columns>
+
+## Card reading
+
+Read card data from magnetic stripes or NFC Mifare cards, and cancel a read operation in progress.
+
+<Columns cols={2}>
+  <Card icon="link" title="readCard" href="/docs/integrate-pos-device/tweezercomm/device-methods/readcard" />
+
+  <Card icon="link" title="abortReadCard" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortreadcard" />
+
+  <Card icon="link" title="displaySwipeCard" href="/docs/integrate-pos-device/tweezercomm/device-methods/displayswipecard" />
+
+  <Card icon="link" title="abortSwipe" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortswipe" />
+</Columns>
+
+## User input & selection
+
+Prompt the user for free-form input or a selection from a list, and cancel either prompt.
+
+<Columns cols={2}>
   <Card icon="link" title="getUserInput" href="/docs/integrate-pos-device/tweezercomm/device-methods/getuserinput" />
 
   <Card icon="link" title="abortGetUserInput" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserinput" />
@@ -40,28 +62,32 @@ These tools help you integrate and control payment devices for various purposes,
   <Card icon="link" title="getUserSelection" href="/docs/integrate-pos-device/tweezercomm/device-methods/getuserselection" />
 
   <Card icon="link" title="abortGetUserSelection" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserselection" />
+</Columns>
 
+## Display & animation
+
+Show or hide animations, QR codes, and other on-screen prompts on the terminal.
+
+<Columns cols={3}>
   <Card icon="link" title="showAnimation" href="/docs/integrate-pos-device/tweezercomm/device-methods/showanimation" />
 
   <Card icon="link" title="hideAnimation" href="/docs/integrate-pos-device/tweezercomm/device-methods/hideanimation" />
-
-  <Card icon="link" title="displaySwipeCard" href="/docs/integrate-pos-device/tweezercomm/device-methods/displayswipecard" />
-
-  <Card icon="link" title="abortSwipe" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortswipe" />
 
   <Card icon="link" title="displayQR" href="/docs/integrate-pos-device/tweezercomm/device-methods/displayqr" />
 
   <Card icon="link" title="abortDisplayQR" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortdisplayqr" />
 
   <Card icon="link" title="abortDisplay" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortdisplay" />
+</Columns>
 
-  <Card icon="link" title="sendGeneralEvent" href="/docs/integrate-pos-device/tweezercomm/device-methods/sendgeneralevent" />
+## External transaction processing
 
+Read a card for an external processor to authorize, then report the resulting transaction status back to the device.
+
+<Columns cols={2}>
   <Card icon="link" title="readCardForExternalTransaction" href="/docs/integrate-pos-device/tweezercomm/device-methods/readcardforexternaltransaction" />
 
   <Card icon="link" title="updatePinpadTransactionStatus" href="/docs/integrate-pos-device/tweezercomm/device-methods/updatepinpadtransactionstatus" />
-
-  <Card icon="link" title="getLocation" href="/docs/integrate-pos-device/tweezercomm/device-methods/getlocation" />
 </Columns>
 
 <Note>
