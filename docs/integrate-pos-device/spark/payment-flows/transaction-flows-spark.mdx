@@ -5,30 +5,47 @@ metadata:
   og:description: "Spark supports multiple payment flows to handle different use cases depending on how the payment process is initiated. Remote Start: The transaction."
 ---
 
-Spark supports multiple payment flows to handle different use cases depending on how the payment process is initiated.
+Spark supports multiple payment flows to handle different use cases depending on who initiates the payment process.
 
-* **Remote Start**: The transaction is initiated by the integrator's server remotely, often triggered by a consumer action outside the physical payment device (e.g., plugging in an EV charger).
+* **Remote Start**: Your server initiates the transaction remotely, often in response to a consumer action outside the physical payment device (for example, plugging in an EV charger).
 * **Device Start**: The transaction begins directly from the Nayax payment terminal, where the consumer interacts with the device to select a service point or product.
 
-Each flow involves a specific sequence of API calls and device interactions tailored for either integrator-driven or device-driven control, and uses a standard set of Spark API methods, such as `StartAuthentication`, `TriggerTransaction`, and `Settlement`. But the timing and responsibility differ depending on the initiator and logic owner. To learn more about each one, see the following pages.
+Each flow involves a specific sequence of API calls and device interactions tailored for either integrator-driven or device-driven control, and uses a standard set of Spark API methods, such as `StartAuthentication`, `TriggerTransaction`, and `Settlement`. The timing and responsibility differ depending on the initiator and logic owner. To learn more about each one, see the following pages.
 
-<Columns cols={3}>
+<CardGroup cols={3}>
 <Card
-  icon="link"
+  icon="circle-play"
   title="Device Start"
   href="/docs/integrate-pos-device/spark/payment-flows/spark-device-start"
-  arrow
-/>
+>
+  Starts a session at the Nayax terminal when a consumer selects a service or presents a card.
+</Card>
 <Card
-  icon="link"
+  icon="server"
   title="Remote Start"
   href="/docs/integrate-pos-device/spark/payment-flows/spark-remote-start"
-  arrow
-/>
+>
+  Starts a transaction from your server and directs Nayax to activate a specific device.
+</Card>
 <Card
-  icon="link"
+  icon="hand"
   title="Device Stop"
   href="/docs/integrate-pos-device/spark/payment-flows/spark-device-stop"
-  arrow
-/>
-</Columns>
+>
+  Validates a presented card and stops the matching session on the terminal.
+</Card>
+<Card
+  icon="money-check-dollar"
+  title="External Settlement"
+  href="/docs/integrate-pos-device/spark/payment-flows/external-settlement"
+>
+  Lets a third-party server complete or cancel a transaction authorized outside a Spark flow.
+</Card>
+<Card
+  icon="ban"
+  title="External Cancel"
+  href="/docs/integrate-pos-device/spark/payment-flows/external-cancel"
+>
+  Releases captured funds immediately when an authorized transaction did not deliver its service.
+</Card>
+</CardGroup>

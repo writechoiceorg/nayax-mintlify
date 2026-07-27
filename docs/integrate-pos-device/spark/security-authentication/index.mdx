@@ -4,18 +4,22 @@ metadata:
   og:description: "To ensure the security and integrity of every transaction, the Spark API requires a two-part authentication process. All requests must identify the."
 ---
 
-To ensure the security and integrity of every transaction, the Spark API requires a two-part authentication process. All requests must identify the sender and include a digital signature to verify that the request body has not been altered.
+To ensure the security and integrity of every transaction, the Spark API requires a two-part authentication process. All requests must identify the sender and include a digital signature so Nayax can verify that no one has altered the request body.
 
 ## Authentication Options
 
 Choose the integration path that matches your project status:
 
-<Columns cols={2}>
-  <Card icon="link" title="Authentication" href="/docs/integrate-pos-device/spark/security-authentication/spark-authentication">
-    The current standard for all new integrations. This version uses a simplified header-based signature.
+<CardGroup cols={3}>
+  <Card icon="key" title="Authentication" href="/docs/integrate-pos-device/spark/security-authentication/spark-authentication">
+    Sign requests with the current header-based signature method for new integrations.
   </Card>
 
-  <Card icon="link" title="Legacy Authentication" href="/docs/integrate-pos-device/spark/security-authentication/spark-legacy-authentication">
-    Intended only for maintaining existing integrations. This version requires generating an HMAC signature based on the JSON body content.
+  <Card icon="clock-rotate-left" title="Legacy Authentication" href="/docs/integrate-pos-device/spark/security-authentication/spark-legacy-authentication">
+    Generate an HMAC signature from the request body to maintain existing integrations.
   </Card>
-</Columns>
+
+  <Card icon="screwdriver-wrench" title="Interactive Authentication Tool" href="/docs/integrate-pos-device/spark/security-authentication/spark-auth-tool">
+    Build and inspect ciphers and signature headers without writing code.
+  </Card>
+</CardGroup>

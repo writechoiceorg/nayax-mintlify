@@ -4,27 +4,51 @@ metadata:
   og:description: "This section provides supplementary resources, detailed technical data, and common troubleshooting information for the Nayax Marshall SDK."
 ---
 
-This section provides supplementary resources, detailed technical data, and common troubleshooting information for the Nayax Marshall SDK. These pages are designed to offer quick access to facts, definitions, and code examples that complement the main documentation flows and guides.
+This section provides supplementary resources, detailed technical data, and common troubleshooting information for the Nayax Marshall SDK. These pages offer quick access to facts, definitions, and code examples that complement the main documentation flows and guides.
 
 ## Available Guides
 
-<Columns cols={3}>
+<CardGroup cols={3}>
 <Card
-  icon="link"
+  icon="flag"
   title="SDK Flags"
   href="/docs/integrate-pos-device/marshall/get-started/sdk-flags-descriptions"
-  arrow
-/>
+>
+  Configure vmc_configuration flags that control peripheral behavior and capabilities.
+</Card>
 <Card
-  icon="link"
-  title="Screen Display"
+  icon="display"
+  title="Display Control (Screen Display)"
   href="/docs/integrate-pos-device/marshall/additional-resources/marshall-display"
-  arrow
-/>
+>
+  Let consumers start a transaction by selecting a product on the device screen.
+</Card>
 <Card
-  icon="link"
-  title="Log"
+  icon="file-lines"
+  title="SDK's Log Generation"
   href="/docs/integrate-pos-device/marshall/additional-resources/log-generation"
-  arrow
-/>
-</Columns>
+>
+  Debug and monitor SDK behavior and peripheral interactions through logs.
+</Card>
+<Card
+  icon="toggle-on"
+  title="Capabilities"
+  href="/docs/integrate-pos-device/marshall/additional-resources/capabilities"
+>
+  Review which SDK feature flags FirmwareInfo reports during pairing.
+</Card>
+<Card
+  icon="right-left"
+  title="Transfer Data"
+  href="/docs/integrate-pos-device/marshall/additional-resources/marshall-ontransferdata"
+>
+  Send transaction information between the device and peripheral in either direction.
+</Card>
+<Card
+  icon="triangle-exclamation"
+  title="Stability & Starvation Issues"
+  href="/docs/integrate-pos-device/marshall/additional-resources/stablity-issues"
+>
+  Diagnose hardware causes of Marshall link stability and starvation issues.
+</Card>
+</CardGroup>
