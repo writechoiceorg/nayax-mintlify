@@ -42,29 +42,3 @@ The table below describes the parameters of the request:
 | ------------ | ------ | -------------------------------------------------------- |
 | `vuid`       | string | Vendor (client) unique transaction identifier. Mandatory. |
 | `readMifare` | bool   | Whether to enable the NFC reader (Mifare only).           |
-
-## Response
-
-A successful request will return the following response:
-
-```json
-{
-    "jsonrpc": "2.0",
-    "id": "16115875",
-    "result": {
-        "statusCode": 0,
-        "statusMessage": "ok",
-        "pinpadCardDataId": "a1b2c3d4e5f6"
-    }
-}
-```
-
-### Response Parameters
-
-The table below describes the response parameters for this method:
-
-| Name               | Type    | Description                                                                                                                     |
-| ------------------ | ------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `statusCode`       | integer | Operation status (0 = success)                                                                                                    |
-| `statusMessage`    | string  | Operation result message                                                                                                          |
-| `pinpadCardDataId` | string  | Identifier for the captured card data. Pass this value in the `pinpadCardDataId` parameter of `updatePinpadTransactionStatus`. |
