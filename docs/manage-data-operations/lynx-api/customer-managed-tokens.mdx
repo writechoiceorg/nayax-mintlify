@@ -57,7 +57,7 @@ types, each with its own priority and validation behavior.
 For most customer integrations, set `appScope` on the token to describe the
 machines, devices, or orders the integration needs to access.
 
-## Requesting a Customer-Managed Token
+## Requesting a Token
 
 Nayax provisions customer-managed tokens on your behalf; you don't call an
 API to generate one yourself.
@@ -76,7 +76,7 @@ API to generate one yourself.
   </Step>
 </Steps>
 
-## Exchanging a Refresh Token for an Access Token
+## Exchanging a Refresh Token
 
 Once you have a refresh token, exchange it for an access token before making
 requests. You can do this against either the Users API directly or the Lynx
