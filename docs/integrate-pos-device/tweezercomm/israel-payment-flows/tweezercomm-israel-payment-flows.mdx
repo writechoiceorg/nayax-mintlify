@@ -8,40 +8,24 @@ TweezerComm follows structured payment flows to ensure secure and efficient tran
 
 The pages below provide a more detailed description of each one:
 
-<Columns cols={3}>
-<Card
-  icon="link"
-  title="Regular Transaction"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/single-phase-transaction"
-  arrow
-/>
-<Card
-  icon="link"
-  title="Two Phases Transaction"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/2-phase-transaction"
-  arrow
-/>
-<Card
-  icon="link"
-  title="Pre-Authorization (Israel)"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-pre-authorization-israel"
-  arrow
-/>
-</Columns>
+<CardGroup cols={3}>
+  <Card icon="bolt" title="Regular Transaction" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/single-phase-transaction">
+    Process and authorize a payment request in a single step.
+  </Card>
 
-<Columns cols={2}>
-<Card
-  icon="link"
-  title="Deferred Payment"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-deferred-payment"
-  arrow
-/>
-<Card
-  icon="link"
-  title="Split Transaction"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-split-transaction"
-  arrow
-/>
-</Columns>
+  <Card icon="layer-group" title="Two Phases Transaction" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/2-phase-transaction">
+    Split a transaction into an information retrieval step and a completion step.
+  </Card>
 
-<br />
+  <Card icon="hourglass-half" title="Pre-Authorization (Israel)" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-pre-authorization-israel">
+    Process and authorize a transaction, then settle or cancel it based on the payment server's response.
+  </Card>
+
+  <Card icon="clock" title="Deferred Payment" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-deferred-payment">
+    Run a pre-authorization phase followed by a final authorization phase.
+  </Card>
+
+  <Card icon="arrows-split-up-and-left" title="Split Transaction" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-split-transaction">
+    Split a transaction's payment across multiple sub-merchants.
+  </Card>
+</CardGroup>

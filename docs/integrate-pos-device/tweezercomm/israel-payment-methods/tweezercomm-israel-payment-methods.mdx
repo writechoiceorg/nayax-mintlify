@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Israel Payment Methods"
 mode: wide
 metadata:
@@ -12,99 +12,82 @@ This section describes the API methods for handling transactions in Israel with 
 * Look up details of past transactions using a unique ID.
 * Get reports about various transaction records.
 
-These tools provide you with complete control over your payment processes, enabling you to easily manage, track, and report on all your transactions.
+These tools give you complete control over your payment processes, so you can manage, track, and report on all your transactions.
 
-## Available Methods
+## Transaction Processing
 
-<Columns cols={3}>
-<Card
-  icon="link"
-  title="doTransaction"
-  href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction"
-  arrow
-/>
-<Card
-  icon="link"
-  title="doTransactionPhase1"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase1"
-  arrow
-/>
-<Card
-  icon="link"
-  title="doTransactionPhase2"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase2"
-  arrow
-/>
-<Card
-  icon="link"
-  title="doperiodic"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic"
-  arrow
-/>
-<Card
-  icon="link"
-  title="doMiniSettlement"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dominisettlement"
-  arrow
-/>
-<Card
-  icon="link"
-  title="addsubretailer"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/addsubretailer"
-  arrow
-/>
-<Card
-  icon="link"
-  title="abortTransaction"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/aborttransaction-copy"
-  arrow
-/>
-<Card
-  icon="link"
-  title="cancelTransaction"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/canceltransaction-1"
-  arrow
-/>
-<Card
-  icon="link"
-  title="getTransactionByUid"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/gettransactionbyvuid-copy"
-  arrow
-/>
-<Card
-  icon="link"
-  title="getTransactionByVuid"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/gettransactionbyvuid-copy-1"
-  arrow
-/>
-<Card
-  icon="link"
-  title="getReport"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/getreport-1"
-  arrow
-/>
-<Card
-  icon="link"
-  title="getRetailerInfo"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/getreport-copy-1"
-  arrow
-/>
-<Card
-  icon="link"
-  title="getInternalStatus"
-  href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/getinternalstatus"
-  arrow
-/>
-<Card
-  icon="link"
-  title="getSubRetailer"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/addsubretailer-copy"
-  arrow
-/>
-</Columns>
+<CardGroup cols={3}>
+  <Card icon="play" title="doTransaction" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction">
+    Start and process a payment transaction over the TweezerComm protocol.
+  </Card>
+
+  <Card icon="forward-step" title="doTransactionPhase1" href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase1">
+    Start a new transaction and retrieve its properties.
+  </Card>
+
+  <Card icon="flag-checkered" title="doTransactionPhase2" href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dotransactionphase2">
+    Complete a transaction that doTransactionPhase1 started, using only the vuid.
+  </Card>
+
+  <Card icon="ban" title="abortTransaction" href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/aborttransaction-copy">
+    Cancel an ongoing transaction before it registers in the database.
+  </Card>
+
+  <Card icon="circle-xmark" title="cancelTransaction" href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/canceltransaction-1">
+    Cancel a transaction that the system already approved and registered.
+  </Card>
+</CardGroup>
+
+## Settlement & Reporting
+
+<CardGroup cols={3}>
+  <Card icon="calendar-day" title="doPeriodic" href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic">
+    Deposit transactions daily, update the AEA database, and generate a Z report.
+  </Card>
+
+  <Card icon="money-check-dollar" title="doMiniSettlement" href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/dominisettlement">
+    Settle transactions through the CG or PC payment processors.
+  </Card>
+
+  <Card icon="chart-column" title="getReport" href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/getreport-1">
+    Retrieve Z or X reports and lists of specific transaction types.
+  </Card>
+</CardGroup>
+
+## Transaction Lookup & Status
+
+<CardGroup cols={3}>
+  <Card icon="magnifying-glass" title="getTransactionByUid" href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/gettransactionbyvuid-copy">
+    Look up a transaction by its unique identifier (UID).
+  </Card>
+
+  <Card icon="fingerprint" title="getTransactionByVuid" href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/gettransactionbyvuid-copy-1">
+    Look up a transaction by its vendor-unique identifier (vuid).
+  </Card>
+
+  <Card icon="gauge" title="getInternalStatus" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/getinternalstatus">
+    Check the internal status of the AEA engine.
+  </Card>
+</CardGroup>
+
+## Retailer Management
+
+<CardGroup cols={3}>
+  <Card icon="store" title="addSubRetailer" href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/addsubretailer">
+    Load sub-retailers onto the terminal.
+  </Card>
+
+  <Card icon="list-ul" title="getSubRetailer" href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/addsubretailer-copy">
+    List all sub-retailers loaded on the terminal and their status.
+  </Card>
+
+  <Card icon="circle-info" title="getRetailerInfo" href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/getreport-copy-1">
+    Verify the merchant name and ID associated with the device.
+  </Card>
+</CardGroup>
 
 <Note>
 **Send Requests**
 
-See [Get Started](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) for more details on how the requests are structured and sent.
+See [Get Started](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) for more details on how to structure and send requests.
 </Note>

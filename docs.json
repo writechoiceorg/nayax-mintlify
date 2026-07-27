@@ -229,7 +229,7 @@
                       "docs/integrate-pos-device/tweezercomm/tweezercomm-integration-process",
                       "docs/integrate-pos-device/tweezercomm/tweezercomm-get-started",
                       {
-                        "group": "🌐 Global Payment Flows",
+                        "group": "Global Payment Flows",
                         "pages": [
                           "docs/integrate-pos-device/tweezercomm/global-payment-flows/tweezercomm-engine-preselection-flow",
                           "docs/integrate-pos-device/tweezercomm/global-payment-flows/tweezercomm-engine-preauth-flow"
@@ -254,7 +254,7 @@
                         "root": "docs/integrate-pos-device/tweezercomm/global-payment-methods/payment-services-methods-copy-1"
                       },
                       {
-                        "group": "🟦 Israel Payment Flows",
+                        "group": "Israel Payment Flows",
                         "pages": [
                           "docs/integrate-pos-device/tweezercomm/israel-payment-flows/single-phase-transaction",
                           "docs/integrate-pos-device/tweezercomm/israel-payment-flows/2-phase-transaction",
@@ -289,57 +289,32 @@
                       },
                       {
                         "group": "Device Methods",
-                        "root": "docs/integrate-pos-device/tweezercomm/device-methods/index",
                         "pages": [
-                          {
-                            "group": "Device Info & Diagnostics",
-                            "pages": [
-                              "docs/integrate-pos-device/tweezercomm/device-methods/getinfo",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/getconfig",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/setconfig",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/getversion",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/getproperty",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/uploadlogs",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/getlocation",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/sendgeneralevent"
-                            ]
-                          },
-                          {
-                            "group": "Card Reading",
-                            "pages": [
-                              "docs/integrate-pos-device/tweezercomm/device-methods/readcard",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/abortreadcard",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/displayswipecard",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/abortswipe"
-                            ]
-                          },
-                          {
-                            "group": "User Input & Selection",
-                            "pages": [
-                              "docs/integrate-pos-device/tweezercomm/device-methods/getuserinput",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserinput",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/getuserselection",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserselection"
-                            ]
-                          },
-                          {
-                            "group": "Display & Animation",
-                            "pages": [
-                              "docs/integrate-pos-device/tweezercomm/device-methods/showanimation",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/hideanimation",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/displayqr",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/abortdisplayqr",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/abortdisplay"
-                            ]
-                          },
-                          {
-                            "group": "External Transaction Processing",
-                            "pages": [
-                              "docs/integrate-pos-device/tweezercomm/device-methods/readcardforexternaltransaction",
-                              "docs/integrate-pos-device/tweezercomm/device-methods/updatepinpadtransactionstatus"
-                            ]
-                          }
-                        ]
+                          "docs/integrate-pos-device/tweezercomm/device-methods/getinfo",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/readcard",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/abortreadcard",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/getconfig",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/setconfig",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/getversion",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/uploadlogs",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/getproperty",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/getuserinput",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserinput",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/getuserselection",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserselection",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/showanimation",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/hideanimation",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/displayswipecard",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/abortswipe",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/displayqr",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/abortdisplayqr",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/abortdisplay",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/sendgeneralevent",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/readcardforexternaltransaction",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/updatepinpadtransactionstatus",
+                          "docs/integrate-pos-device/tweezercomm/device-methods/getlocation"
+                        ],
+                        "root": "docs/integrate-pos-device/tweezercomm/device-methods/index"
                       },
                       "docs/integrate-pos-device/tweezercomm/pinpad-mode",
                       "docs/integrate-pos-device/tweezercomm/resilience-mechanism-copy",

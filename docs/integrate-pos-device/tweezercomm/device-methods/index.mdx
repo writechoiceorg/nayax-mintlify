@@ -2,96 +2,125 @@
 title: "Device Methods"
 mode: wide
 metadata:
-  og:description: "This section covers the API methods for managing payment terminals. You can: Get device information (like model, serial number, and software."
+  og:description: "This section covers the API methods for managing payment terminals. Use them to retrieve device information, read card data, configure terminal."
 ---
 
-This section covers the API methods for managing payment terminals. You can:
+This section covers the API methods for managing payment terminals. Use them to retrieve device information, read card data, configure terminal settings, prompt users for input, control on-screen displays, and send diagnostic logs. The sections below group methods by what they do.
 
-* Get device information (like model, serial number, and software versions)
-* Read card data (from magnetic stripes or NFC Mifare cards)
-* Configure terminal settings (such as printer use or transaction types)
-* Send diagnostic logs for troubleshooting
+## Device Information & Configuration
 
-These tools help you integrate and control payment devices for various purposes, including loyalty programs, identification, and system maintenance. You can also stop a card reading operation if needed.
+<CardGroup cols={3}>
+  <Card icon="circle-info" title="getInfo" href="/docs/integrate-pos-device/tweezercomm/device-methods/getinfo">
+    Retrieve device metadata, including hardware, manufacturer, and serial number information.
+  </Card>
 
-## Device info & diagnostics
+  <Card icon="code-branch" title="getVersion" href="/docs/integrate-pos-device/tweezercomm/device-methods/getversion">
+    Retrieve version information for the apps running on the device.
+  </Card>
 
-Retrieve terminal metadata, configuration, and version details, or send logs and status events for monitoring.
+  <Card icon="sliders" title="getProperty" href="/docs/integrate-pos-device/tweezercomm/device-methods/getproperty">
+    Retrieve specific terminal details, such as serial numbers or hardware identifiers.
+  </Card>
 
-<Columns cols={3}>
-  <Card icon="link" title="getInfo" href="/docs/integrate-pos-device/tweezercomm/device-methods/getinfo" />
+  <Card icon="gear" title="getConfig" href="/docs/integrate-pos-device/tweezercomm/device-methods/getconfig">
+    Retrieve the terminal's current configuration object.
+  </Card>
 
-  <Card icon="link" title="getConfig" href="/docs/integrate-pos-device/tweezercomm/device-methods/getconfig" />
+  <Card icon="pen-to-square" title="setConfig" href="/docs/integrate-pos-device/tweezercomm/device-methods/setconfig">
+    Apply configuration settings to the terminal.
+  </Card>
 
-  <Card icon="link" title="setConfig" href="/docs/integrate-pos-device/tweezercomm/device-methods/setconfig" />
+  <Card icon="location-dot" title="getLocation" href="/docs/integrate-pos-device/tweezercomm/device-methods/getlocation">
+    Retrieve the device's current geographic location.
+  </Card>
+</CardGroup>
 
-  <Card icon="link" title="getVersion" href="/docs/integrate-pos-device/tweezercomm/device-methods/getversion" />
+## Card Reading
 
-  <Card icon="link" title="getProperty" href="/docs/integrate-pos-device/tweezercomm/device-methods/getproperty" />
+<CardGroup cols={3}>
+  <Card icon="credit-card" title="readCard" href="/docs/integrate-pos-device/tweezercomm/device-methods/readcard">
+    Read card data from the magnetic stripe or NFC reader.
+  </Card>
 
-  <Card icon="link" title="uploadLogs" href="/docs/integrate-pos-device/tweezercomm/device-methods/uploadlogs" />
+  <Card icon="ban" title="abortReadCard" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortreadcard">
+    Cancel an ongoing readCard operation.
+  </Card>
 
-  <Card icon="link" title="getLocation" href="/docs/integrate-pos-device/tweezercomm/device-methods/getlocation" />
+  <Card icon="share-from-square" title="readCardForExternalTransaction" href="/docs/integrate-pos-device/tweezercomm/device-methods/readcardforexternaltransaction">
+    Read card data so an external processor can authorize the transaction.
+  </Card>
+</CardGroup>
 
-  <Card icon="link" title="sendGeneralEvent" href="/docs/integrate-pos-device/tweezercomm/device-methods/sendgeneralevent" />
-</Columns>
+## User Input & Selection
 
-## Card reading
+<CardGroup cols={3}>
+  <Card icon="keyboard" title="getUserInput" href="/docs/integrate-pos-device/tweezercomm/device-methods/getuserinput">
+    Prompt the user for numeric or alphanumeric input on the terminal.
+  </Card>
 
-Read card data from magnetic stripes or NFC Mifare cards, and cancel a read operation in progress.
+  <Card icon="ban" title="abortGetUserInput" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserinput">
+    Cancel an ongoing getUserInput request.
+  </Card>
 
-<Columns cols={2}>
-  <Card icon="link" title="readCard" href="/docs/integrate-pos-device/tweezercomm/device-methods/readcard" />
+  <Card icon="list-check" title="getUserSelection" href="/docs/integrate-pos-device/tweezercomm/device-methods/getuserselection">
+    Prompt the user to choose from a predefined list of options.
+  </Card>
 
-  <Card icon="link" title="abortReadCard" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortreadcard" />
+  <Card icon="ban" title="abortGetUserSelection" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserselection">
+    Cancel an active getUserSelection prompt.
+  </Card>
+</CardGroup>
 
-  <Card icon="link" title="displaySwipeCard" href="/docs/integrate-pos-device/tweezercomm/device-methods/displayswipecard" />
+## Display & Animations
 
-  <Card icon="link" title="abortSwipe" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortswipe" />
-</Columns>
+<CardGroup cols={3}>
+  <Card icon="circle-play" title="showAnimation" href="/docs/integrate-pos-device/tweezercomm/device-methods/showanimation">
+    Show an approved or declined animation on the device.
+  </Card>
 
-## User input & selection
+  <Card icon="eye-slash" title="hideAnimation" href="/docs/integrate-pos-device/tweezercomm/device-methods/hideanimation">
+    Cancel or hide the animation currently showing on the device.
+  </Card>
 
-Prompt the user for free-form input or a selection from a list, and cancel either prompt.
+  <Card icon="id-card" title="displaySwipeCard" href="/docs/integrate-pos-device/tweezercomm/device-methods/displayswipecard">
+    Prompt the user to swipe a magnetic card on the terminal.
+  </Card>
 
-<Columns cols={2}>
-  <Card icon="link" title="getUserInput" href="/docs/integrate-pos-device/tweezercomm/device-methods/getuserinput" />
+  <Card icon="ban" title="abortSwipe" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortswipe">
+    Cancel an ongoing card swipe operation.
+  </Card>
 
-  <Card icon="link" title="abortGetUserInput" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserinput" />
+  <Card icon="qrcode" title="displayQR" href="/docs/integrate-pos-device/tweezercomm/device-methods/displayqr">
+    Show a QR code on the terminal's screen.
+  </Card>
 
-  <Card icon="link" title="getUserSelection" href="/docs/integrate-pos-device/tweezercomm/device-methods/getuserselection" />
+  <Card icon="ban" title="abortDisplayQR" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortdisplayqr">
+    Cancel an ongoing QR code display.
+  </Card>
 
-  <Card icon="link" title="abortGetUserSelection" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortgetuserselection" />
-</Columns>
+  <Card icon="ban" title="abortDisplay" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortdisplay">
+    Cancel ongoing display operations, such as prompts or messages.
+  </Card>
+</CardGroup>
 
-## Display & animation
+## Diagnostics & Events
 
-Show or hide animations, QR codes, and other on-screen prompts on the terminal.
+<CardGroup cols={3}>
+  <Card icon="bolt" title="sendGeneralEvent" href="/docs/integrate-pos-device/tweezercomm/device-methods/sendgeneralevent">
+    Send operational events or status updates from the terminal.
+  </Card>
 
-<Columns cols={3}>
-  <Card icon="link" title="showAnimation" href="/docs/integrate-pos-device/tweezercomm/device-methods/showanimation" />
+  <Card icon="arrows-rotate" title="updatePinpadTransactionStatus" href="/docs/integrate-pos-device/tweezercomm/device-methods/updatepinpadtransactionstatus">
+    Report a transaction's outcome back to the device after an external processor authorizes it.
+  </Card>
 
-  <Card icon="link" title="hideAnimation" href="/docs/integrate-pos-device/tweezercomm/device-methods/hideanimation" />
-
-  <Card icon="link" title="displayQR" href="/docs/integrate-pos-device/tweezercomm/device-methods/displayqr" />
-
-  <Card icon="link" title="abortDisplayQR" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortdisplayqr" />
-
-  <Card icon="link" title="abortDisplay" href="/docs/integrate-pos-device/tweezercomm/device-methods/abortdisplay" />
-</Columns>
-
-## External transaction processing
-
-Read a card for an external processor to authorize, then report the resulting transaction status back to the device.
-
-<Columns cols={2}>
-  <Card icon="link" title="readCardForExternalTransaction" href="/docs/integrate-pos-device/tweezercomm/device-methods/readcardforexternaltransaction" />
-
-  <Card icon="link" title="updatePinpadTransactionStatus" href="/docs/integrate-pos-device/tweezercomm/device-methods/updatepinpadtransactionstatus" />
-</Columns>
+  <Card icon="file-arrow-up" title="uploadLogs" href="/docs/integrate-pos-device/tweezercomm/device-methods/uploadlogs">
+    Send diagnostic logs from the terminal for troubleshooting.
+  </Card>
+</CardGroup>
 
 <Note>
 **Send Requests**
 
-See [Get Started](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) for more details on how the requests are structured and sent.
+See [Get Started](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) for more details on how to structure and send requests.
 </Note>
