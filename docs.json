@@ -554,6 +554,7 @@
                     "pages": [
                       "docs/manage-data-operations/lynx-api/lynx-overview",
                       "docs/manage-data-operations/lynx-api/security",
+                      "docs/manage-data-operations/lynx-api/customer-managed-tokens",
                       {
                         "group": "Cards",
                         "pages": [
@@ -1276,11 +1277,9 @@
             "icon": "gears",
             "menu": [
               {
-                "group": "Lynx API Guides",
-                "pages": [
-                  "docs/manage-data-operations/lynx-api/lynx-overview",
-                  "docs/manage-data-operations/lynx-api/security",
-                  "docs/manage-data-operations/lynx-api/customer-managed-tokens",
+                "item": "Transaction Reporting",
+                "icon": "envelope",
+                "groups": [
                   {
                     "group": "Transaction Reporting Guides",
                     "pages": [
