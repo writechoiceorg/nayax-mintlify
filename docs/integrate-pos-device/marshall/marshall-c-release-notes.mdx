@@ -9,13 +9,6 @@ Nayax logs Marshall C SDK changes on this page as they ship. Subscribe to
 the RSS feed using the icon at the top of the page to get notified of new
 entries.
 
-Release notes are organized into two categories to help you evaluate the
-impact of each update:
-
-* **Improvements**: New APIs, expanded feature support, and performance
-  enhancements.
-* **Fixes**: Resolved bugs and reliability improvements.
-
 <Update
   label="C 0.0.2.29 (28.10.2025) (Current)"
   rss={{
@@ -24,32 +17,11 @@ impact of each update:
   }}
 >
 
-<Accordion title="Improvements" icon="rocket">
-### Transfer data and technician commands
-
-Site ID and brand name are now transferred to the machine via transfer data, and a new technician-mode command opens the door remotely.
-
-***
-
-### Error handling
-
-Enhanced error handling with improved validation and more descriptive messages.
-</Accordion>
-
-<Accordion title="Fixes" icon="wrench">
-### High com_id issue
-
-Fixed a bug related to a high `com_id` value.
-</Accordion>
-
-</Update>
-
-### Version history
-
-Every earlier C SDK version, condensed to one line. See the current version above for full detail and links.
+Every C SDK version is listed below, from the current version down to the first release.
 
 | Version | Date | Summary |
 |---|---|---|
+| **0.0.2.29 (Current)** | **October 28, 2025** | **Added site ID and brand name transfer via transfer data and a new technician-mode command to open the door remotely; enhanced error handling with improved validation and more descriptive messages; fixed a bug related to a high `com_id` value** |
 | 0.0.2.28 | January 30, 2025 | Fixed a crash on cancel after `session_begin` and before `vend_request` |
 | 0.0.2.27 | December 16, 2024 | Transaction data is now cleared when returning to ready mode after a transaction finishes |
 | 0.0.2.26 | October 13, 2024 | Fixed a crash when canceling an info session |
@@ -81,3 +53,5 @@ Every earlier C SDK version, condensed to one line. See the current version abov
 | 0.0.1.0 | August 3, 2020 | Added a debug-level packet dump option, a vend-denied policy, and a machine type parameter |
 | 0.0.0.2 | April 16, 2020 | Updated transfer_data functionality; added an STM32F0 sample application with UART/DMA support |
 | 0.0.0.1 | March 12, 2020 | Initial release |
+
+</Update>
