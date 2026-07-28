@@ -9,15 +9,8 @@ Nayax logs Marshall Java SDK changes on this page as they ship. Subscribe to
 the RSS feed using the icon at the top of the page to get notified of new
 entries.
 
-Release notes are organized into two categories to help you evaluate the
-impact of each update:
-
-* **Improvements**: New APIs, expanded feature support, and performance
-  enhancements.
-* **Fixes**: Resolved bugs and reliability improvements.
-
 <Note>
-Some features shipped in the 0.1.6.x patch line require VPOS version 4.0.8.23-RC3 or newer. Check the version history below for the patch that introduced the feature you're using.
+Some features shipped in the 0.1.6.x patch line require VPOS version 4.0.8.23-RC3 or newer. Check the table below for the patch that introduced the feature you're using.
 </Note>
 
 <Update
@@ -28,20 +21,11 @@ Some features shipped in the 0.1.6.x patch line require VPOS version 4.0.8.23-RC
   }}
 >
 
-<Accordion title="Fixes" icon="wrench">
-### Missed-ack issue
-
-Fixed the missed-ack issue.
-</Accordion>
-
-</Update>
-
-### Version history
-
-Every earlier Java SDK patch, condensed to one line. See the current version above for full detail and links.
+Every Java SDK patch is listed below, from the current version down to the first release.
 
 | Version | Summary |
 |---|---|
+| **0.1.6.23 (Current)** | **Fixed the missed-ack issue.** |
 | 0.1.6.22 | Fixed a link-down issue where a missed ack stopped keepalive |
 | 0.1.6.21 | <ul><li>Improved link reliability</li><li>Fixed false retransmissions</li></ul> |
 | 0.1.6.20 | Fixed a race condition between the rx and tx threads on `m_pending_tx_msg` access |
@@ -131,3 +115,5 @@ Every earlier Java SDK patch, condensed to one line. See the current version abo
 | 0.1.0.3 | Added socket callbacks for session control and display message/alert/time-request messages |
 | 0.1.0.2 | Moved `lowlevel_serial` outside the SDK as an application-specific concern; added configuration reporting to the vending client |
 | 0.1.0.1 | Fixed an FTP socket closing issue; added VPOS configuration notification for the client |
+
+</Update>
