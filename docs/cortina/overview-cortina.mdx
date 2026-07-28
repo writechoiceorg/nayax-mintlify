@@ -12,7 +12,7 @@ Cortina API allows third-party integrators, such as payment providers or Payment
 
 ## Transaction Flow Components
 
-Cortina API is the central layer in the payment flow, ensuring that transactions are valid, secure, and processed.
+Cortina API sits at the center of the payment flow and ensures each transaction is valid, secure, and fully processed.
 
 <Frame><img src="/images/docs/overview-cortina/image1.png" /></Frame>
 
@@ -23,41 +23,62 @@ The flow involves four key components:
 3. **Nayax**: Nayax receives the payment request and uses the Cortina API to verify the transaction. The API handles the transaction's authentication, authorization, and final settlement.
 4. **Payment Gateway**: The Payment Gateway processes transaction details, authorizes payments, and clears funds.
 
-Nayax uses the Cortina API to authorize and clear the transaction, ensuring that the payment is valid and is processed securely.
+Nayax uses the Cortina API to authorize and clear the transaction, keeping the payment valid and secure.
 
 ## See Also
 
-This section provides a comprehensive guide to understanding and integrating with Cortina.
+See the following pages to learn more about Cortina's payment methods and its integration and support resources.
 
-See the following pages for more information about Cortina and its features.
+### Payment Methods
 
-<Columns cols={3}>
-<Card
-  icon="link"
-  title="Integration Process"
-  href="/docs/cortina/cortina-integration"
-  arrow
-/>
-<Card
-  icon="link"
-  title="Authentication"
-  href="/docs/cortina/start-session/cortina-auth"
-  arrow
-/>
-<Card
-  icon="link"
-  title="Cortina Prepaid"
-  href="/docs/cortina/prepaid-card/prepaid-card-flows"
-  arrow
-/>
-<Card
-  icon="link"
-  title="StaticQR"
-  href="/docs/cortina/staticqr/staticqr-flows"
-  arrow
-/>
-</Columns>
+Cortina supports four payment methods, each with its own transaction flow.
 
+<CardGroup cols={3}>
+  <Card icon="wallet" title="Prepaid Card" href="/docs/cortina/prepaid-card/prepaid-card-flows">
+    Process prepaid card transactions using pre-selection or pre-authorization flows.
+  </Card>
 
+  <Card icon="credit-card" title="Credit Card" href="/docs/cortina/credit-card/cortina-credit-card-flows">
+    Process credit card payments through pre-selection or pre-authorization flows.
+  </Card>
+
+  <Card icon="qrcode" title="StaticQR" href="/docs/cortina/staticqr/staticqr-flows">
+    Process wallet payments when customers scan a static QR code on the machine.
+  </Card>
+
+  <Card icon="rotate" title="DynamicQR" href="/docs/cortina/dynamicqr/cortina-dynamicqr">
+    Process QR payments using a unique code generated for each transaction.
+  </Card>
+</CardGroup>
+
+### Integration & Support
+
+These pages cover the integration process, authentication, and other supporting resources for your Cortina integration.
+
+<CardGroup cols={3}>
+  <Card icon="list-check" title="Integration Process" href="/docs/cortina/cortina-integration">
+    Follow Cortina's staged integration process from kickoff through the production pilot.
+  </Card>
+
+  <Card icon="lock" title="Authentication Process" href="/docs/cortina/start-session/cortina-auth">
+    Encrypt and exchange tokens to authenticate each Cortina transaction session.
+  </Card>
+
+  <Card icon="network-wired" title="Network Requirements" href="/docs/cortina/network-requirements">
+    Set up HTTPS or VPN connectivity and whitelist Nayax's IP addresses.
+  </Card>
+
+  <Card icon="circle-check" title="Sale End Notification" href="/docs/cortina/sale-end-notification">
+    Notify your system when a Cortina transaction reaches completion.
+  </Card>
+
+  <Card icon="rotate-left" title="Refunds" href="/docs/cortina/refunds">
+    Return funds to customers for eligible transactions with full or partial refunds.
+  </Card>
+
+  <Card icon="circle-question" title="Cortina FAQs" href="/docs/cortina/cortina-faqs">
+    Find quick answers to common questions about Cortina integration, payments, and QR setups.
+  </Card>
+</CardGroup>
 
 <br />

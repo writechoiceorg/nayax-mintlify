@@ -4,27 +4,37 @@ metadata:
   og:description: "This section provides supplementary resources, detailed technical data, and common troubleshooting information to aid integrators in their work with."
 ---
 
-This section provides supplementary resources, detailed technical data, and common troubleshooting information to aid integrators in their work with the Nayax Spark API. These pages are designed to offer quick access to facts, definitions, and code examples that complement the main documentation flows and guides.
+This section provides supplementary resources, detailed technical data, and common troubleshooting information to aid integrators in their work with the Nayax Spark API. These pages give you quick access to facts, definitions, and code examples that complement the main documentation flows and guides.
 
 ## Available Guides
 
-<Columns cols={3}>
+<CardGroup cols={3}>
 <Card
-  icon="link"
+  icon="id-badge"
+  title="Closed Loop Card Support"
+  href="/docs/integrate-pos-device/spark/additional-resources/smc-support"
+>
+  Use closed-loop cards, such as RFID tags or loyalty cards, in Spark's start and stop flows.
+</Card>
+<Card
+  icon="display"
   title="PosDisplay Format"
   href="/docs/integrate-pos-device/spark/additional-resources/spark-posdisplay-format"
-  arrow
-/>
+>
+  Format data so it displays correctly on the terminal screen.
+</Card>
 <Card
-  icon="link"
+  icon="receipt"
   title="eReceiptData Format"
   href="/docs/integrate-pos-device/spark/additional-resources/spark-ereceiptdata-format"
-  arrow
-/>
+>
+  Structure transaction data for the eReceiptData field on digital receipts.
+</Card>
 <Card
-  icon="link"
+  icon="list-check"
   title="Response Codes"
   href="/docs/integrate-pos-device/spark/additional-resources/spark-response-codes"
-  arrow
-/>
-</Columns>
+>
+  Look up response codes and the API methods that return them.
+</Card>
+</CardGroup>

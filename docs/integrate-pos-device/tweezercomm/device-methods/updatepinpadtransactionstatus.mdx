@@ -1,0 +1,63 @@
+---
+title: "updatePinpadTransactionStatus"
+description: "Report the outcome of an externally authorized transaction back to the device."
+metadata:
+  og:description: "The updatePinpadTransactionStatus method reports the outcome of an externally authorized transaction back to the device after readCardForExternalTransaction."
+---
+
+The `updatePinpadTransactionStatus` method reports the outcome of an externally authorized transaction back to the device, after the card was read using [`readCardForExternalTransaction`](/docs/integrate-pos-device/tweezercomm/device-methods/readcardforexternaltransaction). See [Pinpad Mode](/docs/integrate-pos-device/tweezercomm/pinpad-mode) for more on this flow.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Get Started](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) for more details on how the requests are structured and sent.
+</Note>
+
+In the request, ensure to configure the following:
+
+* The `method` field must be set to `updatePinpadTransactionStatus`.
+* The service must be set to `engine` in the `params`.
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "updatePinpadTransactionStatus",
+    "id": "123454352",
+    "params": [
+        "engine",
+        {
+            "pinpadCardDataId": "a1b2c3d4e5f6",
+            "tranResultStatus": 1,
+            "processorTerminalId": "12345",
+            "paymentMethodId": "1",
+            "tranType": 1
+        }
+    ]
+}
+```
+
+### Request Parameters
+
+The table below describes the parameters of the request:
+
+| Name                  | Type    | Description                                                                                          |
+| --------------------- | ------- | ------------------------------------------------------------------------------------------------------ |
+| `pinpadCardDataId`    | string  | Identifier returned by [`readCardForExternalTransaction`](/docs/integrate-pos-device/tweezercomm/device-methods/readcardforexternaltransaction). |
+| `tranResultStatus`    | integer | Result of the external authorization. `1` = PINPAD_ONLY_APPROVED, `2` = PINPAD_ONLY_DECLINED, `3` = PINPAD_ONLY_CANCELED. |
+| `processorTerminalId` | string  | Merchant ID for the processor terminal.                                                                 |
+| `paymentMethodId`     | string  | Payment method identifier. Currently only `1` (credit card) is supported.                              |
+| `tranType`            | integer | Transaction type code. See Transaction Type Values below.                                              |
+
+**Transaction Type Values**
+
+| Value | Name                          |
+| ----- | ----------------------------- |
+| `1`   | Sale                           |
+| `2`   | Refund                         |
+| `3`   | Pre-Authorization              |
+| `4`   | Deferred Authorization         |
+| `5`   | CNP                            |
+| `6`   | Pre-Authorization Completion   |
+| `7`   | Void                           |

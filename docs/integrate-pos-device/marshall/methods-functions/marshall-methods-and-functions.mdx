@@ -8,38 +8,24 @@ This section provides detailed reference documentation for all methods and funct
 
 ## Available Guides
 
-<Columns cols={3}>
-<Card
-  icon="link"
-  title="Framework"
-  href="/docs/integrate-pos-device/marshall/methods-functions/framework"
-  arrow
-/>
-<Card
-  icon="link"
-  title="Link and Events Configuration"
-  href="/docs/integrate-pos-device/marshall/methods-functions/link-and-events-configuration"
-  arrow
-/>
-<Card
-  icon="link"
-  title="Vending Events"
-  href="/docs/integrate-pos-device/marshall/methods-functions/vending-events"
-  arrow
-/>
-</Columns>
+<CardGroup cols={3}>
+  <Card icon="cube" title="Framework" href="/docs/integrate-pos-device/marshall/methods-functions/framework">
+    Use the vmcframework component to interface between your application and the vending machine.
+  </Card>
 
-<Columns cols={2}>
-<Card
-  icon="link"
-  title="Vending Session Management"
-  href="/docs/integrate-pos-device/marshall/methods-functions/data-structures"
-  arrow
-/>
-<Card
-  icon="link"
-  title="General Marshall Methods"
-  href="/docs/integrate-pos-device/marshall/methods-functions/general-marshall-events"
-  arrow
-/>
-</Columns>
+  <Card icon="plug" title="Link and Events Configuration" href="/docs/integrate-pos-device/marshall/methods-functions/link-and-events-configuration">
+    Set up and manage the connection between your application and Nayax's servers.
+  </Card>
+
+  <Card icon="bell" title="Vending Events" href="/docs/integrate-pos-device/marshall/methods-functions/vending-events">
+    Handle events for each stage of the vending process.
+  </Card>
+
+  <Card icon="table-list" title="Vending Session Management" href="/docs/integrate-pos-device/marshall/methods-functions/data-structures">
+    Work with the data structures Marshall uses for vending product requests and sessions.
+  </Card>
+
+  <Card icon="toolbox" title="General Marshall Methods" href="/docs/integrate-pos-device/marshall/methods-functions/general-marshall-events">
+    Register callbacks, send alerts, and use other general SDK facilities.
+  </Card>
+</CardGroup>

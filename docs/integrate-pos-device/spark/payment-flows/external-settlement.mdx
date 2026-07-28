@@ -94,13 +94,16 @@ If you manage a Products Map in Nayax Core, you can include an array of objects 
 
 ## See Also
 
-<Columns cols={3}>
-  <Card title="StartAuthentication" icon="link" href="/reference/spark/transactions/startauthentication">
+<CardGroup cols={3}>
+  <Card title="StartAuthentication" icon="key" href="/reference/spark/transactions/startauthentication">
+    Authenticates the 3rd-party server before an external settlement or cancel request.
   </Card>
 
-  <Card title="ExternalSettlement" icon="link" href="/reference/spark/transactions/externalsettlement">
+  <Card title="ExternalSettlement" icon="money-check-dollar" href="/reference/spark/transactions/externalsettlement">
+    Completes a transaction that was authorized outside a standard Spark flow.
   </Card>
 
-  <Card title="ExternalCancel" icon="link" href="/reference/spark/transactions/externalcancel">
+  <Card title="ExternalCancel" icon="ban" href="/reference/spark/transactions/externalcancel">
+    Releases captured funds when no service was provided.
   </Card>
-</Columns>
+</CardGroup>

@@ -9,33 +9,33 @@ The SDK supports multiple transaction flows to accommodate diverse use cases, fr
 
 The available transaction flows are:
 
-<Columns cols={3}>
+<CardGroup cols={3}>
 <Card
-  icon="link"
+  icon="shield-halved"
   title="Payment with Pre-Authorization"
   href="/docs/integrate-pos-device/emv-core/payment-flows/payment-with-authorization"
 >
-  A two-step process where a transaction amount is preauthorized before being confirmed for settlement. Ideal for scenarios where the exact final amount is unknown (such as EV charging).
+  Preauthorize a transaction amount, then confirm it for settlement in a second step. Ideal for scenarios where the exact final amount is unknown (such as EV charging).
 </Card>
 <Card
-  icon="link"
+  icon="repeat"
   title="Closed Loop Transaction"
   href="/docs/integrate-pos-device/emv-core/payment-flows/closed-loop-transaction"
 >
-  Closed-loop transactions refer to operations using MIFARE cards. A MIFARE card UID is used to process the operations in their application server, which does not involve bank transactions.
+  Process MIFARE card operations on your own application server using the card UID, without involving bank transactions.
 </Card>
 <Card
-  icon="link"
+  icon="bolt"
   title="Single Step Payment"
   href="/docs/integrate-pos-device/emv-core/payment-flows/single-step-payment"
 >
-  The single-step payment flow allows for immediate authorization and settlement in one operation, streamlining the payment process for use cases that require fast, straightforward transactions.
+  Authorize and settle a transaction immediately in one operation, streamlining the payment process for fast, straightforward use cases.
 </Card>
 <Card
-  icon="link"
+  icon="money-bill-transfer"
   title="Pre-Authorization with External Settlement"
   href="/docs/integrate-pos-device/emv-core/payment-flows/pre-authorization-with-external-settlement"
 >
-  Separates the authorization and settlement phases. A 3rd-party server handles final settlement via the Nayax API, giving you control over when and how much to charge. Ideal for EV charging and similar variable-amount use cases.
+  Separate the authorization and settlement phases, letting a 3rd-party server handle final settlement through the Nayax API. Ideal for EV charging and similar variable-amount use cases.
 </Card>
-</Columns>
+</CardGroup>
