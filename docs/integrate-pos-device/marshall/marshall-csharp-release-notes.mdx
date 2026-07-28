@@ -9,13 +9,6 @@ Nayax logs Marshall C# SDK changes on this page as they ship. Subscribe to
 the RSS feed using the icon at the top of the page to get notified of new
 entries.
 
-Release notes are organized into two categories to help you evaluate the
-impact of each update:
-
-* **Improvements**: New APIs, expanded feature support, and performance
-  enhancements.
-* **Fixes**: Resolved bugs and reliability improvements.
-
 <Update
   label="C# 0.0.5.20 (Current)"
   rss={{
@@ -24,28 +17,11 @@ impact of each update:
   }}
 >
 
-<Accordion title="Improvements" icon="rocket">
-### Low-level serial cleanup
-
-Consolidated serial rx handling in `lowlevel_serial_t`: head-only framing, a poll-friendly sleep, and a named reader thread.
-</Accordion>
-
-<Accordion title="Fixes" icon="wrench">
-### Link and vend flow reliability
-
-Fixed a link-down issue in `vmc_link` where a missed ack left a packet pending forever and stopped keepalive; retransmit is no longer gated on transmit exceeding receive.
-
-* `vmc_vend_t` now handles `session_end` and `send_transfer_data` globally in any state, making the vend flow state more robust.
-</Accordion>
-
-</Update>
-
-### Version history
-
-Every earlier C# SDK version, condensed to one line. See the current version above for full detail and links.
+Every C# SDK version is listed below, from the current version down to the first release.
 
 | Version | Summary |
 |---|---|
+| **0.0.5.20 (Current)** | **Consolidated low-level serial rx handling in `lowlevel_serial_t` (head-only framing, a poll-friendly sleep, and a named reader thread); fixed a `vmc_link` link-down issue where a missed ack left a packet pending forever and stopped keepalive (retransmit is no longer gated on transmit exceeding receive); `vmc_vend_t` now handles `session_end` and `send_transfer_data` globally in any state for a more robust vend flow** |
 | 0.0.5.19 | Improved link reliability and fixed false retransmissions |
 | 0.0.5.18 | Fixed a race condition between the rx and tx threads on `m_pending_tx_msg` access |
 | 0.0.5.17 | Added the `pre_auth_amount_config` (0x8c) vend sub-command, including the message class, decode/encode support, a factory method, event handling, and the public API; added demo menu options to align with the Java SDK (check balance, prepaid pay, pre-auth config, display message, close socket) |
@@ -119,3 +95,5 @@ Every earlier C# SDK version, condensed to one line. See the current version abo
 | 0.0.1.5 | Added Mifare/mag auth support |
 | 0.0.1.4 | Added socket support and info session support |
 | 0.0.1.3 | Initial version |
+
+</Update>
