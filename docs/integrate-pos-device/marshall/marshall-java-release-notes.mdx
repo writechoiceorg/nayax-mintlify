@@ -16,110 +16,22 @@ impact of each update:
   enhancements.
 * **Fixes**: Resolved bugs and reliability improvements.
 
+<Note>
+Some features shipped in the 0.1.6.x patch line require VPOS version 4.0.8.23-RC3 or newer. Check the version history below for the patch that introduced the feature you're using.
+</Note>
+
 <Update
-  label="Java 0.1.6 (Current)"
+  label="Java 0.1.6.23 (Current)"
   rss={{
-    title: "Java SDK 0.1.6: pre-auth amount config, QR third-party auth, and link reliability fixes",
-    description: "Improvements: pre-authorization amount config, external reader and display control, multi-vend/multi-session pricing, QR-code and third-party authorization support, and vend/session API changes. Fixes: link and retransmission reliability, message encode/decode bugs, and vend/session safeguards."
+    title: "Java SDK 0.1.6.23: missed-ack fix",
+    description: "Fixes: the missed-ack issue."
   }}
 >
-  <Note>
-  Some features in this version require VPOS version 4.0.8.23-RC3 or newer.
-  </Note>
-
-This version spans patches 0.1.6.01 through 0.1.6.23.
-
-<Accordion title="Improvements" icon="rocket">
-### Pre-authorization amount config
-
-Added the `pre_auth_amount_config` (0x8c) vend sub-command, including the message class, decode/encode support, a factory method, and event handling in the public API. The demo application now includes a menu option to test pre-authorization amount configuration.
-
-***
-
-### External reader and display control
-
-Added an external reader command and extended the [display control](/docs/integrate-pos-device/marshall/additional-resources/marshall-display) API to support additional layouts.
-
-* The display control API signature now takes a `layout_t` instance directly.
-* The SDK version string now also reports the SDK language.
-
-***
-
-### Multi-vend, multi-session, and pricing
-
-Added `long_price` support, a 4-byte price capability relevant for VPOS Media.
-
-* Fixed the display of negative prices.
-* Multi-session now works together with multi-vend in the same session.
-* Added a `final_price` field to `onSessionInfo`.
-* Real-time price changes are now supported in always-idle mode, even after the reader is already enabled.
-* The SDK gained file-system management support, since VPOS now provides those services.
-
-***
-
-### Transfer data and QR/third-party authorization
-
-Site ID and brand name are now transferred to the machine through [transfer data](/docs/integrate-pos-device/marshall/additional-resources/marshall-ontransferdata).
-
-* Added a brands-selection bit for the Japanese market.
-* Added support for the QR-code card type and third-party authorization for QR-code readers.
-* Added a technician-mode command to open the door remotely.
-
-***
-
-### Vend and session API improvements
-
-`vend_request` and `close_session` now return a boolean value, with a sanity check that price does not exceed the permitted amount (65k when `long_price` is disabled).
-
-* Machine sub type can now be set explicitly instead of being hard-coded.
-* `vend_session_data_t` now exposes all nullable fields, so the caller can tell whether a value was assigned.
-* The VPOS serial number is now provided as a correctly arranged string instead of raw bytes.
-
-***
-
-### Low-level serial and internal cleanup
-
-The SDK no longer bundles `lowlevel_serial.java` directly. Instead, you inject a `serial_port_i` implementation (a certified FTDI and PC-port implementation is provided).
-
-* Removed a false warning on `vmc_vend_t` when no callback handler was registered, replacing it with a null check shared between `marshall_sdk` and `marshall_master_sdk`.
-* Optimized `eth_port` logging.
-</Accordion>
 
 <Accordion title="Fixes" icon="wrench">
-### Link and retransmission reliability
+### Missed-ack issue
 
-Fixed a missed-ack issue that stopped keepalive and the related link-down issue.
-
-* Fixed a race condition between the rx and tx threads on `m_pending_tx_msg` access.
-* Eliminated false retransmissions.
-* Improved [`vmc_link`](/docs/integrate-pos-device/marshall/methods-functions/link-and-events-configuration) buffer management to prevent a possible retransmission and frame loss.
-* Fixed the `session_end` timeout expiring too soon, which previously caused `reader_always_on` to fire early.
-
-***
-
-### Message encoding and decoding
-
-Fixed several [message encode/decode bugs](/docs/integrate-pos-device/marshall/methods-functions/data-structures):
-
-* `msg_remote_selection_t` encode was an empty stub; now encodes all fields (funds available, payment media ID, payment type, payment data, item number, item options).
-* `msg_setup_max_min_prices_t` encode was missing its sub-command byte and had a currency-code encoding typo; both are fixed.
-* `msg_expansion_t` now null-checks the body before decode/encode.
-* `msg_mdb_rsp_t` decode now correctly instantiates `msg_ftl_retry_deny_t`.
-* Fixed `fw_info` string copy, which could append garbage to the end of strings.
-* Fixed a `msg_alert` string decode error.
-* Fixed an encoding bug affecting multi-session multi-vend frames.
-* Fixed incorrect session ID encoding in `vend_multi_close_session` and multi-vend multi-session close.
-* Fixed a frame-size detection issue affecting varying Marshall message sizes.
-* Fixed a typo in `marshall_func_code_transfer_data`.
-
-***
-
-### Vend and session safeguards
-
-Fixed the reader state command so it also works in always-idle mode.
-
-* Added protection against vend, socket, and general actions being issued when there is no link.
-* Fixed a bug where card info from a previous session was not cleared once a session completed.
+Fixed the missed-ack issue.
 </Accordion>
 
 </Update>
@@ -130,6 +42,28 @@ Every earlier Java SDK patch, condensed to one line. See the current version abo
 
 | Version | Summary |
 |---|---|
+| 0.1.6.22 | Fixed a link-down issue where a missed ack stopped keepalive |
+| 0.1.6.21 | <ul><li>Improved link reliability</li><li>Fixed false retransmissions</li></ul> |
+| 0.1.6.20 | Fixed a race condition between the rx and tx threads on `m_pending_tx_msg` access |
+| 0.1.6.19 | **Added**:<ul><li>The `pre_auth_amount_config` (0x8c) vend sub-command, including the message class, decode/encode support, a factory method, and event handling in the public API</li><li>A demo application menu option to test pre-authorization amount configuration</li></ul> |
+| 0.1.6.18 | Fixed the `session_end` timeout expiring too soon, which caused `reader_always_on` to fire too early |
+| 0.1.6.17 | **Fixed**:<ul><li>`msg_remote_selection_t` encode was an empty stub; now encodes all fields (funds available, payment media ID, payment type, payment data, item number, item options)</li><li>`msg_setup_max_min_prices_t` encode was missing its sub-command byte and had a currency-code encoding typo</li><li>`msg_expansion_t` now null-checks the body before decode/encode, preventing a crash on the FTL-retry-deny case</li><li>`msg_mdb_rsp_t` decode now correctly instantiates `msg_ftl_retry_deny_t`</li></ul> |
+| 0.1.6.16 | <ul><li>Added an external reader command</li><li>Fixed the reader state command to also work in always-idle mode</li></ul> |
+| 0.1.6.15 | Added a sanity check to `vend_request` and `close_session`: both now return a boolean value, and reject a price exceeding the permitted amount (65k when `long_price` is disabled) |
+| 0.1.6.14 | <ul><li>Added real-time price-change support for always-idle mode, even after the reader is already enabled</li><li>Updated the multi-vend request log</li></ul> |
+| 0.1.6.13 | Fixed `vend_multi_close_session` encoding |
+| 0.1.6.12 | <ul><li>Added protection against vend, socket, and general actions being issued when there is no link, preventing unnecessary crashes</li><li>Optimized `eth_port` logging</li></ul> |
+| 0.1.6.11 | Fixed incorrect session ID encoding in multi-vend multi-session close |
+| 0.1.6.10 | <ul><li>Added file-system management support, now that VPOS provides those services</li><li>Fixed a bug where card info from a previous session was not cleared once a session completed</li><li>Improved `vmc_link` buffer management, fixing a possible retransmission and frame loss from buffer overflow</li></ul> |
+| 0.1.6.09 | <ul><li>Added support for extended display control</li><li>The SDK version string now also reports the SDK language</li></ul> |
+| 0.1.6.08 | <ul><li>Fixed frame-size detection to support varying Marshall message sizes</li><li>Added a `flush()` call to the port interface</li></ul> |
+| 0.1.6.07 | <ul><li>Added site ID and brand name transfer to the machine via transfer data</li><li>Added a technician-mode command to open the door remotely</li><li>Updated the logger</li></ul> |
+| 0.1.6.06 | **Fixed**:<ul><li>`fw_info` string copy, which could append garbage to the end of strings</li><li>A `msg_alert` string decode error</li></ul> |
+| 0.1.6.05 | <ul><li>Machine sub type can now be set explicitly instead of being hard-coded</li><li>Fixed an encoding bug affecting multi-session multi-vend frames</li><li>Updated the `entry_type` enum</li></ul> |
+| 0.1.6.04 | <ul><li>Added `long_price` support, a 4-byte price capability relevant for VPOS Media, and fixed the display of negative prices</li><li>Added support for the QR-code card type and third-party authorization for QR-code readers</li><li>Fixed the Marshall max message length, relevant for VPOS Media</li><li>`vend_session_data_t` now exposes all nullable fields, so the caller can tell whether a value was assigned</li><li>Added a brands-selection bit for the Japanese market</li><li>Multi-session now works together with multi-vend in the same session</li><li>Added a `final_price` field to `onSessionInfo`</li><li>Added a link-ready check to all vend APIs to prevent crashes when called with no link</li><li>The version string now appends "rc" for unofficial builds</li></ul> |
+| 0.1.6.03 | Removed a false warning on `vmc_vend_t` when no callback handler was registered, replacing it with a null check shared between `marshall_sdk` and `marshall_master_sdk` |
+| 0.1.6.02 | **Fixed**:<ul><li>The VPOS serial number is now provided as a correctly arranged string instead of raw bytes</li><li>A typo in `marshall_func_code_transfer_data`</li></ul> |
+| 0.1.6.01 | <ul><li>The SDK no longer bundles `lowlevel_serial.java` directly; you now inject a `serial_port_i` implementation (a certified FTDI and PC-port implementation is provided)</li><li>The display control API signature now takes a `layout_t` instance directly</li></ul> |
 | 0.1.5.27 | Fixed a re-transmission bug where two packets arriving at once could be lost, plus fixes in `mdb_rsp` parsing and `lowlevel_serial` buffer management |
 | 0.1.5.26 | Added `session_id` to `vend_session_t` for multi-session reference, more logging, fixed a `msg_display_event_t` parsing error that skipped the user callback |
 | 0.1.5.25 | Fixed `card_balance` decoding, transfer_data parsing crashes, and final_price parsing; added logs to decoded transfer_data fields |
