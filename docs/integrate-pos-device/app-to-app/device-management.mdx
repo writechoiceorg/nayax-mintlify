@@ -1,8 +1,8 @@
 ---
 title: "Device Management"
-description: "Go beyond app registration on VPOS Media: read device information, write to Nayax centralized logging, manage remote attributes, format currency, and control kiosk mode."
+description: "Go beyond app registration on VPOS Media: read device information, write to Nayax centralized logging, manage remote attributes, format currency, and control full-screen mode."
 metadata:
-  og:description: "Go beyond app registration on VPOS Media: read device information, write to Nayax centralized logging, manage remote attributes, format currency, and control kiosk mode."
+  og:description: "Go beyond app registration on VPOS Media: read device information, write to Nayax centralized logging, manage remote attributes, format currency, and control full-screen mode."
 ---
 
 Beyond registering your app, the `general` class exposes the platform features
@@ -14,7 +14,7 @@ around a payment. All of them are optional, and you call them on the same
 * [**Centralized logging**](#centralized-logging) to write your app's logs to the Nayax backend.
 * [**Remote attributes**](#remote-attributes) to read and subscribe to values Nayax manages remotely.
 * [**Locale and currency formatting**](#locale-and-currency-formatting) to display amounts in the device's currency.
-* [**Kiosk mode**](#kiosk-mode) to hide the system UI for unattended operation.
+* [**Full-screen mode**](#full-screen-mode) to hide the system UI for unattended operation.
 
 ## Read Device Information
 
@@ -99,14 +99,13 @@ String formatted = general.format_amount(5.0);  // for example "$5.00"
 `currency_code` overrides the currency derived from `country_code`, for
 deployments that bill in a different currency than their country's default.
 
-## Kiosk Mode
+## Full-Screen Mode
 
-`general.kiosk` controls the Android UI restrictions for unattended, kiosk, and
-vending scenarios. Enabling it hides the navigation and status bars for
-full-screen operation:
+`general.kiosk` controls the Android system UI for unattended operation.
+Enabling it hides the navigation and status bars for full-screen display:
 
 ```java
-general.kiosk(true);   // hide system UI for kiosk operation
+general.kiosk(true);   // hide system UI for full-screen mode
 general.kiosk(false);  // restore normal UI
 ```
 
