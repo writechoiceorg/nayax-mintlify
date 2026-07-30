@@ -31,18 +31,13 @@ If the `statusCode != 0` (indicating an issue) is returned, the system refers to
 
 ## See Also
 
-<Columns cols={2}>
-<Card
-  icon="link"
-  title="doTransaction"
-  href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction"
-  arrow
-/>
-<Card
-  icon="link"
-  title="Resilience Flow"
-  href="/docs/integrate-pos-device/tweezercomm/resilience-mechanism-copy"
-  arrow
-/>
-</Columns>
+<CardGroup cols={2}>
+  <Card icon="play" title="doTransaction" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction">
+    Start and process a payment transaction over the TweezerComm protocol.
+  </Card>
+
+  <Card icon="shield-halved" title="Resilience Mechanism" href="/docs/integrate-pos-device/tweezercomm/resilience-mechanism-copy">
+    Handle transaction completion or cancellation when errors or failures occur.
+  </Card>
+</CardGroup>
 

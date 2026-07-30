@@ -85,10 +85,16 @@ Once the transaction is processed, Nayax automatically sends the result to your 
 
 ## Available Guides
 
-<Columns cols={3}>
-  <Card icon="link" title="Create Payments" href="/docs/ecom-sdk/front-end-integration/ecom-sdk-create-payments" />
+<CardGroup cols={3}>
+  <Card icon="play" title="Initiate Payments" href="/docs/ecom-sdk/front-end-integration/ecom-sdk-create-payments">
+    Call startPayment to launch a payment flow with the Nayax eCom SDK.
+  </Card>
 
-  <Card icon="link" title="Handle Payment Results" href="/docs/ecom-sdk/front-end-integration/handling-payment-results" />
+  <Card icon="bell" title="Payment Callbacks" href="/docs/ecom-sdk/front-end-integration/handling-payment-results">
+    Handle the SDK's payment result callbacks for Android and iOS.
+  </Card>
 
-  <Card icon="link" title="Drop-In UI" href="/docs/ecom-sdk/front-end-integration/drop-in-ui/index" />
-</Columns>
+  <Card icon="window" title="Drop-in UI" href="/docs/ecom-sdk/front-end-integration/drop-in-ui/index">
+    Display a pre-configured list of payment methods anywhere on your site.
+  </Card>
+</CardGroup>

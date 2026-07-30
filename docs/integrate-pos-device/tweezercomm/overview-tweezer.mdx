@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Overview"
 metadata:
   og:description: "TweezerComm is a secure and efficient payment communication protocol that enables seamless integration between client applications and Nayax attended."
@@ -16,7 +16,7 @@ It enables client applications to communicate with the Agamento payment applicat
 
 <McpNote />
 
-## &#x20;Payment services
+## Payment Services
 
 Nayax's TweezerComm protocol supports two primary payment services, one for global users and one exclusive to Israel.
 
@@ -29,79 +29,56 @@ The sections below list the relevant guides for each payment service.
 
 This section provides guides to assist you in using TweezerComm with the Nayax global payment service, outlining the integration process and available API methods. See the pages below to learn more:
 
-<Card
-  icon="link"
-  title="Get Started"
-  href="/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started"
-  arrow
-/>
-<Columns cols={2}>
-<Card
-  icon="link"
-  title="Global Payment Flows"
-  href="/docs/integrate-pos-device/tweezercomm/global-payment-flows/payment-flows-copy-1"
-  arrow
-/>
-<Card
-  icon="link"
-  title="Global Payment Methods"
-  href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/payment-services-methods-copy-1"
-  arrow
-/>
-</Columns>
+<CardGroup cols={3}>
+  <Card icon="rocket" title="Get Started" href="/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started">
+    See how TweezerComm structures and sends requests using JSON-RPC 2.0.
+  </Card>
+
+  <Card icon="route" title="Global Payment Flows" href="/docs/integrate-pos-device/tweezercomm/global-payment-flows/payment-flows-copy-1">
+    Follow the structured payment flows for global transaction processing.
+  </Card>
+
+  <Card icon="code" title="Global Payment Methods" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/payment-services-methods-copy-1">
+    Browse the API methods for the global engine payment service.
+  </Card>
+</CardGroup>
 
 ## Israel TweezerComm Guides
 
 This section provides guides to assist you in using TweezerComm with the Nayax Israel payment service, outlining the integration process and available API methods. See the pages below to learn more:
 
-<Card
-  icon="link"
-  title="Get Started"
-  href="/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started"
-  arrow
-/>
-<Columns cols={2}>
-<Card
-  icon="link"
-  title="Israel Payment Flows"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-israel-payment-flows"
-  arrow
-/>
-<Card
-  icon="link"
-  title="Israel Payment Methods"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/tweezercomm-israel-payment-methods"
-  arrow
-/>
-</Columns>
+<CardGroup cols={3}>
+  <Card icon="rocket" title="Get Started" href="/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started">
+    See how TweezerComm structures and sends requests using JSON-RPC 2.0.
+  </Card>
+
+  <Card icon="route" title="Israel Payment Flows" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-israel-payment-flows">
+    Follow the structured payment flows for Israel transaction processing.
+  </Card>
+
+  <Card icon="code" title="Israel Payment Methods" href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/tweezercomm-israel-payment-methods">
+    Browse the API methods for the Israel ashrait payment service.
+  </Card>
+</CardGroup>
 
 ## General Guides
 
 This section provides general guides that are relevant to TweezerComm's payment services. See the pages below to learn more:
 
-<Columns cols={3}>
-<Card
-  icon="link"
-  title="Device Methods"
-  href="/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started"
-  arrow
-/>
-<Card
-  icon="link"
-  title="TC Service"
-  href="/docs/integrate-pos-device/tweezercomm/tc-service"
-  arrow
-/>
-<Card
-  icon="link"
-  title="Resilience Mechanism"
-  href="/docs/integrate-pos-device/tweezercomm/resilience-mechanism-copy"
-  arrow
-/>
-</Columns>
-<Card
-  icon="link"
-  title="Additional Resources"
-  href="/docs/integrate-pos-device/spark/additional-resources/index"
-  arrow
-/>
+<CardGroup cols={3}>
+  <Card icon="mobile-screen-button" title="Device Methods" href="/docs/integrate-pos-device/tweezercomm/device-methods/index">
+    Manage payment terminals: device info, card reads, configuration, and diagnostics.
+  </Card>
+
+  <Card icon="server" title="TC Service" href="/docs/integrate-pos-device/tweezercomm/tc-service">
+    Run the Agamento app as a background service for your own Android app.
+  </Card>
+
+  <Card icon="shield-halved" title="Resilience Mechanism" href="/docs/integrate-pos-device/tweezercomm/resilience-mechanism-copy">
+    Handle transaction completion or cancellation when errors or failures occur.
+  </Card>
+
+  <Card icon="book" title="Additional Resources" href="/docs/integrate-pos-device/tweezercomm/additional-resources/tweezercomm-additional-resources">
+    Find certification files, error codes, and other supporting materials.
+  </Card>
+</CardGroup>

@@ -10,7 +10,7 @@ The Marshall SDK provides an easy and comprehensive facility for using Nayax's V
 <Danger>
 **Important note**
 
-Nayax only supports integrations which were done using our SDKs and that have gone through and completed the certification process (more on that in the "Certification process" page).
+Nayax only supports integrations that use our SDKs and that have gone through and completed the certification process (more on that in the "Certification process" page).
 </Danger>
 
 All SDKs have comprehensive APIs, detailed configuration options, and support for handling various vending scenarios. The following guide provides a quick-start approach to integrating and configuring these SDKs in your projects, ensuring a smooth setup and operation of Nayax payment systems.
@@ -18,30 +18,67 @@ All SDKs have comprehensive APIs, detailed configuration options, and support fo
 <Note>
 **Available Languages**
 
-For your convenience, the SDK is provided in C, C#, and JAVA.
+For your convenience, we provide the SDK in C, C#, and JAVA.
 </Note>
 
 ## Integration Guides
 
 The integration process of the SDK can vary depending on the chosen language. The guides below will help you integrate your chosen SDK.
 
-<Columns cols={2}>
+<CardGroup cols={3}>
 <Card
-  icon="link"
+  icon="code"
   title="C# & Java SDK Integration"
   href="/docs/integrate-pos-device/marshall/get-started/marshall-csharp-java-integration"
-  arrow
-/>
+>
+  Import the SDK package and integrate Marshall into your C# or Java application.
+</Card>
 <Card
-  icon="link"
+  icon="terminal"
   title="C SDK Integration"
   href="/docs/integrate-pos-device/marshall/get-started/c-sdk-integration"
-  arrow
-/>
-</Columns>
+>
+  Integrate the Marshall C SDK into your C application.
+</Card>
+<Card
+  icon="route"
+  title="Integration Process"
+  href="/docs/integrate-pos-device/marshall/get-started/marshall-integration-process"
+>
+  Connect sessions and handle payments end to end with a step-by-step guide.
+</Card>
+</CardGroup>
 
 <Note>
 **SDK Access**
 
 Your chosen SDK will be provided to you after completing the onboarding with the Nayax team.
 </Note>
+
+## Configuration & Certification
+
+Before you go live, review how to configure the VMC object and complete Nayax's certification process.
+
+<CardGroup cols={3}>
+<Card
+  icon="gears"
+  title="VMC Configuration Object"
+  href="/docs/integrate-pos-device/marshall/get-started/vmc-configuration-object"
+>
+  Set the parameters and flags that control peripheral behavior.
+</Card>
+<Card
+  icon="flag"
+  title="SDK Flags"
+  href="/docs/integrate-pos-device/marshall/get-started/sdk-flags-descriptions"
+>
+  Configure vmc_configuration flags that control peripheral behavior and capabilities.
+</Card>
+<Card
+  icon="certificate"
+  title="Certification Process"
+  href="/docs/integrate-pos-device/marshall/get-started/certification-proccess"
+>
+  Complete Nayax's required tests to certify your Marshall integration.
+</Card>
+</CardGroup>

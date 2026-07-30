@@ -9,25 +9,16 @@ The refund mechanism within Lynx API is a 2-step process:
 1. Request refund.
 2. Approve or Decline the refund.
 
-This section contains guides that will detail each of these steps. Below is a list of the available guides:
+This section covers each step in detail. Find the available guides below:
 
-<Columns cols={3}>
-<Card
-  icon="link"
-  title="Request a Refund"
-  href="/docs/manage-data-operations/lynx-api/refunds/request-refunds"
-  arrow
-/>
-<Card
-  icon="link"
-  title="Approve or Decline Refunds"
-  href="/docs/manage-data-operations/lynx-api/refunds/approve-or-decline-a-refund"
-  arrow
-/>
-<Card
-  icon="link"
-  title="Upload Refund Documentation"
-  href="/docs/manage-data-operations/lynx-api/refunds/upload-refund-document"
-  arrow
-/>
-</Columns>
+<CardGroup cols={3}>
+  <Card title="Request Refunds" icon="money-bill-transfer" href="/docs/manage-data-operations/lynx-api/refunds/request-refunds">
+    Submit a refund request with the amount and reason for a credit card transaction.
+  </Card>
+  <Card title="Approve or Decline Refunds" icon="clipboard-check" href="/docs/manage-data-operations/lynx-api/refunds/approve-or-decline-a-refund">
+    Approve or decline a pending refund request and update its status in Nayax Core.
+  </Card>
+  <Card title="Upload Refund Documentation" icon="file-arrow-up" href="/docs/manage-data-operations/lynx-api/refunds/upload-refund-document">
+    Upload documentation when a customer receives a refund directly from the billing provider.
+  </Card>
+</CardGroup>
