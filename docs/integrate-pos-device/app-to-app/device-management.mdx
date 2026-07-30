@@ -19,8 +19,7 @@ around a payment. All of them are optional, and you call them on the same
 ## Read Device Information
 
 `general.get_info` returns a `device_info_t` describing the device, so you can
-read its model, serial number, country, currency, EMV kernel version, and
-languages:
+read its model, serial number, country, currency, and languages:
 
 ```java
 device_info_t info = general.get_info();
@@ -29,7 +28,6 @@ String model    = info.get_model();
 String serial   = info.get_serial();
 int country     = info.get_country_code();   // ISO 3166-1 numeric
 int currency    = info.get_currency_code();  // ISO 4217 numeric
-String kernel   = info.get_emv_kernel_version();
 ```
 
 ## Centralized Logging
@@ -112,13 +110,8 @@ general.kiosk(true);   // hide system UI for kiosk operation
 general.kiosk(false);  // restore normal UI
 ```
 
-## Next Steps
+## See Also
 
-<CardGroup cols={2}>
-  <Card title="Pre-Selection Payment" icon="credit-card" href="/docs/integrate-pos-device/app-to-app/pre-selection">
-    Run a single-phase payment that authorizes and settles in one call.
-  </Card>
-  <Card title="Transaction Status" icon="list-check" href="/docs/integrate-pos-device/app-to-app/transaction-status">
-    List open and settled transactions for reconciliation.
-  </Card>
-</CardGroup>
+- [Pre-Selection Payment](/docs/integrate-pos-device/app-to-app/pre-selection)
+- [Pre-Authorization Payment](/docs/integrate-pos-device/app-to-app/pre-authorization)
+- [Transaction Status](/docs/integrate-pos-device/app-to-app/transaction-status)

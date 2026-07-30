@@ -1,22 +1,23 @@
 ---
 title: "How App to App Works"
-description: "The architecture behind App to App: AIDL, the VPOS Service API classes, the async listener model, and built-in or custom payment UI."
+description: "The API parts you use for an App to App integration, how you call a payment, and how results come back."
 metadata:
-  og:description: "The architecture behind App to App: AIDL, the VPOS Service API classes, the async listener model, and built-in or custom payment UI."
+  og:description: "The API parts you use for an App to App integration, how you call a payment, and how results come back."
 ---
 
 App to App is two apps working together on one VPOS Media device: your Android
 app and Nayax's payment app. Your app runs the screens and decides when to take
 a payment, and Nayax's app runs the payment and reports back what happened.
 
-The two apps talk through the VPOS Service API, a Java library you add to your
+The two apps talk through the VPOS Service API, a Java library you link to your
 app.
 
 ## Why App to App
 
-Building payments into a device app is normally slow and expensive. You take on
-the PCI and EMV burden, you integrate separately with each acquirer, and you
-often add extra hardware just to give the app a display.
+Building payments into a device app is normally slow and expensive. You need to
+take on the certifications burden, for example PCI and EMV, you integrate
+separately with each acquirer, and you often add extra hardware just to give
+the app a display.
 
 App to App removes that work. Nayax provides a ready-to-use Android SDK and
 keeps the payment processing and compliance. Unlike bare-metal terminal SDKs
@@ -26,10 +27,12 @@ returns the result to your app.
 ## How the Two Apps Talk
 
 The connection uses AIDL, the standard Android mechanism that lets one app call
-methods in another. You never touch card data or payment code: your app binds to
-Nayax's payment service (Nayax calls it the VPOS service), then sends requests
-and receives results. Nayax keeps full control of the card reader, EMV
-processing, PIN entry, and the connection to its backend.
+methods in another. You never touch card data or payment code: your app binds
+to Nayax's Payment service (that is part of the VPOS Service API), then sends
+requests and receives results. The Nayax Payment Service keeps full control of
+the card reader and carries out the processing of the card in EMV mode and
+triggers the PIN Entry process if needed. The Nayax VPOS Service also manages
+the communication with Nayax's backend for the transaction processing.
 
 At a high level, every integration follows the same shape:
 

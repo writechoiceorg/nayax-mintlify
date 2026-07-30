@@ -17,7 +17,7 @@ pre-authorizations that are still open. This page covers:
 
 `payment.query` returns a list of `transaction_info_t`, one per transaction,
 each carrying the transaction ID, the current status, the final price, and
-details about the card used:
+details about the transaction:
 
 ```java
 List<transaction_info_t> transactions = payment.query();
@@ -48,33 +48,27 @@ when you cancel it.
 | `5` | Cancelled | None. The transaction is void. |
 
 <Note>
-Open transactions (status `2`) hold funds on the consumer's card until you
+Open transactions (status `2`) hold funds on the consumer's account until you
 settle or cancel them, so reconcile and clear them promptly.
 </Note>
 
 ## Reading Transaction Details
 
-Beyond the ID, status, and amount, each `transaction_info_t` describes the card
-used, which is useful for receipts and support.
+Beyond the ID, status, and amount, each `transaction_info_t` describes the
+transaction, which is useful for receipts and support.
 
 | Field | Description |
 |---|---|
-| `transaction_id` | The transaction identifier you settle or cancel against. |
-| `final_price` | The captured amount, in minor units. |
+| `transaction_id` | The transaction identifier you settle or cancel authorization against. |
+| `final_price` | The captured amount, according to the Decimal Place. |
 | `status` | The lifecycle status from the table above. |
-| `card_entry_mode` | How the card was read (see the `card_entry_type_*` constants). |
-| `card_bin`, `card_bin_hash` | The card BIN and its hashed form. |
-| `card_balance` | The card balance, where the card type reports one. |
+| `card_entry_mode` | How the means of payment was read (see the `card_entry_type_*` constants). |
+| `card_bin`, `card_bin_hash` | The BIN of the means of payment and its hashed form. |
+| `card_balance` | The balance of the means of payment, for types that report one. |
 
 The SDK reference lists every `transaction_info_t` field.
 
-## Next Steps
+## See Also
 
-<CardGroup cols={2}>
-  <Card title="Pre-Authorization Payment" icon="lock" href="/docs/integrate-pos-device/app-to-app/pre-authorization">
-    The two-phase flow that produces the open transactions you settle here.
-  </Card>
-  <Card title="Device Management" icon="gear" href="/docs/integrate-pos-device/app-to-app/device-management">
-    Read device information and use logging, attributes, and locale features.
-  </Card>
-</CardGroup>
+- [Pre-Authorization Payment](/docs/integrate-pos-device/app-to-app/pre-authorization)
+- [Device Management](/docs/integrate-pos-device/app-to-app/device-management)

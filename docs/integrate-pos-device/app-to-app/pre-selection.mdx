@@ -5,9 +5,8 @@ metadata:
   og:description: "Run a single-phase pre-selection payment on VPOS Media that detects the card, authorizes, and settles in a single call."
 ---
 
-A pre-selection payment is the regular flow: the consumer picks a product or
-amount first, then taps to pay. The authorization and settlement happen
-together, so you run the whole transaction with a single `payment.pay` call.
+The regular flow for a Pre-Selection payment: consumer selects a product or a
+fixed amount first, then presents a means of payment to pay (card/NFC/QR Code).
 
 Use pre-selection when the final amount is known before the consumer pays, such
 as a fixed-price wash cycle or a kiosk item. When you need to authorize first and
@@ -16,10 +15,10 @@ instead.
 
 ## The Pay Method
 
-`payment.pay` runs the whole transaction. You pass the amount in minor units
-(for example, cents), a channel bitmask that selects which payment methods to
-accept, a `payment_listener_i` to receive the result, and a `showUI` flag that
-chooses the built-in or custom screens:
+`payment.pay` runs the whole transaction. You pass the amount according to the
+Decimal Place (for example, cents), a channel bitmask that selects which
+payment methods to accept, a `payment_listener_i` to receive the result, and a
+`showUI` flag that chooses the built-in or custom screens:
 
 ```java
 payment.pay(
@@ -53,7 +52,7 @@ payment.pay(
 
 The channel parameter is a bitmask that tells the service which payment methods
 to enable while it waits for the consumer. Combine values with a bitwise OR to
-accept more than one, or use `CHANNEL_ALL` to accept all card channels.
+accept more than one, or use `CHANNEL_ALL` to accept all payment channels.
 
 | Constant | Value | Method |
 |---|---|---|
@@ -78,15 +77,16 @@ service drives the card interaction and reports each step through the listener.
     `payment.pay` with the amount, the channels to accept, and a
     `payment_listener_i`.
   </Step>
-  <Step title="The service waits for a card">
+  <Step title="The service waits for a means of payment">
     The VPOS service powers up the reader on the selected channels and waits for
-    the consumer to present a card.
+    the consumer to present a means of payment.
   </Step>
-  <Step title="The card is detected">
-    When the consumer presents a card, the service calls `on_card_detected`.
+  <Step title="The means of payment is detected">
+    When the consumer presents a means of payment, the service calls
+    `on_card_detected`.
   </Step>
   <Step title="The service authorizes">
-    The service runs the EMV and online authorization and calls
+    The service runs the transaction and online authorization and calls
     `on_authorization`. If `authorized` is `true`, the payment was approved.
   </Step>
   <Step title="The service settles">
@@ -101,7 +101,7 @@ service drives the card interaction and reports each step through the listener.
   <Card title="Pre-Authorization Payment" icon="lock" href="/docs/integrate-pos-device/app-to-app/pre-authorization">
     Add the two-phase flow for when the final amount is not known up front.
   </Card>
-  <Card title="Certify and Go Live" icon="rocket" href="/docs/integrate-pos-device/app-to-app/getting-started">
-    Run the certification suite and roll your integration out to your fleet.
+  <Card title="Transaction Status" icon="list-check" href="/docs/integrate-pos-device/app-to-app/transaction-status">
+    List open and settled transactions for reconciliation.
   </Card>
 </CardGroup>

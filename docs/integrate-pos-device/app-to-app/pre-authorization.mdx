@@ -1,20 +1,20 @@
 ---
 title: "Pre-Authorization Payment"
-description: "Run a two-phase pre-authorization on VPOS Media: authorize a hold, deliver the product, then settle the final amount, which can be lower."
+description: "Run a two-phase pre-authorization on VPOS Media: authorize a hold, deliver the product, then settle the final amount, no higher than the hold."
 metadata:
-  og:description: "Run a two-phase pre-authorization on VPOS Media: authorize a hold, deliver the product, then settle the final amount, which can be lower."
+  og:description: "Run a two-phase pre-authorization on VPOS Media: authorize a hold, deliver the product, then settle the final amount, no higher than the hold."
 ---
 
 A pre-authorization payment splits into two phases with a pause in between. You
-place a hold on the card, deliver the product or service, and only then capture
-the amount the consumer actually owes.
+place a hold on the consumer's account, deliver the product or service, and
+only then capture the amount the consumer actually owes.
 
 Use pre-authorization when the final amount is not known until after the service
 is delivered, such as a metered wash or a variable-weight purchase. When the
 amount is fixed before payment, use [Pre-Selection](/docs/integrate-pos-device/app-to-app/pre-selection)
 instead.
 
-## Authorize, Then Settle
+## Authorize Before Settling
 
 The flow uses two `payment` calls. `payment.authorize` places the hold, and
 `payment.settle` captures the final amount against the transaction the
@@ -102,10 +102,10 @@ product between them. The service reports each step through the listener.
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="Pre-Selection Payment" icon="credit-card" href="/docs/integrate-pos-device/app-to-app/pre-selection">
-    Add the single-phase flow for when the amount is fixed before payment.
+  <Card title="Transaction Status" icon="list-check" href="/docs/integrate-pos-device/app-to-app/transaction-status">
+    List open and settled transactions for reconciliation.
   </Card>
-  <Card title="Certify and Go Live" icon="rocket" href="/docs/integrate-pos-device/app-to-app/getting-started">
-    Run the certification suite and roll your integration out to your fleet.
+  <Card title="Device Management" icon="gear" href="/docs/integrate-pos-device/app-to-app/device-management">
+    Read device information, log to the backend, and control kiosk mode.
   </Card>
 </CardGroup>
