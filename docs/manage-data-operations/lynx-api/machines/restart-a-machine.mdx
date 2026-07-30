@@ -6,7 +6,7 @@ metadata:
 
 import {EndpointCard} from "/snippets/EndpointCard.jsx";
 
-Restart a Nayax device remotely by updating a device attribute via the Lynx API. The attribute is pushed to the machine automatically: no manual action is required, and the device picks up the change on its next poll, restarts, and reconnects on its own.
+Restart a Nayax device remotely by updating a device attribute on the machine. The device picks up the change on its next poll and restarts, then reconnects to the server on its own.
 
 <EndpointCard
   title="Update Specific Machine Attribute"
@@ -20,7 +20,7 @@ Restart a Nayax device remotely by updating a device attribute via the Lynx API.
 Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use them to authenticate your API requests.
 </Warning>
 
-## Restart a machine
+## Restart a Machine
 
 Use the [Update Specific Machine Attribute](/reference/lynx/machine-attribute/update-specific-machine-attribute) endpoint to set device attribute `144` on the machine. Provide the `MachineID` and the attribute's `DeviceAttributeID` as path parameters, and the attribute value as a body parameter:
 
@@ -38,6 +38,8 @@ curl -X PUT "https://qa-lynx.nayax.com/operational/v1/machines/<MACHINE_ID>/attr
 <Note>
   Replace `<MACHINE_ID>` with your machine's unique identifier, and `<YOUR_ACCESS_TOKEN>` with your Lynx API token.
 </Note>
+
+This table outlines the body parameters:
 
 | **Name**               | **Type** | **Description**                                                       |
 | :--------------------- | :------- | :---------------------------------------------------------------------- |
@@ -67,37 +69,17 @@ The device restarts within a few minutes once it polls the queue. Restarting als
   If attribute `144` has never been set on the machine, a `GET` request for it returns `204 No Content` instead of an error, and the attribute is omitted from the machine's full attribute list until you set it.
 </Note>
 
-## Restart vs reboot
+## Restart Versus Reboot
 
-**Restart** is the lighter operation. It only powers the device off and on and applies any pending configuration. Use it for a remote restart like the one described on this page.
-
-**Reboot** is heavier. The device reaches out to the boot server and checks whether a newer firmware version is available. If there is one, the bootloader on the device downloads and installs it, and then a regular restart happens as part of the firmware update flow. A reboot is not needed to restart a device.
+A restart is the lighter of the two power operations. It powers the device off and on and applies any other pending configuration. A reboot is heavier: it activates the bootloader. Use a restart unless you specifically need the bootloader.
 
 <Warning>
 Do not trigger a restart during an active transaction. Wait until the device is idle so you do not interrupt a payment in progress.
 </Warning>
 
-## Confirm the restart
+## Confirm the Restart
 
-After the device restarts, it sends a `PowerUp` event back to the server confirming it is online again. Use this event to verify the restart completed. In Nayax Core, find this event on the machine's page under **Info** > **Last alerts**:
-
-| **Timestamp**       | **Event**  | **Code** | **Type** | **Description**                                    |
-| :------------------- | :--------- | :------- | :------- | :-------------------------------------------------- |
-| 2026-07-28 10:29:30   | Power up   | `1`      | Device   | Device boot version, firmware version, and status    |
-
-Selecting the event shows the device details panel. Identifiers such as the device serial number, IMEI, and SIM serial are omitted here for privacy. The non sensitive fields look like this:
-
-| **Field**              | **Example value**      |
-| :---------------------- | :---------------------- |
-| Device Serial #         | `<DEVICE_SERIAL>`       |
-| Device Boot Version     | `0`                      |
-| Device FW Version       | `EV.Charger.344.275`    |
-| Decimal Place           | `2`                      |
-| Payment Conf. Version   | `4012`                   |
-| Modem IMEI              | `<IMEI>`                 |
-| SIM Card Serial #       | `<SIM_SERIAL>`           |
-| RSSI                    | `31`                     |
-| POS PCB version         | `0`                      |
+After the device restarts, it sends a `PowerUp` event back to the server confirming it is online again. Use this event to verify the restart completed.
 
 ## Next steps
 
