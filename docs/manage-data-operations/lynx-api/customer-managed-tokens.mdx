@@ -1,8 +1,8 @@
 ---
 title: "Customer-Managed Access Tokens"
-keywords: ["customer-managed token", "customer-managed access token", "appScope", "internalScope", "scope", "access token lifetime", "Cortex Gateway", "customer token management", "token claims"]
+keywords: ["customer-managed token", "customer-managed access token", "appScope", "internalScope", "scope", "access token lifetime", "customer token management", "token claims"]
 metadata:
-  og:description: "Learn what customer-managed access tokens are, how scopes and claim types work, and how Lynx evaluates a token on each request."
+  og:description: "Learn what customer-managed access tokens are and how scopes and claim types control the access an integration gets."
 ---
 
 Customer-managed access tokens let you grant limited, time-boxed API access
@@ -15,14 +15,12 @@ that you define.
 
 The system uses two related token types. A refresh token is long-lived and
 is used only to request new access tokens. An access token is short-lived
-and is the credential you actually send with each API call. Cortex Gateway
-authorizes its own requests by converting the HTTP method and route into a
-required scope string.
+and is the credential you actually send with each API call.
 
 | Token type | Lifetime | Used for |
 | --- | --- | --- |
 | Refresh token | Up to 100 years | Requesting access tokens |
-| Access token | 24 hours | Making Lynx API and Cortex Gateway requests |
+| Access token | 24 hours | Making Lynx API requests |
 
 ## Scopes
 
@@ -38,7 +36,7 @@ Common scope examples:
 - `users:app-token:create` grants permission to create app tokens.
 
 <Warning>
-Avoid granting the bare `*` scope. It grants full access to every resource
+Avoid assigning the bare `*` scope. It grants full access to every resource
 and action, which defeats the purpose of scoping a token to a specific
 integration.
 </Warning>
@@ -54,40 +52,9 @@ types, each with its own priority and validation behavior.
 | `internalScope` | Authenticates internal Nayax microservices | Checked first | Must match exactly if present |
 | `scope` | Standard OAuth2 user-level scope | Checked last, as a fallback | Checked after other authorization checks pass |
 
-For most customer integrations, set `appScope` on the token to describe the
-machines, devices, or orders the integration needs to access.
-
-## How Lynx Evaluates a Token
-
-Cortex Gateway authorizes requests with a flat conversion from HTTP route to
-required scope. For example, a `GET /v1/machines` request requires
-`machines:read`, and a `POST /v1/machines` request requires
-`machines:create`.
-
-| Method | Route | Required scope |
-| --- | --- | --- |
-| GET | `/v1/machines` | `machines:read` |
-| POST | `/v1/machines` | `machines:create` |
-| PUT | `/v1/machines/{id}` | `machines:update` |
-| DELETE | `/v1/machines/{id}` | `machines:delete` |
-
-Lynx API applies a layered check instead of a single route-to-scope lookup.
-For every request other than the token exchange, Lynx evaluates the token
-in this order:
-
-1. **`appScope` claim.** If present and it matches the scope required for
-   the action, Lynx skips the remaining checks and allows the request. If
-   present but it doesn't match, Lynx denies the request immediately.
-2. **Menu-based permission check.** If no `appScope` claim is present, Lynx
-   falls back to checking the calling user's menu permissions in Nayax Core.
-   This is the same check used for standard account tokens.
-3. **`scope` claim.** If the menu check passes, Lynx checks whether a
-   `scope` claim is present and, if so, whether it matches. A mismatch
-   denies the request even though the menu check succeeded.
-
-The required scope string follows the same `{resource}:{action}` convention
-as Cortex Gateway. For example, the `lynx_machines_get_machine` action maps
-to `machines:read`.
+For most customer integrations, `appScope` is the claim type a Nayax admin
+assigns to describe the machines, devices, or orders the integration needs
+to access.
 
 ## See Also
 
