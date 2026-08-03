@@ -1,0 +1,122 @@
+---
+title: "FAQ"
+---
+
+# Triggering apps update process (accessing CasHub's app)
+
+Once Nayax Fuel's Support team has submitted the relevant app update request to the device, please turn on the device and proceed with one of the following two options:
+
+1. Leave the device powered on overnight: it will reset automatically at approximately 3-4 AM, at which point the updates will be collected and initiated.
+2. Manually access the CASHUB app to trigger the download and installation of the updates.
+
+If you select the second option, please proceed as follows:
+
+First, set the device to "Out of Service" status by disconnecting the link to the device and waiting 30 seconds:
+
+<Frame>
+  ![11](/images/11.png "11")
+</Frame>
+
+Next, click five times on the top-right corner of the screen and select the Technician Menu. Enter the password 123123.
+
+<Frame>
+  ![12](/images/12.png "12")
+</Frame>
+
+Then scroll down to Dev Mode and enter the password 321321:
+
+<Frame>
+  ![13](/images/13.png "13")
+</Frame>
+
+Proceed to select WiFi:
+
+<Frame>
+  ![14](/images/14.png "14")
+</Frame>
+
+Then select the back arrow to return to the Android settings:
+
+<Frame>
+  ![15](/images/15.png "15")
+</Frame>
+
+From there, go to Apps & Notifications:
+
+<Frame>
+  ![16](/images/16.png "16")
+</Frame>
+
+Then select "See all X apps" (in this example, the device has 24 apps):
+
+<Frame>
+  ![17](/images/17.png "17")
+</Frame>
+
+Select the CasHub app and open it:
+
+<Frame>
+  ![18](/images/18.png "18")
+</Frame>
+
+<Frame>
+  ![19](/images/19.png "19")
+</Frame>
+
+Click the "Status" button:
+
+<Frame>
+  ![20](/images/20.png "20")
+</Frame>
+
+Then select the three dots in the top-right corner and choose "Connect":
+
+<Frame>
+  ![21](/images/21.png "21")
+</Frame>
+
+The screen will display "Connecting..." both at the top and in the table below:
+
+<Frame>
+  ![22](/images/22.png "22")
+</Frame>
+
+(If this persists for more than one minute, the process has likely stalled)
+
+Following this, the download and update of the apps will begin:
+
+<Frame>
+  ![23](/images/23.png "23")
+</Frame>
+
+Once all apps have been downloaded and updated, a "Finished" line will appear:
+
+<Frame>
+  ![24](/images/24.png "24")
+</Frame>
+
+Please note that certain apps can only be downloaded, not installed, at this stage, as the device cannot update applications that are currently running. This applies to apps such as
+
+- Nayax Launcher
+- Update Service
+- VPOS Service
+
+For these, the device must be rebooted afterward, and the apps will be updated during the device's power-up sequence. <br />During this process, a "Castles: Updating (application)" notification will appear for approximately one minute.
+
+<Note>
+  **Note- "vpos\_media keeps stopping" error**
+
+  If you receive this error, this is due to the Vendapp crashing, an application not relevant to your needs. This can occur if the Vendapp is set as the default application:
+
+  <Frame>
+    ![25 1](/images/25-1.png "25 1")
+  </Frame>
+
+  or if the relevant parameter value is empty or missing (in either case, the device defaults to Vendapp).<br /><br />If the parameter is correctly set to Fuel:
+
+  <Frame>
+    ![26](/images/26.png "26")
+  </Frame>
+
+  and you still receive this error, the Vendapp will need to be updated.
+</Note>
