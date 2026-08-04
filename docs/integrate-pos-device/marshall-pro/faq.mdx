@@ -10,6 +10,20 @@ Regarding the setup of your device's Wifi/LAN connection to your local network, 
 
 Wifi connection: [https://devzone.nayax.com/docs/integrate-pos-device/marshall-pro/faq#configuring-wifi-and-ip](https://devzone.nayax.com/docs/integrate-pos-device/marshall-pro/faq#configuring-wifi-and-ip)<br />LAN connection: [https://devzone.nayax.com/docs/integrate-pos-device/marshall-pro/faq#configuring-eth-and-ip](https://devzone.nayax.com/docs/integrate-pos-device/marshall-pro/faq#configuring-eth-and-ip)
 
+## Activating the Device
+
+The first step in activating the device is to scan the QR code displayed on the device's screen using your phone's camera. The following photo depicts a VPOSM4S device; however, the process is identical for the VPOSM5 device:
+
+<Frame>
+  ![](/images/docs/faq/image1.png)
+</Frame>
+
+Next, you will be redirected to a landing page where you will be required to enter the following details. After submission, a verification code is sent via email, which must be entered on the landing page to complete the device activation.
+
+<Frame>
+  ![](/images/docs/faq/image2.png)
+</Frame>
+
 ## Getting the Device's Details (Serial Number, IP)
 
 First, set the device to "Out of Service" status by disconnecting the link to the device and waiting 30 seconds:
@@ -109,6 +123,16 @@ In Ethernet Settings, select Static:
 </Frame>
 
 And fill in the details.
+
+# Firmware/ apps update process
+
+The firmware update is initiated from a separate platform called CasHub. The update process involves updating each relevant application individually, rather than as a single package.
+
+The firmware update for each application consists of two separate stages: download and update. Once the download process has been completed, Nayax Fuel's Support team must send the device a request to initiate the update process for the desired applications.
+
+Alternatively, you may initiate this update process yourself, as described in the following section:
+
+[https://devzone.nayax.com/docs/integrate-pos-device/marshall-pro/faq#triggering-apps-update-process-accessing-cashub%E2%80%99s-app](https://devzone.nayax.com/docs/integrate-pos-device/marshall-pro/faq#triggering-apps-update-process-accessing-cashub%E2%80%99s-app)
 
 # Triggering apps update process (accessing CasHub's app)
 
