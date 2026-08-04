@@ -17,7 +17,7 @@ An access token is a security credential used to authenticate API requests. Each
 It is important to avoid sharing your secret tokens in public places like GitHub or Bitbucket since it can allow malicious API calls.
 </Warning>
 
-Access tokens are managed through the Nayax Back Office (Nayax Core). Follow these steps to reach the **User Tokens** area, then create a new token or retrieve an existing one:
+Access tokens can be found through the Nayax Back Office (Nayax Core). Follow these steps to retrieve an access token:
 
 1. **Log in to Nayax Core** using your username and password.
 2. **Navigate to Account Settings** by clicking on your username at the top right corner, and selecting the **Account Settings** option.
@@ -32,25 +32,9 @@ Access tokens are managed through the Nayax Back Office (Nayax Core). Follow the
 
     <Frame><img src="/images/docs/security/image3.png" /></Frame>
 
-### Create a Token
+5. Click the **Show Token** button next to an existing token to show it, and copy the token for use in API calls.
 
-From the **User Tokens** section, create a new token:
-
-1. Click **Add Token**.
-
-    <Frame><img src="/images/docs/security/add-token.png" /></Frame>
-
-2. In the **Add App Token** dialog, enter an optional **Token Name**, set an **Expiration Date**, then click **Generate**.
-
-    <Frame><img src="/images/docs/security/app-token.png" /></Frame>
-
-3. Copy the generated token value and use it in your API calls.
-
-### Retrieve an Existing Token
-
-To reuse a token you created earlier, click the **Show Token** button next to it in the **User Tokens** section, then copy the token for use in API calls.
-
-<Frame><img src="/images/docs/security/image4.png" /></Frame>
+    <Frame><img src="/images/docs/security/image4.png" /></Frame>
 
 ## Using the Token in API Requests
 
