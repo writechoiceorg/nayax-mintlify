@@ -1,0 +1,66 @@
+---
+title: "Customer-Managed Access Tokens"
+keywords: ["customer-managed token", "customer-managed access token", "appScope", "internalScope", "scope", "access token lifetime", "customer token management", "token claims"]
+metadata:
+  og:description: "Learn what customer-managed access tokens are and how scopes and claim types control the access an integration gets."
+---
+
+Customer-managed access tokens let you grant limited, time-boxed API access
+to your own downstream customers or integrations. Unlike the single
+account-level token described in [Security & Token](/docs/manage-data-operations/lynx-api/security),
+a customer-managed token carries specific permissions and an expiration date
+that you define.
+
+## Token Types
+
+The system uses two related token types. A refresh token is long-lived and
+is used only to request new access tokens. An access token is short-lived
+and is the credential you actually send with each API call.
+
+| Token type | Lifetime | Used for |
+| --- | --- | --- |
+| Refresh token | Up to 100 years | Requesting access tokens |
+| Access token | 24 hours | Making Lynx API requests |
+
+## Scopes
+
+A scope is a permission string that defines what a token can access. Scopes
+follow the format `{domain}:{resource}:{action}`, where the domain and
+resource identify what's being accessed and the action identifies the
+allowed operation.
+
+Common scope examples:
+
+- `machines:read` grants read access to machine data.
+- `orders:*:read` grants read access to all order-related resources.
+- `users:app-token:create` grants permission to create app tokens.
+
+<Warning>
+Avoid assigning the bare `*` scope. It grants full access to every resource
+and action, which defeats the purpose of scoping a token to a specific
+integration.
+</Warning>
+
+## Claim Types
+
+A customer-managed token carries its permissions in one of three claim
+types, each with its own priority and validation behavior.
+
+| Claim | Purpose | Priority | Validation |
+| --- | --- | --- | --- |
+| `appScope` | Authenticates external services and integrations | Checked first | Must match exactly if present |
+| `internalScope` | Authenticates internal Nayax microservices | Checked first | Must match exactly if present |
+| `scope` | Standard OAuth2 user-level scope | Checked last, as a fallback | Checked after other authorization checks pass |
+
+For most customer integrations, `appScope` is the claim type a Nayax admin
+assigns to describe the machines, devices, or orders the integration needs
+to access.
+
+## See Also
+
+- [Request a Customer-Managed Token](/docs/manage-data-operations/lynx-api/requesting-customer-managed-tokens)
+  for how to request and exchange one
+- [Security & Token](/docs/manage-data-operations/lynx-api/security) for the
+  standard, account-level access token used by most integrations
+- [Overview](/docs/manage-data-operations/lynx-api/lynx-overview) for a
+  broader introduction to the Lynx API

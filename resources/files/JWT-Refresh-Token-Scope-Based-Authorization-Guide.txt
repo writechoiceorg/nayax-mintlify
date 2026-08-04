@@ -1,0 +1,193 @@
+JWT Refresh Token & Scope-Based Authorization Guide
+
+Table of Contents
+1. Overview
+2. Subject 1: Creating Refresh Tokens with Scopes
+3. Subject 2: Using Refresh Tokens in Users API
+4. Subject 3: Using Tokens in Lynx API and Cortex Gateway
+5. Complete Examples
+6. Security Best Practices
+7. Troubleshooting
+
+Overview
+The Nayax authentication system provides two types of JWT tokens for API access.
+
+Token Types
+| Token Type | Lifetime | Purpose | Algorithm | Scopes |
+|---|---|---|---|---|
+| Refresh Token | Up to 100 years | Long-term API authentication | RS256 | Yes - can include appScope, internalScope |
+| Access Token (Cortex) | 24 hours | Short-term API access | RS256 | Yes - scopes preserved from refresh token |
+
+Subject 1: Creating Refresh Tokens with Scopes
+
+What Are Scopes?
+Scopes are permission strings that define what resources and actions a token can access. They follow the format: {domain}:{resource}:{action}
+
+Example scopes:
+- machines:read - Read machine data
+- users:app-token:create - Create app tokens
+- orders:* - All order operations
+- * - Full access (use with caution) -> avoid using!
+
+Scope Types
+The system supports three types of scope claims:
+
+| Scope Type | Claim Name | Purpose | Priority | Validation |
+|---|---|---|---|---|
+| appScope | appScope | External service-to-service authentication | High (checked first) | Strict - must match if present |
+| internalScope | internalScope | Internal microservice authentication | High (checked first) | Strict - must match if present |
+| scope | scope | Standard OAuth2 user scopes | Low (fallback) | Checked after user permissions |
+
+Generating Refresh Tokens with Scopes
+
+Endpoint
+POST /v1/generate-refresh-token
+This endpoint is marked as internal-only, not reachable through the public API gateway, with no per-request authentication required.
+
+Request Example
+{
+  "userId": 12345,
+  "expirationUtc": "2026-12-31T23:59:59Z",
+  "tokenName": "My API Integration",
+  "claims": {
+    "appScope": "machines:* devices:read orders:*:read",
+    "internalScope": "system:background-worker",
+    "environment": "production",
+    "service": "analytics-platform"
+  }
+}
+
+Subject 2: Using Refresh Tokens in Users API
+
+Exchanging Refresh Token for Access Token
+Once you have a refresh token, exchange it for a short-lived access token (25 hours).
+
+Endpoint
+POST /v1/issue-access-token
+Authentication: Bearer token
+
+Request Example
+POST /v1/issue-access-token HTTP/1.1
+Host: users-api.nayax.com
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+
+Subject 3: Using Tokens in Lynx API and Cortex Gateway
+
+Cortex Gateway
+
+Route-to-Scope Conversion
+Cortex Gateway automatically converts HTTP routes to required scope strings.
+
+| HTTP Method | Route | Required Scope |
+|---|---|---|
+| GET | /v1/machines | machines:read |
+| POST | /v1/machines | machines:create |
+| PUT | /v1/machines/{id} | machines:update |
+| DELETE | /v1/machines/{id} | machines:delete |
+| GET | /v1/devices/{id}/status | devices:status:read |
+
+Common Authorization Scenarios
+
+Scenario 1: Service with Full Access to Machines
+
+Refresh Token Claims:
+{
+  "appScope": "machines:*",
+  "service": "machine-monitoring"
+}
+
+Allowed Operations:
+- GET /v1/machines (machines:read)
+- POST /v1/machines (machines:create)
+- PUT /v1/machines/{id} (machines:update)
+- DELETE /v1/machines/{id} (machines:delete)
+
+Denied Operations:
+- GET /v1/devices (devices:read - not in scope)
+- POST /v1/orders (orders:create - not in scope)
+
+Lynx API
+
+Layered Authorization Model
+Lynx API does not use a plain route-to-scope gate. Instead, Lynx's internal authorization context
+resolution logic layers three checks, evaluated in order, for every request:
+
+1. appScope claim (service-to-service authentication) — checked first. If present and it matches the required scope for the action, the menu-based check is skipped entirely. If present but it does not match, the request is denied immediately.
+2. Menu-based permission check — validates the endpoint against the calling user's menu permissions. This is the standard authorization path for interactive/UI users.
+3. scope claim — checked only after the menu-based check passes; acts as an additional restriction on top of it. If present and it doesn't match, the request is still denied even though the menu check succeeded.
+
+The required scope string is generated automatically from the internal action key (controller/action, or menu item), following the same {resource}:{action} convention as Cortex Gateway — e.g. lynx_machines_get_machine -> machines:read.
+
+Lynx API Pass-Through Endpoint (/v1/issue-access-token)
+Lynx API exposes its own POST /v1/issue-access-token endpoint that acts as a pass-through to the Cortex Users API — it validates the refresh JWT locally, then forwards the call. This endpoint uses a dedicated authentication path in Lynx's authentication and authorization pipeline and is not subject to the layered appScope/menu/scope model above.
+
+- Auth scheme: Authorization: jwt <refresh-token> (note: jwt, not Bearer, is the scheme Lynx expects on this endpoint)
+- This guarantees a refresh JWT can only be used on this one endpoint, nowhere else in the Lynx API.
+- Lynx validates the JWT signature/issuer/audience against the refresh token issuer configuration (RS256, public key), extracts UserName / id claims, then rewrites the header from jwt <token> to Bearer <token> and forwards it to an internal configuration value pointing to the Cortex Users API, at its own /v1/issue-access-token.
+- Response: { "Token": "<cortex-access-token>" } — identical shape to the Users API response.
+
+Complete Examples
+
+Example 1: External Analytics Platform
+
+Step 1: Generate Refresh Token
+curl -X POST "https://users-api.nayax.com/v1/generate-refresh-token" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userId": 12345,
+    "expirationUtc": "2026-12-31T23:59:59Z",
+    "tokenName": "Analytics Platform",
+    "claims": {
+      "appScope": "machines:read devices:read sales:*:read",
+      "service": "analytics-platform",
+      "environment": "production"
+    }
+  }'
+
+Step 2: Exchange for Access Token
+curl -X POST "https://users-api.nayax.com/v1/issue-access-token" \
+  -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+Step 3: Use Access Token
+curl -X GET "https://api.nayax.com/v1/machines" \
+  -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+Lynx pass-through exchange example:
+curl -X POST "https://lynx-api.nayax.com/v1/issue-access-token" \
+  -H "Authorization: jwt <refresh-token>"
+
+Security Best Practices
+
+Token Storage
+
+DO:
+- Store refresh tokens in secure key management systems
+- Use environment variables on servers
+- Encrypt tokens at rest
+
+DON'T:
+- Store in plain text files
+- Commit to version control
+- Include in URL parameters
+
+Token Generation
+1. Minimum Expiration: Use the shortest time needed
+2. Minimum Scopes: Grant only required permissions
+3. Token Naming: Use descriptive names
+4. Token Limits: Max 50 per user
+
+Troubleshooting
+
+Common Issues
+
+Issue: 401 Unauthorized
+Cause: Invalid signature or expired token
+Solution: Verify token expiration, check signing keys
+
+Issue: 403 Forbidden
+Cause: Scope mismatch
+Solution: Check required scope vs token scopes
+
+Issue: 429 Too Many Requests
+Cause: Rate limit exceeded
+Solution: Implement token caching
