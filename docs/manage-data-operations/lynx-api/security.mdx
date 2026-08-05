@@ -5,7 +5,7 @@ metadata:
   og:description: "Learn how to generate a Lynx API access token (API key) from Nayax Core and use it as a Bearer credential to authenticate requests in QA and production."
 ---
 
-Authentication using an access token is required to interact securely with the Lynx API. This guide provides an overview of generating and using access tokens and best practices for ensuring API security.
+The Lynx API requires an access token to authenticate requests securely. This guide provides an overview of generating and using access tokens and best practices for ensuring API security.
 
 ## Access Token
 
@@ -17,7 +17,7 @@ An access token is a security credential used to authenticate API requests. Each
 It is important to avoid sharing your secret tokens in public places like GitHub or Bitbucket since it can allow malicious API calls.
 </Warning>
 
-Access tokens are managed through the Nayax Back Office (Nayax Core). Follow these steps to reach the **User Tokens** area, then create a new token or retrieve an existing one:
+You manage access tokens in the Nayax Back Office (Nayax Core). Follow these steps to reach the **User Tokens** area, then create a new token or retrieve an existing one:
 
 1. **Log in to Nayax Core** using your username and password.
 2. **Navigate to Account Settings** by clicking on your username at the top right corner, and selecting the **Account Settings** option.
@@ -48,7 +48,7 @@ From the **User Tokens** section, create a new token:
 
 ### Retrieve an Existing Token
 
-To reuse a token you created earlier, click the **Show Token** button next to it in the **User Tokens** section, then copy the token for use in API calls.
+To reuse an existing token, click the **Show Token** button next to it in the **User Tokens** section, then copy the token for use in API calls.
 
 <Frame><img src="/images/docs/security/image4.png" /></Frame>
 
