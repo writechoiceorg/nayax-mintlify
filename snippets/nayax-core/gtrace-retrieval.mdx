@@ -1,0 +1,31 @@
+Gtrace is a log that records general device behavior. The Nayax reader
+generates it and sends it to Nayax Core, so it is separate from the SDK logs
+and never appears in the SDK's command output.
+
+To retrieve a Gtrace, open the relevant machine in Nayax Core and follow these
+steps.
+
+<Steps>
+  <Step title="Request the Gtrace">
+    Go to **Actions** > **Request Gtrace**.
+
+    <Frame><img src="/images/docs/faq-general/image3.png" alt="Request Gtrace option in the Nayax Core Actions menu" /></Frame>
+  </Step>
+
+  <Step title="Open the Dex Tab">
+    Once the request is sent, one or more new rows appear in the table under
+    the **Dex** tab, with a Dex Source of `GtraceV2`.
+
+    <Frame><img src="/images/docs/faq-general/image4.png" alt="Dex tab listing a row with the GtraceV2 Dex source" /></Frame>
+  </Step>
+
+  <Step title="View the Parsed Log">
+    Select the row for the log you want, then select **View Parsed** to read
+    the full log.
+  </Step>
+</Steps>
+
+<Note>
+  **The device must be online.** Nayax Core can only collect a Gtrace from a
+  device that is powered on and connected.
+</Note>

@@ -82,3 +82,96 @@ Below is a list of methods available when using the `vend_callbacks_t` interface
 | `onReaderStateResponse(mdb_msg_reader_status_t state)`   | Responds to the "Get Reader Status" command, indicating whether the card reader is enabled or disabled. (See Marshall Protocol section 8.27.9)                                    |
 | `onReceipt(int ereceiptType, String data)`               | Called when a QR code receipt is generated. Passes the QR code data to the peripheral to display for the consumer. (See Marshall Protocol section 8.12)                           |
 | `onSessionTimeout(uint32_t sessionId)`                   | Triggered when a transaction times out, providing the `sessionId` of the timed-out session.                                                                                       |
+
+## Why onVendDenied Carries No Reason
+
+`onVendDenied` tells your peripheral that the vend was denied, but never why. That is deliberate. The machine is unattended, and surfacing a reason such as a blocked card on a public screen would embarrass the consumer.
+
+The same applies to insufficient credit: the device does not show it and the SDK logs do not record it, because it concerns the exchange between the device and the acquirer rather than the exchange between the device and your machine.
+
+You can see the reason a card was rejected or a transaction was cancelled in Nayax Core.
+
+## Approve a Card with a Third-Party Server
+
+When your peripheral authorizes proprietary cards against your own server, the flow runs outside the SDK up to the point of the verdict.
+
+After the Vend Request is sent and the consumer presents a card, the device sends the Transfer Data command. Your peripheral receives the card details and forwards them to your server on its own. Once your server approves or denies the card, the peripheral reports the verdict back through `client_gateway_auth`, which also informs the device.
+
+<CodeGroup>
+```java Java
+m_vmc.vend.client_gateway_auth(bool approved);
+```
+
+```csharp C#
+vmc_instance.vend.client_gateway_auth(bool approved);
+```
+
+```c C
+vmc_vend_client_gateway_auth(__bool approved)
+```
+</CodeGroup>
+
+The demo apps simulate an approved card by returning `true`:
+
+<CodeGroup>
+```java Java
+public void onSessionBegin(int funds_avail)
+{
+    // credit card has been detected. stop timer
+    session_timer_stop();
+
+    // delayed vend example: send vend request later, and not now inside onBeginSession
+    if (false)
+        vend_timer_start();
+    else
+    {
+        // vend request
+        m_vmc.vend.vend_request(m_sessions[m_active_session]);
+
+        // example: approve mifar/mag card externally (vmc authenticates)
+        if (vmc_config.mag_card_approved_by_vmc_support || vmc_config.mifare_approved_by_vmc_support)
+            m_vmc.vend.client_gateway_auth(true);
+    }
+}
+```
+
+```csharp C#
+public override void onSessionBegin(int funds_avail)
+{
+    logger.d(TAG, "session began. requesting product vend");
+
+    // do vend request
+    vmc_instance.vend.vend_request(session);
+
+    // todo: check if this is a mifare / mag card
+    // todo: usually you will send this to another thread for async processing
+    if (false)
+    {
+        // acknowledge mifare (note: only when machine is working on mifare/mag mode)
+        if (vmc_config.mifare_approved_by_vmc_support || vmc_config.mag_card_approved_by_vmc_support)
+            vmc_instance.vend.client_gateway_auth(true);
+    }
+}
+```
+
+```c C
+static void triggered_vend_request(void)
+{
+.
+.
+.
+if (config.mag_card_approved_by_vmc_support || config.mifare_approved_by_vmc_support || config.qr_approved_by_vmc_support)
+	{
+		vmc_vend_client_gateway_auth(__true);
+	}
+}
+```
+</CodeGroup>
+
+## Cancel a Vend Request
+
+Once you have sent a Vend Request and have not yet received Vend Approved or Vend Denied, you can send the Cancel command. It causes Vend Denied to be sent.
+
+If Vend Approved was already on its way when you sent Cancel, the cancel does not appear in the logs, because a cancel cannot follow a Vend Approved. The peripheral sends Vend Failure instead. Responding with Vend Failure directly, without using Cancel, gives the same result.
+
+You can also cancel before sending the Vend Request, when a consumer starts a transaction and then backs out. That covers both the case before a card is presented and the case just after Begin Session arrives but before you send the Vend Request. In the first case, the SDK log shows only `reader enable`.

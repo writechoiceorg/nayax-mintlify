@@ -111,6 +111,16 @@ As explained in [Payment Flows](/docs/integrate-pos-device/marshall/payment-flow
 </Card>
 </CardGroup>
 
+## CPU and Memory Requirements
+
+The C SDK has no special hardware requirements.
+
+The SDK developer estimates memory usage at around 1KB of RAM, plus a timer tick of roughly 100 lines of code every 5ms. The actual machine code depends on your compiler and platform. It has been run on an Atmel AVR with 2KB of RAM and an 8MHz controller, with plenty left over for the application itself.
+
+## Update to a Newer SDK Version
+
+To move an existing integration to a newer SDK version, overwrite the previous SDK with the new one and recompile your implementation.
+
 ## See Also
 
 <CardGroup cols={2}>

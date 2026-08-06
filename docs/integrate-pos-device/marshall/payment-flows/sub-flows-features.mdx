@@ -14,6 +14,14 @@ This configuration is relevant for peripherals that want to start the transactio
 
 The transaction starts with the consumer selecting a product (PreSelection flow) on the peripheral, which then sends the "Vend request" command without waiting for a "Begin Session" trigger (the "Vend request"). This flow is very commonly used in the Far East.
 
+### Brand Selection and the Dynamic QR Channel URL
+
+Always Idle is also what makes the brand selection screen possible. Regular PreSelection shows animations once a product is selected and cannot display brands, so the device has to be configured to Always Idle for brands to appear at all.
+
+After a product is selected, the brand or channel and its QR code appear on the device screen and in the SDK log. The string is logged in hexadecimal, so [convert it to ASCII](https://www.rapidtables.com/convert/number/hex-to-ascii.html) to read the URL.
+
+<Frame><img src="/images/docs/faq-general/image7.png" alt="Dynamic QR channel URL logged in hexadecimal in the SDK log" /></Frame>
+
 # Features
 
 ## Transfer Data
@@ -54,11 +62,11 @@ On newer ones, it would appear something as follows:
 marshall-c-sdk-demo: received ereceipt: https://ereceipt.nayax.com/qr/2470412964/0123456478901234/2
 ```
 
-### How to get the eReceipt product name not to be "unknown"?
+### Keeping the eReceipt Product Name From Showing as "Unknown"
 
-The product names are taken from our product map, so you can create products in it and name them (to match the product codes you send via the SDK). Just keep in mind that Marshall does not use any of the information in the product map, meaning you can put whichever information inside of it and it won't matter to the transaction flow, including the prices (the only field that is relevant for you is the product code name, and it would appear in Last Sales and eReceipt file)
+Product names on the eReceipt come from the product map, so a product code with no matching row shows up as `unknown`. Create a row for each product code your integration sends and give it a name.
 
-You can add new products to your device's product map by going to the "product map" tab, clicking on "Map"-\> "Add BIN", and then add the product code and product group, PA code and MDB code (this is the one which should match the product code in the SDK), and then of course click on "save".
+Marshall itself never reads the product map, so nothing else in that row affects the transaction flow, prices included. The product name is the only field that matters to you, and it appears in Last Sales and in the eReceipt file. For how to add a row, see [Nayax Core Operations](/docs/integrate-pos-device/marshall/additional-resources/nayax-core-operations).
 
 ## Info Session
 
@@ -70,7 +78,7 @@ An informative non-vending session that provides the peripheral with the consume
 
 ## Incremental Authorization
 
-Incremental authorizations can be used to increase the total amount authorized when the estimate/initial authorization is insufficient. An incremental authorization request may also be based on a revised estimate of the cardholder's spending. Incremental authorizations do not replace the original approval—they are additional to previously authorized amounts. The sum of all linked estimated and incremental authorizations represents the Total amount permitted for a given transaction.
+Incremental authorizations can be used to increase the total amount authorized when the estimate/initial authorization is insufficient. An incremental authorization request may also be based on a revised estimate of the cardholder's spending. Incremental authorizations do not replace the original approval, they are additional to previously authorized amounts. The sum of all linked estimated and incremental authorizations represents the Total amount permitted for a given transaction.
 
 <Danger>
   **Supported billing providers**

@@ -121,3 +121,90 @@ The following methods are available to interact with the general facilities of t
 | `register_callbacks(GeneralEvents events)` | void | Registers the callback events for the peripheral general module. This method allows your application to handle the events defined in the GeneralEvents interface. |
 | `alert(short id, String msg)`              | void | Sends an alert to Nayax Core, shown under **Last Alerts**.                                                                                                        |
 | `requestTime()`                            | void | Makes a time request from the VPOS. The response will arrive as an event (`onTimeUpdate`).                                                                        |
+
+## Send an Alert
+
+Alerts sent with the `alert` method appear in Nayax Core under **Last Alerts**, provided the machine carries the alert configuration described in [Set Up Nayax Core for Marshall Integration](/docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/set-up-nayax-core-for-marshall-integration).
+
+The alert ID must already exist in the Nayax database. You cannot invent one. Alert IDs `200` and `810` do nothing. Use ID `2`, a Door event, which is the recommended choice, and set the event data to whatever you need.
+
+<CodeGroup>
+```java Java
+m_vmc.general.alert((short) 2, "Back door opened");
+```
+
+```csharp C#
+vmc_instance.general.alert(2, "alert test");
+```
+
+```c C
+uint8_t alert_str[32];
+sprintf((char*)&alert_str,"Back door opened");
+vmc_general_alert((short)2, (char*)&alert_str, strlen((char*)&alert_str));
+```
+</CodeGroup>
+
+## Status Command
+
+Once pairing completes, the device sends a Status command whenever network communication is lost, so your machine finds out. The Java SDK log below shows what that looks like, and the C# and C logs match it.
+
+```text Java SDK's log
+[1760613771245+(      7476ms)]        vmc_link: rx
+vmc_link :rx :0d:00:01:04:00:36:01:30:0b:15:01:00:08:37:92:
+[1760613771245+(         0ms)]        vmc_link: tx
+vmc_link :tx :0a:00:00:04:01:30:00:36:00:00:4c:6b:
+[1760613771245+(         0ms)]      vmc_vend_t: received status: 21
+[1760613771251+(         6ms)]            Main: device not available: in technician mode
+
+[1760613771251+(         0ms)]    vmc_socket_t: received status: 21
+```
+
+The status is 21 (`0x15`), which means the device is unavailable. The bytes that follow indicate why.
+
+| Status ID | Description |
+| :-------- | :---------- |
+| `20` | Device in idle mode, available for starting a transaction. Bitmap of extra information, set in the **Status Additional Data** field: bit 0, Ethernet connection is available. |
+| `21` | Device not available. Bitmap of reasons, set in the **Status Additional Data** field: bit 0, device with cellular issues; bit 1, no network communication available; bit 2, device busy with a long operation such as a remote software update; bit 3, device in technician mode; bit 4, device with an internal issue. |
+
+Once communication resumes and the device returns to idle, it sends a Status command with a value of 20.
+
+```text Java SDK's log
+[1759994336421(+7ms)] : rx:
+0d:00:01:02:00:36:01:30:0b:14:01:00:00:34:16:
+[1759994336424(+3ms)] marshall_t: received status
+[1759994336426(+2ms)] : tx:
+0a:00:00:02:01:30:00:36:00:00:69:ca:
+[1759994336431(+5ms)] vmc_vend_t: received status: 20
+[1759994336431(+0ms)] APP: received status: 20
+[1759994336433(+2ms)] APP: device available
+[1759994336434(+1ms)] vmc_socket_t: received status: 20
+```
+
+In short, the device loses contact with the outside world, whether from a dead SIM, a faulty Ethernet connection, or something else. Your peripheral keeps sending keep-alives, the device keeps responding, and the device sends a Status command with a value of 21 (`0x15`). When the device regains contact, it sends a Status command with a value of 20 (`0x14`).
+
+### Card Presentation Statuses
+
+The Status command also reports what is happening while the consumer presents a card.
+
+| Status ID | Description                                                                              |
+| :-------- | :--------------------------------------------------------------------------------------- |
+| `54`      | Call your Bank                                                                           |
+| `56`      | Card Error (Reader not able to read card)                                                |
+| `61`      | Insert Card into the Contact slot                                                        |
+| `62`      | Card not Accepted                                                                        |
+| `65`      | Processing error (Card has been removed before completion of the transaction in Contact) |
+| `66`      | Remove Card from the Contact slot                                                        |
+| `67`      | Use Contact Reader                                                                       |
+| `68`      | Use Magnetic Stripe Reader                                                               |
+| `69`      | Try again                                                                                |
+| `71`      | Present Card                                                                             |
+| `73`      | Card read OK                                                                             |
+| `74`      | Insert card in Contact or Swipe                                                          |
+| `75`      | Present ONE card only                                                                    |
+| `78`      | Use another Card                                                                         |
+| `79`      | Insert card in Contact                                                                   |
+| `82`      | Look at your mobile (consumer is completing the transaction on its mobile phone)         |
+| `83`      | Present Card Again                                                                       |
+| `84`      | Insert or Swipe another card                                                             |
+
+A consumer who has trouble with card reading is prompted to insert the card or use another one. A card without enough credit produces no on-screen message, for the reason described in [Vending Events](/docs/integrate-pos-device/marshall/methods-functions/vending-events).

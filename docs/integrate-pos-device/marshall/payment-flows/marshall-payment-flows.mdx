@@ -57,6 +57,18 @@ The following pages provide a more detailed description of each one:
   </Card>
 </CardGroup>
 
+## Session Start Order With Prepaid Cards
+
+The order of Begin Session and the authorization depends on the card type, which matters when you are matching what you see in the SDK log against the flow diagrams.
+
+With prepaid cards, the authorization comes first and Begin Session follows.
+
+<Frame><img src="/images/docs/faq-marshall-flowconfigurations/image1.png" alt="SDK log showing the authorization arriving before Begin Session for a prepaid card" /></Frame>
+
+With every other card type, Begin Session comes first and the authorization follows.
+
+<Frame><img src="/images/docs/faq-marshall-flowconfigurations/image2.png" alt="SDK log showing Begin Session arriving before the authorization" /></Frame>
+
 ## Recommended Flows
 
 If you are unsure which flow is ideal for your machine type, the following table shows the recommended flow and configuration.

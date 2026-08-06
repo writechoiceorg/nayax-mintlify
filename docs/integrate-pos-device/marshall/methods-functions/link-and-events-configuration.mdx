@@ -125,3 +125,11 @@ void vmc_link_register_callback(vmc_vend_event_handler_cb_t cb)
 </CodeGroup>
 
 By understanding and implementing these configurations and methods, you can effectively manage the communication link and event handling for Nayax payment devices, ensuring reliable and efficient vending operations.
+
+## Communication Loss
+
+The Marshall protocol answers every command with an ACK. When your peripheral sends a command to the device it gets an ACK back, and the same happens in the other direction. The ACK is the receiver telling the sender that the command arrived.
+
+When no ACK comes back, the command is transmitted twice more. If none of the three attempts is acknowledged, the SDK stops sending keep-alive commands and the device sends a reset command to start the pairing process again.
+
+What happens to a transaction that was in progress when the ACKs stopped depends on the stage it had reached. See [Create Payments](/docs/integrate-pos-device/marshall/marshall-create-payments).

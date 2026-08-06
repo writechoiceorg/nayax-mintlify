@@ -164,6 +164,51 @@ no such function in C# or Java due to the nature of the languages
 17. The Billing Provider sends a settlement response (OK) to the Nayax Server.
 18. Nayax Server sends the settlement response (OK) back to the Nayax Device.
 
+## Partial Vending
+
+Partial vending applies only to Multi-Vend. It covers the case where the consumer selected several products but only some of them could be vended.
+
+Take a consumer who selected five items:
+
+<Frame><img src="/images/docs/faq-marshall-flowconfigurations/image3.png" alt="Demo app showing five selected items in a multi-vend session" /></Frame>
+
+To simulate only two of them being vended, add the following inside the `onVendApproved` callback of your demo app:
+
+<Frame><img src="/images/docs/faq-marshall-flowconfigurations/image4.png" alt="onVendApproved callback in the demo app with the partial vending code added" /></Frame>
+
+<CodeGroup>
+```java Java
+if (vmc_config.multi_vend_support) //example of partial vending
+{
+    ArrayList<vmc_vend_t.vend_item_t> list = new ArrayList<vmc_vend_t.vend_item_t>();
+
+    list.add(new vmc_vend_t.vend_item_t((short) 0, (short) 100, (short) 1, (byte) 1));
+    list.add(new vmc_vend_t.vend_item_t((short) 1, (short) 100, (short) 1, (byte) 1));
+
+    // prepare single session object
+    session.products_list = list;
+}
+```
+
+```csharp C#
+if (vmc_config.multi_vend_support) //example of partial vending
+{
+  List<vmc_vend_t.vend_item_t> list = new List<vmc_vend_t.vend_item_t>();
+
+	 list.Add(new vmc_vend_t.vend_item_t((ushort)0, (ushort)10, (ushort)1, (byte)1));
+	 list.Add(new vmc_vend_t.vend_item_t((ushort)1, (ushort)10, (ushort)1, (byte)1));
+
+    // prepare single session object
+    session = new vmc_vend_t.vend_session_t(list);
+}
+```
+
+```c C
+session->products = &session_products[0];
+session->total_products = 1;
+```
+</CodeGroup>
+
 ## See Also
 
 <CardGroup cols={3}>

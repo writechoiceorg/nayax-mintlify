@@ -155,6 +155,48 @@ On android, you either need support from your provider or use a FTDI chip, which
 port implementation for. (see the “android” folder in the JAVA SDK release)
 </Note>
 
+## CPU and Memory Requirements
+
+Neither SDK has any special hardware requirements. If your machine can run a JVM, it can run the SDK.
+
+The SDK developer estimates memory usage at around 50KB of RAM and close to zero CPU time. The SDK is roughly 100 lines of code executed every 5ms, plus a little more per packet when serial data arrives.
+
+## Run the SDK on Android
+
+On Android you do not use the serial port number.
+
+If your board has an onboard serial port, use the regular low-level implementation of the Java SDK. Most Android boards do not have one, and in that case you use the Android low-level file that Nayax provides. Use the Java SDK as is, changing only the low-level serial port, following the code in the demo named `nayax-android-marshall-demo_0_1_6_02`.
+
+The part of the SDK that handles the serial port is shown below.
+
+<Frame><img src="/images/docs/faq-general/image10.png" alt="Serial port section of the Java SDK that the Android low-level file replaces" /></Frame>
+
+<Note>
+With the Android low-level serial implementation you cannot run the demo app itself, but you can still read it as a reference for how to start transactions.
+</Note>
+
+For logging on Android, pass the logger a `BufferedWriter` object. The example below writes to the SD card.
+
+<Frame><img src="/images/docs/faq-general/image11.png" alt="Example of passing a BufferedWriter to the logger to write to the SD card on Android" /></Frame>
+
+### UART Located at /dev/tty
+
+Android cannot access `/dev/tty...`. You need the vendor's serial port library and an implementation of `serial_port_i` wrapped around it.
+
+FTDI is for a converted USB serial port.
+
+## Update to a Newer SDK Version
+
+Updating an existing integration to a newer SDK version is a file swap.
+
+For **Java**, replace the `.JAR` file, which sits in the `libs` folder inside the SDK's directory.
+
+<Frame><img src="/images/docs/faq-general/image8.png" alt="Location of the JAR file inside the libs folder of the Java SDK directory" /></Frame>
+
+For **C#**, replace the `.DLL` file, which sits in the SDK's directory.
+
+<Frame><img src="/images/docs/faq-general/image9.png" alt="Location of the DLL file in the C# SDK directory" /></Frame>
+
 ## See Also
 
 <CardGroup cols={2}>

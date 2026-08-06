@@ -1,0 +1,101 @@
+---
+title: "Device Activation & Communication"
+description: "Activate a VPOS Media device, read its details, and set up Wi-Fi, Ethernet, and static IP"
+keywords: ["marshall", "marshal", "VPOSM activation", "VPOSM5", "VPOSM 4S", "device info", "serial number", "static ip", "DHCP", "ethernet", "eSIM", "fallback"]
+metadata:
+  og:description: "Once a Marshall device is mounted and wired, activate it, read its serial number and IP, and choose how it talks to your peripheral and to the Nayax servers."
+---
+
+import StaticIp from '/snippets/device/static-ip.mdx';
+
+Once the device is mounted and wired, it still needs to be activated and put on
+a network. Activation, the device's own identifiers, and its network settings
+all come from the device screen rather than from Nayax Core.
+
+## Activate a VPOS Media Device
+
+Activation runs from the device screen and a landing page, and it takes an email
+address you can receive a verification code at.
+
+<Warning>
+  Activation is available on VPOS Media 5 only. VPOS Media 4S does not support
+  it yet, so the steps below do not apply to that model.
+</Warning>
+
+<Steps>
+  <Step title="Scan the QR Code">
+    Scan the QR code shown on the device screen with your phone's camera.
+
+    <Frame><img src="/images/docs/faq/image1.png" alt="QR code displayed on the VPOS Media screen during activation" /></Frame>
+  </Step>
+
+  <Step title="Fill In the Landing Page">
+    The QR code opens a landing page. Enter the requested details and submit
+    the form.
+
+    <Frame><img src="/images/docs/faq/image2.png" alt="Activation landing page form for a VPOS Media device" /></Frame>
+  </Step>
+
+  <Step title="Enter the Verification Code">
+    A verification code arrives by email. Enter it on the landing page to
+    finish activating the device.
+  </Step>
+</Steps>
+
+## Find the Device's Serial Number and IP
+
+The device reports its own identifiers and network state from a hidden menu, so
+you do not need Nayax Core to read them.
+
+Tap the top-left corner of the screen repeatedly until the menu appears.
+
+<Frame><img src="/images/docs/faq/image3.png" alt="Hidden menu on the VPOS Media screen" /></Frame>
+
+Select **Device Info**. The screen shows the device's serial number along with
+its cellular and Ethernet communication details.
+
+<Frame><img src="/images/docs/faq/image4.png" alt="Device Info screen showing serial number, eSIM, and network details" /></Frame>
+
+In the example above the device has an eSIM, which every VPOS Media 4S has, and
+it is also connected to Wi-Fi, so the screen shows the network and the device's
+IP address.
+
+To go back to the idle screen and run transactions, select the arrow at the top
+left, then select the Payment APP screen.
+
+## Configure Wi-Fi, Ethernet, and Static IP
+
+You reach the device's network settings from the same hidden menu.
+
+<StaticIp />
+
+## Use Ethernet for Both the Peripheral and the Servers
+
+The supported Ethernet setup is a single connection that carries traffic to the
+Marshall peripheral and to the Nayax servers at the same time. Providing access
+to the outside world in parallel with the peripheral is the router's job.
+
+<Warning>
+  Communicating with the peripheral over Ethernet while communicating with the
+  servers over eSIM is not supported. That split is technically unnatural for
+  Android and Nayax does not currently support it.
+</Warning>
+
+## Keep Cellular as a Fallback
+
+Even when a machine is planned around Ethernet, leave the SIM card installed and
+the antenna connected. Ethernet connections have caused intermittent problems
+for many customers, and with the SIM in place the VPOST or Onyx falls back to
+cellular when that happens.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Set Up Nayax Core for Marshall Integration" icon="gear" href="/docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/set-up-nayax-core-for-marshall-integration">
+    Configure the machine model, timeouts, and payment parameters in Nayax Core.
+  </Card>
+
+  <Card title="Marshall Firmware Updates" icon="arrows-rotate" href="/docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/firmware-updates">
+    See how the update runs on each device model and how long it takes.
+  </Card>
+</CardGroup>

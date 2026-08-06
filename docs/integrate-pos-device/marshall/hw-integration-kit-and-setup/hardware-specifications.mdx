@@ -1,0 +1,56 @@
+---
+title: "Marshall Hardware Specifications"
+sidebarTitle: "Hardware Specifications"
+description: "Power, serial interface, and supported card specifications for Marshall devices"
+keywords: ["marshall", "marshal", "RS232", "level shifter", "RTS/CTS", "handshaking", "power consumption", "24V", "12V", "RFID cards", "magstripe cards", "MiFare", "13.56 MHz"]
+metadata:
+  og:description: "The electrical and reader specifications behind a Marshall integration: what the device needs from your power supply, how the RS232 line is wired, and which cards the reader accepts."
+---
+
+import SupportedCards from '/snippets/device/supported-cards.mdx';
+
+The specifications below cover what the device needs from your machine
+electrically and which cards its reader accepts.
+
+## Power Requirements
+
+Marshall devices need a 24V power source rated at a minimum of 1.5A.
+
+12V is not enough. At that voltage the device struggles to tell a `0` from a
+`1`, which corrupts packets in both directions, triggers retries, and produces
+CRC errors. Power-up draws a spike of current, so a 12V supply can also crash
+the device partway through boot. A Chipi-X adapter draws power of its own,
+which makes 12V even less likely to hold up.
+
+## Serial Interface
+
+The Marshall line is true RS232 with a level shifter, not UART signals at 5V or
+3.3V.
+
+The RS-232 standard specifies −15V to −3V and +3V to +15V. The components Nayax
+uses operate at roughly ±7V.
+
+No hardware handshaking is needed. The interface uses only RxD, TxD, and GnD,
+so RTS and CTS can be left unconnected.
+
+## Power Consumption
+
+The figures below are typical for VPOS Media.
+
+| State | Consumption |
+| :---- | :---------- |
+| Idle  | 3W to 4W    |
+| Peak  | 5W to 7W    |
+
+## Supported Cards
+
+Which of the technologies below applies to you depends on the cards your
+deployment issues.
+
+<SupportedCards />
+
+## See Also
+
+* [Marshall Integration Kit](/docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/sales-kit)
+* [Installation Steps](/docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/installation-steps)
+* [Marshall Troubleshooting](/docs/integrate-pos-device/marshall/additional-resources/troubleshooting)
