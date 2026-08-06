@@ -1,5 +1,6 @@
 ---
 title: "Set Up Nayax Core for Marshall Integration"
+keywords: ["marshall", "marshal", "MDB RX Timeout", "vend result timeout", "session timeout", "keep alive", "VPOST button function", "enable alerts"]
 metadata:
   og:description: "Once you have completed the Marshall installation process, follow the steps below to configure the Nayax device to support the Marshall functionality."
 ---
@@ -69,7 +70,7 @@ If your machine works in the **multi-session mode**, set the session timeout par
 3. Define the **Session Time Out** to specify the session’s duration:
 
    * **Maximum for Credit Cards:** 23 hours
-     \*Update: as of 2025 — **71** hours*
+     \*Update: as of 2025, **71** hours*
    * **Maximum for Prepaid Cards:** 72 hours
    * **Default:** 60 minutes
    * **Minimum:** 1 minute
@@ -82,6 +83,28 @@ If your machine works in the **multi-session mode**, set the session timeout par
 Once the session timeout reaches the defined limit, the session expires. In such cases, the settlement amount will correspond to the price sent during the "vend request" command.
 Once a session has timed out, the device would settle the transaction on its own and send a "Status" command to the peripheral in order to notify it about the settlement taking place. This would let the peripheral know that it no longer needs to settle said transaction (as it has already been settled), and should he try to settle the already-settled transaction he would get "settlement error" (as the device couldn't find said session to settle it).
 </Note>
+
+Expect the session to expire slightly later than the value you set. The device checks its open sessions once a minute, so settlement can lag the configured timeout by up to a minute:
+
+* A 1 minute timeout expires between 1 minute and 1 minute 59 seconds after the session starts.
+* A 5 minute timeout expires between 5 minutes and 5 minutes 59 seconds.
+* A 1 hour timeout expires between 1 hour and 1 hour 59 seconds.
+
+## Configure Vend Result Timeout
+
+The **Vend Result Timeout** sets how long the device waits for a vend response from the peripheral ("Vend Approved" or "Vend Failure") after it sends "Vend Approved" to the peripheral.
+
+The maximum value is 65535 seconds, which is 18 hours, 12 minutes, and 15 seconds. If your machine needs a longer window than that, use [Multi-Session](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session) instead, which runs on the **Session Time Out** parameter above and reaches considerably longer limits.
+
+## Configure the Acquirer Approval Timeout
+
+While the device waits for the acquirer, it shows "Authorizing, Please wait". The message stays up until a response arrives or the timeout is reached.
+
+When the device can reach the Nayax servers normally, the round trip takes a few seconds, usually no more than five. Communication problems between the device and the servers over GSM, VPN, MQTT, or Ethernet stretch that out, either on the way to the servers or on the way back.
+
+The timeout itself is the **MDB RX Timeout** parameter, and its default value is 60 seconds.
+
+<Frame><img src="/images/docs/faq-general/image6.png" alt="MDB RX Timeout parameter in Nayax Core" /></Frame>
 
 ## Configure Keep Alive Parameter
 
@@ -206,6 +229,12 @@ The Payment Flags option needs to be configured for Pre-authorization mode.
 
     <Frame><img src="/images/docs/set-up-nayax-core-for-marshall-integration/image16.png" /></Frame>
 
+## Remove the Cancel Button During Authorization
+
+The device can show an **X** button while a transaction is being authorized, which lets the consumer cancel at that point.
+
+To remove it, set the **VPOST button function** parameter to **VPOS cancel button during authorization**.
+
 ## Configure LCD Parameters
 
 To optimize the user experience, configure the LCD messages displayed during idle or disabled states. This includes customizing or disabling the **"Cash Only"** or **"Welcome"** messages to suit your machine's requirements.
@@ -233,6 +262,14 @@ Follow these steps to update the message:
 2. To disable the Welcome message, send `@@` to the device in the **Welcome message attribute** using the LCD section on the **Machine page**.
 3. To customize the Welcome message, click on the **LCD section** and enter an appropriate message (for example, "Swipe card" to start the transaction).
 4. Click **Save** to store the customized Welcome message.
+
+## Enable Alerts
+
+Alerts sent from the SDK only reach Nayax Core when the machine carries the configuration below. Apply it even if your machine is not an EV charger.
+
+<Frame><img src="/images/docs/faq-general/image2.png" alt="Alert configuration on the machine in Nayax Core" /></Frame>
+
+For the alert IDs your code can send and how to send them, see [General Marshall Events](/docs/integrate-pos-device/marshall/methods-functions/general-marshall-events).
 
 ## Define the Prepaid Card(s) in the System
 

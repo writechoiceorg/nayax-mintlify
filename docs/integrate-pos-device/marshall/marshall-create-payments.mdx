@@ -1,5 +1,6 @@
 ---
 title: "Create Payments"
+keywords: ["marshall", "marshal", "decimal place", "close session", "vend failure", "vend success", "refund", "ACK"]
 metadata:
   og:description: "Once the SDK is running and the connection with the Nayax device is established, the device is ready to handle vending and cashless transactions."
 ---
@@ -61,7 +62,7 @@ To perform a transaction using the Nayax Marshall SDK, follow the steps below.
 **Price field**
 
 The price field is set as an integer, meaning it does not take into consideration the Decimal Place: the actual price is calculated by the device based on the Decimal place- meaning if you set a price of 50 in the SDK, the peripheral would send a price of 50 to the device, who would look at its own Decimal Place setting and would multiply the price sent by 10^(-decimal place). Meaning if the device has a Decimal Place of 2, the actual price the device would attempt to charge the consumer would be 0.50.\
-More on that on [Decimal Place](/docs/integrate-pos-device/marshall/marshall-faqs/faq#decimal-place).
+More on that in [Decimal Place](#decimal-place).
 
 This means that in case the device is using a Decimal Place of 2, the highest price would be 655.35 (0XFFFF with decimal of 2).
 </Warning>
@@ -121,6 +122,57 @@ vmc_vend_session_close(session)
 </Note>
 
 Following these steps ensures that the vending process, from card presentation to product delivery and payment, is handled efficiently and securely using the Nayax Marshall SDK.
+
+## Decimal Place
+
+Decimal Place is a parameter in Nayax Core that the device forwards to your peripheral in the Marshall `Config` command, which is sent as part of the pairing process.
+
+Your machine calculates the multiplier from it:
+
+```text
+X = 10 ^ Decimal Place
+```
+
+For every transaction, multiply the price set in the SDK by that value and send the result to the device. With a Decimal Place of 2 and a price of 30 Euros, the price sent to the device is 30 × (10 ^ 2) = 3000.
+
+<Note>
+Credorax only accepts transactions of 10 cents and above. A price of `1` with 2 decimal places resolves to 0.01 Euro by the time it reaches Credorax, and the transaction is declined.
+</Note>
+
+## Close a Session Without Charging the Consumer
+
+When you cannot provide the goods, close the session with a status other than `Status Ok`, such as `Failed to dispense the product`. Do not close it with a price of 0 and a status of `Status Ok`.
+
+A price of 0 with an `ok` status reads as a price calculation error on your side. Anyone looking at the virtual machine's Last Sales would conclude that Nayax failed to settle the transaction, when in fact the flow between your peripheral and the device worked and you simply chose not to charge. Responding with Vend Failure, or closing with `User cancel` or `Failed to dispense the product`, records the real reason in Last Sales and the Dynamic Transaction Monitor.
+
+Once the status is anything other than `Status Ok`, the price you send is irrelevant, because the transaction counts as cancelled.
+
+| Status | Meaning |
+| :----- | :------------------------------ |
+| `0`    | Status Ok                       |
+| `1`    | User cancel                     |
+| `2`    | Failed to dispense the product  |
+| `4`    | Vend denied                     |
+
+<Warning>
+**Only close a session when the device is idle.** Sending Close Session during an active transaction can get that transaction stuck, because the device processes the Close Session first. Send it only once `onReady` has been triggered.
+</Warning>
+
+## Handle Missing ACKs During a Transaction
+
+Every Marshall command is answered with an ACK. When a command goes unanswered through all three attempts, what happens to the transaction depends on how far it had progressed:
+
+* No ACKs after Vend Success: Nayax is responsible for the settlement.
+* No ACKs after the authorization but before Vend Success: Nayax cancels the transaction.
+* No ACKs before the authorization stage: Nayax cancels the transaction.
+
+For the retry mechanism itself, see [Link and Events Configuration](/docs/integrate-pos-device/marshall/methods-functions/link-and-events-configuration).
+
+## Refunds
+
+Marshall has no refund feature, because a refund concerns the payment rather than the communication between your machine and the device.
+
+If you could not provide the goods, do not charge the consumer in the first place: respond with Vend Failure rather than Vend Success. For a transaction that was already charged and settled, request the refund from Nayax Core, as described in [Nayax Core Operations](/docs/integrate-pos-device/marshall/additional-resources/nayax-core-operations).
 
 ## See Also
 

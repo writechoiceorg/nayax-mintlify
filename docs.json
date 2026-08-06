@@ -110,7 +110,10 @@
                         "pages": [
                           "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/sales-kit",
                           "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/installation-steps",
-                          "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/set-up-nayax-core-for-marshall-integration"
+                          "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/set-up-nayax-core-for-marshall-integration",
+                          "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/device-activation-and-communication",
+                          "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/firmware-updates",
+                          "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/hardware-specifications"
                         ],
                         "root": "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/vpos-touch-installation"
                       },
@@ -121,17 +124,10 @@
                           "docs/integrate-pos-device/marshall/additional-resources/log-generation",
                           "docs/integrate-pos-device/marshall/additional-resources/marshall-ontransferdata",
                           "docs/integrate-pos-device/marshall/additional-resources/stablity-issues",
-                          "docs/integrate-pos-device/marshall/additional-resources/capabilities"
+                          "docs/integrate-pos-device/marshall/additional-resources/capabilities",
+                          "docs/integrate-pos-device/marshall/additional-resources/troubleshooting",
+                          "docs/integrate-pos-device/marshall/additional-resources/nayax-core-operations"
                         ]
-                      },
-                      {
-                        "group": "Marshall FAQs",
-                        "pages": [
-                          "docs/integrate-pos-device/marshall/marshall-faqs/faq-general",
-                          "docs/integrate-pos-device/marshall/marshall-faqs/faq",
-                          "docs/integrate-pos-device/marshall/marshall-faqs/faq-marshall-flowconfigurations"
-                        ],
-                        "root": "docs/integrate-pos-device/marshall/marshall-faqs/index"
                       }
                     ]
                   },
@@ -1898,19 +1894,35 @@
     },
     {
       "source": "/docs/marshall-faqs",
-      "destination": "/docs/integrate-pos-device/marshall/marshall-faqs/index"
+      "destination": "/docs/integrate-pos-device/marshall/marshall-sdk"
+    },
+    {
+      "source": "/docs/integrate-pos-device/marshall/marshall-faqs/index",
+      "destination": "/docs/integrate-pos-device/marshall/marshall-sdk"
     },
     {
       "source": "/docs/faq-general",
-      "destination": "/docs/integrate-pos-device/marshall/marshall-faqs/faq-general"
+      "destination": "/docs/integrate-pos-device/marshall/additional-resources/nayax-core-operations"
+    },
+    {
+      "source": "/docs/integrate-pos-device/marshall/marshall-faqs/faq-general",
+      "destination": "/docs/integrate-pos-device/marshall/additional-resources/nayax-core-operations"
     },
     {
       "source": "/docs/faq",
-      "destination": "/docs/integrate-pos-device/marshall/marshall-faqs/faq"
+      "destination": "/docs/integrate-pos-device/marshall/additional-resources/troubleshooting"
+    },
+    {
+      "source": "/docs/integrate-pos-device/marshall/marshall-faqs/faq",
+      "destination": "/docs/integrate-pos-device/marshall/additional-resources/troubleshooting"
     },
     {
       "source": "/docs/faq-marshall-flowconfigurations",
-      "destination": "/docs/integrate-pos-device/marshall/marshall-faqs/faq-marshall-flowconfigurations"
+      "destination": "/docs/integrate-pos-device/marshall/methods-functions/general-marshall-events"
+    },
+    {
+      "source": "/docs/integrate-pos-device/marshall/marshall-faqs/faq-marshall-flowconfigurations",
+      "destination": "/docs/integrate-pos-device/marshall/methods-functions/general-marshall-events"
     },
     {
       "source": "/docs/overview-tweezer",

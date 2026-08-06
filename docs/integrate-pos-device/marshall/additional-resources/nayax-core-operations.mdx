@@ -1,0 +1,67 @@
+---
+title: "Nayax Core Operations"
+description: "Retrieve device logs, manage the product map, and request refunds from Nayax Core"
+keywords: ["marshall", "marshal", "nayax core", "gtrace", "last alerts", "product map", "eReceipt", "refund", "request refund", "dynamic transaction monitor"]
+metadata:
+  og:description: "Part of a Marshall integration happens in Nayax Core rather than in the SDK: pulling the Gtrace and Last Alerts logs, naming products in the product map, and requesting refunds."
+---
+
+import GtraceRetrieval from '/snippets/nayax-core/gtrace-retrieval.mdx';
+import LastAlertsRetrieval from '/snippets/nayax-core/last-alerts-retrieval.mdx';
+import ProductMap from '/snippets/nayax-core/product-map.mdx';
+import RefundRequest from '/snippets/nayax-core/refund-request.mdx';
+
+Part of a Marshall integration happens in Nayax Core rather than in the SDK.
+The two device-side logs, the product map, and refunds all live there.
+
+## Retrieve a Gtrace
+
+A Gtrace records what the device itself is doing, which makes it the counterpart
+to the SDK log: the SDK log only covers traffic between the device and your
+peripheral.
+
+<GtraceRetrieval />
+
+## Retrieve Last Alerts
+
+Last Alerts holds both the alerts the device raises on its own and the alerts
+your integration sends with the `alert` method, documented in
+[General Marshall Events](/docs/integrate-pos-device/marshall/methods-functions/general-marshall-events).
+
+<LastAlertsRetrieval />
+
+## Manage the Product Map
+
+Marshall does not read the product map during a transaction. The product code
+your peripheral sends drives the flow, and the price comes from the Vend
+Request rather than from the map. The only field that matters to you is the
+product name, which is what turns an `unknown` product in Last Sales or in an
+eReceipt into a readable name.
+
+<ProductMap />
+
+## Request a Refund
+
+Marshall has no refund feature of its own, because a refund concerns the
+payment rather than the communication between your machine and the device.
+Refunds run through Nayax Core.
+
+<RefundRequest />
+
+<Note>
+  If you have not charged the consumer yet, you do not need a refund. Respond
+  with Vend Failure, or close the session with a status other than `Status Ok`.
+  See [Create Payments](/docs/integrate-pos-device/marshall/marshall-create-payments).
+</Note>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="SDK's Log Generation" icon="file-lines" href="/docs/integrate-pos-device/marshall/additional-resources/log-generation">
+    Turn on SDK logging and find the log file that records peripheral traffic.
+  </Card>
+
+  <Card title="Create Payments" icon="credit-card" href="/docs/integrate-pos-device/marshall/marshall-create-payments">
+    Set up and manage cashless payment transactions from your controller.
+  </Card>
+</CardGroup>

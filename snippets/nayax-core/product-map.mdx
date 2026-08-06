@@ -1,0 +1,24 @@
+The product map lets you manage the products assigned to your peripherals from
+Nayax Core. Each row maps a product code to a product name and cost, and that
+name is what appears in Last Sales, the Dynamic Transaction Monitor, and the
+eReceipt file.
+
+To add a product, open the **Product Map** tab, go to **Map** > **Add BIN**,
+then enter the product code, product group, PA code, and MDB code. The MDB code
+is the one that must match the product code your integration sends. Select
+**Save** to store the row.
+
+### Example
+
+The peripheral sends a Vend Request for product code `1` with a price of
+`10.00`. The product map has a row for product code `1` named `Apple` with a
+cost of `20.00`.
+
+The consumer is charged `10.00`, the price from the Vend Request. In Last Sales
+and the Dynamic Transaction Monitor, the transaction shows product code `1`
+alongside the name `Apple`.
+
+Nayax U has step-by-step guides for the product map itself:
+
+* [Create a product map template](https://nayax-u.nayax.com/scenario/how-to-create-a-product-map-template-administration-2349)
+* [Create a product in the product map](https://nayax-u.nayax.com/scenario/how-to-create-a-product-administration-937)

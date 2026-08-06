@@ -1,0 +1,12 @@
+Nayax readers accept both swipe (magstripe) and RFID cards.
+
+The reader works at 13.56 MHz and supports ISO 14443 Type A and Type B cards,
+such as MiFare Classic and MiFare Plus, as well as ISO 15693 cards, such as HID
+iClass. The most common RFID card used with Nayax readers is MiFare Classic 1K
+or 4K.
+
+Magstripe cards are supported when they follow a non credit card standard, which
+means the card data contains no `=` character and the UID length is between 4
+and 40. Cards that fall outside those limits can still be supported, but doing
+so may require an additional integration through
+[Cortina Prepaid](/docs/cortina/prepaid-card/prepaid-card-flows).

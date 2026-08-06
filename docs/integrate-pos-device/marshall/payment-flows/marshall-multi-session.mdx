@@ -23,7 +23,7 @@ This differs from the Single-Session flow, in which settlement is performed imme
 
 <Danger>
   It's important that peripherals do not count on the Session Timeout mechanism as it's strictly a fallback mechanism from the device's end.\
-  Meaning the peripheral should always send a settlement command, and in case of not wanting to charge the consumer he can change one of the settlements fields, called "status" (unrelated to the "Status" command) to a status of "Vend failure" for example- more on that in [Multisession- not charging a consumer at settlement stage](/docs/integrate-pos-device/marshall/marshall-faqs/faq-marshall-flowconfigurations#not-charging-consumers-close-session-with-price-of-0--what-is-the-issue)
+  Meaning the peripheral should always send a settlement command, and in case of not wanting to charge the consumer he can change one of the settlements fields, called "status" (unrelated to the "Status" command) to a status of "Vend failure" for example- more on that in [Close a Session Without Charging the Consumer](/docs/integrate-pos-device/marshall/marshall-create-payments#close-a-session-without-charging-the-consumer)
 </Danger>
 
 ## Why Use Multi-Session
@@ -45,6 +45,20 @@ The flow allows the peripheral to notify the Nayax Device that vending can begin
 The Multi-Session flow functions technically as a **Pre-Selection flow**. For some acquirers, this architecture can lead to a **quicker release of captured credit** than the Single-Session flow with Pre-Authorization.
 
 If you use Single-Session with Pre-Authorization, the authorized credit amount may take days or weeks to be released, which can confuse consumers who may think they were charged the full Pre-Authorization amount. Multi-Session helps mitigate this issue.
+
+### Transactions That Start and End at Different Locations
+
+Because a Multi-Session transaction stays open, you can start it at one Nayax device and close it at another. Cart rental is the clearest example:
+
+1. The consumer starts a transaction at the Nayax device on the first rail and takes a cart.
+2. The consumer uses the cart.
+3. The consumer returns the cart to any rail, not necessarily the first one. The Nayax device on that second rail recognizes the cart and sends its ID to a main server, which matches the cart ID to the device where the transaction started and closes the transaction there.
+
+This pattern puts real requirements on your side:
+
+* A server that tracks which sessions are open at which location.
+* A way to tell the different cards apart.
+* No more than 60 carts available for rent per rail at a time. Beyond that, consumers cannot rent.
 
 ## Payment Flow
 

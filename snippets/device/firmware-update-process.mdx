@@ -1,0 +1,42 @@
+How a firmware update runs depends on the device model. VPOST, Onyx, and
+VPOS Media 4S updates start from Nayax Core. VPOS Media 5 updates start from
+CasHub, a separate site.
+
+### VPOST and Onyx
+
+The update starts from Nayax Core and runs in two parts: the MAIN update and
+the POS update.
+
+During the MAIN update, the screen shows `gloader` at the top along with a
+percentage. When that part finishes, the device resets itself and starts
+downloading and installing the POS part. The screen goes black while the POS is
+erased and rewritten. Once everything completes, the device powers up on its own
+and returns to idle mode.
+
+<Warning>
+  **Do not disconnect the device until it resets.** The black screen during the
+  POS update is expected, not a failure. Interrupting the update at this point
+  can leave the device in an unusable state.
+</Warning>
+
+The full process usually takes 30 to 60 minutes, and longer over Ethernet.
+
+### VPOS Media 4S
+
+The update starts from Nayax Core, as it does for VPOST and Onyx, but it runs as
+a single part rather than two.
+
+The download runs in the background, so consumers can keep using the device
+while it happens. Once the download completes, the device starts the
+installation on its own and shows an installation screen with the current
+progress.
+
+### VPOS Media 5
+
+The update starts from CasHub instead of Nayax Core, and each app is updated
+individually rather than as one package.
+
+Every app takes two separate actions: the download, and then the update. Once
+the download finishes, your local support contact has to send the device a
+request to start the update for the apps you want. How long the whole process
+takes varies with the packages involved and their versions.

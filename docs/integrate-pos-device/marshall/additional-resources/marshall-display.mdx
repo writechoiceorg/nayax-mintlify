@@ -1060,3 +1060,59 @@ Packets are created automatically by the SDK or Nayax Core.
 The image below would be the display result.
 
 <Frame>![](/images/docs/marshall-display/image1.png)</Frame>
+
+## Customize the Idle Screen and Transaction UI
+
+Beyond the selection screens, a limited set of idle-state and transaction-state elements can be customized from the DCS back office. The list below is everything that is currently available.
+
+Select the pictures or animations shown while the device is idle. You can also add a custom image, such as your company logo.
+
+<Frame>![Idle state image and animation selection in the DCS back office](/images/docs/faq/image5.png)</Frame>
+
+Change the **Please select a product** title.
+
+<Frame>![Setting for the product selection title](/images/docs/faq/image6.png)</Frame>
+
+Change the title shown in idle mode.
+
+<Frame>![Setting for the idle mode title](/images/docs/faq/image7.png)</Frame>
+
+Change the product selection message.
+
+<Frame>![Setting for the product selection message](/images/docs/faq/image8.png)</Frame>
+
+Remove the audio on the product selection screen.
+
+<Frame>![Setting to remove the product selection screen audio](/images/docs/faq/image9.png)</Frame>
+
+Remove any of the following audio prompts.
+
+<Frame>![First group of removable audio prompts](/images/docs/faq/image10.png)</Frame>
+
+<Frame>![Second group of removable audio prompts](/images/docs/faq/image11.png)</Frame>
+
+Remove the "Thank you and goodbye" message at the end of a transaction, which removes both the picture and the spoken message.
+
+<Frame>![Setting to remove the end of transaction thank you message](/images/docs/faq/image12.jpg)</Frame>
+
+<Note>
+On VPOS Touch there is nothing to customize during the transaction itself: neither messages nor images and animations can be changed.
+</Note>
+
+## Change the Product Selection Animation
+
+You can replace the product selection animation with the Smartfridge one. Send the following file to the device using Machine File.
+
+<Frame>![Machine File screen used to send the animation file to the device](/images/docs/faq/image13.png)</Frame>
+
+```text
+4010001;devicecoreftp.nayax.net;21;embedded_support;asdf&^%;./automation/General/1742223843-select_smartfridge.264;;f7b4;video\select_smartfridge.264;
+```
+
+Then apply the configuration below.
+
+<Frame>![Configuration that activates the Smartfridge selection animation](/images/docs/faq/image14.png)</Frame>
+
+<Note>
+This feature is available from version 4.0.25.11 and above.
+</Note>

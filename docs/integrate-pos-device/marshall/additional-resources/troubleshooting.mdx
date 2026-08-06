@@ -1,0 +1,97 @@
+---
+title: "Marshall Troubleshooting"
+sidebarTitle: "Troubleshooting"
+description: "Diagnose Marshall device startup, connection, and SIM failures"
+keywords: ["marshall", "marshal", "Marshall FAQ", "device troubleshooting", "device stuck on nayax screen", "sim card", "antenna", "com port", "cash only", "chipi-x", "pairing"]
+metadata:
+  og:description: "Work through the most common Marshall failures: a device that hangs on the Nayax logo, a device stuck in Cash Only mode, a link that never pairs, and an unrecognized SIM."
+---
+
+Each section below covers one Marshall failure: what brings it on, and what to
+check to clear it.
+
+## The Device Hangs on the Nayax Screen During Power-Up
+
+A device that stops on the Nayax logo during power-up has a communication
+problem. Any of the following can cause it:
+
+* **Modem connection.** Poor cellular reception, or a poor Ethernet connection
+  if the device is wired.
+* **Wrong modem type.** For example, a European modem used in the United
+  States, or a modem too weak for the location.
+* **SIM card.** The SIM is missing, unsupported (such as a SIM bought outside
+  of Nayax), or has used up its data.
+* **Antenna.** The antenna is loose, wrapped around itself, pointing downward,
+  or sitting against a metal enclosure.
+* **Power supply.** If the device reaches the Nayax logo and then crashes,
+  confirm the power source delivers 24V at a minimum of 1.5A. See
+  [Marshall Hardware Specifications](/docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/hardware-specifications).
+
+## The Device Is in Cash Only Mode
+
+If the device is connected to the Marshall cable but still runs in Cash Only
+mode, the serial connection is not reaching the board.
+
+Check which COM port is connected to your board. It must be COM2, as described
+in [Installation Steps](/docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/installation-steps).
+
+If you use a Chipi-X USB-to-serial adapter, check whether it is connected
+through a hub. Connect it directly to the PC instead.
+
+<Note>
+  The Chipi-X is the only USB-to-serial adapter that grants support privileges.
+  Other adapters may work, but Nayax support does not cover them.
+</Note>
+
+## Everything Is Connected but Nothing Works
+
+When the wiring and the device both look correct and the integration still does
+not run, work through these checks in order.
+
+<Steps>
+  <Step title="Check the Nayax Core Parameters">
+    Confirm the machine parameters in Nayax Core match your setup. See
+    [Set Up Nayax Core for Marshall Integration](/docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/set-up-nayax-core-for-marshall-integration).
+  </Step>
+
+  <Step title="Check the Physical Connection">
+    Confirm the wiring matches
+    [Installation Steps](/docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/installation-steps).
+  </Step>
+
+  <Step title="Reboot the Device">
+    Disconnect the device from power, wait for the screen to go black, then
+    power it back on.
+  </Step>
+
+  <Step title="Check the COM Port in Your Code">
+    Confirm the SDK code points at the correct COM port.
+  </Step>
+
+  <Step title="Compile and Run the SDK">
+    Two things confirm the link is up: the peripheral simulator's menu and
+    pairing process appear in the prompt window, and the log file shows the
+    pairing process finished successfully.
+  </Step>
+</Steps>
+
+## The SIM Card Is Not Working
+
+Whether a SIM is recognized depends on the APN addresses stored on the device.
+A SIM whose APN is not on the device does not work.
+
+If a SIM has a problem, whether it shipped with the device or was bought from
+Nayax separately, contact the support team at
+[support@nayax.com](mailto:support@nayax.com).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Stability & Starvation Issues" icon="triangle-exclamation" href="/docs/integrate-pos-device/marshall/additional-resources/stablity-issues">
+    Diagnose the hardware causes behind an unstable or starved Marshall link.
+  </Card>
+
+  <Card title="SDK's Log Generation" icon="file-lines" href="/docs/integrate-pos-device/marshall/additional-resources/log-generation">
+    Turn on SDK logging and find the log file to inspect peripheral traffic.
+  </Card>
+</CardGroup>
