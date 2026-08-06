@@ -76,10 +76,13 @@ Added as the first three entries in the `redirects` array:
 ```json
 { "source": "/docs/get-started/agent-skills", "destination": "/docs/get-started/build-with-ai" },
 { "source": "/docs/zh/get-started/agent-skills", "destination": "/docs/zh/get-started/build-with-ai" },
-{ "source": "/archive/build-with-ai/agent-skills", "destination": "/docs/get-started/build-with-ai" }
+{ "source": "/archive/build-with-ai/:slug*", "destination": "/docs/get-started/build-with-ai" }
 ```
 
-The third one covers the archive URL that was publicly reachable between 2026-07-14 and 2026-08-06.
+The third one sends anything under this folder to the Build with AI landing page. It covers the
+archive URL that was publicly reachable between 2026-07-14 and 2026-08-06, and it also keeps
+Mintlify's preview-deployment link working: that bot builds its link from the first changed file in
+the PR, so a PR touching this README would otherwise point reviewers at a 404.
 
 ### 3. `docs/get-started/build-with-ai.mdx` — original (MCP + skills)
 
