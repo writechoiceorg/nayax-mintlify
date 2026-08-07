@@ -1,0 +1,185 @@
+---
+title: "Receive the payment result"
+description: "Read the postMessage response, verify webhooks, and confirm a transaction's final status via Get transaction."
+keywords: ["webhook signature verification", "hmac signature verification", "transaction status api"]
+metadata:
+  og:description: "The three channels for learning a payment's outcome: postMessage, returnURL, and webhooks, plus the Get transaction fallback."
+---
+
+After the shopper completes a Hosted Payment Page session, you learn the
+outcome through three channels: a browser `postMessage`, a redirect to your
+`returnURL`, and a server-to-server webhook. Treat `postMessage` and
+`returnURL` as UX signals only; confirm every transaction's final status
+server-side through a webhook, or Get transaction as a fallback,
+before you fulfill an order.
+
+## Browser postMessage (iframe mode)
+
+When you display the Hosted Payment Page in an iframe, Nayax posts a message
+to the parent window as soon as the payment attempt finishes. Listen for it
+and always verify the message origin before trusting its contents.
+
+```js
+window.addEventListener("message", function (event) {
+  if (event.origin !== "https://merchant-api.sb.nayaxpay.com") return;
+
+  var message = event.data || {};
+
+  if (message.type === "payment-complete") {
+    if (message.status === "success") {
+      var result = message.data;
+      // See "The result object" below for result.status and its meanings.
+    } else {
+      // message.status === "error": show a retry or failure message.
+    }
+  } else if (message.type === "payment-complete-done") {
+    // The shopper dismissed the result screen inside the Hosted Payment Page.
+  }
+});
+```
+
+| `type` | Fires when |
+| --- | --- |
+| `payment-complete` | The payment attempt finished. `data` holds the result object described below. |
+| `payment-complete-done` | The shopper dismissed the result screen shown inside the Hosted Payment Page. |
+
+### The result object
+
+The result object carries the outcome of the payment attempt, plus enough
+detail to route the shopper to the right next step.
+
+```json
+{
+  "success": true,
+  "status": "APPROVED",
+  "transactionId": "6c1e2a4d-9f3b-4e21-8a2c-1f9b7d6e5a01",
+  "authCode": "123456",
+  "message": "issuer_decline"
+}
+```
+
+The message carries two separate status values. The envelope's `status`
+(`success` or `error`), checked first in the listener above, tells you
+whether `message.data` holds a usable result at all. The result object's
+own `status` (`APPROVED`, `DECLINED`, or `FAILED`) tells you what happened
+to the payment. Always branch your UI logic on `result.status`, not the
+envelope status.
+
+| `status` | Meaning | Recommended action |
+| --- | --- | --- |
+| `APPROVED` | The issuer authorized the payment, and it was captured for `sale` transactions. | Confirm the result server-side, then fulfill the order. |
+| `DECLINED` | The issuer declined the transaction. `message` carries the decline reason. | Show the shopper a clear message. Don't fulfill the order. |
+| `FAILED` | A system or processing error stopped the attempt before it reached the issuer. | Show a generic error. A retry is often appropriate. |
+
+<Note>
+  Every customer-initiated transaction passes through Nayax risk screening
+  before it reaches the acquirer. Risk screening can decline a transaction
+  independently of the issuer, so a `DECLINED` result doesn't always mean the
+  issuer rejected the card.
+</Note>
+
+## returnURL redirect
+
+If you display the Hosted Payment Page as a full-page redirect, or the
+shopper's browser leaves the iframe, Nayax navigates the shopper to your
+`returnURL` when the attempt finishes. The redirect carries no result data;
+it's a navigation target only. Treat the arrival at `returnURL` as a cue to
+check the transaction's status server-side, not as the status itself.
+
+## Webhooks
+
+Webhooks are the recommended way to confirm a transaction's result
+server-side. Nayax delivers an HTTPS POST to your configured endpoint for
+every transaction lifecycle event, with a JSON body signed using HMAC-SHA256.
+
+| Event | Fires when |
+| --- | --- |
+| `transaction.authorized` | An authorization was approved, either a standalone authorization or the authorization leg of a `sale`. |
+| `transaction.captured` | Funds were captured. |
+| `transaction.voided` | An authorization was reversed before capture. |
+| `transaction.declined` | The issuer declined the authorization. |
+| `transaction.failed` | A system-level error stopped the attempt. |
+| `transaction.refunded` | A captured transaction was refunded, in full or in part. |
+
+```json
+{
+  "id": "whd_8f1c2a",
+  "type": "transaction.authorized",
+  "createdAt": "2026-07-09T10:15:30.000Z",
+  "data": {
+    "transactionId": "6c1e2a4d-9f3b-4e21-8a2c-1f9b7d6e5a01",
+    "merchantId": "5555-2222-01",
+    "status": "authorized",
+    "amount": { "value": "1499", "currency": "USD", "exponent": 2 },
+    "nayaxToken": "ntok_9a2b7c1d",
+    "card": { "lastFour": "4242", "brand": "VISA", "expiry": "1229" },
+    "authCode": "123456",
+    "networkTransactionId": "024071012345678",
+    "rrn": "207010123456",
+    "processorTransactionId": "pay_abc123",
+    "sca": {
+      "lifecycle": "frictionless",
+      "authenticationResult": "authenticated",
+      "eci": "05",
+      "liabilityShift": "yes"
+    }
+  }
+}
+```
+
+A few fields in `data` are worth calling out individually.
+
+| Field | Description |
+| --- | --- |
+| `nayaxToken` | A reusable token for charging this card on future merchant-initiated transactions. |
+| `card` | A summary of the card used: last four digits, brand, and expiry. |
+| `networkTransactionId` | What a later merchant-initiated transaction references to chain back to this customer-initiated one for stored-credential processing. The gateway plumbs it through automatically; store it yourself only if you handle that chaining directly. |
+| `sca` | Present only when 3D Secure ran or a Strong Customer Authentication (SCA) exemption was applied. `lifecycle` is `frictionless`, `challenge`, or `exemption`; `liabilityShift` tells you whether fraud liability moved to the issuer. |
+
+### Verify the signature
+
+Every webhook request carries three headers: `X-HMAC-Signature`,
+`X-HMAC-Timestamp` (Unix seconds), and `X-HMAC-Nonce`. Recompute the
+signature and compare it to `X-HMAC-Signature` with a constant-time
+comparison before you trust the payload.
+
+```text
+canonical = METHOD | url | BASE64(SHA256(rawBody)) | timestampSeconds | nonce
+signature = HMAC_SHA256(webhookSigningSecret, canonical) // lowercase hex
+```
+
+<Warning>
+  Reject any webhook request whose `X-HMAC-Timestamp` falls outside your
+  allowed clock-skew window. This protects you against replayed requests.
+  Nayax shows `webhookSigningSecret` once, at the time you configure your
+  endpoint; it isn't retrievable later, so store it securely as soon as you
+  receive it.
+</Warning>
+
+### Delivery and retries
+
+Respond to a webhook request with any `2xx` status code to acknowledge it.
+Nayax retries a non-`2xx` response or a timeout with exponential backoff, and
+moves the event to a dead-letter queue once retries run out. Delivery is
+at-least-once, so your endpoint can receive the same event more than once.
+Deduplicate on the payload's `id` field, or on the `transactionId` and `type`
+pair, and make sure your endpoint handles a repeated event safely.
+
+## Get transaction fallback
+
+Use [Get transaction](/docs/online-payments/rest-api/transactions#get-transaction) to
+poll for a transaction's status server-side, whether you're confirming the
+result after a `returnURL` redirect or recovering from a webhook you missed.
+
+If you have the `transactionId`, call `GET /api/v1/transactions/{transactionId}` directly.
+If the authorization response was lost, for example to a network timeout, and
+you never received a `transactionId`, call
+[List transactions](/docs/online-payments/rest-api/transactions#list-transactions)
+filtered by `orderId` instead. This is why including `orderId` on every
+Hosted Payment Page request is worth doing even though it's optional for the
+signature.
+
+## See also
+
+- [Build and display the Hosted Payment Page](/docs/online-payments/payment-page/build-and-display-payment-page)
+- [Get transaction](/docs/online-payments/rest-api/transactions#get-transaction)

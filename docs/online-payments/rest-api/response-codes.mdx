@@ -1,0 +1,122 @@
+---
+title: "Response codes"
+description: "Interpret every transaction status, decline code, and error code returned by the REST API."
+keywords: ["decline codes", "transaction status api"]
+metadata:
+  og:description: "The full list of transaction statuses, decline codes, and error codes returned by the Nayax Online Payments REST API."
+---
+
+Every REST API response carries up to four outcome fields: `status`
+always, and `declineCode`, `errorCode`, or `rawDeclineCode` depending on
+what happened. This page covers what each status means, the full list of
+decline and error codes, and how to branch on them in code.
+
+| Field | When set | Meaning |
+| --- | --- | --- |
+| `status` | Always | The transaction's current state. See Transaction statuses below. |
+| `declineCode` | `status: declined` | Issuer-attributable: the card or issuer rejected the transaction. |
+| `errorCode` | `status: failed` | System-attributable: the attempt couldn't complete. Generally safe to retry. |
+| `rawDeclineCode` | When available | Unmapped processor-native code. For logging and support only; don't branch on this value. |
+
+A response sets either `declineCode` (on `declined`) or `errorCode` (on
+`failed`), never both.
+
+## Transaction statuses
+
+Every transaction has one of the following statuses, some terminal, some
+not.
+
+| `status` | Meaning | Terminal? |
+| --- | --- | --- |
+| `created` | Transaction recorded, not yet authorized. Transient internal state. | No |
+| `authorized` | Issuer approved an auth-only hold (`final_auth`/`pre_auth`). Funds held, not captured. | No, awaits capture or void |
+| `captured` | Funds settled. For a `sale`, the same call returns this directly. | No, refundable |
+| `voided` | A prior authorization was reversed before capture. | Yes |
+| `refunded` | A settled (`captured`) transaction was refunded, in full or in part. | Yes |
+| `verified` | Zero-amount card validity check approved by the issuer. No money held or moved. Void, capture, and refund are all rejected on this state. | Yes |
+| `declined` | The issuer declined the authorization. See `declineCode`. | Yes |
+| `failed` | A system-level problem stopped the attempt. See `errorCode`. Often safe to retry. | Yes |
+| `partially_refunded` | A settled transaction was partially refunded. Further refunds may be possible up to the captured amount. | No, further refundable |
+
+Each operation only returns a subset of the statuses above.
+
+| Operation | Possible status values |
+| --- | --- |
+| Authorize | `authorized`, `captured`, `verified`, `declined`, or `failed` |
+| Capture | `captured`, `authorized`¹, or `failed` |
+| Void | `voided`, `authorized`¹, or `failed` |
+| Refund | `refunded`, `captured`¹, or `failed` |
+
+¹ The operation didn't complete, a transient processor refusal. The
+transaction is unchanged from its prior state; safe to retry.
+
+## Decline codes
+
+Nayax sets `declineCode` when `status` is `declined`: the issuer or the
+card rejected the transaction.
+
+| `declineCode` | Meaning | Retry guidance |
+| --- | --- | --- |
+| `DO_NOT_HONOR` | Generic issuer decline, no specific reason given. | Cardholder should contact issuer or try another card. |
+| `INSUFFICIENT_FUNDS` | Cardholder is over their available balance or limit. | Retry later or use another card. |
+| `EXPIRED_CARD` | Card is past its expiry date per the issuer. | Use a different card. |
+| `INVALID_CARD_NUMBER` | PAN failed validation, unknown BIN, or no such account. | Re-enter the card number or use another card. |
+| `INVALID_CVV` | CVV/CVC was wrong or missing. | Re-enter CVV. |
+| `INVALID_AVS` | Billing address verification mismatch. | Correct the billing address. |
+| `INVALID_3DS` | 3DS authentication failed, was required, or the cryptogram was invalid. | Re-attempt with successful 3DS. |
+| `CARD_LOST_OR_STOLEN` | Issuer flagged the card as lost or stolen. | Don't retry. Use another card. |
+| `CARD_BLOCKED` | Issuer has restricted or closed the card. | Don't retry. Use another card. |
+| `COUNTERFEIT_CARD` | Issuer flagged the card as counterfeit. | Don't retry. |
+| `FRAUD_SUSPECTED` | The transaction was rejected as suspected fraud. | Don't retry. |
+| `CURRENCY_NOT_SUPPORTED` | The card or issuer doesn't accept the transaction currency. | Use a supported currency or another card. |
+| `TRANSACTION_NOT_ALLOWED` | The card type, channel, amount, or terms aren't permitted. | Don't retry as-is. |
+| `VELOCITY_EXCEEDED` | Too many recent attempts, or a usage or withdrawal limit was hit. | Retry later. |
+| `INVALID_INSTALLMENTS` | The installment or credit terms were rejected (regional). | Adjust terms. |
+| `INVALID_ID` | National ID mismatch (Israel, teudat zehut). | Correct the ID. |
+| `REFERRAL` | The issuer requires manual review or authorization. | Cardholder contacts their issuer. |
+| `UNKNOWN` | The processor returned a code that isn't mapped. | Inspect `rawDeclineCode`; contact support if needed. |
+
+## Error codes
+
+Nayax sets `errorCode` when `status` is `failed`: the card was never the
+problem, and retrying is often safe.
+
+| `errorCode` | Meaning | Retry guidance |
+| --- | --- | --- |
+| `PROCESSOR_CONNECTIVITY` | Couldn't reach the processor, or the issuer was unavailable. | Retry. |
+| `PROCESSOR_TIMEOUT` | The processor didn't respond in time. | Retry (reuse `idempotencyKey` to avoid a double charge). |
+| `PROCESSOR_PROTOCOL_ERROR` | The processor returned a malformed or unexpected response. | Retry; contact support if persistent. |
+| `PROCESSOR_AUTH_FAILED` | The platform's own credentials were rejected by the processor. | Don't retry blindly, it's a configuration issue. Contact support. |
+| `INVALID_REQUEST_DATA` | A field failed validation at the processor. | Check the request payload. |
+| `MERCHANT_CONFIG_ERROR` | Routing or configuration lookup failed before the attempt. | Contact support; merchant configuration needs attention. |
+| `INTERNAL_ERROR` | An unexpected internal error. | Retry; contact support if persistent. |
+
+## Handling pattern
+
+Branch on `status` first, then on `declineCode` or `errorCode`.
+
+```js
+switch (response.status) {
+  case "authorized":
+  case "captured":
+  case "verified":
+    // Success: reconcile with response.authCode
+    break;
+
+  case "declined":
+    // Issuer declined: branch on response.declineCode
+    break;
+
+  case "failed":
+    // System error: branch on response.errorCode; most are retryable
+    break;
+}
+```
+
+Reserve `rawDeclineCode` for logging and support tickets only; it isn't
+part of the stable contract.
+
+## See also
+
+- [Retrieve transactions](/docs/online-payments/rest-api/transactions)
+- [Authorize a merchant-initiated transaction](/docs/online-payments/rest-api/authorize-mit)

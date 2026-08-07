@@ -1,0 +1,86 @@
+---
+title: "Verify a card via the API"
+description: "Confirm a card is valid and store its credentials for future charges, without moving funds."
+keywords: ["save card for future payments", "card on file"]
+metadata:
+  og:description: "How to confirm a card is valid and store it for future charges, without authorizing or moving any money."
+---
+
+Use this endpoint to confirm a card is valid and capture a reusable
+credential for later, for example when a customer adds a card to their
+account, without authorizing or moving any money. On success, the
+transaction reaches `verified` status instead of `authorized` or
+`captured`.
+
+## Verify a card
+
+`POST /api/v1/verify`
+
+This is a separate mechanism from the Hosted Payment Page's
+`account_verification` transaction type described in
+[Build and display the Hosted Payment Page](/docs/online-payments/payment-page/build-and-display-payment-page#build-the-signed-url):
+that one runs through the signed URL with the shopper present, this one is
+a direct server-to-server API call for any credential type, including a
+previously stored one.
+
+This endpoint accepts the same `paymentMethod` objects as
+[Authorize a merchant-initiated transaction](/docs/online-payments/rest-api/authorize-mit)
+and [Authorize a customer-initiated transaction via the API](/docs/online-payments/rest-api/authorize-cit),
+`card`, `apple_pay`, `google_pay`, `scheme_token`, or `nayax_token`, with
+the same field requirements for each. Use whichever of those two pages
+matches your `paymentMethod.type` for the exact sub-fields.
+
+<Note>
+  There's no `amount` object on this endpoint. `transaction.currency` alone
+  selects the acquirer BIN, and the check is always zero-value.
+</Note>
+
+| Object | Parameter | Required | Format | Description |
+| --- | --- | --- | --- | --- |
+| `requestData` | `idempotencyKey` | Yes | String, 1-200 characters | Unique per attempt. Safe to retry. |
+| `requestData` | `orderId` | No | String, 1-200 characters | Your order reference. |
+| `requestData` | `userId` | No | String, 1-200 characters | Your customer reference. |
+| `transaction` | `currency` | Yes | String, 3 characters | ISO 4217. |
+| `transaction` | `initiationType` | No | Enum | `cit` or `mit`. Defaults to `cit`. |
+| `paymentMethod` | `type` | Yes | Enum | `card`, `apple_pay`, `google_pay`, `scheme_token`, or `nayax_token`. |
+
+| Field | Condition | Format | Description |
+| --- | --- | --- | --- |
+| `transactionId` | Always | UUID | Nayax transaction identifier. |
+| `status` | Always | Enum | `verified`, `declined`, or `failed`. |
+| `authCode` | On success | String | Issuer authorization code. |
+| `declineCode` | On decline | String | A coded reason for the decline; see [Decline codes](/docs/online-payments/rest-api/response-codes#decline-codes). |
+| `errorCode` | On failure | String | A coded reason for the system-level failure; see [Error codes](/docs/online-payments/rest-api/response-codes#error-codes). |
+
+```json
+{
+  "requestData": {
+    "idempotencyKey": "idem_9f2b3c7a1d",
+    "userId": "cust_88213"
+  },
+  "transaction": {
+    "currency": "USD"
+  },
+  "paymentMethod": {
+    "type": "scheme_token",
+    "token": "stok_7b3e9f21",
+    "cryptogram": "AqIBAwECAQQwMgIBAQIBAA==",
+    "tokenEci": "05",
+    "expiryMonth": "09",
+    "expiryYear": "27"
+  }
+}
+```
+
+```json
+{
+  "transactionId": "f1a4c7e2-8b3d-4a9c-b5e1-6d2f8a9c3b47",
+  "status": "verified",
+  "authCode": "334455"
+}
+```
+
+## See also
+
+- [Authorize a merchant-initiated transaction](/docs/online-payments/rest-api/authorize-mit)
+- [Retrieve transactions](/docs/online-payments/rest-api/transactions)

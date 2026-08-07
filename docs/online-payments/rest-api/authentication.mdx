@@ -1,0 +1,49 @@
+---
+title: "Authentication"
+description: "Authenticate every REST API request with your per-merchant x-api-key header."
+keywords: ["api authentication", "online payment api"]
+metadata:
+  og:description: "How to authenticate Nayax Online Payments REST API requests with a per-merchant x-api-key header."
+---
+
+Every REST API request needs exactly one thing to authenticate: a header
+carrying your per-merchant API key. Get that right, and Nayax identifies
+your account and environment automatically, no `merchantId` anywhere else in
+the request.
+
+## Base URL
+
+All REST API endpoints live under `/api/v1` on your environment's
+[gateway host](/docs/online-payments/prerequisites-and-onboarding#environments),
+for example `https://merchant-api.sb.nayaxpay.com/api/v1/transactions/authorize`
+in sandbox.
+
+## Authenticate requests
+
+Send your API key in the `x-api-key` header on every request. Nayax also
+accepts `x-paycom-api-key` as an alias for the same header.
+
+```bash
+curl https://merchant-api.sb.nayaxpay.com/api/v1/transactions/authorize \
+  -H "x-api-key: <YOUR_MERCHANT_API_KEY>"
+```
+
+Nayax issues one API key per merchant per environment; get yours from
+[Prerequisites and onboarding](/docs/online-payments/prerequisites-and-onboarding#required-credentials).
+Keep it server-side only, the same rule that applies to
+`merchantSigningSecret` and `webhookSigningSecret`.
+
+Nayax derives `merchantId` from the API key on its side, so never send
+`merchantId` as a path, query, or body parameter.
+
+<Warning>
+  Nayax rejects any request with a missing, invalid, or revoked key, or a key
+  belonging to a merchant that isn't active, with an HTTP 401 and
+  `errorCode: UNAUTHORIZED`. Every endpoint under `/api/v1` enforces this;
+  there's no unauthenticated route.
+</Warning>
+
+## See also
+
+- [Prerequisites and onboarding](/docs/online-payments/prerequisites-and-onboarding)
+- [Get transaction](/docs/online-payments/rest-api/transactions#get-transaction)
