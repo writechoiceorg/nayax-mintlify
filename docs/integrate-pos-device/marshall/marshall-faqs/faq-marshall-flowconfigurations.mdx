@@ -7,8 +7,6 @@ description: "Answers to common questions about Marshall's flow behavior and con
 
 This parameter sets how long the device waits for a vend response (`Vend Approved` or `Vend Failure`) from the peripheral after sending it `Vend Approved`. In Nayax Core, the parameter's maximum value is 65535 seconds (18 hours, 12 minutes, and 15 seconds). If you need a longer window, use [Multi-Session](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session#/), where the timeout is 23 hours for credit cards and 72 hours for proprietary cards.
 
-> **FLAG:** Unverified. The source content noted the credit card timeout "can be up to 72 hours as of 2025." This isn't recorded in nayax-service-facts. Confirm the current figure with the Nayax team before treating it as authoritative.
-
 ## Status Command
 
 Once pairing is complete, the device immediately sends a `Status` command when network communication is lost, so the machine knows. It looks something like this in the Java SDK (the C# and C logs look the same):

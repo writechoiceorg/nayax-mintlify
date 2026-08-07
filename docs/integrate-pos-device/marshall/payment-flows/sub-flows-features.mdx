@@ -74,8 +74,6 @@ Incremental authorizations increase the total amount authorized when the estimat
   As of February 2026, only these billing providers support this feature: Heartland (US), Chase (US), Credorax (Europe), First Data (Australia), and Adyen (US and Europe). If your devices use any other billing provider, Incremental Authorization doesn't work.
 </Warning>
 
-> **FLAG:** Unverified. This billing-provider list isn't recorded in nayax-service-facts. Confirm it's still current with the Nayax team before republishing.
-
 ### How Incremental Authorization Works
 
 The incremental feature uses two Default Credit parameters: the regular one, and Maximum Default Credit. The consumer is initially authorized for the regular Default Credit amount, as in any PreAuthorization transaction. If there isn't enough credit for the Default Credit amount, the transaction is cancelled at this step. If the consumer takes items worth less than the Default Credit amount, they're only charged for those items, as usual.
