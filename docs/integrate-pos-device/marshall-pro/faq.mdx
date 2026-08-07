@@ -1,254 +1,234 @@
 ---
 title: "Flow & Configuration"
+description: "Answers to common questions about activating, connecting, configuring, and updating Marshall Pro devices."
 ---
 
-# Connecting the device to your POS/ simulator
-
-To establish a link with the device, TCP protocol should be used through port 5050 (no physical connection to your computer is required).
-
-Regarding the setup of your device's Wifi/LAN connection to your local network, please refer to the following resources:
-
-Wifi connection: [https://devzone.nayax.com/docs/integrate-pos-device/marshall-pro/faq#configuring-wifi-and-ip](https://devzone.nayax.com/docs/integrate-pos-device/marshall-pro/faq#configuring-wifi-and-ip)<br />LAN connection: [https://devzone.nayax.com/docs/integrate-pos-device/marshall-pro/faq#configuring-eth-and-ip](https://devzone.nayax.com/docs/integrate-pos-device/marshall-pro/faq#configuring-eth-and-ip)
-
-## Activating the Device
-
-The first step in activating the device is to scan the QR code displayed on the device's screen using your phone's camera. The following photo depicts a VPOSM4S device; however, the process is identical for the VPOSM5 device:
-
-<Frame>
-  ![](/images/docs/faq/image1.png)
-</Frame>
-
-Next, you will be redirected to a landing page where you will be required to enter the following details. After submission, a verification code is sent via email, which must be entered on the landing page to complete the device activation.
-
-<Frame>
-  ![](/images/docs/faq/image2.png)
-</Frame>
-
-## Getting the Device's Details (Serial Number, IP)
-
-First, set the device to "Out of Service" status by disconnecting the link to the device and waiting 30 seconds:
-
-<Frame>
-  ![11](/images/11.png "11")
-</Frame>
-
-Next, click five times on the top-right corner of the screen and select the Device Info
-
-<Frame>
-  ![27 1](/images/27-1.png "27 1")
-</Frame>
-
-What you'd see is the device's serial number as well as information about its communication details, both cellular and Ethernet.<br />In this example, the device has an eSIM and it's also connected to WIFI:
-
-<Frame>
-  ![28 1](/images/28-1.png "28 1")
-</Frame>
-
-Should you like to return to the device's idle screen (to make transactions), click the top-left arrow, then select the Payment APP screen.
-
-### Configuring communication (Wifi / LAN)
-
-VPOSM over Marshall supports either DHCP or Static IP (depends how you want to work). DHCP is the default for the device, but it can be changed to Static IP from the device menu:<br />click a couple of times on the top-left corner of the screen and select "Technician Menu":
-
-<Frame>
-  ![29](/images/29.png "29")
-</Frame>
-
-And insert the code (by default it's 123123) and scroll down to the "Communication" section:
-
-<Frame>
-  ![Image](/images/image-1.png "Image")
-</Frame>
-
-<br />Then go into Wifi or LAN (depending on your connection type):
-
-<Frame>
-  ![Image](/images/image-6.png "Image")
-</Frame>
-
-<br />And into the desired network and edit its' settings: go to the "Advanced" section and under it you'd see "IP settings"- which would be DHCP by default, or changed to "Static".
-
-#### Configuring Wifi (and IP)
-
-Click on the gears icon of the relevant network
-
-<Frame>
-  ![Image](/images/image-15.png "Image")
-</Frame>
-
-Then on "Advanced":
-
-<Frame>
-  ![Image](/images/image-16.png "Image")
-</Frame>
-
-And scroll down to IP settings:
-
-<Frame>
-  ![Image](/images/image-17.png "Image")
-</Frame>
-
-And fill in the IP details.
-
-#### Configuring ETH (and IP)
-
-On the WiFi settings screen, tap the back arrow at the top-left to return to the device's system settings.
-
-<Frame>
-  ![Image](/images/image-11.png "Image")
-</Frame>
-
-Tap Network & Internet:
-
-<Frame>
-  ![Image](/images/image-10.png "Image")
-</Frame>
-
-Tap Ethernet:
-
-<Frame>
-  ![Image](/images/image-12.png "Image")
-</Frame>
-
-Turn Ethernet on using the toggle, then tap the Ethernet row again to open Ethernet Settings:
-
-<Frame>
-  ![Image](/images/image-13.png "Image")
-</Frame>
-
-In Ethernet Settings, select Static:
-
-<Frame>
-  ![Image](/images/image-14.png "Image")
-</Frame>
-
-And fill in the details.
-
-# Firmware/ apps update process
-
-The firmware update is initiated from a separate platform called CasHub. The update process involves updating each relevant application individually, rather than as a single package.
-
-The firmware update for each application consists of two separate stages: download and update. Once the download process has been completed, Nayax Fuel's Support team must send the device a request to initiate the update process for the desired applications.
-
-Alternatively, you may initiate this update process yourself, as described in the following section:
-
-[https://devzone.nayax.com/docs/integrate-pos-device/marshall-pro/faq#triggering-apps-update-process-accessing-cashub%E2%80%99s-app](https://devzone.nayax.com/docs/integrate-pos-device/marshall-pro/faq#triggering-apps-update-process-accessing-cashub%E2%80%99s-app)
-
-# Triggering apps update process (accessing CasHub's app)
-
-Once Nayax Fuel's Support team has submitted the relevant app update request to the device, please turn on the device and proceed with one of the following two options:
-
-1. Leave the device powered on overnight: it will reset automatically at approximately 3-4 AM, at which point the updates will be collected and initiated.
-2. Manually access the CASHUB app to trigger the download and installation of the updates.
-
-If you select the second option, please proceed as follows:
-
-First, set the device to "Out of Service" status by disconnecting the link to the device and waiting 30 seconds:
-
-<Frame>
-  ![11](/images/11.png "11")
-</Frame>
-
-Next, click five times on the top-right corner of the screen and select the Technician Menu. Enter the password 123123.
-
-<Frame>
-  ![12](/images/12.png "12")
-</Frame>
-
-Then scroll down to Dev Mode and enter the password 321321:
-
-<Frame>
-  ![13](/images/13.png "13")
-</Frame>
-
-Proceed to select WiFi:
-
-<Frame>
-  ![14](/images/14.png "14")
-</Frame>
-
-Then select the back arrow to return to the Android settings:
-
-<Frame>
-  ![15](/images/15.png "15")
-</Frame>
-
-From there, go to Apps & Notifications:
-
-<Frame>
-  ![16](/images/16.png "16")
-</Frame>
-
-Then select "See all X apps" (in this example, the device has 24 apps):
-
-<Frame>
-  ![17](/images/17.png "17")
-</Frame>
-
-Select the CasHub app and open it:
-
-<Frame>
-  ![18](/images/18.png "18")
-</Frame>
-
-<Frame>
-  ![19](/images/19.png "19")
-</Frame>
-
-Click the "Status" button:
-
-<Frame>
-  ![20](/images/20.png "20")
-</Frame>
-
-Then select the three dots in the top-right corner and choose "Connect":
-
-<Frame>
-  ![21](/images/21.png "21")
-</Frame>
-
-The screen will display "Connecting..." both at the top and in the table below:
-
-<Frame>
-  ![22](/images/22.png "22")
-</Frame>
-
-(If this persists for more than one minute, the process has likely stalled)
-
-Following this, the download and update of the apps will begin:
-
-<Frame>
-  ![23](/images/23.png "23")
-</Frame>
-
-Once all apps have been downloaded and updated, a "Finished" line will appear:
-
-<Frame>
-  ![24](/images/24.png "24")
-</Frame>
-
-Please note that certain apps can only be downloaded, not installed, at this stage, as the device cannot update applications that are currently running. This applies to apps such as
+## Connecting the Device to Your POS or Simulator
+
+To connect to the device, use the TCP protocol through port 5050. No physical connection to your computer is required.
+
+For your device's Wifi connection setup, see [Configuring Wifi (and IP)](/docs/integrate-pos-device/marshall-pro/faq#configuring-wifi-and-ip) below. For LAN, see [Configuring ETH (and IP)](/docs/integrate-pos-device/marshall-pro/faq#configuring-eth-and-ip).
+
+### Activating the Device
+
+<Steps>
+  <Step title="Scan the QR code">
+    Scan the QR code displayed on the device's screen using your phone's camera. The following photo shows a VPOSM4S device, but the process is identical for VPOSM5.
+    <Frame>
+      ![QR code displayed on the device screen for activation](/images/docs/faq/image1.png)
+    </Frame>
+  </Step>
+  <Step title="Complete the landing page">
+    You're redirected to a landing page where you enter the required details. After submission, a verification code is sent by email. Enter it on the landing page to complete the device activation.
+    <Frame>
+      ![Landing page for entering device activation details](/images/docs/faq/image2.png)
+    </Frame>
+  </Step>
+</Steps>
+
+### Getting the Device's Details (Serial Number, IP)
+
+<Steps>
+  <Step title="Set the device to Out of Service">
+    Disconnect the link to the device and wait 30 seconds.
+    <Frame>
+      ![Device screen showing Out of Service status](/images/11.png)
+    </Frame>
+  </Step>
+  <Step title="Open Device Info">
+    Click five times on the top-right corner of the screen, then select **Device Info**.
+    <Frame>
+      ![Device menu with the Device Info option highlighted](/images/27-1.png)
+    </Frame>
+  </Step>
+  <Step title="Review the device details">
+    Device Info shows the device's serial number, along with its cellular and Ethernet communication details. In this example, the device has an eSIM and is also connected to Wifi.
+    <Frame>
+      ![Device Info screen showing serial number and connectivity details](/images/28-1.png)
+    </Frame>
+  </Step>
+</Steps>
+
+To return to the device's idle screen for making transactions, click the top-left arrow, then select **Payment App**.
+
+### Configuring Wifi (and IP)
+
+VPOSM over Marshall supports either DHCP or Static IP, depending on how you want the device to work. DHCP is the default.
+
+<Steps>
+  <Step title="Open the Technician menu">
+    Click a few times on the top-left corner of the screen, then select **Technician Menu**.
+    <Frame>
+      ![Technician Menu opened on the device](/images/29.png)
+    </Frame>
+  </Step>
+  <Step title="Enter the technician code">
+    Enter the code (123123 by default), then scroll down to the **Communication** section.
+    <Frame>
+      ![Technician Menu with the Communication section highlighted](/images/image-1.png)
+    </Frame>
+  </Step>
+  <Step title="Select Wifi">
+    Select **Wifi**, then select the relevant network.
+    <Frame>
+      ![Communication section with the Wifi option](/images/image-6.png)
+    </Frame>
+  </Step>
+  <Step title="Open the network's advanced settings">
+    Click the gear icon for the relevant network, then select **Advanced**.
+    <Frame>
+      ![Network settings with the gear icon highlighted](/images/image-15.png)
+    </Frame>
+    <Frame>
+      ![Advanced network settings screen](/images/image-16.png)
+    </Frame>
+  </Step>
+  <Step title="Set a static IP">
+    Scroll down to **IP Settings**, which is set to DHCP by default, and switch it to **Static**. Fill in the IP details.
+    <Frame>
+      ![IP settings showing the option to switch from DHCP to Static](/images/image-17.png)
+    </Frame>
+  </Step>
+</Steps>
+
+### Configuring ETH (and IP)
+
+<Steps>
+  <Step title="Return to system settings">
+    On the Wifi settings screen, tap the back arrow at the top-left to return to the device's system settings.
+    <Frame>
+      ![Device system settings screen](/images/image-11.png)
+    </Frame>
+  </Step>
+  <Step title="Open Network & Internet">
+    Tap **Network & Internet**.
+    <Frame>
+      ![System settings with the Network and Internet option](/images/image-10.png)
+    </Frame>
+  </Step>
+  <Step title="Open Ethernet settings">
+    Tap **Ethernet**, then turn it on using the toggle. Tap the Ethernet row again to open Ethernet Settings.
+    <Frame>
+      ![Network and Internet settings with the Ethernet option](/images/image-12.png)
+    </Frame>
+    <Frame>
+      ![Ethernet toggle and settings row](/images/image-13.png)
+    </Frame>
+  </Step>
+  <Step title="Set a static IP">
+    In Ethernet Settings, select **Static**, then fill in the IP details.
+    <Frame>
+      ![Ethernet Settings screen with the Static option](/images/image-14.png)
+    </Frame>
+  </Step>
+</Steps>
+
+## Triggering the Apps Update Process (Accessing the CasHub App)
+
+Nayax Fuel initiates firmware updates from a separate platform called CasHub. The update process updates each relevant application individually, rather than as a single package, in two stages: download and update.
+
+Once the download finishes, Nayax Fuel's support team sends the device a request to start the update for the desired applications. You can also trigger the update yourself. Turn on the device and use one of the following options:
+
+1. Leave the device powered on overnight. It resets automatically at approximately 3-4 AM, at which point the device collects and starts the updates.
+2. Manually access the CasHub app to trigger the download and installation of the updates.
+
+To trigger the update manually, follow these steps:
+
+<Steps>
+  <Step title="Set the device to Out of Service">
+    Disconnect the link to the device and wait 30 seconds.
+    <Frame>
+      ![Device screen showing Out of Service status](/images/11.png)
+    </Frame>
+  </Step>
+  <Step title="Open the Technician menu">
+    Click five times on the top-right corner of the screen, then select **Technician Menu**. Enter the password 123123.
+    <Frame>
+      ![Technician Menu password prompt](/images/12.png)
+    </Frame>
+  </Step>
+  <Step title="Open Dev Mode">
+    Scroll down to **Dev Mode** and enter the password 321321.
+    <Frame>
+      ![Technician Menu with the Dev Mode option](/images/13.png)
+    </Frame>
+  </Step>
+  <Step title="Return to Android settings">
+    Select **Wifi**, then select the back arrow to return to the Android settings.
+    <Frame>
+      ![Wifi settings within Dev Mode](/images/14.png)
+    </Frame>
+    <Frame>
+      ![Android settings screen](/images/15.png)
+    </Frame>
+  </Step>
+  <Step title="Open Apps & Notifications">
+    Go to **Apps & Notifications**, then select **See All Apps** (in this example, the device has 24 apps).
+    <Frame>
+      ![Android settings with the Apps and Notifications option](/images/16.png)
+    </Frame>
+    <Frame>
+      ![Full list of apps on the device](/images/17.png)
+    </Frame>
+  </Step>
+  <Step title="Open the CasHub app">
+    Select the CasHub app and open it.
+    <Frame>
+      ![App list with CasHub selected](/images/18.png)
+    </Frame>
+    <Frame>
+      ![CasHub app info screen](/images/19.png)
+    </Frame>
+  </Step>
+  <Step title="Connect and start the update">
+    Click **Status**, then select the three dots in the top-right corner and choose **Connect**.
+    <Frame>
+      ![CasHub app Status screen](/images/20.png)
+    </Frame>
+    <Frame>
+      ![CasHub app menu with the Connect option](/images/21.png)
+    </Frame>
+  </Step>
+  <Step title="Wait for the connection">
+    The screen displays "Connecting..." both at the top and in the table below. If this persists for more than one minute, the process has likely stalled.
+    <Frame>
+      ![CasHub app showing the Connecting status](/images/22.png)
+    </Frame>
+  </Step>
+  <Step title="Download and install the updates">
+    The download and update of the apps begins.
+    <Frame>
+      ![CasHub app downloading updates](/images/23.png)
+    </Frame>
+  </Step>
+  <Step title="Confirm the update finished">
+    Once all apps finish downloading and updating, a "Finished" line appears.
+    <Frame>
+      ![CasHub app showing the Finished status](/images/24.png)
+    </Frame>
+  </Step>
+</Steps>
+
+Some apps can only be downloaded, not installed, at this stage, since the device can't update applications that are currently running. This applies to:
 
 - Nayax Launcher
 - Update Service
 - VPOS Service
 
-For these, the device must be rebooted afterward, and the apps will be updated during the device's power-up sequence. <br />During this process, a "Castles: Updating (application)" notification will appear for approximately one minute.
+For these, reboot the device afterward. The apps update during the device's power-up sequence, and a "Castles: Updating (application)" notification appears for about one minute.
 
 <Note>
-  **Note- "vpos\_media keeps stopping" error**
+  **"vpos_media keeps stopping" error**
 
-  If you receive this error, this is due to the Vendapp crashing, an application not relevant to your needs. This can occur if the Vendapp is set as the default application:
-
-  <Frame>
-    ![25 1](/images/25-1.png "25 1")
-  </Frame>
-
-  or if the relevant parameter value is empty or missing (in either case, the device defaults to Vendapp).<br /><br />If the parameter is correctly set to Fuel:
+  This error happens because the Vendapp crashes, which isn't relevant to your setup. This can occur if the Vendapp is set as the default application:
 
   <Frame>
-    ![26](/images/26.png "26")
+    ![Error notification showing vpos_media has stopped](/images/25-1.png)
   </Frame>
 
-  and you still receive this error, the Vendapp will need to be updated.
+  or if the relevant parameter value is empty or missing (in either case, the device defaults to Vendapp). If the parameter is correctly set to Fuel and you still get this error, update the Vendapp.
+
+  <Frame>
+    ![Parameter setting correctly configured to Fuel](/images/26.png)
+  </Frame>
 </Note>
