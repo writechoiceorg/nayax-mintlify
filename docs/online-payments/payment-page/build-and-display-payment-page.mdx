@@ -1,0 +1,95 @@
+---
+title: "Build and display the Hosted Payment Page"
+description: "Construct a signed Hosted Payment Page URL and show it to your customer as an iframe or a full-page redirect."
+keywords: ["hosted payment form", "hosted payment page example", "hosted checkout page", "pre-authorization", "authorize and capture", "hmac signature verification"]
+metadata:
+  og:description: "How to sign a Hosted Payment Page request and display it to your customer as an iframe or a full-page redirect."
+---
+
+With `merchantId` and `merchantSigningSecret` in hand, you're ready to build your first request. This page covers the two things standing between you and a shopper looking at the Hosted Payment Page: a correctly signed URL, and where to display it.
+
+## Prerequisites
+
+You need two credentials from [Integration overview](/docs/online-payments/payment-page/integration-overview):
+
+- `merchantId`
+- `merchantSigningSecret`
+
+## Build the signed URL
+
+Every request to the Hosted Payment Page is a GET request to `/pp/{merchantId}` on your environment's [gateway host](/docs/online-payments/prerequisites-and-onboarding#environments), for example `https://merchant-api.sb.nayaxpay.com/pp/{merchantId}` in sandbox, with the order details attached as query parameters.
+
+The URL takes eight query parameters.
+
+| Parameter | Required | Format | Description |
+| --- | --- | --- | --- |
+| `orderId` | Yes | String, 1-200 characters | Your order reference. Nayax uses it as the idempotency key. |
+| `userId` | No | String, 0-200 characters | The logged-in customer's ID. Omit it for guest checkout; when you omit it, Nayax doesn't show saved payment methods. |
+| `amount` | Yes | Integer, minor units | For example, `4990` means 49.90. Must be `0` for account verification transactions. |
+| `currency` | Yes | ISO 4217 code | For example, `USD`, `ILS`, or `GBP`. Sets the transaction currency and the page's locale. |
+| `transactionType` | Yes | Enum | See the transaction types table below. |
+| `returnURL` | Yes | Full URL | Where you want the shopper sent after completion. URL-encode it in the query string. |
+| `timestamp` | Yes | Epoch milliseconds | Must be within five minutes of the Nayax server time. Generate a fresh value for every request. |
+| `signature` | Yes | 64-character lowercase hex | The HMAC-SHA256 signature of the canonical parameter string, described below. |
+
+Set `transactionType` to one of four values.
+
+| `transactionType` | Name | Description |
+| --- | --- | --- |
+| `sale` | Sale | Authorizes and captures the payment in a single step. |
+| `final_auth` | Final authorization | Use this when you know the final amount at authorization time. The capture amount must equal the authorized amount. |
+| `pre_auth` | Pre-authorization | Use this when you don't know the final amount at authorization time. The capture amount can't exceed the authorized amount. |
+| `account_verification` | Card verification | A zero-amount authorization that validates the card without showing an amount. See also [Verify a card via the API](/docs/online-payments/rest-api/verify-card) for the separate REST API mechanism. |
+
+Compute the signature server-side. Never compute it in the browser.
+
+1. Collect eight fields: `merchantId` (from the URL path), `orderId`, `userId`, `amount`, `currency`, `transactionType`, `returnURL`, and `timestamp` (from the query parameters). For guest checkout, use an empty string for `userId`.
+2. Sort the field names alphabetically and join them as `name=value` pairs separated by `&`, using the raw, non-URL-encoded values:
+
+   ```text
+   amount=4990&currency=USD&merchantId=2222-xxxx&orderId=order_123
+   &returnURL=https://merchant.com/result&timestamp=1780834642393
+   &transactionType=sale&userId=
+   ```
+
+3. Compute the signature: `HMAC_SHA256(canonical_string, merchantSigningSecret)`, rendered as lowercase hex, 64 characters.
+
+<Warning>
+  Compute the signature only on your server. Never embed `merchantSigningSecret` in client-side code, commit it to source control, or log it. Generate a fresh `timestamp` for every payment session, and never cache or reuse a signed URL.
+</Warning>
+
+## Display the Hosted Payment Page
+
+Show the signed URL to your customer either in an iframe or as a full-page redirect.
+
+<Tabs>
+  <Tab title="Iframe (recommended)">
+    An iframe keeps the shopper on your page, avoids redirect blocking, and avoids losing the session to SameSite cookie restrictions.
+
+    ```html
+    <iframe
+      src="https://merchant-api.sb.nayaxpay.com/pp/{merchantId}?orderId=...&signature=..."
+      allow="payment"
+      width="100%"
+      height="600"
+      frameborder="0"
+    ></iframe>
+    ```
+
+    `allow="payment"` is required. Without it, the browser blocks the Payment Request API, and the Apple Pay and Google Pay buttons don't appear.
+
+    The Hosted Payment Page shows the order total, Apple Pay and Google Pay buttons, saved payment methods when you provide `userId`, and a card entry form for Visa, Mastercard, American Express, and Diners/Discover.
+  </Tab>
+  <Tab title="Full-page redirect">
+    A full-page redirect sends the shopper's browser directly to the signed URL. Use it where an iframe isn't practical, for example inside a webview.
+
+    ```js
+    // Server-side: generate the signed URL, then navigate the browser
+    window.location.href = "https://merchant-api.sb.nayaxpay.com/pp/{merchantId}?orderId=...&signature=...";
+    ```
+
+    On completion, Nayax redirects the shopper to your `returnURL`. The redirect doesn't include the result; you confirm the transaction's status server-side either way, covered next.
+  </Tab>
+</Tabs>
+
+Once your customer sees the Hosted Payment Page and completes the payment, move on to [receive the payment result](/docs/online-payments/payment-page/receive-payment-result).

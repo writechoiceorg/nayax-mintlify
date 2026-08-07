@@ -786,6 +786,39 @@
             ]
           },
           {
+            "tab": "Online Payments",
+            "icon": "globe",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "docs/online-payments/overview",
+                  "docs/online-payments/prerequisites-and-onboarding"
+                ]
+              },
+              {
+                "group": "Payment Page",
+                "pages": [
+                  "docs/online-payments/payment-page/integration-overview",
+                  "docs/online-payments/payment-page/build-and-display-payment-page",
+                  "docs/online-payments/payment-page/receive-payment-result"
+                ]
+              },
+              {
+                "group": "REST API",
+                "pages": [
+                  "docs/online-payments/rest-api/authentication",
+                  "docs/online-payments/rest-api/transactions",
+                  "docs/online-payments/rest-api/authorize-mit",
+                  "docs/online-payments/rest-api/authorize-cit",
+                  "docs/online-payments/rest-api/verify-card",
+                  "docs/online-payments/rest-api/capture-void-refund",
+                  "docs/online-payments/rest-api/response-codes"
+                ]
+              }
+            ]
+          },
+          {
             "tab": "Build with AI",
             "icon": "robot",
             "pages": [

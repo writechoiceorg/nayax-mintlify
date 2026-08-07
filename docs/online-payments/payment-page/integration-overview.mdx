@@ -1,0 +1,49 @@
+---
+title: "Integration overview"
+description: "Get a valid postMessage response back from your first signed Hosted Payment Page request."
+keywords: ["hosted checkout", "what is a hosted payment page", "hosted payment page vs iframe"]
+metadata:
+  og:description: "The three-step Hosted Payment Page flow: build a signed URL, display it to the shopper, and receive a postMessage result."
+---
+
+The Hosted Payment Page integration has three steps: build a signed URL, show the page to your customer, and receive the result. Your first milestone is getting a valid `postMessage` response back after a test payment.
+
+## How the flow works
+
+A Hosted Payment Page transaction moves through four actors: your server, the shopper's browser, the Nayax gateway, and the acquirer or card issuer. From your side, it's a three-step flow.
+
+<Steps>
+  <Step title="Build a signed URL">
+    Your server creates a URL that encodes the order details (amount, currency, order ID) and signs it with your `merchantSigningSecret`.
+  </Step>
+  <Step title="Display the Hosted Payment Page">
+    Your site shows that URL to the shopper, either in an iframe or as a full-page redirect. The shopper enters their card or picks a digital wallet.
+  </Step>
+  <Step title="Receive the result">
+    Nayax authorizes the transaction with the acquirer and sends the result back through `postMessage` (iframe mode), a redirect to your `returnURL`, or both.
+  </Step>
+</Steps>
+
+Behind that, the gateway verifies your signature, replaces the card or wallet details with a secure token, and authorizes the transaction with the acquirer before returning a result to the shopper's browser.
+
+## Confirm the result server-side
+
+The `postMessage` response and the `returnURL` redirect tell your front end how to update the shopper's screen. Neither one is proof of payment.
+
+<Warning>
+  Treat `postMessage` and `returnURL` as UX signals only. Before you fulfill an order, confirm the transaction's final status server-side by calling [Get transaction](/docs/online-payments/rest-api/transactions#get-transaction). Don't rely on the browser result alone.
+</Warning>
+
+## What you need
+
+Building your first signed request needs two credentials from your sandbox onboarding.
+
+- `merchantId`: a UUID Nayax provisions per environment.
+- `merchantSigningSecret`: provisioned per environment, server-side only. Never expose it in client-side code.
+
+If you haven't completed onboarding yet, see [Prerequisites and onboarding](/docs/online-payments/prerequisites-and-onboarding). Complete production onboarding before you switch to production credentials.
+
+## See also
+
+- [Build and display the Hosted Payment Page](/docs/online-payments/payment-page/build-and-display-payment-page)
+- [Receive the payment result](/docs/online-payments/payment-page/receive-payment-result)
