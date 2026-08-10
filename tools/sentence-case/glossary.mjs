@@ -28,6 +28,8 @@ export const PHRASES = [
   "FIS Cortina",
   "UNO-mini",
   "Nayax Core",
+  "VPOS Media-5",
+  "Castles Technology",
 ];
 
 // Single-word proper nouns / brand or platform names -> canonical casing.
