@@ -17,7 +17,7 @@ These stability issues usually happen due to not using proper hardware:
 
 Or due to "starving" the Marshall task- explained further below.
 
-## You've mentioned that the Marshall task is being "starved". What does it mean?
+## You've mentioned that the Marshall task is being "starved". what does it mean?
 
 Once the Marshall task doesn't get enough priority to run, it's "starved" and may not behave properly.
 In that case, your machine would stop sending the "Keep Alive" signals. The device (VPOST/VPOSM) will detect that the machine is disconnected due to a missing "Keep Alive" and launch a new pairing process.
@@ -114,7 +114,7 @@ In some cases, starvation is caused by poor task handling or by extensive file w
 
 In addition, the starvation could be due to your peripheral doing tasks unrelated to Marshall, causing it not to respond to the Marshall task in time.
 
-### Can I increase the time between keepalives? Would that solve the starvation issue?
+### Can I increase the time between keepalives? would that solve the starvation issue?
 
 The SDK is made to work best with a keepalive of 1 second, and increasing the keepalive to a higher amount won't solve the issue of starvation- it would just take much longer to realize there's some issue with the communication. We don't recommend having it set to more than 5 seconds.
 For example, if you had it configured to 30 seconds, it would take 3\*30=90 seconds for the SDK to realize there's an issue, and in that time, the VPOST may appear "frozen"/unresponsive, confusing consumers. Having keepalives occur every second is not what's overloading the processor; the issue is that the task doesn't get enough priority to start with.
@@ -123,7 +123,7 @@ For example, if you had it configured to 30 seconds, it would take 3\*30=90 seco
   **Note:** For VPOSM, in case of Marshall over ETH, there's a need to set the keepalive to 10 seconds due to LAN requirements/limitations.
 </Note>
 
-## Should I have the keepalives logged? Would you be aware of any issues with them if they do not appear?
+## Should I have the keepalives logged? would you be aware of any issues with them if they do not appear?
 
 You can have them written to the logs, but they would make it really hard to read, since you get a keepalive (and a response to it) every second. In an hour-long log, you'd have at least 3,600 records. The "debug level dump moderate" means that only the critical information would be logged, such as the pairing process, transactions, statuses, starvation warning etc., so if you'd have an issue with keepalives/packets going missing- you'd get the same warning/information in the "debug level dump moderate " logging versus " debug level dump all".
 Bottom line, I would highly recommend using "debug level dump moderate" instead of "debug level dump all".

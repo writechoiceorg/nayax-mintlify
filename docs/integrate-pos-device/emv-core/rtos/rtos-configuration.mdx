@@ -20,7 +20,7 @@ Configuration files are saved on the reader file system in the `E:\ETC` folder.
 
 **Example:** `TMS_SVC_URL=tms.otiglobal.com`
 
-## Managing Settings
+## Managing settings
 
 Configuration is managed centrally through **Nayax Core**. To adjust settings:
 
@@ -30,7 +30,7 @@ Configuration is managed centrally through **Nayax Core**. To adjust settings:
 
 ---
 
-## Network & System Settings
+## Network & system settings
 
 These parameters control network interface selection and system-level behavior:
 
@@ -42,7 +42,7 @@ These parameters control network interface selection and system-level behavior:
 | `CONFIG_VERSION` | Version of the config file; sent to TMS, not used by the device | String | — | — |
 | `KIOSK_TCP_LOCALHOST` | Limit EMV Core sockets to localhost interface | Bool (1/0) | 0 | 0.7 |
 
-## TMS & Payment Service Settings
+## TMS & payment service settings
 
 These parameters configure the URLs and polling behavior for the TMS and payment server:
 
@@ -52,7 +52,7 @@ These parameters configure the URLs and polling behavior for the TMS and payment
 | `PAYMENT_SVC_URL` | Payment server URL, name only (e.g., `payment-nayax-p.otiglobal.com`) | URL String (max 256) | empty | — |
 | `SERVER_POLL_INTERVAL` | Seconds between server calls for updates. Lower value = better responsiveness but more data usage. | U16 | 600 | — |
 
-## Reader Settings
+## Reader settings
 
 These parameters control initialization commands, button behavior, and reader display messages:
 
@@ -65,7 +65,7 @@ These parameters control initialization commands, button behavior, and reader di
 | `R_DO` | Sends DO commands to the reader on device start. Executed only once, unlike `INIT_CMD`. Multiple `R_DO` lines are all executed. | Hex string | N/A | — |
 | `R_MSG_X_Y` | Sets reader message (index X, line Y) when the device starts | ASCII string | N/A | — |
 
-## Security Settings
+## Security settings
 
 These parameters control SSL and encryption settings for server connections:
 
@@ -75,7 +75,7 @@ These parameters control SSL and encryption settings for server connections:
 | `PMT_DUKPT_KEY_VARIANT` | DUKPT key variant depending on PSP. Use decimal format (e.g., 17 decimal = 0x11). Set to 0 to disable DUKPT (testing only). | U8 | 17 | — |
 | `PAYMENT_SVC_USE_SSL` | Switch SSL for payment service on or off | Bool (1/0) | — | — |
 
-## Open Loop Payment Settings
+## Open loop payment settings
 
 These parameters control open-loop (credit/debit) payment behavior, timeouts, and authorization flow:
 
@@ -94,7 +94,7 @@ These parameters control open-loop (credit/debit) payment behavior, timeouts, an
 | `PRE_AUTH_AMOUNT` | Default pre-authorization amount in cents if no amount is provided by the API | Int | 0 | 0.7 |
 | `CURRENCY_CODE` | ISO 4217 code (e.g., 840 = USD). v1.0 takes it from Nayax Core automatically after any machine attribute change or 'Reload configuration' action. | String | 840 | 0.7 / 1.0 |
 
-## Closed-Loop Payment Settings
+## Closed-loop payment settings
 
 These parameters enable and configure closed-loop (prepaid) card support, including Mifare:
 
@@ -104,7 +104,7 @@ These parameters enable and configure closed-loop (prepaid) card support, includ
 | `CLP_MIFARE_READ` | Specify Mifare blocks to read. Format: `K[A|B][key_num]B[block_num],...` Example: `KA01B10B14,KB05B20B30` | String | — | — |
 | `CLP_MIFARE_ENABLED` | Enable Mifare cards as Closed Loop during payment. 0 = disabled; 1 = enabled via server; 2 = enabled via local host API (UID returned immediately in `TransactionComplete`). | Int | 0 | 0.7 |
 
-## Logging Settings
+## Logging settings
 
 These parameters control log file size, retention, and per-module verbosity:
 
@@ -122,7 +122,7 @@ These parameters control log file size, retention, and per-module verbosity:
 | `LOG_APP_4` | Log level for TMS | 1–5 | 3 | — |
 | `LOG_USBH2` | Log level for USB Host | 1–5 | 3 | — |
 
-## Reader Message Customization
+## Reader message customization
 
 These parameters customize the text displayed on the Saturn Reader for various states:
 

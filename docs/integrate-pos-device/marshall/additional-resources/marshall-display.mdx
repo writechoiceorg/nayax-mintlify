@@ -88,23 +88,23 @@ The second is via sending a command via Nayax Core (Nayax's backoffice)- more on
 
 Once either configuration has been sent, it will remain on the device (no need to resend it after every transaction; only after the pairing process).
 
-## Display Control Related Commands
+## Display control related commands
 
 <Frame><img src="/images/docs/marshall-display/image2.png" /></Frame>
 
-### Updating the Screens
+### Updating the screens
 
 As can be seen in the PowerPoint above, once the Display Control command has been sent, the device would respond with a Display Status command, letting it know whether or not the device received said command and its validity.
 
-### Starting a Transaction
+### Starting a transaction
 
 Once a consumer has selected a product (screen) on the device, the device would respond with information the peripheral regarding which screen was selected, to which it should respond with a "Vend Request" with the relevant product code and price in order for the transaction process to begin.
 
-## Possible Layouts- VPOST only (except for layouts 7,8 which are also relevant for Media)
+## Possible layouts- VPOST only (except for layouts 7,8 which are also relevant for media)
 
 <Frame><img src="/images/docs/marshall-display/image3.png" /></Frame>
 
-### Layouts Relevant for VPOSM Only:
+### Layouts relevant for VPOSM only:
 
 <Frame><img src="/images/docs/marshall-display/image4.png" /></Frame>
 
@@ -112,7 +112,7 @@ Once a consumer has selected a product (screen) on the device, the device would 
 
 <Frame><img src="/images/docs/marshall-display/image6.png" /></Frame>
 
-## Layout Examples
+## Layout examples
 
 ### Layout ID 1
 
@@ -875,7 +875,7 @@ WIP
 
 One or two big buttons will appear in the middle. The first is in yellow and text in black, and the other (if it exists) is in black with text in white.
 
-### Layout ID 10- VPOSM Only
+### Layout ID 10- VPOSM only
 
 <Frame><img src="/images/docs/marshall-display/image14.png" /></Frame>
 
@@ -901,7 +901,7 @@ WIP
 
 Including title (optional, can be Null), and the element to be presented (Image/Animation).
 
-### Layout ID 11- VPOSM Only
+### Layout ID 11- VPOSM only
 
 <Frame><img src="/images/docs/marshall-display/image15.png" /></Frame>
 
@@ -953,7 +953,7 @@ You can see the flag's location in the [SDK Flags](/docs/integrate-pos-device/ma
 |                  | Payment Flags                 | Allow Pre-Selection on Pre-Paid cards |
 | **VMC**          | Session Time Out (minutes)    | > 0                                   |
 
-## Updating the Screens via Nayax Core
+## Updating the screens via Nayax Core
 
 A Nayax Core attribute has been introduced that allows operators to dynamically update text, prices, and configurations on selection screens- the screens that appear when the device is in idle mode, waiting for a consumer to select a product by selecting (touching) one of said screens.
 This attribute enables sending structured data from Nayax Core to the peripheral. This information is then processed and displayed on the Marshall selection screen.
@@ -969,7 +969,7 @@ The attribute definition is as follows:
 
 This sends a JSON-formatted string containing details about selection screens, including layout configurations, text labels, prices, and timing.
 
-## JSON Logic Recommendation
+## JSON logic recommendation
 
 The JSON string should include necessary instructions for each selection screen. The format is flexible, allowing operators to specify only the required parameters.
 

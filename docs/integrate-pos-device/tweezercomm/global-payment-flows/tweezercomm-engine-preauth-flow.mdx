@@ -6,7 +6,7 @@ metadata:
 
 Tweezercomm's pre-authorization transactions are processed, authorized, and either settled or canceled based on the response from the payment server. This process also includes a resilience mechanism for handling errors.
 
-## Transaction Flow
+## Transaction flow
 
 To understand the pre-authorization flow, see the diagram below:
 
@@ -29,14 +29,14 @@ Here's a breakdown of each step:
 If the `statusCode != 0` (indicating an issue) is returned, the system refers to the [Resilience Mechanism](/docs/integrate-pos-device/tweezercomm/resilience-mechanism-copy) to understand how TweezerComm handles errors or retry mechanisms.
 </Warning>
 
-## See Also
+## See also
 
 <CardGroup cols={2}>
   <Card icon="play" title="doTransaction" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction">
     Start and process a payment transaction over the TweezerComm protocol.
   </Card>
 
-  <Card icon="shield-halved" title="Resilience Mechanism" href="/docs/integrate-pos-device/tweezercomm/resilience-mechanism-copy">
+  <Card icon="shield-halved" title="Resilience mechanism" href="/docs/integrate-pos-device/tweezercomm/resilience-mechanism-copy">
     Handle transaction completion or cancellation when errors or failures occur.
   </Card>
 </CardGroup>

@@ -5,9 +5,9 @@ description: "Field reference for widget parameters, filter names, and filter ty
 
 This page covers the field reference for widget parameters and filters used when calling the Widgets Dashboard API endpoints.
 
-## Field Reference
+## Field reference
 
-### ScreenTypeId Values
+### ScreenTypeId values
 
 `screenTypeId` identifies which dashboard screen context the widget belongs to:
 
@@ -44,7 +44,7 @@ Each item in the response array contains `widgetTypeId` and `widgetName`. Use th
   The Devzone reference page for "Retrieve Widget Data" uses `widgetTypeId: 5` ("Top Events For Period") in its example, but presents it as if it were a revenue widget. This is incorrect. Use `GET /v1/dashboard/widgets` to discover the correct `widgetTypeId` for revenue widgets in your environment (commonly ID `19`).
 </Warning>
 
-### Filter Names
+### Filter names
 
 Filter names are widget-specific. The following are commonly used across revenue and reporting widgets:
 
@@ -64,7 +64,7 @@ Filter names are widget-specific. The following are commonly used across revenue
   **MachineId via `entityId` vs filter**: Some widgets accept the machine ID through the `entityId` field; others accept it as a `MachineId` filter entry. If the widget is scoped to the machine screen (`screenTypeId=2`), prefer `entityId`. If it is a dashboard widget (`screenTypeId=1`), use the `MachineId` filter. The exact behavior depends on the widget's stored procedure implementation.
 </Note>
 
-### Filter Types
+### Filter types
 
 The `type` field in a filter is a hint used by the backend to parse the `value` string:
 
@@ -74,7 +74,7 @@ The `type` field in a filter is a hint used by the backend to parse the `value` 
 | `"int"`    | Integer value                       |
 | `"string"` | Free-text string                    |
 
-## Multiple Filters in One Request
+## Multiple filters in one request
 
 The `filters` field is an array - multiple filters can be combined in a single request. For example, filtering by date range, machine ID, and grouping in one call:
 

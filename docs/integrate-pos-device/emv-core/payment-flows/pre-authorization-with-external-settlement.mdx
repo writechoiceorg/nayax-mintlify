@@ -14,7 +14,7 @@ While EMV Core manages the initial interaction with the consumer and the payment
   For this flow to function, the [ExternalSettlement](/reference/spark/transactions/externalsettlement) setting must be enabled by Nayax.
 </Warning>
 
-## Configuration & Device Behavior
+## Configuration & device behavior
 
 Once enabled, settlement is handled externally rather than by the host application:
 
@@ -30,14 +30,14 @@ This gives you the flexibility to trigger the settlement stage externally accord
 | **Auto-Cleanup** | Transactions unsettled past the settlement window are automatically canceled via card scheme regulations (this should not be relied upon). |
 | **Settlement Amount** | The final settlement price must not exceed the authorized amount. |
 
-## Managing Unsettled Transactions
+## Managing unsettled transactions
 
 When no product or service is provided, you must proactively manage the transaction to maintain a good user experience.
 
 - **External Cancel:** If no settlement will occur, you must send an **External Cancel** immediately.
 - **Consumer Impact:** If a transaction remains authorized without being canceled or settled, the consumer's funds will stay captured on their payment method, leading to potential disputes.
 
-## External Settlement Flow
+## External settlement flow
 
 The flow consists of two phases: payment authorization handled by EMV Core, and settlement or cancellation triggered by your 3rd-party server.
 
@@ -88,10 +88,10 @@ If the service was not provided:
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="External Settlement API" icon="link" href="/reference/spark/transactions/externalsettlement">
+  <Card title="External settlement API" icon="link" href="/reference/spark/transactions/externalsettlement">
     API reference for the ExternalSettlement endpoint used to settle authorized transactions from a 3rd-party server.
   </Card>
-  <Card title="External Cancel API" icon="link" href="/reference/spark/transactions/externalcancel">
+  <Card title="External cancel API" icon="link" href="/reference/spark/transactions/externalcancel">
     API reference for the ExternalCancel endpoint used to cancel authorized transactions when no service is provided.
   </Card>
 </CardGroup>

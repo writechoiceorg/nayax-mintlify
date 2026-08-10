@@ -72,7 +72,7 @@ See the API Signature for the `CancelTransaction` method:
 
 A confirmation request is the second stage of the authorization flow. It confirms the pre-authorization so that settlement can take place.
 
-### API Signature
+### API signature
 
 <Tabs>
   <Tab title="JSON">
@@ -179,7 +179,7 @@ EMV Core waits for a card to be presented, reads the data, and triggers a `CardT
 * **Payment Cards:** Returns a Base64 string containing the card token.
 * **CLP Cards (for example, Mifare):** Returns the card UID.
 
-### API Signature
+### API signature
 
 <Tabs>
   <Tab title="JSON">
@@ -236,7 +236,7 @@ EMV Core waits for a card to be presented, reads the data, and triggers a `CardT
 
 Use `PreAuthorize` to pre-authorize a card with the payment processor. EMV Core waits for a card, reads it, and processes it with the payment service if needed. It then sends a `TransactionComplete` event.
 
-### API Signature
+### API signature
 
 <Tabs>
   <Tab title="JSON">
@@ -330,7 +330,7 @@ This request is used to void a transaction in two specific cases:
 1. **Release Funds:** The transaction was **Pre-Authorized** but not **Confirmed**. Voiding releases the reserved funds when the transaction will no longer occur.
 2. **Reversal:** The transaction was completed using `PayTransaction` but needs to be canceled.
 
-### API Signature
+### API signature
 
 <Tabs>
   <Tab title="JSON">
