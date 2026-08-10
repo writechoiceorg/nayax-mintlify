@@ -38,16 +38,16 @@ Authorization: Bearer <YOUR_ACCESS_TOKEN>
 
 See [Security & Token](/docs/manage-data-operations/lynx-api/security) for details on obtaining a token.
 
-## Available Endpoints
+## Available endpoints
 
 The following endpoints are available. Select a card to view the full API reference.
 
 <CardGroup cols={2}>
-  <Card icon="grid" title="List Widgets for a Screen" href="/reference/lynx/report/get-available-widgets">
+  <Card icon="grid" title="List widgets for a screen" href="/reference/lynx/report/get-available-widgets">
     Returns all widgets configured for a given screen type, including their IDs, names, and configurations.
   </Card>
 
-  <Card icon="chart-line" title="Retrieve Widget Data" href="/reference/lynx/report/retrieve-widget-data">
+  <Card icon="chart-line" title="Retrieve widget data" href="/reference/lynx/report/retrieve-widget-data">
     Fetches data for a specific widget with full filter support (date range, machine ID, etc.). **Recommended for most use cases.**
   </Card>
 </CardGroup>
@@ -56,7 +56,7 @@ The following endpoints are available. Select a card to view the full API refere
   The GET simple variant (`GET /v1/dashboard/widget-data`) is not included in the API reference as it is not defined in the OpenAPI spec. Use the POST variant for filter support and full API reference coverage.
 </Note>
 
-## Typical Integration Flow
+## Typical integration flow
 
 A standard integration follows three steps: discover available widgets, fetch their data with optional filters, then parse the response payload.
 
@@ -74,7 +74,7 @@ A standard integration follows three steps: discover available widgets, fetch th
    - data                       → actual data payload (structure varies per widget)
 ```
 
-## Error Handling
+## Error handling
 
 The following HTTP status codes may be returned by the widget endpoints:
 

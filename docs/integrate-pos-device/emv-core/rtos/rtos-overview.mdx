@@ -10,7 +10,7 @@ The EMV Core RTOS SDK is a portable C99 library for adding EMV payment to MCU an
   This documentation covers SDK v1.0 for MCU and RTOS platforms. For the Android or Linux SDK, see [Android Installation](/docs/integrate-pos-device/emv-core/get-started/emv-core-android-installation) or [Linux Installation](/docs/integrate-pos-device/emv-core/get-started/emv-core-linux-installation).
 </Note>
 
-## SDK Highlights
+## SDK highlights
 
 * **C99 source code** designed for embedded systems
 * **Complete EMV transaction processing**, including command handling and authorization
@@ -18,25 +18,25 @@ The EMV Core RTOS SDK is a portable C99 library for adding EMV payment to MCU an
 * **Linux reference implementation** included with the SDK
 * **Example application** to test your setup quickly
 
-## System Overview
+## System overview
 
 The Nayax Embedded solution includes three elements:
 
 <Columns cols={3}>
-  <Card title="Cashless Reader Hardware">
+  <Card title="Cashless reader hardware">
     The UNO-mini reader running EMV Core firmware, exposing a JSON Payment API and network socket interface.
   </Card>
-  <Card title="SDK Sample Code">
+  <Card title="SDK sample code">
     C99 sample code implementing the network socket and payment API calls.
   </Card>
-  <Card title="Nayax Servers (Nayax Core)">
+  <Card title="Nayax servers (Nayax Core)">
     Cloud service for remote terminal management and transaction clearing.
   </Card>
 </Columns>
 
 <Frame><img src="/images/docs/rtos-overview/system-overview.png" /></Frame>
 
-## Hardware and Software Architecture
+## Hardware and software architecture
 
 The UNO-mini reader running EMV Core connects to the Host platform (MCU/RTOS) via UART TTL or USB HID.
 
@@ -44,7 +44,7 @@ The UNO-mini reader running EMV Core connects to the Host platform (MCU/RTOS) vi
 
 <Frame><img src="/images/docs/rtos-overview/hw-sw-architecture-2.png" /></Frame>
 
-### Application Layers
+### Application layers
 
 Communication flows through the following layers:
 
@@ -56,7 +56,7 @@ Communication flows through the following layers:
 | **EMV Core Device** | Processes payment requests and returns responses |
 | **Callback System** | Async responses delivered via registered callbacks |
 
-## Requirements Summary
+## Requirements summary
 
 | Requirement | Details |
 | :---------- | :------ |
@@ -66,16 +66,16 @@ Communication flows through the following layers:
 | **Network** | IPv4 TCP sockets, DNS resolution, client-only |
 | **Compiler** | GCC 4.8+ or Clang 3.5+ with C99 support |
 
-## Next Steps
+## Next steps
 
 <Columns cols={3}>
-  <Card icon="link" title="Get Started" href="/docs/integrate-pos-device/emv-core/rtos/rtos-get-started">
+  <Card icon="link" title="Get started" href="/docs/integrate-pos-device/emv-core/rtos/rtos-get-started">
     SDK delivery, firmware installation, and obtaining your Device ID.
   </Card>
-  <Card icon="link" title="Integration Guide" href="/docs/integrate-pos-device/emv-core/rtos/rtos-integration-guide">
+  <Card icon="link" title="Integration guide" href="/docs/integrate-pos-device/emv-core/rtos/rtos-integration-guide">
     Threading, callbacks, error handling, and configuration.
   </Card>
-  <Card icon="link" title="C API Reference" href="/docs/integrate-pos-device/emv-core/rtos/rtos-c-api">
+  <Card icon="link" title="C API reference" href="/docs/integrate-pos-device/emv-core/rtos/rtos-c-api">
     Complete C API function reference and key data types.
   </Card>
 </Columns>

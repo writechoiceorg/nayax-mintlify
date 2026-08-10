@@ -14,14 +14,14 @@ Nayax supports two methods for delivering transaction reports to your systems. C
 
     Transactions are pushed to your Amazon SQS queue immediately as they occur. Ideal for systems that need up-to-the-minute data.
   </Card>
-  <Card title="SFTP / Email" icon="clock" href="/docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-transaction-delivery#scheduled-file-report-sftp--email">
+  <Card title="SFTP / email" icon="clock" href="/docs/manage-data-operations/amazon-sqs/set-up-nayax-core/set-up-transaction-delivery#scheduled-file-report-sftp--email">
     **Periodic (Batch delivery)**
 
     Transaction reports are delivered to an SFTP server or email address at the end of each hour or day. Ideal for back-office batch processing.
   </Card>
 </CardGroup>
 
-## Amazon SQS (Real-Time)
+## Amazon SQS (real-time)
 
 Amazon SQS (Simple Queuing Service) is a queue mechanism that provides a robust, redundant, and reliable
  way to transfer data between systems without managing retry logic. By integrating SQS with Nayax Core, 
@@ -32,7 +32,7 @@ The SQS integration is a two-step process:
 - [Setting up Amazon Queue in AWS](/docs/manage-data-operations/amazon-sqs/amazon-queue-setup/index)
 - [Configuring Nayax Core](/docs/manage-data-operations/amazon-sqs/set-up-nayax-core/nayax-back-office-setup)
 
-## Email/SFTP (Periodic)
+## Email/SFTP (periodic)
 
 Nayax Core can be configured to deliver a transaction report file to an SFTP server or email address on a recurring schedule (hourly or daily). 
 The report uses the same transaction fields as SQS and supports CSV or XML output with configurable delimiters.

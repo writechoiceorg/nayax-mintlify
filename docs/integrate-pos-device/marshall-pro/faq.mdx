@@ -3,13 +3,13 @@ title: "Flow & Configuration"
 description: "Answers to common questions about activating, connecting, configuring, and updating Marshall Pro devices."
 ---
 
-## Connecting the Device to Your POS or Simulator
+## Connecting the device to your POS or simulator
 
 To connect to the device, use the TCP protocol through port 5050. No physical connection to your computer is required.
 
 For your device's Wifi connection setup, see [Configuring Wifi (and IP)](/docs/integrate-pos-device/marshall-pro/faq#configuring-wifi-and-ip) below. For LAN, see [Configuring ETH (and IP)](/docs/integrate-pos-device/marshall-pro/faq#configuring-eth-and-ip).
 
-### Activating the Device
+### Activating the device
 
 <Steps>
   <Step title="Scan the QR code">
@@ -26,16 +26,16 @@ For your device's Wifi connection setup, see [Configuring Wifi (and IP)](/docs/i
   </Step>
 </Steps>
 
-### Getting the Device's Details (Serial Number, IP)
+### Getting the device's details (serial number, IP)
 
 <Steps>
-  <Step title="Set the device to Out of Service">
+  <Step title="Set the device to out of service">
     Disconnect the link to the device and wait 30 seconds.
     <Frame>
       ![Device screen showing Out of Service status](/images/11.png)
     </Frame>
   </Step>
-  <Step title="Open Device Info">
+  <Step title="Open device info">
     Click five times on the top-right corner of the screen, then select **Device Info**.
     <Frame>
       ![Device menu with the Device Info option highlighted](/images/27-1.png)
@@ -51,12 +51,12 @@ For your device's Wifi connection setup, see [Configuring Wifi (and IP)](/docs/i
 
 To return to the device's idle screen for making transactions, click the top-left arrow, then select **Payment App**.
 
-### Configuring Wifi (and IP)
+### Configuring wifi (and IP)
 
 VPOSM over Marshall supports either DHCP or Static IP, depending on how you want the device to work. DHCP is the default.
 
 <Steps>
-  <Step title="Open the Technician menu">
+  <Step title="Open the technician menu">
     Click a few times on the top-left corner of the screen, then select **Technician Menu**.
     <Frame>
       ![Technician Menu opened on the device](/images/29.png)
@@ -68,7 +68,7 @@ VPOSM over Marshall supports either DHCP or Static IP, depending on how you want
       ![Technician Menu with the Communication section highlighted](/images/image-1.png)
     </Frame>
   </Step>
-  <Step title="Select Wifi">
+  <Step title="Select wifi">
     Select **Wifi**, then select the relevant network.
     <Frame>
       ![Communication section with the Wifi option](/images/image-6.png)
@@ -100,13 +100,13 @@ VPOSM over Marshall supports either DHCP or Static IP, depending on how you want
       ![Device system settings screen](/images/image-11.png)
     </Frame>
   </Step>
-  <Step title="Open Network & Internet">
+  <Step title="Open network & internet">
     Tap **Network & Internet**.
     <Frame>
       ![System settings with the Network and Internet option](/images/image-10.png)
     </Frame>
   </Step>
-  <Step title="Open Ethernet settings">
+  <Step title="Open ethernet settings">
     Tap **Ethernet**, then turn it on using the toggle. Tap the Ethernet row again to open Ethernet Settings.
     <Frame>
       ![Network and Internet settings with the Ethernet option](/images/image-12.png)
@@ -123,7 +123,7 @@ VPOSM over Marshall supports either DHCP or Static IP, depending on how you want
   </Step>
 </Steps>
 
-## Triggering the Apps Update Process (Accessing the CasHub App)
+## Triggering the apps update process (accessing the CasHub app)
 
 Nayax Fuel initiates firmware updates from a separate platform called CasHub. The update process updates each relevant application individually, rather than as a single package, in two stages: download and update.
 
@@ -135,19 +135,19 @@ Once the download finishes, Nayax Fuel's support team sends the device a request
 To trigger the update manually, follow these steps:
 
 <Steps>
-  <Step title="Set the device to Out of Service">
+  <Step title="Set the device to out of service">
     Disconnect the link to the device and wait 30 seconds.
     <Frame>
       ![Device screen showing Out of Service status](/images/11.png)
     </Frame>
   </Step>
-  <Step title="Open the Technician menu">
+  <Step title="Open the technician menu">
     Click five times on the top-right corner of the screen, then select **Technician Menu**. Enter the password 123123.
     <Frame>
       ![Technician Menu password prompt](/images/12.png)
     </Frame>
   </Step>
-  <Step title="Open Dev Mode">
+  <Step title="Open dev mode">
     Scroll down to **Dev Mode** and enter the password 321321.
     <Frame>
       ![Technician Menu with the Dev Mode option](/images/13.png)
@@ -162,7 +162,7 @@ To trigger the update manually, follow these steps:
       ![Android settings screen](/images/15.png)
     </Frame>
   </Step>
-  <Step title="Open Apps & Notifications">
+  <Step title="Open apps & notifications">
     Go to **Apps & Notifications**, then select **See All Apps** (in this example, the device has 24 apps).
     <Frame>
       ![Android settings with the Apps and Notifications option](/images/16.png)

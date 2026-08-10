@@ -10,13 +10,13 @@ The SDK is designed for portability across embedded platforms and operating syst
   Use the Linux reference implementation in `platform/linux/` as a working starting point. For RTOS-based platforms, map mutexes and events to your RTOS primitives (e.g., FreeRTOS `SemaphoreHandle_t`, Zephyr `k_mutex`).
 </Tip>
 
-## Implement the Platform Layer
+## Implement the platform layer
 
-### Create the Platform Directory
+### Create the platform directory
 
 Create a new directory under `platform/` (e.g., `platform/my_platform/`) with two files:
 
-### Platform Types (`ecod_platform_types.h`)
+### Platform types (`ecod_platform_types.h`)
 
 Define the platform-specific types used by the SDK:
 
@@ -30,7 +30,7 @@ typedef struct {
 
 The Linux reference uses `pthread_mutex_t` for mutexes and a struct wrapping `pthread_mutex_t` + `pthread_cond_t` + `bool` flag for events. Adapt these to your platform's RTOS or OS primitives.
 
-### Platform Implementation (`ecod_platform_<name>.c`)
+### Platform implementation (`ecod_platform_<name>.c`)
 
 Implement all functions declared in `ecod_sdk_platform.h`. They are grouped into these categories:
 
@@ -43,7 +43,7 @@ Implement the startup function to allocate platform resources:
 EC_SDK_STATUS ecod_platform_init(void);
 ```
 
-### Clock & Timing
+### Clock & timing
 
 Implement these functions to provide the SDK with a monotonic clock and blocking delay:
 
@@ -101,7 +101,7 @@ EC_SDK_STATUS ecod_event_wait(ecod_event_t* p_event, u32 timeout_ms);  // 0xFFFF
 EC_SDK_STATUS ecod_event_signal(ecod_event_t* p_event);
 ```
 
-### Serial Communication
+### Serial communication
 
 Implement these functions to handle raw serial or USB HID I/O:
 
@@ -134,7 +134,7 @@ EC_SDK_STATUS ecod_socket_recv(ecod_socket_t socket, u8* out_data, u32 max_size,
                                 u32* out_received_size);
 ```
 
-## Update the Build System
+## Update the build system
 
 Modify `configure.ac` and `Makefile.am` to include your platform:
 
@@ -145,7 +145,7 @@ libecodsdk_a_SOURCES += platform/my_platform/ecod_platform_my_platform.c
 endif
 ```
 
-## Test the Integration
+## Test the integration
 
 Use the demo application to verify functionality on your target platform:
 

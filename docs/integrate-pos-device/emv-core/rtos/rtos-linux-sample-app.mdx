@@ -14,7 +14,7 @@ The sample code was developed and tested on Ubuntu (x86\_64). When porting to ot
 * Platform-specific code is under `platform/`.
 * It is highly recommended **not** to modify code outside the `platform/` folder.
 
-## Directory Structure
+## Directory structure
 
 The sample application sources are organized as follows:
 
@@ -28,11 +28,11 @@ demo/              # Example / demo application
 
 ## Build
 
-### Get the Sources
+### Get the sources
 
 Obtain the SDK package from your Nayax account manager and extract the `Linux Sample Application` folder.
 
-### Install Build Dependencies (Ubuntu Linux)
+### Install build dependencies (ubuntu linux)
 
 Run these commands to install the required tools:
 
@@ -41,7 +41,7 @@ sudo apt-get update
 sudo apt-get install build-essential automake
 ```
 
-### Build the SDK and Demo
+### Build the SDK and demo
 
 The provided sources and demo are ready to build on Ubuntu Linux x86\_64 with GCC and automake:
 
@@ -62,7 +62,7 @@ make clean              # Remove build objects
 make maintainer-clean   # Remove all generated files
 ```
 
-## Configuration Options
+## Configuration options
 
 The SDK supports various build-time configurations through `ecod_sdk_configs.h`:
 
@@ -84,7 +84,7 @@ The SDK supports various build-time configurations through `ecod_sdk_configs.h`:
   Computed defaults are in `ecod_sdk_setup.h`. Do not modify that file directly.
 </Note>
 
-## Run the Demo
+## Run the demo
 
 After building, run the included demo application to test the SDK:
 

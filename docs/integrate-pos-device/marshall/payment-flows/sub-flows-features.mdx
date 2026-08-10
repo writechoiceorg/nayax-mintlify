@@ -5,15 +5,15 @@ description: "Reference for Marshall's payment sub-flows and features, including
 
 Marshall supports two sub-flows, Reader Always On and Always Idle, plus five related features: Transfer Data, Display Control, eReceipt, Info Session, and Incremental Authorization.
 
-## Reader Always On
+## Reader always on
 
 This configuration is relevant for peripherals that want to start the transaction with product selection (PreSelection flow) but don't have a way to start a transaction from the peripheral. It means the transaction process is initiated from a consumer selecting a product on Nayax's device screen, which then triggers the peripheral to send the product's details. In rare cases, a consumer's card presentation can trigger the peripheral to send the product selection, but this option isn't common.
 
-## Always Idle
+## Always idle
 
 The transaction starts with the consumer selecting a product (PreSelection flow) on the peripheral, which then sends `Vend Request` without waiting for a `Begin Session` trigger. This flow is very commonly used in the Far East.
 
-## Transfer Data
+## Transfer data
 
 Transfer Data provides information during the transaction process about the transaction details: Nayax's transaction ID and the consumer's card details.
 
@@ -25,7 +25,7 @@ Transfer Data also lets the peripheral send its own transaction ID, so it appear
 
 For more detail, see [Transfer Data](/docs/integrate-pos-device/marshall/additional-resources/marshall-ontransferdata).
 
-## Display Control
+## Display control
 
 Display Control is a feature for peripherals that need the Marshall master to define different selection screens on the device before sending a request for a specific price. This way, product selection comes from Nayax's device instead of the peripheral. It helps when the peripheral has no screen, or no way for consumers to select a product on its own end.
 
@@ -48,13 +48,13 @@ In newer versions, it looks something like this:
 marshall-c-sdk-demo: received ereceipt: https://ereceipt.nayax.com/qr/2470412964/0123456478901234/2
 ```
 
-### Fixing an Unrecognized eReceipt Product Name
+### Fixing an unrecognized eReceipt product name
 
 Product names come from your product map. You can create products in it and name them to match the product codes you send via the SDK. Marshall doesn't use any other information in the product map, so it doesn't affect the transaction flow, including prices. The only field that matters is the product code name, which appears in Last Sales and the eReceipt file.
 
 To add new products to your device's product map, go to the Product Map tab and click **Map** > **Add BIN**. Add the product code, product group, PA code, and MDB code (the MDB code must match the product code in the SDK), then click **Save**.
 
-## Info Session
+## Info session
 
 Info Session is an informative, non-vending session that provides the peripheral with the consumer's card details when they present their card. The consumer isn't charged, and receives a `Card Read Successfully` notification. The transaction ends with `Vend Denied`, since there's no authorization and no need to proceed to vending.
 
@@ -64,7 +64,7 @@ Info Session is used chiefly for consumer re-identification, by having the consu
   **Important note:** This feature requires the peripheral to have a screen, or another way to distinguish between a vending session and an info session, since the peripheral decides which type of session to start.
 </Note>
 
-## Incremental Authorization
+## Incremental authorization
 
 Incremental authorizations increase the total amount authorized when the estimated or initial authorization isn't enough. An incremental authorization request can also be based on a revised estimate of the cardholder's spending. Incremental authorizations don't replace the original approval: they're additional to previously authorized amounts. The sum of all linked estimated and incremental authorizations is the total amount permitted for a given transaction.
 
@@ -74,7 +74,7 @@ Incremental authorizations increase the total amount authorized when the estimat
   As of February 2026, only these billing providers support this feature: Heartland (US), Chase (US), Credorax (Europe), First Data (Australia), and Adyen (US and Europe). If your devices use any other billing provider, Incremental Authorization doesn't work.
 </Warning>
 
-### How Incremental Authorization Works
+### How incremental authorization works
 
 The incremental feature uses two Default Credit parameters: the regular one, and Maximum Default Credit. The consumer is initially authorized for the regular Default Credit amount, as in any PreAuthorization transaction. If there isn't enough credit for the Default Credit amount, the transaction is cancelled at this step. If the consumer takes items worth less than the Default Credit amount, they're only charged for those items, as usual.
 

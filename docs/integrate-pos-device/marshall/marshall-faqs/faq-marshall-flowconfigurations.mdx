@@ -3,11 +3,11 @@ title: "Flow & Configurations"
 description: "Answers to common questions about Marshall's flow behavior and configuration, including timeouts, status codes, and session handling."
 ---
 
-## Vend Result Timeout (Timeout for Vend Success)
+## Vend result timeout (timeout for vend success)
 
 This parameter sets how long the device waits for a vend response (`Vend Approved` or `Vend Failure`) from the peripheral after sending it `Vend Approved`. In Nayax Core, the parameter's maximum value is 65535 seconds (18 hours, 12 minutes, and 15 seconds). If you need a longer window, use [Multi-Session](/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session#/), where the timeout is 23 hours for credit cards and 72 hours for proprietary cards.
 
-## Status Command
+## Status command
 
 Once pairing is complete, the device immediately sends a `Status` command when network communication is lost, so the machine knows. It looks something like this in the Java SDK (the C# and C logs look the same):
 
@@ -78,13 +78,13 @@ The `Status` command can also provide information during the consumer's card pre
 
 If a consumer has trouble with card reading, the device prompts them to insert the card or use another card. If the card doesn't have enough credit, the device doesn't show that reason on screen or in the SDK logs, since it isn't related to communication between the VPOST and the machine, but rather between the device and the acquirer. You can generally see the reason a transaction was cancelled or a card was rejected in Nayax Core.
 
-## Communication Loss
+## Communication loss
 
 The Marshall protocol uses ACK commands in response to each command sent: when your peripheral sends a command to the device, it receives an ACK command in return, and vice versa. The ACK is a response from the receiving side to the sender, confirming the command was received. If no ACK arrives, the command is sent again. If none of the three attempts (the original command plus two retries) receive an ACK, the SDK stops sending keep-alive commands, and the device sends a reset command to re-establish pairing.
 
 If no ACKs arrive during a transaction, responsibility depends on timing. If none arrive after `Vend Success`, Nayax is responsible for making the settlement. If none arrive after authorization but before `Vend Success`, or before authorization at all, Nayax cancels the transaction.
 
-## Approval by a 3rd-Party Server
+## Approval by a 3rd-party server
 
 This section covers how the machine notifies the SDK whether a card is approved.
 
@@ -165,7 +165,7 @@ if (config.mag_card_approved_by_vmc_support || config.mifare_approved_by_vmc_sup
 
 </CodeGroup>
 
-## Cancel Command
+## Cancel command
 
 If you send `Vend Request` and haven't yet received `Vend Approved` or `Vend Denied`, you can send the `Cancel` command, which causes `Vend Denied` to be sent.
 
@@ -173,7 +173,7 @@ If you send `Cancel` before receiving `Vend Approved`, but `Vend Approved` is al
 
 You can also cancel a transaction before sending `Vend Request`, if the consumer starts a transaction but backs out before you send it. This can happen either before the consumer presents a card, or right after you receive `Begin Session` but before you send `Vend Request`. In the first case, the SDK's logs show only `Reader Enable`.
 
-## Begin Session Sent Only After Card Authorization
+## Begin session sent only after card authorization
 
 When using prepaid cards, authorization comes first, and `Begin Session` is sent afterward.
 
@@ -193,7 +193,7 @@ You must perform a close session only when the VPOST/Onyx is in idle mode, not i
   Don't send `Close Session` while a transaction is active. The device processes `Close Session` first, which can get the active transaction stuck. Send `Close Session` only when `onReady` triggers.
 </Warning>
 
-## Closing a Session With a Price of 0
+## Closing a session with a price of 0
 
 To cancel a transaction, send a close session command with a status other than `OK`, such as `Failed to Dispense`. Sending a close session with a price of 0 and a status of `OK` is treated as an error in your machine's price calculation, not as a cancellation.
 
@@ -210,7 +210,7 @@ The possible statuses are:
 
 Then you can send the `Close Session` command.
 
-## Multivend: Partial Vending Example
+## Multivend: partial vending example
 
 Partial vending applies only to Multivend, and means that only some of the selected products could be vended.
 
@@ -261,7 +261,7 @@ if (vmc_config.multi_vend_support) //example of partial vending
 
 </CodeGroup>
 
-## Session Timeout Delay
+## Session timeout delay
 
 The device checks its open sessions every minute, so it may settle a transaction up to a minute after the timeout set in Nayax Core.
 
