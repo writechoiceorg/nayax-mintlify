@@ -806,9 +806,20 @@
             "href": "https://www.nayax.com/product-updates/integrated-pos/integrated-vpos-touch-onyx/"
           },
           {
-            "tab": "Help Center",
-            "icon": "circle-question",
-            "href": "https://nayax-u.nayax.com/"
+            "tab": "Support & Trust",
+            "icon": "shield-check",
+            "menu": [
+              {
+                "item": "Help Center",
+                "icon": "circle-question",
+                "href": "https://nayax-u.nayax.com/"
+              },
+              {
+                "item": "Certifications",
+                "icon": "certificate",
+                "pages": ["docs/get-started/certifications"]
+              }
+            ]
           }
         ]
       },
