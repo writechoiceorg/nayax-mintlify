@@ -2,41 +2,54 @@
 title: "Security & Token"
 keywords: ["api key", "API key", "credentials", "credential", "credentials for test", "bearer token", "access token", "authorization header", "test credentials", "sandbox credentials", "generate token", "user token", "show token", "account settings", "security and login", "how to get an access token"]
 metadata:
-  og:description: "Learn how to generate a Lynx API access token (API key) from Nayax Core and use it as a Bearer credential to authenticate requests in QA and production."
+  og:description: "Retrieve a Lynx API access token from Nayax Core and use it as a Bearer credential to authenticate requests in QA and production."
 ---
 
-Authentication using an access token is required to interact securely with the Lynx API. This guide provides an overview of generating and using access tokens and best practices for ensuring API security.
+The Lynx API requires an access token to authenticate requests securely.
 
-## Access Token
+## Access token
 
 An access token is a security credential used to authenticate API requests. Each request to the Lynx API must include a valid access token in the `Authorization` header. This access token is also known as an API key or API token, and appears as a User Token in Nayax Core.
 
+<Note>
+If you need to issue scoped, time-limited tokens to your own downstream customers or integrations, see [Customer-Managed Access Tokens](/docs/manage-data-operations/lynx-api/customer-managed-tokens) instead.
+</Note>
+
+You manage access tokens in the Nayax Back Office (Nayax Core).
+
 <Warning>
-**Keep your Tokens Safe**
+**Keep your tokens safe**
 
 It is important to avoid sharing your secret tokens in public places like GitHub or Bitbucket since it can allow malicious API calls.
 </Warning>
 
-Access tokens can be found through the Nayax Back Office (Nayax Core). Follow these steps to retrieve an access token:
-
-1. **Log in to Nayax Core** using your username and password.
-2. **Navigate to Account Settings** by clicking on your username at the top right corner, and selecting the **Account Settings** option.
+<Steps>
+  <Step title="Log in to Nayax Core">
+    Use your username and password.
+  </Step>
+  <Step title="Navigate to Account Settings">
+    Click your username in the top right corner, then select **Account Settings**.
 
     <Frame><img src="/images/docs/security/image1.png" /></Frame>
-
-3. Access the **Security and Login** Tab.
+  </Step>
+  <Step title="Open the Security and Login tab">
+    It's the second tab, next to **Account**.
 
     <Frame><img src="/images/docs/security/image2.png" /></Frame>
-
-4. Navigate down to the **User Tokens** section.
+  </Step>
+  <Step title="Find the User Tokens section">
+    It's below **Your Trusted Devices**.
 
     <Frame><img src="/images/docs/security/image3.png" /></Frame>
-
-5. Click the **Show Token** button next to an existing token to show it, and copy the token for use in API calls.
+  </Step>
+  <Step title="Show and copy the token">
+    Click **Show Token** next to an existing token to reuse it, then copy it for use in API calls.
 
     <Frame><img src="/images/docs/security/image4.png" /></Frame>
+  </Step>
+</Steps>
 
-## Using the Token in API Requests
+## Using the token in API requests
 
 Include the access token in the `Authorization` header for each API request:
 
