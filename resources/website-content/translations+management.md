@@ -1,4 +1,4 @@
-<!-- source: resources/files/Translations+Management.txt processed: 2026-05-06 -->
+{/* source: resources/files/Translations+Management.txt processed: 2026-05-06 */}
 
 # Translations Management
 

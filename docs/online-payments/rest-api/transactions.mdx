@@ -1,0 +1,65 @@
+---
+title: "Retrieve Transactions"
+description: "Get a single transaction by ID, or list transactions filtered by status, order, customer, or date range."
+keywords: ["transaction status api", "payment processor api"]
+metadata:
+  og:description: "Look up a payment using only your own order or customer reference, even without the Nayax transaction ID on hand."
+---
+
+Use these two endpoints to check a transaction's status server-side:
+confirming a Hosted Payment Page result, recovering from a lost response, or
+building your own reporting. Both need only the `x-api-key` header; neither
+takes `merchantId` as a parameter.
+
+## Get transaction
+
+Retrieve full details of a single transaction by its Nayax transaction ID.
+
+`GET /api/v1/transactions/{transactionId}`
+
+Nayax returns a `404` if the transaction belongs to a different merchant.
+
+<Warning>
+  The response's `status` field uses a different vocabulary from the Hosted
+  Payment Page result object's `status` (`APPROVED`, `DECLINED`, `FAILED`)
+  described in
+  [Receive the payment result](/docs/online-payments/payment-page/receive-payment-result#the-result-object).
+  They're two different objects; branching on `status === "APPROVED"`
+  against a Get transaction response fails silently, since this endpoint
+  never returns that value.
+</Warning>
+
+If the [authorize](/docs/online-payments/rest-api/authorize-transaction)
+response was lost, for example to a network timeout, you won't have a
+`transactionId` to query with.
+[List transactions](#list-transactions) filtered by `orderId` recovers it
+instead, which is why including `orderId` on every request pays off later.
+
+For the full response field reference and an example, see
+[Get transaction](/reference/online-payments/endpoints/get-transaction) in the API
+reference.
+
+## List transactions
+
+Retrieve a paginated list of transactions, filtered by status, order
+reference, customer reference, or a date range.
+
+`GET /api/v1/transactions`
+
+Each transaction in the list carries a narrower field set than [Get
+transaction](#get-transaction) above (no `authCode`, `declineCode`, or
+`errorCode`), ordered by `createdAt` descending. Call [Get
+transaction](#get-transaction) on a specific `transactionId` for those
+fields.
+
+For the filter parameters, response fields, and an example, see [List
+transactions](/reference/online-payments/endpoints/list-transactions) in the API
+reference.
+
+## See also
+
+- [Authentication](/docs/online-payments/rest-api/authentication)
+- [Receive the payment result](/docs/online-payments/payment-page/receive-payment-result)
+- [Authorize a transaction](/docs/online-payments/rest-api/authorize-transaction)
+- [Capture, void, or refund a transaction](/docs/online-payments/rest-api/capture-void-refund)
+- [Response codes](/docs/online-payments/rest-api/response-codes)

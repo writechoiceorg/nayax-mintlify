@@ -1,0 +1,127 @@
+---
+title: "Authorize a Transaction"
+description: "Authorize a merchant-initiated or customer-initiated transaction through the REST API, with a stored token, card, or wallet."
+keywords: ["card on file", "idempotency key", "authorize and capture", "3d secure", "3d secure authentication", "3ds2", "credit card processing api"]
+metadata:
+  og:description: "How to authorize a payment through the REST API, either a merchant-initiated transaction with a stored card or a customer-initiated one submitted directly instead of through the Hosted Payment Page."
+---
+
+Authorize a payment through the REST API, either a merchant-initiated
+transaction ([MIT](/docs/online-payments/overview#transaction-types-cit-and-mit))
+that charges a stored card without the cardholder present, or a
+customer-initiated one (CIT) submitted directly instead of through the
+Hosted Payment Page. Most merchants only need the MIT case; use the CIT case
+only if you're building your own checkout.
+
+## Prerequisites
+
+What you need depends on which case applies.
+
+- **Merchant-initiated (MIT):** a reusable payment credential. Use one of:
+  - `scheme_token`, a network token (for example a device or wallet DPAN),
+    passed with its per-transaction cryptogram. Use this when you or the
+    wallet already hold a network token for the card.
+  - [`nayax_token`](/docs/online-payments/payment-page/receive-payment-result#webhooks),
+    Nayax's own reusable token, returned on a prior customer-initiated
+    transaction when one is available for that card.
+
+  In most cases you also need the original CIT's `transactionId`, from
+  [Get transaction](/docs/online-payments/rest-api/transactions#get-transaction)
+  or the transaction you processed through the Hosted Payment Page, passed as
+  `mit.originalTransactionId`.
+- **Customer-initiated (CIT):** no extra credential beyond the card or wallet
+  data itself.
+
+<Warning>
+  Submitting a raw card number (`paymentMethod.type: card`) on a
+  customer-initiated request brings your systems into PCI DSS scope,
+  typically SAQ D; see
+  [PCI DSS scope](/docs/online-payments/prerequisites-and-onboarding#pci-dss-scope).
+  Apple Pay, Google Pay, `scheme_token`, and `nayax_token` carry no raw card
+  number and don't trigger this. If you don't want that scope, use the
+  Hosted Payment Page instead.
+</Warning>
+
+## Authorize a transaction
+
+`POST /api/v1/transactions/authorize`
+
+Authorizes the payment, in either case from the Prerequisites section above.
+
+<Warning>
+  Set `transaction.initiationType` explicitly: `mit` for a merchant-initiated
+  request, or `cit` for a customer-initiated one. It defaults to `cit`, so a
+  merchant-initiated request that omits it gets treated as customer-initiated
+  instead.
+</Warning>
+
+<Tabs>
+  <Tab title="Merchant-initiated (MIT)">
+    `paymentMethod.type` is `scheme_token` or `nayax_token`, plus an `mit`
+    object with two fields.
+
+    **`mitType`** (required) is one of the following values:
+
+    | `mitType` | Description |
+    | --- | --- |
+    | `unscheduled` | A one-off MIT not on a fixed schedule, for example a balance top-up you trigger on demand. |
+    | `recurring` | A fixed-schedule repeat charge for the same amount, for example a subscription. |
+    | `installments` | One of a pre-agreed series of charges splitting a single purchase. |
+    | `no_show` | A charge for a reserved service the customer didn't use, for example a missed booking. |
+    | `delayed_charge` | A charge for the final amount of a service whose cost wasn't known at authorization time, for example incidentals. |
+    | `resubmission` | A retry of a previously declined MIT. |
+    | `split_shipment` | A charge for one of multiple shipments from a single order. |
+
+    **`originalTransactionId`** (optional, but recommended) references the
+    original CIT. See the warning below for why it matters.
+
+    <Warning>
+      In the EU, under PSD2, an MIT that doesn't reference an authenticated
+      original CIT is likely to be soft-declined by the issuer. Set
+      `mit.originalTransactionId` whenever you have it: the gateway uses it to
+      pass the original transaction's network transaction ID through to the
+      acquirer for stored-credential chaining, automatically. The gateway
+      doesn't itself validate that the referenced CIT was 3DS-authenticated,
+      and it doesn't enforce issuer soft-decline behavior; both depend on the
+      issuer and acquirer.
+    </Warning>
+  </Tab>
+  <Tab title="Customer-initiated (CIT)">
+    `paymentMethod.type` is `card`, `apple_pay`, or `google_pay`.
+    `scheme_token` and `nayax_token` are also accepted here, for a
+    customer-initiated purchase against a stored credential.
+
+    Pass the `apple_pay.token` or `google_pay.token` object exactly as your
+    own integration returns it, without reshaping or unwrapping it.
+
+    ### 3D Secure
+
+    On the Hosted Payment Page, 3D Secure runs automatically and is the
+    recommended path for most merchants; see
+    [3D Secure (3DS2)](/docs/online-payments/payment-page/display-hosted-payment-page#3d-secure-3ds2)
+    for how frictionless and challenge flows behave there. If you authorize a
+    card CIT through the API after running your own Merchant Plug-In (MPI)
+    for 3D Secure, pass the authentication result in `externalMPI` so Nayax
+    forwards it to the acquirer and preserves the liability shift.
+  </Tab>
+</Tabs>
+
+Both cases return the same response shape: `transactionId`, `status`,
+`authCode` on approval,
+[`declineCode`](/docs/online-payments/rest-api/response-codes#decline-codes)
+or [`errorCode`](/docs/online-payments/rest-api/response-codes#error-codes)
+on decline or failure, the authorized `amount`, and the card's `lastFour`
+and `brand` where applicable.
+
+For the full field-by-field reference, both request payloads (MIT and CIT),
+and the response, see
+[Authorize a transaction](/reference/online-payments/endpoints/authorize-a-transaction)
+in the API reference.
+
+## See also
+
+- [Retrieve transactions](/docs/online-payments/rest-api/transactions)
+- [Authentication](/docs/online-payments/rest-api/authentication)
+- [Verify a card](/docs/online-payments/rest-api/verify-card)
+- [Capture, void, or refund a transaction](/docs/online-payments/rest-api/capture-void-refund)
+- [Response codes](/docs/online-payments/rest-api/response-codes)

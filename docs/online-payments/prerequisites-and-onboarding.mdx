@@ -1,0 +1,73 @@
+---
+title: "Prerequisites and Onboarding"
+description: "Get the environments, credentials, onboarding steps, and PCI DSS scope you need before you start integrating with Online Payments."
+keywords: ["sandbox credentials", "merchant onboarding", "api authentication"]
+metadata:
+  og:description: "The sandbox and production environments, required credentials, and onboarding steps for integrating with Nayax Online Payments."
+---
+
+Before you write any code, get access to a sandbox environment and confirm your onboarding requirements with your Nayax contact. This page lists what you need for both sandbox and production.
+
+## Environments
+
+Online Payments provides two external environments, each with its own gateway host.
+
+| Environment | Host | Purpose |
+| --- | --- | --- |
+| Sandbox | `merchant-api.sb.nayaxpay.com` | Test your integration end to end without processing real payments. |
+| Production | `merchant-api.prod.nayaxpay.com` | Process live transactions. |
+
+## Required credentials
+
+Both environments use the same four credentials; only the values differ between sandbox and production.
+
+| Credential | Used for |
+| --- | --- |
+| `merchantId` | Identifies your account in the Hosted Payment Page URL. Nayax derives it automatically from your API key for REST API calls, so you never send it as a parameter there. |
+| API key | Sent in the `x-api-key` header (or its `x-paycom-api-key` alias) on every REST API request. |
+| `merchantSigningSecret` | Signs Hosted Payment Page requests with HMAC-SHA256. |
+| `webhookSigningSecret` | Verifies the signature on incoming webhook notifications. |
+
+See [Onboarding steps](#onboarding-steps) below for how and when Nayax issues each one.
+
+## Onboarding steps
+
+Getting from sandbox access to a live integration moves through four stages.
+
+<Steps>
+  <Step title="Get sandbox access">
+    Request sandbox credentials from your Nayax contact: `merchantId`, an API key, and `merchantSigningSecret`. Use them against the sandbox host to integrate and test your solution end to end.
+
+    <Warning>
+      Onboarding is a prerequisite, not a background task. If it hasn't started, request it from your Nayax contact before you begin integration work. Without credentials, you can't call the sandbox API at all.
+    </Warning>
+  </Step>
+  <Step title="Complete production onboarding requirements">
+    What you need to go live depends on your operating model.
+
+    | Requirement | Direct mode | Payment Facilitator (PF) mode |
+    | --- | --- | --- |
+    | Signed commercial agreement with Nayax | Required | Required |
+    | Production credentials provisioned by Nayax | Required | Required |
+    | Signed agreement with the acquiring bank | Required | — |
+    | Merchant ID (MID) issued by the acquirer | Required | — |
+
+    This acquirer-issued MID is a separate identifier from the `merchantId`
+    field Nayax issues you for the API. The two aren't interchangeable.
+  </Step>
+  <Step title="Get production credentials">
+    Nayax provisions your production `merchantId`, API key, and `merchantSigningSecret` once onboarding is complete. Switch your integration to the production host.
+  </Step>
+  <Step title="Configure your webhook endpoint">
+    `webhookSigningSecret` comes last: Nayax generates and shows it once, when you configure your webhook endpoint, so store it as soon as you receive it. It isn't retrievable later.
+  </Step>
+</Steps>
+
+## PCI DSS scope
+
+Using the Hosted Payment Page keeps you out of PCI DSS scope for card data capture: Nayax handles, processes, and stores all raw card data, and none of it touches your systems. If you want to [submit card data directly through the REST API](/docs/online-payments/rest-api/authorize-transaction) instead, you need proof of valid PCI DSS certification before Nayax allows it.
+
+## See also
+
+- [Integration overview](/docs/online-payments/payment-page/integration-overview)
+- [Authentication](/docs/online-payments/rest-api/authentication)

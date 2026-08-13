@@ -1,0 +1,53 @@
+---
+title: "Verify a Card"
+description: "A server-to-server card check, separate from the Hosted Payment Page's account_verification type."
+keywords: ["save card for future payments", "card on file"]
+metadata:
+  og:description: "How to confirm a card is valid and store it for future charges, without authorizing or moving any money."
+---
+
+Use this endpoint to confirm a card is valid and capture a reusable
+credential for later, for example when a customer adds a card to their
+account, without authorizing or moving any money. On success, the
+transaction reaches
+[`verified`](/docs/online-payments/rest-api/response-codes#transaction-statuses)
+status instead of `authorized` or `captured`.
+
+## Prerequisites
+
+This endpoint accepts the same `paymentMethod` objects as
+[Authorize a transaction](/docs/online-payments/rest-api/authorize-transaction):
+`card`, `apple_pay`, `google_pay`, `scheme_token`, or `nayax_token`, with the
+same field requirements for each. See that page for the exact sub-fields per
+`paymentMethod.type`.
+
+## Verify a card
+
+`POST /api/v1/verify`
+
+This is a separate mechanism from the Hosted Payment Page's
+`account_verification` transaction type described in
+[Build the signed URL](/docs/online-payments/payment-page/build-signed-url).
+That flow runs through the signed URL with the shopper present. This one is
+a direct server-to-server call, for any credential type, including a
+previously stored one.
+
+<Note>
+  There's no `amount` object on this endpoint. `transaction.currency` alone
+  selects the acquirer Bank Identification Number (BIN), and the check is
+  always zero-value.
+</Note>
+
+On decline or failure, the response carries a
+[`declineCode`](/docs/online-payments/rest-api/response-codes#decline-codes)
+or [`errorCode`](/docs/online-payments/rest-api/response-codes#error-codes),
+the same as the other authorization endpoints. For the full field-by-field
+reference and a request and response example, see
+[Verify a card](/reference/online-payments/endpoints/verify-a-card) in the API
+reference.
+
+## See also
+
+- [Authorize a transaction](/docs/online-payments/rest-api/authorize-transaction)
+- [Retrieve transactions](/docs/online-payments/rest-api/transactions)
+- [Response codes](/docs/online-payments/rest-api/response-codes)

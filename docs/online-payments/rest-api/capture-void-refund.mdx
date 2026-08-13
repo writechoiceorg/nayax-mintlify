@@ -1,0 +1,63 @@
+---
+title: "Capture, Void, or Refund a Transaction"
+description: "Settle, cancel, or return funds on a transaction that the Hosted Payment Page or an MIT authorized."
+keywords: ["refund api", "void authorization", "authorize and capture"]
+metadata:
+  og:description: "How to settle, cancel, or refund a transaction, whether it was authorized through the Hosted Payment Page or the REST API."
+---
+
+Once a transaction reaches
+[`authorized`](/docs/online-payments/rest-api/response-codes#transaction-statuses),
+you can capture it to settle funds, void it to cancel before capture, or
+refund it after capture. All three apply to transactions authorized through
+both the Hosted Payment Page
+([CIT](/docs/online-payments/overview#transaction-types-cit-and-mit)) and the
+REST API (MIT).
+
+## Capture
+
+`POST /api/v1/transactions/{transactionId}/capture`
+
+Settles a previously authorized transaction. Supported for
+[`final_auth`](/docs/online-payments/payment-page/build-signed-url#build-the-signed-url)
+and `pre_auth` transaction types. Provide `amount` for a partial capture;
+omit it entirely for a full capture.
+
+For the exact parameters and an example, see [Capture a
+transaction](/reference/online-payments/endpoints/capture-a-transaction) in the API
+reference.
+
+## Void
+
+`POST /api/v1/transactions/{transactionId}/void`
+
+Fully cancels an approved `final_auth` or `pre_auth` transaction before
+capture.
+
+<Note>
+  Voiding a `sale` transaction is subject to acquirer support; it isn't
+  guaranteed the way it is for `final_auth` and `pre_auth`.
+</Note>
+
+For the exact parameters and an example, see [Void a
+transaction](/reference/online-payments/endpoints/void-a-transaction) in the API
+reference.
+
+## Refund
+
+`POST /api/v1/transactions/{transactionId}/refund`
+
+Returns funds to the customer on a captured transaction. Both full and
+partial refunds are supported.
+
+For the exact parameters and an example, see [Refund a
+transaction](/reference/online-payments/endpoints/refund-a-transaction) in the API
+reference.
+
+## See also
+
+- [Retrieve transactions](/docs/online-payments/rest-api/transactions)
+- [Authorize a transaction](/docs/online-payments/rest-api/authorize-transaction)
+- [Integration overview](/docs/online-payments/payment-page/integration-overview)
+- [Build the signed URL](/docs/online-payments/payment-page/build-signed-url)
+- [Response codes](/docs/online-payments/rest-api/response-codes)

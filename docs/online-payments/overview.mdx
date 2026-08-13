@@ -1,0 +1,38 @@
+---
+title: "Overview"
+description: "Learn what Online Payments is, how its components fit together, how it classifies CIT/MIT transactions, and its operating models."
+keywords: ["payment gateway integration", "payment api", "payment integration", "online payment api", "payment gateway developer", "hosted payment gateway"]
+metadata:
+  og:description: "Nayax Online Payments is a hosted checkout and REST API for accepting card and digital wallet payments, with two settlement models to choose from."
+---
+
+Online Payments is Nayax's online payment gateway. Merchants use it to accept card and digital wallet payments on their websites and in their apps, without building or maintaining their own acquirer connections.
+
+## How it works
+
+Online Payments performs transaction orchestration. A single integration routes each payment to the right acquiring bank or payment service provider (PSP) for its market. You integrate once and reach every market Online Payments supports. The solution has four parts.
+
+- **Hosted Payment Page**: a Nayax-hosted checkout UI where the customer enters card details or picks a digital wallet. It runs on Nayax's domain, shown either as an iframe on your site or as a redirect. You never handle raw card data, so you stay out of PCI DSS scope for card capture. It handles customer-initiated transactions (CITs).
+- **REST API**: covers merchant-initiated transactions (MITs), such as recurring charges and installments. It also lets you [submit a customer-initiated transaction directly](/docs/online-payments/rest-api/authorize-transaction), if you're building your own checkout, and [verify a card](/docs/online-payments/rest-api/verify-card) without charging it. You also [capture, void, or refund a transaction](/docs/online-payments/rest-api/capture-void-refund) here once it's authorized, whether that authorization happened through the Hosted Payment Page or the API.
+- **Gateway**: Nayax's backend that validates every request and routes it to the correct acquirer. Merchant setup and Hosted Payment Page customization also happen here. Today, that's a manual process that Nayax's team runs on your behalf.
+- **Reporting and billing**: transaction data flows to Nextcall, Nayax's reporting platform, within seconds to minutes of processing. You view transactions and issue refunds from there.
+
+## Transaction types: CIT and MIT
+
+Online Payments classifies every transaction by who initiates it.
+
+- **Customer-initiated transaction (CIT)**: the customer starts the transaction, typically a purchase through the Hosted Payment Page.
+- **Merchant-initiated transaction (MIT)**: you start the transaction without the customer present, for example a subscription renewal or an installment. MITs go through the REST API, not the Hosted Payment Page, since there's no cardholder present to interact with it.
+
+## Operating models
+
+Nayax supports two operating models for handling settlement. Your Nayax contact confirms which one applies to your account during onboarding.
+
+- **Direct (Gateway only) mode**: you use Online Payments only to orchestrate transactions. You contract directly with an acquirer, who settles funds with you. Nayax doesn't touch the flow of money.
+- **Payment Facilitator (PF) mode**: Nayax acts as the financial entity. You integrate and contract with Nayax only; the acquirer settles with Nayax, and Nayax disburses funds to you.
+
+## See also
+
+- [Supported payment methods](/docs/online-payments/supported-payment-methods)
+- [Prerequisites and onboarding](/docs/online-payments/prerequisites-and-onboarding)
+- [Integration overview](/docs/online-payments/payment-page/integration-overview)

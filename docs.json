@@ -44,11 +44,9 @@
           },
           {
             "tab": "Terminal SDKs",
-            "icon": "tablet-screen-button",
             "menu": [
               {
                 "item": "Marshall",
-                "icon": "microchip",
                 "groups": [
                   {
                     "group": "Marshall Guides",
@@ -147,7 +145,6 @@
               },
               {
                 "item": "Marshall Pro (Fuel)",
-                "icon": "gas-pump",
                 "groups": [
                   {
                     "group": "Marshall Pro Guides",
@@ -221,7 +218,6 @@
               },
               {
                 "item": "TweezerComm",
-                "icon": "mobile",
                 "groups": [
                   {
                     "group": "TweezerComm Guides",
@@ -336,7 +332,6 @@
               },
               {
                 "item": "EMV Core",
-                "icon": "credit-card",
                 "groups": [
                   {
                     "group": "EMV Core Guides",
@@ -422,15 +417,14 @@
                   {
                     "group": "Release Notes",
                     "pages": [
-                      "docs/integrate-pos-device/emv-core/emv-core-release-notes",
-                      "docs/integrate-pos-device/emv-core/rtos/rtos-release-notes"
+                      "docs/integrate-pos-device/emv-core/emv-core-android-linux-release-notes",
+                      "docs/integrate-pos-device/emv-core/emv-core-rtos-release-notes"
                     ]
                   }
                 ]
               },
               {
                 "item": "Spark",
-                "icon": "bolt",
                 "groups": [
                   {
                     "group": "Spark Guides",
@@ -510,11 +504,9 @@
           },
           {
             "tab": "Platform Management",
-            "icon": "gears",
             "menu": [
               {
                 "item": "Transaction Reporting",
-                "icon": "envelope",
                 "groups": [
                   {
                     "group": "Transaction Reporting Guides",
@@ -551,7 +543,6 @@
               },
               {
                 "item": "Lynx API",
-                "icon": "link",
                 "groups": [
                   {
                     "group": "Lynx API Guides",
@@ -665,7 +656,6 @@
           },
           {
             "tab": "Core Extension",
-            "icon": "plug",
             "groups": [
               {
                 "group": "Core Extension Guides",
@@ -682,7 +672,6 @@
           },
           {
             "tab": "Cortina",
-            "icon": "credit-card",
             "groups": [
               {
                 "group": "Cortina Guides",
@@ -787,36 +776,70 @@
             ]
           },
           {
+            "tab": "Online Payments",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "docs/online-payments/overview",
+                  "docs/online-payments/prerequisites-and-onboarding",
+                  "docs/online-payments/supported-payment-methods"
+                ]
+              },
+              {
+                "group": "Payment Page",
+                "pages": [
+                  "docs/online-payments/payment-page/integration-overview",
+                  "docs/online-payments/payment-page/build-signed-url",
+                  "docs/online-payments/payment-page/display-hosted-payment-page",
+                  "docs/online-payments/payment-page/receive-payment-result"
+                ]
+              },
+              {
+                "group": "Manage Transactions",
+                "pages": [
+                  "docs/online-payments/rest-api/authentication",
+                  "docs/online-payments/rest-api/authorize-transaction",
+                  "docs/online-payments/rest-api/verify-card",
+                  "docs/online-payments/rest-api/transactions",
+                  "docs/online-payments/rest-api/capture-void-refund",
+                  "docs/online-payments/rest-api/response-codes"
+                ]
+              },
+              {
+                "group": "API Reference",
+                "openapi": {
+                  "source": "/openapi/online-payments.yaml",
+                  "directory": "reference/online-payments"
+                }
+              }
+            ]
+          },
+          {
             "tab": "Build with AI",
-            "icon": "robot",
             "pages": [
               {
                 "group": "Build with AI",
                 "root": "docs/get-started/build-with-ai",
                 "pages": [
-                  "docs/get-started/mcp-setup",
-                  "docs/get-started/agent-skills"
+                  "docs/get-started/mcp-setup"
                 ]
               }
             ]
           },
           {
             "tab": "Release Notes",
-            "icon": "newspaper",
             "href": "https://www.nayax.com/product-updates/integrated-pos/integrated-vpos-touch-onyx/"
           },
           {
             "tab": "Support & Trust",
-            "icon": "shield-check",
             "menu": [
               {
                 "item": "Help Center",
-                "icon": "circle-question",
                 "href": "https://nayax-u.nayax.com/"
               },
               {
                 "item": "Certifications",
-                "icon": "certificate",
                 "pages": ["docs/get-started/certifications"]
               }
             ]
@@ -835,11 +858,9 @@
           },
           {
             "tab": "Terminal SDKs",
-            "icon": "tablet-screen-button",
             "menu": [
               {
                 "item": "Marshall",
-                "icon": "microchip",
                 "groups": [
                   {
                     "group": "Marshall 指南",
@@ -930,7 +951,6 @@
               },
               {
                 "item": "Marshall Pro (Fuel)",
-                "icon": "gas-pump",
                 "groups": [
                   {
                     "group": "Marshall Pro Guides",
@@ -1003,7 +1023,6 @@
               },
               {
                 "item": "TweezerComm",
-                "icon": "mobile",
                 "groups": [
                   {
                     "group": "TweezerComm Guides",
@@ -1115,7 +1134,6 @@
               },
               {
                 "item": "EMV Core",
-                "icon": "credit-card",
                 "groups": [
                   {
                     "group": "EMV Core Guides",
@@ -1209,7 +1227,6 @@
               },
               {
                 "item": "Spark",
-                "icon": "bolt",
                 "groups": [
                   {
                     "group": "Spark Guides",
@@ -1289,11 +1306,9 @@
           },
           {
             "tab": "Platform Management",
-            "icon": "gears",
             "menu": [
               {
                 "item": "Transaction Reporting",
-                "icon": "envelope",
                 "groups": [
                   {
                     "group": "Transaction Reporting Guides",
@@ -1330,7 +1345,6 @@
               },
               {
                 "item": "Lynx API",
-                "icon": "link",
                 "groups": [
                   {
                     "group": "Lynx API Guides",
@@ -1443,7 +1457,6 @@
           },
           {
             "tab": "Core Extension",
-            "icon": "plug",
             "groups": [
               {
                 "group": "Core Extension Guides",
@@ -1460,7 +1473,6 @@
           },
           {
             "tab": "Cortina",
-            "icon": "credit-card",
             "groups": [
               {
                 "group": "Cortina Guides",
@@ -1566,7 +1578,6 @@
           },
           {
             "tab": "Build with AI",
-            "icon": "robot",
             "pages": [
               {
                 "group": "Build with AI",
@@ -1580,12 +1591,10 @@
           },
           {
             "tab": "Release Notes",
-            "icon": "newspaper",
             "href": "https://www.nayax.com/product-updates/integrated-pos/integrated-vpos-touch-onyx/"
           },
           {
             "tab": "Help Center",
-            "icon": "circle-question",
             "href": "https://nayax-u.nayax.com/"
           }
         ]

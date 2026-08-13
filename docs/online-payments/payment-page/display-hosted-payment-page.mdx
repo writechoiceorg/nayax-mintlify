@@ -1,0 +1,82 @@
+---
+title: "Display the Hosted Payment Page"
+description: "Show the signed Hosted Payment Page as an iframe or redirect, set its language, and see how 3D Secure behaves inline."
+keywords: ["hosted payment form", "hosted checkout page", "hosted payment page language", "3d secure", "3ds2", "sca exemption"]
+metadata:
+  og:description: "When to embed the payment page in an iframe versus redirecting to it, what sets the page language, and how a 3DS2 challenge completes without leaving your checkout."
+---
+
+Once you have a signed URL, the remaining work is getting the page in front of your customer: displaying it, controlling the language it renders in, and letting 3D Secure run inside it.
+
+## Show the payment page
+
+You have two ways to show the signed URL to the shopper: embedded in an
+iframe, or as a full-page redirect.
+
+<Tabs>
+  <Tab title="Iframe (recommended)">
+    An iframe keeps the shopper on your page, avoids redirect blocking, and avoids losing the session to SameSite cookie restrictions. Embed it like this:
+
+    ```html
+    <iframe
+      src="https://merchant-api.sb.nayaxpay.com/pp/{merchantId}?orderId=...&signature=..."
+      allow="payment"
+      width="100%"
+      height="600"
+      frameborder="0"
+    ></iframe>
+    ```
+
+    `allow="payment"` is required. Without it, the browser blocks the Payment Request API, and the Apple Pay and Google Pay buttons don't appear.
+
+    The Hosted Payment Page shows the order total, Apple Pay and Google Pay buttons, saved payment methods when you provide `userId`, and a card entry form for the [supported card networks](/docs/online-payments/supported-payment-methods). Wallet buttons appear automatically once Apple Pay or Google Pay is enabled for your account. Nayax also completes Apple Pay merchant validation server-side, so you don't need to run your own domain verification for this page.
+  </Tab>
+  <Tab title="Full-page redirect">
+    A full-page redirect sends the shopper's browser directly to the signed URL. Use it where an iframe isn't practical, for example inside a webview. Navigate to it like this:
+
+    ```js
+    // Server-side: generate the signed URL, then navigate the browser
+    window.location.href = "https://merchant-api.sb.nayaxpay.com/pp/{merchantId}?orderId=...&signature=...";
+    ```
+
+    On completion, Nayax redirects the shopper to your `returnURL`. The redirect doesn't include the result; you confirm the transaction's status server-side either way, covered next.
+  </Tab>
+</Tabs>
+
+## Language and locale
+
+The Hosted Payment Page's language is determined by the `currency`
+parameter; there's no separate language or locale parameter to set.
+
+| `currency` | Page language |
+| --- | --- |
+| `ILS` | Hebrew (RTL layout) |
+| All other currencies | English (default) |
+
+## 3D Secure (3DS2)
+
+When 3-D Secure 2 (3DS2) is enabled for your account, the Hosted Payment
+Page authenticates the cardholder automatically. You don't need any
+additional integration for this. 3DS2 runs one of two ways.
+
+| Flow | What happens |
+| --- | --- |
+| Frictionless | Authentication completes invisibly. The shopper sees no extra step. |
+| Challenge | The issuer requires more proof. The page shows the challenge inline and completes the payment once the cardholder responds. The shopper never leaves your checkout. |
+
+Either way, the outcome reaches you through the result object and webhooks
+described in
+[Receive the payment result](/docs/online-payments/payment-page/receive-payment-result).
+
+A successful authentication satisfies PSD2 Strong Customer Authentication
+(SCA), and shifts liability for fraud-related chargebacks to the issuer
+where the card scheme allows it.
+
+For eligible EEA and UK merchants, Nayax can apply an SCA exemption, for
+example based on transaction-risk analysis or a low transaction value. This
+lets you authorize a low-risk payment without a challenge.
+
+Apple Pay and Google Pay use their own network authentication, so they
+never trigger a 3DS challenge.
+
+Once your customer sees the Hosted Payment Page and completes the payment, move on to [receive the payment result](/docs/online-payments/payment-page/receive-payment-result).
