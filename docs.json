@@ -421,8 +421,8 @@
                   {
                     "group": "Release Notes",
                     "pages": [
-                      "docs/integrate-pos-device/emv-core/emv-core-release-notes",
-                      "docs/integrate-pos-device/emv-core/rtos/rtos-release-notes"
+                      "docs/integrate-pos-device/emv-core/emv-core-android-linux-release-notes",
+                      "docs/integrate-pos-device/emv-core/emv-core-rtos-release-notes"
                     ]
                   }
                 ]
@@ -793,28 +793,36 @@
                 "group": "Get Started",
                 "pages": [
                   "docs/online-payments/overview",
-                  "docs/online-payments/prerequisites-and-onboarding"
+                  "docs/online-payments/prerequisites-and-onboarding",
+                  "docs/online-payments/supported-payment-methods"
                 ]
               },
               {
                 "group": "Payment Page",
                 "pages": [
                   "docs/online-payments/payment-page/integration-overview",
-                  "docs/online-payments/payment-page/build-and-display-payment-page",
+                  "docs/online-payments/payment-page/build-signed-url",
+                  "docs/online-payments/payment-page/display-hosted-payment-page",
                   "docs/online-payments/payment-page/receive-payment-result"
                 ]
               },
               {
-                "group": "REST API",
+                "group": "Manage Transactions",
                 "pages": [
                   "docs/online-payments/rest-api/authentication",
-                  "docs/online-payments/rest-api/transactions",
-                  "docs/online-payments/rest-api/authorize-mit",
-                  "docs/online-payments/rest-api/authorize-cit",
+                  "docs/online-payments/rest-api/authorize-transaction",
                   "docs/online-payments/rest-api/verify-card",
+                  "docs/online-payments/rest-api/transactions",
                   "docs/online-payments/rest-api/capture-void-refund",
                   "docs/online-payments/rest-api/response-codes"
                 ]
+              },
+              {
+                "group": "Endpoints",
+                "openapi": {
+                  "source": "/openapi/online-payments.yaml",
+                  "directory": "reference/online-payments"
+                }
               }
             ]
           },
@@ -826,8 +834,7 @@
                 "group": "Build with AI",
                 "root": "docs/get-started/build-with-ai",
                 "pages": [
-                  "docs/get-started/mcp-setup",
-                  "docs/get-started/agent-skills"
+                  "docs/get-started/mcp-setup"
                 ]
               }
             ]

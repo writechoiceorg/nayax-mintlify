@@ -1,4 +1,4 @@
-<!-- source: resources/files/Role-Based+UI+Visibility+Control.txt processed: 2026-05-06 -->
+{/* source: resources/files/Role-Based+UI+Visibility+Control.txt processed: 2026-05-06 */}
 
 # Role-Based UI Visibility Control
 

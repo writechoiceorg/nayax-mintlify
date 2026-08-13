@@ -1,6 +1,6 @@
 ---
-title: "Receive the payment result"
-description: "Read the postMessage response, verify webhooks, and confirm a transaction's final status via Get transaction."
+title: "Receive the Payment Result"
+description: "The result object's fields, how to verify a webhook signature, and how to deduplicate retried webhook deliveries."
 keywords: ["webhook signature verification", "hmac signature verification", "transaction status api"]
 metadata:
   og:description: "The three channels for learning a payment's outcome: postMessage, returnURL, and webhooks, plus the Get transaction fallback."
@@ -10,8 +10,9 @@ After the shopper completes a Hosted Payment Page session, you learn the
 outcome through three channels: a browser `postMessage`, a redirect to your
 `returnURL`, and a server-to-server webhook. Treat `postMessage` and
 `returnURL` as UX signals only; confirm every transaction's final status
-server-side through a webhook, or Get transaction as a fallback,
-before you fulfill an order.
+server-side through a webhook, or
+[Get transaction](/docs/online-payments/rest-api/transactions#get-transaction)
+as a fallback, before you fulfill an order.
 
 ## Browser postMessage (iframe mode)
 
@@ -38,6 +39,8 @@ window.addEventListener("message", function (event) {
 });
 ```
 
+The message's `type` tells you which case you're in:
+
 | `type` | Fires when |
 | --- | --- |
 | `payment-complete` | The payment attempt finished. `data` holds the result object described below. |
@@ -58,18 +61,18 @@ detail to route the shopper to the right next step.
 }
 ```
 
-The message carries two separate status values. The envelope's `status`
-(`success` or `error`), checked first in the listener above, tells you
-whether `message.data` holds a usable result at all. The result object's
-own `status` (`APPROVED`, `DECLINED`, or `FAILED`) tells you what happened
-to the payment. Always branch your UI logic on `result.status`, not the
-envelope status.
+The message carries two separate status values. The outer message's own
+`status` (`success` or `error`), checked first in the listener above,
+tells you whether `message.data` holds a usable result at all. The result
+object's own `status` (`APPROVED`, `DECLINED`, or `FAILED`) tells you what
+happened to the payment. Always branch your UI logic on `result.status`,
+not the outer one.
 
 | `status` | Meaning | Recommended action |
 | --- | --- | --- |
-| `APPROVED` | The issuer authorized the payment, and it was captured for `sale` transactions. | Confirm the result server-side, then fulfill the order. |
+| `APPROVED` | The issuer authorized the payment, and it was captured for [`sale`](/docs/online-payments/payment-page/build-signed-url#build-the-signed-url) transactions. | Confirm the result server-side, then fulfill the order. |
 | `DECLINED` | The issuer declined the transaction. `message` carries the decline reason. | Show the shopper a clear message. Don't fulfill the order. |
-| `FAILED` | A system or processing error stopped the attempt before it reached the issuer. | Show a generic error. A retry is often appropriate. |
+| `FAILED` | A system or processing error. | Show a generic error. A retry is often appropriate. |
 
 <Note>
   Every customer-initiated transaction passes through Nayax risk screening
@@ -95,11 +98,13 @@ every transaction lifecycle event, with a JSON body signed using HMAC-SHA256.
 | Event | Fires when |
 | --- | --- |
 | `transaction.authorized` | An authorization was approved, either a standalone authorization or the authorization leg of a `sale`. |
-| `transaction.captured` | Funds were captured. |
+| `transaction.captured` | Funds were captured (settlement requested). |
 | `transaction.voided` | An authorization was reversed before capture. |
 | `transaction.declined` | The issuer declined the authorization. |
 | `transaction.failed` | A system-level error stopped the attempt. |
 | `transaction.refunded` | A captured transaction was refunded, in full or in part. |
+
+A `transaction.authorized` delivery looks like this:
 
 ```json
 {
@@ -131,10 +136,10 @@ A few fields in `data` are worth calling out individually.
 
 | Field | Description |
 | --- | --- |
-| `nayaxToken` | A reusable token for charging this card on future merchant-initiated transactions. |
+| `nayaxToken` | A reusable token for charging this card on future merchant-initiated transactions: pass it as `paymentMethod.token` with type `nayax_token`. Nayax's issuance of this token is still pending confirmation from Nayax; treat `scheme_token` as the reliable reuse mechanism until that's confirmed. |
 | `card` | A summary of the card used: last four digits, brand, and expiry. |
 | `networkTransactionId` | What a later merchant-initiated transaction references to chain back to this customer-initiated one for stored-credential processing. The gateway plumbs it through automatically; store it yourself only if you handle that chaining directly. |
-| `sca` | Present only when 3D Secure ran or a Strong Customer Authentication (SCA) exemption was applied. `lifecycle` is `frictionless`, `challenge`, or `exemption`; `liabilityShift` tells you whether fraud liability moved to the issuer. |
+| `sca` | Present only when 3D Secure ran or a Strong Customer Authentication (SCA) exemption was applied. `lifecycle` is `frictionless`, `challenge`, or `exemption`; `liabilityShift` tells you whether fraud liability moved to the issuer (`yes` or `no`). `exemptionType` and `exemptionClaimedBy` appear only on the exemption path. The authentication cryptogram (CAVV) is never included here. |
 
 ### Verify the signature
 
@@ -165,21 +170,30 @@ at-least-once, so your endpoint can receive the same event more than once.
 Deduplicate on the payload's `id` field, or on the `transactionId` and `type`
 pair, and make sure your endpoint handles a repeated event safely.
 
-## Get transaction fallback
+## Confirm status through the API
 
 Use [Get transaction](/docs/online-payments/rest-api/transactions#get-transaction) to
 poll for a transaction's status server-side, whether you're confirming the
 result after a `returnURL` redirect or recovering from a webhook you missed.
 
-If you have the `transactionId`, call `GET /api/v1/transactions/{transactionId}` directly.
-If the authorization response was lost, for example to a network timeout, and
-you never received a `transactionId`, call
+If you have the `transactionId`, call
+[`GET /api/v1/transactions/{transactionId}`](/docs/online-payments/rest-api/transactions#get-transaction)
+directly. If the
+[authorization response](/docs/online-payments/rest-api/authorize-transaction)
+was lost, for example to a network timeout, and you never received a
+`transactionId`, call
 [List transactions](/docs/online-payments/rest-api/transactions#list-transactions)
 filtered by `orderId` instead. This is why including `orderId` on every
 Hosted Payment Page request is worth doing even though it's optional for the
 signature.
 
-## See also
+## Next steps
 
-- [Build and display the Hosted Payment Page](/docs/online-payments/payment-page/build-and-display-payment-page)
-- [Get transaction](/docs/online-payments/rest-api/transactions#get-transaction)
+<CardGroup cols={2}>
+  <Card title="Get transaction" icon="magnifying-glass" href="/docs/online-payments/rest-api/transactions#get-transaction">
+    Poll a transaction's status server-side by ID or by order reference.
+  </Card>
+  <Card title="Authorize a merchant-initiated transaction" icon="repeat" href="/docs/online-payments/rest-api/authorize-transaction">
+    Charge the stored card again for a renewal or installment, without the cardholder present.
+  </Card>
+</CardGroup>

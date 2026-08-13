@@ -1,25 +1,25 @@
 ---
-title: "Response codes"
+title: "Response Codes"
 description: "Interpret every transaction status, decline code, and error code returned by the REST API."
 keywords: ["decline codes", "transaction status api"]
 metadata:
   og:description: "The full list of transaction statuses, decline codes, and error codes returned by the Nayax Online Payments REST API."
 ---
 
-Every REST API response carries up to four outcome fields: `status`
-always, and `declineCode`, `errorCode`, or `rawDeclineCode` depending on
-what happened. This page covers what each status means, the full list of
-decline and error codes, and how to branch on them in code.
+Every REST API response carries up to four outcome fields, but not every
+response sets all of them; which ones appear depends on what happened:
 
-| Field | When set | Meaning |
-| --- | --- | --- |
-| `status` | Always | The transaction's current state. See Transaction statuses below. |
-| `declineCode` | `status: declined` | Issuer-attributable: the card or issuer rejected the transaction. |
-| `errorCode` | `status: failed` | System-attributable: the attempt couldn't complete. Generally safe to retry. |
-| `rawDeclineCode` | When available | Unmapped processor-native code. For logging and support only; don't branch on this value. |
+| Field | When set |
+| --- | --- |
+| `status` | Always |
+| `declineCode` | `status: declined` |
+| `errorCode` | `status: failed` |
+| `rawDeclineCode` | When available |
 
 A response sets either `declineCode` (on `declined`) or `errorCode` (on
-`failed`), never both.
+`failed`), never both. This page covers what each `status` value means,
+the full list of decline and error codes, and how to branch on them in
+code.
 
 ## Transaction statuses
 
@@ -29,11 +29,11 @@ not.
 | `status` | Meaning | Terminal? |
 | --- | --- | --- |
 | `created` | Transaction recorded, not yet authorized. Transient internal state. | No |
-| `authorized` | Issuer approved an auth-only hold (`final_auth`/`pre_auth`). Funds held, not captured. | No, awaits capture or void |
+| `authorized` | Issuer approved an auth-only hold ([`final_auth`/`pre_auth`](/docs/online-payments/payment-page/build-signed-url#build-the-signed-url)). Funds held, not captured. | No, awaits [capture](/docs/online-payments/rest-api/capture-void-refund#capture) or [void](/docs/online-payments/rest-api/capture-void-refund#void) |
 | `captured` | Funds settled. For a `sale`, the same call returns this directly. | No, refundable |
 | `voided` | A prior authorization was reversed before capture. | Yes |
 | `refunded` | A settled (`captured`) transaction was refunded, in full or in part. | Yes |
-| `verified` | Zero-amount card validity check approved by the issuer. No money held or moved. Void, capture, and refund are all rejected on this state. | Yes |
+| `verified` | Zero-amount card validity check approved by the issuer. No money held or moved. [Void](/docs/online-payments/rest-api/capture-void-refund#void), [capture](/docs/online-payments/rest-api/capture-void-refund#capture), and [refund](/docs/online-payments/rest-api/capture-void-refund#refund) are all rejected on this state. | Yes |
 | `declined` | The issuer declined the authorization. See `declineCode`. | Yes |
 | `failed` | A system-level problem stopped the attempt. See `errorCode`. Often safe to retry. | Yes |
 | `partially_refunded` | A settled transaction was partially refunded. Further refunds may be possible up to the captured amount. | No, further refundable |
@@ -42,13 +42,13 @@ Each operation only returns a subset of the statuses above.
 
 | Operation | Possible status values |
 | --- | --- |
-| Authorize | `authorized`, `captured`, `verified`, `declined`, or `failed` |
-| Capture | `captured`, `authorized`¹, or `failed` |
-| Void | `voided`, `authorized`¹, or `failed` |
-| Refund | `refunded`, `captured`¹, or `failed` |
+| [Authorize](/docs/online-payments/rest-api/authorize-transaction) | `authorized`, `captured`, `verified`, `declined`, or `failed` |
+| [Capture](/docs/online-payments/rest-api/capture-void-refund#capture) | `captured`, `authorized`¹, or `failed` |
+| [Void](/docs/online-payments/rest-api/capture-void-refund#void) | `voided`, `authorized`¹, or `failed` |
+| [Refund](/docs/online-payments/rest-api/capture-void-refund#refund) | `refunded`, `captured`¹, or `failed` |
 
-¹ The operation didn't complete, a transient processor refusal. The
-transaction is unchanged from its prior state; safe to retry.
+¹ The operation didn't complete because of a transient processor refusal.
+The transaction is unchanged from its prior state, so it's safe to retry.
 
 ## Decline codes
 
@@ -119,4 +119,6 @@ part of the stable contract.
 ## See also
 
 - [Retrieve transactions](/docs/online-payments/rest-api/transactions)
-- [Authorize a merchant-initiated transaction](/docs/online-payments/rest-api/authorize-mit)
+- [Authorize a transaction](/docs/online-payments/rest-api/authorize-transaction)
+- [Capture, void, or refund a transaction](/docs/online-payments/rest-api/capture-void-refund)
+- [Verify a card](/docs/online-payments/rest-api/verify-card)

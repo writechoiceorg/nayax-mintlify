@@ -1,6 +1,6 @@
 ---
-title: "Integration overview"
-description: "Get a valid postMessage response back from your first signed Hosted Payment Page request."
+title: "Integration Overview"
+description: "The three-step Hosted Payment Page flow: build a signed URL, display it, and receive the result."
 keywords: ["hosted checkout", "what is a hosted payment page", "hosted payment page vs iframe"]
 metadata:
   og:description: "The three-step Hosted Payment Page flow: build a signed URL, display it to the shopper, and receive a postMessage result."
@@ -14,21 +14,21 @@ A Hosted Payment Page transaction moves through four actors: your server, the sh
 
 <Steps>
   <Step title="Build a signed URL">
-    Your server creates a URL that encodes the order details (amount, currency, order ID) and signs it with your `merchantSigningSecret`.
+    Your server creates a URL that encodes the order details (amount, currency, order ID) and signs it with your `merchantSigningSecret`. See [Build the signed URL](/docs/online-payments/payment-page/build-signed-url) for the full parameter list and signature steps.
   </Step>
   <Step title="Display the Hosted Payment Page">
-    Your site shows that URL to the shopper, either in an iframe or as a full-page redirect. The shopper enters their card or picks a digital wallet.
+    Your site shows that URL to the shopper, either in an iframe or as a full-page redirect. The shopper enters their card or picks a digital wallet. See [Display the Hosted Payment Page](/docs/online-payments/payment-page/display-hosted-payment-page) for the iframe and redirect examples.
   </Step>
   <Step title="Receive the result">
-    Nayax authorizes the transaction with the acquirer and sends the result back through `postMessage` (iframe mode), a redirect to your `returnURL`, or both.
+    Nayax authorizes the transaction with the acquirer and sends the result back through `postMessage` (iframe mode), a redirect to your `returnURL`, or both. See [Receive the payment result](/docs/online-payments/payment-page/receive-payment-result) for the result object and webhook verification.
   </Step>
 </Steps>
 
-Behind that, the gateway verifies your signature, replaces the card or wallet details with a secure token, and authorizes the transaction with the acquirer before returning a result to the shopper's browser.
+Behind those three steps, the gateway verifies your signature, replaces the card or wallet details with a secure token, and authorizes the transaction with the acquirer before returning a result to the shopper's browser.
 
 ## Confirm the result server-side
 
-The `postMessage` response and the `returnURL` redirect tell your front end how to update the shopper's screen. Neither one is proof of payment.
+The `postMessage` response and the `returnURL` redirect only tell your front end how to update the shopper's screen.
 
 <Warning>
   Treat `postMessage` and `returnURL` as UX signals only. Before you fulfill an order, confirm the transaction's final status server-side by calling [Get transaction](/docs/online-payments/rest-api/transactions#get-transaction). Don't rely on the browser result alone.
@@ -43,7 +43,13 @@ Building your first signed request needs two credentials from your sandbox onboa
 
 If you haven't completed onboarding yet, see [Prerequisites and onboarding](/docs/online-payments/prerequisites-and-onboarding). Complete production onboarding before you switch to production credentials.
 
-## See also
+## Next steps
 
-- [Build and display the Hosted Payment Page](/docs/online-payments/payment-page/build-and-display-payment-page)
-- [Receive the payment result](/docs/online-payments/payment-page/receive-payment-result)
+<CardGroup cols={2}>
+  <Card title="Build the signed URL" icon="code" href="/docs/online-payments/payment-page/build-signed-url">
+    Collect the order parameters and compute the HMAC-SHA256 signature.
+  </Card>
+  <Card title="Receive the payment result" icon="check" href="/docs/online-payments/payment-page/receive-payment-result">
+    Read the postMessage response, verify webhooks, and confirm the transaction's final status.
+  </Card>
+</CardGroup>

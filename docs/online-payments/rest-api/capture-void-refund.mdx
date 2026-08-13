@@ -1,52 +1,31 @@
 ---
-title: "Capture, void, or refund a transaction"
-description: "Settle, cancel, or return funds on a transaction the Hosted Payment Page or an MIT authorized."
+title: "Capture, Void, or Refund a Transaction"
+description: "Settle, cancel, or return funds on a transaction that the Hosted Payment Page or an MIT authorized."
 keywords: ["refund api", "void authorization", "authorize and capture"]
 metadata:
   og:description: "How to settle, cancel, or refund a transaction, whether it was authorized through the Hosted Payment Page or the REST API."
 ---
 
-Once a transaction reaches `authorized`, you can capture it to settle
-funds, void it to cancel before capture, or refund it after capture. All
-three apply to transactions authorized through both the Hosted Payment
-Page (CIT) and the REST API (MIT).
+Once a transaction reaches
+[`authorized`](/docs/online-payments/rest-api/response-codes#transaction-statuses),
+you can capture it to settle funds, void it to cancel before capture, or
+refund it after capture. All three apply to transactions authorized through
+both the Hosted Payment Page
+([CIT](/docs/online-payments/overview#transaction-types-cit-and-mit)) and the
+REST API (MIT).
 
 ## Capture
 
 `POST /api/v1/transactions/{transactionId}/capture`
 
-Settles a previously authorized transaction. Supported for `final_auth`
-and `pre_auth` transaction types.
+Settles a previously authorized transaction. Supported for
+[`final_auth`](/docs/online-payments/payment-page/build-signed-url#build-the-signed-url)
+and `pre_auth` transaction types. Provide `amount` for a partial capture;
+omit it entirely for a full capture.
 
-| Object | Parameter | Required | Format | Description |
-| --- | --- | --- | --- | --- |
-| path | `transactionId` | Yes | UUID | The authorized transaction to capture. Must have `status: authorized`. |
-| `amount` | `amount.value` | No | String, 1-20 characters | Minor units. Provide for a partial capture; omit entirely for a full capture. |
-| `amount` | `amount.exponent` | Conditional | Integer | Required when `amount` is provided. |
-| `amount` | `amount.currency` | Conditional | String, 3 characters | ISO 4217. Required when `amount` is provided; must match the authorized currency. |
-
-```json
-{
-  "amount": { "value": "2000", "currency": "USD", "exponent": 2 }
-}
-```
-
-| Field | Condition | Format | Description |
-| --- | --- | --- | --- |
-| `transactionId` | Always | UUID | Transaction identifier. |
-| `status` | Always | Enum | `captured`, `authorized` (transient failure, retry the capture), or `failed`. |
-| `capturedAmount.value` | Always | String | Amount captured, in minor units. |
-| `capturedAmount.currency` | Always | String | Currency of the captured amount. |
-| `capturedAmount.exponent` | Always | Integer | Decimal places for the captured currency. |
-| `errorCode` | On failure | String | A coded reason for the system-level failure; see [Error codes](/docs/online-payments/rest-api/response-codes#error-codes). |
-
-```json
-{
-  "transactionId": "6c1e2a4d-9f3b-4e21-8a2c-1f9b7d6e5a01",
-  "status": "captured",
-  "capturedAmount": { "value": "2000", "currency": "USD", "exponent": 2 }
-}
-```
+For the exact parameters and an example, see [Capture a
+transaction](/reference/online-payments/capture-a-transaction) in the API
+reference.
 
 ## Void
 
@@ -60,26 +39,9 @@ capture.
   guaranteed the way it is for `final_auth` and `pre_auth`.
 </Note>
 
-| Object | Parameter | Required | Format | Description |
-| --- | --- | --- | --- | --- |
-| path | `transactionId` | Yes | UUID | The authorized transaction to void. Must have `status: authorized`. |
-
-```json
-{}
-```
-
-| Field | Condition | Format | Description |
-| --- | --- | --- | --- |
-| `transactionId` | Always | UUID | Transaction identifier. |
-| `status` | Always | Enum | `voided`, `authorized` (transient failure, retry the void), or `failed`. |
-| `errorCode` | On failure | String | A coded reason for the system-level failure; see [Error codes](/docs/online-payments/rest-api/response-codes#error-codes). |
-
-```json
-{
-  "transactionId": "a2e97f31-5c8d-4b6e-9a12-3f7d8e5c1b90",
-  "status": "voided"
-}
-```
+For the exact parameters and an example, see [Void a
+transaction](/reference/online-payments/void-a-transaction) in the API
+reference.
 
 ## Refund
 
@@ -88,38 +50,14 @@ capture.
 Returns funds to the customer on a captured transaction. Both full and
 partial refunds are supported.
 
-| Object | Parameter | Required | Format | Description |
-| --- | --- | --- | --- | --- |
-| path | `transactionId` | Yes | UUID | The captured transaction to refund. Must have `status: captured`. |
-| `amount` | `amount.value` | Yes | String, 1-20 characters | Amount to refund, in minor units. Must not exceed the captured amount. |
-| `amount` | `amount.exponent` | Yes | Integer | Decimal places for the currency. |
-| `amount` | `amount.currency` | Yes | String, 3 characters | ISO 4217. Must match the captured currency. |
-
-```json
-{
-  "amount": { "value": "2000", "currency": "USD", "exponent": 2 }
-}
-```
-
-| Field | Condition | Format | Description |
-| --- | --- | --- | --- |
-| `transactionId` | Always | UUID | Transaction identifier. |
-| `status` | Always | Enum | `refunded`, `captured` (transient failure, retry the refund), or `failed`. |
-| `refundedAmount.value` | Always | String | Amount refunded, in minor units. |
-| `refundedAmount.currency` | Always | String | Currency of the refunded amount. |
-| `refundedAmount.exponent` | Always | Integer | Decimal places for the refunded currency. |
-| `errorCode` | On failure | String | A coded reason for the system-level failure; see [Error codes](/docs/online-payments/rest-api/response-codes#error-codes). |
-
-```json
-{
-  "transactionId": "6c1e2a4d-9f3b-4e21-8a2c-1f9b7d6e5a01",
-  "status": "refunded",
-  "refundedAmount": { "value": "2000", "currency": "USD", "exponent": 2 }
-}
-```
+For the exact parameters and an example, see [Refund a
+transaction](/reference/online-payments/refund-a-transaction) in the API
+reference.
 
 ## See also
 
 - [Retrieve transactions](/docs/online-payments/rest-api/transactions)
-- [Authorize a merchant-initiated transaction](/docs/online-payments/rest-api/authorize-mit)
-- [Build and display the Hosted Payment Page](/docs/online-payments/payment-page/build-and-display-payment-page)
+- [Authorize a transaction](/docs/online-payments/rest-api/authorize-transaction)
+- [Integration overview](/docs/online-payments/payment-page/integration-overview)
+- [Build the signed URL](/docs/online-payments/payment-page/build-signed-url)
+- [Response codes](/docs/online-payments/rest-api/response-codes)

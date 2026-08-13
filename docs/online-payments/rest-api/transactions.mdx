@@ -1,5 +1,5 @@
 ---
-title: "Retrieve transactions"
+title: "Retrieve Transactions"
 description: "Get a single transaction by ID, or list transactions filtered by status, order, customer, or date range."
 keywords: ["transaction status api", "payment processor api"]
 metadata:
@@ -17,61 +17,27 @@ Retrieve full details of a single transaction by its Nayax transaction ID.
 
 `GET /api/v1/transactions/{transactionId}`
 
-| Parameter | Required | Format | Description |
-| --- | --- | --- | --- |
-| `transactionId` | Yes | UUID | The transaction to retrieve. |
-
 Nayax returns a `404` if the transaction belongs to a different merchant.
 
-| Field | Condition | Type | Description |
-| --- | --- | --- | --- |
-| `transactionId` | Always | UUID | Nayax transaction identifier. |
-| `status` | Always | Enum | `created`, `authorized`, `captured`, `declined`, `failed`, `voided`, `refunded`, `partially_refunded`, or `verified`. |
-| `transactionType` | Always | Enum | `sale`, `final_auth`, `pre_auth`, or `account_verification`. |
-| `authCode` | On approval | String | Authorization code from the issuer. |
-| `declineCode` | On decline | String | A coded reason for the decline; see [Decline codes](/docs/online-payments/rest-api/response-codes#decline-codes). |
-| `rawDeclineCode` | On decline | String | The raw, unmapped decline code from the acquirer or issuer. |
-| `errorCode` | On failure | String | A coded reason for the system-level failure; see [Error codes](/docs/online-payments/rest-api/response-codes#error-codes). |
-| `orderId` | Conditional | String | Returned if you provided it in the original request. |
-| `userId` | Conditional | String | Returned if you provided it in the original request. |
-| `amount.value` | Always | String | Amount in minor units. |
-| `amount.currency` | Always | String | ISO 4217 currency code. |
-| `amount.exponent` | Always | Integer | Decimal places for the currency. |
-| `lifecycle.createdAt` | Always | ISO-8601 | When the transaction was created. |
-| `lifecycle.authorizedAt` | Conditional | ISO-8601 | When the transaction was authorized. |
-| `lifecycle.capturedAt` | Conditional | ISO-8601 | When funds were captured. |
-| `lifecycle.voidedAt` | Conditional | ISO-8601 | When the authorization was voided. |
-| `lifecycle.refundedAt` | Conditional | ISO-8601 | When the transaction was refunded. |
-| `nayaxToken` | Conditional | String | A reusable token for this card, present when a reusable credential is available. |
-
-```json
-{
-  "transactionId": "6c1e2a4d-9f3b-4e21-8a2c-1f9b7d6e5a01",
-  "status": "captured",
-  "transactionType": "sale",
-  "authCode": "123456",
-  "orderId": "order_1029",
-  "amount": { "value": "4990", "currency": "USD", "exponent": 2 },
-  "lifecycle": {
-    "createdAt": "2026-07-09T10:15:28.000Z",
-    "authorizedAt": "2026-07-09T10:15:30.000Z",
-    "capturedAt": "2026-07-09T10:15:31.000Z"
-  },
-  "nayaxToken": "ntok_9a2b7c1d"
-}
-```
-
-<Note>
-  This `status` is a different vocabulary from the Hosted Payment Page
-  result object's `status` (`APPROVED`, `DECLINED`, `FAILED`) described in
+<Warning>
+  The response's `status` field uses a different vocabulary from the Hosted
+  Payment Page result object's `status` (`APPROVED`, `DECLINED`, `FAILED`)
+  described in
   [Receive the payment result](/docs/online-payments/payment-page/receive-payment-result#the-result-object).
-  They're two different objects; don't treat the values as interchangeable.
-</Note>
+  They're two different objects; branching on `status === "APPROVED"`
+  against a Get transaction response fails silently, since this endpoint
+  never returns that value.
+</Warning>
 
-If the authorize response was lost, for example to a network timeout, you
-won't have a `transactionId` to query with.
+If the [authorize](/docs/online-payments/rest-api/authorize-transaction)
+response was lost, for example to a network timeout, you won't have a
+`transactionId` to query with.
 [List transactions](#list-transactions) filtered by `orderId` recovers it
 instead, which is why including `orderId` on every request pays off later.
+
+For the full response field reference and an example, see
+[Get transaction](/reference/online-payments/get-transaction) in the API
+reference.
 
 ## List transactions
 
@@ -80,51 +46,20 @@ reference, customer reference, or a date range.
 
 `GET /api/v1/transactions`
 
-| Parameter | Required | Format | Description |
-| --- | --- | --- | --- |
-| `status` | No | Enum | `created`, `authorized`, `captured`, `voided`, `refunded`, `partially_refunded`, `verified`, `declined`, or `failed`. |
-| `orderId` | No | String | Filter by your order reference. Can return multiple transactions for the same order, for example retries, or a capture followed by a refund. |
-| `userId` | No | String | Filter by your customer reference. |
-| `fromDate` | No | ISO-8601 | Inclusive lower bound on creation date. |
-| `toDate` | No | ISO-8601 | Exclusive upper bound on creation date. |
-| `page` | No | Integer | Page number. Defaults to `1`. |
-| `limit` | No | Integer | Results per page, from 1 to 100. Defaults to `25`. |
+Each transaction in the list carries a narrower field set than [Get
+transaction](#get-transaction) above (no `authCode`, `declineCode`, or
+`errorCode`), ordered by `createdAt` descending. Call [Get
+transaction](#get-transaction) on a specific `transactionId` for those
+fields.
 
-Each transaction in the list carries `transactionId`, `status`,
-`transactionType`, `orderId`, `userId`, `amount`, `lifecycle`, and
-`nayaxToken`, a narrower set than [Get transaction](#get-transaction) above,
-ordered by `createdAt` descending. Call [Get transaction](#get-transaction)
-on a specific `transactionId` for `authCode`, `declineCode`, or `errorCode`.
-
-| Field | Description |
-| --- | --- |
-| `pagination.currentPage` | Current page number. |
-| `pagination.totalPages` | Total number of pages. |
-| `pagination.totalItems` | Total number of matching transactions. |
-| `pagination.itemsPerPage` | Number of items per page. |
-
-```json
-{
-  "transactions": [
-    {
-      "transactionId": "6c1e2a4d-9f3b-4e21-8a2c-1f9b7d6e5a01",
-      "status": "captured",
-      "transactionType": "sale",
-      "orderId": "order_1029",
-      "amount": { "value": "4990", "currency": "USD", "exponent": 2 },
-      "lifecycle": { "createdAt": "2026-07-09T10:15:28.000Z" }
-    }
-  ],
-  "pagination": {
-    "currentPage": 1,
-    "totalPages": 4,
-    "totalItems": 87,
-    "itemsPerPage": 25
-  }
-}
-```
+For the filter parameters, response fields, and an example, see [List
+transactions](/reference/online-payments/list-transactions) in the API
+reference.
 
 ## See also
 
 - [Authentication](/docs/online-payments/rest-api/authentication)
 - [Receive the payment result](/docs/online-payments/payment-page/receive-payment-result)
+- [Authorize a transaction](/docs/online-payments/rest-api/authorize-transaction)
+- [Capture, void, or refund a transaction](/docs/online-payments/rest-api/capture-void-refund)
+- [Response codes](/docs/online-payments/rest-api/response-codes)

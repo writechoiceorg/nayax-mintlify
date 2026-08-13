@@ -1,4 +1,4 @@
-<!-- source: resources/files/Nayax+Core+App+Framework.txt processed: 2026-05-06 -->
+{/* source: resources/files/Nayax+Core+App+Framework.txt processed: 2026-05-06 */}
 
 # Nayax Core App Framework
 

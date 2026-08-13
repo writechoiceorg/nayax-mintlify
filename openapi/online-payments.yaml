@@ -1,0 +1,1083 @@
+openapi: 3.0.1
+info:
+  title: Nayax Online Payments API
+  description: >-
+    Reconstructed from the hand-written Online Payments REST API docs
+    (docs/online-payments/rest-api/*.mdx), not from a spec provided by the
+    Online Payments engineering team. Confirm field-level accuracy against
+    that team before treating this as authoritative; flag any drift back to
+    the docs.
+  version: v1
+servers:
+  - url: https://{environment}/api/v1
+    variables:
+      environment:
+        default: merchant-api.sb.nayaxpay.com
+        description: >-
+          merchant-api.sb.nayaxpay.com for sandbox, merchant-api.prod.nayaxpay.com
+          for production.
+security:
+  - ApiKeyAuth: []
+  - ApiKeyAuthAlias: []
+# No operation-level `tags` on purpose: with only 7 endpoints, tagging them
+# splits the API Reference sidebar into per-tag subfolders
+# (/reference/online-payments/{tag}/{operation}) that just add a click for no
+# real benefit yet. Re-add tags (Authorize / Verify / Transactions, or finer)
+# once the endpoint count grows enough to need the grouping.
+paths:
+  /transactions/authorize:
+    post:
+      summary: Authorize a transaction
+      operationId: authorize-transaction
+      x-mint:
+        content: >-
+          Authorizes a payment, customer-initiated or merchant-initiated
+          depending on `transaction.initiationType`. See [Authorize a
+          transaction](/docs/online-payments/rest-api/authorize-transaction)
+          for the field reference, PCI DSS scope, and 3D Secure guidance for
+          each case.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorizeRequest'
+            examples:
+              merchant_initiated:
+                summary: Merchant-initiated, scheme_token
+                value:
+                  requestData:
+                    idempotencyKey: idem_2f8a1c9e7b
+                    orderId: order_2044
+                    userId: cust_88213
+                  transaction:
+                    transactionType: sale
+                    initiationType: mit
+                    amount: { value: '2999', currency: USD, exponent: 2 }
+                  paymentMethod:
+                    type: scheme_token
+                    token: stok_7b3e9f21
+                    cryptogram: AqIBAwECAQQwMgIBAQIBAA==
+                    tokenEci: '05'
+                    expiryMonth: '09'
+                    expiryYear: '27'
+                  mit:
+                    mitType: recurring
+                    originalTransactionId: 6c1e2a4d-9f3b-4e21-8a2c-1f9b7d6e5a01
+              customer_initiated:
+                summary: Customer-initiated, raw card
+                value:
+                  requestData:
+                    idempotencyKey: idem_5c1e9a3f42
+                    orderId: order_2051
+                  transaction:
+                    transactionType: sale
+                    amount: { value: '4990', currency: USD, exponent: 2 }
+                  paymentMethod:
+                    type: card
+                    pan: '4242424242424242'
+                    expiryMonth: '09'
+                    expiryYear: '27'
+                    cvv: '123'
+                    cardholderName: Jamie Rivera
+      responses:
+        '200':
+          description: The authorization attempt completed. Check `status` for the outcome.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizeResponse'
+              example:
+                transactionId: 9d4f21e8-3c6b-4a1f-b8e5-2a7c9d1e4f6b
+                status: authorized
+                authCode: '654321'
+                amount: { value: '2999', currency: USD, exponent: 2 }
+                card: { lastFour: '4242', brand: VISA }
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /verify:
+    post:
+      summary: Verify a card
+      operationId: verify-card
+      x-mint:
+        content: >-
+          Confirms a card or stored credential is valid, without authorizing
+          or moving any money. See [Verify a card via the
+          API](/docs/online-payments/rest-api/verify-card) for how this
+          differs from the Hosted Payment Page's `account_verification`
+          transaction type.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyRequest'
+            example:
+              requestData:
+                idempotencyKey: idem_9f2b3c7a1d
+                userId: cust_88213
+              transaction:
+                currency: USD
+              paymentMethod:
+                type: scheme_token
+                token: stok_7b3e9f21
+                cryptogram: AqIBAwECAQQwMgIBAQIBAA==
+                tokenEci: '05'
+                expiryMonth: '09'
+                expiryYear: '27'
+      responses:
+        '200':
+          description: The verification attempt completed. Check `status` for the outcome.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyResponse'
+              example:
+                transactionId: f1a4c7e2-8b3d-4a9c-b5e1-6d2f8a9c3b47
+                status: verified
+                authCode: '334455'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /transactions/{transactionId}:
+    get:
+      summary: Get transaction
+      operationId: get-transaction
+      x-mint:
+        content: >-
+          Retrieves full details of a single transaction by its Nayax
+          transaction ID. See [Retrieve
+          transactions](/docs/online-payments/rest-api/transactions#get-transaction).
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: The transaction to retrieve.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Transaction found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+              example:
+                transactionId: 6c1e2a4d-9f3b-4e21-8a2c-1f9b7d6e5a01
+                status: captured
+                transactionType: sale
+                authCode: '123456'
+                orderId: order_1029
+                amount: { value: '4990', currency: USD, exponent: 2 }
+                lifecycle:
+                  createdAt: '2026-07-09T10:15:28.000Z'
+                  authorizedAt: '2026-07-09T10:15:30.000Z'
+                  capturedAt: '2026-07-09T10:15:31.000Z'
+                nayaxToken: ntok_9a2b7c1d
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: The transaction doesn't exist, or belongs to a different merchant.
+  /transactions:
+    get:
+      summary: List transactions
+      operationId: list-transactions
+      x-mint:
+        content: >-
+          Retrieves a paginated, filterable list of transactions. See
+          [Retrieve
+          transactions](/docs/online-payments/rest-api/transactions#list-transactions).
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/ListTransactionsStatusFilter'
+        - name: orderId
+          in: query
+          required: false
+          description: >-
+            Filter by your order reference. Can return multiple transactions
+            for the same order, for example retries, or a capture followed by
+            a refund.
+          schema:
+            type: string
+        - name: userId
+          in: query
+          required: false
+          description: Filter by your customer reference.
+          schema:
+            type: string
+        - name: fromDate
+          in: query
+          required: false
+          description: Inclusive lower bound on creation date.
+          schema:
+            type: string
+            format: date-time
+        - name: toDate
+          in: query
+          required: false
+          description: Exclusive upper bound on creation date.
+          schema:
+            type: string
+            format: date-time
+        - name: page
+          in: query
+          required: false
+          description: Page number.
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          description: Results per page.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 25
+      responses:
+        '200':
+          description: A page of transactions, ordered by `createdAt` descending.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTransactionsResponse'
+              example:
+                transactions:
+                  - transactionId: 6c1e2a4d-9f3b-4e21-8a2c-1f9b7d6e5a01
+                    status: captured
+                    transactionType: sale
+                    orderId: order_1029
+                    amount: { value: '4990', currency: USD, exponent: 2 }
+                    lifecycle: { createdAt: '2026-07-09T10:15:28.000Z' }
+                pagination:
+                  currentPage: 1
+                  totalPages: 4
+                  totalItems: 87
+                  itemsPerPage: 25
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /transactions/{transactionId}/capture:
+    post:
+      summary: Capture a transaction
+      operationId: capture-transaction
+      x-mint:
+        content: >-
+          Settles a previously authorized transaction. See [Capture, void, or
+          refund a
+          transaction](/docs/online-payments/rest-api/capture-void-refund#capture).
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: The authorized transaction to capture.
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: false
+        description: >-
+          Provide `amount` for a partial capture; omit the whole object, or
+          send an empty body, for a full capture.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaptureRequest'
+            example:
+              amount: { value: '2000', currency: USD, exponent: 2 }
+      responses:
+        '200':
+          description: The capture attempt completed. Check `status` for the outcome.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaptureResponse'
+              example:
+                transactionId: 6c1e2a4d-9f3b-4e21-8a2c-1f9b7d6e5a01
+                status: captured
+                capturedAmount: { value: '2000', currency: USD, exponent: 2 }
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /transactions/{transactionId}/void:
+    post:
+      summary: Void a transaction
+      operationId: void-transaction
+      x-mint:
+        content: >-
+          Fully cancels an approved `final_auth` or `pre_auth` transaction
+          before capture. See [Capture, void, or refund a
+          transaction](/docs/online-payments/rest-api/capture-void-refund#void).
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: The authorized transaction to void.
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              description: No body fields are needed. Send an empty object.
+      responses:
+        '200':
+          description: The void attempt completed. Check `status` for the outcome.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoidResponse'
+              example:
+                transactionId: a2e97f31-5c8d-4b6e-9a12-3f7d8e5c1b90
+                status: voided
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /transactions/{transactionId}/refund:
+    post:
+      summary: Refund a transaction
+      operationId: refund-transaction
+      x-mint:
+        content: >-
+          Returns funds to the customer on a captured transaction. See
+          [Capture, void, or refund a
+          transaction](/docs/online-payments/rest-api/capture-void-refund#refund).
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: The captured transaction to refund.
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundRequest'
+            example:
+              amount: { value: '2000', currency: USD, exponent: 2 }
+      responses:
+        '200':
+          description: The refund attempt completed. Check `status` for the outcome.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundResponse'
+              example:
+                transactionId: 6c1e2a4d-9f3b-4e21-8a2c-1f9b7d6e5a01
+                status: refunded
+                refundedAmount: { value: '2000', currency: USD, exponent: 2 }
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: >-
+        Your per-merchant, per-environment API key. Nayax derives
+        `merchantId` from this key on its side; never send `merchantId` as a
+        path, query, or body parameter on REST API requests.
+    ApiKeyAuthAlias:
+      type: apiKey
+      in: header
+      name: x-paycom-api-key
+      description: Accepted as an alias for `x-api-key`. Carries the same value.
+  responses:
+    Unauthorized:
+      description: >-
+        The key is missing, invalid, revoked, or belongs to a merchant that
+        isn't active. Every endpoint under `/api/v1` enforces this; there's
+        no unauthenticated route.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            errorCode: UNAUTHORIZED
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          enum:
+            - UNAUTHORIZED
+    Amount:
+      type: object
+      required:
+        - value
+        - currency
+        - exponent
+      properties:
+        value:
+          type: string
+          description: Amount in minor units, for example `4990` for $49.90.
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+        exponent:
+          type: integer
+          description: Decimal places for the currency (`2` for USD/EUR, `0` for JPY, `3` for KWD).
+    RequestData:
+      type: object
+      required:
+        - idempotencyKey
+      properties:
+        idempotencyKey:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: >-
+            Unique per payment attempt. Reuse the same key to retry safely
+            after a timeout; Nayax returns the original result instead of
+            charging twice.
+        orderId:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: >-
+            Your order reference. Strongly recommended: enables lost-response
+            recovery via List transactions filtered by `orderId`.
+        userId:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: Your customer reference.
+    TransactionType:
+      type: string
+      enum:
+        - sale
+        - final_auth
+        - pre_auth
+    InitiationType:
+      type: string
+      enum:
+        - cit
+        - mit
+      default: cit
+    TransactionRequest:
+      type: object
+      required:
+        - transactionType
+        - amount
+      properties:
+        transactionType:
+          $ref: '#/components/schemas/TransactionType'
+        initiationType:
+          allOf:
+            - $ref: '#/components/schemas/InitiationType'
+          description: Defaults to `cit`; set to `mit` for a merchant-initiated transaction.
+        amount:
+          $ref: '#/components/schemas/Amount'
+    PaymentMethodCard:
+      type: object
+      required:
+        - type
+        - pan
+        - expiryMonth
+        - expiryYear
+      properties:
+        type:
+          type: string
+          enum: [card]
+        pan:
+          type: string
+          minLength: 12
+          maxLength: 19
+          description: The card number. PCI DSS SAQ-D applies.
+        expiryMonth:
+          type: string
+          description: Two characters (MM).
+        expiryYear:
+          type: string
+          description: Two to four characters (YY or YYYY).
+        cvv:
+          type: string
+          minLength: 3
+          maxLength: 4
+          description: Card security code.
+        cardholderName:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: Name on the card.
+    PaymentMethodApplePay:
+      type: object
+      required:
+        - type
+        - token
+      properties:
+        type:
+          type: string
+          enum: [apple_pay]
+        token:
+          type: object
+          description: >-
+            The Apple Pay `PKPaymentToken` from your own Apple Pay
+            integration, passed exactly as your integration returns it. Nayax
+            decrypts it and processes it as a Digital Secure Remote Payment
+            (DSRP) transaction.
+    PaymentMethodGooglePay:
+      type: object
+      required:
+        - type
+        - token
+      properties:
+        type:
+          type: string
+          enum: [google_pay]
+        token:
+          type: object
+          description: >-
+            The Google Pay ECv2 token from your own Google Pay integration,
+            passed exactly as your integration returns it. Nayax decrypts it
+            and processes it as a Digital Secure Remote Payment (DSRP)
+            transaction.
+    PaymentMethodSchemeToken:
+      type: object
+      required:
+        - type
+        - token
+        - cryptogram
+        - expiryMonth
+        - expiryYear
+      properties:
+        type:
+          type: string
+          enum: [scheme_token]
+        token:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: The merchant-supplied network token. The confirmed way to reuse a card today.
+        cryptogram:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: The token cryptogram (TAVV).
+        tokenEci:
+          type: string
+          minLength: 2
+          maxLength: 2
+          description: Electronic Commerce Indicator (ECI) accompanying the token. Recommended.
+        expiryMonth:
+          type: string
+          description: Two characters (MM).
+        expiryYear:
+          type: string
+          description: Two to four characters.
+    PaymentMethodNayaxToken:
+      type: object
+      required:
+        - type
+        - token
+      properties:
+        type:
+          type: string
+          enum: [nayax_token]
+          description: >-
+            Nayax-issued token from a prior customer-initiated transaction.
+            Issuance of this token is still pending confirmation from Nayax;
+            treat `scheme_token` as the reliable reuse mechanism until that's
+            confirmed.
+        token:
+          type: string
+          minLength: 1
+          maxLength: 200
+        expiryMonth:
+          type: string
+          description: Two characters (MM). Optional for this token type.
+        expiryYear:
+          type: string
+          description: Two to four characters. Optional for this token type.
+    PaymentMethod:
+      oneOf:
+        - $ref: '#/components/schemas/PaymentMethodCard'
+        - $ref: '#/components/schemas/PaymentMethodApplePay'
+        - $ref: '#/components/schemas/PaymentMethodGooglePay'
+        - $ref: '#/components/schemas/PaymentMethodSchemeToken'
+        - $ref: '#/components/schemas/PaymentMethodNayaxToken'
+      discriminator:
+        propertyName: type
+        mapping:
+          card: '#/components/schemas/PaymentMethodCard'
+          apple_pay: '#/components/schemas/PaymentMethodApplePay'
+          google_pay: '#/components/schemas/PaymentMethodGooglePay'
+          scheme_token: '#/components/schemas/PaymentMethodSchemeToken'
+          nayax_token: '#/components/schemas/PaymentMethodNayaxToken'
+    ExternalMPI:
+      type: object
+      required:
+        - eci
+      description: >-
+        Pass the result of your own Merchant Plug-In (MPI) / 3DS run so Nayax
+        forwards it to the acquirer and preserves the liability shift.
+        card-CIT only.
+      properties:
+        eci:
+          type: string
+          description: Electronic Commerce Indicator (ECI) from your 3DS authentication.
+        cavv:
+          type: string
+          description: Cardholder Authentication Verification Value (CAVV), the authentication cryptogram.
+        dsTransId:
+          type: string
+          description: Directory-server transaction ID.
+        messageVersion:
+          type: string
+          description: 3DS protocol/message version, for example `2.2.0`.
+    MitType:
+      type: string
+      enum:
+        - unscheduled
+        - recurring
+        - installments
+        - no_show
+        - delayed_charge
+        - resubmission
+        - split_shipment
+    MitDetails:
+      type: object
+      required:
+        - mitType
+      properties:
+        mitType:
+          $ref: '#/components/schemas/MitType'
+        originalTransactionId:
+          type: string
+          format: uuid
+          description: >-
+            The original customer-initiated transaction's `transactionId`.
+            Optional, but strongly recommended: in the EU, under PSD2, an MIT
+            that doesn't reference an authenticated original CIT is likely to
+            be soft-declined by the issuer. The gateway doesn't itself
+            validate that the referenced CIT was 3DS-authenticated, and
+            doesn't enforce issuer soft-decline behavior; both depend on the
+            issuer and acquirer.
+    DynamicDescriptors:
+      type: object
+      description: Subject to acquirer support.
+      properties:
+        dbaName:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: DBA name on the cardholder's statement. Overrides your account default.
+        phone:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: Your phone number on the statement.
+        email:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: Your email on the statement.
+        address:
+          type: string
+          minLength: 1
+          maxLength: 300
+          description: Your address on the statement.
+    AuthorizeRequest:
+      type: object
+      required:
+        - requestData
+        - transaction
+        - paymentMethod
+      properties:
+        requestData:
+          $ref: '#/components/schemas/RequestData'
+        transaction:
+          $ref: '#/components/schemas/TransactionRequest'
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+        mit:
+          allOf:
+            - $ref: '#/components/schemas/MitDetails'
+          description: >-
+            Required when `transaction.initiationType` is `mit`. Set
+            `transaction.initiationType` to `mit` explicitly; it defaults to
+            `cit`, so omitting it makes Nayax treat this as a
+            customer-initiated request instead.
+        externalMPI:
+          $ref: '#/components/schemas/ExternalMPI'
+        dynamicDescriptors:
+          $ref: '#/components/schemas/DynamicDescriptors'
+    CardBrand:
+      type: string
+      enum:
+        - VISA
+        - MASTERCARD
+        - AMEX
+        - DISCOVER
+    AuthorizeResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+          description: Nayax transaction ID. Store it for lifecycle operations and future MIT references.
+        status:
+          type: string
+          enum:
+            - authorized
+            - captured
+            - verified
+            - declined
+            - failed
+        authCode:
+          type: string
+          description: Authorization code from the issuer. Present on approval.
+        declineCode:
+          allOf:
+            - $ref: '#/components/schemas/DeclineCode'
+          description: Present on decline.
+        rawDeclineCode:
+          type: string
+          description: The raw, unmapped decline code from the acquirer or issuer. Present on decline.
+        errorCode:
+          allOf:
+            - $ref: '#/components/schemas/ErrorCode'
+          description: Present on failure. Safe to retry.
+        amount:
+          allOf:
+            - $ref: '#/components/schemas/Amount'
+          description: An echo of the authorized amount.
+        card:
+          type: object
+          properties:
+            lastFour:
+              type: string
+              description: Last four digits of the card.
+            brand:
+              $ref: '#/components/schemas/CardBrand'
+    VerifyRequest:
+      type: object
+      required:
+        - requestData
+        - transaction
+        - paymentMethod
+      properties:
+        requestData:
+          $ref: '#/components/schemas/RequestData'
+        transaction:
+          type: object
+          required:
+            - currency
+          properties:
+            currency:
+              type: string
+              minLength: 3
+              maxLength: 3
+              description: ISO 4217. Alone selects the acquirer BIN; the check is always zero-value.
+            initiationType:
+              allOf:
+                - $ref: '#/components/schemas/InitiationType'
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+    VerifyResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+            - verified
+            - declined
+            - failed
+        authCode:
+          type: string
+          description: Present on success.
+        declineCode:
+          allOf:
+            - $ref: '#/components/schemas/DeclineCode'
+          description: Present on decline.
+        errorCode:
+          allOf:
+            - $ref: '#/components/schemas/ErrorCode'
+          description: Present on failure.
+    CaptureRequest:
+      type: object
+      description: Omit entirely for a full capture.
+      properties:
+        amount:
+          type: object
+          description: Provide for a partial capture.
+          required:
+            - value
+            - exponent
+            - currency
+          properties:
+            value:
+              type: string
+              description: Minor units.
+            exponent:
+              type: integer
+            currency:
+              type: string
+              description: ISO 4217. Must match the authorized currency.
+    CaptureResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+            - captured
+            - authorized
+            - failed
+          description: '`authorized` means a transient failure; retry the capture.'
+        capturedAmount:
+          allOf:
+            - $ref: '#/components/schemas/Amount'
+          description: Amount captured.
+        errorCode:
+          allOf:
+            - $ref: '#/components/schemas/ErrorCode'
+          description: Present on failure.
+    VoidResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+            - voided
+            - authorized
+            - failed
+          description: '`authorized` means a transient failure; retry the void.'
+        errorCode:
+          allOf:
+            - $ref: '#/components/schemas/ErrorCode'
+          description: Present on failure.
+    RefundRequest:
+      type: object
+      required:
+        - amount
+      properties:
+        amount:
+          type: object
+          required:
+            - value
+            - exponent
+            - currency
+          properties:
+            value:
+              type: string
+              description: Amount to refund, in minor units. Must not exceed the captured amount.
+            exponent:
+              type: integer
+            currency:
+              type: string
+              description: ISO 4217. Must match the captured currency.
+    RefundResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+            - refunded
+            - captured
+            - failed
+          description: '`captured` means a transient failure; retry the refund.'
+        refundedAmount:
+          allOf:
+            - $ref: '#/components/schemas/Amount'
+          description: Amount refunded.
+        errorCode:
+          allOf:
+            - $ref: '#/components/schemas/ErrorCode'
+          description: Present on failure.
+    TransactionStatus:
+      type: string
+      enum:
+        - created
+        - authorized
+        - captured
+        - voided
+        - refunded
+        - verified
+        - declined
+        - failed
+        - partially_refunded
+    ListTransactionsStatusFilter:
+      type: string
+      description: >-
+        As documented on List transactions. Note this filter enum omits
+        `partially_refunded`, which does appear in the full status list
+        returned by Get transaction; unconfirmed whether that's a real API
+        restriction or a documentation gap.
+      enum:
+        - created
+        - authorized
+        - captured
+        - voided
+        - refunded
+        - verified
+        - declined
+        - failed
+    Lifecycle:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          description: When the transaction was created.
+        authorizedAt:
+          type: string
+          format: date-time
+          description: When the transaction was authorized. Present when applicable.
+        capturedAt:
+          type: string
+          format: date-time
+          description: When funds were captured. Present when applicable.
+        voidedAt:
+          type: string
+          format: date-time
+          description: When the authorization was voided. Present when applicable.
+        refundedAt:
+          type: string
+          format: date-time
+          description: When the transaction was refunded. Present when applicable.
+    Transaction:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/TransactionStatus'
+        transactionType:
+          type: string
+          enum:
+            - sale
+            - final_auth
+            - pre_auth
+            - account_verification
+        authCode:
+          type: string
+          description: Authorization code from the issuer. Present on approval.
+        declineCode:
+          allOf:
+            - $ref: '#/components/schemas/DeclineCode'
+          description: Present on decline.
+        rawDeclineCode:
+          type: string
+          description: The raw, unmapped decline code from the acquirer or issuer. Present on decline.
+        errorCode:
+          allOf:
+            - $ref: '#/components/schemas/ErrorCode'
+          description: Present on failure.
+        orderId:
+          type: string
+          description: Returned if you provided it in the original request.
+        userId:
+          type: string
+          description: Returned if you provided it in the original request.
+        amount:
+          $ref: '#/components/schemas/Amount'
+        lifecycle:
+          $ref: '#/components/schemas/Lifecycle'
+        nayaxToken:
+          type: string
+          description: >-
+            A reusable token for this card, present when a reusable
+            credential is available. Nayax's issuance of this token is still
+            pending confirmation.
+    TransactionListItem:
+      type: object
+      description: A narrower field set than Get transaction.
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+        status:
+          $ref: '#/components/schemas/TransactionStatus'
+        transactionType:
+          type: string
+          enum:
+            - sale
+            - final_auth
+            - pre_auth
+            - account_verification
+        orderId:
+          type: string
+        userId:
+          type: string
+        amount:
+          $ref: '#/components/schemas/Amount'
+        lifecycle:
+          $ref: '#/components/schemas/Lifecycle'
+        nayaxToken:
+          type: string
+    Pagination:
+      type: object
+      properties:
+        currentPage:
+          type: integer
+        totalPages:
+          type: integer
+        totalItems:
+          type: integer
+        itemsPerPage:
+          type: integer
+    ListTransactionsResponse:
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionListItem'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    DeclineCode:
+      type: string
+      description: Set when `status` is `declined`. Issuer-attributable.
+      enum:
+        - DO_NOT_HONOR
+        - INSUFFICIENT_FUNDS
+        - EXPIRED_CARD
+        - INVALID_CARD_NUMBER
+        - INVALID_CVV
+        - INVALID_AVS
+        - INVALID_3DS
+        - CARD_LOST_OR_STOLEN
+        - CARD_BLOCKED
+        - COUNTERFEIT_CARD
+        - FRAUD_SUSPECTED
+        - CURRENCY_NOT_SUPPORTED
+        - TRANSACTION_NOT_ALLOWED
+        - VELOCITY_EXCEEDED
+        - INVALID_INSTALLMENTS
+        - INVALID_ID
+        - REFERRAL
+        - UNKNOWN
+    ErrorCode:
+      type: string
+      description: Set when `status` is `failed`. System-attributable; generally safe to retry.
+      enum:
+        - PROCESSOR_CONNECTIVITY
+        - PROCESSOR_TIMEOUT
+        - PROCESSOR_PROTOCOL_ERROR
+        - PROCESSOR_AUTH_FAILED
+        - INVALID_REQUEST_DATA
+        - MERCHANT_CONFIG_ERROR
+        - INTERNAL_ERROR
