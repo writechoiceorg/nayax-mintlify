@@ -1,0 +1,105 @@
+---
+title: 能力
+metadata:
+  og:description: 有关 SDK 标志的信息会在配对过程中通过 FirmwareInfo() 函数发送。其中每个 bit 都会。
+---
+
+SDK 标志位的相关信息在配对过程中通过 FirmwareInfo() 函数发送。这些标志位中的每一个都控制着另一个功能的开启/关闭，具体如下：
+
+<table align={["left","left"]}>
+  <thead>
+    <tr>
+      <th style={{ textAlign: "left" }}>
+        少量
+      </th>
+
+      <th style={{ textAlign: "left" }}>
+        描述
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td style={{ textAlign: "left" }}>
+        `0-5`
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        对马歇尔来说无关紧要
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>
+        `6`
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        **多会话模式。**外设支持多会话模式。
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>
+        `7`
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        **外围设备将批准非接触式专有卡。**外围设备连接到其服务器并授权其专有的非接触式预付卡。注意：一旦设置此位，系统将仅支持第三方专有卡！即，无法接受其他专有卡。
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>
+        `8`
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        **供应商请求价格并非最终价格。**结合多会话支持位，可实现类似预授权的交易流程。
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>
+        `9`
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        **外围设备将授权使用磁条专用卡。**外围设备连接到其服务器并授权其专有的磁条预付卡。注意：一旦设置此位，系统将仅支持第三方专用卡！即，无法接受其他专用卡。
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>
+        `10`
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        **扩展货币**支持 4 字节价格（范围：0 - 4,294,967,295）。注意：此功能仅适用于 VPOS 媒体系列！
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>
+        `11`
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        **外设将批准专有二维码卡。**外设连接到其服务器并授权其专有二维码卡。注意：一旦设置此位，系统将仅支持第三方专有卡！即，无法接受其他专有卡。
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }} />
+
+      <td style={{ textAlign: "left" }} />
+    </tr>
+  </tbody>
+</table>
+
+例如，如果您使用的是“多会话+价格非最终版”，则功能值将为：0b0101000000=320（十进制），并且在 Nayax Core 中也会显示相同的值：
+
+<Frame>
+  <img src="/images/docs/capabilities/image1.png" />
+</Frame>

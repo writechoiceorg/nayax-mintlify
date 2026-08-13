@@ -1,0 +1,80 @@
+---
+title: TransactionCallback
+metadata:
+  og:description: 终端使用 TransactionCallback 端点通知集成方刷卡操作的结果。当用户执行以下操作时会自动触发。
+---
+
+终端使用 `TransactionCallback` 端点通知集成方刷卡操作的结果。当用户出示卡片，且授权流程与支付提供商一同启动时，会自动触发该回调。
+
+此回调对于继续进行交易确认或拒绝处理至关重要。
+
+## 要求
+
+Spark 平台会向您配置的 `TransactionCallback` 端点发送 POST 请求。载荷中包含刷卡操作的完整结果：
+
+```json
+{
+  "NayaxTransactionId": 2004545072,
+  "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+  "SiteId": 2,
+  "TerminalId": "0434334921100366",
+  "MachineId": 71234996,
+  "HwSerial": "0434334921100366",
+  "AuthStatus": {
+    "Verdict": "Approved",
+    "ErrorCode": 0,
+    "ErrorDescription": "",
+    "StatusMessage": ""
+  },
+  "CardLast4Digits": "1234",
+  "CardHash": "7f2082ba5dbccf706b6987e75b62083f65b5695bc2d8c827c3e46769d007a9e6",
+  "CardUid": "1288528281124927",
+  "MachineAuTime": "20240205194122328",
+  "Amount": 15.0,
+  "CardBrand": "MASTERCARD",
+  "CardFirst6Digits": "555561",
+  "AuthCode": "3494297",
+  "AuTime": "20240205194122328",
+  "CurrencyCode": "ILS",
+  "CurrencyNumeric": "376",
+  "FiscalRrn": "1A2b3C4d5E6f7g8H9i",
+  "NayaxRRN": "527109494297"
+}
+```
+
+### 请求参数
+
+下表描述了请求的所有参数：
+
+| 场地                            | 类型     | 必需的 | 描述                                                                                                       |
+| ----------------------------- | ------ | --- | -------------------------------------------------------------------------------------------------------- |
+| `NayaxTransactionId`          | 整数     | 是的  | 内部 Nayax 交易 ID。                                                                                          |
+| `SparkTransactionId`          | String | 是的  | 在 `StartAuthentication` 中生成的唯一会话 ID。                                                                     |
+| `SiteId`                      | 整数     | 是的  | 自动售货点或Spark站点的ID。                                                                                        |
+| `TerminalId`                  | String | 是的  | 读取卡片的终端的唯一标识符。                                                                                           |
+| `MachineId`                   | 整数     | 是的  | 自动售货机或设备的标识符。                                                                                            |
+| `HwSerial`                    | String | 是的  | 终端硬件序列号。                                                                                                 |
+| `AuthStatus`                  | Object | 是的  | 信用卡授权结果。                                                                                                 |
+| `AuthStatus.Verdict`          | String | 是的  | 授权结果（`Approved`、`Declined` 等）。                                                                           |
+| `AuthStatus.ErrorCode`        | 整数     | 不   | 如果卡片被拒绝，则会显示一个可选的错误代码。                                                                                   |
+| `AuthStatus.ErrorDescription` | String | 不   | 如有错误，请解释错误原因。                                                                                            |
+| `AuthStatus.StatusMessage`    | String | 不   | Spark返回的状态消息。                                                                                            |
+| `CardLast4Digits`             | String | 是的  | 所出示卡片的后四位数字。                                                                                             |
+| `CardHash`                    | String | 是的  | 完整卡号的单向哈希值。                                                                                              |
+| `CardUid`                     | String | 是的  | 卡片的唯一标识符（适用于预付卡）。更多详细说明请参见[SMC 支持](/docs/integrate-pos-device/spark/additional-resources/smc-support)页面。 |
+| `MachineAuTime`               | String | 是的  | 来自机器的时间戳，格式为 `yyyyMMddHHmmssSSS`。                                                                        |
+| `Amount`                      | 数字     | 是的  | 交易金额以主要货币单位表示（小数点后一位为 0，例如，15.0 表示 15.00 美元）                                                             |
+| `CardBrand`                   | String | 不   | 使用的卡品牌（例如，Visa、MasterCard）。                                                                              |
+| `CardFirst6Digits`            | String | 不   | 信用卡的前 6 位数字（卡 BIN）。                                                                                      |
+| `AuthCode`                    | String | 不   | 支付服务商返回的授权码。                                                                                             |
+| `AuTime`                      | String | 不   | 授权服务器时间戳。                                                                                                |
+| `CurrencyCode`                | String | 不   | ISO货币代码（例如，“EUR”）。                                                                                       |
+| `CurrencyNumeric`             | String | 不   | ISO 4217 数字代码（例如 “978”）。                                                                                 |
+| `FiscalRrn`                   | String | 不   | 会计/报告用财务参考编号。                                                                                            |
+| `NayaxRRN`                    | String | 不   | Nayax内部结算参考编号。                                                                                           |
+
+<Note>
+  Nayax 回调
+
+  这是来自 Nayax 的回调，不需要响应体。简单的 200 OK 服务器确认就足够了。
+</Note>

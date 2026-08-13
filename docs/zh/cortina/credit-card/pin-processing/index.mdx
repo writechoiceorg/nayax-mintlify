@@ -1,0 +1,42 @@
+---
+title: PIN 码处理
+metadata:
+  og:description: PIN（个人识别码）是一种数字代码，用于在借记卡和信用卡交易中对持卡人进行授权和验证。
+---
+
+PIN（个人识别码）是一种数字代码，用于在借记卡和信用卡交易中对持卡人进行授权和验证。为了在传输过程中保护 PIN，必须使用安全的 PIN 加密密钥对其进行加密，该密钥的管理须符合 PCI PIN Security 标准。
+
+当持卡人在终端输入 PIN 时，该 PIN 会由 Nayax 终端使用 DUKPT 算法进行加密，并作为 PIN block（即加密后的 PIN 字符串）发送给 Nayax Engine。
+
+Nayax engine 将 PIN Block 发送给 MyHSM（Nayax 的 HSM 提供商）进行解密，然后使用与 Payment Gateway（集成方）共享的密钥对其重新加密。
+
+<Note>
+  主密钥/会话密钥
+
+  对于 Cortina，Nayax 仅支持主密钥/会话密钥（Master/Session Key）管理方式。
+
+  - Master Key 是密钥交换密钥，也称为区域主密钥（Zone Master Key，ZMK）。
+  - Session Key 指的是 PIN 加密密钥，也称为区域 PIN 密钥（Zone PIN Key，ZPK）。
+</Note>
+
+参见下图：
+
+<Frame>
+  <img src="/images/docs/pin-processing/image1.png" />
+</Frame>
+
+## 支持的 PIN 交换方式
+
+Nayax 支持两种 PIN 密钥交换和加密方式：
+
+- 手动密钥交换（静态密钥）：在此方式中，PIN 使用一种长期加密密钥（称为区域 PIN 密钥，ZPK）进行加密。ZPK 会在搭建阶段安全交换，并按照 PCI 要求手动加载到 MyHSM 系统中。
+- 动态密钥交换（主密钥/会话密钥）：在此方式中，PIN 使用临时会话密钥（ZPK）进行加密，该密钥由 Payment Gateway 通过 API 动态生成并共享。为确保传输安全，会话 ZPK 会使用静态区域主密钥（ZMK）进行加密。与静态 ZPK 一样，ZMK 也会在初始搭建阶段安全交换并预加载到 MyHSM 中。PIN 交换流程将由 Nayax 使用 Cortina `Renew Key` 端点发起，密钥交换的间隔可配置，将在集成的搭建阶段讨论确定。
+
+<Note>
+  PIN 加密算法
+
+  - Nayax 支持 TDEA、2TDEA、3TDEA、AES-128 和 AES-256
+  - Nayax 支持 ISO 0-4 或 ANSI PIN Block 格式。
+
+  如需更多详情，请联系您的 Nayax 集成方。
+</Note>

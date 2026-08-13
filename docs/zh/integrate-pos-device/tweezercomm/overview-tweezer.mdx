@@ -1,0 +1,64 @@
+---
+title: 概述
+metadata:
+  og:description: TweezerComm 是一种安全高效的支付通信协议，可实现客户端应用程序与 Nayax 有人值守。
+---
+
+import McpNote from '/snippets/zh/mcp-server-note.mdx';
+
+TweezerComm 是一种安全高效的支付通信协议，可实现客户端应用程序与 Nayax 人工支付设备之间的无缝集成。它允许销售点 (POS) 系统、电子收银机 (ECR) 和其他支持支付的应用程序通过结构化的 JSON-RPC 接口安全地处理交易。
+
+它使客户端应用程序能够与 Agamento 支付应用程序（运行在 Nayax 有人值守终端上）进行通信，Agamento 是交易处理的中央单元。通信应通过**本地网络**进行，例如**HTTPS** （最佳实践）、 **HTTP** 、**蓝牙**或**USB**连接，从而允许您：
+
+- 发起和管理交易。
+- 检索和处理交易数据。
+- 处理结算、退款和预授权。
+
+<McpNote />
+
+## 支付服务
+
+Nayax 的 TweezerComm 协议支持两种主要的支付服务，一种面向全球用户，另一种专供以色列用户使用。
+
+- 全球支付：`Engine` Service 是通过 Nayax Gateway 处理信用卡和闭环交易的主要服务。Nayax Gateway 负责设置设备参数，并根据 Nayax Core 中配置的设置处理交易。该服务应用广泛，支持众多国家/地区的多家支付提供商。在执行交易之前，设备必须完成“建立（establishment）”过程（由 Nayax 团队管理）。
+- 以色列支付：`Ashrait` Service 是用于执行 AshraitEMV 交易的专用服务。客户端应用程序与 AshraitEMV 应用程序（AEA）进行通信，该应用程序既可在独立终端上运行，也可在中央服务器上运行。所有已批准的交易都会写入 AEA 的数据库。该服务的一个关键部分是批处理过程，即 AEA 将已批准的交易传输到 ABS（SHVA）服务器。
+
+以下部分列出了每种支付服务的相关指南。
+
+## 全球 TweezerComm 指南
+
+本部分提供指南，帮助您将 TweezerComm 与 Nayax 全球支付服务结合使用，概述集成流程和可用的 API 方法。请参阅以下页面了解更多信息：
+
+<Card icon="link" title="开始" href="/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started" arrow />
+
+<Columns cols={2}>
+  <Card icon="link" title="全球支付流程" href="/docs/integrate-pos-device/tweezercomm/global-payment-flows/payment-flows-copy-1" arrow />
+
+  <Card icon="link" title="全球支付方式" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/payment-services-methods-copy-1" arrow />
+</Columns>
+
+## 以色列 TweezerComm 指南
+
+本节提供指南，帮助您将 TweezerComm 与 Nayax Israel 支付服务结合使用，概述集成流程和可用的 API 方法。请参阅以下页面了解更多信息：
+
+<Card icon="link" title="开始" href="/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started" arrow />
+
+<Columns cols={2}>
+  <Card icon="link" title="以色列支付流程" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-israel-payment-flows" arrow />
+
+  <Card icon="link" title="以色列付款方式" href="/docs/integrate-pos-device/tweezercomm/israel-payment-methods/tweezercomm-israel-payment-methods" arrow />
+</Columns>
+
+## 一般指南
+
+本部分提供与 TweezerComm 支付服务相关的通用指南。请参阅以下页面了解更多信息：
+
+<Columns cols={3}>
+  <Card icon="link" title="设备方法" href="/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started" arrow />
+
+  <Card icon="link" title="TC服务" href="/docs/integrate-pos-device/tweezercomm/tc-service" arrow />
+
+  <Card icon="link" title="弹性机制" href="/docs/integrate-pos-device/tweezercomm/resilience-mechanism-copy" arrow />
+</Columns>
+
+<Card icon="link" title="其他资源" href="/docs/integrate-pos-device/spark/additional-resources/index" arrow />

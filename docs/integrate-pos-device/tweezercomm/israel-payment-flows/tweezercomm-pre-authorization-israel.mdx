@@ -6,7 +6,7 @@ metadata:
 
 Tweezercomm's pre-authorization transactions are processed, authorized, and either settled or canceled based on the response from the payment server. This process also includes a resilience mechanism for handling errors.
 
-## Transaction Flow
+## Transaction flow
 
 To understand the pre-authorization transaction flow, consider the following sequence of events:
 
@@ -23,32 +23,23 @@ Here's a breakdown of each step:
 7. The payment server responds with a `Completion result`, which the Nayax Device sends back to the POS.
 8. At the end of the day, the POS sends a [`doPeriodic()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) request. The Nayax Device communicates with the payment server to perform the settlement of the day's transactions and sends a [`doPeriodic()`](/docs/integrate-pos-device/tweezercomm/israel-payment-methods/doperiodic) result back to the POS.
 
-## See Also
+## See also
 
-<Columns cols={2}>
-<Card
-  icon="link"
-  title="Regular Transaction"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/single-phase-transaction"
-  arrow
-/>
-<Card
-  icon="link"
-  title="Two Phases Transaction"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/2-phase-transaction"
-  arrow
-/>
-<Card
-  icon="link"
-  title="Deferred Payment"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-deferred-payment"
-  arrow
-/>
-<Card
-  icon="link"
-  title="Split Transaction"
-  href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-split-transaction"
-  arrow
-/>
-</Columns>
+<CardGroup cols={3}>
+  <Card icon="bolt" title="Regular transaction" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/single-phase-transaction">
+    Process and authorize a payment request in a single step.
+  </Card>
+
+  <Card icon="layer-group" title="Two phases transaction" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/2-phase-transaction">
+    Split a transaction into an information retrieval step and a completion step.
+  </Card>
+
+  <Card icon="clock" title="Deferred payment" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-deferred-payment">
+    Run a pre-authorization phase followed by a final authorization phase.
+  </Card>
+
+  <Card icon="arrows-split-up-and-left" title="Split transaction" href="/docs/integrate-pos-device/tweezercomm/israel-payment-flows/tweezercomm-split-transaction">
+    Split a transaction's payment across multiple sub-merchants.
+  </Card>
+</CardGroup>
 

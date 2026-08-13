@@ -1,0 +1,81 @@
+---
+title: 用户界面要求
+description: UNO-mini 集成所需的 EMV 徽标放置位置、卡组织品牌标识以及 LED 与音频要求。
+metadata:
+  og:description: UNO-mini 的 EMVCo 认证要求：非接触式徽标放置位置、卡组织品牌准则以及 LED 与音频状态要求。
+---
+
+集成 UNO-mini 需要您的外壳和显示屏满足特定的 EMVCo 认证要求，包括徽标、LED 和音频反馈。
+
+## EMV 非接触式徽标
+
+EMV 非接触式徽标必须出现在您的机器面板上，位置须与 UNO-mini 设备上印制的徽标位置相同：即天线的中心位置。
+
+When reproducing the logo, follow the EMVCo sizing, clear space, and color rules. See the [EMVCo Contactless Symbol Reproduction Requirements](/images/docs/uno-mini/EMVCo-Contactless-Symbol-Reproduction-Requirements-Oct-2019.pdf) for the full specification.
+
+## 卡组织品牌准则
+
+机器面板或显示屏上的卡组织徽标为可选项。如果您选择显示这些徽标，则必须遵守各卡组织的品牌准则。
+
+下表列出了各主要卡组织的品牌准则文档。
+
+| 卡组织              | 品牌准则                                                                                                                                   |
+| :--------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
+| 签证               | Visa 商户标识规范（[Visa Merchant Signage](https://www.merchantsignage.visa.com/brandguidelines)）                                             |
+| 万事达              | Mastercard 品牌中心（[Mastercard Brand Center](https://www.mastercard.com/brandcenter)）                                                     |
+| American Express | [American Express Checkout](https://www.americanexpress.com/en-us/business/merchant/supplies/details/?pid=CheckoutDL)                  |
+| 发现               | Discover 全球网络标识与徽标规范（[Discover Global Network Signage and Logos](https://www.discoverglobalnetwork.com/resources/businesses/signage/)） |
+
+## LED 与音频要求
+
+UNO-mini 的前面板上有 4 个绿色 LED。EMVCo 要求 POS 设备必须具备这些 LED，且必须让最终用户可见。
+
+<Frame>
+  <img src="/images/docs/uno-mini/user-interface-front-panel.png" alt="UNO-mini 前面板，显示 4 个 LED 指示灯及 EMV 非接触式徽标" width="346" />
+</Frame>
+
+有两种合规方式可向最终用户呈现这些 LED：
+
+1. 在机器面板上开设一个透明区域，直接露出原始设备的 LED。
+2. 如果机器显示屏存在，则在显示屏上模拟 LED 状态。
+
+### LED 与音频状态
+
+下表列出了 EMVCo Book A v2.10 第 9.x 节中定义的所有 LED 和音频状态。
+
+LED 图例：○ 关闭，● 开启。闪烁状态在“LED 模式”列中注明。
+
+音频提示音：
+
+- 成功提示音：约 1500 Hz 正弦波，持续 500 毫秒
+- 警示提示音：约 750 Hz 双声蜂鸣（200 毫秒开 / 200 毫秒关 / 200 毫秒开）
+
+| Status   | 消息索引 | 描述                                                      | LED 模式       | 消息显示            | 音频             |
+| :------- | :--- | :------------------------------------------------------ | :----------- | :-------------- | :------------- |
+| 未就绪      | —    | 读卡器未通电或未通信                                              | ○ ○ ○ ○      | 无消息             | 没有任何           |
+| Idle     | 17   | 已通电并已连接，未在轮询卡片。第一个 LED 大约每 5 秒闪烁 200 毫秒。                | ● ○ ○ ○（闪烁）  | 欢迎              | 没有任何           |
+| 准备读取     | 1    | 正在轮询卡片。可能会显示交易金额。                                       | ● ○ ○ ○      | € xx.xx / 请出示卡片 | 没有任何           |
+| 读卡成功     | 35   | 四个 LED 依次点亮，历时约 250 毫秒，然后保持点亮约 750 毫秒，随后熄灭。总时长：1000 毫秒。 | 依次闪烁（全部 4 个） | 读卡成功 / 请移开卡片    | 成功提示音          |
+| 授权中      | 36   | 联机授权处理中                                                 | ○ ○ ○ ○      | 正在授权 / 请稍候      | —              |
+| 得到正式认可的  | 6    | 发卡机构或终端离线决策批准了该交易                                       | ○ ○ ○ ○      | 得到正式认可的         | 无（读卡时已播放成功提示音） |
+| 未批准      | 9    | 发卡机构拒绝了该交易                                              | ○ ○ ○ ○      | 未批准             | 可选提示音          |
+| 拒绝       | 255  | 一般拒绝                                                    | ○ ○ ○ ○      | 拒绝              | 可选提示音          |
+| 读取错误     | 39   | 读取卡片时发生错误                                               | ○ ○ ○ ○      | 读取错误 / 请重试      | 可选提示音          |
+| 条件不满足    | 38   | 未满足非接触式条件，例如风险管理要求使用接触式芯片时                              | ○ ○ ○ ○      | 请尝试使用其他卡        | 可选提示音          |
+| 非接触式冲突   | 5    | 同时检测到多张非接触式卡片                                           | ○ ○ ○ ○      | 仅出示一张卡          | 可选提示音          |
+| 超时/无卡    | 30   | 交易超时，未刷卡                                                | ○ ○ ○ ○      | 超时/无卡           | 可选提示音          |
+| 已终止      | 10   | 交易被终端或应用程序终止                                            | ○ ○ ○ ○      | 已终止             | 可选提示音          |
+| 需要输入 PIN | 11   | 卡片要求输入 PIN，而非接触方式无法完成此操作                                | ○ ○ ○ ○      | 请尝试使用其他卡        | 可选提示音          |
+| 查看电话     | 12   | 移动设备需要客户操作，例如在手机上解锁或批准                                  | ○ ○ ○ ○      | 查看电话            | 可选提示音          |
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="电源" href="/docs/integrate-pos-device/emv-core/uno-mini/uno-mini-power-supply" icon="link">
+    在连接设备之前，请了解电源要求和布线建议。
+  </Card>
+
+  <Card title="连接接口" href="/docs/integrate-pos-device/emv-core/uno-mini/uno-mini-connections" icon="link">
+    通过 USB 或 UART TTL 将 UNO-mini 连接到主机控制器。
+  </Card>
+</CardGroup>

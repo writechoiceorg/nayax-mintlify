@@ -1,0 +1,86 @@
+---
+title: 安全与身份验证
+metadata:
+  og:description: Nayax eCom SDK 采用一套强大的唯一安全密钥和哈希签名体系，对集成方进行身份验证，防止未经授权的访问。
+---
+
+Nayax eCom SDK 采用一套强大的唯一安全密钥和哈希签名体系，对集成方进行身份验证，防止未经授权的访问。每个集成方至少会收到两套密钥：
+
+- Secret Token：一个用于 `/validate-merchant` 方法的唯一预共享令牌（通常长度为 66 个字符）。应集成方的要求，Nayax 可提供额外的身份验证密钥，以区分不同的 Nayax 商户。
+- Sign Key：通过生成哈希值对请求进行签名。集成方会收到一个 Sign Key 和一个 Sign Key ID。
+
+本页面将指导您完成 eCom SDK 请求的安全身份验证。这包括使用共享的 `Sign Key` 对每个请求正文进行签名，并附加两个必需的请求头：`Signature` 和 `IntegratorId`。
+
+## 前提条件
+
+开始之前，请确保您拥有以下资源：
+
+- 有效的签名密钥（由 Nayax 共享，通常为 16 个字符）
+- 关联的签名密钥 ID
+
+## 验证请求
+
+获得所需资源后，您可以按照以下步骤开始对发往 eCom SDK 的请求进行身份验证：
+
+1. Prepare the JSON body with all the necessary fields (e.g., `actorId`, `Cipher`, etc.). Here’s a simplified example for the [`/validateMerchant`](/reference/ecom/management/validate-merchant-start-authentication) endpoint:
+
+   ```json
+   { 
+     "TokenId": 116383, 
+     "actorId ": "0434334921100366", 
+     "MachineId": 1, 
+     "Random": "123456789qwertyui", 
+     "Cipher": "X305dITNTAw2vHsxE+taVcn6UvgBC3fdI6QbqeABgHbo8CKsoZhqISJfslehCiA+L7XYrqvKFci7C6BNj/trzBuNJwBEjgBzKhhgpJ5ggnw=" 
+   } 
+   ```
+2. 使用您的 Sign Key ID 准备 `IntegratorId` 请求头。
+
+   ```json
+   {
+     IntegratorId:927
+   }
+   ```
+3. 序列化 JSON 请求内容，删除空格和换行符。请勿更改值或添加转义符，除非它们是实际负载的一部分。
+
+   ```json
+   {"TokenId":116383,"actorId":"0434334921100366","MachineId":1,"Random":"123 456789qwertyui","Cipher":"X305dITNTAw2vHsxE+taVcn6UvgBC3fdI6QbqeABgHbo8CKsoZh qISJfslehCiA+L7XYrqvKFci7C6BNj/trzBuNJwBEjgBzKhhgpJ5ggnw="}
+   ```
+4. 请按照以下步骤生成 `Signature` 头：
+   1. 将序列化的请求和签名密钥连接起来，用“;”分隔。
+      ```json
+      {"TokenId":116383,...,"Cipher":"..."};RbtdDsiVNjkAeRty
+      ```
+   2. 使用 SHA-256（UTF-8 编码）对结果进行哈希处理，并将输出结果用作您的 `Signature` 请求头：
+      ```json
+      536a5813206bcb663d98715d10a6b2612364245c865cdd5f781ff4428c4a6137
+      ```
+5. 将 `IntegratorId` 和 `Signature` 头添加到您的请求中。
+   ```json
+   curl -X POST https://api-sandbox.nayax.com/ecom/validate-merchant \
+   --header 'IntegratorId: 927' \
+   --header 'Signature: 536a5813206bcb663d98715d10a6b2612364245c865cdd5f781ff4428c4a6137' \
+   --header 'Content-Type: application/json' \
+   --data '{
+     "TokenId": 116383,	
+     "actorId": "0434334921100366",
+     "MachineId": 1,
+     "Random": "123456789qwertyui",
+     "Cipher": "X305dITNTAw2vHsxE+taVcn6UvgBC3fdI6QbqeABgHbo8CKsoZhqISJfslehCiA+L7XYrqvKFci7C6BNj/trzBuNJwBEjgBzKhhgpJ5ggnw="
+   }'
+   ```
+
+For this example, the [`/validateMerchant`](/docs/ecom-sdk/back-end-integration/request-samples/validate-merchant) method was used, but the process is relevant for any eCom SDK method request and response.
+
+<Warning>
+  UTF-8 编码
+
+  确保签名是从最小化的 JSON 和 UTF-8 哈希正确生成的。
+</Warning>
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="开始" href="/docs/ecom-sdk/get-started/ecom-sdk-get-started" />
+
+  <Card icon="link" title="分词" href="/docs/ecom-sdk/tokenization" />
+</Columns>

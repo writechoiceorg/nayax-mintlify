@@ -1,0 +1,76 @@
+---
+title: UI 主题自定义
+metadata:
+  og:description: eCOM SDK 支持对其移动端（iOS/Android）和 Web UI 组件进行全面自定义，使您能够统一结账体验。
+---
+
+eCOM SDK 支持对其移动端（iOS/Android）和 Web UI 组件进行全面自定义，使您能够使结账体验与您的品牌形象保持一致。
+
+<Warning>
+  Android 自定义
+
+  Android 目前的 UI 自定义选项有限。如需帮助，请联系 Nayax 集成工程师。
+</Warning>
+
+## iOS 自定义
+
+iOS SDK 允许您通过在初始化时传入样式配置对象来自定义支付组件的外观。
+
+您可以通过修改专用 Style 对象（例如 `DropInComponent.Style` 或 `FormComponentStyle`）中的嵌套属性来自定义 UI。这些对象为各种 UI 元素的颜色、排版和布局提供了精细的控制。
+
+| 元素类型 | 示例属性（Swift）                                                 | 描述                 |
+| :--- | :---------------------------------------------------------- | :----------------- |
+| 颜色   | `style.listComponent.sectionHeader.title.color`             | 更改标题、文本字段和按钮的颜色。   |
+| 排版   | `style.formComponent.textField.text.font`                   | 调整文本元素的字体大小、粗细和样式。 |
+| 按钮   | `style.formComponent.mainButtonItem.button.backgroundColor` | 设置主按钮的背景色和文本颜色。    |
+
+要将分区标题更改为红色，并将主按钮背景更改为黑色搭配白色文本：
+
+```swift
+var style = DropInComponent.Style()
+// Customize text colors
+style.listComponent.sectionHeader.title.color = .red 
+style.formComponent.textField.title.color = .red 
+// Customize button appearance
+style.formComponent.mainButtonItem.button.backgroundColor = .black
+style.formComponent.mainButtonItem.button.title.color = .white
+
+let configuration = DropInComponent.Configuration(style: style)
+// Initialize component with custom configuration
+let component = DropInComponent(paymentMethods: paymentMethods, context: context, configuration: configuration)
+```
+
+## Web 自定义
+
+对于 Web 集成，SDK 的样式主要由 CSS 自定义属性（CSS Variables）驱动，无需修改核心库代码即可轻松进行全局主题覆盖。
+
+该库定义了数百个以 `--adyen-sdk-` 为前缀的 CSS 变量，用于控制所有 Drop-in 和 Component 元素的颜色、间距、排版和边框。要应用自定义主题，请在您自己的 CSS 文件中覆盖这些变量。
+
+1. 创建一个 CSS 文件（例如 `override.css`），并为相关的 `--adyen-sdk-` 变量定义您所需的值，通常在 `:root` 级别定义以实现全局应用。
+   ```css
+   :root {
+       /* Changes the background color for selected payment method item */
+       --adyen-sdk-color-background-secondary: #f7f7f8; 
+       /* Changes the primary button background color */
+       --adyen-sdk-color-background-always-dark: #333333; 
+   }
+   ```
+2. 请确保您的自定义 CSS 文件在 SDK 的主样式表之后导入。
+   ```javascript
+   import { AdyenCheckout } from '@adyen/adyen-web';
+   import '@adyen/adyen-web/styles/adyen.css'; // Original SDK Styles
+   import './override.css'; // Your Custom Overrides (must be imported last)
+   ```
+
+下表列出了一些常用的修改变量。您几乎可以使用此方法覆盖任何视觉元素。
+
+| CSS 变量                                     | 默认值            | 主要作用范围/受影响元素              |
+| :----------------------------------------- | :------------- | :------------------------ |
+| `--adyen-sdk-color-background-always-dark` | `#00112c`(深蓝色) | 主按钮背景色（支付按钮）              |
+| `--adyen-sdk-color-label-on-color`         | `#ffffff`（白色）  | 显示在彩色背景上的文本颜色（例如支付按钮上的文本） |
+| `--adyen-sdk-color-outline-primary-active` | `#00112c`(深蓝色) | 输入字段的聚焦和激活状态边框/阴影颜色       |
+| `--adyen-sdk-color-background-secondary`   | `#f7f7f8`（浅灰色） | 所选支付方式项的背景                |
+| `--adyen-sdk-text-subtitle-font-size`      | `16px`         | 输入字段和分区标题的字体大小            |
+| `--adyen-sdk-border-radius-m`              | `8px`          | 组件和字段的通用边框圆角              |
+
+对于 iframe 内的元素（例如出于安全合规要求的卡号、CVC 和有效期字段），必须遵循特定的样式指南。有关详情，请参阅安全字段样式指南。

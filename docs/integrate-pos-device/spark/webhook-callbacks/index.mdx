@@ -1,41 +1,46 @@
 ---
 title: "Webhook Callbacks"
+keywords: ["callback", "callbacks", "webhook", "webhooks", "webhook callback", "TransactionCallback", "DeclineCallback", "StopCallback", "TimeoutCallback", "custom headers", "webhook security", "Spark notifications"]
 metadata:
   og:description: "Webhooks are a crucial part of the Spark API, as they serve as automatic callbacks that alert your system to important events without requiring."
 ---
 
-Webhooks are a crucial part of the Spark API, as they serve as automatic callbacks that alert your system to important events without requiring constant monitoring. For example, the `DeclineCallback` is triggered if a transaction fails after a successful `TriggerTransaction` request. This could happen if a consumer cancels the transaction on the device or if the terminal times out. Other webhooks, like `TimeoutCallback` and `StopCallback`, let you know when a session has timed out or when a card has been presented to stop a session, respectively.
+Webhooks are a crucial part of the Spark API, as they serve as automatic callbacks that alert your system to important events without requiring constant monitoring. For example, the `DeclineCallback` is triggered if a transaction fails after a successful `TriggerTransaction` request. This could happen if a consumer cancels the transaction on the device or if the terminal times out. Other webhooks, like `TimeoutCallback` and `StopCallback`, let you know when a session times out or when a consumer presents a card to stop a session, respectively.
 
 By using these callbacks, you can quickly handle failures and other events, ensuring your system's transaction state remains accurate without requiring constant polling.
 
 ## Available Webhooks
 
-<Columns cols={2}>
+<CardGroup cols={3}>
 <Card
-  icon="link"
+  icon="credit-card"
   title="TransactionCallback"
   href="/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback"
-  arrow
-/>
+>
+  Notifies you when a card tap completes an authorization attempt.
+</Card>
 <Card
-  icon="link"
+  icon="hand"
   title="StopCallback"
   href="/docs/integrate-pos-device/spark/webhook-callbacks/stopcallback"
-  arrow
-/>
+>
+  Notifies you when a consumer presents a card to stop an active session.
+</Card>
 <Card
-  icon="link"
+  icon="clock"
   title="TimeoutCallback"
   href="/docs/integrate-pos-device/spark/webhook-callbacks/timeoutcallback"
-  arrow
-/>
+>
+  Notifies you when a payment session times out before completing.
+</Card>
 <Card
-  icon="link"
+  icon="circle-xmark"
   title="DeclineCallback"
   href="/docs/integrate-pos-device/spark/webhook-callbacks/declinecallback"
-  arrow
-/>
-</Columns>
+>
+  Notifies you when a transaction fails after authorization begins.
+</Card>
+</CardGroup>
 
 ### Enable Custom Headers (Optional)
 

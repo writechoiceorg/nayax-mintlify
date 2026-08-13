@@ -1,0 +1,32 @@
+---
+title: Android SDK 安装
+metadata:
+  og:description: 将 EMV Core SDK 集成到 Android 环境中，可以在自助服务终端或 POS 应用中进行预认证的 EMV 支付处理。
+---
+
+将 EMV Core SDK 集成到 Android 环境中，可以在自助服务终端或 POS 应用中进行预认证的 EMV 支付处理。
+
+### 系统要求和 SDK 文件
+
+开始之前，请确保主机硬件满足以下条件：
+
+- **Android 操作系统**：版本 7 或更高版本。
+- **网络**：稳定的互联网通信，使用 TLS v1.2 或更高版本。
+- 权限:应用程序必须具有读取 `/sys/class` 的权限。
+- SDK 软件包组件:
+  1. `com.nayax.emvCore-release-v.v-bbb.apk`:必需的 EMV Core 服务软件包。
+  2. `com.nayax.emv_core_android_test-release-v.v-bbb.apk`:用于测试的示例应用程序。
+  3. `emv-core-test-v.v-bbb.zip`:包含库和 Java 示例源代码的 Android Studio 项目。
+
+### 安装步骤
+
+1. **部署 APK** ：在目标 Android 设备上安装 EMV Core Service 包，然后安装测试应用程序。
+2. **硬件连接**：将 UNO 阅读器连接到 Android 设备。
+3. 系统提示:
+   - 当系统提示“Allow EmvCore Service to access Saturn 8700”时,请勾选“Always open...”复选框并点击 OK,将读卡器加入白名单。
+   - 在“停止优化电池使用”提示中选择 **“允许”** ，以保持该服务在后台运行。
+4. **重新启动**：如果阅读器和应用程序之间出现通信问题，请重新启动服务。
+
+### 确认
+
+应用程序运行且读卡器连接成功后，测试应用程序屏幕顶部的状态栏应显示 **“就绪”** 。然后，您可以导航至 **“维护”** 页面并按 **“获取数据”** 以检索软件版本和硬件状态。

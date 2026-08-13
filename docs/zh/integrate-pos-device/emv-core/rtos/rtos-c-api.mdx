@@ -1,0 +1,310 @@
+---
+title: C API 参考
+mode: wide
+metadata:
+  og:description: EMV Core RTOS SDK 的完整 C API 参考，包括初始化、设备状态、交易操作、回调和数据类型。
+---
+
+## 概述
+
+EMV核心为POS应用程序提供两个API层：
+
+1. 在 `libecodsdk` 中实现的 C 函数。请参阅 SDK 中的 `ecod_sdk.h` 和 `ecod_sdk_types.h`。
+2. 通过串口或USB接口，使用Datalink封装器**发送JSON-RPC消息**。请参阅[JSON-RPC API](/docs/integrate-pos-device/emv-core/rtos/rtos-json-rpc-api) 。
+
+POS 应用程序管理用户界面，使用 EMV Core 的读卡器状态事件来保持显示与当前支付状态（空闲、正在授权、已拒绝、已批准等）同步。
+
+## 支持的功能
+
+该SDK支持以下支付和设备管理操作：
+
+- 信用卡/借记卡/预付卡销售：
+  - EMV非接触式（仅限非CVM）
+  - 两步交易（授权→确认）
+  - 封闭式（预付）卡
+  - 同步（单会话）流和异步（多会话）流
+- 取消并作废交易：
+  - `CancelTransaction` 会在卡片被捕获之前取消正在进行的轮询。
+  - `VoidTransaction` 会撤销已经获批准的交易。
+- **用户界面（UI）：**由 POS 应用程序使用读卡器状态事件进行管理。
+- **终端管理：**固件和配置更新、状态和版本查询、设备 ID。
+- **网络 API：**主机必须实现网络 API 才能启用 EMV Core 与 Nayax 服务器的通信。
+
+## API 参考
+
+### 初始化和生命周期
+
+### 获取 SDK 版本字符串
+
+返回 SDK 版本，以空字符结尾的字符串形式表示：
+
+```c
+const char* EcodSdk_GetSdkVersion(void);
+```
+
+### 初始化 SDK
+
+启动时调用一次：
+
+```c
+bool EcodSdk_Init(void);
+```
+
+### 维护循环
+
+从专用线程持续调用：
+
+```c
+void EcodSdk_Maintain(void);
+```
+
+### 处理 JSON-RPC 消息
+
+当 `EC_USE_DATALINK_PROTOCOL=1` 时，从第二个线程调用：
+
+```c
+int EcodSdk_ProcessMessages(uint32_t timeout_ms);
+```
+
+启用 `EC_USE_DATALINK_PROTOCOL` 后，需要第二个线程来处理 JSON-RPC 消息。调用 `EcodSdk_Maintain()` 处理数据链路操作，调用 `EcodSdk_ProcessMessages()` 处理消息。
+
+### 设置日志详细程度
+
+调用此函数控制 SDK 日志输出的详细程度：
+
+```c
+EC_RET EcodSdk_SetLogLevel(EC_LOG_LEVEL max_level);
+```
+
+---
+
+### 设备状态
+
+### 获取当前设备状态
+
+调用查询当前设备状态：
+
+```c
+EC_RET EcodSdk_GetStatus(EC_STATUS* out_status);
+```
+
+### 获取设备标识（序列号）和版本
+
+调用此函数以获取设备序列号和固件版本字符串：
+
+```c
+EC_RET EcodSdk_GetKioskId(char* out_id, int max_out_size);
+EC_RET EcodSdk_GetEmvCoreVersion(char* out_version, int max_out_size);
+EC_RET EcodSdk_GetReaderVersion(char* out_version, int max_out_size);
+```
+
+### 读取配置属性
+
+返回当前配置文件中指定键的值：
+
+```c
+EC_RET EcodSdk_GetAttribute(char* attribute_name, char* out_value, int max_out_size);
+```
+
+---
+
+### 交易操作
+
+### 开始预授权
+
+预留相应金额；稍后需确认或作废：
+
+```c
+EC_RET EcodSdk_PreAuthorize(emvCorePaymentParameters* params);
+```
+
+### 免费申请卡令牌
+
+启动刷卡查询但不发起支付：
+
+```c
+EC_RET EcodSdk_GetCardToken(emvCorePaymentParameters* params);
+```
+
+### 确认预授权交易
+
+产品或服务交付后请致电：
+
+```c
+EC_RET EcodSdk_ConfirmTransaction(uint32_t amount_cents, uint32_t product_id,
+                                   char* transaction_reference);
+```
+
+### 取消预授权交易
+
+致电解除预授权冻结，无需实际扣款：
+
+```c
+EC_RET EcodSdk_VoidTransaction(char* transaction_reference);
+```
+
+### 取消正在进行的付款流程
+
+在授权完成之前，调用命令停止正在进行的卡片轮询：
+
+```c
+EC_RET EcodSdk_CancelTransaction(void);
+```
+
+---
+
+### 网络通知
+
+这些函数由平台层调用，用于通知 SDK 网络事件：
+
+### 通知 EmvCore 套接字数据已到达
+
+当套接字上存在数据时，从平台层调用：
+
+```c
+EC_RET EcodSdk_NotifySocketDataReceived(int socket_id, int available_bytes);
+```
+
+### 通知 EmvCore 套接字已关闭
+
+当套接字连接关闭时，从平台层调用：
+
+```c
+EC_RET EcodSdk_NotifySocketClosed(int socket_id);
+```
+
+### 通知 EmvCore 网络连接变更
+
+当网络可用或不可用时，从平台层调用：
+
+```c
+EC_RET EcodSdk_NotifyNetworkStatusChanged(bool available);
+```
+
+---
+
+### 回调注册
+
+### 交易完成情况（成功、失败、错误、取消、超时）
+
+注册一个处理程序以接收每次 `PreAuthorize` 调用的结果：
+
+```c
+void EcodSdk_Register_TransactionComplete_Callback(TransactionCompleteCb_t cb);
+```
+
+### 读者显示事件（客户提示）
+
+注册一个处理程序以接收阅读器上显示的当前消息：
+
+```c
+void EcodSdk_Register_ReaderEvent_Callback(RdrEventCb_t cb);
+```
+
+---
+
+## 关键数据类型
+
+### 支付参数
+
+将此结构体传递给 `EcodSdk_PreAuthorize` 和 `EcodSdk_GetCardToken`：
+
+```c
+typedef struct {
+    uint32_t amount_cents;           // Amount in cents (1500 = $15.00)
+    uint32_t product_id;             // Product identifier
+    unsigned int timeout_sec;        // Timeout for card presentation
+    bool continuous;                 // Wait continuously until cancelled
+    char* additional_receipt_data;   // Optional JSON string (can be NULL)
+    bool is_deferred;                // Deferred authorization (charge later) — RFU
+    bool is_final_amount;            // Amount won't change (no incremental auth)
+} emvCorePaymentParameters;
+```
+
+### 交易响应
+
+此结构体会传递给 `TransactionComplete` 回调：
+
+```c
+typedef struct {
+    emvCoreTransStatus status;          // OK, Declined, Error, Timeout, Cancelled, etc.
+    int error_code;                     // Error code if status is Error
+    char error_message[100];            // Human-readable error
+    double amount_requested;            // Amount that was requested
+    double amount_authorized;           // Amount actually authorized
+    char transaction_reference[128];    // Use for confirm/void/incremental
+    char partial_PAN[20];               // Masked card number (****1234)
+    char card_type[32];                 // VISA, MASTERCARD, etc.
+    char card_id[64];                   // Unique card identifier
+    char card_token[128];               // Tokenized card data
+    char authorization_code[128];       // Auth code from processor
+    char rrn[128];                      // Retrieval reference number
+    bool is_transaction_approved;       // True if approved
+    // ... additional fields for receipt, balance, Nayax info
+} emvCorePaymentResponse;
+```
+
+### 状态码
+
+设备状态（来自 `EcodSdk_GetStatus`）：
+
+```c
+typedef enum {
+    EC_READY,           // Ready for transactions
+    EC_TRANSACTION,     // Transaction in progress
+    EC_UNCONFIRMED,     // Pending transaction needs confirm/void
+    EC_UPDATE,          // Device updating
+    EC_NOT_READY,       // Initializing
+    EC_NO_EMVCORE,      // Cannot communicate with device
+    EC_NO_READER,       // Reader not connected
+    EC_NO_TERMINAL_ID,  // Terminal ID not configured
+    EC_DISABLED,        // Device disabled
+    EC_ERROR            // Error state
+} EC_STATUS;
+```
+
+API 返回代码：
+
+```c
+typedef enum {
+    EC_RET_OK,              // Success
+    EC_RET_GENERAL_ERROR,   // General error
+    EC_RET_MEMORY_ERROR,    // Memory allocation failed
+    EC_RET_PARSING_ERROR,   // Response parsing failed
+    EC_RET_COMM_ERROR,      // Communication error
+    EC_RET_NEGATIVE_RESP    // Device returned error
+} EC_RET;
+```
+
+交易状态：
+
+```c
+typedef enum {
+    emvCoreTransStatus_OK,           // Success
+    emvCoreTransStatus_Declined,     // Declined by processor
+    emvCoreTransStatus_Error,        // Error occurred
+    emvCoreTransStatus_Timeout,      // Card presentation timeout
+    emvCoreTransStatus_Cancelled,    // Cancelled by application
+    emvCoreTransStatus_Voided,       // Transaction voided
+    emvCoreTransStatus_LocalCLP      // Local closed-loop payment
+} emvCoreTransStatus;
+```
+
+## 金额字段详情
+
+金额字段根据 API 方法的不同使用不同的单位：
+
+- **C API:** `amount_cents` in `emvCorePaymentParameters` and the amount argument in `EcodSdk_ConfirmTransaction` are always in **cents** (e.g., 450 = $4.50).
+- JSON-RPC `PreAuthorize`：amount 以主单位表示（例如 4.50 = 4.50 美元）。
+- JSON-RPC `ConfirmTransaction`：amount 以美分表示（例如 450 = 4.50 美元）。
+- The `amount` fields in the `TransactionComplete` event are returned in **major units** (e.g., 4.50 USD) as received from the PSP.
+- `fee` 参数已弃用，请将其设为 `0`。它将在下一版本的 SDK 中移除。
+
+## 货币代码管理
+
+SDK会按优先级顺序从多个来源解析货币代码：
+
+- 自 SDK v1.0 起，货币代码取自 EMV Core 配置中的 `CURRENCY_CODE` 属性。
+- If `CURRENCY_CODE` is missing from the configuration, the `currency` parameter sent by the host in `PreAuthorize` is used (backward compatibility).
+- 如果两者都未提供，则使用 E​​MV Core 软件默认值（840 美元），并向 Nayax Core 服务器发送警报。
+- 当设备由 Nayax Core 管理时，货币代码会自动从机器设置中获取。

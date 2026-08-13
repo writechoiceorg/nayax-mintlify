@@ -1,0 +1,194 @@
+---
+title: Web SDK
+metadata:
+  og:description: Nayax 提供了 eCom SDK 的 Web 版本。本指南将向您展示如何将其集成到您的应用程序中。您将学习如何安装。
+---
+
+Nayax 提供了 eCom SDK 的 Web 版本。本指南将向您展示如何将其集成到您的应用程序中。您将学习如何安装、初始化并准备该 SDK，以便创建支付。
+
+## 前提条件
+
+为确保兼容性和最佳性能，您的 Web 项目必须满足以下最低要求：
+
+- 需要支持 ES2017+ JavaScript。
+- TypeScript：4.5+（可选，但推荐使用以获得类型安全性和更好的 IDE 支持）。
+
+该 SDK 需要支持以下功能的浏览器：
+
+- ES2017 特性（async/await、Object.entries、Object.values 等）。
+- DOM 和 Web API（localStorage、fetch）。
+- 捆绑的依赖项使用了现代 JavaScript 特性。
+
+该 SDK 支持多种模块格式：
+
+- ES Modules（ESM）：适用于现代打包工具（Webpack、Vite、Rollup）
+- CommonJS（CJS）：适用于 Node.js 和较旧的打包工具
+- UMD: For direct browser usage via `<script>` tag
+
+## 集成 eCom SDK
+
+集成 eCom Web SDK 包含三个步骤：
+
+1. 安装 SDK
+2. 初始化 SDK
+3. 添加配置类
+
+以下各部分详细描述了每个步骤。
+
+### 步骤 1：安装 SDK
+
+NayaxEcomSDK 托管在 Nayax 的私有 GitLab 软件包注册表中。您需要在安装前配置访问权限。
+
+1. Nayax eCom 团队将为您提供一个只读访问令牌。在您的项目根目录下创建或更新 `.npmrc` 文件：
+
+```shell Shell
+@nayax:registry=https://gitlab.nayax-sdk.nayax.com/api/v4/projects/9/packages/npm/ 
+//gitlab.nayax-sdk.nayax.com/api/v4/projects/9/packages/npm/:_authToken=YOUR-PROVIDED-TOKEN
+```
+
+<Warning>
+  重要提示
+
+  请勿将包含访问令牌的 `.npmrc` 文件提交到您的源代码控制系统中。请将其添加到 `.gitignore` 文件中。
+</Warning>
+
+2. 要安装该 SDK，请使用以下命令：
+
+<CodeGroup>
+  ```shell npm
+  npm install @nayax/ecom-sdk
+  ```
+
+  ```shell Yarn
+  yarn add @nayax/ecom-sdk
+  ```
+
+  ```powershell pnpm
+  pnpm add @nayax/ecom-sdk
+  ```
+</CodeGroup>
+
+<Note>
+  对于 UMD 构建版本或其他分发方式，请联系 Nayax Ecom 团队。
+</Note>
+
+### 第 2 步:初始化 SDK
+
+要使用 eCom Web SDK，您需要初始化 SDK 实例：
+
+1. 该 Web SDK 采用基于构造函数的模式（非单例）。使用您的配置创建一个新实例：
+
+```typescript
+import { NayaxEcomSDK, NayaxEcomConfig } from '@nayax/ecom-sdk';
+
+// Configure the SDK
+const config: NayaxEcomConfig = {
+	environment: string,
+	signId: integer,
+	signKey: string,
+	securityTokenId: integer,
+	securityTokenValue: string,
+	enableLog: boolean
+};
+
+// Create SDK instance
+const ecomSDK = new NayaxEcomSDK(config);
+```
+
+```javascript
+const { NayaxEcomSDK } = require('@nayax/ecom-sdk');
+
+// Configure the SDK
+	const config = {
+	environment: string,
+	signId: integer,
+	signKey: string,
+	securityTokenId: integer,
+	securityTokenValue: string,
+	enableLog: boolean
+1};
+
+// Create SDK instance
+const ecomSDK = new NayaxEcomSDK(config);
+```
+
+<Note>
+  `signId`、`signKey`、`securityTokenId` 和 `securityTokenValue` 的值将由 Nayax eCom 团队提供。请确保安全地处理这些值。
+</Note>
+
+3. `NayaxEcomConfig` 接口封装了 SDK 配置所需的基本属性：
+
+```javascript
+interface NayaxEcomConfig {
+  /** The environment to be used by the SDK */
+  environment: NayaxEcomEnvironment;
+
+  /** The ID used for signing requests */
+  signId: number;
+
+  /** The key used for signing requests */
+  signKey: string;
+
+  /** The security token ID for merchant validation */
+  securityTokenId: number;
+
+  /** The security token value for merchant validation */
+  securityTokenValue: string;
+
+  /** Flag to enable or disable console logging */
+  enableLog: boolean;
+}
+```
+
+### 步骤 3：配置 SDK
+
+要配置 eCom Web SDK，请按照以下步骤操作：
+
+1. 导入 SDK（ES 模块）：
+
+```typescript
+import { NayaxEcomSDK, NayaxEcomConfig, PaymentData } from '@nayax/ecom-sdk';
+```
+
+2. 导入 SDK（CommonJS）
+
+```javascript
+const { NayaxEcomSDK } = require('@nayax/ecom-sdk');
+```
+
+<Note>
+  该 SDK 会自动包含所有必需的 CSS 样式（包括 Drop-in 样式），这些样式已捆绑在 JavaScript 中。无需单独导入 CSS。
+</Note>
+
+## 环境配置
+
+该 SDK 支持四种环境：
+
+| 环境           | 描述      | 使用场景        |
+| :----------- | :------ | :---------- |
+| `develop`    | 开发环境。   | 内部开发和测试。    |
+| `qa`         | 质量保证环境。 | QA 测试和集成测试。 |
+| `stable`     | 预发布环境。  | 生产前测试。      |
+| `production` | 生产环境。   | 真实交易。       |
+
+不同环境的示例：
+
+```typescript
+const devConfig: NayaxEcomConfig = {
+  environment: 'develop',
+  signId: 123,
+  signKey: 'dev-sign-key',
+  securityTokenId: 456,
+  securityTokenValue: 'dev-token-value',
+  enableLog: true, // Enable logging in development
+};
+
+const prodConfig: NayaxEcomConfig = {
+  environment: 'production',
+  signId: 789,
+  signKey: 'prod-sign-key',
+  securityTokenId: 012,
+  securityTokenValue: 'prod-token-value',
+  enableLog: false, // Disable logging in production
+};
+```

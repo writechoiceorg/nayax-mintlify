@@ -1,0 +1,72 @@
+---
+title: 中止交易
+metadata:
+  og:description: abortTransaction 方法可在交易被记录到数据库之前取消正在进行的交易，即在 doTransaction 响应
+---
+
+`abortTransaction` 方法可在交易被记录到数据库之前取消正在进行的交易，即在收到 doTransaction 响应之前（= 在消费者刷卡/插卡之前，或在交易超时发生之前）。这可确保尚未完成但正在进行中的交易能够被安全终止，而不会影响商户的记录。
+
+当用户发起交易但在完成前取消，或在处理过程中检测到需要停止交易的问题时，此方法非常有用。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“集成”部分](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started)。
+</Note>
+
+请在请求中确保配置以下内容：
+
+- `method` 字段必须设置为 `abortTransaction`。
+- The service must be set to `ashrait` in the `params`.
+
+请求包含一个参数列表，第一个参数为服务名称，目前固定为 `ashrait`，第二个参数为包含所有其他交易特定详情的字典。
+
+```json
+{
+    "jsonrpc":"2.0",
+    "method":"abortTransaction",
+    "params":[
+        "ashrait",
+        {
+           "vuid":"cb740169-7758-4f55-b685-b90652b9aba6"
+        }
+    ],
+    "id":"123454352"
+}
+```
+
+### 请求参数
+
+下表描述了此方法的请求参数。
+
+| 姓名     | 类型     | 描述              |
+| ------ | ------ | --------------- |
+| `vuid` | string | 供应商（客户）唯一交易标识符。 |
+
+## 回复
+
+成功的请求将返回以下响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "ok"
+    },
+    "id": "123454352"
+}
+```
+
+### 响应参数
+
+下表描述了该方法的响应参数。
+
+| 姓名                     | 类型     | 描述             |
+| ---------------------- | ------ | -------------- |
+| `statusCode`           | 整数     | 操作状态（`0` = 成功） |
+| `statusMessage`        | string | 操作消息（例如 `ok`）  |
+
+<br />

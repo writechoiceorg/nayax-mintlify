@@ -1,0 +1,263 @@
+---
+title: 一般的
+keywords:
+  - marshall
+  - marshal
+  - Marshall FAQ
+  - product map
+  - gtrace
+  - last alerts
+  - static ip
+  - cable SKU
+  - firmware version update
+  - MDB RX Timeout
+  - RFID cards
+  - magstripe cards
+metadata:
+  og:description: '## 支持的专有卡 Nayax 支持刷卡（磁条）和 RFID 卡。支持的 RFID 工作频率为 13.56 MHz：Nayax。'
+---
+
+## 支持的专用卡
+
+Nayax 同时支持磁条卡和 RFID 卡。
+
+这支持RFID Nayax读卡器的工作频率为13.56 MHz **，支持ISO 14443 A型和B型卡（例如MiFare Classic和MiFare Plus）以及ISO 15693卡（例如HID iClass）** 。Nayax读卡器支持的最常用、最简单的RFID卡是MiFare Classic 1K（或4K）。
+
+磁条卡也受支持——前提是它们符合非信用卡标准，即卡片数据中**不**包含任何“=”符号，且UID在4-40范围内。如果它们具备上述任何特征，则有可能支持这些特征，但这可能需要额外的集成（[例如Cortina Prepaid](/docs/cortina/prepaid-card/prepaid-card-flows#/) ）。
+
+## Vend被拒——为什么Nayax没有向外围设备提供理由
+
+由于该设备无人值守，我们不希望因银行卡被冻结等情况而让消费者感到尴尬。
+
+## 如何找到与物理连接匹配的虚拟 COM 端口
+
+转到“设备管理器”->“端口”：
+
+<Frame>
+  <img src="/images/docs/faq-general/image1.png" />
+</Frame>
+
+## Marshall over ETH：使用同一根线缆同时进行 Marshall 通信以及设备与 Nayax 服务器之间的通信
+
+支持的配置是通过以太网与（Marshall）外围设备和 Nayax 服务器进行通信。路由器的作用是在与外围设备并行的同时提供对外部网络的访问。目前不支持设备通过以太网与外围设备通信、通过 eSIM 与服务器通信的方式，因为这种设置在技术上对 Android 而言不太自然。
+
+## 启用警报
+
+要能够在 Nayax Core 中查看 SDK 发送的警报，您应该进行以下配置（即使您的设备不是电动汽车充电器）。
+
+<Frame>
+  <img src="/images/docs/faq-general/image2.png" />
+</Frame>
+
+此外，您不能自行创建警报 ID，而应该使用数据库中已存在的 ID（该 ID 可以配置）。例如，您可以使用 ID 号 2，它代表“门事件”（您可以根据需要更改事件数据）：
+
+• 警报 ID 为 200 或 810 时不会产生任何效果。最佳实践是使用警报 ID 2。
+
+<CodeGroup>
+  ```java Java
+  m_vmc.general.alert((short) 2, "Back door opened");
+  ```
+
+  ```csharp C#
+  vmc_instance.general.alert(2, "alert test");
+  ```
+
+  ```c C
+  uint8_t alert_str[32];
+  sprintf((char*)&alert_str,"Back door opened");
+  vmc_general_alert((short)2, (char*)&alert_str, strlen((char*)&alert_str));
+  ```
+</CodeGroup>
+
+## 产品地图
+
+此功能允许您通过 Nayax Core 管理外围设备的产品。此功能与 Marshall 无关，因为 Marshall 不使用产品映射。唯一的关联是，如果您查看“最近销售/动态交易监控”，您会在交易详情中看到产品名称，该名称会出现在外围设备发送的产品代码对应的产品映射中。
+
+如果管理商品映射 (Product Map) 与您相关，我们的支持团队已提供 Nayax U 的相关链接，其中包含相关指南：设置商品映射 (Product Map)：
+[https://nayax-u.nayax.com/scenario/how-to-create-a-product-map-template-administration-2349](https://nayax-u.nayax.com/scenario/how-to-create-a-product-map-template-administration-2349) 在商品映射 (Product Map) 中设置商品：[https://nayax-u.nayax.com/scenario/how-to-create-a-product-administration-937](https://nayax-u.nayax.com/scenario/how-to-create-a-product-administration-937)
+
+### 例子：
+
+外围设备已发送产品代码为 1、价格为 10.00 的“销售请求”。产品映射表中有一行关于产品代码为 1 的记录，名称为“Apple”，成本为 20.00。消费者实际支付的价格为 10.00。在“最近销售/动态交易监控”中，您可以看到该交易针对产品代码为 1 的产品，并且在产品代码旁边会显示“Apple”。
+
+<br />
+
+## 如何让电子收据上的产品名称不显示为“未知”？
+
+产品名称取自我们的产品地图，因此您可以在其中创建产品并命名（以匹配您通过 SDK 发送的产品代码）。请注意，Marshall 不会使用产品地图中的任何信息，因此您可以随意填写任何内容。这不会影响交易流程，包括价格（唯一与您相关的字段是产品代码名称，它会显示在“上次销售”和电子收据文件中）。
+
+您可以通过转到“产品地图”选项卡，点击“地图”->“添加 BIN”，然后添加产品代码和产品组、PA 代码和 MDB 代码（此代码应与 SDK 中的产品代码匹配），最后点击“保存”，将新产品添加到设备的产品地图中。
+
+## 静态IP
+
+需要为机器定义一个静态 IP 地址，因为当信息返回时，它会遇到防火墙，导致数据不知道该路由到哪里。
+
+## 退款申请
+
+退款是指交易完成结算后，消费者出于某种原因想要退款。Marshall 系统没有退款功能，因为它与客户机器和我们设备之间的通信无关，而是与支付环节有关。如果您无法提供商品，您可以取消交易或不向消费者收费。如果商品发放出现问题，您应该回复“销售失败”而不是“销售成功”。
+
+如果交易已成功完成（消费者已被扣款），而您想要申请退款，可以通过 Nayax Core 进行操作：前往“动态交易监控”页面，选择相关交易并右键单击，选择“申请退款”并确认。Nayax 团队将审核您的申请，审核通过后，您应该会在 1-2 天内收到退款。
+
+## 计量单位值
+
+| 计量单位 | 计量单位名称 | 计量单位符号 |
+| :--- | :----- | :----- |
+| `1`  | 单位     | U      |
+| `2`  | 厘米     | 厘米     |
+| `3`  | 克      | G      |
+| `4`  | 第二     | S      |
+| `5`  | 摄氏度    | °C     |
+| `6`  | 毫升     | 毫升     |
+| `7`  | 瓦时     | 什么     |
+| `8`  | 千瓦时    | 千瓦时    |
+
+## Gtrace检索
+
+Gtrace 是一种日志，提供有关设备行为的一般信息，与设备和您的机器之间的通信无关。它不会显示在 SDK 的命令和日志中，而是显示在 Gtrace 中——这是另一种类型的日志文件，但它是由 Nayax 的读卡器生成并发送到 Nayax Core 的。如果这与您相关，您可以通过以下方式获取 Gtrace（请注意，要获取它，您可以想象，您的设备必须处于开机状态）：
+
+选择好所需的机器后，您应该选择“操作”->“请求 Gtrace”：
+
+<Frame>
+  <img src="/images/docs/faq-general/image3.png" />
+</Frame>
+
+发送请求后，您会在“Dex”选项卡下的表格中看到新增一行或多行，其中包含 GtraceV2 的 Dex 来源：
+
+<Frame>
+  <img src="/images/docs/faq-general/image4.png" />
+</Frame>
+
+点击所需的日志（表格中的特定行）和“查看已解析”按钮后，即可查看整个日志。
+
+<Note>
+  **重要提示：**设备必须处于在线状态才能收集 Gtrace 数据。
+</Note>
+
+## 最新警报检索
+
+“最新警报”日志显示在 Nayax Core 中您相关设备虚拟机的目录下。该日志提供有关设备与我们的服务器之间发送的警报信息。要查看此日志，请转到相应的虚拟机，然后单击“信息”->“最新警报”。
+
+<Frame>
+  <img src="/images/docs/faq-general/image5.png" />
+</Frame>
+
+## 线缆 SKU
+
+C130011- 常规 Marshall 线缆 - VPOST/Onyx
+
+C150001- Onyx Marshall 线缆（带以太网接口）
+
+C140001- VPOST ETH 适配器（RJ11 公头转 RJ45 母头）
+
+NX-CB0135- VPOS Media 4S Marshall 电缆
+
+NX-CB0138-VPOS Media 5 马歇尔电缆
+
+NX-CB0156- VPOS Media 4S 以太网适配器（USB-C 转 RJ45 母口）
+
+## 固件版本更新过程
+
+### VPOST/Onyx：
+
+固件更新由 Nayax Core 发起。固件更新由两部分组成——MAIN 更新和 POS 更新。
+对于 MAIN 更新，您会在屏幕顶部看到“gloader”字样，旁边附有百分比。完成后，设备会自行重置并开始下载和更新 POS。在设备重置之前请不要触碰它，因为在 POS 被擦除和更新期间，设备屏幕也会显示为黑屏。完成后，VPOST 会启动电源并进入空闲模式。整个过程通常需要 30-60 分钟（如果使用 ETH 可能需要更长时间），请注意这一点。
+
+### VPOSM 4S：
+
+与 VPOST 和 Onyx 类似，固件更新由 Nayax Core 发起，但与这些设备不同的是，它仅由一个部件组成。
+
+下载过程在后台运行，因此用户可以在下载期间继续使用设备。下载完成后，设备将自动开始安装，并显示相应的安装界面，显示当前的安装进度。
+
+### VPOSM5
+
+与 VPOST/Onyx/VPOSM 4S 不同，固件更新是从一个名为 CasHub 的独立站点发起的。固件更新过程是通过手动更新每个相关应用程序完成的（而不是作为一个整体包）。每个应用程序的固件更新由两个独立部分组成：下载和更新——这意味着一旦下载过程完成，您当地的支持人员需要向设备发送请求，以启动所需应用程序的更新过程。
+
+<br />
+
+## 等待收购方批准交易的超时时间
+
+“正在授权，请稍候”的提示会一直显示，直到收到收单机构的响应或超时为止。通常情况下，如果 VPOST 可以与我们的服务器通信（我们的服务器接收收单机构的响应没有问题），发送授权请求并收到响应的整个过程只需几秒钟，通常不超过 5 秒。但是，如果 VPOST 和我们的服务器之间存在任何通信问题（GSM/VPN/MQTT/ETH），请求到达我们的服务器或从我们的服务器收到响应都需要一些时间。我已经就超时问题咨询过技术支持，他们告诉我可以通过“MDB RX Timeout”参数进行配置，默认值为 60 秒。
+
+<Frame>
+  <img src="/images/docs/faq-general/image6.png" />
+</Frame>
+
+## “技巧”在于：在一个地点开始交易，在另一个地点完成交易。
+
+为了便于解释，我以购物车租赁为例：
+
+1. 在第一个地点，使用 Nayax 的设备发起交易（从那里取购物车）。
+2. 让消费者使用购物车
+3. 让消费者将购物车放回他想要的任何轨道（不一定是第一个位置，比如第二个位置）。此时，Nayax 在第二个位置的设备会识别出购物车，并将其 ID 发送到主服务器。主服务器会将购物车 ID 与发起交易的 Nayax 设备进行匹配，并在该服务器上完成交易。但正如您所理解的，在这种情况下，您需要进行服务器管理。
+
+两个要求：
+
+1. 用于管理在哪些位置打开的会话的服务器
+2. 区分不同卡片的方法
+3. 每条轨道一次最多可容纳 60 辆手推车可供出租（如果超过 60 辆，消费者将无法租用）。
+
+## SDK（品牌选择屏幕）中显示的动态二维码通道 URL
+
+要让品牌选择界面在启动时显示，设备必须配置为“始终空闲”（因为常规预选会在选择产品后显示动画，无法显示品牌）。选择产品后，品牌/渠道和二维码会出现在 VPOST 屏幕上，也会出现在 SDK 日志中。该字符串以十六进制显示，因此需要将其转换为 ASCII 才能获取 URL。例如： [https](https://www.rapidtables.com/convert/number/hex-to-ascii.html)://www\.rapidtables.com/convert/number/hex-to-ascii.html
+
+<Frame>
+  <img src="/images/docs/faq-general/image7.png" />
+</Frame>
+
+## CPU 要求
+
+所有SDK均无特殊要求。Java**和C# SDK：**
+
+该SDK对CPU和内存的要求极低，只要您的机器能够运行JVM，就能运行该SDK。我们的SDK开发人员估计其内存占用约为50KB RAM，CPU占用几乎为零。（这是基于100行代码，每5毫秒执行一次，并且在接收到串行数据时，每个数据包的执行时间也相差无几。）
+
+**C SDK：**我们的 SDK 开发人员估计其内存占用约为 1KB RAM，每 5 毫秒定时器滴答一次，大约执行 100 行代码（实际机器代码取决于编译器和平台）。他在一块配备 2KB RAM 和 8MHz 控制器的 Atmel AVR 上运行了该 SDK，并且还有充足的内存可供实际应用程序使用。
+
+<br />
+
+## 将现有实现的 SDK 更新到更新的 SDK 版本
+
+Java：
+
+您需要替换 .JAR 文件（位于 SDK 目录下的“libs”文件夹中）。
+
+<Frame>
+  <img src="/images/docs/faq-general/image8.png" />
+</Frame>
+
+C#：
+
+你需要替换 .DLL 文件（位于 SDK 目录中）。
+
+<Frame>
+  <img src="/images/docs/faq-general/image9.png" />
+</Frame>
+
+丙：
+
+您需要用新的 SDK 覆盖之前的 SDK，然后重新编译您的实现。
+
+## 安卓
+
+如果您使用的是 Android 系统，则无需使用串口号。如果您的开发板带有串口，则可以使用 Java SDK 的底层代码。大多数 Android 开发板没有板载串口，在这种情况下，您需要使用我们提供的 Android 底层文件。他们应该直接使用 Java SDK，只需稍作修改，将底层串口号更改为 Android 平台对应的串口号（因为您使用的是 Android 平台），修改代码请参考示例“nayax-android-marshall-demo\_0\_1\_6\_02”。
+
+SDK 中与串口相关的部分是：
+
+<Frame>
+  <img src="/images/docs/faq-general/image10.png" />
+</Frame>
+
+• 注意：在使用 Android 底层串口时，您将无法直接操作演示应用程序，但您可以将其作为了解如何发起交易的参考。
+
+<br />
+
+至于在 Android 系统中使用时，您应该向日志记录器提供一个 BufferedWriter 类型的对象。他发送了以下写入 SD 卡的示例：
+
+<Frame>
+  <img src="/images/docs/faq-general/image11.png" />
+</Frame>
+
+### 如果 UART 位于 /dev/tty：
+
+Android 无法访问“/dev/tty....”，这意味着您需要使用厂商提供的串口库，并围绕它实现“serial\_port\_i”。
+
+ftdi 是 USB 串口转换器。

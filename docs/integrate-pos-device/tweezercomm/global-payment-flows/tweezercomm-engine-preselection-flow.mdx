@@ -6,7 +6,7 @@ metadata:
 
 The pre-selection transaction flow processes, authorizes, and settles a payment request before completing the transaction. This streamlined approach ensures that all payment stages are finalized in a single, continuous sequence.
 
-## Transaction Flow
+## Transaction flow
 
 To understand the pre-selection transaction flow, consider the following sequence of events:
 
@@ -20,11 +20,15 @@ Here's a breakdown of each step:
 4. The Nayax Device communicates with the Nayax Server to request payment authorization and settlement.
 5. The Nayax Server responds with the transaction status (approved or declined). The Nayax Device then relays this status back to the ECR/POS, completing the process.
 
-## See Also
+## See also
 
-<Columns cols={2}>
-  <Card icon="link" title="DoTransaction" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction" />
+<CardGroup cols={2}>
+  <Card icon="play" title="doTransaction" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction">
+    Start and process a payment transaction over the TweezerComm protocol.
+  </Card>
 
-  <Card icon="link" title="Pre-Authorization" href="/docs/integrate-pos-device/tweezercomm/global-payment-flows/tweezercomm-engine-preauth-flow" />
-</Columns>
+  <Card icon="hourglass-half" title="Pre-authorization" href="/docs/integrate-pos-device/tweezercomm/global-payment-flows/tweezercomm-engine-preauth-flow">
+    Process and authorize a transaction, then settle or cancel it based on the payment server's response.
+  </Card>
+</CardGroup>
 

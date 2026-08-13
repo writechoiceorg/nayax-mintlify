@@ -1,0 +1,47 @@
+---
+title: 附加功能
+description: 针对 Spark 机器的可选 Nayax Core 设置，包括 POS 显示超时、空闲模式图片、Auto Cancel 和 eReceipt。
+---
+
+这些可选设置在核心的启动、停止和结算流程之外，为 Spark 机器提供扩展功能。请在您所配置功能的配置基础上，应用适合您集成方案的设置。
+
+## POS Display（Tariff）
+
+此功能使用 Spark 的 `PosDisplay` 字段，在设备触发开始支付时（例如显示资费信息）在设备上显示动态文本。有两项设置控制该信息的显示时长：
+
+- Approve button UI display duration：设备屏幕上 OK 按钮的显示超时时间。例如，您可以先向消费者显示带有 OK 按钮的资费信息，供其确认后再继续交易。如果达到超时时间且按钮未被按下，该流程将被取消。按下按钮后，显示界面将切换到出示卡片状态。取值范围为 `0` 到 60 秒，默认值为 0，表示不显示。
+- Informative State Display Timeout：资费信息等提示性状态显示的时长（以秒为单位）。当 Approve button UI display duration 为 `0`（即不显示确认按钮）时设置此项。红色 X 允许消费者取消该流程。取值范围为 0 到 10 秒，默认值为 `4`。值为 `0` 表示不显示。
+
+这两项设置的组合效果如下：
+
+| 批准按钮 UI 显示持续时间 | 信息状态显示超时 | 预期行为                                                           |
+| :------------: | :------: | :------------------------------------------------------------- |
+|       45       |     0    | 资费信息与 OK 按钮一同显示。45 秒内无任何操作后，该流程将被取消。如果消费者按下 OK，显示界面将切换到出示卡片状态。 |
+|        0       |    10    | 资费信息显示 10 秒后，显示界面将自动切换到出示卡片状态。                                 |
+|        0       |     0    | 完全不显示资费信息。                                                     |
+
+## 空闲模式自定义图像
+
+您可以在设备处于空闲模式时，在屏幕上设置自定义图片以告知消费者应如何操作。请自行制作图片，然后联系您的 Nayax 支持代表，将其上传到您的机器。
+
+## Auto Cancel
+
+Auto Cancel 是一项自动服务，用于取消处于待结算或待取消状态的未结算交易。该服务针对所有 Nayax 收单机构自动运行，基于每个收单机构的默认配置。
+
+要为您的运营商设置适合其业务类型的 Auto Cancel，请联系您的 Nayax 支持代表。请提供在没有结算或取消到达 Nayax 网关的情况下，可以安全取消该交易前所需等待的最短时间。
+
+## 电子收据
+
+如需 eReceipt 支持，请联系您的 Nayax 支持代表以获取相关配置协助。有关结算请求中所用的数据格式，请参见 [eReceiptData Format](/docs/integrate-pos-device/spark/additional-resources/spark-ereceiptdata-format)。
+
+## 后续步骤
+
+<CardGroup cols={2}>
+  <Card title="PosDisplay 格式" icon="display" href="/docs/integrate-pos-device/spark/additional-resources/spark-posdisplay-format">
+    查看用于资费文本的 PosDisplay 字段结构。
+  </Card>
+
+  <Card title="付款流程" icon="arrow-right-arrow-left" href="/docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark">
+    在 API 层面回顾 Spark 交易流程。
+  </Card>
+</CardGroup>

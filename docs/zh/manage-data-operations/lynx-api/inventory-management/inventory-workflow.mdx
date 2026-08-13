@@ -1,0 +1,20 @@
+---
+title: 库存工作流程
+metadata:
+  og:description: Nayax 中的库存管理工作流旨在简化管理产品、跟踪库存水平以及确保机器
+---
+
+Nayax 中的库存管理遵循一个四步流程，每一步都必须在下一步之前完成。
+
+1. [Create Product Groups](/docs/manage-data-operations/lynx-api/inventory-management/create-product-group)：将产品分组到诸如“Beverages”、“Snacks”或“Confectionery”之类的逻辑类别中，以组织您的目录。
+2. [Create Products](/docs/manage-data-operations/lynx-api/inventory-management/create-products)：将单个商品添加到运营商的目录中，包括产品名称、价格和分组关联等详细信息。
+3. [Map Products to Machines](/docs/manage-data-operations/lynx-api/inventory-management/machine-products-1)：将产品分配到每台机器的货位或选择项，以定义其布局并跟踪可用库存。
+4. [Pick Lists](/docs/manage-data-operations/lynx-api/inventory-management/pick-lists)：创建补货单，列明每台机器需要从仓库调配的产品和数量。
+
+<Warning>
+  产品和运营商
+
+  产品组及其产品与运营商直接关联，不能添加到其他运营商。
+</Warning>
+
+工作流完成后，请参阅 [Pick List Actions](/docs/manage-data-operations/lynx-api/inventory-management/pick-list-actions)，了解如何更新、检索或删除现有拣货单。

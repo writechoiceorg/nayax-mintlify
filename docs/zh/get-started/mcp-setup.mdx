@@ -1,0 +1,191 @@
+---
+title: 连接到 Nayax MCP 服务器
+metadata:
+  og:description: 将您的 AI 编程助手连接到 Nayax MCP server,以获得针对 Nayax API、SDK 及集成指南的上下文感知帮助。
+---
+
+[Model Context Protocol (MCP)](https://modelcontextprotocol.io) is an open standard that lets AI coding assistants
+connect to external data sources and tools.
+
+Nayax 开发者门户内置了一个 MCP server。
+将您的 AI 助手连接到该服务器后,它便可以实时读取和搜索
+Nayax 文档,让您无需离开编辑器即可获得关于 Nayax
+API、SDK 及集成流程的准确答案。
+
+## 先决条件
+
+在开始之前,您需要一个兼容 MCP 的 AI 工具作为客户端宿主。
+常见选项包括 Claude desktop、Claude Code、Cursor,以及搭配 GitHub Copilot(Agent mode)的 VS Code。
+
+## 连接到 Nayax MCP 服务器
+
+了解如何通过不同工具连接到我们的 MCP server:
+
+<Tabs>
+  <Tab title="Claude">
+    <Steps>
+      <Step title="打开 Connectors 设置">
+        在 Claude 中,前往 [Settings → Connectors](https://claude.ai/settings/integrations),然后选择 Add custom connector。
+      </Step>
+
+      <Step title="输入服务器详细信息">
+        将名称设置为 `nayax`,URL 设置为 `https://devzone.nayax.com/mcp`,然后点击 Add。
+      </Step>
+
+      <Step title="在对话中附加服务器">
+        要将服务器附加到您的对话中:
+
+        1. 开始一个新对话。
+        2. 点击附件图标(输入框旁边的加号图标)。
+        3. 选择 `nayax` connector。
+      </Step>
+
+      <Step title="验证连接">
+        提出一个与 Nayax 相关的问题,例如:
+
+        ```
+        What authentication method does the Lynx API use?
+        ```
+
+        Claude 应会直接从 Nayax 开发者门户中提取信息进行回答。
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="Claude Code">
+    <Steps>
+      <Step title="通过 CLI 添加服务器">
+        在终端中运行以下命令：
+
+        ```bash
+                claude mcp add --transport http nayax https://devzone.nayax.com/mcp
+        ```
+
+        This registers the server globally across all your Claude Code sessions. For more on managing MCP servers in Claude Code, see the [Claude Code MCP documentation](https://docs.anthropic.com/en/docs/claude-code/mcp).
+      </Step>
+
+      <Step title="验证连接">
+        启动一个 Claude Code 会话并提出与 Nayax 相关的问题。要确认服务器已注册，请运行：
+
+        ```bash
+                claude mcp list
+        ```
+
+        输出中应显示 `nayax` 服务器。
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="光标">
+    <Steps>
+      <Step title="打开 MCP 设置">
+        1. 按 `Cmd+Shift+P`（macOS）或 `Ctrl+Shift+P`（Windows/Linux）打开命令面板。
+        2. 搜索 Open MCP settings。
+        3. 选择 Add custom MCP。这将打开 `mcp.json` 文件。
+
+        For more details, see the [Cursor MCP documentation](https://cursor.com/docs/context/mcp).
+      </Step>
+
+      <Step title="添加 Nayax MCP 服务器">
+        在 `mcp.json` 中，添加以下配置。如果您已经配置了其他服务器，请将 `nayax` 条目添加到现有的 `mcpServers` 对象中。
+
+        ```json ~/.cursor/mcp.json
+        {
+          "mcpServers": {
+            "nayax": {
+              "url": "https://devzone.nayax.com/mcp"
+            }
+          }
+        }
+        ```
+      </Step>
+
+      <Step title="保存并重启 Cursor">
+        保存文件。Cursor 会在下次启动时自动检测到新服务器。
+      </Step>
+
+      <Step title="验证连接">
+        要验证连接，请打开 Cursor Chat 并提出与 Nayax 相关的问题。当 MCP 处于活动状态时，工具列表中会显示服务器名称 `nayax`。
+      </Step>
+    </Steps>
+  </Tab>
+
+  <Tab title="VS Code">
+    <Steps>
+      <Step title="打开您工作区的 MCP 配置">
+        在项目根目录（项目的顶层文件夹）中，
+        创建或打开名为 `.vscode/mcp.json` 的文件。
+      </Step>
+
+      <Step title="添加 Nayax MCP 服务器">
+        粘贴以下配置：
+
+        ```json .vscode/mcp.json
+                {
+                  "servers": {
+                    "nayax": {
+                      "type": "http",
+                      "url": "https://devzone.nayax.com/mcp"
+                    }
+                  },
+                  "inputs": []
+                }
+        ```
+      </Step>
+
+      <Step title="重新加载窗口">
+        按 `Ctrl+Shift+P`（Windows/Linux）或 `Cmd+Shift+P`（macOS），
+        然后运行 Developer: Reload Window。
+      </Step>
+
+      <Step title="验证连接">
+        在 VS Code 中打开您的 AI 助手，并提出有关 Nayax API 的问题，例如：
+
+        ```
+          How do I start a session with the Marshall SDK?
+        ```
+
+        您的助手应使用来自 Nayax 开发者门户的内容进行回答。
+
+        <Note>
+          If you are using GitHub Copilot, make sure you are in [**Agent mode**](https://code.visualstudio.com/docs/copilot/chat/mcp-servers). You can switch to it by selecting it from the dropdown at the bottom of the chat input.
+        </Note>
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## 使用 MCP 服务器可以做什么
+
+连接后，您的 AI 助手可以：
+
+- 搜索并检索 Nayax 开发者门户中任何页面的内容
+- 回答有关特定 API 端点、请求参数和响应字段的问题
+- 解释集成流程、支付会话和 SDK 配置选项
+- 展示来自 Marshall、Cortina、EMV Core 和 eCom SDK 等指南中的代码示例
+
+<Tip>
+  为获得最佳效果，请在提示中提出具体问题。例如，应提问“如何在 Cortina 预付卡流程中处理被拒绝的交易？”，而不是像“介绍一下 Cortina”这样宽泛的问题。
+</Tip>
+
+## 故障排除
+
+以下是您在设置 Nayax MCP 时可能遇到的一些常见错误及其解决方法：
+
+<AccordionGroup>
+  <Accordion title="MCP 服务器未出现在我的工具列表中。">
+    请确认：
+
+    - 配置文件中的 JSON 有效（没有多余的逗号，所有大括号均已闭合）。
+    - 保存文件后已重新加载或重启编辑器。
+    - 您的网络可以访问 `https://devzone.nayax.com`。
+  </Accordion>
+
+  <Accordion title="助手返回了过时或不正确的信息。">
+    MCP 服务器反映的是 Nayax 开发者门户已发布的状态。如果文档最近有更新，请尝试开始一个新的对话，以便助手获取最新的上下文。
+  </Accordion>
+
+  <Accordion title="我看到了身份验证错误。">
+    Nayax MCP 服务器不需要身份验证。如果您看到身份验证错误，请检查是否有代理或防火墙拦截了发往 `devzone.nayax.com` 的 HTTPS 请求。
+  </Accordion>
+</AccordionGroup>

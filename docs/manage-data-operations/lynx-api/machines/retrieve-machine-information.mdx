@@ -4,6 +4,8 @@ metadata:
   og:description: "In Nayax Core, machines have various attributes, such as the Operator of the machine, the machine's model or ID, and its status. These can all be."
 ---
 
+import {EndpointCard} from "/snippets/EndpointCard.jsx"
+
 In Nayax Core, machines have various attributes, such as the Operator of the machine, the machine's model or ID, and its status. These can all be seen in the **Machines** menu, which you can access in the following way:
 
 1. In your Dashboard, go to **Operations > Machines**.
@@ -15,41 +17,23 @@ In Nayax Core, machines have various attributes, such as the Operator of the mac
 
 You can see all the key information about the machine you may need for other requests there.
 
-## Lynx API Methods
-
-The Lynx API provides various methods to retrieve all this information, allowing you to programmatically access specific machine details, groups, statuses, and configurations.
-
-These are the available methods discussed on this page:
-
-<Columns cols={2}>
-  <Card icon="link" title="Get Specific Machine Basic Info by MachineID" href="/reference/lynx/machines/get-machine-basic-info">
-    GET
-  </Card>
-
-  <Card icon="link" title="Get Specific Machine Basic Info by Device" href="/reference/lynx/machines/get-machine-info-by-device">
-    GET
-  </Card>
-
-  <Card icon="link" title="Get Specific Machine Basic Info by VPOS" href="/reference/lynx/machines/get-machine-info-by-vpos">
-    GET
-  </Card>
-
-  <Card icon="link" title="Get All Machine Basic Info" href="/reference/lynx/machines/get-all-machine-basic-info">
-    GET
-  </Card>
-</Columns>
-
-See the following sections for more details on each method.
-
 <Warning>
 **Authentication**
 
 Refer to the [Security & Token](/docs/manage-data-operations/lynx-api/security) page of this documentation to learn how to access your tokens, and how to properly use it to authenticate your API requests.
 </Warning>
 
-### Retrieve a Machine by `MachineID`
+The Lynx API provides four methods to retrieve machine information programmatically. Use the section that matches the identifier you have available.
 
-Using the [Get Specific Machine Basic Info](/reference/lynx/machines/get-machine-basic-info) you can get the details of a machine with a specific `MachineID`. See an example request in the code block below:
+## Retrieve a machine by `MachineID`
+
+Use the [Get Specific Machine Basic Info](/reference/lynx/machines/get-specific-machine-basic-info) endpoint to retrieve the details of a machine with a specific `MachineID`. Insert the `MachineID` in the path parameter of the request.
+
+<EndpointCard
+  title="Get Specific Machine Basic Info"
+  href="/reference/lynx/machines/get-specific-machine-basic-info"
+  method="get"
+/>
 
 <CodeGroup>
 ```sh Request
@@ -142,11 +126,15 @@ curl --request GET \
 ```
 </CodeGroup>
 
-Insert the `MachineID` in the path param of the request.
+## Retrieve a machine by `DeviceSerialNumber`
 
-### Retrieve a Machine by `DeviceSerialNumber`
+Use the [Get Specific Machine Basic Info by Device](/reference/lynx/machines/get-specific-machine-basic-info-by-device) endpoint to retrieve the details of a machine associated with a specific `DeviceSerialNumber`. Insert the `DeviceSerialNumber` in the path parameter of the request.
 
-Using the [Get Specific Machine Basic Info by Device](/reference/lynx/machines/get-machine-info-by-device) endpoint, you can retrieve the details of a machine associated with a specific DeviceSerialNumber. See an example request in the code block below:
+<EndpointCard
+  title="Get Specific Machine Basic Info by Device"
+  href="/reference/lynx/machines/get-specific-machine-basic-info-by-device"
+  method="get"
+/>
 
 <CodeGroup>
 ```sh Request
@@ -239,11 +227,15 @@ curl --request GET \
 ```
 </CodeGroup>
 
-Insert the DeviceSerialNumber in the request path parameter to fetch the machine details associated with that device.
+## Retrieve a machine by `VPOSSerial`
 
-### Retrieve a Machine by `VPOSSerial`
+Use the [Get Specific Machine Basic Info by VPOS](/reference/lynx/machines/get-specific-machine-basic-info-by-vpos) endpoint to retrieve the details of a machine associated with a specific `VPOSSerial`. Insert the `VPOSSerial` in the path parameter of the request.
 
-Using the [Get Specific Machine Basic Info by VPOS](/reference/lynx/machines/get-machine-info-by-vpos) endpoint, you can retrieve the details of a machine associated with a specific `VPOSSerial`. See an example request in the code block below:
+<EndpointCard
+  title="Get Specific Machine Basic Info by VPOS"
+  href="/reference/lynx/machines/get-specific-machine-basic-info-by-vpos"
+  method="get"
+/>
 
 <CodeGroup>
 ```sh Request
@@ -336,11 +328,15 @@ curl --request GET \
 ```
 </CodeGroup>
 
-Insert the `VPOSSerial` in the path parameter of the request to fetch the machine details associated with that VPOS device.
+## Retrieve all machine basic info
 
-### Retrieve All Machine Basic Info
+Use the [Get All Machine Basic Info](/reference/lynx/machines/get-all-machine-basic-info) endpoint to retrieve basic information for all machines, with optional filtering by the query parameters listed below.
 
-Using the [Get All Machine Basic Info](/reference/lynx/machines/get-all-machine-basic-info) endpoint, you can retrieve basic information for all machines, with optional filtering by various parameters. See an example request in the code block below:
+<EndpointCard
+  title="Get All Machine Basic Info"
+  href="/reference/lynx/machines/get-all-machine-basic-info"
+  method="get"
+/>
 
 ```sh Request
 curl --request GET \
@@ -348,8 +344,6 @@ curl --request GET \
      --header 'Authorization: Bearer <YOUR_ACCESS_TOKEN>' \
      --header 'accept: application/json'
 ```
-
-You can use any of the query parameters in the table below to filter out the machines:
 
 | **Parameter**           | `Type`   | Description                                                                           |
 | ----------------------- | -------- | ------------------------------------------------------------------------------------- |
@@ -362,4 +356,3 @@ You can use any of the query parameters in the table below to filter out the mac
 | **MachineName**         | `string` | Filter results by the machine's name.                                                 |
 | **DeviceID**            | `int32`  | Filter results by the device ID associated with the machine.                          |
 | **VposID**              | `int64`  | Filter results by the VPOS ID associated with the machine.                            |
-

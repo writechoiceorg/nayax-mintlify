@@ -1,0 +1,94 @@
+---
+title: 错误处理与故障排除
+metadata:
+  og:description: EMV Core RTOS SDK 的日志文件访问、故障排除流程和常见问题。
+---
+
+本页涵盖系统级问题:终端注册、配置和日志收集。有关 SDK 级集成问题(串行设置、线程、回调、内存),请参阅 [Integration Guide](/docs/integrate-pos-device/emv-core/rtos/rtos-integration-guide#integration-troubleshooting)。
+
+遇到错误或异常行为时,请向 Nayax 支持团队提供以下信息:
+
+1. 设备 ID(读卡器序列号)
+2. 使用中的 EMV Core 固件版本
+3. EMV Core 配置文件
+4. EMV Core 日志文件
+5. 交易数据(如适用):日期/时间、金额、交易 ID、收到的错误
+6. 读卡器配置(可通过 Saturn Management Utility 获取)
+
+## 日志文件
+
+EMV Core 会将信息保存在日志文件中,用于调试目的。
+
+可通过以下方式获取日志文件:
+
+1. Nayax Core:使用 Request Gtrace 操作。
+2. TMS:发送 `UPLOAD_LOGS` 命令。
+3. 通过 UNO-8 Manager 在本地获取:
+   - 选择“文件系统”选项卡。
+   - 导航到 `E:\LOG` 文件夹。
+   - 右键单击 `*.log` 文件,选择“Save As...”将其保存到您的电脑。
+
+<Frame>
+  <img src="/images/docs/rtos-troubleshooting/log-files.png" />
+</Frame>
+
+## 故障排查流程
+
+遇到问题时,请按顺序执行以下步骤:
+
+1. 检查 SDK 版本:卸载旧版本并安装最新版本。
+2. 检查并更新配置:
+   - EMV Core 配置
+   - 读卡器配置
+3. 验证注册是否正确:
+   - OTI TMS
+   - Nayax Core
+   - 注意:测试终端和正式终端需要不同的注册方式。
+4. 使用有效的测试卡尝试进行交易。
+5. 确保通信未被防火墙或类似机制阻断。
+
+## 常见问题
+
+### 错误代码概述
+
+根据来源不同,错误代码分为两类:
+
+- 正数错误代码(例如 `99`):来自 PSP 系统。
+- 负数错误代码(例如 `-997`):来自 OTI 系统。
+
+注意:诸如 `-995 declined by reader` 这样的负数错误代码,也可能表示来自 PSP 的线上拒绝。
+
+---
+
+### 终端注册问题
+
+症状 1:
+
+- 状态 = `Not ready`(可在测试应用程序的“Get Status”按钮中查看)
+- Error: `"Failed getting terminal operator …code: -997"`
+
+可能原因:终端未在 TMS 中正确注册。
+
+建议步骤:
+
+- 确认您的终端 ID 出现在 TMS 中正确的运营商下;如有需要,请联系 Nayax 支持团队。
+- 检查 EMV Core 配置文件中是否包含以下内容:
+  - `TMS_SVC_URL=tms.otiglobal.com`(用于通过 TMS 进行管理)
+  - `TMS_SVC_URL=tms-c.otiglobal.com`(用于通过 Nayax Core 进行管理)
+
+---
+
+症状 2:
+
+- 交易以错误结束:
+  ```
+  Method TransactionComplete arrived with parameters: Declined '1' Invalid Device' {...}
+  ```
+
+建议步骤:
+
+- 检查 kiosk 配置文件。最常见的设置:
+  ```
+  PAYMENT_SVC_URL=payment-nayax-p.otiglobal.com
+  ```
+- 验证终端 ID 是否已在 Nayax 后台正确注册;如有需要,请联系 Nayax 支持团队。

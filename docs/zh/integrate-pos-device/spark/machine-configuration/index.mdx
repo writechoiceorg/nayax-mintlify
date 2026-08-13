@@ -1,0 +1,111 @@
+---
+title: 机器配置概述
+description: 在配置 Spark 功能之前，先在 Nayax Core 中设置您的运营商和机器，包括设备固件要求和提供商关联。
+---
+
+在某个 Spark 功能可在终端上运行之前，您需要在 Nayax 后台系统 Nayax Core 中配置该机器。首先，确认您的运营商已与您的 Spark 提供商关联。然后选择或创建机器，并打开您要集成的功能对应的页面。
+
+## 先决条件
+
+开始之前，您需要具备以下条件：
+
+- 一台未通过线缆连接的 VPOS Touch 或 Onyx 终端。
+- 一个在 Nayax Core 中拥有 actor、机器和用户角色的账户。
+- 已在 Nayax Core 中设置好的 Spark 提供商实体。
+
+在执行本页面所述的任何操作之前，您必须使用您的凭据登录 Nayax Core。
+
+<Note>
+  某些提供商级别的配置由 Nayax 内部管理，不会在 Nayax Core 界面中开放。如需更改此类配置，请联系您的 Nayax 支持代表。
+</Note>
+
+## 设备固件要求
+
+如需采购 Nayax 设备、电源和线缆，请联系您的 Nayax 销售代表。为支持您计划使用的 Spark 功能，该设备必须运行以下固件版本之一，或更新的官方版本：
+
+| 特征                          | 最低固件版本          |
+| :-------------------------- | :-------------- |
+| Remote Start（含 Device Stop） | `4.0.24.3-RC06` |
+| Device Start（含 Device Stop） | `4.0.25.5-RC04` |
+
+## 将您的运营商与 Spark 关联
+
+确认您的运营商已在 Nayax Core 中与您的 Spark 实体关联：
+
+<Steps>
+  <Step title="打开 Operator 页面">
+    登录 Nayax Core，然后点击 Administration > Operator。
+  </Step>
+
+  <Step title="查找您的运营商">
+    在 Operator 搜索栏中开始输入运营商名称，并从建议列表中选择，然后点击 Search。或者，也可以点击 Search 并在层级结构中定位该运营商。
+  </Step>
+
+  <Step title="打开 VAS Provider 选项卡">
+    在层级结构中选择该运营商，然后点击 VAS Provider 选项卡。在 Spark 部分下，您的 Spark 集成名称将显示在 Provider Name 字段中。
+  </Step>
+</Steps>
+
+<Note>
+  如果您没有看到 VAS Provider 选项卡，或者 Spark 部分下的 Provider Name 不是您的 Spark 集成名称，请联系您的 Nayax 支持代表。
+</Note>
+
+## 选择或创建您的机器
+
+打开您要为 Spark 配置的机器，如果尚不存在则创建一个：
+
+<Steps>
+  <Step title="打开 Machines 页面">
+    登录 Nayax Core，然后点击 Operations > Machines。
+  </Step>
+
+  <Step title="查找您的机器">
+    在 Operator 搜索栏中开始输入您的运营商名称，并从建议列表中选择，然后点击 Search。或者，也可以点击 Search 并在层级结构中定位该运营商。随后将显示带有其 actor 树的机器列表。
+  </Step>
+
+  <Step title="打开或创建机器">
+    点击您要配置的机器。如果没有可用的机器，您可以创建一台新机器或复制一台现有机器。有关分步指导，请点击右侧的 Need Assistance 按钮。
+
+    <Frame>
+      Nayax Core 中的 Machines 页面，Need Assistance 按钮已高亮显示
+    </Frame>
+  </Step>
+
+  <Step title="设置机器型号">
+    对于新机器，在 General Information > General > Machine Model 下，使用 Nayax 支持团队建议的机器型号。机器型号决定了 Nayax Core 中的初始机器配置，这可以为您后续操作节省步骤。您可以随时更改或在初始设置基础上添加配置。
+
+    <Frame>
+      General Information 部分，包含 Machine Model 字段
+    </Frame>
+  </Step>
+
+  <Step title="连接 Nayax 设备">
+    在 General Information > Hardware > Device Number 下，输入您的设备编号并点击 Save。如果没有可用设备，请联系您的 Nayax 支持代表。
+
+    <Frame>
+      Hardware 部分，包含 Device Number 字段
+    </Frame>
+  </Step>
+</Steps>
+
+如需一般性支付配置，请联系您的 Nayax 支持代表。有关每个 Spark 功能的具体配置，请参见您所集成功能对应的页面。有关 POS 显示超时和空闲模式图片等可选设置，请参见 [Additional Features](/docs/integrate-pos-device/spark/machine-configuration/additional-features)。
+
+## 后续步骤
+
+<CardGroup cols={2}>
+  <Card title="远程启动配置" icon="bolt" href="/docs/integrate-pos-device/spark/machine-configuration/spark-remote-start-configuration">
+    配置一台机器，使您的服务器可以远程启动交易。
+  </Card>
+
+  <Card title="设备启动配置" icon="circle-play" href="/docs/integrate-pos-device/spark/machine-configuration/spark-device-start-configuration">
+    配置一台机器，使交易可从终端本身启动。
+  </Card>
+
+  <Card title="设备停止配置" icon="hand" href="/docs/integrate-pos-device/spark/machine-configuration/spark-device-stop-configuration">
+    配置一台机器，使终端处的刷卡操作可以停止一笔进行中的交易。
+  </Card>
+
+  <Card title="外部结算配置" icon="money-check" href="/docs/integrate-pos-device/spark/machine-configuration/spark-external-settlement-configuration">
+    配置一台机器，使您的服务器可以结算或取消一笔在终端上已授权的交易。
+  </Card>
+</CardGroup>

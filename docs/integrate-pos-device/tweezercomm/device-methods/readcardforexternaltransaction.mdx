@@ -1,0 +1,44 @@
+---
+title: "readCardForExternalTransaction"
+description: "Read card data from the device for authorization by an external payment processor."
+metadata:
+  og:description: "The readCardForExternalTransaction method reads card data from the device so that the transaction can be authorized by an external processor."
+---
+
+The `readCardForExternalTransaction` method reads card data from the device so that the transaction can be authorized by an external processor instead of the built-in payment engine.
+
+Once the card is read, pass the returned `pinpadCardDataId` to [`updatePinpadTransactionStatus`](/docs/integrate-pos-device/tweezercomm/device-methods/updatepinpadtransactionstatus) to report the outcome of the external authorization back to the device.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Get Started](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) for more details on how the requests are structured and sent.
+</Note>
+
+To invoke this method, set the `method` field to `readCardForExternalTransaction`, and include the service name and parameters as shown below.
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "readCardForExternalTransaction",
+    "params": [
+        "device",
+        {
+            "vuid": "44d96006",
+            "readMifare": true
+        }
+    ],
+    "id": "16115875"
+}
+```
+
+### Request parameters
+
+The table below describes the parameters of the request:
+
+| Name         | Type   | Description                                             |
+| ------------ | ------ | -------------------------------------------------------- |
+| `vuid`       | string | Vendor (client) unique transaction identifier. Mandatory. |
+| `readMifare` | bool   | Whether to enable the NFC reader (Mifare only).           |

@@ -1,0 +1,104 @@
+---
+title: 预授权与外部结算
+metadata:
+  og:description: 使用 EMV Core 的 External Settlement 功能,可让第三方服务器控制交易结算的时间和金额,结算窗口最长可配置为 60 小时。
+---
+
+EMV Core 的 [ExternalSettlement](/reference/spark/transactions/externalsettlement) 实现将交易的授权和结算阶段分开。
+
+EMV Core 负责管理与消费者和支付卡的初始交互，而最终的财务结算则由第三方服务器执行，该服务器会将结算请求发送到 Nayax 的服务器。
+
+<Warning>
+  先决条件
+
+  要使此流程正常运行，Nayax 必须启用[ExternalSettlement](/reference/spark/transactions/externalsettlement)设置。
+</Warning>
+
+## 配置和设备行为
+
+启用后，结算将由外部程序处理，而不是由主机应用程序处理：
+
+- 结算交易的唯一方法是通过[ExternalSettlement](/reference/spark/transactions/externalsettlement)命令。
+- 结算金额可以小于或等于授权金额。
+
+这样，您可以根据自己的业务逻辑，灵活地从外部触发结算阶段。
+
+| 特征   | 要求                                                       |
+| :--- | :------------------------------------------------------- |
+| 结算窗口 | 默认情况下，交易必须在发起后 **60 小时** 内完成结算。Nayax 技术支持可根据具体情况调整此时间窗口。 |
+| 到期日  | 在结算窗口期之后进行的结算尝试将会失败。                                     |
+| 自动清洁 | 根据卡组织规定，超过结算窗口期仍未结算的交易将自动取消（但不应依赖此规定）。                   |
+| 和解金额 | 最终结算价格不得超过授权金额。                                          |
+
+## 管理未结算交易
+
+当不提供产品或服务时，您必须主动管理交易，以保持良好的用户体验。
+
+- **外部取消：** 如果无法进行结算，您必须立即发送 **外部取消请求** 。
+- **对消费者的影响：**如果交易在未取消或结算的情况下仍保持授权状态，消费者的资金将一直保留在其支付方式中，从而导致潜在的纠纷。
+
+## 外部结算流
+
+该流程包括两个阶段：由 EMV Core 处理的支付授权，以及由您的第三方服务器触发的结算或取消。
+
+### 付款授权
+
+以下步骤涵盖了授权阶段，从刷卡到会话结束。
+
+<Frame>
+  <img src="/images/docs/pre-authorization-with-external-settlement/payment-authorization.png" alt="支付授权阶段的序列图，从预授权调用到交易完成事件和服务交付。" />
+</Frame>
+
+1. The host machine calls the [`PreAuthorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#preauthorize) method using the EMV Core SDK.
+2. EMV核心开始轮询读卡器。主机应用程序应提示买家轻触银行卡。
+3. 买家将银行卡轻触读卡器。
+4. EMV Core 读取卡片数据并向 Nayax 服务器发送授权请求。
+5. Nayax 服务器与计费提供商进行授权。
+6. 计费提供商向 Nayax 服务器发送授权响应。
+7. Nayax 服务器将授权响应返回给 EMV Core。
+8. EMV Core sends a `TransactionComplete` event to the host application. The event contains the transaction ID and transaction data, including `NayaxTransactionId` and `SiteId` in the `authorizationDetails.Additional_Parameters` field.
+
+此时,主机应用程序必须保留 `NayaxTransactionId` 和 `SiteId`,以便日后在 External Settlement 或 External Cancel 请求中使用。
+
+9. 主机应用程序继续提供服务（例如，启动电动汽车充电会话或分发产品）。
+
+### 完成交易
+
+服务交付后，第三方服务器将根据结果处理结算或取消事宜。
+
+如果提供了该服务：
+
+<Frame>
+  <img src="/images/docs/pre-authorization-with-external-settlement/external-settlement.png" alt="外部结算流程的序列图，从 StartAuthentication 到 ExternalSettlement 响应" />
+</Frame>
+
+10. 第三方服务器通过调用 `StartAuthentication` 方法并附带加密密文来发起通信以进行身份验证。
+11. Nayax 服务器解密密码并验证凭据以确认其真实性。
+12. The 3rd-party server sends an [ExternalSettlement](/reference/spark/transactions/externalsettlement) request. It must contain the `NayaxTransactionId` and `SiteId` retrieved from the `TransactionComplete` event, and must be sent within the settlement window.
+13. Nayax 服务器与计费提供商进行结算。
+14. Nayax 服务器向第三方服务器发送 [ExternalSettlement](/reference/spark/transactions/externalsettlement) 响应，确认结算结果。
+
+如果未提供服务：
+
+<Frame>
+  <img src="/images/docs/pre-authorization-with-external-settlement/external-cancel.png" alt="外部取消流程的时序图，从 StartAuthentication 到 ExternalCancel 响应" />
+</Frame>
+
+10. 第三方服务器通过调用 `StartAuthentication` 方法发起通信。
+11. Nayax 服务器会验证凭据。
+12. The 3rd-party server sends an [ExternalCancel](/reference/spark/transactions/externalcancel) request. It must contain the `NayaxTransactionId` and `SiteId` retrieved from the `TransactionComplete` event, and must be sent within the settlement window.
+13. Nayax 服务器会向计费提供商发起取消流程。
+14. Nayax 服务器接收来自计费提供商的响应。
+15. Nayax 服务器向第三方服务器发送 [ExternalCancel](/reference/spark/transactions/externalcancel) 响应。
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="外部结算 API" icon="link" href="/reference/spark/transactions/externalsettlement">
+    用于结算来自第三方服务器的授权交易的 ExternalSettlement 端点的 API 参考。
+  </Card>
+
+  <Card title="外部取消 API" icon="link" href="/reference/spark/transactions/externalcancel">
+    用于在未提供服务时取消已授权交易的 ExternalCancel 端点的 API 参考。
+  </Card>
+</CardGroup>

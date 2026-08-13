@@ -13,55 +13,48 @@ This section describes the API methods for handling payment transactions for tra
 
 These tools give you complete control over your payment processes, making it easy to manage, track, and report on all your transactions.
 
-## Available Methods
+## Transaction Processing
 
-<Columns cols={3}>
-<Card
-  icon="link"
-  title="doTransaction"
-  href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction"
-  arrow
-/>
-<Card
-  icon="link"
-  title="abortTransaction"
-  href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/abort-transaction"
-  arrow
-/>
-<Card
-  icon="link"
-  title="getTransactionByVuid"
-  href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/gettransactionbyvuid"
-  arrow
-/>
-<Card
-  icon="link"
-  title="getReport"
-  href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/getreport"
-  arrow
-/>
-<Card
-  icon="link"
-  title="getStatus"
-  href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/getstatus"
-  arrow
-/>
-<Card
-  icon="link"
-  title="getRetailerInfo"
-  href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/getretailerinfo"
-  arrow
-/>
-</Columns>
-<Card
-  icon="link"
-  title="getInternalStatus"
-  href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/getinternalstatus"
-  arrow
-/>
+<CardGroup cols={3}>
+  <Card icon="play" title="doTransaction" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/dotransaction">
+    Start and process a payment transaction over the TweezerComm protocol.
+  </Card>
+
+  <Card icon="ban" title="abortTransaction" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/abort-transaction">
+    Cancel an ongoing transaction before it registers in the database.
+  </Card>
+</CardGroup>
+
+## Reporting & Status
+
+<CardGroup cols={3}>
+  <Card icon="chart-column" title="getReport" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/getreport">
+    Query transaction reports, including mini-settlement records.
+  </Card>
+
+  <Card icon="gauge" title="getStatus" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/getstatus">
+    Check whether the AEA payment engine is ready to process transactions.
+  </Card>
+
+  <Card icon="microchip" title="getInternalStatus" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/getinternalstatus">
+    Check the internal status of the AEA engine.
+  </Card>
+</CardGroup>
+
+## Transaction Lookup & Retailer Info
+
+<CardGroup cols={3}>
+  <Card icon="fingerprint" title="getTransactionByVuid" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/gettransactionbyvuid">
+    Look up a transaction by its vendor-unique identifier (vuid).
+  </Card>
+
+  <Card icon="circle-info" title="getRetailerInfo" href="/docs/integrate-pos-device/tweezercomm/global-payment-methods/getretailerinfo">
+    Verify the merchant name and ID configured on the terminal.
+  </Card>
+</CardGroup>
 
 <Note>
 **Send Requests**
 
-See [Get Started](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) for more details on how the requests are structured and sent.
+See [Get Started](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) for more details on how to structure and send requests.
 </Note>

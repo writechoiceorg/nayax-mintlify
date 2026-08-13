@@ -1,0 +1,54 @@
+---
+title: "Overview"
+description: "Learn how Core Extension lets you embed your 
+application inside the Nayax back-office."
+---
+
+Core Extension 是面向外部开发者的 Nayax 应用框架。它允许您构建一个直接加载到 Nayax 后台（Nayax Core）中的应用程序，从而为您的用户提供无缝体验，无需离开平台。
+
+## 工作原理
+
+当 Nayax 管理员将您的应用添加到菜单时，它会作为 Nayax Core 的原生组件显示给用户。用户打开应用时，Nayax 会向您的应用传递一个包含用户身份和权限的签名 JWT 令牌。您的应用使用该令牌代表已登录用户调用 Nayax API。
+
+Nayax 负责处理：
+
+- 在菜单中注册您的应用
+- 传递身份验证令牌
+- 通过反向代理路由 API 调用
+- 跨语言翻译管理
+- 控制哪些用户角色可以查看用户界面的哪些部分。
+
+你负责：
+
+- 构建和托管您的应用程序
+- 接收令牌并将其用于 API 调用
+- 公开您的 UI 字符串以进行翻译
+- 声明哪些 UI 元素可由角色控制
+
+## 扩展类型
+
+应用在 Nayax Core 中的显示方式取决于 Nayax 管理员配置的显示类型。每种类型控制着布局、导航以及应用接收令牌的方式。
+
+- **屏幕**——显示整个页面，Nayax Core导航菜单可见。未传递屏幕上下文。
+- **全屏模式**——不使用 Nayax 菜单，应用提供自定义导航。不传递屏幕上下文信息。
+- **带弹出窗口的按钮**— 现有屏幕中的按钮，点击后会在模态窗口中打开您的应用。包含屏幕上下文（例如，选定的机器 ID）。
+- **标签页**— 您的应用将以标签页的形式加载到现有的 Nayax Core 屏幕中。包含屏幕上下文（例如，所选机器 ID）。
+
+**屏幕**和**全屏模式**使用**“应用”**菜单类型。**带弹出窗口**和**标签页的**按钮使用**“应用插件”**菜单类型。
+
+<Note>
+  全屏扩展程序无法通过 postMessage 接收令牌。如果您的应用使用全屏显示类型，请联系 Nayax 以确认令牌的发送方式。详情请参阅[身份验证](/docs/core-extension/authentication)部分。
+</Note>
+
+## 你实施的
+
+以下四个领域均设有专门的指南：
+
+- [身份验证](/docs/core-extension/authentication)— 接收并验证 Nayax 在加载时传递的 JWT 令牌。
+- [扩展类型](/docs/core-extension/extension-types)— 根据您的使用场景选择合适的显示类型。
+- [翻译](/docs/core-extension/translations)— 公开您的 UI 字符串，以便 Nayax Core 可以用用户的语言提供它们。
+- [基于角色的可见性](/docs/core-extension/role-based-visibility)— 声明管理员可以根据角色显示或隐藏哪些 UI 元素。
+
+## 入门
+
+要开始构建，请按照“[入门指南”](/docs/core-extension/get-started)进行操作。它将引导您完成从沙盒访问到生产部署的整个开发过程。

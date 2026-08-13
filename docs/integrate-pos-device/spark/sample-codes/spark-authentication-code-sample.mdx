@@ -12,7 +12,7 @@ This page provides a detailed sample code flow for integrating Spark's authentic
 The following code snippets are provided in **C#** for example purposes. Developers should implement the same logic (e.g., AES-256 ECB encryption, SHA-256 hashing) in their chosen programming language to successfully communicate with the Spark DMZ.
 </Note>
 
-## Step 1: Generating the Cipher
+## Step 1: generating the cipher
 
 The Cipher field is a securely encrypted payload that must be included in the request body. It serves as a strong mechanism to prove that you possess the necessary secret token without transmitting it openly.
 
@@ -38,7 +38,7 @@ Where:
 * `random`: 17-digit random number.
 * `timestamp`: UTC time in format `yyMMddHHmm` (optional)
 
-## Step 2: Create Signature
+## Step 2: create signature
 
 The signature authenticates each request by combining the serialized request body with your header hash key and computing a SHA-256 hash. This signature is sent in the HTTP headers, along with your integrator ID, to verify the request's origin and integrity.
 
@@ -81,7 +81,7 @@ Where:
 
 The output will be a dictionary containing the two mandatory HTTP request headers: `IntegratorId` and `Signature`.
 
-## Request Model
+## Request model
 
 The request model defines the structure of data sent to initiate authentication with Spark. Each authentication request must include your token ID, terminal identification details, and the encrypted cipher (created using the `CreateCipher()` method), and the random 17-digit number used in cipher generation.
 
@@ -96,7 +96,7 @@ public class StartAuthenticationRequest3rdParty
 }
 ```
 
-## Response Model
+## Response model
 
 The response model defines the structure of data returned after initiating authentication with Spark. It includes the hashed transaction ID and status information.
 

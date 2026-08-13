@@ -1,0 +1,60 @@
+---
+title: 获取零售商信息
+metadata:
+  og:description: getRetailerInfo 方法允许您验证商户的名称和 ID。这有助于确认终端是否配置正确。
+---
+
+`getRetailerInfo` 方法允许您验证商户的名称和 ID。这有助于确认终端在安装或设置后是否配置正确。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+要调用此方法，`method` 字段应设置为 `getRetailerInfo`，且 params 数组必须包含固定的服务名称 `engine`。
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getRetailerInfo",
+    "id": "136bdaa3",
+    "params": [
+        "engine"
+    ]
+}
+```
+
+### 请求参数
+
+有关此方法可用的请求参数的描述，请参阅下表。
+
+| 姓名       | 类型     | 描述      |
+| :------- | :----- | :------ |
+| `engine` | string | 固定的服务名称 |
+
+## 回复
+
+成功的请求将返回类似于以下代码块中的响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "136bdaa3",
+    "result": {
+        "id": "12970568",
+        "name": "MACHINE_TEST"
+    }
+}
+```
+
+### 响应参数
+
+下表列出了 `result` 对象的可能取值：
+
+| 姓名     | 类型     | 描述           |
+| ------ | ------ | ------------ |
+| `id`   | string | 唯一的零售商（机器）ID |
+| `name` | string | 零售商的名称       |

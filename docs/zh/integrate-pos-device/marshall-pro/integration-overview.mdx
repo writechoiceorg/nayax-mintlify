@@ -1,0 +1,37 @@
+---
+title: 集成概述
+keywords:
+  - marshall pro
+  - forecourt controller
+  - FCC
+  - fuel dispenser
+description: Marshall Pro（Fuel）在燃油环境中的架构和交易流程。
+metadata:
+  og:description: Marshall Pro（Fuel）是一个专用通信框架，旨在促进您的本地 a 与 Nayax 支付硬件之间的无缝交易管理。
+---
+
+Marshall Pro（Fuel）是一个专用通信框架，旨在促进您的本地应用程序与 Nayax 支付硬件之间的无缝交易管理。
+
+<Frame>
+  Marshall Fuel 架构
+</Frame>
+
+该生态系统由四个主要组件组成，共同协作以授权、执行和监控交易：
+
+<CardGroup cols={2}>
+  <Card title="Nayax 设备" icon="terminal">
+    位于加油泵处的物理硬件（Onyx、VPOS Touch），可与卡、移动支付或 QR 支付进行交互。
+  </Card>
+
+  <Card title="您的应用程序" icon="computer">
+    与 Marshall Pro（Fuel）集成的本地 POS 或加油站控制器，用于管理交易生命周期。
+  </Card>
+
+  <Card title="Nayax 遥测" icon="server">
+    处理设备健康状况、远程配置和交易日志记录的云端服务器。
+  </Card>
+
+  <Card title="支付网关" icon="building-columns">
+    负责资金最终授权和结算的金融后端。
+  </Card>
+</CardGroup>

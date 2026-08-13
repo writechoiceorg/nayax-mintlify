@@ -1,0 +1,84 @@
+---
+title: InfoQuery
+metadata:
+  og:description: Nayax 在成功收到 StartSession 响应后发送 InfoQuery API。其主要目的是：检索要在 POS 设备上显示的信息。
+---
+
+Nayax sends an `InfoQuery` API after a successful `StartSession` response. Its main purposes are:
+
+- 在支付开始之前，检索要在 POS 设备上显示的信息。
+- 检查所请求服务站的可用性状态。
+
+这确保消费者已被告知，并且设备可以据此继续操作。
+
+## 要求
+
+Spark 会向您配置的 `InfoQuery` 端点发送 GET 请求。请求正文如下例所示：
+
+```json
+{
+ "HwSerial": "0434334921100366",
+ "MachineId": 71234996,
+ "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+ "ServiceStationNumber": "5",
+ "SiteId": 2
+}
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+| 场地                     | 类型     | 描述                |
+| ---------------------- | ------ | ----------------- |
+| `HwSerial`             | string | 硬件终端的序列号。         |
+| `MachineId`            | 整数     | 机器的唯一 ID。         |
+| `SparkTransactionId`   | string | Spark 分配的唯一交易 ID。 |
+| `ServiceStationNumber` | string | 标识所选服务站。          |
+| `SiteId`               | 整数     | 终端运行所在的站点 ID      |
+
+## 回复
+
+成功的响应将返回以下正文：
+
+```json
+{
+ "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+ "HwSerial": "0434334921100366",
+ "MachineId": 71234996,
+ "ServiceStationNumber": "5",
+ "ServiceStationAvailability": 1,
+ "PosDisplay": ";Charging Station:5;Day:30.52p;Night:9p;Standing charge:52.18p/day; Offpeak:12:30-04:30;",
+ "Amount": 10.00,
+ "SiteId": 2,
+ "Status": {
+ "Verdict": "Approved",
+ "StatusMessage": "Charger is available for charging"
+ }
+}
+```
+
+### 响应参数
+
+下表说明了响应的参数：
+
+| 场地                           | 类型     | 描述                                                                                                                                            |
+| ---------------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SparkTransactionId`         | string | 来自原始请求的交易标识符。                                                                                                                                 |
+| `HwSerial`                   | string | 硬件序列号。                                                                                                                                        |
+| `MachineId`                  | 整数     | 机器标识符。                                                                                                                                        |
+| `ServiceStationNumber`       | string | 所选服务站。                                                                                                                                        |
+| `ServiceStationAvailability` | 整数     | 可用性状态（1 = 可用，2 = 忙碌，3 = 停用）。更多信息请参阅下方章节。                                                                                                      |
+| `PosDisplay`                 | string | 要在终端显示屏上显示的自定义消息（以分号分隔的格式）。请参阅 [PosDisplay Format](/docs/integrate-pos-device/spark/additional-resources/spark-posdisplay-format) 了解如何设置消息格式。 |
+| `Amount`                     | number | 该会话的预估金额。                                                                                                                                     |
+| `SiteId`                     | 整数     | 设备所在的站点。                                                                                                                                      |
+| `Status.Verdict`             | string | 设置为 `"Approved"`。                                                                                                                             |
+| `Status.StatusMessage`       | string | 描述性状态消息。                                                                                                                                      |
+
+#### `ServiceStationAvailability`
+
+根据 `ServiceStationAvailability` 字段，POS 设备将以以下方式之一做出响应：
+
+- `1`（可用）：POS 设备继续进入支付阶段。
+- `2`（忙碌）：POS 设备将允许启动设备停止（Device Stop）流程。
+- `3`（停用）：流程立即结束，判定结果为 Declined。

@@ -1,0 +1,131 @@
+---
+title: 创建付款
+metadata:
+  og:description: 一旦 SDK 运行并建立与 Nayax 设备的连接，该设备就可以处理自动售货和无现金交易。
+---
+
+一旦 SDK 运行并建立与 Nayax 设备的连接，该设备就可以处理自动售货和无现金交易。
+
+本指南向您展示如何使用 Nayax Marshall SDK 从外围设备的控制器设置和管理无现金支付交易。
+
+## 前提条件
+
+- 确保您的 SDK 正在运行，并已连接到 `onReady()` 事件所指示的 Nayax 设备。
+
+<Warning>
+  一体化
+
+  如果您尚未完成集成过程，请在继续之前检查[“入门”](/docs/integrate-pos-device/marshall/get-started/marshall-get-started)页面。
+</Warning>
+
+## 创建付款
+
+要使用 Nayax Marshall SDK 执行交易，请按照以下步骤操作。
+
+1. 首先启用设备进行交易。
+   <CodeGroup>
+     ```java Java
+     m_vmc.vend.session_start(vmc_vend_t.session_type_credit_e);
+     ```
+
+     ```csharp C#
+     vmc_instance.vend.session_start(vmc_vend_t.session_type_credit_e);
+     ```
+
+     ```c C
+     vmc_vend_session_start(vmc_vend_session_type_credit_e);
+     ```
+   </CodeGroup>
+2. 当客户出示卡片且获得批准时，将触发 `onSessionBegin()` 事件。
+   这是通知外围设备（例如自动售货机）准备进行付款批准的信号。
+   <CodeGroup>
+     ```java Java
+     m_sessions[0] = new vmc_vend_t.vend_session_t((short) 0, 1, (byte) 0, 10);
+     //the fields are (from left to right): produce code (2 bytes long, meaning value up to 65535), quantity (2 bytes), unit of measure (1 byte), price (2 bytes, meaning value up to 65535)
+     ```
+
+     ```csharp C#
+     List<vmc_vend_t.vend_item_t> list = new List<vmc_vend_t.vend_item_t> ();
+     list.Add(new vmc_vend_t.vend_item_t(0, 10, 1, 1));
+     //the fields are (from left to right): produce code (2 bytes long, meaning value up to 65535), price (2 bytes, meaning value up to 65535), quantity (2 bytes), unit of measure (1 byte).
+     session = new vmc_vend_t.vend_session_t(list);
+     ```
+
+     ```c C
+     session_product.code = 1;
+     session_product .qty = 1;
+     session_product.price = 10;
+     session_product.unit = 1;
+     session->products = &session_product;
+     session->total_products = 1;
+     ```
+   </CodeGroup>
+
+<Warning>
+  价格字段
+
+  price 字段被设置为整数，这意味着它不考虑 [Decimal Place](/docs/integrate-pos-device/marshall/marshall-faqs/faq#decimal-place)：实际价格由设备根据 Decimal Place 计算——也就是说，如果您在 SDK 中设置价格为 50，外围设备会向设备发送价格 50，设备会查看其自身的 Decimal Place 设置，并将发送的价格乘以 10^(-decimal place)。也就是说，如果设备的 Decimal Place 为 2，则设备实际尝试向消费者收取的价格将为 0.50。更多相关信息请参阅 Decimal Place。
+
+  这意味着，如果设备使用小数位数为 2，则最高价格为 655.35（小数位数为 2 的 0XFFFF）。
+</Warning>
+
+<Note>
+  多供应商会议
+
+  对于多售卖会话，当消费者可以在一次交易中选择多个商品时，请启用 `multi_vend_support` 标志。此时会话将包含一个商品列表。您可以在演示应用中查看相关示例。
+</Note>
+
+然后，在 onSessionBegin() 回调函数中，您将发送该会话（交易）的“Vend 请求”：
+
+<Note>
+  <CodeGroup>
+    ```java Java
+    m_vmc.vend.vend_request(m_sessions[m_active_session]);
+    ```
+
+    ```csharp C#
+    vmc_instance.vend.vend_request(session);
+    ```
+
+    ```c C
+    vmc_vend_vend_request(session);
+    ```
+  </CodeGroup>
+</Note>
+
+3. 在 VPOS 批准售卖请求后，外围设备必须通知 SDK 商品已成功交付给消费者。这是通过实现 `onVendApproved(...)` API 并返回以下值之一来完成的：
+
+- `True`：如果售卖过程成功，则会向客户的信用卡收取所请求的金额。
+- `False`：售卖过程失败时使用。
+
+4. 无论是单一会话还是多会话，售卖过程完成后都会调用 `onReady()` 事件，表示设备已准备好进行下一笔交易。
+
+<Note>
+  多会话
+
+  对于多会话配置，当外围设备端的会话结束时，外围设备需要关闭会话才能结算交易：
+
+  <CodeGroup>
+    ```java Java
+    m_vmc.vend.session_close(m_session)
+    ```
+
+    ```csharp C#
+    m_vend_machine.vend.session_close(m_vend_machine.session)
+    ```
+
+    ```c C
+    vmc_vend_session_close(session)
+    ```
+  </CodeGroup>
+</Note>
+
+遵循这些步骤可确保使用 Nayax Marshall SDK 高效、安全地处理从出卡到产品交付和付款的自动售货流程。
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="开始" href="/docs/integrate-pos-device/marshall/get-started/marshall-get-started" arrow />
+
+  <Card icon="link" title="方法和功能" href="/docs/integrate-pos-device/marshall/methods-functions/marshall-methods-and-functions" arrow />
+</Columns>

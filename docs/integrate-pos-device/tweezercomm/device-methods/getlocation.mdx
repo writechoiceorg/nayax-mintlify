@@ -1,0 +1,69 @@
+---
+title: "getLocation"
+description: "Get the device's GPS location for location-based terminal features."
+metadata:
+  og:description: "The getLocation method retrieves the device's current geographic location, including latitude, longitude, accuracy, and the time of the reading."
+---
+
+The `getLocation` method retrieves the device's current geographic location, including latitude, longitude, accuracy, and the time of the reading.
+
+## Request
+
+<Note>
+**JSON-RPC 2.0**
+
+All methods in TweezerComm follow a JSON-RPC 2.0 structure. See [Get Started](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) for more details on how the requests are structured and sent.
+</Note>
+
+In the request, the `method` field needs to be set to `getLocation`, as shown in the example below:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "getLocation",
+    "params": [
+        "device"
+    ],
+    "id": "101"
+}
+```
+
+### Request parameters
+
+The table below describes the request parameters for this method:
+
+| Name     | Type  | Description                      |
+| -------- | ----- | --------------------------------- |
+| `params` | array | Must contain the value `device`  |
+
+## Response
+
+A successful request will return the following response:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "101",
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "",
+        "latitude": "32.0879",
+        "longitude": "34.7999",
+        "accuracy": "12.4",
+        "timestamp": "1751443200000"
+    }
+}
+```
+
+### Response parameters
+
+The table below describes the response parameters for this method:
+
+| Name            | Type    | Description                                                |
+| --------------- | ------- | ------------------------------------------------------------ |
+| `statusCode`    | integer | Operation status (0 = success)                                |
+| `statusMessage` | string  | Operation result message                                      |
+| `latitude`      | string  | Latitude coordinate of the device's location.                 |
+| `longitude`     | string  | Longitude coordinate of the device's location.                |
+| `accuracy`      | string  | Accuracy of the location reading, in meters.                  |
+| `timestamp`     | string  | Epoch timestamp (milliseconds) of when the location was recorded. |

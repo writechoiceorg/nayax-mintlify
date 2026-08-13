@@ -1,0 +1,79 @@
+---
+title: 做周期性
+metadata:
+  og:description: 应至少每天调用一次 doPeriodic 方法，以存入交易并更新 AEA 数据库。此方法会生成 Z 报告。
+---
+
+应至少每天调用一次 `doPeriodic` 方法，以存入交易并更新 AEA 数据库。此方法会生成汇总当天交易的 Z 报告。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“集成”部分](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started)。
+</Note>
+
+请在请求中确保配置以下内容：
+
+- `method` 字段必须设置为 `doPeriodic`。
+- The service must be set to `ashrait` in the `params`.
+- 可选字符串，用于指定报告格式（`narrow`、`medium`、`wide` 或 `xml`）
+
+请求包含一个参数列表，其中可以包含 `forceUpdateParams` 布尔标志，用于强制终端更新其零售商参数。
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "doPeriodic",
+    "params": [
+        "ashrait",
+        "wide",
+        {
+            "forceUpdateParams": true
+        }
+    ],
+    "id": 2
+}
+```
+
+### 请求参数
+
+此方法的参数是一个值列表，而非字典。
+
+- 服务名称（字符串，必填）：服务名称。目前固定为：ashrait。
+- 报告格式（字符串，可选）：报告的格式。可选值包括 narrow、medium、wide 或 xml。
+- 强制更新（布尔值，可选）：一个包含 `forceUpdateParams` 键的可选字典。当为 true 时，将强制终端更新零售商参数。
+
+## 回复
+
+成功的请求将返回以下响应：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "2",
+    "result": {
+        "statusCode": 0,
+        "report": "        MODULARITY 12 \n׳ž׳¡׳₪׳¨ ׳ž׳¡׳•׳£:  0883012   \n׳×׳׳¨׳™׳š:      17/07/2024\n...",
+        "ackNumber": "23346317",
+        "queriedTransactions": [
+            "24071711405408830122531", 
+            "24071711552508830122539", 
+            "24071711552508830122539"
+        ]
+    }
+}
+```
+
+### 响应参数
+
+下表描述了该方法的响应参数。
+
+| 姓名                     | 类型     | 描述                                               |
+| :--------------------- | :----- | :----------------------------------------------- |
+| `statusCode`           | 整数     | Operation status. A value of `0` indicates `OK`. |
+| `statusMessage`        | string | 操作消息（例如 `ok`）                                    |
+| `report`               | string | 日终 / Z 报告内容                                      |
+| `ackNumber`            | string | 此批次的确认编号                                         |
+| `queriedTransactions`  | 字符串数组  | 当前批次的交易                                          |

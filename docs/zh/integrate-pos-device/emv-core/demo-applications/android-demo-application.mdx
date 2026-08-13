@@ -1,0 +1,107 @@
+---
+title: 安卓应用
+metadata:
+  og:description: SDK 提供了带源代码的演示应用程序,让您从第一天起就能测试集成。此演示提供功能齐全的体验。
+---
+
+该 SDK 提供了一个附带源代码的演示应用程序,让您从第一天起就能测试集成效果。此演示提供了一个功能完整的应用程序,通过 Nayax SDK API 与 EMV Core 通信。您可以将该源代码应用程序作为开发自有系统的基础。
+
+<Warning>
+  在开始之前,请确保您的读卡器已在 Nayax Core 系统中注册。若未注册,则无法完成支付交易。
+</Warning>
+
+## 安装
+
+SDK 包含以下文件:
+
+| 文件名                                                   | 描述                                      |
+| ----------------------------------------------------- | --------------------------------------- |
+| `com.nayax.emvCore-release-v.v-bbb.apk`               | EMV核心服务包。                               |
+| `com.nayax.emv_core_android_test-release-v.v-bbb.apk` | 该 SDK 的示例应用程序。                          |
+| `emv-core-test-v.v-bbb.zip`                           | 包含库和 Java 示例应用程序源代码的 Android Studio 项目。 |
+
+要安装演示应用程序,请按以下步骤操作:
+
+1. 在您的 Android 设备上安装 EMV Core 服务 `com.nayax.emvCore-release-x.x-xxx.apk`。
+2. 安装测试应用程序 `com.nayax.emv_core_android_test-release-x.x.x.apk`。
+
+<Note>
+  如果 EMV Core 服务与应用程序或读卡器之间出现通信问题,请重启 EMV Core 服务。
+</Note>
+
+## 使用演示应用程序
+
+要开始使用测试应用程序,您可以按以下步骤操作:
+
+1. 将您的 UNO 读卡器连接到 Android 设备。如果收到系统消息“Allow EmvCore Service to access Saturn 8700”,请点击 OK。
+
+   <Frame>
+     <img src="/images/docs/android-demo-application/image1.png" />
+   </Frame>
+
+   <Warning>
+     如果此消息频繁出现,您可以配置设备以减少提示:
+
+     - 在 Android 操作系统设置中将 Nayax 读卡器加入白名单。
+     - 在您的移动设备上,勾选“Always open EmvCore service when Saturn 8700 is connected”选项并点击 OK。
+     - 同时建议在系统提示时允许“Stop optimizing battery usage”选项。
+   </Warning>
+2. 应用程序将自动尝试连接 EMV Core 服务和 UNO 读卡器。连接成功后,屏幕顶部的状态栏将显示 Ready。
+
+### 浏览应用程序
+
+演示应用程序包含多个页面，用于执行特定操作。
+
+### 维护页面
+
+<Frame>
+  <img src="/images/docs/android-demo-application/image2.png" />
+</Frame>
+
+在维护页面,您可以执行以下操作:
+
+- Get Data:从 EMV Core 服务和读卡器获取版本信息和状态。
+- Show Message(仅适用于 UNO-PLUS 读卡器):允许您编辑并向读卡器显示屏发送两行文本。
+
+### 设置页面
+
+<Frame>
+  <img src="/images/docs/android-demo-application/image3.png" />
+</Frame>
+
+在设置页面,您可以配置以下选项:
+
+- Currency Code:输入货币代码(例如,美元为 `840`,欧元为 `978`)。
+- Product ID:可选,为产品分配一个标识符,以便在交易日志和报告中进行追踪。
+- Timeout:设置交易的超时时长(以秒为单位)。最长时间为 `60` 秒,如需无限轮询,请使用“continuous=true”。
+- Continuous:在发生超时时自动续期交易轮询,从而实现无限轮询。可使用 `CancelTransaction` 命令停止该操作。
+
+### 支付页面
+
+执行支付交易：
+
+1. 两步交易请选择 Authorize,单步交易请选择 Pay。
+2. 输入交易 Amount。
+3. 按 START 发起交易。虚拟显示屏将显示 Present card,状态栏将显示 Payment transaction。
+
+   <Frame>
+     <img src="/images/docs/android-demo-application/image4.png" />
+   </Frame>
+4. 将 EMV 卡出示给读卡器。
+5. 交易响应到达后,将显示在屏幕上,您可继续进入结算页面。
+
+   <Frame>
+     <img src="/images/docs/android-demo-application/image5.png" />
+   </Frame>
+6. 您也可以继续执行另一笔授权。根据 `PMT_KIOSK_AUTOCONFIRM` 配置选项,之前的交易可能会保持开放状态(Authorized),或被自动确认。
+
+### 配置页面
+
+<Frame>
+  <img src="/images/docs/android-demo-application/image6.png" />
+</Frame>
+
+在配置页面,您可以测试 `GetAttribute` 命令:
+
+1. 输入属性(Attribute)名称,例如 `CONFIG_VERSION`。
+2. 按 `GET ATTRIBUTE` 从配置文件中获取属性值。

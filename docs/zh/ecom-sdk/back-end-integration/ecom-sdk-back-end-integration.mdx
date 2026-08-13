@@ -1,0 +1,45 @@
+---
+title: 后端集成
+metadata:
+  og:description: Nayax 提供 eCom API，用于处理确保交易得以处理所需的复杂服务器端逻辑、数据存储和身份验证。
+---
+
+Nayax 提供 eCom API 来处理复杂的服务器端逻辑、数据存储和身份验证，以确保交易得到高效、安全的处理。
+
+<Note>
+  API 参考
+
+  有关其端点和参数的更多详细信息，请参阅完整的电子商务[API 参考文档](/reference/ecom-sdk/overview)。
+</Note>
+
+<Note>
+  集成 URL
+
+  在进行 API 集成时，请使用稳定 URL。
+
+  - `https://stable-sdk-api.nayax.com/`
+</Note>
+
+## 电子商务 API
+
+此API作为处理电子商务请求的接口，包括初始化和支付。请参见下图：
+
+<Frame>
+  <img src="/images/docs/ecom-sdk-back-end-integration/image1.png" />
+</Frame>
+
+在哪里：
+
+1. 商家的后端向 Nayax 服务器发送 API 请求。
+2. Nayax 处理请求并向商家的后端发送响应（批准或拒绝）。
+3. Nayax 服务器会异步地向您的后端发送 webhook 通知，其中包含最终的交易状态。
+
+## 参见
+
+<Columns cols={2}>
+  <Card icon="link" title="Nayax 令牌" href="/docs/ecom-sdk/back-end-integration/nayax-ecom-tokens" />
+
+  <Card icon="link" title="Webhook 通知" href="/docs/ecom-sdk/back-end-integration/webhook-notifications" />
+</Columns>
+
+<br />

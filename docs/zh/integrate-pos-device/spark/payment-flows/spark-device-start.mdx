@@ -1,0 +1,45 @@
+---
+title: 设备启动
+metadata:
+  og:description: Device Start 流程直接从 Nayax 终端发起，允许消费者通过选择服务或出示卡片来开始一个会话。
+---
+
+设备启动流程直接在 Nayax 终端启动，消费者可以通过选择服务或出示银行卡来开启服务。这实现了与终端的交互式通信，例如在服务正式开始之前显示费率或确认服务站是否可用。
+
+设备启动流程使用以下 Spark 方法：
+
+- [`StartSession`](/reference/spark/transactions/startsession)
+- [`InfoQuery`](/reference/spark/transactions/infoquery)
+- [`TransactionNotify`](/reference/spark/transactions/transactionnotify)
+- [`Settlement`](/reference/spark/transactions/settlement)
+- [`CancelTransaction`](/reference/spark/transactions/canceltransaction)
+- [`TimeoutCallback`](/reference/spark/transactions/timeoutcallback)
+
+<Note>
+  仅限预授权
+
+  设备启动目前仅支持预授权，有关预选选项，请参阅[远程启动](/docs/integrate-pos-device/spark/payment-flows/spark-remote-start)。
+</Note>
+
+## 预授权流程
+
+要了解设备启动预授权流程，请参见下图：
+
+<Frame>
+  <img src="/images/docs/spark-device-start/image1.png" />
+</Frame>
+
+以下是该图的细分：
+
+1. A consumer selects a service station (and/or presents a card) on the Nayax Device, which sends an [`InfoQuery`](/reference/spark/transactions/infoquery) request to the Nayax Server.
+2. The Nayax Server sends a [`StartSession`](/reference/spark/transactions/startsession) to the 3rd Party Server.
+3. 第三方服务器以 `StartSession Response` 响应 Nayax 服务器。
+4. Nayax 服务器向第三方服务器发送 `InfoQuery`。
+5. 第三方服务器以 `InfoQuery` 响应 Nayax 服务器。
+6. Nayax 服务器将 `InfoQuery` 命令发回给 Nayax 设备。
+7. 消费者出示卡片（如果尚未出示）。Nayax 设备向 Nayax 服务器发送 `AuthorizationRequest`。
+8. The Nayax Server performs authorization with a Payment Provider and then sends a [`TransactionNotify`](/reference/spark/transactions/transactionnotify) to the 3rd Party Server.
+9. The 3rd Party Server responds to the Nayax Server with a [`TransactionNotify`](/reference/spark/transactions/transactionnotify) Response.
+10. Nayax 服务器将 `AuthorizationResponse` 发回给 Nayax 设备。此时，可以在服务站提供服务，Nayax 设备恢复空闲状态。
+11. The 3rd Party Server sends a [`Settlement`](/reference/spark/transactions/settlement) command to the Nayax Server.
+12. The Nayax Server performs the settlement with the Payment Provider and then sends a [`Settlement`](/reference/spark/transactions/settlement) back to the 3rd Party Server.

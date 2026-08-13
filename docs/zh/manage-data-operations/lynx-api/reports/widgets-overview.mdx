@@ -1,0 +1,56 @@
+---
+title: 仪表盘小部件概览
+description: 小部件是 Lynx Reports 仪表板上的可视化组件，用于显示机器和操作员数据。
+metadata:
+  og:description: 小部件是可视化组件，用于显示特定的自定义数据，以满足您的业务需求。您可以在“报告”中找到这些小部件。  > 仪表板。
+---
+
+小部件是可视化组件，用于显示特定的自定义数据，以满足您的业务需求。您可以在**“报告”**中找到这些小部件。 ** > 仪表板**。
+
+小部件分为两个级别：
+
+- **操作员/参与者级别：**从多台机器收集数据的组件。
+- **机器级别：**显示特定于单台机器的数据的小部件。
+
+<Note>
+  每个组件都有自己独特的标识符（`widget_type_id`）、筛选条件及其他配置选项。完整参考请参阅 [Widgets ID List](/docs/manage-data-operations/lynx-api/reports/available-widgets)。
+</Note>
+
+## 已记录的小部件
+
+<CardGroup cols={2}>
+  <Card title="按时期销售情况" href="/docs/manage-data-operations/lynx-api/reports/widget-sales-by-period">
+    条形图显示了您的车队在选定时间段内产生的收入。
+  </Card>
+
+  <Card title="仪表盘销售表" href="/docs/manage-data-operations/lynx-api/reports/widget-dashboard-sales-table">
+    按报告窗口划分的收入和交易笔数的数值细分。
+  </Card>
+
+  <Card title="去年与今年月销售额对比" href="/docs/manage-data-operations/lynx-api/reports/widget-last-year-vs-this-year">
+    本年度与上年度月度销售业绩的直观对比。
+  </Card>
+
+  <Card title="十大最受欢迎销售/销售机器" href="/docs/manage-data-operations/lynx-api/reports/widget-10-most-popular-machines">
+    按销售额和销售量对您车队中表现最佳的机器进行排名。
+  </Card>
+</CardGroup>
+
+## 通用小部件操作
+
+这些选项显示在每个小部件的右侧，并提供额外的控制选项。
+
+<Frame>
+  <img src="/images/docs/widgets-lynx/image9.jpg" />
+</Frame>
+
+1. **下拉箭头**按钮提供以下选项：
+
+<Accordion title="选项">
+  - **锁定小部件**：将小部件固定在仪表板上的当前位置，以防止意外移动或调整大小。
+  - **导出**：允许您以 PDF 格式下载小部件的原始数据，以便进行外部报告。
+  - **移除小部件**：从当前仪表盘视图中删除该小部件。
+</Accordion>
+
+2. **货币切换**：账单/货币图标会打开一个子菜单，允许您更改小部件中的货币。
+3. **调整大小工具**：该图标位于小部件的右下角，点击并拖动即可调整仪表板上小部件的大小。

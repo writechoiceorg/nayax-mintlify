@@ -8,6 +8,10 @@ Reader messages are critical for communicating the status of the card reader to 
 
 The sections below contain tables describing the different reader messages that can be displayed.
 
+## Main reader messages
+
+These are the messages sent for the reader's main operational states, transitions, and error conditions:
+
 | Category | Hex (Internal) | Decimal (API) | Message Details |
 | :--- | :--- | :--- | :--- |
 | **Main States** | 0x00 | 0 | (Blank Screen) |
@@ -34,4 +38,35 @@ The sections below contain tables describing the different reader messages that 
 | | 0x0A | 10 | Terminated |
 | | 0x0B | 11 | PIN Entry Required – see attendant |
 | | 0x0C | 12 | See Phone |
-| | 255 | N/A | Message from EMV Core (e.g. after reading Mifare card) |
+| | 255 | N/A | Deprecated since SDK v1.5. Replaced by indexes 201 to 220 below. |
+
+## Other messages from EMV Core
+
+Since SDK v1.5, EMV Core sends additional status messages using dedicated indexes instead of the single index 255 used in earlier versions. You can overwrite each message's default text with the corresponding configuration key.
+
+| Decimal (API) | Default text | Configuration key |
+| :--- | :--- | :--- |
+| 201 | Loading... | `SAT_MSG_LOADING` |
+| 202 | Welcome | `SAT_MSG_READER_IDLE` |
+| 203 | Vending item | `SAT_MSG_VEND_ONLINE` |
+| 204 | Thank You! Total: X.XX | `SAT_MSG_RESULT` |
+| 205 | Declined | `SAT_MSG_DECLINED` |
+| 206 | Please select an item | `SAT_MSG_SELECT` |
+| 207 | Error Please Try Again | `SAT_MSG_ERROR` |
+| 208 | Please / Wait ... | `SAT_MSG_DISABLED` |
+| 209 | No selection Cancelling | `SAT_MSG_CANCEL` |
+| 210 | Starting over | `SAT_MSG_SELECTION_TIMEOUT` |
+| 211 | Not enough credit | `SAT_MSG_LOW_BALANCE` |
+| 212 | Updating... | `SAT_MSG_BUSY` |
+| 213 | Insert, swipe or Try another card | `SAT_MSG_SWIPE_ALL` |
+| 214 | Amount too small | `SAT_MSG_MIN_PRICE` |
+| 215 | Credit received Select product | `SAT_MSG_SELECT_NOCARD` |
+| 216 | Card not recognized | `SAT_MSG_CARD_NOT_RECOGNIZED` |
+| 217 | Authorizing... | `SAT_MSG_CLP_AUTHORIZING` |
+| 218 | Approved Balance: | `SAT_MSG_CLP_APPROVED` |
+| 219 | Varies. Firmware version or IP address at startup. | `SAT_MSG_SYSTEM_INFO` |
+| 220 | Varies. Set by the host using the `ShowMessage` command. | `SAT_MSG_CUSTOM_MESSAGE` |
+
+<Note>
+  Indexes 221 to 250 are reserved for future EMV Core messages.
+</Note>

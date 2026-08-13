@@ -1,0 +1,119 @@
+---
+title: 示例：加油站流量
+description: 标准加油交易的分步指南。
+metadata:
+  og:description: 以下流程展示了典型的 Pay-at-the-Pump（加油站泵前支付）工作流程，结合了支付检测、用户交互和最终结算。
+---
+
+以下流程展示了典型的 Pay-at-the-Pump（加油站泵前支付）工作流程，结合了支付检测、用户交互和最终结算。
+
+### 步骤 1:启用读卡器
+
+系统首先激活终端,等待刷卡或使用移动钱包。
+
+```json
+{
+"command": "cardDetect",
+"requestId": "fuel-001",
+"data": {
+"amount": 50000,
+"tranType": 1,
+"channels": ["CTLS", "CHIP", "SWIPE"]
+}
+}
+```
+
+### 步骤 2:确认支付位置
+
+检测到卡片后,询问用户是在此处支付还是在店内支付。
+
+```json
+{
+"command": "displayConfirm",
+"requestId": "fuel-002",
+"data": {
+"title": "Choose Payment Method",
+"yesLabel": "Pay at Pump",
+"noLabel": "Pay in Store",
+"yesImage": "payatpump",
+"noImage": "payinstore"
+}
+}
+```
+
+### 步骤 3:选择油品类型
+
+提示用户选择所需的油品等级。
+
+```json
+{
+"command": "displaySelect",
+"requestId": "fuel-003",
+"data": {
+"title": "Select Fuel Type",
+"options": [
+{"tag": "87", "label": "Unleaded 87"},
+{"tag": "89", "label": "Unleaded 89"},
+{"tag": "DSL", "label": "Diesel"}
+],
+"showTags": true
+}
+}
+```
+
+### 步骤 4:授权最高金额
+
+调用 authorization 命令,根据初始 cardDetect 金额对资金进行保留。
+
+```json
+{
+"command": "authorize",
+"requestId": "fuel-004"
+}
+```
+
+### 步骤 5:显示加油屏幕
+
+更新终端显示屏,在加油机工作期间显示循环动画。
+
+```json
+{
+"command": "displayScreen",
+"requestId": "fuel-005",
+"data": {
+"title": "Fueling...",
+"mediaId": "fueling",
+"fitImage": "FULL",
+"loop": true
+}
+}
+```
+
+### 步骤 6:结算实际金额
+
+当油枪放回枪座后,使用最终交易金额调用 settle。
+
+```json
+{
+"command": "settle",
+"requestId": "fuel-006",
+"data": {
+"transactionId": "TXN-20260113-004000",
+"amount": 7850
+}
+}
+```
+
+### 步骤 7:打印小票
+
+通过提供交易的纸质或电子记录来完成流程。
+
+```json
+{
+"command": "print",
+"requestId": "fuel-007",
+"data": {
+"printData": "Fuel Receipt\nUnleaded 87\n15.7 gal @ $5.00/gal\nTotal: $78.50"
+}
+}
+```

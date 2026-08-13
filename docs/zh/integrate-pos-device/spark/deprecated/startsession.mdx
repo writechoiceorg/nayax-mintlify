@@ -1,0 +1,56 @@
+---
+title: 开始会话
+metadata:
+  og:description: 这是 Nayax 发送的初始 API 调用。它通过对双方进行身份验证并生成 SparkTransactionId 来启动交易会话。
+---
+
+这是 Nayax 发送的初始 API 调用。它通过对双方进行身份验证并生成 `SparkTransactionId` 来启动交易会话，该 ID 将在整个交易生命周期的后续所有调用中被回显。
+
+## 要求
+
+Spark 平台会向您配置的 `StartSession` 端点发送 POST 请求。负载包含以下正文：
+
+```json
+{
+ "HwSerial": "0434334921100366",
+ "MachineId": 71234996,
+ "TokenId": 116383,
+ "Random": "123456789qwertyui"
+}
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+| 场地          | 类型     | 描述                     |
+| ----------- | ------ | ---------------------- |
+| `HwSerial`  | string | 支付终端硬件的序列号             |
+| `MachineId` | 整数     | 机器的唯一标识符               |
+| `TokenId`   | 整数     | Nayax 提供的用于安全身份验证的唯一令牌 |
+| `Random`    | string | 用于会话验证的随机字符串           |
+
+## 回复
+
+成功的响应将返回以下正文：
+
+```json
+{
+  "Cipher": "X305dITNTAw2vHsxE+taVcn6UvgBC3fdI6QbqeABgHbo8CKsoZhqISJfslehCiA+L7XYrqvKFci7C6BNj/trzBuNJwBEjgBzKhhgpJ5ggnw=",
+  "Status": {
+    "Verdict": "Approved"
+  }
+}
+```
+
+### 响应参数
+
+下表说明了响应的参数：
+
+| 场地                        | 类型     | 描述                                      |
+| :------------------------ | :----- | :-------------------------------------- |
+| `Cipher`                  | string | 用于验证身份并启动会话的加密数据                        |
+| `Status`                  | object | 包含请求的结果                                 |
+| `Status.Verdict`          | string | "Approved" 表示会话成功启动                     |
+| `Status.ErrorDescription` | String | 提供发生的任何错误的人类可读描述；若请求成功，则显示 `No Errors`。 |
+| `Status.ErrorCode`        | 数字     | 指示交易期间发生的特定错误类型的数字代码。此字段仅出现在错误响应中。      |

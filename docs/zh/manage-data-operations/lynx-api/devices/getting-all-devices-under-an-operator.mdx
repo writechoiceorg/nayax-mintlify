@@ -1,0 +1,183 @@
+---
+title: 检索设备信息
+metadata:
+  og:description: 在 Nayax Core 中，设备具有多种属性，例如设备的运营商、型号或 ID 及其状态。所有这些属性都可以在 Devices 菜单中查看。
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+在 Nayax Core 中，设备具有各种属性，例如设备的运营商、型号或 ID 以及状态。所有这些属性都可以在**“设备”**菜单中查看，您可以通过以下方式访问该菜单：
+
+1. 在您的仪表板中，转到**管理 > 设备**。
+2. 使用搜索功能来筛选设备列表。
+3. 从列表中选择所需的设备。
+4. 打开**“常规信息”**选项卡。
+
+<Frame>
+  ![](/images/docs/getting-all-devices-under-an-operator/image1.png)
+</Frame>
+
+在这里，您可以看到有关所选设备的常规信息。
+
+## Lynx API 方法
+
+Lynx API 允许您使用以下端点以编程方式从一个设备或一组设备检索所有这些信息：
+
+<Warning>
+  验证
+
+  请参阅本文档的[“安全和令牌”](/docs/manage-data-operations/lynx-api/security)页面，了解如何访问您的令牌，以及如何正确使用它来验证您的 API 请求。
+</Warning>
+
+### 通过 `deviceID` 检索设备
+
+使用 [Get Device by DeviceID](/reference/lynx/devices/get-device-by-deviceid) 端点，并将 `deviceID` 作为路径参数提供，即可检索该设备的详细信息。请参见下方代码块中的示例请求和响应：
+
+<CodeGroup>
+  ```sh Request
+  curl --request GET \
+       --url https://qa-lynx.nayax.com/operational/v1/devices/{DeviceID} \
+       --header 'accept: application/json'
+  ```
+
+  ```json Response
+  {
+    "VposChipId": "string",
+    "IsDeviceExists": true,
+    "FWVersionNumber": "string",
+    "VposVersionNumber": "string",
+    "DeviceID": 0,
+    "ActorID": 0,
+    "DeviceTypeLutID": 0,
+    "DeviceSerial": "string",
+    "IMEI": "string",
+    "DeviceDescription": "string",
+    "SimCardID": 0,
+    "FWVersionID": 0,
+    "RequestedFwID": 0,
+    "PollInterval": 0,
+    "StatusID": 0,
+    "LastUpdated": "2024-12-09T14:40:50.980Z",
+    "IsCollectMultipleParameters": true,
+    "IsLogged": true,
+    "FRequestedNewVersionDate": "2024-12-09T14:40:50.980Z",
+    "FTookNewVersionDate": "2024-12-09T14:40:50.980Z",
+    "HardwareVersion": "string",
+    "IsRental": true,
+    "RentalEndMonth": 0,
+    "RentalEndYear": 0,
+    "IsToBeReturned": true,
+    "FeeCommunicationThreshold": 0,
+    "BillingPlanID": 0,
+    "BillingPlanActivationDate": "2024-12-09T14:40:50.980Z",
+    "DeviceCreationDate": "2024-12-09T14:40:50.980Z",
+    "CreatedBy": 0,
+    "UpdatedBy": 0,
+    "DistributorBillingPlanID": 0,
+    "ChipID": "string",
+    "OrderID": 0,
+    "ExternalFlashSize": 0,
+    "BoardSerial": "string",
+    "FlashSize": 0,
+    "DeviceFamily": "string",
+    "ModemModel": "string",
+    "TrialEndDate": "2024-12-09T14:40:50.980Z",
+    "VerticalTypeID": 0,
+    "VerticalProductTypeID": 0,
+    "VerticalTypeLutID": 0,
+    "VerticalProductTypeLutID": 0,
+    "Refs": {
+      "additionalProp": "string"
+    }
+  }
+  ```
+</CodeGroup>
+
+<Note>
+  路径参数
+
+  代替`<DeviceID>`使用设备的实际标识符。
+</Note>
+
+### 检索所有设备
+
+使用“获取所有设备”端点，您可以检索可用设备列表。以下代码块显示了一个示例请求和响应。
+
+<CodeGroup>
+  ```sh Request
+  curl --request GET \
+       --url https://qa-lynx.nayax.com/operational/v1/devices \
+       --header 'accept: application/json'
+  ```
+
+  ```json Response
+  [
+    {
+      "VposChipId": "string",
+      "IsDeviceExists": true,
+      "FWVersionNumber": "string",
+      "VposVersionNumber": "string",
+      "DeviceID": 0,
+      "ActorID": 0,
+      "DeviceTypeLutID": 0,
+      "DeviceSerial": "string",
+      "IMEI": "string",
+      "DeviceDescription": "string",
+      "SimCardID": 0,
+      "FWVersionID": 0,
+      "RequestedFwID": 0,
+      "PollInterval": 0,
+      "StatusID": 0,
+      "LastUpdated": "2024-12-09T14:40:50.980Z",
+      "IsCollectMultipleParameters": true,
+      "IsLogged": true,
+      "FRequestedNewVersionDate": "2024-12-09T14:40:50.980Z",
+      "FTookNewVersionDate": "2024-12-09T14:40:50.980Z",
+      "HardwareVersion": "string",
+      "IsRental": true,
+      "RentalEndMonth": 0,
+      "RentalEndYear": 0,
+      "IsToBeReturned": true,
+      "FeeCommunicationThreshold": 0,
+      "BillingPlanID": 0,
+      "BillingPlanActivationDate": "2024-12-09T14:40:50.980Z",
+      "DeviceCreationDate": "2024-12-09T14:40:50.980Z",
+      "CreatedBy": 0,
+      "UpdatedBy": 0,
+      "DistributorBillingPlanID": 0,
+      "ChipID": "string",
+      "OrderID": 0,
+      "ExternalFlashSize": 0,
+      "BoardSerial": "string",
+      "FlashSize": 0,
+      "DeviceFamily": "string",
+      "ModemModel": "string",
+      "TrialEndDate": "2024-12-09T14:40:50.980Z",
+      "VerticalTypeID": 0,
+      "VerticalProductTypeID": 0,
+      "VerticalTypeLutID": 0,
+      "VerticalProductTypeLutID": 0,
+      "Refs": {
+        "additionalProp": "string"
+      }
+    }
+  ]
+  ```
+</CodeGroup>
+
+该端点允许您在查询参数中使用筛选条件。请参阅下表了解所有可用的查询参数——请注意，查询中至少应包含 ActorId（如有需要，也可添加其他筛选条件）：
+
+| 查询参数                | 类型          | 描述               |
+| ------------------- | ----------- | ---------------- |
+| `ActorId`           | `int64`     | 与设备关联的参与者的唯一标识符。 |
+| `isConnected`       | `boolean`   | 根据设备的连接状态进行过滤。   |
+| `pageNumber`        | `int32`     | 默认为 1。分页结果的页码。   |
+| `pageSize`          | `int32`     | 默认为 1000。每页的结果数。 |
+| `nayaxDeviceSerial` | `string`    | Nayax 设备的序列号。    |
+| `orderId`           | `int32`     | 根据关联的订单 ID 过滤设备。 |
+| `statusId`          | `int32`     | 根据设备状态 ID 过滤设备。  |
+| `createdDt`         | `date-time` | 根据创建日期过滤设备。      |
+| `updatedDt`         | `date-time` | 根据上次更新日期过滤设备。    |
+| `boardSerial`       | `string`    | 设备主板的序列号。        |
+| `imei`              | `string`    | 设备的国际移动设备识别号码。   |
+| `chipId`            | `string`    | 设备中芯片的唯一标识符。     |

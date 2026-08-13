@@ -7,9 +7,9 @@ metadata:
 
 While integrators should use the [C API](/docs/integrate-pos-device/emv-core/rtos/rtos-c-api) provided by `libecodsdk`, the JSON-RPC API is used by the EMV Core logs and is very useful during integration debugging.
 
-## Protocol Rules
+## Protocol rules
 
-### Syntax Rules
+### Syntax rules
 
 All commands follow these formatting conventions:
 
@@ -24,7 +24,7 @@ All commands follow these formatting conventions:
 * Use a different `id` for each command (e.g., a running counter) to aid synchronization.
 * An illegal command returns a `"Not existing command"` response from the EMV Core.
 
-### Send & Receive
+### Send & receive
 
 **Sending a message:**
 
@@ -39,7 +39,7 @@ All commands follow these formatting conventions:
 3. Parse and process the message as JSON-RPC.
 4. Send a JSON-RPC response (no response needed for `ReaderMessageEvent`; no response is sent for `socket_data_received`).
 
-## Payment Flow
+## Payment flow
 
 A typical payment session follows this sequence:
 
@@ -58,7 +58,7 @@ A typical payment session follows this sequence:
 
 <Frame><img src="/images/docs/rtos-integration-guide/transaction-flow-2.png" /></Frame>
 
-### Closed Loop (CLP) Flow
+### Closed loop (CLP) flow
 
 For pre-paid cards, EMV Core immediately returns the card UID to the host application via `TransactionComplete` without sending to the Nayax server.
 
@@ -382,7 +382,7 @@ Sent when the display message on the Saturn Reader changes. Use this to synchron
 
 ---
 
-## Network Protocol
+## Network protocol
 
 ### Socket API
 
@@ -437,7 +437,7 @@ Sent by the host when data is available on an open socket. The device does not r
 
 ---
 
-### Network Management APIs
+### Network management APIs
 
 #### network\_get\_status
 

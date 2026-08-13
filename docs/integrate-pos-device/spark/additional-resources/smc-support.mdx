@@ -20,7 +20,7 @@ To support this feature, you must use a dedicated “Payment Method”. Machines
 Please ask your Nayax Integration Engineer for more information and configuration assistance.
 </Note>
 
-## How SMC Works
+## How SMC works
 
 When SMC is enabled:
 
@@ -40,7 +40,7 @@ The Payment card's Unique ID (Card UID) is a critical identifier for Spark self-
 If you don’t validate the card on your side, unauthorized users could start sessions. Always compare the `UID` data in the callback.
 </Warning>
 
-## Use Case Example
+## Use case example
 
 A typical SMC transaction would look like the following:
 
@@ -58,11 +58,14 @@ A typical SMC transaction would look like the following:
 `/CancelTransaction` is mandatory and will indicate an invalid card was presented or if the transaction is completed with no charge (no service provided / settlement=0).
 </Warning>
 
-## See Also
+## See also
 
+<CardGroup cols={1}>
 <Card
-  icon="link"
+  icon="credit-card"
   title="TransactionCallback"
   href="/docs/integrate-pos-device/spark/webhook-callbacks/transactioncallback"
-  arrow
-/>
+>
+  Notifies you when a card tap completes an authorization attempt.
+</Card>
+</CardGroup>

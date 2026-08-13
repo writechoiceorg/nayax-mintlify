@@ -1,0 +1,100 @@
+---
+title: 获取机器小部件数据（API）
+metadata:
+  og:description: Lynx Widget API 提供对组件数据的访问。在本文中，您将了解如何使用 API 调用检索组件信息，从列出可用组件到获取特定组件的数据。
+---
+
+Widgets Dashboard API 使您能够发现给定屏幕上有哪些可用组件，并获取每个组件的数据。
+
+## 先决条件
+
+在调用 Widget API 之前，您需要具备以下条件：
+
+- 访问 Lynx 质量保证或生产环境
+- 有效的 API 令牌（参见[“安全性和令牌](/docs/manage-data-operations/lynx-api/security)”）
+- [机器](/reference/lynx/machines/get-specific-machine-basic-info)或[操作员](/docs/manage-data-operations/lynx-api/operator/index)ID
+
+## 基本 URL
+
+```text
+https://<host>/v1/dashboard
+```
+
+<Note>
+  如果服务器配置为 `UseBasePath: true`，所有路由都将以 `/operational` 为前缀：
+
+  ```text
+  https://<host>/operational/v1/dashboard
+  ```
+</Note>
+
+## 验证
+
+所有接口都需要通过 JWT 持有者令牌进行身份验证。请在每个请求中包含该令牌：
+
+```text
+Authorization: Bearer <YOUR_ACCESS_TOKEN>
+```
+
+有关获取令牌的详细信息，请参阅[“安全与令牌”部分](/docs/manage-data-operations/lynx-api/security)。
+
+## 可用端点
+
+以下接口可用。选择卡片即可查看完整的 API 参考文档。
+
+<CardGroup cols={2}>
+  <Card icon="grid" title="屏幕列表小部件" href="/reference/lynx/report/get-available-widgets">
+    返回为给定屏幕类型配置的所有小部件，包括它们的 ID、名称和配置。
+  </Card>
+
+  <Card icon="chart-line" title="获取组件数据" href="/reference/lynx/report/retrieve-widget-data">
+    获取特定组件的数据，并支持完整的筛选功能（日期范围、机器 ID 等）。**推荐用于大多数使用场景。**
+  </Card>
+</CardGroup>
+
+<Note>
+  GET 简单变体（`GET /v1/dashboard/widget-data`）未包含在 API 参考中，因为它未在 OpenAPI 规范中定义。请使用 POST 变体以获得筛选条件支持和完整的 API 参考覆盖。
+</Note>
+
+## 典型集成流程
+
+标准的集成过程包括三个步骤：发现可用的组件，使用可选过滤器获取其数据，然后解析响应有效负载。
+
+```text
+1. GET /v1/dashboard/widgets?screenTypeId=1
+       → Discover available widgets and their widgetTypeId values
+
+2. POST /v1/dashboard/get-widget-data  (recommended - supports filters)
+   OR
+   GET  /v1/dashboard/widget-data      (simple - no filter support)
+       → Fetch widget data, optionally scoped by entity and filtered by date/machine
+
+3. Parse the response:
+   - widgetDetails.widgetConfig → rendering hints
+   - data                       → actual data payload (structure varies per widget)
+```
+
+## 错误处理
+
+小部件端点可能会返回以下 HTTP 状态代码：
+
+| HTTP 状态 | 原因                                                                                    |
+| ------- | ------------------------------------------------------------------------------------- |
+| `400`   | 缺少必填字段，参数值无效                                                                          |
+| `401`   | 缺少或已过期的持有者代币                                                                          |
+| `403`   | 已通过身份验证，但缺少此端点所需的权限密钥                                                                 |
+| `500`   | 后端错误 - 常见原因：`Content-Type` 标头错误（应使用 `application/json`）、`widgetTypeId` 无效，或筛选条件格式无法识别 |
+
+## 权限
+
+每个端点都要求经过身份验证的用户在 Lynx 中被分配特定的菜单权限。权限由 `GetContext()` 中间件在每个请求中进行检查：
+
+| 端点                                   | 权限密钥                          | OAuth 范围      |
+| ------------------------------------ | ----------------------------- | ------------- |
+| `GET /v1/dashboard/widgets`          | `lynx_report_get_widgets`     | `report:read` |
+| `POST /v1/dashboard/get-widget-data` | `lynx_report_get_widget_data` | `report:read` |
+| `GET /v1/dashboard/widget-data`      | `lynx_report_get_widget`      | `report:read` |
+
+<Note>
+  `GET /v1/dashboard/widget-data` 需要 `lynx_report_get_widget` 权限，该权限与 `lynx_report_get_widget_data`（POST 变体）是相互独立的。如果您有权访问 POST 端点，但在 GET 端点收到 `403` 错误，请在您的 Lynx 角色配置中申请 `lynx_report_get_widget` 权限。
+</Note>

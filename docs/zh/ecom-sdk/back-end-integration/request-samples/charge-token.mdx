@@ -1,0 +1,114 @@
+---
+title: Charge Token
+metadata:
+  og:description: 使用先前保存的卡令牌处理付款。此端点主要用于周期性付款(MIT 或 CIT 交易)。
+---
+
+使用先前保存的卡令牌处理付款。此端点主要用于周期性付款(MIT 或 CIT 交易)。
+
+该端点可能以服务器对服务器的方式暴露，用于双因素身份验证流程，这可能需要对身份验证机制进行调整。循环付款调用只能从服务器发起。财政化（Fiscalization）和 eReceipt 流程也应在此流程中执行。
+
+## 要求
+
+Requests are performed to the[ `/charge-token`](/reference/ecom/payments/charge-token) endpoint.
+
+```json
+{
+  "basicInfo": {
+    "requestType": 0,
+    "entryMode": 1,
+    "amount": 25.5,
+    "currency": "EUR",
+    "countryCode": "DE",
+    "tokenModel": 1,
+    "cvc": null,
+    "token": "NAYAXTOK12345",
+    "merchantRequestId": "MERCHANT_MIT_001",
+    "transactionId": null,
+    "transactionTimeUtc": null,
+    "isSaveTokenWithoutConsent": false
+  },
+  "machineInfo": {
+    "machineId": "0434334921100366"
+  },
+  "cardHolderInfo": {
+    "cardholderEmail": "customer@example.com",
+    "cardHolderUniqId": "unique_customer_id_123"
+  },
+  "additionalInfo": {
+    "additionalData": "{\"loyaltyPoints\": 100}",
+    "additionalReceiptData": "[{\"key\":\"product\", \"value\":\"Premium Service\"}]"
+  },
+  "validationKey": "AUTH_VALID_KEY_XYZ"
+}
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+| 范围                          | 地点    | 类型             | 描述                                                                                                                                                                                             | 必需的 |
+| :-------------------------- | :---- | :------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-- |
+| `requestType`               | 基本信息  | Int32          | 定义交易类型（例如，0 表示 Sale/Charge）。                                                                                                                                                                   | 是的  |
+| `entryMode`                 | 基本信息  | Int32          | 定义卡片数据的获取方式（例如，1 表示 E-commerce/MIT）。                                                                                                                                                           | 是的  |
+| `amount`                    | 基本信息  | 小数             | 要收取的金额。                                                                                                                                                                                        | 是的  |
+| `currency`                  | 基本信息  | String         | 三位字母的 ISO 货币代码。                                                                                                                                                                                | 是的  |
+| `countryCode`               | 基本信息  | String         | 交易来源地的两位字母 ISO 国家/地区代码。                                                                                                                                                                        | 是的  |
+| `tokenModel`                | 基本信息  | Int32          | 所使用的具体令牌化方案。令牌类型行为：令牌的类型（subscription/COF/top-up）在其首次创建时设置，并存储在我们的系统中。如果后续的 [Charge Token](/reference/ecom/payments/charge-token) 请求中包含不同的令牌类型参数，该参数将被忽略。系统始终使用来自初始化请求的原始令牌类型，无论后续扣款请求中提供了什么值。 | 是的  |
+| `cvc`                       | 基本信息  | String \| null | CVC/CVV（对于令牌化的 MIT 通常为 null）。                                                                                                                                                                  | 是的  |
+| `token`                     | 基本信息  | String         | 表示待扣款卡片的唯一令牌。                                                                                                                                                                                  | 是的  |
+| `merchantRequestId`         | 基本信息  | String         | 商户为此请求生成的唯一 ID。                                                                                                                                                                                | 是的  |
+| `isSaveTokenWithoutConsent` | 基本信息  | 布尔值            | 用于保存新令牌的标志（通常为 false）。                                                                                                                                                                         | 是的  |
+| `machineId`                 | 机器信息  | String         | 交易机器/终端的唯一标识符。                                                                                                                                                                                 | 是的  |
+| `cardholderEmail`           | 持卡人信息 | String         | 客户的电子邮件地址。                                                                                                                                                                                     | 是的  |
+| `cardHolderUniqId`          | 持卡人信息 | String         | 持卡人的唯一商户 ID。                                                                                                                                                                                   | 是的  |
+| `additionalData`            | 附加信息  | String         | 以 JSON 字符串形式表示的自定义数据（例如，会员积分信息）。                                                                                                                                                               | 不   |
+| `validationKey`             | Root  | String         | 用于验证请求真实性的加密密钥（HMAC）。                                                                                                                                                                          | 是的  |
+
+## 回复
+
+验证成功将返回 `200 OK` 状态，以及包含已验证商户详细信息的正文：
+
+```json
+{
+  "status": {
+    "verdict": "Approved",
+    "code": 0,
+    "statusMessage": "Payment processed successfully."
+  },
+  "basicInfo": {
+    "amount": 25.5,
+    "currency": "EUR",
+    "merchantRequestId": "MERCHANT_MIT_001",
+    "transactionId": "NAYAXTRANS98765",
+    "transactionTimeUtc": "2025-08-28T10:30:00Z"
+  },
+  "paymentInfo": {
+    "amount": 25.5,
+    "currency": "EUR",
+    "nayaxTokenId": "NAYAXTOK12345",
+    "siteId": 1,
+    "providerTransactionId": "PSP_TRANS_ABC",
+    "decimalPlace": 2
+  }
+}
+```
+
+### 响应参数
+
+下表说明了响应的参数：
+
+| 范围                      | 地点     | 类型       | 描述                                              |
+| :---------------------- | :----- | :------- | :---------------------------------------------- |
+| `verdict`               | status | String   | 'Approved' 或 'Declined'。最终判定结果。                 |
+| `code`                  | status | Int32    | 响应代码：0 表示已批准，否则为相应的拒绝代码。                        |
+| `statusMessage`         | status | String   | 有关交易结果的描述性消息。                                   |
+| `amount`                | 基本信息   | 小数       | 已处理的交易金额。                                       |
+| `currency`              | 基本信息   | String   | 交易的货币。                                          |
+| `merchantRequestId`     | 基本信息   | String   | 原始请求中的唯一 ID。                                    |
+| `transactionId`         | 基本信息   | String   | 由 Nayax 系统分配的唯一交易 ID。                           |
+| `transactionTimeUtc`    | 基本信息   | DateTime | 交易完成时的 UTC 时间戳。                                 |
+| `nayaxTokenId`          | 支付信息   | String   | 用于本次扣款的 token ID。                               |
+| `siteId`                | 支付信息   | Int32    | 与本次付款关联的站点 ID。                                  |
+| `providerTransactionId` | 支付信息   | String   | 由支付服务提供商（Payment Service Provider，PSP）分配的唯一 ID。 |
+| `decimalPlace`          | 支付信息   | Int32    | 该货币/金额所使用的小数位数。                                 |

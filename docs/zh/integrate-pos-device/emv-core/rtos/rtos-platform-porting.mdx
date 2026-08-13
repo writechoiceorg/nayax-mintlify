@@ -1,0 +1,156 @@
+---
+title: 平台移植
+metadata:
+  og:description: 通过实现平台抽象层,将 EMV Core RTOS SDK 移植到新的嵌入式平台。
+---
+
+该 SDK 设计为可在嵌入式平台和操作系统之间移植。要将 SDK 移植到新平台,请按照以下步骤操作。
+
+<Tip>
+  使用 `platform/linux/` 中的 Linux 参考实现作为可用的起点。对于基于 RTOS 的平台,将互斥锁和事件映射到您的 RTOS 原语(例如 FreeRTOS 的 `SemaphoreHandle_t`、Zephyr 的 `k_mutex`)。
+</Tip>
+
+## 实现平台层
+
+### 创建平台目录
+
+在 `platform/` 下创建一个新目录(例如 `platform/my_platform/`),包含两个文件:
+
+### 平台类型(`ecod_platform_types.h`)
+
+定义 SDK 使用的平台特定类型:
+
+```c
+typedef /* platform-specific */ ecod_socket_t;  // Socket handle
+typedef /* platform-specific */ ecod_mutex_t;   // Mutex primitive
+typedef struct {
+    /* platform-specific fields for a waitable event */
+} ecod_event_t;
+```
+
+Linux 参考实现使用 `pthread_mutex_t` 作为互斥锁,并使用一个包装了 `pthread_mutex_t` + `pthread_cond_t` + `bool` 标志的结构体来表示事件。请根据您平台的 RTOS 或操作系统原语进行调整。
+
+### Platform Implementation (`ecod_platform_<name>.c`)
+
+实现 `ecod_sdk_platform.h` 中声明的所有函数。它们分为以下几类:
+
+### 初始化
+
+实现启动函数以分配平台资源:
+
+```c
+// Called once at startup. Initialize platform resources (e.g., signal handling, log files).
+EC_SDK_STATUS ecod_platform_init(void);
+```
+
+### 时钟与计时
+
+实现这些函数以为 SDK 提供单调时钟和阻塞延迟:
+
+```c
+// Return current time in milliseconds (must be monotonic / always increasing)
+u32 ecod_platform_get_tick_ms(void);
+
+// Blocking delay for the given number of milliseconds
+void ecod_platform_delay(u32 delay_ms);
+```
+
+### 日志记录
+
+实现这些函数以将 SDK 日志输出路由到您平台的日志系统:
+
+```c
+// printf-style log output, filtered by level and tagged with module name
+void ecod_log(EC_LOG_LEVEL level, const char* module, const char* format, ...);
+
+// Set the maximum log level that will be output
+void ecod_set_log_level(EC_LOG_LEVEL max_level);
+
+// Log a data buffer as hex (useful for protocol debugging)
+void ecod_log_buf(EC_LOG_LEVEL level, const char* module, const char* msg,
+                  u8* data, u32 data_len);
+```
+
+### 内存(仅当启用 `EC_USE_HEAP` 时)
+
+在启用堆分配时实现 `malloc` 和 `free` 包装函数:
+
+```c
+void* ecod_malloc(u32 size);
+void  ecod_free(void* ptr);
+```
+
+### 互斥锁
+
+使用您平台的互斥原语实现这些函数:
+
+```c
+EC_SDK_STATUS ecod_mutex_init(ecod_mutex_t* out_mutex);
+void          ecod_mutex_lock(ecod_mutex_t* p_mutex);
+void          ecod_mutex_unlock(ecod_mutex_t* p_mutex);
+```
+
+### 事件
+
+用于线程间同步的可等待信号:
+
+```c
+EC_SDK_STATUS ecod_event_init(ecod_event_t* out_event);
+EC_SDK_STATUS ecod_event_clear(ecod_event_t* p_event);
+EC_SDK_STATUS ecod_event_wait(ecod_event_t* p_event, u32 timeout_ms);  // 0xFFFFFFFF = infinite
+EC_SDK_STATUS ecod_event_signal(ecod_event_t* p_event);
+```
+
+### 串行通信
+
+实现这些函数以处理原始串行或 USB HID I/O:
+
+```c
+// Open and configure the serial port (UART or HID). Called once.
+bool ecod_serial_init(void);
+
+// Synchronous send. Returns number of bytes actually sent.
+u32 ecod_serial_send(u8* data, u32 length);
+
+// Receive up to max_length bytes, waiting up to timeout_ms. Returns bytes received.
+u32 ecod_serial_receive(u8* data, u32 max_length, u32 timeout_ms);
+```
+
+### 网络(仅在使用网络桥接时)
+
+实现这些函数以使 SDK 能够访问 TCP 套接字:
+
+```c
+EC_SDK_STATUS ecod_network_init(void);
+void          ecod_network_cleanup(void);
+bool          ecod_network_is_ready(void);
+
+EC_SDK_STATUS ecod_socket_connect(char* host, u16 port, u16 timeout_sec,
+                                   ecod_socket_t* out_socket);
+EC_SDK_STATUS ecod_socket_close(ecod_socket_t socket);
+EC_SDK_STATUS ecod_socket_send(ecod_socket_t socket, u8* data, u32 data_len,
+                                bool last_part, u32* out_sent_data_len);
+EC_SDK_STATUS ecod_socket_recv(ecod_socket_t socket, u8* out_data, u32 max_size,
+                                u32* out_received_size);
+```
+
+## 更新构建系统
+
+修改 `configure.ac` 和 `Makefile.am` 以包含您的平台:
+
+```makefile
+# In ecod_sdk/Makefile.am
+if TARGET_MY_PLATFORM
+libecodsdk_a_SOURCES += platform/my_platform/ecod_platform_my_platform.c
+endif
+```
+
+## 测试集成
+
+使用演示应用程序验证目标平台上的功能:
+
+```bash
+./demo/ecodSdkDemo
+```
+
+有关详细的移植指南,请参阅 `platform/ecod_sdk_platform.h`。

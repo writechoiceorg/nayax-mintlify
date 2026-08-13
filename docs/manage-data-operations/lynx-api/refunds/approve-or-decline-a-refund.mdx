@@ -1,5 +1,6 @@
 ---
 title: "Approve or Decline Refunds"
+keywords: ["decline", "approve refund", "decline refund", "refund status", "pending refund", "dynamic transactions monitor", "refund-approve", "refund-decline", "DeclineReason"]
 metadata:
   og:description: "When a refund is successfully requested, the transaction will remain in the Pending status until approved or declined. You can see this in Nayax core."
 ---
@@ -24,13 +25,13 @@ This process can be done through the Lynx API using the endpoints below.
 <Columns cols={2}>
 <EndpointCard
   title="Approve a Payment Refund"
-  href="/reference/approve-payment-refund"
+  href="/reference/lynx/payment/approve-payment-refund"
   method="post"
 />
 
 <EndpointCard
   title="Decline a Payment Refund"
-  href="/reference/decline-payment-refund"
+  href="/reference/lynx/payment/decline-a-payment-refund"
   method="post"
 />
 </Columns>
@@ -164,7 +165,7 @@ See the table below for more details on each parameter:
   The `TransactionId`, `SiteId` and `MachineAuTime` need to be the same as sent in the refund request.
 </Warning>
 
-### Decline Request
+### Decline request
 
 To decline a refund, use the Decline a Payment Refund endpoint. The code block below displays the request object and its body parameters.
 
@@ -196,7 +197,7 @@ See the table below for more details on each parameter:
   The `TransactionId`, `SiteId` and `MachineAuTime` need to be the same as the one sent in the refund request.
 </Warning>
 
-## Request Status
+## Request status
 
 Once the request is approved or denied, the consumer will receive an email at the address provided in the refund request. The request status will also be updated. You can see this in Nayax core by going to **Reports > Online Reports > Dynamic Transactions Monitor**.
 

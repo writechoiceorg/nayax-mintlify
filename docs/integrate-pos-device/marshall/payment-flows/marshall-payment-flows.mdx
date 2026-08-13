@@ -1,5 +1,6 @@
 ---
 title: "Payment Flows"
+keywords: ["marshall payment flows", "vending machine controller", "multi-vend", "multi-session"]
 metadata:
   og:description: "The Nayax Marshall SDK offers a diverse range of payment flows, each designed to meet specific operational needs and dictate precisely how your."
 ---
@@ -8,19 +9,53 @@ The Nayax Marshall SDK offers a diverse range of payment flows, each designed to
 
 The following pages provide a more detailed description of each one:
 
-<Columns cols={2}>
-  <Card icon="link" title="Single Session with Pre-Selection" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel" />
+## Single Session Flows
 
-  <Card icon="link" title="Single Session with Pre-Authorization" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-auth" />
-</Columns>
+<CardGroup cols={3}>
+  <Card icon="hand-pointer" title="Single Session with Pre-Selection" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-sel">
+    Separate product selection from payment authorization in a single transaction.
+  </Card>
 
-<Columns cols={3}>
-  <Card icon="link" title="Multi-Vend with Pre-Selection" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-vend-with-pre-sel" />
+  <Card icon="shield-check" title="Single Session with Pre-Authorization" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-single-session-with-pre-auth">
+    Approve payment before the customer selects a product to minimize risk.
+  </Card>
 
-  <Card icon="link" title="Multi-Vend with Pre-Authorization" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-vend-with-pre-auth" />
+  <Card icon="server" title="Single Session Pre-Authorization with External Settlement" href="/docs/integrate-pos-device/marshall/payment-flows/external-settlement-marshall">
+    Let a third-party server trigger final settlement or cancellation.
+  </Card>
+</CardGroup>
 
-  <Card icon="link" title="Multi-Session" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session" />
-</Columns>
+## Multi-Vend Flows
+
+<CardGroup cols={2}>
+  <Card icon="cart-shopping" title="Multi-Vending with Pre-Selection" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-vend-with-pre-sel">
+    Dispense multiple selected products after the customer completes one payment.
+  </Card>
+
+  <Card icon="layer-group" title="Multi-Vending with Pre-Authorization" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-vend-with-pre-auth">
+    Let customers buy multiple products after a single upfront authorization.
+  </Card>
+</CardGroup>
+
+## Multi-Session Flows
+
+<CardGroup cols={2}>
+  <Card icon="users" title="Multi-Session" href="/docs/integrate-pos-device/marshall/payment-flows/marshall-multi-session">
+    Separate product selection from authorization and settlement across sessions.
+  </Card>
+
+  <Card icon="network-wired" title="Multi-Session Pre-Authorization with External Settlement" href="/docs/integrate-pos-device/marshall/payment-flows/multi-session-pre-authorization-with-external-settlement">
+    Manage multiple parallel transactions with an external settlement server.
+  </Card>
+</CardGroup>
+
+## Additional Flows & Features
+
+<CardGroup cols={3}>
+  <Card icon="puzzle-piece" title="Sub Flows & Features" href="/docs/integrate-pos-device/marshall/payment-flows/sub-flows-features">
+    Start a transaction from product selection when full pre-selection isn't available.
+  </Card>
+</CardGroup>
 
 ## Recommended Flows
 

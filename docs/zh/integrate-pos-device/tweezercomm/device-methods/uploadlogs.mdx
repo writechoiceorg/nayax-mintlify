@@ -1,0 +1,50 @@
+---
+title: uploadLogs
+metadata:
+  og:description: uploadLogs 方法将诊断日志从终端发送到 Modularity 后端系统。这对于故障排查、支持。
+---
+
+`uploadLogs` 方法将诊断日志从终端发送到 Modularity 后端系统。这对于故障排查、支持和系统监控非常有用。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“入门指南”](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started) 。
+</Note>
+
+在请求中，method 字段应设置为 `uploadLogs`，且 params 必须包含服务名称设备：
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "uploadLogs",
+    "id": "123454352",
+    "params": [
+        "device"
+    ]
+}
+```
+
+## 回复
+
+成功的请求将返回类似于以下代码块中的响应：
+
+```json
+{
+    "result": {
+        "statusCode": 0,
+        "statusMessage": "ok"
+    }
+}
+```
+
+### 响应参数
+
+下面是一个包含所有可能的响应参数及其描述的表格：
+
+| 姓名                     | 类型     | 描述           |
+| ---------------------- | ------ | ------------ |
+| `statusCode`           | 整数     | 操作状态（0 = 成功） |
+| `statusMessage`        | string | 操作消息         |

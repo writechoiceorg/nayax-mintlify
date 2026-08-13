@@ -14,7 +14,7 @@ While the Marshall peripheral and Nayax device manage the initial interaction wi
   For this flow to function, the [ExternalSettlement](/reference/spark/transactions/externalsettlement) setting must be enabled by Nayax.
 </Warning>
 
-## Configuration & Device Behavior
+## Configuration & device behavior
 
 Once enabled, the Nayax Engine changes how the physical device handles transactions:
 
@@ -39,14 +39,14 @@ This gives you the flexibility to trigger the settlement stage externally accord
   External Settlement supports Incremental Authorization. Ensure your logic adheres to the Maximum Default Credit limits to avoid settlement failure. More on this in the [Incremental Authorization documentation](/docs/integrate-pos-device/marshall/payment-flows/sub-flows-features#incremental-authorization).
 </Note>
 
-## Managing Unsettled Transactions
+## Managing unsettled transactions
 
 When no product or service is provided, you must proactively manage the transaction to maintain a good user experience.
 
 - **External Cancel:** If you know no settlement will occur, you must send an **External Cancel** immediately.
 - **Consumer Impact:** If a transaction remains authorized without being canceled or settled, the consumer's funds will stay captured on their payment method, leading to potential disputes.
 
-## External Settlement Flow
+## External settlement flow
 
 The flow consists of two phases: payment authorization handled by the Marshall peripheral and Nayax device, and settlement or cancellation triggered by your 3rd-party server.
 
@@ -234,13 +234,13 @@ If the service was not provided:
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="External Settlement API" icon="link" href="/reference/spark/transactions/externalsettlement">
+  <Card title="External settlement API" icon="link" href="/reference/spark/transactions/externalsettlement">
     API reference for the ExternalSettlement endpoint used to settle authorized transactions from a 3rd-party server.
   </Card>
-  <Card title="External Cancel API" icon="link" href="/reference/spark/transactions/externalcancel">
+  <Card title="External cancel API" icon="link" href="/reference/spark/transactions/externalcancel">
     API reference for the ExternalCancel endpoint used to cancel authorized transactions when no service is provided.
   </Card>
-  <Card title="Incremental Authorization" icon="link" href="/docs/integrate-pos-device/marshall/payment-flows/sub-flows-features#incremental-authorization">
+  <Card title="Incremental authorization" icon="link" href="/docs/integrate-pos-device/marshall/payment-flows/sub-flows-features#incremental-authorization">
     Details on Incremental Authorization and Maximum Default Credit limits that apply to External Settlement.
   </Card>
 </CardGroup>

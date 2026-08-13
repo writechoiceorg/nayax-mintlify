@@ -1,0 +1,131 @@
+---
+title: 稳定性和饥饿问题
+metadata:
+  og:description: '# 简介 ## 是什么导致 Marshall 链路出现稳定性问题? 这些稳定性问题通常是由于未使用合适的硬件所致: 1.'
+---
+
+# 介绍
+
+## 是什么导致 Marshall 链路出现稳定性问题?
+
+这些稳定性问题通常是由于未使用合适的硬件所致:
+
+1. 24V/1.5A 电源
+2. 如果使用 USB 转 COM 适配器,必须使用 Chipi-X,这是 Nayax 技术团队唯一批准的类型。过去的经验也表明,其他类型的适配器可能(且往往)会导致稳定性问题。
+3. 机器 COM 端口的问题(物理连接/COM 端口管理)。
+4. 如果通过 LAN 使用 Marshall,可能是由于以太网连接器、LAN 通信等方面的问题。
+
+或者是由于 Marshall 任务被“饿死”(starving)所致——下文将进一步说明。
+
+## 您提到 Marshall 任务被“饿死”(starved)了。这是什么意思?
+
+一旦 Marshall 任务得不到足够的优先级来运行,它就会被“饿死”,并可能出现异常行为。
+在这种情况下,您的机器将停止发送 “Keep Alive” 信号。设备(VPOST/VPOSM)会因缺少 “Keep Alive” 而检测到机器已断开连接,并启动新的配对过程。
+饥饿(Starvation)是您可能遇到的最严重的问题,根据其发生的时机不同可能导致意外行为(我想您已经见过这种情况),因此解决它非常重要。这些问题可能会从消费者的角度造成怪异的行为,甚至导致 Marshall 链路中断——这种情况本不应发生(一旦发生,您将无法发起或完成交易)。
+
+导致 Marshall 任务饥饿(starvation)的可能原因包括:未赋予 Marshall 足够高的优先级来运行、机器执行其他任务导致未能及时响应 Marshall(keepalive 或其他命令)、除 SDK 之外的大量文件写入操作等。
+
+## 它看起来是什么样的?
+
+一旦 Marshall 任务被饿死,您会看到以下情况:
+
+```
+-	In the log file of the SDK will be printed:
+"vmc_link: warning! sdk is not getting enough cpu! (starved for Xms)"
+or:
+" vmc_link: *** error: retransmitting... last_rx"
+Or:
+" lowlevel_serial: bytes available: 0 bytes "
+
+
+-	And at the same laps of time, in the GTrace will be printed something along the lines of:
+
+Marshall: Sys,Err: No keep alive,Handle = 1           
+Marshall: Com error,Event = 1
+Marshall: No keep alive message from the POS. retry number: 2      
+Marshall: Sys,Err: No keep alive,Handle = 1           
+Marshall: Com error,Event = 1    
+
+```
+
+如果您的外围设备持续不响应(每个数据包会发送一次,并有另外最多 2 次重试来尝试从您的机器获得响应——下文关于 keepalive 的部分会详细说明)——Marshall 链路将被判定为断开。
+随后,设备会反复发送 “Reset()” 命令以启动配对过程。
+这意味着配对过程已启动,表示 VPOST/VPOSM 正在寻找可通信的外围设备。一旦机器对此做出响应(通过 Firmware Info 命令)——它将通过发送 Config 命令来完成该过程。
+
+在连接建立之前,您会在 Marshall 日志中看到重置(reset)记录,并在 Gtrace 日志中看到 “Marshall: peripheral not connected”。
+一旦 Marshall 配对过程完成,VPOST/VPOSM 与外围设备之间就会建立链路。Marshall 日志中会出现以下内容:
+
+```
+> [1661418016846+(       432ms)]      marshall_t: received reset
+[1661418016847+(         1ms)]                : rx: 	09:00:00:6a:ff:ff:ff:ff:01:77:d6:
+[1661418016853+(         6ms)]                : tx:
+	87:00:00:00:00:30:00:00:05:00:02:0b:01:40:01:6d:
+	61:72:73:68:61:6c:6c:2d:6a:61:76:61:2d:73:64:6b:
+	00:00:00:30:31:32:33:34:35:36:37:00:00:00:00:00:
+	00:00:00:00:00:00:00:30:2e:31:2e:35:2e:31:33:00:
+	00:00:00:00:00:00:00:00:00:00:00:30:31:32:33:34:
+	35:36:37:00:00:00:00:00:00:00:00:00:00:00:00:6d:
+	61:6e:75:66:00:00:00:00:00:00:00:00:00:00:00:00:
+	00:00:00:30:2e:31:2e:35:2e:31:33:00:00:00:00:00:
+	00:00:00:00:00:00:00:9d:4a:
+[1661418016874+(        21ms)]      marshall_t: received config
+[1661418016875+(         1ms)]                : rx:
+	2a:00:00:00:00:35:01:30:06:02:01:01:e8:03:00:00:
+	00:24:00:00:24:00:00:02:35:35:30:36:30:30:31:32:
+	38:31:32:33:34:33:34:30:00:02:01:68:
+[1661418017084+(       209ms)]      marshall_t: received transfer_data
+[1661418017084+(         0ms)]      marshall_t: default credit: 1000
+[1661418017084+(         0ms)]      marshall_t: main fw ver: 4.0.8.23-RC03
+[1661418017084+(         0ms)]      marshall_t: pos fw ver: 2203-rc09
+[1661418017084+(         0ms)]      marshall_t: monyx id: 06911447
+[1661418017085+(         1ms)]                : rx:
+	34:00:05:01:00:35:01:30:0a:14:02:e8:03:12:0e:34:
+	2e:30:2e:38:2e:32:33:2d:52:43:30:33:00:13:0a:32:
+	32:30:33:2d:72:63:30:39:00:15:09:30:36:39:31:31:
+	34:34:37:00:4b:89:
+[1661418017085+(         0ms)]                : tx:	0a:00:00:01:01:30:00:35:00:00:bb:4b:
+[1661418017096+(        11ms)]        vmc_link: vmc is online. time: Thu Aug 25 12:00:17 IDT 2022
+[1661418017097+(         1ms)]    vmc_socket_t: received event: [init_done], state: [init]
+[1661418017097+(         1ms)]            Main: link with vpos serial: 0434321821006055
+[1661418017097+(         0ms)]    vmc_socket_t: changed state, from [init] to [idle]
+[1661418017097+(         0ms)]            Main: 	main fw version: 4.0.8.23-RC03
+[1661418017097+(         0ms)]            Main: 	pos fw version: 2203-rc09
+[1661418017097+(         0ms)]            Main: 	monyx id: 06911447
+[1661418017097+(         0ms)]            Main: 	default credit: 1000
+[1661418017098+(         1ms)]                : tx:
+	16:00:01:01:01:30:00:35:31:01:00:68:65:6c:6c:6f:
+	20:74:68:65:72:65:76:09:
+[1661418017099+(         1ms)]                : tx:	0a:00:00:02:01:30:00:35:00:00:39:93:
+[1661418017099+(         0ms)]      vmc_vend_t: received status: 20
+[1661418017099+(         0ms)]            Main: device available
+[1661418017099+(         0ms)]    vmc_socket_t: received status: 20
+[1661418017115+(        16ms)]                : rx:	0a:00:00:01:00:35:01:30:00:00:08:b0:
+
+And in Gtrace it would show:
+"Marshall sys: RCV - Firmware info - type - 0 subtype - 1
+Marshall sys: RCV - Firmware info - Capabilities – 0"
+```
+
+## “keepalive” 机制的工作原理/饥饿(starvation)产生的原因
+
+“no keep alive” 表示您的外围设备未响应 keep alive(默认每秒发生一次,除非另行配置),在这种情况下,系统会尝试重新发送该数据包。如果仍无响应,会再次尝试(1 次原始尝试加 2 次重试),如果这次尝试仍然失败,Marshall 链路将被判定为断开。配对过程(即 VPOST/VPOSM 与您的充电设备之间通信的建立)将被重新启动。
+
+在某些情况下,饥饿(starvation)是由任务处理不当或大量文件写入(与 Marshall 日志写入无关)所致。在文件写入期间,所有任务都会被暂停,以防止 flash 损坏。
+
+此外,饥饿(starvation)也可能是由于您的外围设备正在执行与 Marshall 无关的任务,导致它未能及时响应 Marshall 任务。
+
+### 我可以增加 keepalive 之间的时间间隔吗?这样能解决饥饿(starvation)问题吗?
+
+该 SDK 的设计在 keepalive 间隔为 1 秒时效果最佳,将 keepalive 间隔增加到更长的时间并不能解决饥饿(starvation)问题——它只会使发现通信问题所需的时间大大延长。我们不建议将其设置为超过 5 秒。
+例如,如果您将其配置为 30 秒,SDK 将需要 3\*30=90 秒才能意识到存在问题,在这段时间里,VPOST 可能会显得“冻结”/无响应,从而使消费者感到困惑。每秒发生一次的 keepalive 并不是导致处理器过载的原因;真正的问题在于该任务本身未能获得足够的优先级来运行。
+
+<Note>
+  注意:对于 VPOSM,在通过 ETH 使用 Marshall 的情况下,由于 LAN 的要求/限制,需要将 keepalive 设置为 10 秒。
+</Note>
+
+## 我应该记录 keepalive 吗?如果它们没有出现,您会知道有什么问题吗?
+
+您可以将它们写入日志,但这会使日志变得非常难以阅读,因为每秒都会有一次 keepalive(及其响应)。在一个小时的日志中,您至少会有 3,600 条记录。“debug level dump moderate” 意味着只记录关键信息,例如配对过程、交易、状态、饥饿警告等,因此如果您遇到 keepalive/数据包丢失的问题——在 “debug level dump moderate” 日志记录中,您也会得到与 “debug level dump all” 相同的警告/信息。
+总而言之,我强烈建议使用 “debug level dump moderate” 而不是 “debug level dump all”。
+
+<br />

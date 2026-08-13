@@ -1,0 +1,88 @@
+---
+title: 概述
+metadata:
+  og:description: Nayax eCom SDK 是一款旨在简化商户电子商务支付处理的工具。它充当中介，简化您的前端应用程序与各种计费提供商之间的交互。
+---
+
+import McpNote from '/snippets/zh/mcp-server-note.mdx';
+
+Nayax eCom SDK 是一款旨在简化商户电子商务支付处理的工具。它充当中介，简化您的前端应用程序与各种计费提供商之间的交互，使您能够：
+
+- 接受全球及本地支付方式。
+
+- 支持 Web、iOS 和 Android 的在线支付。
+
+- 提供支付链接。
+
+该 SDK 屏蔽了直接与多个支付网关集成的复杂性。商户无需为每个支付提供商构建自定义集成，只需与 Nayax eCom SDK 集成一次即可。
+
+<McpNote />
+
+## 支付方式
+
+eCom SDK 支持以下支付方式：
+
+- 签证
+- 发现
+- 万事达
+- Diners
+- Maestro
+- Apple Pay
+- Google Pay
+
+## 无缝结账
+
+我们的平台支持适用于各种用例的无缝结账体验，并允许您通过附加功能提供独特的结账体验。
+
+### 交易类型
+
+我们的在线支付解决方案支持多种用例和业务模式。您可以利用我们提供的一系列功能和支付流程，满足消费者和业务的特定需求。
+
+<Columns cols={2}>
+  <Card title="一次性支付" icon="credit-card" color="#4F39F6">
+    接受一次性支付。
+  </Card>
+
+  <Card title="令牌支付" icon="coins" color="#4F39F6">
+    使用 Nayax 令牌执行支付。
+  </Card>
+</Columns>
+
+### 功能
+
+我们的在线支付解决方案提供多种功能。借助这些功能，您可以在轻松、安全地处理支付的同时，为消费者打造专属的结账体验。
+
+<Columns cols={3}>
+  <Card title="验证" icon="lock" color="#00D492">
+    与 3D Secure 2 集成，安全地处理卡支付。
+  </Card>
+
+  <Card title="风险管理" icon="shield-halved" color="#00D492">
+    使用我们的风险管理解决方案来预防和应对欺诈。
+  </Card>
+
+  <Card title="定期扣款" icon="money-bill-transfer" color="#00D492">
+    安全存储购物者的支付详细信息，以提供更快捷的结账体验。
+  </Card>
+</Columns>
+
+## 集成架构
+
+与 eCom 完整集成在线支付包含以下几个部分：
+
+1. 支付服务器
+   ：向 eCom API 端点发出 API 请求并接收响应。
+2. 客户端网站或应用程序
+   ：我们的 [Drop-in UI](docs:drop-in-ui) 从消费者处收集支付详细信息，并将支付信息传递给您的服务器。
+3. **Webhook server**
+   : Receives [webhooks](/docs/ecom-sdk/back-end-integration/webhook-notifications) from eCom about payment statuses and other payment-related activity.
+
+## 开始
+
+<Columns cols={3}>
+  <Card icon="link" title="开始" href="/docs/ecom-sdk/get-started/ecom-sdk-get-started" />
+
+  <Card icon="link" title="前端集成" href="/docs/ecom-sdk/front-end-integration/front-end-sdk" />
+
+  <Card icon="link" title="后端集成" href="/docs/ecom-sdk/back-end-integration/ecom-sdk-back-end-integration" />
+</Columns>

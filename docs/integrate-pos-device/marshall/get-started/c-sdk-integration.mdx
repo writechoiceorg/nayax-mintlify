@@ -83,44 +83,49 @@ The customer machine information fields are mandatory for the VMC configuration.
    vmc_link_start()
    ```
 
-## Implement Payment Flows
+## Implement payment flows
 
 As explained in [Payment Flows](/docs/integrate-pos-device/marshall/payment-flows/marshall-payment-flows), the Marshall SDK supports various payment flows. The pages below explain how to implement each in your VMC using the **C SDK**.
 
-<Columns cols={3}>
+<CardGroup cols={3}>
 <Card
-  icon="link"
-  title="Single Session"
+  icon="credit-card"
+  title="C SDK single session"
   href="/docs/integrate-pos-device/marshall/simulators-sample-codes/single-session"
-  arrow
-/>
+>
+  Process one transaction at a time before the session resets.
+</Card>
 <Card
-  icon="link"
-  title="Multi-Session"
+  icon="layer-group"
+  title="C SDK multi-session"
   href="/docs/integrate-pos-device/marshall/simulators-sample-codes/multi-session"
-  arrow
-/>
+>
+  Run multiple transactions independently for self-service environments.
+</Card>
 <Card
-  icon="link"
-  title="Multi-Vend"
+  icon="cubes"
+  title="C SDK multi-vend"
   href="/docs/integrate-pos-device/marshall/simulators-sample-codes/multi-vend"
-  arrow
-/>
-</Columns>
+>
+  Let consumers purchase multiple products in a single payment session.
+</Card>
+</CardGroup>
 
-## See Also
+## See also
 
-<Columns cols={2}>
+<CardGroup cols={2}>
 <Card
-  icon="link"
-  title="C SDK Integration"
-  href="/docs/integrate-pos-device/spark/security-authentication/spark-authentication"
-  arrow
-/>
+  icon="sliders"
+  title="VMC configuration object"
+  href="/docs/integrate-pos-device/marshall/get-started/vmc-configuration-object"
+>
+  Configure the parameters and flags that control your peripheral's behavior.
+</Card>
 <Card
-  icon="link"
-  title="Methods & Functions"
-  href="/docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark"
-  arrow
-/>
-</Columns>
+  icon="code"
+  title="Methods & functions"
+  href="/docs/integrate-pos-device/marshall/methods-functions/marshall-methods-and-functions"
+>
+  Find reference documentation for all methods and functions in the Marshall SDK.
+</Card>
+</CardGroup>

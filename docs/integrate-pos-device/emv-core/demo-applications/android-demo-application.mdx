@@ -29,7 +29,7 @@ To install the demo application, follow the steps below:
   If you experience communication issues between the EMV Core service and the application or Reader, restart the EMV Core service.
 </Note>
 
-## Using the Demo Application
+## Using the demo application
 
 To start using the test application, you can follow the steps below:
 
@@ -46,11 +46,11 @@ To start using the test application, you can follow the steps below:
    </Warning>
 2. The application will automatically attempt to connect to the EMV Core service and the UNO Reader. Once the connection is successful, the status line at the top of the screen will display **Ready**.
 
-### Navigating the Application
+### Navigating the application
 
 The demo application includes multiple pages for performing specific actions.
 
-### Maintenance Page
+### Maintenance page
 
 <Frame><img src="/images/docs/android-demo-application/image2.png" /></Frame>
 
@@ -59,7 +59,7 @@ On the **Maintenance** page, you can perform the following actions:
 * **Get Data:** Retrieves the version information and status from the EMV Core service and Reader.
 * **Show Message (UNO-PLUS readers only):** Allows you to edit and send two lines of text to the Reader's display.
 
-### Settings Page
+### Settings page
 
 <Frame><img src="/images/docs/android-demo-application/image3.png" /></Frame>
 
@@ -70,7 +70,7 @@ On the **Settings** page, you can configure the following options:
 * **Timeout:** Set a timeout duration (in seconds) for transactions. The maximal time is `60` seconds, for unlimited polling use 'continuous=true'.
 * **Continuous:** Automatically renew the transaction polling when a timeout occurs, allowing unlimited polling. It can be stopped with the `CancelTransaction` command.
 
-### Payment Page
+### Payment page
 
 Run a payment transaction:
 
@@ -85,7 +85,7 @@ Run a payment transaction:
    <Frame><img src="/images/docs/android-demo-application/image5.png" /></Frame>
 6. You can also continue to run another authorization. The previous transaction may be kept open (Authorized) or automatically confirmed according to the `PMT_KIOSK_AUTOCONFIRM` configuration option.
 
-### Config Page
+### Config page
 
 <Frame><img src="/images/docs/android-demo-application/image6.png" /></Frame>
 

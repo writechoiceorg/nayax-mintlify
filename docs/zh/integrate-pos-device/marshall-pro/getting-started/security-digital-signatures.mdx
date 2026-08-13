@@ -1,0 +1,41 @@
+---
+title: 安全与数字签名
+description: 实施 RSA SHA-256 签名以确保数据输入安全。
+metadata:
+  og:description: 某些命令(例如 displayInput)需要数字签名以确保请求的完整性。### 密钥管理 客户端系统负责。
+---
+
+某些命令(例如 `displayInput`)需要数字签名以确保请求的完整性。
+
+### 密钥管理
+
+客户端系统负责生成一对 RSA SHA-256 私钥和公钥。
+
+- 私钥必须安全地保存在您的服务器上。
+- 公钥由 VPOS 用于验证请求。
+
+### C# 实现
+
+以下示例展示了如何使用 PKCS#1 填充方式对消息进行签名并验证签名。
+
+```csharp C#
+static string SignMessage(string message, string privateKeyBase64)
+{
+    using (RSA rsa = ImportPrivateKey(privateKeyBase64))
+    {
+        byte[] messageBytes = Encoding.UTF8.GetBytes(message);
+        byte[] signature = rsa.SignData(messageBytes, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        return Convert.ToBase64String(signature);
+    }
+}
+
+static bool VerifySignature(string message, string signatureBase64, string publicKeyBase64)
+{
+    using (RSA rsa = ImportPublicKey(publicKeyBase64))
+    {
+        byte[] messageBytes = Encoding.UTF8.GetBytes(message);
+        byte[] signature = Convert.FromBase64String(signatureBase64);
+        return rsa.VerifyData(messageBytes, signature, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+    }
+}
+```

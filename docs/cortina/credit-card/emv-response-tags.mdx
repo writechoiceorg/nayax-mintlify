@@ -17,7 +17,7 @@ These tags carry issuer-provided instructions (scripts) that the terminal sends 
 Failing to return the mandatory EMV response tags in a contact transaction (8A and 91), or returning them incorrectly, may cause the transaction to fail during the second Generate AC step (Second GenAC) and be declined.\
 In case the transaction is declined due to incorrect response tags, a Cortina Cancel/Void will be sent with `ReasonCode` as 17 or 18.
 
-## How to Implement
+## How to implement
 
 Return the tag value to the relevant field in the "EMVTags" object for each contact transaction response.
 

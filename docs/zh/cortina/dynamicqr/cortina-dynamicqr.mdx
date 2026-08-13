@@ -1,0 +1,52 @@
+---
+title: 动态二维码
+metadata:
+  og:description: DynamicQR 码使客户能够通过用移动设备扫描该码来完成支付,但增加了一层安全保障,生成一个。
+---
+
+DynamicQR 码使客户能够通过使用移动设备扫描代码来完成付款，但增加了一层安全性，为每笔交易生成唯一的代码，确保 QR 码不能重复使用，使其成为高价值或安全交易的理想选择。
+
+## 工作原理
+
+下图描述了 DynamicQR 的典型使用流程。
+
+<Frame>
+  ![](/images/docs/cortina-dynamicqr/image1.png)
+</Frame>
+
+在哪里：
+
+1. 顾客首先选择产品。
+2. 客户选择二维码支付选项。
+3. 设备显示生成的二维码。
+4. 顾客扫描此代码即可开始付款。
+5. 付款已处理并批准。
+
+<Warning>
+  仅限预选
+
+  Cortina Dynamic QR 目前仅支持预选交易类型。
+</Warning>
+
+## 预选流程
+
+预选流程将产品/服务选择和授权步骤合并为一个交易，从而简化了支付流程。此流程通常用于小额或快速交易，客户的选择和付款授权可在一个步骤中同时处理。
+
+请参见下图（括号内的数字与不同的超时来源有关）：
+
+<Frame>
+  <img src="/images/docs/cortina-dynamicqr/Cortina Dynamic QR.png" />
+</Frame>
+
+该过程的步骤如下：
+
+1. 用户在自动售货机上选择商品和付款方式。
+2. 自动售货机向 Nayax 服务器发送 QR 命令请求。
+3. Nayax 服务器使用[DynamicQR GenerateQR](/reference/cortina/dynamicqr/cortina-dynamicqr-generateqr)端点向集成器发送 GenerateQR（金额，渠道）请求。
+4. 集成器向 Nayax 服务器返回包含二维码数据的响应。
+5. Nayax 服务器将 QR 命令响应发送回自动售货机，然后自动售货机显示 QR 码。
+6. 用户扫描二维码并通过手机确认后，自动售货机将向 Nayax 服务器发送二维码支付命令请求。
+7. Nayax 服务器使用[DynamicQR 查询](/reference/cortina/dynamicqr/cortina-dynamicqr-inquiry)端点向集成商发送查询（交易 ID）。
+8. 集成器将响应状态（已批准/待处理）返回给 Nayax 服务器。
+9. Nayax 服务器向自动售货机发送二维码支付命令响应。
+10. 自动售货机分发商品并将结算指令发送到 Nayax 服务器。

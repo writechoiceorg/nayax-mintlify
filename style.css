@@ -110,7 +110,7 @@ footer h2 {
   width: 100%;
 }
 
-.nav-tabs a:nth-last-child(3) {
+.nav-tabs .nav-tabs-item:nth-last-child(3 of .nav-tabs-item) {
   margin-left: auto;
 }
 /* end */
@@ -155,3 +155,8 @@ table {
   color: #4b5563;
 }
 /* End separator bar */
+
+/* Hide "Ask Assistant" chip inside the search modal; keep #assistant-entry (topbar) and the assistant panel intact */
+[data-component-part="search-ask-ai-button"] {
+  display: none !important;
+}

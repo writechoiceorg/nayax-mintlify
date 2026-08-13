@@ -1,0 +1,146 @@
+---
+title: 执行交易阶段1
+metadata:
+  og:description: doTransactionPhase1 方法用于开始一笔新交易并获取其属性。此阶段成功完成后，客户端即可。
+---
+
+`doTransactionPhase1` 方法用于开始一笔新交易并获取其属性。此阶段成功完成后，客户端即可通过调用 `doTransactionPhase2` 方法进入流程的下一阶段以完成该交易。
+
+此方法对于发起交易、验证关键信息以及为最终处理步骤准备系统至关重要。
+
+## 要求
+
+<Note>
+  JSON-RPC 2.0
+
+  TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求的结构和发送方式的更多详细信息，请参阅[“集成”部分](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started)。
+</Note>
+
+请在请求中确保配置以下内容：
+
+- `method` 字段必须设置为 `doTransactionPhase1`。
+- The service must be set to `ashrait` in the `params`.
+
+请求包含一个参数列表，第一个参数为服务名称，目前固定为 ashrait，第二个参数为包含所有其他交易特定详情的字典。
+
+```json
+{  
+   "jsonrpc":"2.0",
+   "method":"doTransactionPhase1",
+   "params":[  
+      "ashrait",
+      {  
+         "amount":2000,
+         "vuid":"1234567890",
+         "currency":"376",
+         "creditTerms":1,
+         "tranCode":1,
+         "tranType":1,
+         "cardNumber":"4580000000000000",
+         "expDate":"2308",
+         "cvv":"666"
+      }
+   ],
+   "id":1
+}
+```
+
+### 请求参数
+
+下表描述了此方法的请求参数。
+
+| 姓名                   | 类型        | 描述                                                                                                                               |
+| -------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `tranCode`           | 整数        | 交易代码。可选值包括：`1`（正常）、`2`（预授权）、`3`（预授权完成）、`4`（预授权取消）、`5`（取消）、`6`（已授权交易）。                                                            |
+| `amount`             | 整数        | 交易金额（以分为单位）。                                                                                                                     |
+| `currency`           | string    | 采用 ISO 4217 格式的货币代码。                                                                                                             |
+| `ecrID`              | string    | ECR/POS 唯一 ID。仅当多个客户端使用相同的商户 ID 时为必填项。                                                                                           |
+| `vuid`               | string    | 供应商（客户）唯一交易标识符。                                                                                                                  |
+| `tranType`           | 整数        | 交易类型。可选值包括：`1`（常规）、`3`（强制交易）、`6`（现金返还）、`7`（现金）、`30`（余额）、`53`（退款）。                                                                |
+| `creditTerms`        | 整数        | 信用卡支付选项。可选值包括：`1`（常规）、`2`（特殊信用）、`3`（即时）、`6`（信用）、`8`（结算）。                                                                         |
+| `creditPayments`     | 整数        | 信用付款期数。                                                                                                                          |
+| `payments`           | 整数        | 该交易的额外付款期数，不包括首期付款。例如，若 "payments" 的值为 2，则消费者实际的付款期数为 3。若请求中未提供 firstPaymentAmount，则所有付款金额将被平均分配。                                |
+| `firstPaymentAmount` | 整数        | 首期付款金额（以分为单位）。                                                                                                                   |
+| `paymentIndex`       | 整数        | 付款所挂钩的指数。可选值包括：`1`（挂钩 Madad 指数），`2`（挂钩美元）。                                                                                       |
+| `cashBackAmount`     | 整数        | 现金返还金额（以分为单位）。                                                                                                                   |
+| `tipAmount`          | 整数        | 小费金额（以分为单位）。                                                                                                                     |
+| `ipayCode`           | 整数        | 权益类型。可选值包括：`0`（货币）、`1`（星级积分）、`2`（积分）、`3`（会员俱乐部）、`99`（无权益）。                                                                       |
+| `ipayAmount`         | 整数        | 权益金额（以分为单位）。                                                                                                                     |
+| `ipayPercent`        | 整数        | 权益百分比（0-100）。                                                                                                                    |
+| `ipayUnits`          | 整数        | 权益单位数量。                                                                                                                          |
+| `posEntryMode`       | 整数        | POS 输入方式，卡交易的类型。若提供了卡数据则为必填项。可选值包括：`1`（磁条 MSR）、`5`（非接触磁条 CTLS MSR）、`40`（接触式 EMV）、`50`（电话）、`51`（仅签名）、`80`（回退（错误））、`81`（回退（无 AID）） |
+| `cardTrack2`         | string    | 卡的 track2 数据。                                                                                                                    |
+| `cardNumber`         | string    | 用于非现场交易（CNP）的卡号（PAN）。                                                                                                            |
+| `expDate`            | string    | 卡有效期，格式为 `YYMM`。                                                                                                                 |
+| `cvv`                | string    | 卡验证码（3 位数）。                                                                                                                      |
+| `cardHolderID`       | string    | 持卡人的个人身份证件号码。                                                                                                                    |
+| `zipCode`            | string    | 邮政编码。                                                                                                                            |
+| `city`               | string    | 城市。                                                                                                                              |
+| `address`            | string    | 地址。                                                                                                                              |
+| `authNum`            | string    | 授权号（7 位数字）。                                                                                                                      |
+| `originalUID`        | string    | 原始交易唯一标识符。                                                                                                                       |
+| `language`           | string    | UI Language. Values include `Hebrew` and `English`.                                                                              |
+| `conversionAmount`   | 整数        | 以外币折算为以色列新谢克尔（ILS）后的金额。若 `currency` 字段不是 376 或 840，则为必填项。                                                                        |
+| `changeRate`         | 整数        | 外币汇率，精确到小数点后 4 位。例如，4.210 = 42100。若 `currency` 字段不是 376 或 840，则为必填项。                                                             |
+| `retailer`           | string    | SHVA 零售商编号，将与支付终端的 SHVA 零售商编号进行比对。                                                                                               |
+| `additionalInfo`     | 字符串的 json | 发送给支付网关的私有供应商数据（最多 300 个字符）。                                                                                                     |
+| `cardless`           | bool      | 完成交易而不显示卡片。                                                                                                                      |
+| `petrol`             | bool      | 执行加油交易。                                                                                                                          |
+| `hideAnimation`      | bool      | 交易结束时不显示动画。                                                                                                                      |
+
+## 回复
+
+成功的请求将返回以下响应：
+
+```json
+{  
+   "jsonrpc":"2.0",
+   "result":{  
+      "statusCode":0,
+      "statusMessage":"ok",
+      "mutag":2,
+      "solek":6,
+      "manpik":6,
+      "cardNumber":"458003***7640",
+      "posEntryMode":40,
+      "creditType":0,      
+      "isClub":false,
+      "isPrePaid":false,
+      "isImmediate":false,
+      "isIpayAllowed":false,
+      "maxPayments":18,
+      "maxCreditPayments":18,
+      "minCreditPayments":3,
+      "minCreditAmount":2500,
+      "uid":"18071016383608830129318"
+   },
+   "id":1
+}
+```
+
+### 响应参数
+
+下表描述了该方法的响应参数。
+
+| 姓名                     | 类型     | 描述                       |
+| :--------------------- | :----- | :----------------------- |
+| `statusCode`           | 整数     | 交易状态。值为 `0` 表示交易成功（已批准）。 |
+| `statusMessage`        | string | 交易消息（例如 `ok`）。           |
+| `mutag`                | 整数     | 卡品牌。                     |
+| `solek`                | 整数     | 收单机构。                    |
+| `manpik`               | 整数     | 发卡机构。                    |
+| `cardNumber`           | string | 掩码个人账号 (PAN)。            |
+| `posEntryMode`         | 整数     | POS 输入方式。取值与请求中的相同。      |
+| `creditTerms`          | 整数     | 信用卡支付选项。取值与请求中的相同。       |
+| `cardName`             | string | 信用卡名称。                   |
+| `isClub`               | 布尔值    | 标示该卡是否属于会员俱乐部的标志。        |
+| `isPrePaid`            | 布尔值    | 预付卡交易的标志。                |
+| `isImmediate`          | 布尔值    | 即时交易的标志。                 |
+| `allowedCreditTerms`   | 整数数组   | 该交易允许的信用分期期数数组。          |
+| `isIpayAllowed`        | 布尔值    | 标示此交易是否允许使用权益的标志。        |
+| `maxPayments`          | 整数     | 允许的最大付款期数。               |
+| `maxCreditPayments`    | 整数     | 允许的最大信用付款期数。             |
+| `minCreditPayments`    | 整数     | 允许的最小信用付款期数。             |
+| `minCreditAmount`      | 整数     | 允许的最小信用金额（以分为单位）。        |
+| `uid`                  | string | 交易唯一标识符。                 |
+| `tokenizedCardNumber`  | string | 经令牌化处理的 PAN。             |

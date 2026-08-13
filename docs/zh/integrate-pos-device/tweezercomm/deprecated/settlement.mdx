@@ -1,0 +1,93 @@
+---
+title: 沉降
+metadata:
+  og:description: 使用 Settlement 端点完成已批准的交易。会话结束且总金额确定后，集成方会发送。
+---
+
+`Settlement` 端点用于完成已批准的交易。会话结束且总金额确定后，集成方会发送最终金额以及可选的电子小票信息。
+
+<Warning>
+  仅限预授权
+
+  此方法仅适用于已进行预授权的交易。
+</Warning>
+
+## 要求
+
+向 Spark 的 `/spark/Settlement` 端点发送 POST 请求，请求正文如下：
+
+```json
+{
+  "NayaxTransactionId": 2004545072,
+  "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+  "SiteId": 2,
+  "TerminalId": "0434334921100366",
+  "TerminalIdType": 1,
+  "Amount": 12.25,
+  "EReceiptData": "{\"General\":[{\"Company\":\"Your Payments - Our Solutions\",\"Station Name\":\"B12\"}],\"Service\":[{\"Product\":\"Something Yummy\",\"Price Per Unit\":\"$2.45\",\"Number of Units\":2}]}"
+}
+
+```
+
+### 请求参数
+
+下表描述了该请求的参数：
+
+| 场地                   | 类型     | 必需的 | 描述                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| -------------------- | ------ | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `NayaxTransactionId` | 整数     | 是的  | Nayax 分配的唯一交易 ID。                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `SparkTransactionId` | String | 是的  | 来自初始 `StartAuthentication` 的会话 ID。                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `SiteId`             | 整数     | 是的  | 交易发生地点的站点标识符。                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `TerminalId`         | String | 是的  | 所使用终端的序列号或外部 ID。                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `TerminalIdType`     | 整数     | 是的  | 定义所使用的 ID 类型。`1` 表示硬件序列号，`2` 表示 Nayax 机器 ID                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `Amount`             | Float  | 是的  | 以主要货币单位（例如美元或欧元）表示的最终交易金额。                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `EReceiptData`       | String | 不   | JSON-formatted string representing e-receipt details. For machine operators who wish to provide digital receipts to their consumers via the Nayax eReceipt platform. It can hold additional information to be presented in the digital receipt, which cannot be obtained from Nayax Core. See [EReceiptData Format](/docs/integrate-pos-device/spark/additional-resources/spark-ereceiptdata-format) for more details on how to format this parameter. |
+
+## 回复
+
+成功的响应将返回以下正文：
+
+```json
+{
+  "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c",
+  "Status": {
+    "Verdict": "Approved",
+    "ErrorDescription": "No Errors"
+  },
+  "CardBrand": "Visa",
+  "CardLast4Digits": "1234",
+  "AuthCode": "333333",
+  "MachineAuTime": "20240205194122328",
+  "AuTime": "20240205174122328",
+  "SeTime": "20240205192215572",
+  "CurrencyCode": "EUR",
+  "CurrencyNumeric": "978",
+  "FiscalRrn": "1A2b3C4d5E6f7g8H9i",
+  "NayaxRRN": "111111",
+  "Amount": 12.25
+}
+
+```
+
+### 响应参数
+
+下表说明了响应的参数：
+
+| 场地                        | 类型     | 描述                                                          |
+| :------------------------ | :----- | :---------------------------------------------------------- |
+| `SparkTransactionId`      | String | 用于此交易会话的唯一 ID。                                              |
+| `Status`                  | Object | 结算处理的结果。                                                    |
+| `Status.Verdict`          | String | `"Approved"`（已批准）或 `"Declined"`（已拒绝）。                       |
+| `Status.ErrorDescription` | String | Describes error if `Declined`, or `"No Errors"` if success. |
+| `Status.ErrorCode`        | 数字     | 指示交易期间发生的特定错误类型的数字代码。此字段仅出现在错误响应中。                          |
+| `CardBrand`               | String | 使用的卡品牌（例如，Visa、MasterCard）。                                 |
+| `CardLast4Digits`         | String | 卡号的最后四位数字。                                                  |
+| `AuthCode`                | String | 支付服务商返回的授权码。                                                |
+| `MachineAuTime`           | String | 授权时刻的设备时间戳。                                                 |
+| `AuTime`                  | String | 授权服务器时间戳。                                                   |
+| `SeTime`                  | String | 结算服务器时间戳。                                                   |
+| `CurrencyCode`            | String | ISO货币代码（例如，“EUR”）。                                          |
+| `CurrencyNumeric`         | String | ISO 4217 数字代码（例如 “978”）。                                    |
+| `FiscalRrn`               | String | 会计/报告用财务参考编号。                                               |
+| `NayaxRRN`                | String | Nayax内部结算参考编号。                                              |
+| `Amount`                  | Float  | 支付服务商批准的结算金额。                                               |
