@@ -19,14 +19,20 @@ servers:
 security:
   - ApiKeyAuth: []
   - ApiKeyAuthAlias: []
-# No operation-level `tags` on purpose: with only 7 endpoints, tagging them
-# splits the API Reference sidebar into per-tag subfolders
-# (/reference/online-payments/{tag}/{operation}) that just add a click for no
-# real benefit yet. Re-add tags (Authorize / Verify / Transactions, or finer)
-# once the endpoint count grows enough to need the grouping.
+# All operations share one tag, "Endpoints". This isn't for grouping (there's
+# only one tag, so it doesn't split anything meaningfully) — it's a workaround
+# for a Mintlify default: an untagged operation set gets wrapped in a nav node
+# hardcoded to "API Reference", clashing with the outer "API Reference" group
+# this spec is mounted under in docs.json. Naming our own tag "Endpoints"
+# gives that inner node a distinct label instead, matching the
+# "API Reference" > "Endpoints" pattern already used for Cortina and Lynx.
+tags:
+  - name: Endpoints
 paths:
   /transactions/authorize:
     post:
+      tags:
+        - Endpoints
       summary: Authorize a transaction
       operationId: authorize-transaction
       x-mint:
@@ -97,6 +103,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
   /verify:
     post:
+      tags:
+        - Endpoints
       summary: Verify a card
       operationId: verify-card
       x-mint:
@@ -140,6 +148,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
   /transactions/{transactionId}:
     get:
+      tags:
+        - Endpoints
       summary: Get transaction
       operationId: get-transaction
       x-mint:
@@ -180,6 +190,8 @@ paths:
           description: The transaction doesn't exist, or belongs to a different merchant.
   /transactions:
     get:
+      tags:
+        - Endpoints
       summary: List transactions
       operationId: list-transactions
       x-mint:
@@ -262,6 +274,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
   /transactions/{transactionId}/capture:
     post:
+      tags:
+        - Endpoints
       summary: Capture a transaction
       operationId: capture-transaction
       x-mint:
@@ -303,6 +317,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
   /transactions/{transactionId}/void:
     post:
+      tags:
+        - Endpoints
       summary: Void a transaction
       operationId: void-transaction
       x-mint:
@@ -340,6 +356,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
   /transactions/{transactionId}/refund:
     post:
+      tags:
+        - Endpoints
       summary: Refund a transaction
       operationId: refund-transaction
       x-mint:
