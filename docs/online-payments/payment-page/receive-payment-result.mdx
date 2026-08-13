@@ -136,7 +136,7 @@ A few fields in `data` are worth calling out individually.
 
 | Field | Description |
 | --- | --- |
-| `nayaxToken` | A reusable token for charging this card on future merchant-initiated transactions: pass it as `paymentMethod.token` with type `nayax_token`. Nayax's issuance of this token is still pending confirmation from Nayax; treat `scheme_token` as the reliable reuse mechanism until that's confirmed. |
+| `nayaxToken` | A reusable token for charging this card on future merchant-initiated transactions: pass it back as `paymentMethod.token` with type `nayax_token`. Present only when a reusable credential is available for the card. |
 | `card` | A summary of the card used: last four digits, brand, and expiry. |
 | `networkTransactionId` | What a later merchant-initiated transaction references to chain back to this customer-initiated one for stored-credential processing. The gateway plumbs it through automatically; store it yourself only if you handle that chaining directly. |
 | `sca` | Present only when 3D Secure ran or a Strong Customer Authentication (SCA) exemption was applied. `lifecycle` is `frictionless`, `challenge`, or `exemption`; `liabilityShift` tells you whether fraud liability moved to the issuer (`yes` or `no`). `exemptionType` and `exemptionClaimedBy` appear only on the exemption path. The authentication cryptogram (CAVV) is never included here. |

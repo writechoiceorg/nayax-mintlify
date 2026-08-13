@@ -18,12 +18,12 @@ only if you're building your own checkout.
 What you need depends on which case applies.
 
 - **Merchant-initiated (MIT):** a reusable payment credential. Use one of:
-  - `scheme_token`, a network token (for example a device or wallet DPAN)
-    that you or the wallet already hold, passed with its per-transaction
-    cryptogram. This is the confirmed way to reuse a card today.
+  - `scheme_token`, a network token (for example a device or wallet DPAN),
+    passed with its per-transaction cryptogram. Use this when you or the
+    wallet already hold a network token for the card.
   - [`nayax_token`](/docs/online-payments/payment-page/receive-payment-result#webhooks),
-    Nayax's own reusable token. It's accepted on this endpoint, but its
-    issuance is still pending confirmation from Nayax.
+    Nayax's own reusable token, returned on a prior customer-initiated
+    transaction when one is available for that card.
 
   In most cases you also need the original CIT's `transactionId`, from
   [Get transaction](/docs/online-payments/rest-api/transactions#get-transaction)

@@ -2,11 +2,10 @@ openapi: 3.0.1
 info:
   title: Nayax Online Payments API
   description: >-
-    Reconstructed from the hand-written Online Payments REST API docs
-    (docs/online-payments/rest-api/*.mdx), not from a spec provided by the
-    Online Payments engineering team. Confirm field-level accuracy against
-    that team before treating this as authoritative; flag any drift back to
-    the docs.
+    Accept card and digital wallet payments through a hosted checkout page or
+    directly through the REST API. Authorize, capture, void, and refund
+    transactions, verify a card without charging it, and retrieve
+    transaction history.
   version: v1
 servers:
   - url: https://{environment}/api/v1
@@ -604,9 +603,6 @@ components:
           enum: [nayax_token]
           description: >-
             Nayax-issued token from a prior customer-initiated transaction.
-            Issuance of this token is still pending confirmation from Nayax;
-            treat `scheme_token` as the reliable reuse mechanism until that's
-            confirmed.
         token:
           type: string
           minLength: 1
@@ -941,8 +937,7 @@ components:
       description: >-
         As documented on List transactions. Note this filter enum omits
         `partially_refunded`, which does appear in the full status list
-        returned by Get transaction; unconfirmed whether that's a real API
-        restriction or a documentation gap.
+        returned by Get transaction.
       enum:
         - created
         - authorized
@@ -1018,8 +1013,7 @@ components:
           type: string
           description: >-
             A reusable token for this card, present when a reusable
-            credential is available. Nayax's issuance of this token is still
-            pending confirmation.
+            credential is available.
     TransactionListItem:
       type: object
       description: A narrower field set than Get transaction.
