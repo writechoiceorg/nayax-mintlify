@@ -1,0 +1,170 @@
+---
+title: "Marshall Pro Network Requirements"
+sidebarTitle: "Network Requirements"
+description: "Ports, domains, and IP ranges to whitelist so Marshall Pro terminals, including VPOS Media-5, can connect to Nayax."
+keywords: ["network requirements", "firewall whitelist", "VPOS Media-5", "VPOSM5", "Castles TMS", "required ports", "IP ranges", "HawkBit OTA", "forecourt controller network", "Marshall Pro network requirements"]
+metadata:
+  og:description: "Marshall Pro (Fuel) now supports the VPOS Media-5 terminal alongside forecourt controllers. Before you deploy any Marshall Pro hardware, your network team."
+---
+
+Marshall Pro (Fuel) supports the VPOS Media-5 terminal alongside forecourt controllers.
+ Before you deploy any Marshall Pro hardware, your network team must open the following ports,
+  domains, and IP ranges for outbound traffic to Nayax's cloud.
+
+## Network Prerequisites
+
+A DHCP connection gives Marshall Pro terminals plug-and-play network access, and Nayax recommends
+ it over a static IP assignment. If your network requires a static IP, provide Nayax with the following
+  details before deployment:
+
+* IP address
+* Ethernet gateway address
+* DNS address
+* Ethernet subnet mask
+
+Static IP configuration requires coordination with Nayax support.
+
+DNS resolution is mandatory for all Nayax device communication; blocking DNS prevents the terminal from reaching Nayax entirely.
+
+<Note>
+Nayax Android-based devices use Google Public DNS (`8.8.8.8`). This address must be reachable from your network.
+</Note>
+
+## Registered IP Ranges
+
+As an alternative to whitelisting individual domains, you can whitelist the full Nayax registered IP ranges. The table below lists global ranges that cover all regions, plus narrower per-country ranges for Israel, Germany, and the United States.
+
+| Scope | IP range |
+| :--- | :--- |
+| Global range | `185.159.232.0/22` |
+| Global range | `195.184.224.0/22` |
+| Israel (IL) | `185.159.232.0/24` |
+| Germany (DE) | `185.159.234.0/24` |
+| United States (US) | `185.159.233.0/24` |
+
+<Note>
+The Israel, Germany, and United States ranges are subsets of the `185.159.232.0/22` global range. Whitelisting that global range alone already covers all three; you don't need to add the country-specific rows separately unless your firewall policy requires narrower rules.
+</Note>
+
+## Required Ports
+
+Open the following ports for outbound traffic from the Marshall Pro network.
+
+| Port | Protocol | Purpose |
+| :--- | :--- | :--- |
+| 443 | TCP | HTTPS for core services, onboarding, and CommerceAPI |
+| 9000 | TCP | Nayax device communication |
+| 9005 | TCP | Telemetry |
+| 5000 | TCP | Nayax device communication |
+| 26520 | TCP | Boot server connection |
+| 8883 | TCP | MQTT (AWS IoT) for the PayBridge service |
+| 53 | UDP/TCP | Google Public DNS (`8.8.8.8`), used by Android OS |
+
+## Required Domains
+
+Add the following domains to your firewall or proxy's allowlist. Wildcard entries (`*.domain`) cover all subdomains.
+
+### Core Domains
+
+These domains are mandatory for all Marshall Pro deployments.
+
+| Domain | Purpose |
+| :--- | :--- |
+| `*.nayax.com` | Nayax platform services |
+| `*.nayax.net` | Nayax platform services |
+| `commerceapib.nayax.com` | Nayax Core CommerceAPI server (port 443) |
+| `commerceapi.nayax.com` | Nayax Core CommerceAPI server (port 443) |
+| `mrs.nayax.com` | Nayax device onboarding, ROS (port 443) |
+| `www.nayax.com` | Internet connectivity check (ICMP / ping) |
+| `checkip.amazonaws.com` | External IP verification (port 443) |
+| `geoprimary.nayax.net` | TLV engine, geo-primary gateway (port 9000) |
+| `broker2.nayax.com` | MQTT broker for real-time messaging and telemetry (port 1883) |
+| `brokerst1.nayax.com` | MQTT broker, alternate (port 1883) |
+| `eu-broker5.nayax.com` | MQTT broker, alternate (port 1883) |
+| `brokerir1.nayax.com` | MQTT broker, alternate (port 1883) |
+| `hawkbit-vposm-prod.nayax.com` | HawkBit OTA update server for VPOS devices (port 443) |
+
+### DCS Access URLs
+
+The Nayax Device Control System (DCS) requires the following URLs to be reachable for browsing and use:
+
+* `il1.nayax.net` (port 443)
+* `il2.nayax.net` (port 443)
+* `backup.nayax.net` (port 443)
+* `boot.nayax.net` (port 443)
+
+### Third-Party Service Domains
+
+These domains support certificate validation, security checks, and cloud storage that Nayax services use:
+
+* `s3.amazonaws.com`
+* `s3.eu-central-1.amazonaws.com`
+* `seal.verisign.com`
+* `www.verisign.com`
+* `extended-validation-ssl.verisign.com`
+* `trustsealinfo.verisign.com`
+
+## VPOS Media-5 (Castles Technology)
+
+VPOS Media-5 uses a separate terminal management system (TMS) from Castles Technology for application deployment, firmware updates, and remote configuration. Deploying VPOS Media-5 on Marshall Pro requires the Castles TMS domains below, in addition to the core requirements above.
+
+### Castles TMS Domains
+
+The following Castles TMS domains handle application, firmware, and configuration delivery for VPOS Media-5.
+
+| Domain | Port(s) | Purpose |
+| :--- | :--- | :--- |
+| `ctms-gw.eu.cashub.cloud` | 443, 1883 | TMS gateway for application and firmware updates |
+| `cstore-gw.eu.cashub.cloud` | 443 | Application store gateway |
+| `rcg.eu.cashub.cloud` | 443 | Remote configuration |
+| `file.eu.cashub.cloud` | 443 | File delivery service |
+| `prod-eu-cashub.s3.eu-west-2.amazonaws.com` | 443 | AWS S3 storage for packages |
+| `prod-eu-cashub.s3.dualstack.eu-west-2.amazonaws.com` | 443 | AWS S3 dual-stack storage |
+
+### Connectivity Checklist
+
+Use this checklist to confirm you've whitelisted everything a VPOS Media-5 deployment needs, combining the Castles TMS domains above with the core requirements earlier on this page:
+
+* All ports and domains in Required Ports and Required Domains above
+* All Castles TMS domains above
+* The HawkBit OTA update server (`hawkbit-vposm-prod.nayax.com`, port 443), which every VPOS device needs
+* If you're deploying in Israel, also whitelist the Israel-based deployment addresses below
+
+<Warning>
+If you don't whitelist the Castles TMS domains and the HawkBit OTA server (`hawkbit-vposm-prod.nayax.com`), VPOS Media-5 devices can't receive software updates, security patches, or configuration changes.
+</Warning>
+
+## Israel-Based Deployments
+
+This section applies only to deployments in Israel. It lists additional addresses to whitelist for payment processing and local service connectivity.
+
+| Service | Domain / URL | IP address | Port | Remarks |
+| :--- | :--- | :--- | :--- | :--- |
+| Shva (EMV) | `emv.shva.co.il` | `193.142.151.159` | 443 | Payment clearing, mandatory |
+| CommerceAPI (IL) | `il-commerceapib.nayax.com`, `il-commerceapi.nayax.com` | — | 443 | Israel regional CommerceAPI |
+| Graylog SPI | `log.modularity.co.il` | `34.245.120.119` | 12202 | Device logging service |
+
+<Warning>
+The Shva EMV address is mandatory for all card-present transactions that go through the Israeli payment network. Without it, card-present transactions fail.
+</Warning>
+
+## Remote Support (Optional)
+
+For remote technical support sessions, Nayax may need TeamViewer access.
+
+| Domain | Ports | Purpose |
+| :--- | :--- | :--- |
+| `*.teamviewer.com` | 5938, 443, 80 | Remote technical support |
+
+## Important Notes
+
+These notes apply across every Marshall Pro deployment, regardless of device or region:
+
+* All connections are outbound from Marshall Pro devices to the Nayax Cloud; no inbound firewall rules are required.
+* If your network uses a web proxy, add the domains listed above to its bypass list.
+* IP addresses and domains on this page are subject to change; Nayax notifies customers of any updates.
+
+## See Also
+
+* [Forecourt Architecture](/docs/integrate-pos-device/marshall-pro/getting-started/forecourt-architecture)
+* [Integration Process](/docs/integrate-pos-device/marshall-pro/getting-started/marshall-pro-integration-process)
