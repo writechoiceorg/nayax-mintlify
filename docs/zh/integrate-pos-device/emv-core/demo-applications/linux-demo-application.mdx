@@ -40,7 +40,7 @@ SDK 包含以下文件:
 
 ## 使用演示应用程序
 
-该压缩包包含一个带有 makefile 的项目、一个库,以及带有 C 源代码的示例应用程序:
+该压缩包包含一个带有 makefile 的项目、一个库，以及带有 C 源代码的示例应用程序:
 
 - 库 `libotikiosk` 将 Socket JSON API 转换为 C 函数。
 - `otiKioskDemo` 支持两种运行模式: Single API flow 和 Auto Mode。
@@ -58,10 +58,10 @@ SDK 包含以下文件:
 ### Auto Mode flow
 
 1. 使用命令选项 `--auto` 运行示例应用程序: `$ ./otiKioskDemo --auto`
-2. 应用程序启动后进入 Idle 状态,并显示欢迎消息。
-3. 设备调用 `AuthorizeTransaction`,显示价格并提示用户出示银行卡。
-4. 出示银行卡后,设备会将卡数据发送到服务器,并显示等待消息。
-5. 设备显示交易结果,并返回 Idle 状态。
+2. 应用程序启动后进入 Idle 状态，并显示欢迎消息。
+3. 设备调用 `AuthorizeTransaction`，显示价格并提示用户出示卡片。
+4. 出示卡片后，设备会将卡数据发送到服务器，并显示等待消息。
+5. 设备显示交易结果，并返回 Idle 状态。
 
 <Frame>
   ![](/images/docs/linux-demo-application/image2.png)
@@ -71,13 +71,13 @@ SDK 包含以下文件:
 
 请按照以下步骤从源代码编译演示程序:
 
-1. 将源代码获取到目标系统。在 Ubuntu 上,解压以下文件:
+1. 将源代码获取到目标系统。在 Ubuntu 上，解压以下文件:
 
 ```text
 `EMV-Core Linux SDK v1.4\Linux\x86_64\Sources\Emv-Core-client-x86_64-1.4-97.zip`
 ```
 
-这将解压出一个名为 `Emv-Core-client` 的文件夹,其中包含应用程序源代码和 makefile。
+这将解压出一个名为 `Emv-Core-client` 的文件夹，其中包含应用程序源代码和 makefiles。
 
 2. 安装所需的构建依赖项(Ubuntu Linux):
 
@@ -95,15 +95,15 @@ make
 ```
 
 4. 构建过程将在以下目录下生成静态库和演示程序的二进制文件:`Emv-Core-client/demo/otiKioskDemo`。
-5. 要运行新生成的应用程序,请确保该二进制文件具有适当的执行权限,并按照特定环境的执行步骤进行操作。
+5. 要运行新生成的应用程序，请确保该二进制文件具有适当的执行权限，并按照特定环境的执行步骤进行操作。
 
 ### 运行示例应用程序
 
 要在 Ubuntu 上运行测试应用程序可执行文件:
 
 1. 按照上一节所述启动 EMV Core(otiKiosk)。
-2. 在与 EMV Core 二进制文件相同的文件夹中运行 otiKioskDemo 示例应用程序(不要进入演示应用程序自身所在的文件夹)。
-3. 例如,如果您的文件夹结构如下:
+2. 在与 EMV Core 二进制文件相同的文件夹中运行 otiKioskDemo 示例应用程序（不要进入演示应用程序自身所在的文件夹）。
+3. 例如，如果您的文件夹结构如下:
 
 ```text
 sdk/
