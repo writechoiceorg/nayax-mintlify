@@ -1,0 +1,38 @@
+---
+title: "Deferred Transaction"
+metadata:
+  og:description: "Use deferred transactions to keep accepting payments on EMV Core when the terminal has no connection to Nayax's servers."
+---
+
+Deferred transaction, also known as "offline transaction" or "store & forward," lets the terminal keep providing service even when it has no communication with the server.
+
+## How it works
+
+The terminal keeps the transaction data in persistent memory and sends it for online approval once communication is restored. EMV Core performs basic card authentication first. If that authentication passes, EMV Core returns the `TransactionComplete` event to the host before it goes on to request online authorization.
+
+To use deferred transaction on Android, set `isDeferred=true` in [`PreAuthorize`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#preauthorize). The same parameter is called `deferred` in the JSON API.
+
+This parameter, introduced in SDK v1.5, replaces the [`PMT_ACCEPT_OFFLINE`](/docs/integrate-pos-device/emv-core/emv-core-configuration#managing-settings) configuration attribute. `PMT_ACCEPT_OFFLINE` is deprecated and no longer affects EMV Core's behavior.
+
+## Final amount requirement
+
+In SDK v1.5, deferred authorization is only supported when `isFinalAmount=true`. Under this condition:
+
+- EMV Core stores the transaction data in memory and sends it to the server when possible.
+- The transaction is authorized and settled for the same amount.
+- You don't need to call `ConfirmTransaction` afterward.
+
+<Warning>
+  When activating this feature, there is a risk that some transactions will not be approved. It's recommended to use it only when it's impossible to prevent service (e.g. parking, lockers, transit). The risk and responsibility are on the operator; Nayax is not responsible for any transaction that isn't approved.
+</Warning>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="PreAuthorize API" icon="link" href="/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#preauthorize">
+    API reference for PreAuthorize, including the isDeferred and isFinalAmount parameters used to trigger a deferred transaction.
+  </Card>
+  <Card title="Configuration parameters" icon="link" href="/docs/integrate-pos-device/emv-core/emv-core-configuration#managing-settings">
+    Configuration reference. Look for the deprecated PMT_ACCEPT_OFFLINE parameter in the parameter table further down the page.
+  </Card>
+</CardGroup>

@@ -9,6 +9,7 @@ The SDK triggers event callbacks in the EMV Core SDK to notify the application o
 These are the available callbacks.
 
 * [CardTokenReceived](#cardtokenreceived)
+* [IncrementalAuthorizationResponse](#incrementalauthorizationresponse)
 * [ReaderMessageEvent](#readermessageevent)
 * [SystemStatusChanged](#systemstatuschanged)
 * [TransactionComplete](#transactioncomplete)
@@ -56,11 +57,12 @@ This event is triggered after a card token is successfully retrieved.
     void CardTokenReceived(TokenDetails tokenDetails);
     ```
 
-    Where:
+    Where `tokenDetails` has two fields:
 
-    | Parameter      | Description                 |
-    | :------------- | :-------------------------- |
-    | `tokenDetails` | String with the Card token. |
+    | Parameter  | Description                                                                                                 |
+    | :--------- | :------------------------------------------------------------------------------------------------------------ |
+    | `CardToken` | Base64 string for payment cards, or the card UID for closed loop (Mifare) cards.                              |
+    | `CardType`  | Card scheme (for example, EMV, MasterCard, Visa). For closed loop cards, the card technology (for example, Type A, Mifare). |
   </Tab>
 
   <Tab title="Linux">
@@ -95,6 +97,26 @@ This event is triggered after a card token is successfully retrieved.
     | `card_type`     | Card scheme (for example, EMV, Visa) for payment cards, or card technology (for example, Type A, Mifare) for closed loop cards. |
   </Tab>
 </Tabs>
+
+***
+
+## `IncrementalAuthorizationResponse`
+
+<Warning>
+  This method is only available for the Android operating system.
+</Warning>
+
+The `IncrementalAuthorizationResponse` event is triggered when an [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) call completes, whether it succeeds or fails.
+
+```java Java
+void IncrementalAuthorizationResponse(IncrementalAuthorizationDetails details);
+```
+
+| Parameter | Description |
+| --------- | ----------- |
+| `Status` | `OK` or `Error`. |
+| `Amount` | The incremental amount, in major units (for example, 1.50 for $1.50). |
+| `TransactionReference` | Transaction reference from the original `IncrementalAuthorization` call. |
 
 ***
 
@@ -155,17 +177,21 @@ For this feature to work, the reader must be configured to send External Display
 The `SystemStatusChanged` event indicates changes in the SDKs or connected devices' operational state.
 
 ```java Java
-void onTransactionComplete(TransactionResult result);
+void SystemStatusChanged(EmvCoreStatus emvCoreStatus);
 ```
 
-`SystemStatus` is an enumeration representing the current state of the system. See the possible result values in the table below:
+`EmvCoreStatus` is an enumeration representing the current state of the system. See the possible result values in the table below:
 
 | Result               | Description                                    |
 | -------------------- | ---------------------------------------------- |
-| `Ready`              | The SDK is ready for transactions.             |
 | `NotReady`           | The SDK is not operational.                    |
+| `Ready`              | The SDK is ready for transactions.             |
 | `PaymentTransaction` | A transaction is currently in progress.        |
 | `Update`             | A firmware or configuration update is ongoing. |
+| `NoReader`           | No card reader is currently connected.         |
+| `NoTerminalId`       | Indicates the EMV Core does not have a configured Terminal ID. |
+| `NoNetwork`          | No network connection is available.            |
+| `NoTransaction`      | No transaction is currently in progress or was found. |
 
 ***
 
@@ -310,6 +336,7 @@ If EMV Core doesn’t get an answer, it will re-send 2 times (for a total of 3 m
     | `AllowFundsOverAuthAmount`| Whether incremental charges above the authorized amount are permitted (`"true"` or `"false"`).                                                               |
     | `IncrementalMaxDefaultCredit` | Maximum credit amount allowed for incremental authorization.                                                                                             |
     | `card_Balance`            | Card balance for closed-loop cards managed by Nayax.                                                                                                                                    |
+    | `mifare_read`             | Optional. JSON with the results of Mifare blocks read, according to the `CLP_MIFARE_READ` configuration attribute. Empty string when not configured. Returns a JSON object keyed by UID and by block number (for example, `B10`, `B14`).                                                                                                                                    |
 
     ### `TransactionComplete` Closed loop card types
 

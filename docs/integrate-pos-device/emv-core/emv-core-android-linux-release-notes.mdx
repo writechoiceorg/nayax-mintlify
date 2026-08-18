@@ -25,63 +25,265 @@ impact of each update:
 </Note>
 
 <Update
-  label="SDK Version 1.4 (Latest)"
+  label="SDK Version 1.5 (Latest)"
   rss={{
-    title: "SDK Version 1.4: automatic currency code, server failover, and local serial port management",
-    description: "Improvements: automated currency code management, Nayax Core/OTI TMS server failover, and local serial port management (Linux). Fixes: reader message event delivery and reader reconnection, sample app token reporting, and sample app resources. Known issues: offline acceptance limitation, terminal ID update delay, and an intermittent authorizing status event."
+    title: "SDK Version 1.5: incremental authorization, deferred transactions, and MQTT push notifications",
+    description: "Improvements: 1-step incremental authorization, deferred (offline) transaction support, offline-by-default mode, External Settlement support in the client library, and MQTT push notifications. Fixes: reader communication recovery, External Settlement and CLP response field corrections, and the IncrementalAuthorization URL. Known issues: reader-swap terminal ID behavior, intermittent Android service restarts, and incorrect status reporting after a cancelled or CannotCancel transaction."
   }}
 >
 
 This version includes the following improvements, fixes, and known issues for the SDK:
 
 <Accordion title="Improvements" icon="rocket">
-  ### **Automated Currency Code Management (#7473)**
+  ### **1-Step Incremental Authorization (#7462)**
 
-  The SDK now sets the currency code automatically from the Nayax Core. The host application no longer needs to set it manually.
-
-  ***
-
-  ### **Server Connectivity and Automatic Failover (#7474)**
-
-  The EMV Core now automatically attempts connections to both the Nayax Core (`tms-c.otiglobal.com`) and the OTI TMS (`tms.otiglobal.com`). You can omit the `TMS_SVC_URL` attribute from your configuration when migrating a device from OTI TMS management to the Nayax Core system.
+  Add an incremental charge to an already-authorized transaction in a single call, using the new [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) method. The result arrives through the new [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) callback.
 
   ***
 
-  ### **Local Serial Port Management (#7308) (Linux Only)**
+  ### **Deferred Transaction (#7486)**
 
-  Host applications can now manage the reader serial port locally through a configuration file located at `/etc/oti_kiosk/init.cfg`. By defining the `READER_SERIAL_PORT` attribute (e.g., `READER_SERIAL_PORT=/dev/ttyS0`), the SDK can pinpoint the hardware interface immediately.
+  The terminal can now keep accepting payments while offline and send them for approval once communication is restored. Set `isDeferred` and `isFinalAmount` in `PreAuthorize` to use it. This replaces the deprecated `PMT_ACCEPT_OFFLINE` configuration attribute. See [Deferred Transaction](/docs/integrate-pos-device/emv-core/payment-flows/deferred-transaction) for details.
+
+  ***
+
+  ### **Offline by Default Mode (#7604)**
+
+  EMV Core can now operate offline by default, improving reliability in low-connectivity environments.
+
+  ***
+
+  ### **External Settlement Support in the Client Library (#7430)**
+
+  The client library now parses and exposes the fields required for server-to-server settlement.
+
+  ***
+
+  ### **Push Notifications via MQTT (#6817)**
+
+  EMV Core now supports MQTT push notifications. To use this feature, configure the MQTT Primary Address (`oti-broker.nayax.com:1883`) and Ping Interval (default 600 seconds) machine attributes in Nayax Core.
+
+  ***
+
+  ### **Currency Fallback from the Reader (#7654)**
+
+  If `CURRENCY_CODE` is missing from the configuration, EMV Core now falls back to the reader's kernel currency tag (`9F3C`) before defaulting to USD.
+
+  ***
+
+  ### **AUDIO_PERCENTAGE Configuration (#7609)**
+
+  Added the `AUDIO_PERCENTAGE` configuration attribute to control the reader's audio volume.
+
+  ***
+
+  ### **Terminal Authentication over TLS (#6719, #7305)**
+
+  Terminal Authentication (DSS) `GET /challenge` requests are now sent over TLS.
+
+  ***
+
+  ### **additionalReceiptData in PreAuthorize and ConfirmTransaction (#7377)**
+
+  You can now pass `additionalReceiptData` directly in `PreAuthorize` and `ConfirmTransaction` to include extra data in the eReceipt.
+
+  ***
+
+  ### **Local Firmware and Configuration Update Utility (#7372)**
+
+  Added a utility to update reader firmware and configuration locally without a TMS connection. This is intended for production-line use only. Remove it before deployment.
+
+  ***
+
+  ### **Advanced Closed Loop Card Support (#7639, #6898)**
+
+  EMV Core can now read Mifare blocks using the `CLP_MIFARE_READ` attribute, and host applications can send commands directly to the reader with the new [`SendToReader`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/remote-management#sendtoreader) method.
+
+  ***
+
+  ### **Reader Configuration Management from Nayax Core (#7250)**
+
+  Reader configuration can now be managed from Nayax Core machine attributes.
+
+  ***
+
+  ### **Process Info in UPLOAD_LOG (#7300)**
+
+  `UPLOAD_LOG` now includes process information: CPU, memory, and uptime.
+
+  ***
+
+  ### **Felica IDm as CLP UID (#7496)**
+
+  FeliCa's IDm is now returned as the CLP UID.
+
+  ***
+
+  ### **Unconditional Confirmation (#7594)**
+
+  Removed the `CONFIRM_IF_UNSURE` flag. Confirmation behavior is now unconditional.
+
+  ***
+
+  ### **Client Library Version Reporting (#7673)**
+
+  The client library version is now reported to TMS via `GetVersions`.
+
+  ***
+
+  ### **Nayax TLS CA Support (#7703)**
+
+  Added support for the Nayax TLS certificate authority.
+
+  ***
+
+  ### **Hardcoded External Settlement Defaults (#7705)**
+
+  External Settlement properties are now hardcoded defaults, removing the dependency on `local.properties`.
+
+  ***
+
+  ### **Foreground Service (#7712)**
+
+  The EMV Core service now runs in the foreground, preventing the OS from killing it.
 </Accordion>
 
 <Accordion title="Fixes" icon="wrench">
-  ### **Event Delivery and Reader Stability (#7443, #7497)**
+  ### **ReaderMessageEvent Index Correction (#7088)**
 
-  Fixed an intermittent issue where [`ReaderMessageEvent`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages) would stop arriving at the host application. Additionally, we resolved a connectivity bug where the EMV Core was unable to reconnect to a serial reader following a POS firmware update.
+  Messages that previously used index `255` now use the correct assigned indexes in the `201`-`220` range.
 
-  ### **Sample Application Token Reporting (Linux Only)**
+  ***
 
-  Fixed a logic error in the Sample application that prevented card tokens from being returned in the `TransactionComplete` event for open-loop cards.
+  ### **Reader Communication Recovery (#6819)**
 
-  ### **Sample Application Resources (Android Only)**
+  Improved reader communication recovery, including handling of reader power cycles.
 
-  Fixed an issue in the previous distribution where incorrect sample application source files were included. The SDK v1.4 package now contains the verified and updated source code.
+  ***
+
+  ### **External Settlement Response Missing hwSerial (#7515)**
+
+  The External Settlement response was missing the `hwSerial` field.
+
+  ***
+
+  ### **Push Notifications on TMS-C (#7537)**
+
+  Fixed push notifications not working when the device is managed by TMS-C (Nayax Core).
+
+  ***
+
+  ### **CLP Card ID Response Fields (#7425)**
+
+  Fixed the CLP Card ID being sent in the wrong response fields.
+
+  ***
+
+  ### **Local CLP Transaction and Card ID (#7512)**
+
+  Fixed the Transaction ID and Card ID (`CardToken`) being identical on Local CLP transactions.
+
+  ***
+
+  ### **Transaction Fee Reporting (#7478)**
+
+  Fixed transaction fees not being sent correctly to the Bridge.
+
+  ***
+
+  ### **PMT_DUKPT_KEY_VARIANT Fallback (#6772)**
+
+  `PMT_DUKPT_KEY_VARIANT` now falls back to `0x11` when the configured value is invalid.
+
+  ***
+
+  ### **Automatic Restart with No Reader (#7183)**
+
+  EMV Core now restarts automatically if it doesn't find a reader within 1 hour.
+
+  ***
+
+  ### **IncrementalAuthorization URL (#7662)**
+
+  Fixed an incorrect URL used by `IncrementalAuthorization`.
+
+  ***
+
+  ### **Configuration Preserved Across APK Upgrades (#7491)**
+
+  Configuration was previously deleted when the APK was updated. It's now preserved across upgrades.
+
+  ***
+
+  ### **hwSerial Truncation (#7710)**
+
+  Fixed `hwSerial` being truncated in `NayaxTransactionIdInfo`.
+
+  ***
+
+  ### **Large Receipt Data Buffer Overflow (#7763)**
+
+  Fixed a buffer overflow that could crash or reset the device when large receipt or terminal data combined with transaction result data.
+
+  ***
+
+  ### **Truncated Server Responses (#7783)**
+
+  Fixed truncated or rejected server responses that could report a valid approval as declined, or drop a TMS-pushed command.
+
+  ***
+
+  ### **Continuous Polling Interruption (#7217)**
+
+  Fixed polling stopping in the middle of a `continuous=true` transaction.
+
+  ***
+
+  ### **CON_CONFIG and Service Restart (#7452, #7701)**
+
+  Fixed the `CON_CONFIG` command failing, and the Android service sometimes not restarting after that command.
+
+  ***
+
+  ### **GetStatus Stuck at Update (#7740)**
+
+  Fixed `GetStatus` remaining stuck at `Update` for 5 or more minutes after a firmware flash.
+
+  ***
+
+  ### **Duplicate Authorize Requests**
+
+  Reduced duplicate `Authorize` requests sent after a timeout or cancellation.
 </Accordion>
 
 <Accordion title="Known issues" icon="exclamation-triangle">
-  ### **Offline Acceptance Limitation (#6918)**
+  ### **Reader Swap Terminal ID (#7211, #7030)**
 
-  The `PMT_ACCEPT_OFFLINE` command currently only functions for DEMO purposes. Transactions processed under this flag are not yet sent to the server and will remain local to the device until a future update.
-
-  ***
-
-  ### **Terminal ID Update Delay (#7211, #7030)**
-
-  If you swap readers without manually resetting the EMV Core, the Terminal ID will not update. Reset the EMV Core whenever you replace hardware to ensure the correct terminal identity is registered.
+  Always stop EMV Core before moving a reader to a different machine. Swapping a reader without resetting EMV Core doesn't update the Terminal ID, and payment may complete against the previous terminal. Moving a reader to a different machine without first stopping EMV Core on the original machine may also cause unpredictable behavior on the new machine.
 
   ***
 
-  ### **Authorizing Status Event (#7510)**
+  ### **Android OS Service Restarts (#7714)**
 
-  There is a known intermittent issue where the EMV Core may fail to send the [`ReaderMessageEvent`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/reader-messages) with index 36 (“Authorizing”). Applications should handle the transaction flow even if this specific status update is missing.
+  The Android OS may stop the EMV Core service, causing multiple restarts during operation.
+
+  ***
+
+  ### **IsTransactionApproved on Cancelled Transactions (#7743)**
+
+  A cancelled transaction incorrectly returns `IsTransactionApproved` as `true`.
+
+  ***
+
+  ### **Cancellation After CannotCancel (#7742)**
+
+  A transaction may still be cancelled after receiving a `CannotCancel` response.
+
+  ***
+
+  ### **GetStatus with Ethernet Disabled (#7741)**
+
+  `GetStatus` returns `Ready` even when Ethernet is disabled.
 </Accordion>
 
 </Update>
@@ -93,6 +295,7 @@ current version above for full detail and links.
 
 | Version | Summary |
 |---|---|
+| SDK Version 1.4 | **Added** (#7473, #7474, #7308):<ul><li>Automated currency code management</li><li>Nayax Core/OTI TMS server failover</li><li>Local serial port management (Linux)</li></ul>**Fixed** (#7443, #7497):<ul><li>Reader message event delivery and reader reconnection</li><li>Sample app token reporting and sample app resources</li></ul> |
 | SDK Version 1.2 | **Added** (#6782, #7139, #7346, #7269, #6888):<ul><li>e-Receipt/Remote Settlement support</li><li>Nayax Core-managed attribute/limit control and CLP cards</li><li>Enhanced logging</li></ul>**Fixed** (#7385, #7371, #7199, #7272):<ul><li>Offline display sync and reader-boot/core-invocation issues</li><li>Deprecated `PayTransaction` in favor of `PreAuthorize`/`ConfirmTransaction`</li></ul> |
 | SDK Version 1.1 (Linux Only) | **Shipped** (#6813, #7165, #7157):<ul><li>Official UNO-8 firmware v54227</li><li>Beta UNO-mini firmware v071514</li></ul>**Fixed** (#7144, #7331):<ul><li>Serial reader stability</li><li>TMS independence</li><li>A socket resource leak</li></ul> |
 | SDK Version 1.0 | **Added** (#71156, #7129, #7117):<ul><li>`GetAttribute`</li><li>Enhanced Android logging and config reporting</li><li>Linux sample app improvements</li></ul>**Fixed** (#6960, #7136, #7091, #7169, #7180, #6658, #7200, #7204, #7130, #7210):<ul><li>Log truncation</li><li>CLP card mapping</li><li>Timing/sync issues</li><li>Android diagnostics/UI bugs</li></ul> |
