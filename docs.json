@@ -148,13 +148,14 @@
               {
                 "item": "Marshall Pro (Fuel)",
                 "icon": "gas-pump",
-                "groups": [
+                "pages": [
                   {
                     "group": "Marshall Pro Guides",
                     "pages": [
                       "docs/integrate-pos-device/marshall-pro/getting-started/index",
                       "docs/integrate-pos-device/marshall-pro/getting-started/marshall-pro-integration-process",
                       "docs/integrate-pos-device/marshall-pro/getting-started/forecourt-architecture",
+                      "docs/integrate-pos-device/marshall-pro/getting-started/network-requirements",
                       "docs/integrate-pos-device/marshall-pro/getting-started/best-practices",
                       "docs/integrate-pos-device/marshall-pro/getting-started/security-digital-signatures"
                     ]
@@ -220,6 +221,12 @@
                     "group": "Marshall Pro Release Notes",
                     "pages": [
                       "docs/integrate-pos-device/marshall-pro/fuelapp-release-notes"
+                    ]
+                  },
+                  {
+                    "group": "FAQ",
+                    "pages": [
+                      "docs/integrate-pos-device/marshall-pro/faq"
                     ]
                   }
                 ]
@@ -425,10 +432,10 @@
                     ]
                   },
                   {
-                    "group": "Release Notes",
+                    "group": "EMV Core Release Notes",
                     "pages": [
-                      "docs/integrate-pos-device/emv-core/emv-core-release-notes",
-                      "docs/integrate-pos-device/emv-core/rtos/rtos-release-notes"
+                      "docs/integrate-pos-device/emv-core/emv-core-android-linux-release-notes",
+                      "docs/integrate-pos-device/emv-core/emv-core-rtos-release-notes"
                     ]
                   }
                 ]
@@ -799,8 +806,7 @@
                 "group": "Build with AI",
                 "root": "docs/get-started/build-with-ai",
                 "pages": [
-                  "docs/get-started/mcp-setup",
-                  "docs/get-started/agent-skills"
+                  "docs/get-started/mcp-setup"
                 ]
               }
             ]
@@ -1206,8 +1212,8 @@
                   {
                     "group": "Release Notes",
                     "pages": [
-                      "docs/zh/integrate-pos-device/emv-core/emv-core-release-notes",
-                      "docs/zh/integrate-pos-device/emv-core/rtos/rtos-release-notes"
+                      "docs/zh/integrate-pos-device/emv-core/emv-core-android-linux-release-notes",
+                      "docs/zh/integrate-pos-device/emv-core/emv-core-rtos-release-notes"
                     ]
                   }
                 ]
@@ -1577,8 +1583,7 @@
                 "group": "Build with AI",
                 "root": "docs/zh/get-started/build-with-ai",
                 "pages": [
-                  "docs/zh/get-started/mcp-setup",
-                  "docs/zh/get-started/agent-skills"
+                  "docs/zh/get-started/mcp-setup"
                 ]
               }
             ]
@@ -1601,6 +1606,34 @@
     {
       "source": "/docs/get-started/agent-skills",
       "destination": "/docs/get-started/build-with-ai"
+    },
+    {
+      "source": "/docs/zh/get-started/agent-skills",
+      "destination": "/docs/zh/get-started/build-with-ai"
+    },
+    {
+      "source": "/archive/build-with-ai/:slug*",
+      "destination": "/docs/get-started/build-with-ai"
+    },
+    {
+      "source": "/changelog",
+      "destination": "/"
+    },
+    {
+      "source": "/docs/integrate-pos-device/emv-core/emv-core-release-notes",
+      "destination": "/docs/integrate-pos-device/emv-core/emv-core-android-linux-release-notes"
+    },
+    {
+      "source": "/docs/integrate-pos-device/emv-core/rtos/rtos-release-notes",
+      "destination": "/docs/integrate-pos-device/emv-core/emv-core-rtos-release-notes"
+    },
+    {
+      "source": "/docs/zh/integrate-pos-device/emv-core/emv-core-release-notes",
+      "destination": "/docs/zh/integrate-pos-device/emv-core/emv-core-android-linux-release-notes"
+    },
+    {
+      "source": "/docs/zh/integrate-pos-device/emv-core/rtos/rtos-release-notes",
+      "destination": "/docs/zh/integrate-pos-device/emv-core/emv-core-rtos-release-notes"
     },
     {
       "source": "/docs/nayax-different-integrations",
@@ -2524,7 +2557,7 @@
     },
     {
       "source": "/docs/widgets-lynx",
-      "destination": "/docs/manage-data-operations/lynx-api/reports/widgets-lynx"
+      "destination": "/docs/manage-data-operations/lynx-api/reports/widgets-overview"
     },
     {
       "source": "/docs/available-widgets",

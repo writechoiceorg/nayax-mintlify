@@ -6,7 +6,7 @@ metadata:
 
 TweezerComm has a resilience mechanism for handling transaction completion or cancellation in case of errors or failures. Whenever an error occurs, such as a `statusCode != 0`, TweezerComm automatically falls back to this mechanism, using retries and verification steps to complete or cancel the transaction and prevent inconsistencies.
 
-## How It Works
+## How it works
 
 The flow chart describes the flow of the mechanism.
 
@@ -21,10 +21,10 @@ When a transaction requires completion (settlement) or cancellation, the system 
 
 The process loops back to the start of the Completion/Cancel flow until it reaches a definitive success or failure condition.
 
-## See Also
+## See also
 
 <CardGroup cols={2}>
-  <Card icon="route" title="Payment Flows" href="/docs/integrate-pos-device/tweezercomm/global-payment-flows/payment-flows-copy-1">
+  <Card icon="route" title="Payment flows" href="/docs/integrate-pos-device/tweezercomm/global-payment-flows/payment-flows-copy-1">
     See the payment flows this resilience mechanism protects.
   </Card>
 

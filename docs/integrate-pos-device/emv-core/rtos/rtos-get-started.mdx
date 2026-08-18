@@ -18,7 +18,7 @@ Your setup requires the following hardware:
 | **Memory** | Minimum 64 KB RAM (configurable for smaller systems) |
 | **Reader power** | 5–12 VDC; 0.7 W idle, 3 W peak |
 
-### Network Requirements
+### Network requirements
 
 The host platform must support IPv4 TCP networking with the following characteristics:
 
@@ -41,7 +41,7 @@ The host platform must support IPv4 TCP networking with the following characteri
   * 1.15 ms at 9600 BAUD
   * 0.1 ms at 115200 BAUD
 
-### Build System
+### Build system
 
 The host sample code requires:
 
@@ -56,7 +56,7 @@ The host sample code requires:
   Use the sample host implementation included with the SDK rather than writing one from scratch.
 </Note>
 
-## SDK Delivery
+## SDK delivery
 
 The SDK package is organized into three top-level folders:
 
@@ -75,7 +75,7 @@ SDK Package/
     └── UNO-8 Manager/             Tool for local firmware and configuration updates
 ```
 
-### EMV Core Communication Protocols
+### EMV Core communication protocols
 
 The EMV Core FW running on the UNO Reader automatically adapts to two protocols based on the host application:
 
@@ -88,9 +88,9 @@ The EMV Core FW running on the UNO Reader automatically adapts to two protocols 
   When switching from one protocol to another, you must restart the UNO Reader.
 </Warning>
 
-## Firmware Installation on UNO-mini
+## Firmware installation on UNO-mini
 
-### EMV Core Installation
+### EMV Core installation
 
 The EMV Core module is provided with the UNO Reader firmware.
 
@@ -103,7 +103,7 @@ The firmware file (`EMVSC_v0xxxxx.oef`) can be found in the SDK `Firmware and Co
   The Reader must be registered to the Nayax Core system. If it is not registered, you will not be able to complete payment transactions. To register your device, provide its Device ID (Reader serial number) to your Nayax account manager.
 </Warning>
 
-## Getting a Device ID
+## Getting a device ID
 
 The Kiosk ID is the Reader Serial Number (SN). Obtain it by:
 

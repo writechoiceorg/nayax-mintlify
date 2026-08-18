@@ -1,0 +1,74 @@
+---
+title: "Transaction Status"
+description: "List open and settled transactions on VPOS Media, read the status lifecycle, and reconcile pre-authorizations that still need to be settled."
+metadata:
+  og:description: "List open and settled transactions on VPOS Media, read the status lifecycle, and reconcile pre-authorizations that still need to be settled."
+---
+
+`payment.query` returns the transactions the device knows about, so your app can
+reconcile after a payment, recover state after a restart, and settle any
+pre-authorizations that are still open. This page covers:
+
+* [**Querying transactions**](#query-transactions) to list them and read each one.
+* [**The status lifecycle**](#status-lifecycle) to see where a transaction stands.
+* [**Transaction detail fields**](#reading-transaction-details) for receipts and support.
+
+## Query Transactions
+
+`payment.query` returns a list of `transaction_info_t`, one per transaction,
+each carrying the transaction ID, the current status, the final price, and
+details about the transaction:
+
+```java
+List<transaction_info_t> transactions = payment.query();
+
+for (transaction_info_t tx : transactions) {
+    long id     = tx.transaction_id;
+    int status  = tx.status;
+    int amount  = tx.final_price;
+
+    if (status == 2) {
+        // Authorized but not settled. Settle or cancel this transaction.
+    }
+}
+```
+
+## Status Lifecycle
+
+The `status` field reports where a transaction sits in the payment lifecycle. A
+pre-authorization starts at `2` and moves to `1` when you settle it, or to `5`
+when you cancel it.
+
+| Status | Meaning | What to do |
+|---|---|---|
+| `1` | Successfully settled | None. The transaction is complete. |
+| `2` | Authorized, not settled | Call `settle` to capture funds, or `cancel` to release the hold. |
+| `3` | Settlement failed, retry in progress | None. The service retries automatically. |
+| `4` | Settlement retry timeout expired | Call `cancel` to release the hold, or contact support. |
+| `5` | Cancelled | None. The transaction is void. |
+
+<Note>
+Open transactions (status `2`) hold funds on the consumer's account until you
+settle or cancel them, so reconcile and clear them promptly.
+</Note>
+
+## Reading Transaction Details
+
+Beyond the ID, status, and amount, each `transaction_info_t` describes the
+transaction, which is useful for receipts and support.
+
+| Field | Description |
+|---|---|
+| `transaction_id` | The transaction identifier you settle or cancel authorization against. |
+| `final_price` | The captured amount, according to the Decimal Place. |
+| `status` | The lifecycle status from the table above. |
+| `card_entry_mode` | How the means of payment was read (see the `card_entry_type_*` constants). |
+| `card_bin`, `card_bin_hash` | The BIN of the means of payment and its hashed form. |
+| `card_balance` | The balance of the means of payment, for types that report one. |
+
+The SDK reference lists every `transaction_info_t` field.
+
+## See Also
+
+- [Pre-Authorization Payment](/docs/integrate-pos-device/app-to-app/pre-authorization)
+- [Device Management](/docs/integrate-pos-device/app-to-app/device-management)

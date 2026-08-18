@@ -16,7 +16,7 @@ This page will guide you through implementing a single session in C SDK in more 
 
 See the section below for more details on each step.
 
-## Step 1: Include Libraries
+## Step 1: include libraries
 
 Start by including the necessary libraries for the SDK. See the code block below:
 
@@ -39,7 +39,7 @@ Start by including the necessary libraries for the SDK. See the code block below
 #include "drv_usart.h"
 ```
 
-## Step 2: Setup Macro and Global Variables
+## Step 2: setup macro and global variables
 
 The code below defines a macro for the module's logging/debugging name and sets up global variables to store configuration and session-related data.
 
@@ -61,11 +61,11 @@ Where:
 * `menu`: Stores menu-related settings.
 * `com_id`: Represents a communication ID (-1 as default).
 
-## Step 3: Setup Private Functions
+## Step 3: setup private functions
 
 Implement helper functions for debugging, event handling, and transaction processing. The following sections provide more details.
 
-### Debug Output Function
+### Debug output function
 
 This function determines the output stream for debug information.
 
@@ -84,7 +84,7 @@ Where:
 
 * `str`: String that contains the debug information.
 
-### CPU Timer Tick
+### CPU timer tick
 
 This function is called periodically (every 5-10ms) by the platform timer.
 
@@ -101,7 +101,7 @@ Where:
 
 * `p`: Pointer to optional parameter (unused in this function).
 
-### VMC Link Events Handler
+### VMC link events handler
 
 This function handles link events and logs relevant information.
 
@@ -142,7 +142,7 @@ Where:
 
 The function will return a boolean value (`__false` always, as no success/failure is determined).
 
-### Vend Request Handler
+### Vend request handler
 
 This function manages the session and its included items, then sends a vending request to the VPOS.
 
@@ -190,7 +190,7 @@ static void triggered_vend_request(void)
 }
 ```
 
-### VMC Vend Events Handler
+### VMC vend events handler
 
 Handles vend events and logs relevant information.
 
@@ -300,7 +300,7 @@ This function will return a Boolean value:
 * `__false` in most cases.
 * `__true` for `vmc_vend_event_on_vend_approved` to indicate a successful vend approval.
 
-## Step 4: Setup Initialization Functions
+## Step 4: setup initialization functions
 
 After adding the helper functions, you need to implement the functions to initialize the VMC configuration and the Menu Handler. See the sections below for more details.
 
@@ -344,7 +344,7 @@ static void vmc_init(void)
 }
 ```
 
-### Initialize Menu
+### Initialize menu
 
 Before initializing the menu, add the necessary handler functions. See the code below:
 
@@ -404,7 +404,7 @@ static void handler_reader_state(void *aux_data)
 
 ```
 
-## Step 5: Implement Main Function
+## Step 5: implement main function
 
 Once all other parts are implemented, you can add the program's main entry point, which initializes the link to the peripheral and the menu, then starts an infinite loop that runs the menu. See the code below:
 

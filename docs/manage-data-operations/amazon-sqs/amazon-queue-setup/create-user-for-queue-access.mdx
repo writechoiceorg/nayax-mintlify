@@ -6,7 +6,7 @@ metadata:
 
 After setting up the queue permissions, AWS requires a user account to interact with the queue programmatically. This user will utilize the previously created policy to secure queue access.
 
-## Types of AWS Users
+## Types of AWS users
 
 AWS offers various methods to manage users and provide access to resources, including users created in IAM, federated users, and users managed through IAM Identity Center.
 
@@ -46,7 +46,7 @@ AWS offers various methods to manage users and provide access to resources, incl
 
 In this case, you will create a **Programmatic Access user**.
 
-## Add User
+## Add user
 
 To create a user, follow these steps:
 
@@ -59,7 +59,7 @@ To create a user, follow these steps:
 
    <Frame><img src="/images/docs/create-user-for-queue-access/image2.png" /></Frame>
 
-## Set Permissions
+## Set permissions
 
 Attach the previously created policy to the user to grant the necessary permissions.
 
@@ -75,7 +75,7 @@ In the **Permissions policies** section:
 
 <Frame><img src="/images/docs/create-user-for-queue-access/image3.png" /></Frame>
 
-## Review and Create User
+## Review and create user
 
 (Optional) AWS tags can help identify and track resource usage for pricing and management purposes:
 
@@ -90,7 +90,7 @@ Once the user is created, you will receive a confirmation message indicating suc
 
 <Frame><img src="/images/docs/create-user-for-queue-access/image5.png" /></Frame>
 
-## Assign Programmatic Access User
+## Assign programmatic access user
 
 The next step in configuring programmatic access is generating access credentials for the created user. These credentials will allow interaction with the queue programmatically.
 
@@ -113,7 +113,7 @@ The next step in configuring programmatic access is generating access credential
 
    <Frame><img src="/images/docs/create-user-for-queue-access/image10.png" /></Frame>
 
-## Save Access Credentials
+## Save access credentials
 
 After creating the access key, you will be shown the **Access Key ID** and **Secret Access Key**, which are necessary for integration.
 

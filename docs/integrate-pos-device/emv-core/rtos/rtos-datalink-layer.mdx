@@ -12,9 +12,9 @@ The channel between EMV Core and Host is either a serial or USB channel.
 * If the length byte is less than 63, the remaining bytes should be discarded.
 * If it is 63 or more, all following 63 bytes are used.
 
-## Datalink Protocol
+## Datalink protocol
 
-### Command Sequence Example (GetKioskId)
+### Command sequence example (GetKioskId)
 
 The following exchange shows the full ACK/NAK flow for a `GetKioskID` command:
 
@@ -40,7 +40,7 @@ The following exchange shows the full ACK/NAK flow for a `GetKioskID` command:
 
 ---
 
-## Data Frame
+## Data frame
 
 **Example:**
 ```
@@ -59,7 +59,7 @@ The following exchange shows the full ACK/NAK flow for a `GetKioskID` command:
 | `[Data]` | Higher-level data being transported, typically a JSON-RPC message |
 | `[LRC]` | 2-character hex LRC (XOR of all bytes from `<` through the last byte of `[Data]`) |
 
-### LRC and Length Calculation Example
+### LRC and length calculation example
 
 ```
 Message:
@@ -79,7 +79,7 @@ Length: 65 bytes → encoded as "0065"
 
 ---
 
-## ACK Frame
+## ACK frame
 
 Sent to acknowledge a successfully received and validated Data Frame.
 
@@ -91,7 +91,7 @@ The `[Frame-ID]` matches the Data Frame being acknowledged.
 
 ---
 
-## NAK Frame
+## NAK frame
 
 Sent when the receiving side fails to parse a Data Frame.
 
@@ -115,7 +115,7 @@ The transmitting party does not change its behavior based on the error codes; th
 
 ---
 
-## Protocol Rules
+## Protocol rules
 
 The datalink layer follows these timing and sequencing rules:
 
