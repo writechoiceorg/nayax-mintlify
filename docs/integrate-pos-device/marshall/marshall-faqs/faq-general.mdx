@@ -41,6 +41,12 @@ C#:
   ![31](/images/31.png "31")
 </Frame>
 
+In addition to that, you need to ensure that you have the matching configuration in Nayax Core (Marshall over ETH needs to be configured on both the SDK's and Nayax Core's end):
+
+<Frame>
+  ![32](/images/32.png "32")
+</Frame>
+
 ## Marshall over ETH: using the same cable for both Marshall communication as well as the device's with Nayax's servers
 
 The supported configuration is to communicate via Ethernet with both the (Marshall) peripheral and Nayax's servers.<br />It’s the router’s role to provide access to the external world in parallel to the peripheral.<br />Having the device communicate with the peripheral via Ethernet and with the servers via eSIM is not currently supported, as this setup is technically less natural for Android.
