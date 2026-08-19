@@ -17,6 +17,8 @@ The following methods are used for managing the SDK:
 * [GetVersion](#getversion)
 * [Initialize](#initialize)
 * [isEMVCoreConnected](#isemvcoreconnected)
+* [SendToReader](#sendtoreader)
+* [SetAdditionalReceiptData](#setadditionalreceiptdata)
 * [SetManagementCallbacks](#setmanagementcallbacks)
 * [SetPaymentCallbacks](#setpaymentcallbacks)
 * [ShowMessage](#showmessage)
@@ -149,6 +151,12 @@ Returns separate status values for the card-polling state and for reader and net
 See the `GetPollStatus` API signature in the code below:
 
 <Tabs>
+  <Tab title="Android">
+    ```java Java
+    PollStatus GetPollStatus() throws EmvCoreException;
+    ```
+  </Tab>
+
   <Tab title="JSON">
     Request:
 
@@ -161,8 +169,6 @@ See the `GetPollStatus` API signature in the code below:
     ```json
     {"jsonrpc":"2.0", "result":{"Polling":false, "Resources":"Ready"}, "id":14}
     ```
-
-    The possible values are: `Polling`: `true` or `false`. `Resources`: `Ready`, `NoReader`, or `NoNetwork`.
   </Tab>
 
   <Tab title="Linux">
@@ -171,6 +177,8 @@ See the `GetPollStatus` API signature in the code below:
     ```
   </Tab>
 </Tabs>
+
+`PollStatus` has two fields: `polling` (Boolean, `true` if EMV Core is currently polling for a card) and `resources` (String, resource availability: `Ready`, `NoReader`, or `NoNetwork`).
 
 ***
 
@@ -341,6 +349,65 @@ See the `isEMVCoreConnected` API signature in the code below:
 ```java Android
 boolean isEmvCoreConnected();
 ```
+
+***
+
+## `SendToReader`
+
+<Warning>
+  This method is only available for the Android SDK.
+</Warning>
+
+Sends a direct command to the payment card reader hardware. This provides low-level access for custom commands, configuration, and diagnostics.
+
+See the `SendToReader` API signature in the code below:
+
+```java Android
+SendToReaderResponse SendToReader(String scope, String tag, String data);
+```
+
+**Parameters:**
+
+| Parameter | Description |
+| --------- | ----------- |
+| `scope` | Command scope. `GET` reads data (all tags allowed). `DO` executes a command (only whitelisted tags allowed). |
+| `tag` | Reader tag identifier in hex (for example, `DF4D` for firmware version). |
+| `data` | Command payload as a hex string. Use an empty string for `GET` operations. |
+
+**Returns:** A `SendToReaderResponse` with:
+
+| Field | Description |
+| --------- | ----------- |
+| `status` | Numerical status code: `0` (SUCCESS), `1` (FAILED), `2` (TIMEOUT), `3` (NO_ACK), `4` (NACK), `5` (UNSUPPORTED), `6` (UNAUTHORIZED), or `7` (ERROR). |
+| `data` | Hex-encoded response data on success, or an error message otherwise. |
+
+***
+
+## `SetAdditionalReceiptData`
+
+<Warning>
+  This method is only available for the Android SDK.
+</Warning>
+
+Sets additional receipt data to be included in transactions. This is a separate command from the `additionalReceiptData` parameter available inline in [`PreAuthorize` and `ConfirmTransaction`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1).
+
+<Note>
+  The manual doesn't specify how long the data set here remains in effect (next transaction only, current session, until overwritten, etc.). Confirm scope with Nayax before publishing guidance on when to call this versus the inline `additionalReceiptData` parameter.
+</Note>
+
+See the `SetAdditionalReceiptData` API signature in the code below:
+
+```java Android
+JSONObject SetAdditionalReceiptData(List<AdditionalReceiptDataPrms> additionalReceiptData) throws EmvCoreException;
+```
+
+**Parameters:**
+
+| Parameter | Description |
+| --------- | ----------- |
+| `additionalReceiptData` | List of `AdditionalReceiptDataPrms` objects, each with a key (String) and value (Object) pair to include in the receipt. |
+
+**Returns:** A `JSONObject` with the configured receipt data.
 
 ***
 

@@ -12,6 +12,7 @@ The methods available for payment management are:
 * [CancelTransaction](#canceltransaction)
 * [ConfirmTransaction](#confirmtransaction)
 * [GetCardToken](#getcardtoken)
+* [IncrementalAuthorization](#incrementalauthorization)
 * [PreAuthorize](#preauthorize)
 * [VoidTransaction](#voidtransaction)
 
@@ -232,6 +233,30 @@ EMV Core waits for a card to be presented, reads the data, and triggers a `CardT
 
 ***
 
+## `IncrementalAuthorization`
+
+<Warning>
+  This method is only available for the Android SDK.
+</Warning>
+
+Add an incremental charge to an existing authorized transaction. Use this when the final amount is higher than the initially authorized amount. The result is delivered via the `IncrementalAuthorizationResponse` callback.
+
+See the `IncrementalAuthorization` API signature in the code below:
+
+```java Java
+void IncrementalAuthorization(int amountMinorUnits, int productID, String transactionReference) throws EmvCoreException;
+```
+
+**Parameters:**
+
+| Parameter | Description |
+| --------- | ----------- |
+| `amountMinorUnits` | Additional amount to charge, in minor units (cents). |
+| `productID` | Optional. Product ID for reporting. |
+| `transactionReference` | Transaction reference from `TransactionComplete` (`TransactionID` field). |
+
+***
+
 ## `PreAuthorize`
 
 Use `PreAuthorize` to pre-authorize a card with the payment processor. EMV Core waits for a card, reads it, and processes it with the payment service if needed. It then sends a `TransactionComplete` event.
@@ -265,12 +290,12 @@ Use `PreAuthorize` to pre-authorize a card with the payment processor. EMV Core 
     | **timeout**               | Maximum seconds to wait. If no card arrives, the request returns a `Timeout` status.                                                                                                                                                                                                                                                                           |
     | **AdditionalReceiptData** | Optional. JSON object with extra receipt data passed to the PSP and included in the eReceipt.                                                                                                                                                                                                                                                                  |
     | **isFinalAmount**         | `true`: fixed amount, indicates `pre-selection` flow. `false`: amount may change, indicates `pre-authorization` flow. When used with `deferred=false`, the host must call `ConfirmTransaction` or `VoidTransaction` in both cases. When used with `deferred=true`, no need to call `ConfirmTransaction` or `VoidTransaction`. The transaction settles automatically. |
-    | **deferred**              | Optional. `true`: Deferred Authorization (Transit mode). Card read offline, authorization queued for settlement. See Deferred Transaction for details.                                                                                                                                                                                                         |
+    | **deferred**              | Optional. `true`: Deferred Authorization (Transit mode). Card read offline, authorization queued for settlement. See [Deferred Transaction](/docs/integrate-pos-device/emv-core/payment-flows/deferred-transaction) for details.                                                                                                                                                                                                         |
   </Tab>
 
   <Tab title="Android">
     ```java Java
-    void PreAuthorize(int amountMinorUnits, int productID, int timeoutSeconds, boolean continuous) throws EmvCoreException;
+    void PreAuthorize(int amountMinorUnits, int productID, int timeoutSeconds, boolean continuous, JSONObject additionalReceiptData, boolean isDeferred, boolean isFinalAmount) throws EmvCoreException;
     ```
 
     **Parameters:**
@@ -281,6 +306,9 @@ Use `PreAuthorize` to pre-authorize a card with the payment processor. EMV Core 
     | `productID`        | ID of the product selected by the consumer. This number will be saved on the server and available for reports. |
     | `timeoutSeconds`   | Maximum wait time for card presentation.                                                                       |
     | `continuous`       | Whether to enable continuous polling.                                                                          |
+    | `additionalReceiptData` | Optional. JSON object with extra receipt data passed to the PSP and included in the eReceipt. Pass null if not used. |
+    | `isDeferred` | Optional. `true`: Deferred Authorization (Transit mode). Card read offline, authorization queued for settlement. See [Deferred Transaction](/docs/integrate-pos-device/emv-core/payment-flows/deferred-transaction) for details. |
+    | `isFinalAmount` | `true`: fixed amount, indicates `pre-selection` flow. `false`: amount may change, indicates `pre-authorization` flow. When used with `isDeferred=false`, the host must call `ConfirmTransaction` or `VoidTransaction` in both cases. When used with `isDeferred=true`, no need to call `ConfirmTransaction` or `VoidTransaction`. The transaction settles automatically. |
   </Tab>
 
   <Tab title="Linux">
