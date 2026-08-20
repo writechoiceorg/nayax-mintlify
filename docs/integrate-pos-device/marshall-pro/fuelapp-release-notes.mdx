@@ -1,0 +1,131 @@
+---
+title: "FuelApp Release Notes"
+sidebarTitle: "FuelApp"
+description: "What changed in each FuelApp version, and what it means for your integration."
+metadata:
+  og:description: "Changes in each FuelApp version on Nayax VPOS terminals at the fuel dispenser, written for POS and forecourt controller integrators."
+rss: true
+---
+
+FuelApp is the payment application that runs on the VPOS terminal at the
+dispenser. Its version number is separate from the Marshall Pro protocol
+version, so a FuelApp release does not change the protocol your POS or
+forecourt controller (FCC) speaks. Subscribe to the RSS feed using the icon
+at the top of the page to get notified when a new version is added.
+
+<Update
+  label="FuelApp 1.10.02 (Current)"
+  rss={{
+    title: "FuelApp 1.10.02: QR e-receipts, site branding, and ANDI support",
+    description: "Added: QR code e-receipts, a custom card-detect screen with tap-to-continue, a Remove Card prompt after chip transactions, and support for the ANDI terminal integration protocol. Changed: clearer status icons and a site-filtered language menu. Fixed: stop request handling, a startup hang after a terminal update, and eight screen, keypad, and stability defects."
+  }}
+>
+
+<AccordionGroup>
+
+<Accordion title="Added" icon="rocket">
+
+### Support for the ANDI integration protocol
+
+FuelApp now supports ANDI, an additional payment-terminal integration
+protocol, on certain dispenser hardware setups.
+
+### Custom card-detect screen and tap-to-continue button
+
+Sites can now show a branded card-detect screen with a tap-to-continue
+button. This is a per-site configuration, so the same integration can show a
+different card-detect screen at different sites.
+
+### Remove Card prompt after chip transactions
+
+The terminal now shows a **Remove Card** prompt after a chip transaction
+instead of only sounding a beep.
+
+### Digital e-receipt by QR code
+
+After a payment, the terminal can show a QR code the customer scans to get a
+digital receipt. Merchants enable this per site, so the screen does not
+appear unless the site has it turned on.
+
+</Accordion>
+
+<Accordion title="Changed" icon="pen-to-square">
+
+### Language menu limited to enabled languages
+
+The language menu now lists only the languages enabled for the site, instead
+of the full list.
+
+### Clearer status icons
+
+The terminal shows clearer on-screen icons for the card-blocked and
+transaction-canceled messages.
+
+</Accordion>
+
+<Accordion title="Fixed" icon="wrench">
+
+### Card reader ignoring a stop request
+
+The card reader sometimes did not respond to a stop or cancel request.
+
+### App stuck on Initializing after a terminal update
+
+FuelApp could stay on the **Initializing** screen after a payment terminal
+software update.
+
+### Dark screen before the idle screen
+
+A dark screen could appear for several seconds before the idle screen after
+a card was tapped or inserted. This fix also improves overall app stability,
+including a rare crash and restart after extended use on some older
+hardware.
+
+### Frozen screen on a card retry
+
+The screen could freeze when a card had to be presented again during
+payment. This included a case where **Transaction Canceled** appeared after
+the customer had already canceled on purpose.
+
+### PIN pad registering the wrong key
+
+PIN pad buttons sometimes registered a different key than the one pressed.
+
+### Masked entry showing typed digits
+
+Masked numeric entry did not hide typed digits on some input screens.
+
+### PIN keypad layout in Hebrew
+
+The PIN entry keypad displayed incorrectly on terminals set to Hebrew.
+
+### Wrong screen after canceling a payment
+
+Canceling a payment could briefly show the wrong screen before the terminal
+settled on the correct one.
+
+### Old message reappearing
+
+A previous message could flash back onto the screen for a split second.
+
+### Yellow flash between screens
+
+A brief yellow flash appeared during screen transitions.
+
+</Accordion>
+
+</AccordionGroup>
+
+</Update>
+
+## Version history
+
+FuelApp 1.10.02 is the first version tracked on this page.
+
+## See also
+
+* [Overview](/docs/integrate-pos-device/marshall-pro/getting-started/index)
+* [Error Codes](/docs/integrate-pos-device/marshall-pro/messaging-protocol/error-codes)
+* [cardDetect](/docs/integrate-pos-device/marshall-pro/methods/payment/card-detect)
+* [stopCardDetect](/docs/integrate-pos-device/marshall-pro/methods/payment/stop-card-detect)
+* [displayScreen](/docs/integrate-pos-device/marshall-pro/methods/display/display-screen)
