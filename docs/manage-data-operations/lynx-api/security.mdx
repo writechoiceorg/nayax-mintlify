@@ -6,16 +6,15 @@ metadata:
 ---
 
 The Lynx API requires an access token to authenticate requests securely.
+
+## Choose a token type
+
 Which token you need depends on who's calling the API.
 
-<CardGroup cols={2}>
-  <Card title="Retrieve an access token" icon="key" href="/docs/manage-data-operations/lynx-api/security#access-token">
-    Get your own account access token from Nayax Core, for authenticating your own requests.
-  </Card>
-  <Card title="Issue a customer-managed token" icon="user-plus" href="/docs/manage-data-operations/lynx-api/customer-managed-tokens">
-    Grant scoped, time-limited access to your own downstream customers or integrations.
-  </Card>
-</CardGroup>
+| Token | Use it for | Scope | Get one |
+| --- | --- | --- | --- |
+| Access token | Your own requests to the Lynx API | Full account access | See [Access token](#access-token) below |
+| Customer-managed token | Requests from your downstream customers or integrations | Limited by a Nayax admin to exactly what the integration needs | See [Customer-Managed Access Tokens](/docs/manage-data-operations/lynx-api/customer-managed-tokens) |
 
 ## Access token
 
