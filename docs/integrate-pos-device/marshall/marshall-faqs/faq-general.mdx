@@ -10,17 +10,17 @@ metadata:
 
 Nayax supports both swipe (Magstripe) and RFID cards.
 
-The <u>RFID supported</u> are working in frequency 13.56 MHz: Nayax' reader is working in frequency **13.56 MHz and supports ISO 14443 Type A and Type B cards (for example, MiFare Classic and MiFare Plus) \+ ISO 15693 (for example, HID iClass)**. The most popular and simple RFID card supported by Nayax' card reader is of type: MiFare Classic 1K (or 4K).
+Nayax's reader operates at 13.56 MHz and supports ISO 14443 Type A and Type B cards (for example, MiFare Classic and MiFare Plus), plus ISO 15693 (for example, HID iClass). The most popular and simplest RFID card supported by Nayax's card reader is MiFare Classic 1K (or 4K).
 
-Magstripe cards are supported as well, should they be compatible with a non credit card standard, that is, do **not** contain any '=' in the card's data and UID is in range 4-40. Should they have any of those features, there is a possibility of supporting those but it may require an additional integration ([Cortina Prepaid](/docs/cortina/prepaid-card/prepaid-card-flows))
+Magstripe cards are also supported, if they comply with a non-credit-card standard: the card's data must not contain any '=', and its UID must be in the range 4-40. If a magstripe card doesn't meet these conditions, it may still be possible to support it through an additional integration ([Cortina Prepaid](/docs/cortina/prepaid-card/prepaid-card-flows)).
 
 ## Vend denied: why Nayax doesn't provide a reason to the peripheral
 
-As the device is unattended, we wouldn't like to embarrass consumers if their card is blocked etc.
+Nayax does not surface a decline reason to the peripheral, since the device is unattended and shouldn't display information that could embarrass the consumer.
 
 ## How to locate which virtual COM port matches the physical connection
 
-Go to "Device Manager" -\> "Ports":
+Go to **Device Manager** → **Ports**:
 
 <Frame>
   ![](/images/docs/faq-general/image1.png)
@@ -28,9 +28,11 @@ Go to "Device Manager" -\> "Ports":
 
 ## Marshall over ETH
 
-Nayax supports this feature only on [VPOSM](/docs/integrate-pos-device/marshall/marshall-sdk) (VPOS Media), for the Java and C# SDKs (not supported on C SDK- as it only includes Marshall related implementations and not support for a specific hardware). All you'd need to do is set the `eth_port`'s configuration instead of the `pc_port`, and ensure that the device and machine are located inside the same network.
+Marshall over ETH is Marshall communication over Ethernet instead of a serial connection. Nayax supports this feature only on [VPOSM](/docs/integrate-pos-device/marshall/marshall-sdk) (VPOS Media), for the Java and C# SDKs (not supported on C SDK, as it only includes Marshall related implementations and not support for a specific hardware). All you'd need to do is set the `eth_port`'s configuration instead of the `pc_port`, and ensure that the device and machine are located inside the same network.
 
 ### Configuring the SDK and Nayax Core
+
+Replace the serial port configuration with an Ethernet port, as shown below:
 
 <CodeGroup>
 
@@ -54,7 +56,7 @@ Marshall over ETH must also be configured in Nayax Core, matching the SDK-side s
 
 ### Using the same cable for Marshall communication and Nayax connectivity
 
-The supported configuration is to communicate via Ethernet with both the (Marshall) peripheral and Nayax's servers.<br />It’s the router’s role to provide access to the external world in parallel to the peripheral.<br />Having the device communicate with the peripheral via Ethernet and with the servers via eSIM is not currently supported, as this setup is technically less natural for Android.
+The supported configuration is to communicate via Ethernet with both the (Marshall) peripheral and Nayax's servers. It’s the router’s role to provide access to the external world in parallel to the peripheral. Having the device communicate with the peripheral via Ethernet and with the servers via eSIM is not currently supported.
 
 ## Enabling alerts
 
@@ -64,9 +66,9 @@ To be able to see the alerts sent from the SDK in the Nayax Core, you should hav
   ![](/images/docs/faq-general/image2.png)
 </Frame>
 
-In addition to that, you can't make up an alert ID, you should use an ID that exist in our database (and can be configurable). For example, you can use ID number 2, which is a "Door event" (you can change the event data as you desire):
+In addition to that, you can't make up an alert ID, you should use an ID that exists in our database (and can be configurable). For example, you can use ID number 2, which is a "Door event" (you can change the event data as you desire):
 
-- Alert ID of 200 or 810 does nothing. Best practice is to use alert ID 2.
+Alert ID 200 or 810 does nothing; best practice is to use alert ID 2.
 
 <CodeGroup>
 
@@ -90,19 +92,36 @@ vmc_general_alert((short)2, (char*)&alert_str, strlen((char*)&alert_str));
 
 This feature allows you to manage products via Nayax Core for your peripherals. The only relevance for Marshall is that, if you look in Last Sales/Dynamic Transaction Monitor, you'd see the product name in the transaction details, which appears in the product map for the product code the peripheral has sent.
 
-Should managing a product map be relevant for you? Our Support team has sent links for our Nayax U, in which there are guides about that:<br />[Setting up a Product Map](https://nayax-u.nayax.com/scenario/how-to-create-a-product-map-template-administration-2349)<br />[Setting up a product in the Product Map](https://nayax-u.nayax.com/scenario/how-to-create-a-product-administration-937)
+If managing a product map is relevant to you, Nayax University has guides covering it:
+
+- [Setting up a Product Map](https://nayax-u.nayax.com/scenario/how-to-create-a-product-map-template-administration-2349)
+- [Setting up a product in the Product Map](https://nayax-u.nayax.com/scenario/how-to-create-a-product-administration-937)
 
 ### Example
 
-The peripheral has sent a "Vend Request" for product code 1 and price of 10.00, and the product map has a row regarding product code 1 which has the name of "Apple" and cost of 20.00- the price that the consumer would be charged for would be 10.00, and in Last Sales/ Dynamic Transaction Monitor you'd see that the transaction is for product code 1 and alongside the product code you'd see "Apple"
+For example, suppose the peripheral sends a Vend Request for product code 1 at a price of 10.00, and the product map has a row for product code 1:
 
-<br />
+| Field | Value |
+| --- | --- |
+| Product code sent by the peripheral | `1` |
+| Price sent by the peripheral | `10.00` |
+| Name in the product map for code 1 | Apple |
+| Cost in the product map for code 1 | `20.00` |
+| Price the consumer is actually charged | `10.00` (from the peripheral, not the product map) |
+| Shown in Last Sales / Dynamic Transaction Monitor | Product code `1`, "Apple" |
+
+The product map's cost is never charged to the consumer; it only supplies the display name.
 
 ## How to get the eReceipt product name not to be "unknown"?
 
 The product names are taken from our product map, so you can create products in it and name them (to match the product codes you send via the SDK). Keep in mind that Marshall does not use any of the information in the product map, so you can put whatever you want in it. It won't affect the transaction flow, including prices (the only field relevant to you is the product code name, which appears in Last Sales and the eReceipt file).
 
-You can add new products to your device's product map by going to the "product map" tab, clicking on "Map"-\> "Add BIN", and then add the product code and product group, PA code and MDB code (this is the one which should match the product code in the SDK), and then of course click on "save".
+To add a new product to your device's product map:
+
+1. Go to the **product map** tab.
+2. Click **Map** → **Add BIN**.
+3. Enter the product code, product group, PA code, and MDB code (this is the one that should match the product code in the SDK).
+4. Click **Save**.
 
 ## Static IP
 
@@ -131,9 +150,11 @@ Use the following values when setting a product's unit of measure:
 
 ## Gtrace retrieval
 
-Gtrace is a log that provides general information about the device's behavior, unrelated to communication with your machine. It would not show up in the SDK's commands and logs, but on the Gtrace, another type of log file, but this one is generated by Nayax's reader and is sent to Nayax Core.<br />Should it be relevant to you, you can retrieve a Gtrace the following way (note that to retrieve it, your device should be on, as you can imagine):
+Gtrace is a log that provides general information about the device's behavior, unrelated to communication with your machine. It would not show up in the SDK's commands and logs, but on the Gtrace, another type of log file, but this one is generated by Nayax's reader and is sent to Nayax Core.
 
-Once you've selected your desired machine, you should choose "Actions"-\> "Request Gtrace":
+Should it be relevant to you, you can retrieve a Gtrace the following way (note that to retrieve it, your device should be on, as you can imagine):
+
+Once you've selected your desired machine, choose **Actions** → **Request Gtrace**:
 
 <Frame>
   ![](/images/docs/faq-general/image3.png)
@@ -148,18 +169,18 @@ Once you've sent the request, you would see that under the "Dex" tab there would
 Once you click on the desired log (on a specific line in the table) and on the "View Parsed" button, you'd be able to see the whole log.
 
 <Note>
-  **Important note:** The device must be online for the Gtrace to be collected.
+  **Device must be online** to collect the Gtrace.
 </Note>
 
 ## Last alerts retrieval
 
-Last Alerts is a log that appears in Nayax Core under your relevant device's virtual machine. The log provides information on alerts sent between the device and our servers. To retrieve it, you should go to the relevant virtual machine, and then click on Info-\> Last Alerts:
+Last Alerts is a log that appears in Nayax Core under your relevant device's virtual machine. The log provides information on alerts sent between the device and our servers. To retrieve it, go to the relevant virtual machine, then click **Info** → **Last Alerts**:
 
 <Frame>
   ![](/images/docs/faq-general/image5.png)
 </Frame>
 
-## Cables SKUs
+## Cable SKUs
 
 The following SKUs cover the Marshall cables and adaptors for each device:
 
@@ -176,7 +197,13 @@ The following SKUs cover the Marshall cables and adaptors for each device:
 
 ### VPOST/Onyx
 
-Nayax Core initiates the firmware update.<br />The firmware update is made out of 2 parts: the MAIN update and POS update. For the MAIN update, you'd see "gloader" at the top of the screen, along with a percentage next to it. Once completed, the device would reset itself and start downloading and updating the POS. Please do not touch it until the device resets, as the device's screen will also appear black while the POS is being erased and updated. After completion, the VPOST would power up and enter idle mode. This whole process usually takes 30-60 minutes (may take longer if using ETH), so keep that in mind.
+Nayax Core initiates the firmware update. The firmware update is made out of two parts: the MAIN update and the POS update. For the MAIN update, you'd see "gloader" at the top of the screen, along with a percentage next to it. Once the MAIN update completes, the device resets itself and starts downloading and updating the POS.
+
+<Warning>
+Do not touch the device until it resets on its own. The screen also appears black while the POS is being erased and updated; this is expected, not a malfunction.
+</Warning>
+
+After completion, the VPOST powers up and enters idle mode. This whole process usually takes 30-60 minutes (longer if using ETH).
 
 ### VPOSM 4S
 
@@ -186,13 +213,13 @@ The download process runs in the background, so consumers can continue using the
 
 ### VPOSM5
 
-Unlike VPOST/Onyx/VPOSM 4S, a separate site called CasHub initiates the firmware update. The firmware update process is done by having each of the relevant apps updated manually (not as one package).<br />The firmware update for each of the apps is made out of 2 separate parts: the download and the update. Once the download process has been completed, your local support would need to send the device a request to initiate the update process for the desired apps.
+Unlike VPOST/Onyx/VPOSM 4S, a separate site called CasHub initiates the firmware update. The firmware update process is done by having each of the relevant apps updated manually (not as one package).
 
-<br />
+The firmware update for each of the apps is made out of two separate parts: the download and the update. Once the download process has been completed, your local support would need to send the device a request to initiate the update process for the desired apps.
 
 ## Timeout for getting approval of the transaction from the acquirer
 
-The "Authorizing, Please wait" would show until either a response is received from the acquirer or a timeout has reached. Usually, if the VPOST can communicate with our servers (our servers do not have issues getting response from acquirer) the whole process of sending the authorization request and getting a response back is a few seconds long, usually up to 5 seconds, but should there be any (GSM/VPN/MQTT/ETH) communication issues between the VPOST and our servers the request would take some time to arrive to our servers, or take some time to get the response from our servers. The "MDB RX Timeout" parameter controls this timeout, and its default value is 60 seconds:
+The "Authorizing, Please wait" message shows until either a response is received from the acquirer or a timeout is reached. Usually, if the VPOST can communicate with our servers, the whole process of sending the authorization request and getting a response back takes a few seconds, usually up to 5; our servers do not have issues getting a response from the acquirer. If there are any GSM, VPN, MQTT (Message Queuing Telemetry Transport), or ETH communication issues between the VPOST and our servers, the request can take longer to arrive, or the response can take longer to come back. The "MDB RX Timeout" parameter controls this timeout, and its default value is 60 seconds:
 
 <Frame>
   ![](/images/docs/faq-general/image6.png)
@@ -204,7 +231,7 @@ The following example uses cart rental:
 
 1. Have a transaction started from Nayax's device at the 1st location (take a cart from there)
 2. Have the consumer use the cart
-3. Have the consumer return the cart to any rail he desired (not necessarily the 1st location. Let's say it's a 2nd location). At this stage Nayax's device at the 2nd location would recognize the cart, will send it's ID to a main server which will make a match between the cart ID and the Nayax device in which the transaction started with, and close the transaction over there. But as you can understand, in such a case, there is a need for server management on your side.
+3. Have the consumer return the cart to any rail he desired (not necessarily the 1st location. Let's say it's a 2nd location). At this stage Nayax's device at the 2nd location would recognize the cart, will send its ID to a main server which will make a match between the cart ID and the Nayax device in which the transaction started with, and close the transaction over there. But as you can understand, in such a case, there is a need for server management on your side.
 
 A couple of requirements:
 
@@ -232,8 +259,6 @@ The SDK has such low CPU and memory requirements that if your machine can run a 
 
 Nayax estimates the C SDK's memory usage at around 1KB of RAM, with a timer tick of around 100 lines of code executed every 5ms (actual machine code depends on compiler and platform). Nayax has tested it on an Atmel AVR with 2KB of RAM and an 8MHz controller, with plenty of resources left for the actual application.
 
-<br />
-
 ## Updating an existing implementation's SDK with a newer SDK version
 
 ### Java
@@ -258,7 +283,7 @@ You'd overwrite the previous SDK with the new one and recompile your implementat
 
 ## Android
 
-If you're working with Android, you won't use the serial port number. Should your board have a serial port you can use the regular lowlevel of the Java SDK. Most Android boards do not have the onboard serial port. In that case you'd use the Android lowlevel file we'd send them. In such case they should use the Java SDK as is with the small change for changing the low-level serial port (as you’re using an Android platform) with the code in the demo called "nayax-android-marshall-demo\_0\_1\_6\_02"
+If you're working with Android, you won't use the serial port number. If your board has a serial port, you can use the regular low-level implementation from the Java SDK. Most Android boards don't have an onboard serial port; in that case, Nayax provides an Android low-level file for you to use in its place. Use the Java SDK as is, with one change: replace the low-level serial port implementation with the code from the demo called `nayax-android-marshall-demo_0_1_6_02`.
 
 The part in the SDK which relates to the serial port is:
 
@@ -270,9 +295,7 @@ The part in the SDK which relates to the serial port is:
   When working with the lowlevel serial for Android, you won't be able to use the demo app, but you can use it as a reference for how to initiate transactions.
 </Note>
 
-<br />
-
-As for the path when working with Android, provide the logger an object of BufferedWriter type. The following example shows how to write to your SD card:
+As for the path when working with Android, provide the logger an object of `BufferedWriter` type. The following example shows how to write to your SD card:
 
 <Frame>
   ![](/images/docs/faq-general/image11.png)
@@ -280,6 +303,6 @@ As for the path when working with Android, provide the logger an object of Buffe
 
 ### In case of UART located at /dev/tty
 
-Android can't access "/dev/tty...." meaning you need the vendor serial port library, and implement "serial\_port\_i" around it.
+Android can't access `/dev/tty...`, meaning you need the vendor serial port library, and implement `serial_port_i` around it.
 
 ftdi is for USB serial port converted
