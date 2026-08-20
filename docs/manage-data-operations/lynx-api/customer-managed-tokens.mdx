@@ -46,9 +46,9 @@ types, each with its own priority and validation behavior.
 
 | Claim | Purpose | Priority | Validation |
 | --- | --- | --- | --- |
-| `appScope` | Authenticates external services and integrations | Checked first | Must match exactly if present |
-| `internalScope` | Authenticates internal Nayax microservices | Checked first | Must match exactly if present |
-| `scope` | Standard OAuth2 user-level scope | Checked last, as a fallback | Checked after other authorization checks pass |
+| `appScope` | Authenticates external services and integrations | Checked before `scope` | Must match exactly if present |
+| `internalScope` | Authenticates internal Nayax microservices | Checked before `scope` | Must match exactly if present |
+| `scope` | Standard OAuth2 (a token-based authorization scheme) user-level scope | Checked last, as a fallback | Checked after other authorization checks pass |
 
 For most customer integrations, `appScope` is the claim type a Nayax admin
 assigns to describe the machines, devices, or orders the integration needs

@@ -11,10 +11,6 @@ The Lynx API requires an access token to authenticate requests securely.
 
 An access token is a security credential used to authenticate API requests. Each request to the Lynx API must include a valid access token in the `Authorization` header. This access token is also known as an API key or API token, and appears as a User Token in Nayax Core.
 
-<Note>
-If you need to issue scoped, time-limited tokens to your own downstream customers or integrations, see [Customer-Managed Access Tokens](/docs/manage-data-operations/lynx-api/customer-managed-tokens) instead.
-</Note>
-
 <Warning>
 **Keep your tokens safe**
 
@@ -43,7 +39,7 @@ Follow these steps in the Nayax Back Office (Nayax Core) to find and copy an acc
     <Frame><img src="/images/docs/security/image3.png" /></Frame>
   </Step>
   <Step title="Show and copy the token">
-    Click **Show Token** next to an existing token to reuse it, then copy it for use in API calls.
+    Click **Show Token** next to an existing token to reuse it, then copy it for use in API calls. If no token exists yet, click **Add Token** and select **Lynx Token** instead.
 
     <Frame><img src="/images/docs/security/image4.png" /></Frame>
   </Step>
@@ -67,3 +63,11 @@ Replace `<YOUR_ACCESS_TOKEN>` with your actual token retrieved from Nayax Core.
 
 This example uses the QA base URL. See [Environments](/docs/manage-data-operations/lynx-api/lynx-overview#environments) on the Lynx overview page for the full list of base URLs.
 </Note>
+
+## See also
+
+- [Customer-Managed Access Tokens](/docs/manage-data-operations/lynx-api/customer-managed-tokens)
+  for issuing scoped, time-limited tokens to your own downstream customers or
+  integrations, instead of this account-level token
+- [Lynx overview](/docs/manage-data-operations/lynx-api/lynx-overview) for
+  the full list of environment base URLs

@@ -2,11 +2,17 @@
 title: "Request a Customer-Managed Token"
 keywords: ["refresh token", "issue access token", "exchange refresh token", "customer-managed token", "customer-managed access token", "token troubleshooting", "401 unauthorized", "403 forbidden", "429 too many requests", "token storage", "token limits"]
 metadata:
-  og:description: "Request a customer-managed refresh token, exchange it for an access token, and follow security best practices and troubleshooting steps."
+  og:description: "Store customer-managed tokens securely and troubleshoot 401, 403, and 429 errors when using them with the Lynx API."
 ---
 
 Follow these steps to request a customer-managed refresh token and exchange
 it for an access token you can use with the Lynx API.
+
+## Prerequisites
+
+You need a Nayax Core account to create the refresh token. A Nayax admin
+must assign its scopes and claim type before you can use it, so requesting a
+token involves waiting on that approval rather than a fully self-service flow.
 
 ## Creating the refresh token
 
@@ -59,8 +65,8 @@ The endpoint returns the access token in the following shape:
 }
 ```
 
-Use this access token as a `Bearer` credential on subsequent Lynx API
-requests. For example, retrieving a list of machines:
+`Token` is the access token itself, a JWT. Use it as a `Bearer` credential
+on subsequent Lynx API requests. For example, retrieving a list of machines:
 
 ```bash
 curl -X GET "https://qa-lynx.nayax.com/operational/v1/machines" \
@@ -82,8 +88,9 @@ include it in a URL.
 ### Scope and expiration
 
 Grant only the scopes an integration needs, and request the shortest
-expiration that covers its use case, rather than creating tokens casually:
-Nayax limits each user to 50 tokens.
+expiration that covers its use case, rather than creating tokens casually.
+Nayax limits each user to 50 tokens, so plan token reuse across integrations
+that need the same access.
 
 ## Troubleshooting
 
@@ -107,3 +114,14 @@ the missing scope if needed.
 
 You've exceeded the rate limit. Cache and reuse access tokens for their
 full 24-hour lifetime instead of requesting a new one on every call.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Retrieve machine information" icon="magnifying-glass" href="/docs/manage-data-operations/lynx-api/machines/retrieve-machine-information">
+    Make your first authenticated call with the access token.
+  </Card>
+  <Card title="Lynx API reference" icon="book" href="/reference/manage-data-operations/lynx-api/overview">
+    Browse the full set of available endpoints.
+  </Card>
+</CardGroup>
