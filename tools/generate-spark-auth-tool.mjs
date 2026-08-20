@@ -80,6 +80,18 @@ export const SparkAuthTool = ({ legacy = false }) => {
     } else {
       window.__satRoot = host.shadowRoot;
     }
+    // Sync with the docs site's own dark/light toggle: Mintlify puts a
+    // literal "dark" class on <html>, but the tool lives in a shadow root
+    // that CSS from the host page can't reach, so mirror that class onto
+    // the shadow host itself (the tool's stylesheet reacts via :host(.dark)).
+    const syncTheme = function () {
+      host.classList.toggle("dark", document.documentElement.classList.contains("dark"));
+    };
+    syncTheme();
+    if (!host.__satThemeObserver) {
+      host.__satThemeObserver = new MutationObserver(syncTheme);
+      host.__satThemeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    }
     setTimeout(function () {
       try {
         const R = window.__satRoot;
