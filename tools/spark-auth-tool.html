@@ -139,7 +139,7 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 .gbtn:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-light)}
 
 /* ── Buttons ── */
-.cta{width:100%;padding:10px 16px;border:none;border-radius:var(--r2);font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .15s,transform .1s;letter-spacing:-.01em}
+.cta{display:block;margin:8px auto 0;width:auto;min-width:220px;max-width:320px;padding:10px 24px;border:none;border-radius:var(--r2);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;text-align:center;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity .15s,transform .1s;letter-spacing:-.01em}
 .cta:hover{opacity:.9}.cta:active{transform:scale(.99)}
 .cta.enc{background:var(--purple);color:#fff}
 .cta.dec{background:var(--text);color:#fff}
@@ -170,10 +170,35 @@ select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='htt
 @keyframes spin{to{transform:rotate(360deg)}}
 .loader{width:13px;height:13px;border:1.5px solid rgba(99,82,224,.2);border-top:1.5px solid var(--purple);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px}
 
-/* ── Embedded mode (inside docs iframe): hide own chrome ── */
-html.embedded .hdr{display:none}
-html.embedded .page{min-height:0}
-html.embedded .main{padding-top:20px}
+/* ── Dark mode (synced with the host page's theme toggle — see mount() in
+   generate-spark-auth-tool.mjs for how the .dark class gets applied when
+   this file is embedded in a shadow root) ── */
+:root.dark, :host(.dark) {
+  --text:#f4f4f5;
+  --text-2:#b4b4bb;
+  --text-3:#86868f;
+  --border:#3f3f46;
+  --border-2:#52525b;
+  --bg:#18181b;
+  --bg-2:#1f1f23;
+  --bg-3:#27272a;
+  --purple-light:#2a2650;
+  --green:#22c55e;
+  --green-bg:#102a1a;
+  --green-border:#1e4a2e;
+  --orange:#f97316;
+  --orange-bg:#3a2213;
+  --orange-border:#5c3419;
+  --red:#f87171;
+}
+:root.dark .callout, :host(.dark) .callout{color:#d8d3ff}
+:root.dark .callout.warn, :host(.dark) .callout.warn{color:#fed7aa}
+:root.dark .callout code, :host(.dark) .callout code{background:rgba(255,255,255,.1)}
+:root.dark select, :host(.dark) select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")}
+:root.dark .op-icon.e, :host(.dark) .op-icon.e{background:#14321f;color:#4ade80}
+:root.dark .op-icon.d, :host(.dark) .op-icon.d{background:#3a2510;color:#fb923c}
+:root.dark .op-card.enc-on .op-icon.e, :host(.dark) .op-card.enc-on .op-icon.e{background:#1c4a2e}
+:root.dark .op-card.dec-on .op-icon.d, :host(.dark) .op-card.dec-on .op-icon.d{background:#5c3a15}
 </style>
 </head>
 <body>
@@ -227,7 +252,7 @@ html.embedded .main{padding-top:20px}
 
     <div class="steps">
       <div class="step"><span class="step-n">1</span><span>Select <b>Encrypt</b> to generate a new cipher, or <b>Decrypt</b> to inspect an existing one.</span></div>
-      <div class="step"><span class="step-n">2</span><span>Enter your <b>token, token ID and sign key</b>. Hover <b>?</b> icons for field details.</span></div>
+      <div class="step"><span class="step-n">2</span><span>Enter your <b>token, integrator ID, token ID and sign key</b>. Hover <b>?</b> icons for field details.</span></div>
       <div class="step"><span class="step-n">3</span><span>Fill in the <b>transaction details</b>. Use Generate to create the GUID and random string.</span></div>
       <div class="step"><span class="step-n">4</span><span>Click <b>Generate cipher + headers</b> and copy the results.</span></div>
     </div>
@@ -248,13 +273,19 @@ html.embedded .main{padding-top:20px}
             <input id="an-tok" placeholder="mrV3U3nsgGFrE3w5…">
           </div>
           <div class="field">
-            <div class="fl"><label>Token ID<span class="req">*</span></label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">Numeric ID of your token. Sent as the IntegratorId HTTP header with every request.</span></span></div>
-            <input id="an-tid" placeholder="116383">
+            <div class="fl"><label>Integrator ID<span class="req">*</span></label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">Your numeric integrator ID assigned by Nayax. Sent as the IntegratorId HTTP header with every request. This is separate from your Token ID.</span></span></div>
+            <input id="an-int" placeholder="927">
           </div>
         </div>
-        <div class="field">
-          <div class="fl"><label>Sign key<span class="req">*</span><span class="hint-txt">16 chars</span></label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">16-character secret shared by Nayax. Used to compute the TransactionSignature header: SHA256(SparkTransactionId;SignKey).</span></span></div>
-          <input id="an-sk" placeholder="RbtdDsiVNjkAeRty">
+        <div class="r2">
+          <div class="field">
+            <div class="fl"><label>Token ID<span class="req">*</span></label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">Numeric ID of your token. Included in the request body JSON as TokenId.</span></span></div>
+            <input id="an-tid" placeholder="116383">
+          </div>
+          <div class="field">
+            <div class="fl"><label>Sign key<span class="req">*</span><span class="hint-txt">16 chars</span></label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">16-character secret shared by Nayax. Used to compute the TransactionSignature header: SHA256(SparkTransactionId;SignKey).</span></span></div>
+            <input id="an-sk" placeholder="RbtdDsiVNjkAeRty">
+          </div>
         </div>
       </div>
       <div class="sec-hd"><span class="sec-n">2</span>Transaction details</div>
@@ -321,18 +352,20 @@ html.embedded .main{padding-top:20px}
           <div class="field"><div class="fl"><label>Secret token<span class="req">*</span></label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">Your full secret token. Last 32 chars = AES-256 key.</span></span></div><input id="al-tok" placeholder="mrV3U3nsgGFrE3w5…"></div>
           <div class="field"><div class="fl"><label>Integrator ID<span class="req">*</span></label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">Your numeric integrator ID. Sent as the IntegratorId HTTP header.</span></span></div><input id="al-int" placeholder="927"></div>
         </div>
-        <div class="field"><div class="fl"><label>Header hash key<span class="req">*</span><span class="hint-txt">16 chars</span></label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">Legacy 16-char key for computing: Signature = SHA256(minifiedRequestBodyJSON;HeaderHashKey).</span></span></div><input id="al-hk" placeholder="RbtdDsiVNjkAeRty"></div>
+        <div class="r2">
+          <div class="field"><div class="fl"><label>Token ID<span class="req">*</span></label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">Numeric token ID. Included in the request body JSON as TokenId.</span></span></div><input id="al-tid" placeholder="116383"></div>
+          <div class="field"><div class="fl"><label>Header hash key<span class="req">*</span><span class="hint-txt">16 chars</span></label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">Legacy 16-char key for computing: Signature = SHA256(minifiedRequestBodyJSON;HeaderHashKey).</span></span></div><input id="al-hk" placeholder="RbtdDsiVNjkAeRty"></div>
+        </div>
       </div>
       <div class="card">
         <div class="r2">
-          <div class="field"><div class="fl"><label>Token ID<span class="req">*</span></label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">Numeric token ID. Included in the request body JSON.</span></span></div><input id="al-tid" placeholder="116383"></div>
           <div class="field"><div class="fl"><label>Terminal ID<span class="req">*</span></label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">The vending machine terminal identifier.</span></span></div><input id="al-term" placeholder="0434334921100366"></div>
+          <div class="field"><div class="fl"><label>Terminal ID type</label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">1 = Hardware serial. 2 = Nayax internal Machine ID.</span></span></div><select id="al-ttype"><option value="1">1 — HW Serial</option><option value="2">2 — Nayax Machine ID</option></select></div>
         </div>
         <div class="r2">
-          <div class="field"><div class="fl"><label>Terminal ID type</label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">1 = Hardware serial. 2 = Nayax internal Machine ID.</span></span></div><select id="al-ttype"><option value="1">1 — HW Serial</option><option value="2">2 — Nayax Machine ID</option></select></div>
           <div class="field"><div class="fl"><label>Spark transaction ID<span class="req">*</span></label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">UUID v4 generated by you. 36 chars including hyphens.</span></span></div><div class="irow"><input id="al-txid" placeholder="12c7cec2…"><button class="gbtn" onclick="fill('al-txid',mkGuid())">Gen</button></div></div>
+          <div class="field"><div class="fl"><label>Random string<span class="req">*</span><span class="hint-txt">17 chars</span></label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">17-char random alphanumeric. Legacy cipher = TxId=Random (no timestamp).</span></span></div><div class="irow"><input id="al-rand" placeholder="123456789qwertyui" maxlength="17"><button class="gbtn" onclick="fill('al-rand',mkRand(17))">Generate</button></div></div>
         </div>
-        <div class="field"><div class="fl"><label>Random string<span class="req">*</span><span class="hint-txt">17 chars</span></label><span class="tip"><button class="tip-btn" tabindex="-1">?</button><span class="tip-pop">17-char random alphanumeric. Legacy cipher = TxId=Random (no timestamp).</span></span></div><div class="irow"><input id="al-rand" placeholder="123456789qwertyui" maxlength="17"><button class="gbtn" onclick="fill('al-rand',mkRand(17))">Generate</button></div></div>
       </div>
       <button class="cta enc" onclick="doAlEnc()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Generate cipher + legacy signature</button>
       <p class="cta-sub">Returns the cipher, minified request body, and Signature header value.</p>
@@ -497,7 +530,7 @@ function v(id){return g(id).value.trim();}
 function fill(id,val){g(id).value=val;}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function loadEx(w){
-  if(w==='new'){fill('an-tok',EX.tok);fill('an-tid',EX.tid);fill('an-sk',EX.sk);fill('an-term',EX.term);g('an-ttype').value=EX.ttype;fill('an-txid',EX.txid);fill('an-rand',EX.r17);}
+  if(w==='new'){fill('an-tok',EX.tok);fill('an-int',EX.int);fill('an-tid',EX.tid);fill('an-sk',EX.sk);fill('an-term',EX.term);g('an-ttype').value=EX.ttype;fill('an-txid',EX.txid);fill('an-rand',EX.r17);}
   else if(w==='leg'){fill('al-tok',EX.tok);fill('al-int',EX.int);fill('al-hk',EX.sk);fill('al-tid',EX.tid);fill('al-term',EX.term);g('al-ttype').value=EX.ttype;fill('al-txid',EX.txid);fill('al-rand',EX.r17);}
   else if(w==='ss'){fill('ss-hw',EX.term);fill('ss-mid','71234996');fill('ss-tid',EX.tid);fill('ss-rand',EX.r27);fill('ss-tok',EX.tok);fill('ss-txid',EX.nid);}
   else if(w==='hdr-new'){fill('hn-txid',EX.txid);fill('hn-sk',EX.sk);fill('hn-int',EX.int);}
@@ -511,28 +544,19 @@ function showTab(name,btn){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('on'));
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('on'));
   btn.classList.add('on');g('tab-'+name).classList.add('on');
-  g('sb-session-group').style.display=name==='session'?'':'none';
-  g('sb-hdr-group').style.display=name==='headers'?'':'none';
-  document.querySelectorAll('.sidebar-item').forEach(b=>b.classList.remove('on'));
-  if(name==='auth'){g('sb-new').classList.add('on');}
-  else if(name==='session'){g('sb-ss-enc').classList.add('on');}
-  else if(name==='headers'){g('sb-hdr-new').classList.add('on');}
 }
 function showSub(grp,name,btn){
   if(btn){btn.closest('.stabs').querySelectorAll('.stab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
   const parent=grp==='hdr'?g('tab-headers'):g('tab-auth');
   parent.querySelectorAll('.sub').forEach(s=>s.classList.remove('on'));
   g(grp+'-'+name).classList.add('on');
-  if(grp==='auth'){document.querySelectorAll('.sidebar-item').forEach(b=>b.classList.remove('on'));g('sb-'+name).classList.add('on');}
 }
 function showOp(pre,mode){
   const ec=g(pre+'-ec'),dc=g(pre+'-dc'),ef=g(pre+'-ef'),df=g(pre+'-df');
   if(mode==='enc'){ec.className='op-card enc-on';dc.className='op-card';ef.style.display='';df.style.display='none';}
   else{dc.className='op-card dec-on';ec.className='op-card';df.style.display='';ef.style.display='none';}
 }
-function sideNav(name){showSub('auth',name,null);document.querySelectorAll('.sidebar-item').forEach(b=>b.classList.remove('on'));g('sb-'+name).classList.add('on');}
-function sideNavSS(mode){showOp('ss',mode);document.querySelectorAll('#sb-session-group .sidebar-item').forEach(b=>b.classList.remove('on'));g('sb-ss-'+mode).classList.add('on');}
-function sideNavHdr(name){showSub('hdr',name,null);document.querySelectorAll('#sb-hdr-group .sidebar-item').forEach(b=>b.classList.remove('on'));g('sb-hdr-'+name).classList.add('on');}
+
 
 // Results
 let cpIdx=0;const cpStore={};
@@ -569,8 +593,8 @@ function doCopy(k){
 async function doAnEnc(){
   spin('an-er');
   try{
-    const tok=v('an-tok'),tid=v('an-tid'),sk=v('an-sk'),term=v('an-term'),ttype=v('an-ttype'),txid=v('an-txid'),rand=v('an-rand');
-    if(!tok||!tid||!sk||!term||!txid||!rand)throw new Error('Please fill all required fields.');
+    const tok=v('an-tok'),int=v('an-int'),tid=v('an-tid'),sk=v('an-sk'),term=v('an-term'),ttype=v('an-ttype'),txid=v('an-txid'),rand=v('an-rand');
+    if(!tok||!int||!tid||!sk||!term||!txid||!rand)throw new Error('Please fill all required fields.');
     if(txid.length!==36)throw new Error('Transaction ID must be 36 chars (got '+txid.length+').');
     if(rand.length!==17)throw new Error('Random must be exactly 17 chars (got '+rand.length+').');
     const stamp=utcTs(),plain=txid+'='+rand+stamp,cipher=await aesEnc(plain,tok);
@@ -582,7 +606,7 @@ async function doAnEnc(){
       {l:'Timestamp (UTC YYMMDDhhmm)',v:stamp,tip:'UTC time appended to cipher plaintext. Nayax validates this is recent.'},
       {l:'Cipher (Base64)',v:cipher,tip:'Put this in the Cipher field of your request body.'},
       {div:1},
-      {l:'IntegratorId header',v:tid,tip:'HTTP header: IntegratorId: <value>'},
+      {l:'IntegratorId header',v:int,tip:'HTTP header: IntegratorId: <value>. Your integrator ID assigned by Nayax — separate from your Token ID.'},
       {l:'TransactionSignature header',v:sig,tip:'HTTP header: TransactionSignature: <value>. SHA256(SparkTransactionId;SignKey).'},
       {div:1},
       {l:'Full request body',v:JSON.stringify(body,null,2),pre:1,tip:'Complete JSON body for your POST to StartAuthentication.'},
@@ -690,17 +714,6 @@ async function doHdrLeg(){
     ]);
   }catch(e){errBox('hdr-leg-r',e.message.includes('JSON')?'Invalid JSON: '+e.message:e.message);}
 }
-
-// When loaded inside a docs iframe, hide the tool's own header chrome.
-if(window.self!==window.top)document.documentElement.classList.add('embedded');
-// Deep-link: open a specific auth variant on load, e.g. ?auth=legacy
-try{
-  const _a=new URLSearchParams(location.search).get('auth');
-  if(_a==='legacy'||_a==='leg'){
-    const _b=document.querySelectorAll('#tab-auth .stabs .stab')[1];
-    showSub('auth','leg',_b||null);
-  }
-}catch(e){}
 </script>
 </body>
 </html>
