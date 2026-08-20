@@ -12,7 +12,7 @@ the integration needs.
 
 ## Token types
 
-The system uses two related token types:
+The Lynx API uses two related token types:
 
 | Token type | Lifetime | Used for |
 | --- | --- | --- |
@@ -22,9 +22,10 @@ The system uses two related token types:
 ## Scopes
 
 A scope is a permission string that defines what a token can access. Scopes
-follow the format `{domain}:{resource}:{action}`, where the domain and
-resource identify the resource the action applies to, and the action
-identifies the allowed operation.
+follow the format `{domain}:{action}` or `{domain}:{resource}:{action}`,
+where the domain identifies the area the scope applies to, the optional
+resource narrows it to a specific resource within that domain, and the
+action identifies the allowed operation.
 
 Common scope examples:
 
@@ -57,3 +58,5 @@ to access.
 
 - [Request a Customer-Managed Token](/docs/manage-data-operations/lynx-api/requesting-customer-managed-tokens)
   for how to request and exchange one
+- [Security & Token](/docs/manage-data-operations/lynx-api/security) for the
+  standard account-level access token, rather than a customer-managed one

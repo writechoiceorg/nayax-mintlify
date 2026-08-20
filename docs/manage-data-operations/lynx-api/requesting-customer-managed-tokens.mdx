@@ -8,7 +8,7 @@ metadata:
 Follow these steps to request a customer-managed refresh token and exchange
 it for an access token you can use with the Lynx API.
 
-## Requesting a token
+## Creating the refresh token
 
 You create the refresh token yourself in Nayax Core, but you don't choose
 its scopes or claim type. A Nayax admin assigns those separately.
@@ -27,28 +27,26 @@ its scopes or claim type. A Nayax admin assigns those separately.
     <Frame><img src="/images/docs/security/app-token.png" /></Frame>
   </Step>
   <Step title="Wait for a Nayax admin to assign scopes">
-    The admin picks the `appScope`, `internalScope`, or `scope` claims based
+    The admin picks the [`appScope`, `internalScope`, or `scope`](/docs/manage-data-operations/lynx-api/customer-managed-tokens) claims based
     on what the integration needs. You can't set these yourself.
-  </Step>
-  <Step title="Receive your scoped refresh token">
-    Once the admin assigns the scopes, your refresh token is ready to use
-    with the requested claims and expiration.
   </Step>
 </Steps>
 
+Once the admin assigns the scopes, you have a scoped refresh token with the
+requested claims and expiration, ready to exchange for an access token.
+
 ## Exchanging a refresh token
 
-Once you have a refresh token, exchange it for an access token before making
-requests, using the Lynx API's pass-through endpoint. It expects the refresh
-token with a `jwt` scheme instead of `Bearer`.
+Exchange it for an access token before making requests, using the Lynx
+API's endpoint below.
 
 ```bash
 curl -X POST "https://lynx-api.nayax.com/v1/issue-access-token" \
-  -H "Authorization: jwt YOUR_REFRESH_TOKEN"
+  -H "Authorization: jwt <YOUR_REFRESH_TOKEN>"
 ```
 
 <Warning>
-The Lynx API endpoint expects `Authorization: jwt YOUR_REFRESH_TOKEN`, not
+The Lynx API endpoint expects `Authorization: jwt <YOUR_REFRESH_TOKEN>`, not
 `Bearer`. Sending a refresh token with the `Bearer` scheme to this endpoint
 fails.
 </Warning>
@@ -66,7 +64,7 @@ requests. For example, retrieving a list of machines:
 
 ```bash
 curl -X GET "https://qa-lynx.nayax.com/operational/v1/machines" \
-  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
 ```
 
 ## Security best practices
@@ -84,10 +82,7 @@ include it in a URL.
 ### Scope and expiration
 
 Grant only the scopes an integration needs, and request the shortest
-expiration that covers its use case.
-
-### Token limits
-
+expiration that covers its use case, rather than creating tokens casually:
 Nayax limits each user to 50 tokens.
 
 ## Troubleshooting

@@ -2,7 +2,7 @@
 title: "Security & Token"
 keywords: ["api key", "API key", "credentials", "credential", "credentials for test", "bearer token", "access token", "authorization header", "test credentials", "sandbox credentials", "generate token", "user token", "show token", "account settings", "security and login", "how to get an access token"]
 metadata:
-  og:description: "Retrieve a Lynx API access token from Nayax Core and use it as a Bearer credential to authenticate requests in QA and production."
+  og:description: "Retrieve a Lynx API access token from Nayax Core and use it as a Bearer credential to authenticate requests."
 ---
 
 The Lynx API requires an access token to authenticate requests securely.
@@ -15,13 +15,13 @@ An access token is a security credential used to authenticate API requests. Each
 If you need to issue scoped, time-limited tokens to your own downstream customers or integrations, see [Customer-Managed Access Tokens](/docs/manage-data-operations/lynx-api/customer-managed-tokens) instead.
 </Note>
 
-You manage access tokens in the Nayax Back Office (Nayax Core).
-
 <Warning>
 **Keep your tokens safe**
 
 It is important to avoid sharing your secret tokens in public places like GitHub or Bitbucket since it can allow malicious API calls.
 </Warning>
+
+Follow these steps in the Nayax Back Office (Nayax Core) to find and copy an access token:
 
 <Steps>
   <Step title="Log in to Nayax Core">
@@ -49,6 +49,8 @@ It is important to avoid sharing your secret tokens in public places like GitHub
   </Step>
 </Steps>
 
+You now have an access token you can send as a Bearer credential on Lynx API requests.
+
 ## Using the token in API requests
 
 Include the access token in the `Authorization` header for each API request:
@@ -58,10 +60,10 @@ curl -X GET "https://qa-lynx.nayax.com/operational/v1/devices" \
 -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
 ```
 
-* Replace `<YOUR_ACCESS_TOKEN>` with your actual token retrieved from Nayax Core.
+Replace `<YOUR_ACCESS_TOKEN>` with your actual token retrieved from Nayax Core.
 
 <Note>
 **Environments**
 
-All examples in this documentation use the QA base URL: `https://qa-lynx.nayax.com/operational`. For production, replace the hostname with `lynx.nayax.com`.
+This example uses the QA base URL. See [Environments](/docs/manage-data-operations/lynx-api/lynx-overview#environments) on the Lynx overview page for the full list of base URLs.
 </Note>
