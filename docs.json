@@ -560,7 +560,13 @@
                     "group": "Lynx API Guides",
                     "pages": [
                       "docs/manage-data-operations/lynx-api/lynx-overview",
-                      "docs/manage-data-operations/lynx-api/security",
+                      {
+                        "group": "Security & Token",
+                        "root": "docs/manage-data-operations/lynx-api/security",
+                        "pages": [
+                          "docs/manage-data-operations/lynx-api/customer-managed-tokens"
+                        ]
+                      },
                       {
                         "group": "Cards",
                         "pages": [
