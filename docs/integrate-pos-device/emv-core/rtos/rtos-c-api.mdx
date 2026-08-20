@@ -14,7 +14,7 @@ The EMV Core provides the POS application with two API layers:
 
 The POS application manages the user interface, using reader state events from EMV Core to keep the display in sync with the current payment status (idle, authorizing, declined, approved, etc.).
 
-## Supported Functionality
+## Supported functionality
 
 The SDK supports the following payment and device management operations:
 
@@ -30,9 +30,9 @@ The SDK supports the following payment and device management operations:
 * **Terminal Management:** Firmware and configuration updates, status and version queries, Device ID.
 * **Network API:** The host must implement the Network API to enable EMV Core communication with Nayax servers.
 
-## API Reference
+## API reference
 
-### Initialization and Lifecycle
+### Initialization and lifecycle
 
 ### Get SDK version string
 
@@ -78,7 +78,7 @@ EC_RET EcodSdk_SetLogLevel(EC_LOG_LEVEL max_level);
 
 ---
 
-### Device Status
+### Device status
 
 ### Get current device status
 
@@ -108,7 +108,7 @@ EC_RET EcodSdk_GetAttribute(char* attribute_name, char* out_value, int max_out_s
 
 ---
 
-### Transaction Operations
+### Transaction operations
 
 ### Start pre-authorization
 
@@ -153,7 +153,7 @@ EC_RET EcodSdk_CancelTransaction(void);
 
 ---
 
-### Network Notifications
+### Network notifications
 
 These functions are called by the platform layer to notify the SDK of network events:
 
@@ -183,7 +183,7 @@ EC_RET EcodSdk_NotifyNetworkStatusChanged(bool available);
 
 ---
 
-### Callback Registration
+### Callback registration
 
 ### Transaction completion (success, decline, error, cancel, timeout)
 
@@ -203,9 +203,9 @@ void EcodSdk_Register_ReaderEvent_Callback(RdrEventCb_t cb);
 
 ---
 
-## Key Data Types
+## Key data types
 
-### Payment Parameters
+### Payment parameters
 
 Pass this struct to `EcodSdk_PreAuthorize` and `EcodSdk_GetCardToken`:
 
@@ -221,7 +221,7 @@ typedef struct {
 } emvCorePaymentParameters;
 ```
 
-### Transaction Response
+### Transaction response
 
 This struct is passed to the `TransactionComplete` callback:
 
@@ -244,7 +244,7 @@ typedef struct {
 } emvCorePaymentResponse;
 ```
 
-### Status Codes
+### Status codes
 
 **Device status** (from `EcodSdk_GetStatus`):
 
@@ -290,7 +290,7 @@ typedef enum {
 } emvCoreTransStatus;
 ```
 
-## Amount Field Details
+## Amount field details
 
 Amount fields use different units depending on the API method:
 
@@ -300,7 +300,7 @@ Amount fields use different units depending on the API method:
 * The `amount` fields in the `TransactionComplete` event are returned in **major units** (e.g., 4.50 USD) as received from the PSP.
 * The `fee` parameter is **deprecated**. Set it to `0`. It will be removed in the next SDK version.
 
-## Currency Code Management
+## Currency code management
 
 The SDK resolves the currency code from multiple sources in priority order:
 

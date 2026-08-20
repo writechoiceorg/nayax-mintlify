@@ -7,7 +7,7 @@ These optional settings extend a Spark machine beyond the core start, stop, and
 settlement flows. Apply the ones that fit your integration on top of the configuration
 for the feature you set up.
 
-## POS Display (Tariff)
+## POS display (tariff)
 
 This feature uses the Spark `PosDisplay` field to show dynamic text on the device while
 it is triggered to start a payment, such as tariff information. Two settings control how
@@ -33,13 +33,13 @@ The two settings combine as follows:
 | 0 | 10 | The tariff is shown for 10 seconds, then the display moves to the present card state automatically. |
 | 0 | 0 | The tariff is not displayed at all. |
 
-## Idle Mode Custom Image
+## Idle mode custom image
 
 You can set a custom image on the device screen while it is in idle mode to tell
 consumers how to act. Create the image yourself, then contact your Nayax Support
 representative to have it uploaded to your machine.
 
-## Auto Cancel
+## Auto cancel
 
 Auto Cancel is an automatic service that cancels unsettled transactions left in a
 pending settlement or cancellation state. It runs automatically for all Nayax
@@ -55,13 +55,13 @@ For eReceipt support, contact your Nayax Support representative for assistance w
 relevant configuration. For the data format used in settlement requests, see
 [eReceiptData Format](/docs/integrate-pos-device/spark/additional-resources/spark-ereceiptdata-format).
 
-## Next Steps
+## Next steps
 
 <CardGroup cols={2}>
-  <Card title="PosDisplay Format" icon="display" href="/docs/integrate-pos-device/spark/additional-resources/spark-posdisplay-format">
+  <Card title="PosDisplay format" icon="display" href="/docs/integrate-pos-device/spark/additional-resources/spark-posdisplay-format">
     See the structure of the PosDisplay field used for tariff text.
   </Card>
-  <Card title="Payment Flows" icon="arrow-right-arrow-left" href="/docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark">
+  <Card title="Payment flows" icon="arrow-right-arrow-left" href="/docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark">
     Review the Spark transaction flows at the API level.
   </Card>
 </CardGroup>

@@ -8,7 +8,7 @@ presented at the terminal stops an active transaction. Device Stop runs alongsid
 Remote Start or Device Start on the same machine, so apply these settings on top of the
 configuration for whichever start flow you use.
 
-## Card Readers
+## Card readers
 
 The **Transaction Start Method** setting defines what can start a transaction through
 the card reader while it is idle. Set it to **Accept All** so the card reader accepts
@@ -19,7 +19,7 @@ cards in idle mode to trigger the Device Stop flow.
   not **Accept Nothing**: Device Stop determines the value when the two run together.
 </Note>
 
-## VPOS Touch
+## VPOS touch
 
 The **VAS configurations** setting informs the server that the machine supports the
 Spark Device Stop feature. Set it based on the start flow you pair with Device Stop:
@@ -39,7 +39,7 @@ Spark Device Stop feature. Set it based on the start flow you pair with Device S
 
 After you finish, click **Save** to store the configuration.
 
-## Configuration Summary
+## Configuration summary
 
 Use this table as a quick reference for Device Stop, depending on the start flow you
 pair it with:
@@ -49,13 +49,13 @@ pair it with:
 | Card Readers | Transaction Start Method | Accept All | Single station: Button+Contactless+Contact. Multiple stations: Product |
 | VPOS Touch | VAS configurations | Spark Device Stop (or Spark Device Stop and Spark Remote Start) | Spark Device Start (V2) (or Spark Device Stop and Spark Device Start (V2)) |
 
-## Next Steps
+## Next steps
 
 <CardGroup cols={2}>
-  <Card title="Device Stop" icon="hand" href="/docs/integrate-pos-device/spark/payment-flows/spark-device-stop">
+  <Card title="Device stop" icon="hand" href="/docs/integrate-pos-device/spark/payment-flows/spark-device-stop">
     See how the Device Stop transaction flow works at the API level.
   </Card>
-  <Card title="Additional Features" icon="sliders" href="/docs/integrate-pos-device/spark/machine-configuration/additional-features">
+  <Card title="Additional features" icon="sliders" href="/docs/integrate-pos-device/spark/machine-configuration/additional-features">
     Configure POS display timeouts, idle mode images, and other options.
   </Card>
 </CardGroup>
