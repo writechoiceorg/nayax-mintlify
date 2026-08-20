@@ -17,7 +17,7 @@ at the top of the page to get notified when a new version is added.
   label="FuelApp 1.10.02 (Current)"
   rss={{
     title: "FuelApp 1.10.02: QR e-receipts, site branding, and ANDI support",
-    description: "Added: QR code e-receipts, a custom card-detect screen with tap-to-continue, a Remove Card prompt after chip transactions, and support for the ANDI terminal integration protocol. Changed: clearer status icons and a site-filtered language menu. Fixed: stop request handling, a startup hang after a terminal update, app stability, and eight screen and keypad defects."
+    description: "Added: QR code e-receipts, a custom card-detect screen with tap-to-continue, a Remove Card prompt after chip transactions, and support for the ANDI terminal integration protocol. Changed: clearer status icons and a site-filtered language menu. Fixed: stop request handling, a startup hang after a terminal update, and eight screen, keypad, and stability defects."
   }}
 >
 
@@ -74,14 +74,12 @@ The card reader sometimes did not respond to a stop or cancel request.
 FuelApp could stay on the **Initializing** screen after a payment terminal
 software update.
 
-### Stability after extended use
-
-Fixed a rare crash and restart after extended use on some older hardware.
-
 ### Dark screen before the idle screen
 
 A dark screen could appear for several seconds before the idle screen after
-a card was tapped or inserted.
+a card was tapped or inserted. This fix also improves overall app stability,
+including a rare crash and restart after extended use on some older
+hardware.
 
 ### Frozen screen on a card retry
 
