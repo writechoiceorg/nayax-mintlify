@@ -103,7 +103,7 @@ This event is triggered after a card token is successfully retrieved.
 ## `IncrementalAuthorizationResponse`
 
 <Warning>
-  This method is only available for the Android operating system.
+  This event is only available for the Android operating system.
 </Warning>
 
 The `IncrementalAuthorizationResponse` event is triggered when an [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) call completes, whether it succeeds or fails.
@@ -171,7 +171,7 @@ For this feature to work, the reader must be configured to send External Display
 ## `SystemStatusChanged`
 
 <Warning>
-  This method is only available for the Android operating system.
+  This event is only available for the Android operating system.
 </Warning>
 
 The `SystemStatusChanged` event indicates changes in the SDKs or connected devices' operational state.
@@ -318,8 +318,9 @@ If EMV Core doesn’t get an answer, it will re-send 2 times (for a total of 3 m
     | `cardType`                | Card scheme (MasterCard, Visa, Amex, and others). For closed-loop cards, the card technology type. See the closed loop card types table below.                                                                             |
     | `authID`                  | Approval Code from the processor (for some processors).                                                                                                      |
     | `receiptID`               | Digital receipt ID in the PSP System.                                                                                                                        |
-    | `Transaction_Referance`   | Deprecated. Use `transactionId` instead.                                                                                                 |
-    | `TransactionDbID`         | Deprecated. Use `transactionId` instead.                                                                                                 |
+    | `TransactionID`           | Transaction ID. Use this value in `ConfirmTransaction` or `VoidTransaction`.                                                                   |
+    | `Transaction_Reference`   | Transaction reference. Use this value in `ConfirmTransaction` or `VoidTransaction`.                                                                                                 |
+    | `TransactionDbID`         | Deprecated. Use `TransactionID` instead.                                                                                                 |
     | `RRN`                     | Processor reference number for approved transactions.                                                                                                        |
     | `card_ID`                 | Mifare UID in case of a Mifare card and `CLP_MIFARE_ENABLED=2`.                                                                                              |
     | `isTransactionApproved`   | Boolean indicating the transaction approval status.                                                                                                          |

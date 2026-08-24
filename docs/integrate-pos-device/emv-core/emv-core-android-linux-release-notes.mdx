@@ -35,9 +35,9 @@ impact of each update:
 This version includes the following improvements, fixes, and known issues for the SDK:
 
 <Accordion title="Improvements" icon="rocket">
-  ### **1-Step Incremental Authorization (#7462)**
+  ### **1-Step Incremental Authorization (Android Only) (#7462)**
 
-  Add an incremental charge to an already-authorized transaction in a single call, using the new [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) method. The result arrives through the new [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) callback.
+  Adds one-step incremental authorization, letting you adjust the authorized amount in a single call via the new [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) method. The result arrives through the new [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) callback.
 
   ***
 
@@ -95,9 +95,15 @@ This version includes the following improvements, fixes, and known issues for th
 
   ***
 
-  ### **Advanced Closed Loop Card Support (#7639, #6898)**
+  ### **Advanced Closed Loop Card Support (#7639)**
 
-  EMV Core can now read Mifare blocks using the `CLP_MIFARE_READ` attribute, and host applications can send commands directly to the reader with the new [`SendToReader`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/remote-management#sendtoreader) method.
+  EMV Core can now read Mifare blocks using the `CLP_MIFARE_READ` attribute.
+
+  ***
+
+  ### **SendToReader (Android Only) (#6898)**
+
+  Host applications can now send commands directly to the reader with the new [`SendToReader`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/remote-management#sendtoreader) method.
 
   ***
 
@@ -203,7 +209,7 @@ This version includes the following improvements, fixes, and known issues for th
 
   ***
 
-  ### **IncrementalAuthorization URL (#7662)**
+  ### **IncrementalAuthorization URL (Android Only) (#7662)**
 
   Fixed an incorrect URL used by `IncrementalAuthorization`.
 

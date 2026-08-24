@@ -23,16 +23,16 @@ In SDK v1.5, deferred authorization is only supported when `isFinalAmount=true`.
 - You don't need to call `ConfirmTransaction` afterward.
 
 <Warning>
-  When activating this feature, there is a risk that some transactions will not be approved. It's recommended to use it only when it's impossible to prevent service (e.g. parking, lockers, transit). The risk and responsibility are on the operator; Nayax is not responsible for any transaction that isn't approved.
+  Activating this feature risks some transactions not being approved. Use it only when preventing service is impossible, for example parking, lockers, or transit. The operator bears the risk and responsibility; Nayax is not responsible for any transaction that isn't approved.
 </Warning>
 
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="PreAuthorize API" icon="link" href="/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#preauthorize">
+  <Card title="PreAuthorize API" icon="code" href="/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#preauthorize">
     API reference for PreAuthorize, including the isDeferred and isFinalAmount parameters used to trigger a deferred transaction.
   </Card>
-  <Card title="Configuration parameters" icon="link" href="/docs/integrate-pos-device/emv-core/emv-core-configuration#managing-settings">
+  <Card title="Configuration parameters" icon="gear" href="/docs/integrate-pos-device/emv-core/emv-core-configuration#managing-settings">
     Configuration reference. Look for the deprecated PMT_ACCEPT_OFFLINE parameter in the parameter table further down the page.
   </Card>
 </CardGroup>
