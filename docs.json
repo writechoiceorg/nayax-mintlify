@@ -564,7 +564,7 @@
                         "group": "Security & Token",
                         "root": "docs/manage-data-operations/lynx-api/security",
                         "pages": [
-                          "docs/manage-data-operations/lynx-api/customer-managed-tokens"
+                          "docs/manage-data-operations/lynx-api/app-tokens"
                         ]
                       },
                       {
@@ -1579,6 +1579,10 @@
     ]
   },
   "redirects": [
+    {
+      "source": "/docs/manage-data-operations/lynx-api/customer-managed-tokens",
+      "destination": "/docs/manage-data-operations/lynx-api/app-tokens"
+    },
     {
       "source": "/docs/get-started/agent-skills",
       "destination": "/docs/get-started/build-with-ai"

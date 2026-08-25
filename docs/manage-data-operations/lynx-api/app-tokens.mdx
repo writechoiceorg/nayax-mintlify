@@ -1,22 +1,27 @@
 ---
-title: "Customer-Managed Access Tokens"
-keywords: ["customer-managed token", "customer-managed access token", "appScope", "internalScope", "scope", "access token lifetime", "customer token management", "token claims", "refresh token", "issue access token", "exchange refresh token", "token troubleshooting", "401 unauthorized", "403 forbidden", "429 too many requests", "token storage", "token limits"]
+title: "App Tokens"
+keywords: ["app token", "Add App Token", "Lynx Token", "app-token", "customer-managed token", "customer-managed access token", "appScope", "internalScope", "scope", "access token lifetime", "customer token management", "token claims", "refresh token", "issue access token", "exchange refresh token", "token troubleshooting", "401 unauthorized", "403 forbidden", "429 too many requests", "token storage", "token limits"]
 metadata:
-  og:description: "Understand customer-managed token types and scopes, request and exchange one, and troubleshoot common errors."
+  og:description: "Create an app token in Nayax Core to give your downstream customers scoped, time-limited access to the Lynx API."
 ---
 
-Customer-managed tokens let you grant limited, time-boxed API access to your
-own downstream customers or integrations. Each token carries an expiration
+App tokens let you grant limited, time-boxed API access to your own
+downstream customers or integrations. Each token carries an expiration
 date you set and permissions a Nayax admin assigns, scoped to exactly what
 the integration needs.
 
 ## Token types
 
-The Lynx API uses two related token types:
+Nayax Core offers two choices under **Add Token**. Pick **App Token** for this
+flow. **Lynx Token** is covered on
+[Security & Token](/docs/manage-data-operations/lynx-api/security#access-token).
+
+The app token you create is a refresh token. You exchange it for a short-lived
+access token, and that access token authenticates your Lynx API requests.
 
 | Token type | Lifetime | Used for |
 | --- | --- | --- |
-| Refresh token | Up to 100 years | Requesting access tokens |
+| App token (refresh token) | Up to 100 years | Requesting access tokens |
 | Access token | 24 hours | Making Lynx API requests |
 
 ## Scopes
@@ -41,8 +46,8 @@ integration.
 
 ## Claim types
 
-A customer-managed token carries its permissions in one of three claim
-types, each with its own priority and validation behavior.
+An app token carries its permissions in one of three claim types, each with
+its own priority and validation behavior.
 
 | Claim | Purpose | Priority | Validation |
 | --- | --- | --- | --- |
@@ -56,17 +61,17 @@ to access.
 
 ## Prerequisites
 
-You need a Nayax Core account to create the refresh token. A Nayax admin
-must assign its scopes and claim type before you can use it, so requesting a
-token involves waiting on that approval rather than a fully self-service flow.
+You need a Nayax Core account to create the app token. A Nayax admin must
+assign its scopes and claim type before you can use it, so requesting a token
+involves waiting on that approval rather than a fully self-service flow.
 
-## Create a refresh token
+## Create an app token
 
-You create the refresh token yourself in Nayax Core, but you don't choose
-its scopes or claim type. A Nayax admin assigns those separately.
+You create the app token yourself in Nayax Core, but you don't choose its
+scopes or claim type. A Nayax admin assigns those separately.
 
 <Steps>
-  <Step title="Create the refresh token in Nayax Core">
+  <Step title="Create the app token in Nayax Core">
     From [Security & Token](/docs/manage-data-operations/lynx-api/security#access-token),
     navigate to the **User Tokens** section, then click **Add Token**.
 
@@ -85,10 +90,10 @@ its scopes or claim type. A Nayax admin assigns those separately.
   </Step>
 </Steps>
 
-Once the admin assigns the scopes, you have a scoped refresh token with the
+Once the admin assigns the scopes, you have a scoped app token with the
 requested claims and expiration, ready to exchange for an access token.
 
-## Exchange a refresh token
+## Exchange the app token
 
 Exchange it for an access token before making requests, using the Lynx
 API's endpoint below.
@@ -122,12 +127,11 @@ curl -X GET "https://qa-lynx.nayax.com/operational/v1/machines" \
 
 ## Security best practices
 
-Follow these practices when requesting and managing customer-managed
-tokens.
+Follow these practices when requesting and managing app tokens.
 
 ### Storage
 
-Store refresh tokens in a secure key management system, or as environment
+Store app tokens in a secure key management system, or as environment
 variables if you manage your own servers. Encrypt tokens at rest. Never
 store a token in a plain text file, commit it to version control, or
 include it in a URL.
@@ -141,8 +145,8 @@ that need the same access.
 
 ## Troubleshooting
 
-If a request using a customer-managed refresh or access token fails, check
-the following common causes.
+If a request using an app token, or the access token it produces, fails,
+check the following common causes.
 
 ### 401 Unauthorized
 
