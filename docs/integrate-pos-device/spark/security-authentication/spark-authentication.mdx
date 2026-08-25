@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Authentication"
 metadata:
   og:description: "To ensure secure communication, every request sent by the Integrator must include two specific authentication headers. These headers verify your."
@@ -10,8 +10,8 @@ To ensure secure communication, every request sent by the Integrator must includ
 
 Before you begin, ensure you have the following resources:
 
-* A valid Sign Key (shared by Nayax, typically 16 characters)
-* The associated Sign Key ID
+- A valid Sign Key (shared by Nayax, typically 16 characters)
+- The associated Sign Key ID
 
 <Warning>
   Your request body must contain the `SparkTransactionId` field.
@@ -22,19 +22,19 @@ Before you begin, ensure you have the following resources:
 Once you have the required resources, you can start authenticating your API requests to Spark by following the steps below:
 
 1. Combine the static string `IntegratorId` with your ID in the following format `IntegratorId: {SignKeyID}`. See the example below:
-   ```
+   ```text
    IntegratorId: 927
    ```
 2. Join the `SparkTransactionId` from your request body with your `Sign Key`, separated by a semicolon (`;`), in the following format: `SparkTransactionId;SignKey`
-   ```
+   ```text
    123456789123456789abcdefghijklmnopqr;RbtdDsiVNjkAeRty
    ```
 3. Perform a **SHA-256** hash on the resulting string using **UTF-8** encoding. Resulting hash:
-   ```
+   ```text
    1b7dd1c4010698824de66f13e1387efc28a4bba00b720d4be8cdb3b598b9603e
    ```
 4. The final header should look like the following:
-   ```
+   ```text
    TransactionSignature: 1b7dd1c4010698824de66f13e1387efc28a4bba00b720d4be8cdb3b598b9603e
    ```
 
@@ -43,19 +43,19 @@ Once you have the required resources, you can start authenticating your API requ
 See an example request for the `/StartAuthentication` endpoint:
 
 <Note>
-**Base URL and Domain**
+  **Base URL and Domain**
 
-The Spark API base URL is `https://{domain}/api`, where `{domain}` is your Nayax-assigned hostname. Nayax provides a QA domain during sandbox setup and a production domain after certification. Contact your Nayax integration engineer if you have not received your domain.
+  The Spark API base URL is `https://{domain}/api`, where `{domain}` is your Nayax-assigned hostname. Nayax provides a QA domain during sandbox setup and a production domain after certification. Contact your Nayax integration engineer if you have not received your domain.
 </Note>
 
 ```bash
-curl --location 'https://{your-domain}/api/StartAuthentication' \
+curl --location 'https://https://nayax-spark-dmz.nayax.com/api/StartAuthentication' \
 --header 'IntegratorId: 927' \
 --header 'TransactionSignature: 1b7dd1c4010698824de66f13e1387efc28a4bba00b720d4be8cdb3b598b9603e' \
 --header 'Content-Type: application/json' \
 --data '{
  "TokenId": 116383,
- "TerminalId": "0434334921100366",
+ "TerminalId": "0434334921112345",
  "TerminalIdType": 1,
  "Random": "123456789qwertyui",
  "Cipher": "X305dITNTAw2vHsxE+taVcn6UvgBC3fdI6QbqeABgHbo8CKsoZhqISJfslehCiA+L7XYrqvKFci7C6BNj/tr zBuNJwBEjgBzKhhgpJ5ggnw=",
@@ -66,11 +66,11 @@ curl --location 'https://{your-domain}/api/StartAuthentication' \
 ## See also
 
 <CardGroup cols={2}>
-  <Card icon="bolt" title="Interactive authentication tool" href="/docs/integrate-pos-device/spark/security-authentication/spark-auth-tool">
+  <Card title="Interactive authentication tool" icon="bolt" href="/docs/integrate-pos-device/spark/security-authentication/spark-auth-tool">
     Build and inspect ciphers and signature headers in your browser, no code required.
   </Card>
 
-  <Card icon="repeat" title="Payment flows" href="/docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark">
+  <Card title="Payment flows" icon="repeat" href="/docs/integrate-pos-device/spark/payment-flows/transaction-flows-spark">
     How authentication fits into the full Spark transaction sequence.
   </Card>
 </CardGroup>
