@@ -5,9 +5,9 @@ metadata:
 ---
 
 <Note>
-**Pre-Authorization Only**
+  **Pre-Authorization Only**
 
-This method is only relevant for transactions with Pre-Authorization.
+  This method is only relevant for transactions with Pre-Authorization.
 </Note>
 
 The `TimeoutCallback` API call notifies that the payment session has timed out due to inactivity or failure to complete the expected flow within a defined period. This callback is typically triggered when the user does not proceed with the session after a pre-authorization and no further actions, such as `CancelTransaction` or `Settlement`, are received.
@@ -15,14 +15,20 @@ The `TimeoutCallback` API call notifies that the payment session has timed out d
 It serves as a final indication that the session should be considered terminated.
 
 <Warning>
-**Timed-out Session**
+  **Timed-out Session**
 
-Do not attempt any further actions for the timed-out session. Use the `SparkTransactionId` to reconcile or log the timeout event.
+  Do not attempt any further actions for the timed-out session. Use the `SparkTransactionId` to reconcile or log the timeout event.
 </Warning>
 
 ## Request
 
-Spark sends a POST request to your configured `TimeoutCallback` endpoint. The request body is as in the example below:
+Spark sends a POST request to your configured `TimeoutCallback` endpoint. 
+
+The call would be sent to the following endpoint:
+
+`(Customer's URL)/TimeoutCallback`
+
+The request body is as in the example below:
 
 ```json
 {
@@ -31,22 +37,21 @@ Spark sends a POST request to your configured `TimeoutCallback` endpoint. The re
   "HwSerial": "0434334921100366",
   "SparkTransactionId": "12c7cec2-c690-4425-9a1f-db0db60e2d8c"
 }
-
 ```
 
 ### Request parameters
 
 The table below describes the parameters of the request.
 
-| Field                | Type    | Required | Description                                                |
-| -------------------- | ------- | -------- | ---------------------------------------------------------- |
-| `TerminalId`         | String  | Yes      | Identifier of the terminal that initiated the transaction. |
-| `MachineId`          | Integer | Yes      | ID of the vending machine or device.                       |
-| `HwSerial`           | String  | Yes      | Hardware serial number of the terminal.                    |
-| `SparkTransactionId` | String  | Yes      | Unique Spark transaction identifier.                       |
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `TerminalId` | String | Yes | Identifier of the terminal that initiated the transaction. |
+| `MachineId` | Integer | Yes | ID of the vending machine or device. |
+| `HwSerial` | String | Yes | Hardware serial number of the terminal. |
+| `SparkTransactionId` | String | Yes | Unique Spark transaction identifier. |
 
 <Note>
-**Nayax Callback**
+  **Nayax Callback**
 
-This is a callback from Nayax, no response body is required. A simple 200 OK server acknowledgment is sufficient.
+  This is a callback from Nayax, no response body is required. A simple 200 OK server acknowledgment is sufficient.
 </Note>
