@@ -1,0 +1,37 @@
+---
+title: "入门指南"
+description: "从获得合作伙伴访问权限到在VPOS Media测试设备上完成第一笔付款。"
+metadata:
+  og:description: "从获得合作伙伴访问权限到在VPOS Media测试设备上完成第一笔付款。"
+---
+
+入门指南分为两部分：你从Nayax获得的访问权限和工具，以及你在测试设备上按照的构建步骤。这些步骤将把你从第一次访问请求带到第一笔付款。
+
+## 先决条件
+
+在编写任何代码之前，从Nayax获得以下内容：
+
+* **合作伙伴访问权限：** 联系你的Nayax客户成功经理或专业服务团队并签署集成协议。
+* **VPOS Service API：** 从DevZone下载`vpos-api` AAR、API参考和示例应用程序。
+* **测试设备：** Nayax寄送VPOS Media 4或VPOS Media 4 Mini测试模式设备用于开发。
+
+## 构建你的集成
+
+获得访问权限、VPOS Service API和测试设备后，按照这些步骤操作。每个步骤都链接到带有详细信息的指南。
+
+<Steps>
+  <Step title="将VPOS Service API添加到你的应用程序">
+    将`vpos-api` AAR和所需的清单条目添加到你的Android项目（请参阅[连接到VPOS Service](/docs/integrate-pos-device/app-to-app/connect-to-the-vpos-service)），然后在测试设备上安装你的应用程序以及Nayax的付款应用程序。
+  </Step>
+  <Step title="连接并注册">
+    绑定到VPOS服务，注册你的应用程序，并等待就绪回调。请参阅[连接到VPOS Service](/docs/integrate-pos-device/app-to-app/connect-to-the-vpos-service)。
+  </Step>
+  <Step title="执行付款">
+    对于交易的立即结算，使用[Pre-Selection Payment](/docs/integrate-pos-device/app-to-app/pre-selection)，或在事先不知道最终金额时使用[Pre-Authorization Payment](/docs/integrate-pos-device/app-to-app/pre-authorization)。调用付款方法并处理结果回调。
+  </Step>
+  <Step title="认证并上线">
+    与Nayax专业服务一起运行认证套件，然后将你的应用程序与生产付款应用程序一起部署并推送到你的设备群。
+  </Step>
+</Steps>
+
+这是从合作伙伴访问权限到实时设备群的完整路径。

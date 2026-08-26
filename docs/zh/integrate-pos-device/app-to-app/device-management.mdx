@@ -1,0 +1,100 @@
+---
+title: "设备管理"
+description: "超越 VPOS Media 上的应用注册：读取设备信息、日志记录、远程属性、货币格式化和全屏模式。"
+metadata:
+  og:description: "超越 VPOS Media 上的应用注册：读取设备信息、日志记录、远程属性、货币格式化和全屏模式。"
+---
+
+除了注册应用外，`general` 类公开了围绕付款的平台功能。所有这些都是可选的，您在用于[注册应用](/docs/integrate-pos-device/app-to-app/connect-to-the-vpos-service)的同一 `general` 接口上调用它们：
+
+* [**读取设备信息**](#read-device-information) 如型号、序列号、货币和语言。
+* [**集中日志**](#centralized-logging) 将您的应用日志写入 Nayax 后端。
+* [**远程属性**](#remote-attributes) 读取和订阅 Nayax 远程管理的值。
+* [**区域和货币格式化**](#locale-and-currency-formatting) 以设备的货币显示金额。
+* [**全屏模式**](#full-screen-mode) 隐藏系统 UI 以实现无人值守操作。
+
+## 读取设备信息
+
+`general.get_info` 返回描述设备的 `device_info_t`，因此您可以读取其型号、序列号、国家/地区、货币和语言：
+
+```java
+device_info_t info = general.get_info();
+
+String model    = info.get_model();
+String serial   = info.get_serial();
+int country     = info.get_country_code();   // ISO 3166-1 numeric
+int currency    = info.get_currency_code();  // ISO 4217 numeric
+```
+
+## 集中日志
+
+写入 Nayax 日志系统以调试您无法在生产中到达的终端。`general.log` 写入一个条目，`general.send_device_logs` 将收集的日志上传到后端，您可以通过 Nayax Core 检索它们：
+
+```java
+general.log(
+    general.LOG_LEVEL_INFO,   // LOG_LEVEL_INFO, LOG_LEVEL_DEBUG, LOG_LEVEL_WARN, LOG_LEVEL_ERROR
+    "checkout",               // module: your component name, for categorization
+    "Started payment for cart 4821");
+
+// Later, push the collected logs to the server.
+general.send_device_logs();
+```
+
+每个条目都标有您的应用名称和模块，因此您的日志与设备日志和其他应用保持分离。
+
+## 远程属性
+
+属性是 Nayax 远程管理的配置值，例如应用语言或功能切换。使用 `general.attribute` 读取一个，并使用 `general.register_attribute` 订阅以在其更改时收到通知：
+
+```java
+// Read a value once. Returns null if the attribute is not set.
+byte[] value = general.attribute(attributeCode);
+
+// Subscribe to change notifications for an attribute.
+general.register_attribute(attributeCode);
+```
+
+更改通知到达 `device_listener_i.on_attribute`，这是您传递给 `register_application` 的侦听器。这使 Nayax 能够推送更改，例如新语言，而无需重新部署：
+
+```java
+@Override
+public void on_attribute(int code, AttributeData data) {
+    // The attribute identified by code changed. Apply the new value.
+}
+```
+
+<Note>
+`register_attribute` 仅订阅通知。要同时读取当前值，请为同一代码调用 `attribute`。
+</Note>
+
+## 区域和货币格式化
+
+让该服务以设备配置的货币格式化金额，而不是硬编码分隔符和符号：
+
+```java
+general.set_locale(
+    "en",   // lang_code: ISO 639-1 language code
+    840,    // country_code: ISO 3166-1 numeric
+    840,    // currency_code: ISO 4217 numeric (0 = use locale default)
+    2);     // decimal_places: fractional digits (0, 1, or 2)
+
+String symbol    = general.currency_symbol();   // for example "$"
+String formatted = general.format_amount(5.0);  // for example "$5.00"
+```
+
+`currency_code` 覆盖从 `country_code` 派生的货币，用于以不同于其国家默认货币的货币计费的部署。
+
+## 全屏模式
+
+`general.kiosk` 控制 Android 系统 UI 以实现无人值守操作。启用它会隐藏导航栏和状态栏以实现全屏显示：
+
+```java
+general.kiosk(true);   // hide system UI for full-screen mode
+general.kiosk(false);  // restore normal UI
+```
+
+## 另请参阅
+
+- [预选择付款](/docs/integrate-pos-device/app-to-app/pre-selection)
+- [预授权付款](/docs/integrate-pos-device/app-to-app/pre-authorization)
+- [交易状态](/docs/integrate-pos-device/app-to-app/transaction-status)
