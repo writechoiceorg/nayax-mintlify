@@ -22,6 +22,7 @@ EMV Core SDK 提供强大的 API，用于管理支付交易。这些 API 可将�
 - [CancelTransaction](#canceltransaction)
 - [ConfirmTransaction](#confirmtransaction)
 - [GetCardToken](#getcardtoken)
+- [IncrementalAuthorization](#incrementalauthorization)
 - [PreAuthorize](#preauthorize)
 - [VoidTransaction](#voidtransaction)
 
@@ -242,6 +243,30 @@ EMV Core 等待呈现卡片，读取数据，并触发 `CardTokenReceived` 事�
 
 ---
 
+## `IncrementalAuthorization`
+
+<Warning>
+  此方法仅适用于 Android SDK。
+</Warning>
+
+为现有已授权交易添加增量扣款。当最终金额高于最初授权的金额时，使用此方法。结果通过 [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) 回调返回。
+
+请参阅下方 `IncrementalAuthorization` 的 API Signature：
+
+```java Java
+void IncrementalAuthorization(int amountMinorUnits, int productID, String transactionReference) throws EmvCoreException;
+```
+
+参数：
+
+| 范围 | 描述 |
+| --------- | ----------- |
+| `amountMinorUnits` | 追加扣款金额，以最小货币单位（分）表示。 |
+| `productID` | 可选。用于报告的产品 ID。 |
+| `transactionReference` | 来自 `TransactionComplete` 的交易引用（`TransactionID` 字段）。 |
+
+---
+
 ## `PreAuthorize`
 
 使用 `PreAuthorize` 对支付处理商的卡片进行预授权。EMV Core 会等待卡片、读取卡片，并在需要时通过支付服务进行处理，然后发送 `TransactionComplete` 事件。
@@ -274,23 +299,26 @@ EMV Core 等待呈现卡片，读取数据，并触发 `CardTokenReceived` 事�
     | 连续的                   | 如果 continuous 为 true，则读卡轮询将在交易超时后立即重新开始，并发送状态为 'PollContinuous' 的 `TransactionComplete` 事件。                                                                                                                                                                                                                                                                          |
     | 暂停                    | 等待的最长秒数。如果没有卡片到达，请求将返回 `Timeout` 状态。                                                                                                                                                                                                                                                                                                                                 |
     | AdditionalReceiptData | 可选。包含传递给 PSP 并包含在 eReceipt 中的额外收据数据的 JSON 对象。                                                                                                                                                                                                                                                                                                                        |
-    | isFinalAmount         | `true`: fixed amount, indicates `pre-selection` flow. `false`: amount may change, indicates `pre-authorization` flow. When used with `deferred=false`, the host must call `ConfirmTransaction` or `VoidTransaction` in both cases. When used with `deferred=true`, no need to call `ConfirmTransaction` or `VoidTransaction`. The transaction settles automatically. |
-    | deferred              | 可选。`true`：延迟授权（Transit 模式）。卡片离线读取，授权排队等待结算。详情请参阅 Deferred Transaction。                                                                                                                                                                                                                                                                                               |
+    | isFinalAmount         | `true`：固定金额，表示 `pre-selection`（预选）流程。`false`：金额可能变化，表示 `pre-authorization`（预授权）流程。当与 `deferred=false` 一起使用时，主机在两种情况下都必须调用 `ConfirmTransaction` 或 `VoidTransaction`。当与 `deferred=true` 一起使用时，无需调用 `ConfirmTransaction` 或 `VoidTransaction`，交易将自动结算。在 SDK v1.5 中，`deferred=true` 仅在 `isFinalAmount=true` 时受支持。                                                                                                                                                                                                                                                                          |
+    | deferred              | 可选。`true`：延迟授权（Transit 模式）。卡片离线读取，授权排队等待结算。详情请参阅[延迟交易](/docs/integrate-pos-device/emv-core/payment-flows/deferred-transaction)。                                                                                                                                                                                                                                                                                               |
   </Tab>
 
   <Tab title="安卓">
     ```java Java
-    void PreAuthorize(int amountMinorUnits, int productID, int timeoutSeconds, boolean continuous) throws EmvCoreException;
+    void PreAuthorize(int amountMinorUnits, int productID, int timeoutSeconds, boolean continuous, JSONObject additionalReceiptData, boolean isDeferred, boolean isFinalAmount) throws EmvCoreException;
     ```
 
     参数：
 
-    | 范围                 | 描述                               |
-    | ------------------ | -------------------------------- |
-    | `amountMinorUnits` | 以最小货币单位计的扣款金额(例如,以分而非元为单位)。      |
-    | `productID`        | 消费者所选产品的ID。该编号将保存在服务器上，并可用于生成报告。 |
-    | `timeoutSeconds`   | 出示卡片的最长等待时间。                     |
-    | `continuous`       | 是否启用持续轮询。                        |
+    | 范围                      | 描述                                                                                                                                                                                                                                    |
+    | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | `amountMinorUnits`      | 以最小货币单位计的扣款金额(例如,以分而非元为单位)。                                                                                                                                                                                                        |
+    | `productID`              | 消费者所选产品的ID。该编号将保存在服务器上，并可用于生成报告。                                                                                                                                                                                                     |
+    | `timeoutSeconds`         | 出示卡片的最长等待时间。                                                                                                                                                                                                                       |
+    | `continuous`             | 是否启用持续轮询。                                                                                                                                                                                                                          |
+    | `additionalReceiptData` | 可选。包含传递给 PSP 并包含在 eReceipt 中的额外收据数据的 JSON 对象。如不使用，请传入 null。                                                                                                                                                                          |
+    | `isDeferred`             | 可选。`true`：延迟授权（Transit 模式）。卡片离线读取，授权排队等待结算。详情请参阅[延迟交易](/docs/integrate-pos-device/emv-core/payment-flows/deferred-transaction)。                                                                                                          |
+    | `isFinalAmount`          | `true`：固定金额，表示 `pre-selection`（预选）流程。`false`：金额可能变化，表示 `pre-authorization`（预授权）流程。当与 `isDeferred=false` 一起使用时，主机在两种情况下都必须调用 `ConfirmTransaction` 或 `VoidTransaction`。当与 `isDeferred=true` 一起使用时，无需调用 `ConfirmTransaction` 或 `VoidTransaction`，交易将自动结算。在 SDK v1.5 中，`isDeferred=true` 仅在 `isFinalAmount=true` 时受支持。 |
   </Tab>
 
   <Tab title="Linux">
@@ -321,7 +349,7 @@ EMV Core 等待呈现卡片，读取数据，并触发 `CardTokenReceived` 事�
     | `continuous`              | 是否启用持续轮询。                                                 |
     | `additional_receipt_data` | 可选。包含传递给 PSP 并包含在 eReceipt 中的额外收据数据的 JSON 字符串。可以为 `NULL`。 |
     | `is_deferred`             | 可选。`true` 表示延迟授权（Transit 模式）：卡片离线读取，授权排队等待结算。             |
-    | `is_final_amount`         | `true`：固定金额，表示预选流程。`false`：金额可能变化，表示预授权流程。                |
+    | `is_final_amount`         | `true`：固定金额，表示预选流程。`false`：金额可能变化，表示预授权流程。在 SDK v1.5 中，`is_deferred=true` 仅在 `is_final_amount=true` 时受支持。 |
   </Tab>
 </Tabs>
 
