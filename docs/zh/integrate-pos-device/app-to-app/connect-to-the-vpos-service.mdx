@@ -1,0 +1,106 @@
+---
+title: "连接到 VPOS 服务"
+description: "添加 VPOS 服务 API，绑定到 VPOS 服务，并注册您的 Android 应用程序，以便它可以在 VPOS Media 上进行支付。"
+metadata:
+  og:description: "添加 VPOS 服务 API，绑定到 VPOS 服务，并注册您的 Android 应用程序，以便它可以在 VPOS Media 上进行支付。"
+---
+
+每个应用到应用的集成都从相同的连接序列开始，每个支付流程都依赖于它。由于 Pre-Selection 和 Pre-Authorization 的序列相同，您只需构建一次，就可以为每个支付重复使用。
+
+## 先决条件
+
+连接之前，请确保您有：
+
+* 将 `vpos-api` AAR 添加到您的 Android 项目中，它提供 `com.nayax.vpos.*` 类。
+* 一个处于测试模式的 VPOS Media 测试设备，您的应用与 Nayax 的支付应用一起安装。
+
+## 构建集成
+
+<Steps>
+  <Step title="添加 VPOS 服务 API">
+    将 `vpos-api` AAR 放在您的模块的 `libs/` 文件夹中，并将其添加为依赖项：
+
+```groovy
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
+}
+```
+
+    然后向您的 `AndroidManifest.xml` 添加三个条目：
+
+    * **`SYSTEM_ALERT_WINDOW` 权限**，使 VPOS 服务可以在您的应用上绘制支付屏幕。
+    * **`queries` 条目**，使您的应用可以找到 VPOS 服务。
+    * **`payment_ui_activity_t` 活动**，内置支付 UI 所需。没有它，使用 `showUI = true` 的支付调用会抛出 `ActivityNotFoundException`。
+
+```xml
+<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+<queries>
+    <package android:name="com.nayax.vpos.service" />
+</queries>
+
+<application>
+    <activity
+        android:name="com.nayax.vpos.ui.payment_ui_activity_t"
+        android:exported="false" />
+</application>
+```
+  </Step>
+  <Step title="连接和注册">
+    连接需要四个步骤：
+
+    1. 使用 `getInstance` 获取连接器。
+    2. 在其上设置 `Listener`。绑定是异步的，所以结果会到达那里。
+    3. 使用您的上下文调用 `init`，然后调用 `bind`。
+    4. 当 `on_vpos_connected` 触发时，读取 `general` 和 `payment` 接口并调用 `register_application`。
+
+    总的来说，看起来像这样：
+
+```java
+vpos_service_remote_connector connector = vpos_service_remote_connector.getInstance();
+
+connector.set_listener(new vpos_service_remote_connector.Listener() {
+    @Override
+    public void on_vpos_connected() {
+        general general = connector.general;
+        payment payment = connector.payment;
+
+        general.register_application(
+                "laundrosmart-app",   // your application name
+                getPackageName(),     // your package name
+                "1.0.0",              // your app version
+                true,                 // force_launch: required when your app shows the payment UI
+                null);                // optional device_listener_i
+
+        // Connected and registered. You can now take payments.
+    }
+
+    @Override
+    public void on_vpos_disconnected() {
+        // Connection lost. Stop calling the API until reconnected.
+    }
+});
+
+connector.init(context);
+connector.bind();
+```
+
+    两个 `register_application` 参数值得注意：
+
+    * **`force_launch`：** 当您的应用显示内置支付 UI 时，将其设置为 `true`。
+    * **`device_listener_i`**（最后一个参数）：可选。传递一个以接收设备就绪和属性事件，如果您不需要它们，则为 `null`。
+  </Step>
+</Steps>
+
+您的应用现已连接、注册并准备好接收支付。选择一个支付流程来运行您的第一笔交易。
+
+## 后续步骤
+
+<CardGroup cols={2}>
+  <Card title="Pre-Selection 支付" icon="credit-card" href="/docs/integrate-pos-device/app-to-app/pre-selection">
+    运行单阶段支付，在一次调用中授权和结算。
+  </Card>
+  <Card title="Pre-Authorization 支付" icon="lock" href="/docs/integrate-pos-device/app-to-app/pre-authorization">
+    先授权，交付产品，然后结算最终金额。
+  </Card>
+</CardGroup>

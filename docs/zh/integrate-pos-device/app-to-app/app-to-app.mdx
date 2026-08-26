@@ -1,0 +1,46 @@
+---
+title: "总览"
+description: "在Nayax处理支付交易流程的同时，在VPOS Media上运行您的Android应用，并保持每笔支付认证。"
+metadata:
+  og:description: "在Nayax处理支付交易流程的同时，在VPOS Media上运行您的Android应用，并保持每笔支付认证。"
+---
+
+import McpNote from '/snippets/zh/mcp-server-note.mdx';
+
+App to App集成让您在VPOS Media设备上将Nayax支付功能添加到您自己的Android应用中，无需构建支付堆栈或承担认证（例如PCI和EMV）。您的应用掌控屏幕体验，而Nayax处理支付。
+
+<Frame>![App to App架构：第三方应用在Nayax VPOS Services之上，运行在VPOS Media操作系统上](/images/docs/app-to-app/architecture.svg)</Frame>
+
+<McpNote />
+
+## 开始使用
+
+了解集成的工作原理，然后设置您的应用只需构建一次就能在每次支付时重复使用的连接。
+
+<Columns cols={3}>
+  <Card icon="diagram-project" title="了解工作原理" href="/docs/integrate-pos-device/app-to-app/how-app-to-app-works">
+    两个应用如何连接、API部分和支付模型。
+  </Card>
+
+  <Card icon="rocket" title="遵循集成流程" href="/docs/integrate-pos-device/app-to-app/getting-started">
+    集成生命周期，从访问权限到正式上线。
+  </Card>
+
+  <Card icon="plug" title="连接到VPOS Service" href="/docs/integrate-pos-device/app-to-app/connect-to-the-vpos-service">
+    绑定、注册并等待准备就绪回调。
+  </Card>
+</Columns>
+
+## 支付流程
+
+根据您何时了解最终金额，选择相应的流程。
+
+<Columns cols={2}>
+  <Card icon="credit-card" title="运行预选支付" href="/docs/integrate-pos-device/app-to-app/pre-selection">
+    在一次调用中授权并结算固定金额。
+  </Card>
+
+  <Card icon="lock" title="运行预授权支付" href="/docs/integrate-pos-device/app-to-app/pre-authorization">
+    保留金额，然后结算最终金额。
+  </Card>
+</Columns>
