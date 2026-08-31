@@ -11,9 +11,9 @@ This page is the full checkpoint and scenario-tag reference for the Log Trace Co
 Each log or sheet gets its own card:
 
 - **File / sheet name**: formatted as `filename.xlsx → SheetName`, so it's clear which result came from which file or sheet when several are uploaded together.
-- **Verdict badge**: ALL CHECKS PASSED, REVIEW RECOMMENDED, or FAILED CHECKS FOUND. See the legend on the main tool page.
+- **Verdict badge**: <Badge color="green">ALL CHECKS PASSED</Badge>, <Badge color="orange">REVIEW RECOMMENDED</Badge>, or <Badge color="red">FAILED CHECKS FOUND</Badge>. See the legend on the main tool page.
 - **Scenario tags**: automatic detection of the transaction type or scenario, such as Vend denied or Multivend. Full list below.
-- **Trace strip**: one dot per checkpoint, green/amber/red/hollow gray, in the same order the checkpoints are listed below.
+- **Trace strip**: one dot per checkpoint, <Badge color="green">Green</Badge> pass, <Badge color="orange">Amber</Badge> warning, <Badge color="red">Red</Badge> fail, <Badge color="gray" variant="outline">Hollow gray</Badge> not applicable, in the same order the checkpoints are listed below.
 - **Suggested fix box**: appears when a checkpoint gets a warning or a failure, with a concrete recommendation and a "Learn more" link to the relevant documentation page.
 - **Evidence line**: the exact log line the checkpoint was based on, so you don't have to search for it manually.
 
@@ -40,77 +40,29 @@ The tool tags each result with the scenario it detected, based on patterns in th
 
 ## The 9 checkpoints
 
-Every result runs through the same 9 checkpoints, grouped into four categories that match the trace-strip order on the tool page. Expand a checkpoint for what it checks and what each verdict means:
+Every result runs through the same 9 checkpoints, grouped into four categories that match the trace-strip order on the tool page. Each row shows what a checkpoint checks and what each verdict means:
 
-<AccordionGroup>
-  <Accordion title="Initialization: SDK boot handshake">
-    Whether the initial pairing sequence (reset, config, transfer_data, online) completed in full.
-
-    - **Pass**: all 4 events found, boot completed normally.
-    - **N/A**: this log doesn't include a boot section (a partial capture, which is normal).
-    - **Warning**: only 1-3 of 4 found, the capture may start partway through boot.
-  </Accordion>
-  <Accordion title="Initialization: Reader reaches idle">
-    Whether the device reached Reader Enable and status 20 (available).
-
-    - **Pass**: both found.
-    - **Warning / fail**: the device never reported itself available, usually a communication, wiring, or power issue.
-  </Accordion>
-  <Accordion title="Transaction: Vend/info request issued">
-    Whether a Vend or Info Session request was sent at all.
-
-    - **Pass**: a request was found.
-    - **N/A**: no vend request in this log (may be a boot-only log, which is fine).
-  </Accordion>
-  <Accordion title="Transaction: Card read & authorization">
-    Whether card data (card_type/prop_card_uid) and an MDB (Multi-Drop Bus) approval (code 3 or 5) were both read.
-
-    - **Pass**: both found.
-    - **Warning**: only partial data, or the card was rejected by the reader itself (status 78/84, normal, not always a bug).
-  </Accordion>
-  <Accordion title="Transaction: Vend outcome resolved">
-    What the vend outcome was: approved, denied, cancelled, or failed to dispense.
-
-    - **Pass**: full Vend Success.
-    - **Warning**: denied, cancelled, or Vend Failure (often expected, depending on the scenario).
-    - **Fail**: no outcome was ever received, the flow may have hung.
-  </Accordion>
-  <Accordion title="Session: Session closed cleanly">
-    Whether end session was received and the device returned to ready/idle.
-
-    - **Pass**: both found.
-    - **Warning / fail**: the session wasn't fully closed, may still be stuck open.
-  </Accordion>
-  <Accordion title="Session: Settlement result">
-    Whether settlement completed successfully.
-
-    - **Pass**: settlement done / success.
-    - **Fail**: an explicit settlement error.
-    - **Warning**: stuck pending, for example due to no cellular connectivity.
-  </Accordion>
-  <Accordion title="Health: Communication / firmware errors">
-    Count of Mac Send-retry, GUI Task Fail, session timeout, or CPU starvation events.
-
-    - **Pass**: 0 events, or a low count also seen in known-good logs.
-    - **Warning**: higher than usual, an explicit timeout, or explicit starvation. Refer to the stability guide.
-  </Accordion>
-  <Accordion title="Health: Response timing">
-    Whether there are time gaps (`+Xms`) above the configured threshold (default 15,000ms).
-
-    - **Pass**: no unusual gaps.
-    - **Warning / fail**: gaps found. Sometimes this is an intentional wait (24-hour idle test, session timeout, stress test) rather than a real issue, see the next section.
-  </Accordion>
-</AccordionGroup>
+| Category | Checkpoint | What it checks | What each verdict means |
+|---|---|---|---|
+| Initialization | SDK boot handshake | Whether the initial pairing sequence (reset, config, transfer_data, online) completed in full. | **Pass**: all 4 events found, boot completed normally.<br/>**N/A**: this log doesn't include a boot section (a partial capture, which is normal).<br/>**Warning**: only 1-3 of 4 found, the capture may start partway through boot. |
+| Initialization | Reader reaches idle | Whether the device reached Reader Enable and status 20 (available). | **Pass**: both found.<br/>**Warning / fail**: the device never reported itself available, usually a communication, wiring, or power issue. |
+| Transaction | Vend/info request issued | Whether a Vend or Info Session request was sent at all. | **Pass**: a request was found.<br/>**N/A**: no vend request in this log (may be a boot-only log, which is fine). |
+| Transaction | Card read & authorization | Whether card data (`card_type`/`prop_card_uid`) and an MDB (Multi-Drop Bus) approval (code 3 or 5) were both read. | **Pass**: both found.<br/>**Warning**: only partial data, or the card was rejected by the reader itself (status 78/84, normal, not always a bug). |
+| Transaction | Vend outcome resolved | What the vend outcome was: approved, denied, cancelled, or failed to dispense. | **Pass**: full Vend Success.<br/>**Warning**: denied, cancelled, or Vend Failure (often expected, depending on the scenario).<br/>**Fail**: no outcome was ever received, the flow may have hung. |
+| Session | Session closed cleanly | Whether end session was received and the device returned to ready/idle. | **Pass**: both found.<br/>**Warning / fail**: the session wasn't fully closed, may still be stuck open. |
+| Session | Settlement result | Whether settlement completed successfully. | **Pass**: settlement done / success.<br/>**Fail**: an explicit settlement error.<br/>**Warning**: stuck pending, for example due to no cellular connectivity. |
+| Health | Communication / firmware errors | Count of Mac Send-retry, GUI Task Fail, session timeout, or CPU starvation events. | **Pass**: 0 events, or a low count also seen in known-good logs.<br/>**Warning**: higher than usual, an explicit timeout, or explicit starvation. Refer to the stability guide. |
+| Health | Response timing | Whether there are time gaps (`+Xms`) above the configured threshold (default 15,000ms). | **Pass**: no unusual gaps.<br/>**Warning / fail**: gaps found. Sometimes this is an intentional wait (24-hour idle test, session timeout, stress test) rather than a real issue, see the next section. |
 
 ## Is it a real issue or a false positive?
 
-The tool is a fast first-pass filter. It doesn't replace professional judgment. Before reporting an issue to a customer, walk through these questions:
+The tool is a fast first-pass filter. It doesn't replace professional judgment. Before reporting an issue to a customer, check this list:
 
-- Does the sheet or test name suggest intentional behavior, such as timeout, idle, stress, or cancel? If so, a warning or failure on timing or on the vend outcome may be exactly what the test is meant to demonstrate.
-- Is this an info session? If so, "vend denied" is correct, not a bug. The tool already recognizes this and marks it as passed, but it's worth double-checking.
-- Is the only failing checkpoint response timing, with everything else passing? If so, it's very likely a wait, not a real issue.
-- Is there a suggested fix box? Read it and follow the "Learn more" link. It explains whether the observed behavior is normal per the protocol or genuinely needs a fix on the customer's side.
-- Was the sheet even recognized as a log? If you got "Not a recognized Marshall log", check that you uploaded the right sheet and that it isn't a metadata or notes sheet.
+- **Does the sheet or test name suggest intentional behavior, such as timeout, idle, stress, or cancel?** A warning or failure on timing or on the vend outcome may be exactly what that test is meant to demonstrate.
+- **Is this an info session?** "Vend denied" is correct there, not a bug. The tool already recognizes this and marks it as passed, but it's worth double-checking.
+- **Is the only failing checkpoint response timing, with everything else passing?** That's very likely a wait, not a real issue.
+- **Is there a suggested fix box?** Read it and follow the "Learn more" link. It explains whether the observed behavior is normal per the protocol or genuinely needs a fix on the customer's side.
+- **Was the sheet even recognized as a log?** If you got "Not a recognized Marshall log," check that you uploaded the right sheet and that it isn't a metadata or notes sheet.
 
 Whenever in doubt, open the evidence line and read the exact log line in its full context in the original log.
 
@@ -125,9 +77,9 @@ Once you've reviewed the results, two actions are available in the footer:
 - **Download report (.txt)**: downloads a full text summary of all results, including detail and recommendations. Useful for attaching to a support ticket or sending to a customer or dev team.
 - **Clear all**: clears all files and results to start a fresh check.
 
-<Tip>
+<Warning>
 "Clear all" has no undo. Download a report first if you want to keep a copy of the current results.
-</Tip>
+</Warning>
 
 ## Known limitations
 
@@ -140,4 +92,4 @@ Keep these in mind before treating a result as final:
 
 ## See also
 
-- [Log Trace Comparator](/docs/integrate-pos-device/marshall/additional-resources/log-trace-comparator): the tool itself, with a short intro and results legend.
+- [Log Trace Comparator Tool](/docs/integrate-pos-device/marshall/additional-resources/log-trace-comparator): the tool itself, with a short intro and results legend.
