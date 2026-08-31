@@ -6,6 +6,35 @@
 <title>Marshall Trace &mdash; Log Comparison Tool</title>
 <style>
   :root{
+    --bg: #f6f7f9;
+    --panel: #ffffff;
+    --panel-alt: #f1f2f5;
+    --panel-raised: #e8eaee;
+    --border: #dde1e6;
+    --border-soft: #e7e9ec;
+    --text: #1c2128;
+    --text-dim: #57606a;
+    --text-faint: #8b93a1;
+    --accent: #0e7490;
+    --accent-dim: rgba(14,116,144,0.1);
+    --accent-strong: #075873;
+    --accent-contrast: #ffffff;
+    --pass: #16a34a;
+    --pass-dim: rgba(22,163,74,0.12);
+    --fail: #dc2626;
+    --fail-dim: rgba(220,38,38,0.1);
+    --warn: #b45309;
+    --warn-dim: rgba(180,83,9,0.12);
+    --na: #8b93a1;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, "Cascadia Mono", "Segoe UI Mono", Consolas, Menlo, monospace;
+  }
+  /* Dark mode (synced with the host page's theme toggle -- see mount() in
+     generate-marshall-log-tool.mjs for how the .dark class gets applied when
+     this file is embedded in a shadow root). These are the tool's original
+     colors, kept as the dark palette; the block above is the light palette
+     added for the docs site's light mode. */
+  :root.dark, :host(.dark) {
     --bg: #12161b;
     --panel: #1a1f26;
     --panel-alt: #20262e;
@@ -18,6 +47,7 @@
     --accent: #4fc3d9;
     --accent-dim: rgba(79,195,217,0.14);
     --accent-strong: #7fdcee;
+    --accent-contrast: #0b1216;
     --pass: #4ade80;
     --pass-dim: rgba(74,222,128,0.14);
     --fail: #f76464;
@@ -25,8 +55,6 @@
     --warn: #f5b942;
     --warn-dim: rgba(245,185,66,0.14);
     --na: #5c6472;
-    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    --font-mono: ui-monospace, SFMono-Regular, "Cascadia Mono", "Segoe UI Mono", Consolas, Menlo, monospace;
   }
   *{box-sizing:border-box;}
   html,body{
@@ -115,7 +143,7 @@
     color:var(--text); padding:5px 8px; font-family:var(--font-mono); font-size:12.5px;
   }
   .run-btn{
-    background:var(--accent); color:#0b1216; border:none; border-radius:7px;
+    background:var(--accent); color:var(--accent-contrast); border:none; border-radius:7px;
     padding:11px 22px; font-weight:650; font-size:13.5px; cursor:pointer; letter-spacing:.01em;
     transition:filter .15s;
   }

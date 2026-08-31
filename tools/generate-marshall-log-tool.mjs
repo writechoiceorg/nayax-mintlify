@@ -5,9 +5,10 @@
 // ports the tool into a native Mintlify React component that renders the
 // tool's exact markup, CSS, and script inside a shadow root (for style
 // isolation) on the docs page. Same approach as
-// tools/generate-spark-auth-tool.mjs, simplified: this tool has no
-// light/dark variant and no hash-based deep-linking, so there's no
-// theme-sync or tab-routing to port.
+// tools/generate-spark-auth-tool.mjs, including the dark-mode sync (the tool
+// ships a light default and a `:root.dark, :host(.dark)` override, same
+// convention as Spark's). Simplified in one way: this tool has no hash-based
+// deep-linking, so there's no tab-routing to port.
 //
 // To update when the client sends a new tool version:
 //   1. Replace tools/marshall-log-tool.html with the new file.
@@ -89,6 +90,18 @@ export const MarshallLogTool = () => {
       }
     } else {
       window.__mlaRoot = host.shadowRoot;
+    }
+    // Sync with the docs site's own dark/light toggle: Mintlify puts a
+    // literal "dark" class on <html>, but the tool lives in a shadow root
+    // that CSS from the host page can't reach, so mirror that class onto
+    // the shadow host itself (the tool's stylesheet reacts via :host(.dark)).
+    const syncTheme = function () {
+      host.classList.toggle("dark", document.documentElement.classList.contains("dark"));
+    };
+    syncTheme();
+    if (!host.__mlaThemeObserver) {
+      host.__mlaThemeObserver = new MutationObserver(syncTheme);
+      host.__mlaThemeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     }
   };
   return <div ref={mount} style={{ width: "100%" }} />;
