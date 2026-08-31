@@ -4,7 +4,7 @@ metadata:
   og:description: "The full checkpoint reference for the Log Trace Comparator tool: scenario tags, the 9 checkpoints, and how to tell a real issue from a false positive."
 ---
 
-This page is the full reference for the [Log Trace Comparator](/docs/integrate-pos-device/marshall/additional-resources/log-trace-comparator). Read this if the short legend on that page isn't enough, or if you're not sure whether a result is a real issue.
+This page is the full checkpoint and scenario-tag reference for the Log Trace Comparator tool. Read it if the short legend on the tool page isn't enough, or if you're not sure whether a result is a real issue.
 
 ## Anatomy of a result card
 
@@ -19,36 +19,40 @@ Each log or sheet gets its own card:
 
 ## Scenario tags
 
+The tool tags each result with the scenario it detected, based on patterns in the log:
+
 | Scenario tag | Meaning |
 |---|---|
 | Regular transaction | A normal transaction, no special scenario detected |
-| Multivend | A Vend Multi-Request was found, a multi-product transaction |
+| Multivend | The tool found a Vend Multi-Request, a multi-product transaction |
 | Multisession-capable build | The build supports multiple parallel sessions (a build capability, not necessarily exercised in this log) |
 | Info session (card read only, no vend) | An information-only session, card details are read but nothing is vended. A "vend denied" outcome here is normal |
 | Card rejected, retry requested | The card itself was rejected by the reader (status 78/84), usually an unsupported or unreadable card, not an SDK bug |
-| Explicit vend failure (no dispense) | Payment was approved but the product wasn't dispensed (Vend Failure) |
-| Vend denied | The transaction was declined by the acquirer or issuer |
-| Cancelled / aborted vend | The transaction was cancelled (X button or Cancel) |
+| Explicit vend failure (no dispense) | The acquirer approved payment, but the product wasn't dispensed (Vend Failure) |
+| Vend denied | The acquirer or issuer declined the transaction |
+| Cancelled / aborted vend | The user cancelled the transaction (X button or Cancel) |
 | Cancelled before card presented | The user never presented a card before the session closed |
 | Session timeout | The session closed because a timeout expired |
 | Settlement failed | Settlement failed explicitly |
-| Communication lost (e.g. SIM removed / no signal) | No cellular or network connectivity, settlement is stuck |
-| eReceipt | A QR or e-receipt was detected in the log |
+| Communication lost (for example SIM removed / no signal) | No cellular or network connectivity, settlement is stuck |
+| eReceipt | The tool detected a QR or e-receipt in the log |
 | Not a recognized Marshall log | The file or sheet doesn't contain a Marshall log at all, for example source code or a metadata sheet |
 
 ## The 9 checkpoints
+
+Every result runs through the same 9 checkpoints, grouped into four categories that match the trace-strip order on the tool page:
 
 | Category | Checkpoint | What it checks | Pass means | Warning / fail / N/A means |
 |---|---|---|---|---|
 | Initialization | SDK boot handshake | Whether the initial pairing sequence (reset, config, transfer_data, online) completed in full | All 4 events found, boot completed normally | N/A: this log doesn't include a boot section (a partial capture, which is normal). Warning: only 1-3 of 4 found, the capture may start partway through boot |
 | Initialization | Reader reaches idle | Whether the device reached Reader Enable and status 20 (available) | Both found | Warning/fail: the device never reported itself available, usually a communication, wiring, or power issue |
 | Transaction | Vend/info request issued | Whether a Vend or Info Session request was sent at all | A request was found | N/A: no vend request in this log (may be a boot-only log, which is fine) |
-| Transaction | Card read & authorization | Whether card data (card_type/prop_card_uid) and an MDB approval (code 3 or 5) were both read | Both found | Warning: only partial data, or the card was rejected by the reader itself (status 78/84, normal, not always a bug) |
+| Transaction | Card read & authorization | Whether card data (card_type/prop_card_uid) and an MDB (Multi-Drop Bus) approval (code 3 or 5) were both read | Both found | Warning: only partial data, or the card was rejected by the reader itself (status 78/84, normal, not always a bug) |
 | Transaction | Vend outcome resolved | What the vend outcome was: approved, denied, cancelled, or failed to dispense | Full Vend Success | Warning: denied, cancelled, or Vend Failure (often expected, depending on the scenario). Fail: no outcome was ever received, the flow may have hung |
 | Session | Session closed cleanly | Whether end session was received and the device returned to ready/idle | Both found | Warning/fail: the session wasn't fully closed, may still be stuck open |
 | Session | Settlement result | Whether settlement completed successfully | settlement done / success | Fail: an explicit settlement error. Warning: stuck pending, for example due to no cellular connectivity |
 | Health | Communication / firmware errors | Count of Mac Send-retry, GUI Task Fail, session timeout, or CPU starvation events | 0 events, or a low count also seen in known-good logs | Warning: higher than usual, an explicit timeout, or explicit starvation. Refer to the stability guide |
-| Health | Response timing | Searches for time gaps (`+Xms`) above the configured threshold (default 15,000ms) | No unusual gaps | Warning/fail: gaps found. Sometimes this is an intentional wait (24-hour idle test, session timeout, stress test) rather than a real issue, see the next section |
+| Health | Response timing | Whether there are time gaps (`+Xms`) above the configured threshold (default 15,000ms) | No unusual gaps | Warning/fail: gaps found. Sometimes this is an intentional wait (24-hour idle test, session timeout, stress test) rather than a real issue, see the next section |
 
 ## Is it a real issue or a false positive?
 
@@ -68,12 +72,24 @@ For example, a certification file for a multisession, always-idle flow might inc
 
 ## Exporting a report, or starting over
 
+Once you've reviewed the results, two actions are available in the footer:
+
 - **Download report (.txt)**: downloads a full text summary of all results, including detail and recommendations. Useful for attaching to a support ticket or sending to a customer or dev team.
 - **Clear all**: clears all files and results to start a fresh check.
 
+<Tip>
+"Clear all" has no undo. Download a report first if you want to keep a copy of the current results.
+</Tip>
+
 ## Known limitations
+
+Keep these in mind before treating a result as final:
 
 - The tool only detects the first request of each kind, for example the first Vend request. In a log with dozens of back-to-back transactions, such as a stress test, the detail refers to the first transaction only, not each one.
 - The response timing checkpoint can't distinguish an intentional wait from a real problem; human judgment is required, see the section above.
 - All the logic is based on text patterns derived from real examples. If the SDK changes existing message wording, a checkpoint might miss it.
 - The tool never sends data anywhere. All analysis happens locally in the browser. Only the "Learn more" links open a connection to the internet, and only if you click them.
+
+## See also
+
+- [Log Trace Comparator](/docs/integrate-pos-device/marshall/additional-resources/log-trace-comparator): the tool itself, with a short intro and results legend.
