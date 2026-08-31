@@ -40,19 +40,67 @@ The tool tags each result with the scenario it detected, based on patterns in th
 
 ## The 9 checkpoints
 
-Every result runs through the same 9 checkpoints, grouped into four categories that match the trace-strip order on the tool page:
+Every result runs through the same 9 checkpoints, grouped into four categories that match the trace-strip order on the tool page. Expand a checkpoint for what it checks and what each verdict means:
 
-| Category | Checkpoint | What it checks | Pass means | Warning / fail / N/A means |
-|---|---|---|---|---|
-| Initialization | SDK boot handshake | Whether the initial pairing sequence (reset, config, transfer_data, online) completed in full | All 4 events found, boot completed normally | N/A: this log doesn't include a boot section (a partial capture, which is normal). Warning: only 1-3 of 4 found, the capture may start partway through boot |
-| Initialization | Reader reaches idle | Whether the device reached Reader Enable and status 20 (available) | Both found | Warning/fail: the device never reported itself available, usually a communication, wiring, or power issue |
-| Transaction | Vend/info request issued | Whether a Vend or Info Session request was sent at all | A request was found | N/A: no vend request in this log (may be a boot-only log, which is fine) |
-| Transaction | Card read & authorization | Whether card data (card_type/prop_card_uid) and an MDB (Multi-Drop Bus) approval (code 3 or 5) were both read | Both found | Warning: only partial data, or the card was rejected by the reader itself (status 78/84, normal, not always a bug) |
-| Transaction | Vend outcome resolved | What the vend outcome was: approved, denied, cancelled, or failed to dispense | Full Vend Success | Warning: denied, cancelled, or Vend Failure (often expected, depending on the scenario). Fail: no outcome was ever received, the flow may have hung |
-| Session | Session closed cleanly | Whether end session was received and the device returned to ready/idle | Both found | Warning/fail: the session wasn't fully closed, may still be stuck open |
-| Session | Settlement result | Whether settlement completed successfully | settlement done / success | Fail: an explicit settlement error. Warning: stuck pending, for example due to no cellular connectivity |
-| Health | Communication / firmware errors | Count of Mac Send-retry, GUI Task Fail, session timeout, or CPU starvation events | 0 events, or a low count also seen in known-good logs | Warning: higher than usual, an explicit timeout, or explicit starvation. Refer to the stability guide |
-| Health | Response timing | Whether there are time gaps (`+Xms`) above the configured threshold (default 15,000ms) | No unusual gaps | Warning/fail: gaps found. Sometimes this is an intentional wait (24-hour idle test, session timeout, stress test) rather than a real issue, see the next section |
+<AccordionGroup>
+  <Accordion title="Initialization: SDK boot handshake">
+    Whether the initial pairing sequence (reset, config, transfer_data, online) completed in full.
+
+    - **Pass**: all 4 events found, boot completed normally.
+    - **N/A**: this log doesn't include a boot section (a partial capture, which is normal).
+    - **Warning**: only 1-3 of 4 found, the capture may start partway through boot.
+  </Accordion>
+  <Accordion title="Initialization: Reader reaches idle">
+    Whether the device reached Reader Enable and status 20 (available).
+
+    - **Pass**: both found.
+    - **Warning / fail**: the device never reported itself available, usually a communication, wiring, or power issue.
+  </Accordion>
+  <Accordion title="Transaction: Vend/info request issued">
+    Whether a Vend or Info Session request was sent at all.
+
+    - **Pass**: a request was found.
+    - **N/A**: no vend request in this log (may be a boot-only log, which is fine).
+  </Accordion>
+  <Accordion title="Transaction: Card read & authorization">
+    Whether card data (card_type/prop_card_uid) and an MDB (Multi-Drop Bus) approval (code 3 or 5) were both read.
+
+    - **Pass**: both found.
+    - **Warning**: only partial data, or the card was rejected by the reader itself (status 78/84, normal, not always a bug).
+  </Accordion>
+  <Accordion title="Transaction: Vend outcome resolved">
+    What the vend outcome was: approved, denied, cancelled, or failed to dispense.
+
+    - **Pass**: full Vend Success.
+    - **Warning**: denied, cancelled, or Vend Failure (often expected, depending on the scenario).
+    - **Fail**: no outcome was ever received, the flow may have hung.
+  </Accordion>
+  <Accordion title="Session: Session closed cleanly">
+    Whether end session was received and the device returned to ready/idle.
+
+    - **Pass**: both found.
+    - **Warning / fail**: the session wasn't fully closed, may still be stuck open.
+  </Accordion>
+  <Accordion title="Session: Settlement result">
+    Whether settlement completed successfully.
+
+    - **Pass**: settlement done / success.
+    - **Fail**: an explicit settlement error.
+    - **Warning**: stuck pending, for example due to no cellular connectivity.
+  </Accordion>
+  <Accordion title="Health: Communication / firmware errors">
+    Count of Mac Send-retry, GUI Task Fail, session timeout, or CPU starvation events.
+
+    - **Pass**: 0 events, or a low count also seen in known-good logs.
+    - **Warning**: higher than usual, an explicit timeout, or explicit starvation. Refer to the stability guide.
+  </Accordion>
+  <Accordion title="Health: Response timing">
+    Whether there are time gaps (`+Xms`) above the configured threshold (default 15,000ms).
+
+    - **Pass**: no unusual gaps.
+    - **Warning / fail**: gaps found. Sometimes this is an intentional wait (24-hour idle test, session timeout, stress test) rather than a real issue, see the next section.
+  </Accordion>
+</AccordionGroup>
 
 ## Is it a real issue or a false positive?
 
