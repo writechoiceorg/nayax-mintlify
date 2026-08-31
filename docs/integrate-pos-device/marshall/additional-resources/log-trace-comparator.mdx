@@ -6,7 +6,16 @@ metadata:
 
 import { MarshallLogTool } from "/snippets/MarshallLogTool.jsx";
 
-Use this tool to check a Marshall SDK or firmware log against known-good reference traces without reviewing it line by line. Drop in a log file, or an Excel certification workbook where each sheet is one test, and the tool runs it through the same checkpoints Nayax uses when reviewing your certification tests: boot handshake, reader state, vend and authorization flow, and session close. Everything runs locally in your browser; log files never leave your machine, except for the "Learn more" links, which open Nayax's documentation.
+Use this tool to check a Marshall SDK or firmware log against known-good reference traces without reviewing it line by line. Drop in either of the following:
+
+- A log file (`.txt` or `.log`)
+- An Excel certification workbook, where each sheet is treated as one test
+
+The tool runs it through the same checkpoints Nayax uses when reviewing your certification tests: boot handshake, reader state, vend and authorization flow, and session close.
+
+<Note>
+Everything runs locally in your browser. Log files never leave your machine, except for the "Learn more" links, which open Nayax's documentation.
+</Note>
 
 ## Reading the results
 
