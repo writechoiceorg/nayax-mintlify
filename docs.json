@@ -120,8 +120,13 @@
                           "docs/integrate-pos-device/marshall/additional-resources/marshall-ontransferdata",
                           "docs/integrate-pos-device/marshall/additional-resources/stablity-issues",
                           "docs/integrate-pos-device/marshall/additional-resources/capabilities",
-                          "docs/integrate-pos-device/marshall/additional-resources/log-trace-comparator",
-                          "docs/integrate-pos-device/marshall/additional-resources/log-trace-comparator-guide"
+                          {
+                            "group": "Log Trace Comparator",
+                            "pages": [
+                              "docs/integrate-pos-device/marshall/additional-resources/log-trace-comparator-guide"
+                            ],
+                            "root": "docs/integrate-pos-device/marshall/additional-resources/log-trace-comparator"
+                          }
                         ]
                       },
                       {
