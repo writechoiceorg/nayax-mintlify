@@ -55,7 +55,7 @@ See the `GetAttribute` API signature in the code below:
     Request:
 
     ```json
-    {"jsonrpc":"2.0","method":"GetAttribute", "params": {"Key":"PRE_AUTH_AMUONT"}, "id":12}
+    {"jsonrpc":"2.0","method":"GetAttribute", "params": {"Key":"PRE_AUTH_AMOUNT"}, "id":12}
     ```
 
     Response when the requested attribute exists in the configuration file:
@@ -75,7 +75,7 @@ See the `GetAttribute` API signature in the code below:
     | Parameter | Description                                                               |
     | :-------- | :------------------------------------------------------------------------ |
     | **id**    | Command ID.                                                               |
-    | **key**   | Label of the requested configuration attribute (e.g., `PRE_AUTH_AMUONT`). |
+    | **key**   | Label of the requested configuration attribute (e.g., `PRE_AUTH_AMOUNT`). |
   </Tab>
 
   <Tab title="Android">
@@ -87,7 +87,7 @@ See the `GetAttribute` API signature in the code below:
 
     | Parameter | Description                                                                                                                                                         |
     | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-    | `key`     | The attribute key in the configuration file. For example, if the config file includes `PRE_AUTH_AMUONT=100`, providing the key `PRE_AUTH_AMUONT` will return `100`. |
+    | `key`     | The attribute key in the configuration file. For example, if the config file includes `PRE_AUTH_AMOUNT=100`, providing the key `PRE_AUTH_AMOUNT` will return `100`. |
   </Tab>
 
   <Tab title="Linux">
@@ -100,7 +100,7 @@ See the `GetAttribute` API signature in the code below:
 
     | Parameter        | Description                                                                                                                             |
     | :--------------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
-    | `attribute_name` | A null-terminated string representing the attribute key in the configuration file (e.g., `"PRE_AUTH_AMUONT"`).                          |
+    | `attribute_name` | A null-terminated string representing the attribute key in the configuration file (e.g., `"PRE_AUTH_AMOUNT"`).                          |
     | `out_value`      | A pointer to a caller-allocated buffer where the attribute value will be stored as a null-terminated string.                            |
     | `max_out_size`   | The maximum capacity of the `out_value` buffer in bytes. This prevents buffer overflows if the retrieved value is longer than expected. |
   </Tab>
