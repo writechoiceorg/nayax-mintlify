@@ -25,7 +25,14 @@ Each log or sheet gets a verdict badge:
 - **REVIEW RECOMMENDED** (amber): at least one checkpoint raised a warning worth a manual look. Not necessarily a bug.
 - **FAILED CHECKS FOUND** (red): at least one checkpoint failed outright and needs attention.
 
-Below the badge, a trace strip shows one dot per checkpoint, in order: green for pass, amber for warning, red for fail, hollow gray for not applicable to that log. For any checkpoint that isn't green, a "Suggested fix" box explains the likely cause and links to the relevant documentation page, and an evidence line shows the exact log line the checkpoint was based on.
+Below the badge, a trace strip shows one dot per checkpoint, in the same colors:
+
+- Green: pass
+- Amber: warning
+- Red: fail
+- Hollow gray: not applicable to that log
+
+For any checkpoint that isn't green, a "Suggested fix" box explains the likely cause and links to the relevant documentation, and an evidence line shows the exact log line it was based on.
 
 <Tip>
 If a test includes an intentional long wait, such as a 24-hour idle test, a session timeout, or a stress test, raise the timing anomaly threshold before running it. Otherwise the tool reports a FAIL on timing that's actually the test working as designed.
