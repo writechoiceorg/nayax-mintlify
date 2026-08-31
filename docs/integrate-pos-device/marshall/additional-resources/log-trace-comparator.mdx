@@ -1,0 +1,37 @@
+---
+title: "Log Trace Comparator"
+metadata:
+  og:description: "Check a Marshall SDK or firmware log against known-good reference traces, entirely in your browser, and get a pass/fail verdict with suggested fixes."
+---
+
+import { MarshallLogTool } from "/snippets/MarshallLogTool.jsx";
+
+Use this tool to check a Marshall SDK or firmware log against known-good reference traces without reviewing it line by line. Drop in a log file, or an Excel certification workbook where each sheet is one test, and the tool runs it through the same checkpoints Nayax uses when reviewing your certification tests: boot handshake, reader state, vend and authorization flow, and session close. Everything runs locally in your browser; log files never leave your machine, except for the "Learn more" links, which open Nayax's documentation.
+
+## Reading the results
+
+Each log or sheet gets a verdict badge:
+
+- **ALL CHECKS PASSED** (green): every checkpoint passed, no action needed.
+- **REVIEW RECOMMENDED** (amber): at least one checkpoint raised a warning worth a manual look. Not necessarily a bug.
+- **FAILED CHECKS FOUND** (red): at least one checkpoint failed outright and needs attention.
+
+Below the badge, a trace strip shows one dot per checkpoint, in order: green for pass, amber for warning, red for fail, hollow gray for not applicable to that log. For any checkpoint that isn't green, a "Suggested fix" box explains the likely cause and links to the relevant documentation page, and an evidence line shows the exact log line the checkpoint was based on.
+
+<Tip>
+If a test includes an intentional long wait, such as a 24-hour idle test, a session timeout, or a stress test, raise the timing anomaly threshold before running it. Otherwise the tool reports a FAIL on timing that's actually the test working as designed.
+</Tip>
+
+<MarshallLogTool />
+
+## See also
+
+<CardGroup cols={2}>
+  <Card icon="book-open" title="Log Trace Comparator guide" href="/docs/integrate-pos-device/marshall/additional-resources/log-trace-comparator-guide">
+    The full checkpoint reference, scenario tags, and how to tell a real issue from a false positive.
+  </Card>
+
+  <Card icon="file-lines" title="SDK's log generation" href="/docs/integrate-pos-device/marshall/additional-resources/log-generation">
+    How to turn on SDK logging so you have a log to run through this tool.
+  </Card>
+</CardGroup>
