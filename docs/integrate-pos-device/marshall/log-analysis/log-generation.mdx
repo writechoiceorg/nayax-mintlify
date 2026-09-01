@@ -8,13 +8,13 @@ Logging shows you what the SDK is doing and how it's communicating with the peri
 
 ## Configuration
 
-To generate SDK logs, configure these flags in the `main` method:
+To generate SDK logs, configure two flags in the `main` method. `debug` is a boolean that turns log generation on or off. `dump_packets_level`, in `vmc_configuration`, sets how much detail the SDK logs:
 
-- `dump_packets_level` (in `vmc_configuration`): sets how much detail the SDK logs.
-  - `debug_level_dump_none`: Generates no log.
-  - `debug_level_dump_all`: Logs all messages.
-  - `debug_level_dump_moderate`: Logs all messages except keep-alives and their ACKs.
-- `debug` (boolean): Turns log generation on or off.
+| Value | What it logs |
+|---|---|
+| `debug_level_dump_none` | Nothing. No log is generated. |
+| `debug_level_dump_all` | Every message. |
+| `debug_level_dump_moderate` | Every message except keep-alives and their ACKs. |
 
 The example below sets both flags together.
 
@@ -95,6 +95,6 @@ Where the SDK writes its log file depends on which SDK you use:
 
 ## See also
 
-<Card icon="magnifying-glass-chart" title="Log Trace Comparator Tool" href="/docs/integrate-pos-device/marshall/additional-resources/log-trace-comparator">
+<Card icon="magnifying-glass-chart" title="Log Trace Comparator" href="/docs/integrate-pos-device/marshall/log-analysis/log-trace-comparator">
   Once you have a log, run it through this tool to check it against known-good reference traces.
 </Card>

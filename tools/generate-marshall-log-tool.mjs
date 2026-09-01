@@ -26,7 +26,12 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const HTML = path.join(root, "tools", "marshall-log-tool.html");
 const OUT = path.join(root, "snippets", "MarshallLogTool.jsx");
 
-const src = fs.readFileSync(HTML, "utf8");
+// Normalise line endings on read. On Windows, git checks the .html out with
+// CRLF, and the CSS/BODY/SCRIPT below are embedded into JS string literals, so
+// a CRLF checkout bakes carriage returns into the shadow-root CSS. That breaks
+// the rule that reveals the paste-tab textarea. Reading as LF keeps the
+// generated snippet byte-identical on every platform.
+const src = fs.readFileSync(HTML, "utf8").split("\r\n").join("\n");
 
 const css = src.match(/<style>([\s\S]*?)<\/style>/)[1];
 const bodyFull = src.match(/<body>([\s\S]*?)<script>/)[1];
@@ -61,10 +66,18 @@ const cssT = css
 // shadow root. document.createElement / document.body.appendChild /
 // removeChild stay on the real document -- those back the "Download report"
 // file-save, which has to go through the real DOM.
-const scriptT = script.replaceAll(
-  "document.getElementById(",
-  "(window.__mlaRoot||document).getElementById("
-);
+const scriptT = script
+  .replaceAll(
+    "document.getElementById(",
+    "(window.__mlaRoot||document).getElementById("
+  )
+  // DOC_LINKS ships absolute devzone.nayax.com URLs, which is right for the
+  // standalone file: opened from disk, a relative path resolves to nothing.
+  // Inside the docs page they should be relative, so the "Learn more" links
+  // stay on whatever site serves the page. That makes them checkable on a
+  // preview deploy and puts them under the same link checking as the rest of
+  // the docs. The standalone .html keeps its absolute URLs untouched.
+  .replaceAll("https://devzone.nayax.com/docs/", "/docs/");
 
 // Note: the CSS/BODY/SCRIPT constants are declared INSIDE the component on
 // purpose. Mintlify's production bundler evaluates the exported component in

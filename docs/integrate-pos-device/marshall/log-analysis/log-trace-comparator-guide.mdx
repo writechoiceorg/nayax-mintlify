@@ -1,5 +1,5 @@
 ---
-title: "Log Trace Comparator Guide"
+title: "Checkpoints & Scenario Tags"
 metadata:
   og:description: "The full checkpoint reference for the Log Trace Comparator tool: scenario tags, the 9 checkpoints, and how to tell a real issue from a false positive."
 ---
@@ -13,7 +13,7 @@ Each log or sheet gets its own card:
 - **File / sheet name**: formatted as `filename.xlsx → SheetName`, so it's clear which result came from which file or sheet when several are uploaded together.
 - **Verdict badge**: <Badge color="green">ALL CHECKS PASSED</Badge>, <Badge color="orange">REVIEW RECOMMENDED</Badge>, or <Badge color="red">FAILED CHECKS FOUND</Badge>. See the legend on the main tool page.
 - **Scenario tags**: automatic detection of the transaction type or scenario, such as Vend denied or Multivend. Full list below.
-- **Trace strip**: one dot per checkpoint, <Badge color="green">Green</Badge> pass, <Badge color="orange">Amber</Badge> warning, <Badge color="red">Red</Badge> fail, <Badge color="gray" variant="outline">Hollow gray</Badge> not applicable, in the same order the checkpoints are listed below.
+- **Trace strip**: one dot per checkpoint, in the same order the checkpoints are listed below. The color legend is on the tool page.
 - **Suggested fix box**: appears when a checkpoint gets a warning or a failure, with a concrete recommendation and a "Learn more" link to the relevant documentation page.
 - **Evidence line**: the exact log line the checkpoint was based on, so you don't have to search for it manually.
 
@@ -23,20 +23,20 @@ The tool tags each result with the scenario it detected, based on patterns in th
 
 | Scenario tag | Meaning |
 |---|---|
-| Regular transaction | A normal transaction, no special scenario detected |
-| Multivend | The tool found a Vend Multi-Request, a multi-product transaction |
-| Multisession-capable build | The build supports multiple parallel sessions (a build capability, not necessarily exercised in this log) |
-| Info session (card read only, no vend) | An information-only session, card details are read but nothing is vended. A "vend denied" outcome here is normal |
-| Card rejected, retry requested | The card itself was rejected by the reader (status 78/84), usually an unsupported or unreadable card, not an SDK bug |
-| Explicit vend failure (no dispense) | The acquirer approved payment, but the product wasn't dispensed (Vend Failure) |
-| Vend denied | The acquirer or issuer declined the transaction |
-| Cancelled / aborted vend | The user cancelled the transaction (X button or Cancel) |
-| Cancelled before card presented | The user never presented a card before the session closed |
-| Session timeout | The session closed because a timeout expired |
-| Settlement failed | Settlement failed explicitly |
-| Communication lost (for example SIM removed / no signal) | No cellular or network connectivity, settlement is stuck |
-| eReceipt | The tool detected a QR or e-receipt in the log |
-| Not a recognized Marshall log | The file or sheet doesn't contain a Marshall log at all, for example source code or a metadata sheet |
+| `Regular transaction` | A normal transaction, no special scenario detected |
+| `Multivend` | The tool found a Vend Multi-Request, a multi-product transaction |
+| `Multisession-capable build` | The build supports multiple parallel sessions (a build capability, not necessarily exercised in this log) |
+| `Info session (card read only, no vend)` | An information-only session, card details are read but nothing is vended. A "vend denied" outcome here is normal |
+| `Card rejected — retry requested (unsupported/expired card)` | The card itself was rejected by the reader (status 78/84), usually an unsupported or unreadable card, not an SDK bug |
+| `Explicit vend failure (no dispense)` | The acquirer approved payment, but the product wasn't dispensed (Vend Failure) |
+| `Vend denied` | The acquirer or issuer declined the transaction |
+| `Cancelled / aborted vend` | The user cancelled the transaction (X button or Cancel) |
+| `Cancelled before card presented` | The user never presented a card before the session closed |
+| `Session timeout` | The session closed because a timeout expired |
+| `Settlement failed` | Settlement failed explicitly |
+| `Communication lost (e.g. SIM removed / no signal)` | No cellular or network connectivity, settlement is stuck |
+| `eReceipt` | The tool detected a QR or e-receipt in the log |
+| `Not a recognized Marshall log` | The file or sheet doesn't contain a Marshall log at all, for example source code or a metadata sheet |
 
 ## The 9 checkpoints
 
@@ -54,27 +54,27 @@ Every result runs through the same 9 checkpoints, grouped into four categories t
 | Health | Communication / firmware errors | Count of Mac Send-retry, GUI Task Fail, session timeout, or CPU starvation events. | **Pass**: 0 events, or a low count also seen in known-good logs.<br/>**Warning**: higher than usual, an explicit timeout, or explicit starvation. Refer to the stability guide. |
 | Health | Response timing | Whether there are time gaps (`+Xms`) above the configured threshold (default 15,000ms). | **Pass**: no unusual gaps.<br/>**Warning / fail**: gaps found. Sometimes this is an intentional wait (24-hour idle test, session timeout, stress test) rather than a real issue, see the next section. |
 
+Before those nine run, the tool checks that the input looks like a Marshall log at all. If it finds none of the expected markers, it stops there and reports a single **File format check** result instead, tagged "Not a recognized Marshall log". That badge means the file was not recognized as a log, not that the log has a problem. Check that you uploaded the right file or sheet, and that it isn't a cover page or a notes sheet.
+
 ## Is it a real issue or a false positive?
 
-The tool is a fast first-pass filter. It doesn't replace professional judgment. Before reporting an issue to a customer, check this list:
+The tool is a fast first-pass filter. It doesn't replace professional judgment. Before you report an issue to your Nayax integrator, check this list:
 
 - **Does the sheet or test name suggest intentional behavior, such as timeout, idle, stress, or cancel?** A warning or failure on timing or on the vend outcome may be exactly what that test is meant to demonstrate.
 - **Is this an info session?** "Vend denied" is correct there, not a bug. The tool already recognizes this and marks it as passed, but it's worth double-checking.
 - **Is the only failing checkpoint response timing, with everything else passing?** That's very likely a wait, not a real issue.
-- **Is there a suggested fix box?** Read it and follow the "Learn more" link. It explains whether the observed behavior is normal per the protocol or genuinely needs a fix on the customer's side.
+- **Is there a suggested fix box?** Read it and follow the "Learn more" link. It explains whether the behavior is normal for the protocol, or whether it needs a fix in your implementation.
 - **Was the sheet even recognized as a log?** If you got "Not a recognized Marshall log," check that you uploaded the right sheet and that it isn't a metadata or notes sheet.
 
 Whenever in doubt, open the evidence line and read the exact log line in its full context in the original log.
 
-<Note>
-For example, a certification file for a multisession, always-idle flow might include a test called "24 hours in idle mode" that fails only on response timing, with 4 gaps above the threshold. That's not a bug: it's the point of the test. The right move is to ignore that failure, or raise the timing threshold before running the comparison, rather than reporting it as an issue.
-</Note>
+Here is what that looks like in practice. A certification file for a multisession, always-idle flow might include a test called "24 hours in idle mode" that fails only on response timing, with 4 gaps above the threshold. That is not a bug: it is the point of the test. The right move is to ignore that failure, or to raise the timing threshold before running the comparison, rather than reporting it as an issue.
 
 ## Exporting a report, or starting over
 
 Once you've reviewed the results, two actions are available in the footer:
 
-- **Download report (.txt)**: downloads a full text summary of all results, including detail and recommendations. Useful for attaching to a support ticket or sending to a customer or dev team.
+- **Download report (.txt)**: downloads a full text summary of all results, including detail and recommendations. Useful for attaching to a support ticket, or for sending to your Nayax integrator.
 - **Clear all**: clears all files and results to start a fresh check.
 
 <Warning>
@@ -92,4 +92,6 @@ Keep these in mind before treating a result as final:
 
 ## See also
 
-- [Log Trace Comparator Tool](/docs/integrate-pos-device/marshall/additional-resources/log-trace-comparator): the tool itself, with a short intro and results legend.
+<Card icon="magnifying-glass-chart" title="Log Trace Comparator" href="/docs/integrate-pos-device/marshall/log-analysis/log-trace-comparator">
+  The tool itself, with a short intro and the results legend.
+</Card>
