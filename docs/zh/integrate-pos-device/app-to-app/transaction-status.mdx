@@ -1,0 +1,66 @@
+---
+title: "交易状态"
+description: "列出VPOS Media上的开放和结算交易、查看状态生命周期，并协调仍需结算的预授权。"
+metadata:
+  og:description: "列出VPOS Media上的开放和结算交易、查看状态生命周期，并协调仍需结算的预授权。"
+---
+
+`payment.query` 返回设备已知的交易，因此您的应用可以在付款后进行对账、在重新启动后恢复状态，并结算任何仍处于开放状态的预授权。本页面涵盖：
+
+* [**查询交易**](#query-transactions)以列出交易并读取每个交易。
+* [**状态生命周期**](#status-lifecycle)查看交易的位置。
+* [**交易详细字段**](#reading-transaction-details)用于收据和支持。
+
+## 查询交易
+
+`payment.query` 返回 `transaction_info_t` 的列表，每个交易一个，每个包含交易ID、当前状态、最终价格和有关交易的详细信息：
+
+```java
+List<transaction_info_t> transactions = payment.query();
+
+for (transaction_info_t tx : transactions) {
+    long id     = tx.transaction_id;
+    int status  = tx.status;
+    int amount  = tx.final_price;
+
+    if (status == 2) {
+        // Authorized but not settled. Settle or cancel this transaction.
+    }
+}
+```
+
+## 状态生命周期
+
+`status` 字段报告交易在支付生命周期中所处的位置。预授权从 `2` 开始，当您结算它时移到 `1`，或当您取消它时移到 `5`。
+
+| Status | Meaning | What to do |
+|---|---|---|
+| `1` | 已成功结算 | 无。交易完成。 |
+| `2` | 已授权，未结算 | 调用 `settle` 捕获资金，或调用 `cancel` 释放冻结。 |
+| `3` | 结算失败，重试进行中 | 无。服务自动重试。 |
+| `4` | 结算重试超时已过期 | 调用 `cancel` 释放冻结，或联系支持。 |
+| `5` | 已取消 | 无。交易无效。 |
+
+<Note>
+开放交易（状态 `2`）会在消费者账户上冻结资金，直到您结算或取消它们，因此请及时对账并清除它们。
+</Note>
+
+## 读取交易详细信息
+
+除了ID、状态和金额外，每个 `transaction_info_t` 都描述了交易，这对收据和支持很有用。
+
+| Field | Description |
+|---|---|
+| `transaction_id` | 您用来结算或取消授权的交易标识符。 |
+| `final_price` | {/* FLAG: unverified term - "Decimal Place" - needs a confirmed Chinese rendering */}根据Decimal Place捕获的金额。 |
+| `status` | 上表中的生命周期状态。 |
+| `card_entry_mode` | 支付手段是如何读取的（请参阅 `card_entry_type_*` 常量）。 |
+| `card_bin`, `card_bin_hash` | 支付手段的BIN及其哈希形式。 |
+| `card_balance` | 支付手段的余额，针对报告余额的类型。 |
+
+SDK参考列出了每个 `transaction_info_t` 字段。
+
+## 另请参阅
+
+- [预授权支付](/docs/integrate-pos-device/app-to-app/pre-authorization)
+- [设备管理](/docs/integrate-pos-device/app-to-app/device-management)

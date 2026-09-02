@@ -1,0 +1,89 @@
+---
+title: "预授权支付"
+description: "在 VPOS Media 上运行两阶段预授权：授权冻结金额、交付产品，然后清算最终金额，金额不超过冻结的金额。"
+metadata:
+  og:description: "在 VPOS Media 上运行两阶段预授权：授权冻结金额、交付产品，然后清算最终金额，金额不超过冻结的金额。"
+---
+
+预授权支付分为两个阶段，中间有停顿。您冻结消费者账户上的一笔金额，交付产品或服务，然后才能获取消费者实际欠款的金额。
+
+当最终金额在服务交付后才知道时（例如按米收费的洗车或可变重量购买），请使用预授权。当金额在支付前固定时，请改用 [预选支付](/docs/integrate-pos-device/app-to-app/pre-selection)。
+
+## 授权后再清算
+
+该流程使用两个 `payment` 调用。`payment.authorize` 冻结金额，`payment.settle` 针对授权返回的交易捕获最终金额。
+
+您使用 `authorize` 开始，`pre_auth` 设置为 `true`，以便服务冻结金额而不是进行完整支付。授权冻结被批准后，`on_authorization` 返回一个 `transaction_info_t`，它包含您稍后用来清算的交易 ID：
+
+```java
+payment.authorize(
+    1000,                         // 冻结金额，以最小单位表示（10.00）
+    payment.CHANNEL_CONTACTLESS,  // 通道位掩码
+    true,                         // 预授权
+    new payment_listener_i() {
+        @Override
+        public void on_authorization(boolean authorized, transaction_info_t info) {
+            if (authorized) {
+                long transactionId = info.transaction_id;
+                // 交付产品，然后清算此交易。
+            }
+        }
+        // 为简洁起见，省略了 on_card_detected、on_settlement 和 on_cancel。
+    },
+    true);                        // showUI：Nayax 绘制支付屏幕
+```
+
+知道最终金额后，针对交易 ID 调用 `payment.settle`，并提供要捕获的金额。消费者信息用于数字收据，是可选的，因此当您不需要它时，传入 `null`：
+
+```java
+payment.settle(
+    transactionId,   // 来自 on_authorization
+    800,             // 要捕获的最终金额 (8.00)，可以 <= 冻结的金额
+    null,            // 用于收据的可选 transaction_consumer_info_t
+    paymentListener,
+    true);           // showUI
+```
+
+<Note>
+清算金额可以小于或等于授权金额，因此您可以冻结最大金额，交付较少，只捕获消费者实际欠款的金额。
+</Note>
+
+## 取消交易
+
+要释放冻结或停止正在进行的交易，请使用交易 ID、原因代码、`payment_listener_i` 和 `showUI` 标志调用 `payment.cancel`：
+
+```java
+payment.cancel(transactionId, payment.CANCEL_TYPE_CANCELLED_BY_CONSUMER, paymentListener, true);
+```
+
+服务通过 `on_cancel` 报告结果。
+
+## 流程分解
+
+预授权流程分两个阶段运行，您的应用在两者之间交付产品。服务通过侦听器报告每一步。
+
+<Steps>
+  <Step title="您的应用启动授权">
+    消费者在您的应用中选择产品或服务。您的应用使用冻结金额、要接受的通道、`pre_auth` 设置为 `true` 和 `payment_listener_i` 调用 `payment.authorize`。
+  </Step>
+  <Step title="服务等待卡并进行授权">
+    服务启动读卡器，当消费者出示卡时调用 `on_card_detected`，运行授权，并调用 `on_authorization`。批准的结果携带交易 ID。
+  </Step>
+  <Step title="您的应用交付产品">
+    冻结被批准后，您的应用交付产品或服务，然后确定最终金额。
+  </Step>
+  <Step title="您的应用清算最终金额">
+    您的应用使用交易 ID 和最终金额调用 `payment.settle`。服务捕获资金并调用 `on_settlement`。
+  </Step>
+</Steps>
+
+## 后续步骤
+
+<CardGroup cols={2}>
+  <Card title="交易状态" icon="list-check" href="/docs/integrate-pos-device/app-to-app/transaction-status">
+    列出未结算和已结算的交易以进行对账。
+  </Card>
+  <Card title="设备管理" icon="gear" href="/docs/integrate-pos-device/app-to-app/device-management">
+    读取设备信息，记录到后端，并控制自助终端模式。
+  </Card>
+</CardGroup>
