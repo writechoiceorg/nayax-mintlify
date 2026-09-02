@@ -26,10 +26,14 @@ metadata:
     选择所需的固件:
 
     - 对于 UNO-mini:
-      - RTOS SDK 固件以 `EMVSC_` 开头(例如 `EMVSC_v07652`)
+      - RTOS SDK 固件以 `EMVSC_` 开头(例如 `EMVSC_v071652`)
       - 第一个 RTOS SDK 版本名为 `EMVS_v071558_ec`
       - Linux 或 Android SDK 固件以 `EMVS_` 开头
     - 如果您的设备有多个可用固件,请选择最新的一个。
+
+    <Warning>
+      RTOS SDK v1.0 应继续使用固件 `EMVSC_v071652.oef`,请勿升级到 SDK v1.5 发布的固件 `EMVSC_v071749`。
+    </Warning>
 
     <Frame>
       <img src="/images/docs/rtos-firmware-updates/nayax-core-fw-update.png" />
@@ -54,10 +58,10 @@ metadata:
 
 | 国家/地区   | 账单提供商                   | POS 配置版本前缀 | 例子      |
 | :------ | :---------------------- | :--------- | :------ |
-| 美国      | Heartland Nayax EMV     | `HTL_`     | HTL\_25 |
-| 加拿大     | CityCardPayment(Nuvei)  | `NUV_`     | NUV\_12 |
-| 欧洲、英国   | Credorax(Finaro/Shift4) | `FIN_`     | FIN\_14 |
-| 其他国家/地区 | Stubb billing(仅测试用)     | `FIN_`     | FIN\_14 |
+| 美国      | Heartland Nayax EMV     | `HTL_`     | HTL\_29 |
+| 加拿大     | CityCardPayment(Nuvei)  | `NUV_`     | NUV\_16 |
+| 欧洲、英国   | Credorax(Finaro/Shift4) | `FIN_`     | FIN\_18 |
+| 其他国家/地区 | Stubb billing(仅测试用)     | `FIN_`     | FIN\_18 |
 
 ### 机器配置
 

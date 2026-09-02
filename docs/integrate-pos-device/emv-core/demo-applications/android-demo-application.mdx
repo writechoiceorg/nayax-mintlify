@@ -83,7 +83,7 @@ Run a payment transaction:
 5. Once the transaction response arrives, it will appear on the screen, allowing you to proceed to the settlement page.
 
    <Frame><img src="/images/docs/android-demo-application/image5.png" /></Frame>
-6. You can also continue to run another authorization. The previous transaction may be kept open (Authorized) or automatically confirmed according to the `PMT_KIOSK_AUTOCONFIRM` configuration option.
+6. You can also continue to run another authorization. The previous transaction may be kept open (Authorized).
 
 ### Config page
 
@@ -93,4 +93,13 @@ On the Config page, you can test the `GetAttribute` command:
 
 1. Insert the Attribute name, such as `CONFIG_VERSION`.
 2. Press `GET ATTRIBUTE` to get the attribute value from the Config file.
+
+### External settlement example settings
+
+To simulate [External Settlement](/docs/integrate-pos-device/emv-core/payment-flows/pre-authorization-with-external-settlement) from the demo application, get the following parameters from Nayax support and set them in the sample app's `settings.java` file:
+
+* `externalSettlementTokenId`
+* `externalSettlementToken`
+* `externalSettlementIntegratorId`
+* `externalSettlementSignKey`
 

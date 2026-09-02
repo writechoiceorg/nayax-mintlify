@@ -4,11 +4,12 @@ metadata:
   og:description: "The SDK triggers event callbacks in the EMV Core SDK to notify the application of specific events during the transaction lifecycle."
 ---
 
-The SDK triggers event callbacks in the EMV Core SDK to notify the application of specific events during the transaction lifecycle. They enable developers to respond dynamically to changes in transaction status and system events. These callbacks provide real-time updates, ensuring seamless communication between the SDK and the application.
+The SDK triggers event callbacks in the EMV Core SDK to notify the application of specific events during the transaction lifecycle. They enable developers to respond dynamically to changes in transaction status and system events. These callbacks provide real-time updates, keeping the SDK and the application in sync.
 
 These are the available callbacks.
 
 * [CardTokenReceived](#cardtokenreceived)
+* [IncrementalAuthorizationResponse](#incrementalauthorizationresponse)
 * [ReaderMessageEvent](#readermessageevent)
 * [SystemStatusChanged](#systemstatuschanged)
 * [TransactionComplete](#transactioncomplete)
@@ -56,11 +57,12 @@ This event is triggered after a card token is successfully retrieved.
     void CardTokenReceived(TokenDetails tokenDetails);
     ```
 
-    Where:
+    Where `tokenDetails` has two fields:
 
-    | Parameter      | Description                 |
-    | :------------- | :-------------------------- |
-    | `tokenDetails` | String with the Card token. |
+    | Parameter  | Description                                                                                                 |
+    | :--------- | :------------------------------------------------------------------------------------------------------------ |
+    | `CardToken` | Base64 string for payment cards, or the card UID for closed loop (Mifare) cards.                              |
+    | `CardType`  | Card scheme (for example, EMV, MasterCard, Visa). For closed loop cards, the card technology (for example, Type A, Mifare). |
   </Tab>
 
   <Tab title="Linux">
@@ -95,6 +97,30 @@ This event is triggered after a card token is successfully retrieved.
     | `card_type`     | Card scheme (for example, EMV, Visa) for payment cards, or card technology (for example, Type A, Mifare) for closed loop cards. |
   </Tab>
 </Tabs>
+
+***
+
+## `IncrementalAuthorizationResponse`
+
+<Warning>
+  This event is only available for the Android operating system.
+</Warning>
+
+The `IncrementalAuthorizationResponse` event triggers when an [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) call completes, whether it succeeds or fails. It's reserved for a future multi-step flow and isn't required today: for the current single-step behavior, see [Single-step incremental authorization](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#single-step-incremental-authorization).
+
+<Note>
+  Nayax doesn't yet support the multi-step flow server-side. `IncrementalAuthorizationResponse` won't fire beyond what's described above.
+</Note>
+
+```java Java
+void IncrementalAuthorizationResponse(IncrementalAuthorizationDetails details);
+```
+
+| Parameter | Description |
+| --------- | ----------- |
+| `Status` | `OK` or `Error`. |
+| `Amount` | The incremental amount, in major units (for example, 1.50 for $1.50). |
+| `TransactionReference` | Transaction reference from the original `IncrementalAuthorization` call. |
 
 ***
 
@@ -149,23 +175,27 @@ For this feature to work, the reader must be configured to send External Display
 ## `SystemStatusChanged`
 
 <Warning>
-  This method is only available for the Android operating system.
+  This event is only available for the Android operating system.
 </Warning>
 
 The `SystemStatusChanged` event indicates changes in the SDKs or connected devices' operational state.
 
 ```java Java
-void onTransactionComplete(TransactionResult result);
+void SystemStatusChanged(EmvCoreStatus emvCoreStatus);
 ```
 
-`SystemStatus` is an enumeration representing the current state of the system. See the possible result values in the table below:
+`EmvCoreStatus` is an enumeration representing the current state of the system. See the possible result values in the table below:
 
 | Result               | Description                                    |
 | -------------------- | ---------------------------------------------- |
-| `Ready`              | The SDK is ready for transactions.             |
 | `NotReady`           | The SDK is not operational.                    |
+| `Ready`              | The SDK is ready for transactions.             |
 | `PaymentTransaction` | A transaction is currently in progress.        |
 | `Update`             | A firmware or configuration update is ongoing. |
+| `NoReader`           | No card reader is currently connected.         |
+| `NoTerminalId`       | Indicates the EMV Core does not have a configured Terminal ID. |
+| `NoNetwork`          | No network connection is available.            |
+| `NoTransaction`      | No transaction is currently in progress or was found. |
 
 ***
 
@@ -258,7 +288,7 @@ EMV Core calls `TransactionComplete` when a transaction completes, whether it su
     | Parameter                | Description                                                                                                                                    |
     | :----------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- |
     | **id**                   | Command ID.                                                                                                                                    |
-    | **status**               | Transaction result: `OK`, `Declined`, `Error`, `Timeout`, `Cancelled`, or `LocalCLP`.                                                         |
+    | **status**               | Transaction result: `OK`, `Declined`, `Error`, `Timeout`, `Cancelled`, `LocalCLP`, or `PollContinuous`.                                                         |
     | **errorCode**            | Numerical error code. `0` when there is no error.                                                                                             |
     | **errorDescription**     | Short technical description of the error, for developer and support use. Do not display to users.                                              |
     | **transactionId**        | Transaction ID. Use this value in `ConfirmTransaction` or `VoidTransaction`.                                                                   |
@@ -284,7 +314,7 @@ If EMV Core doesn’t get an answer, it will re-send 2 times (for a total of 3 m
     | :------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
     | `errorDescription`        | A short technical description of the error intended to help developers and tech support personnel identify the problem. It should not be presented to users. |
     | `errorCode`               | A numerical code describing the error if one occurs. See the table below for details on each code.                                                           |
-    | `status`                  | Possible statuses: OK, Declined, Error, Timeout, Cancelled, LocalCLP.                                                                                        |
+    | `status`                  | Possible statuses: OK, Declined, Error, Timeout, Cancelled, LocalCLP, PollContinuous.                                                                                        |
     | `amountAuthorized`        | Amount approved for the transaction in major units (for example, dollars, not cents). May be lower than the original request if the card is prepaid.                                          |
     | `amountRequested`         | Amount requested for transaction approval in major units (for example, dollars, not cents).                                                                                                                   |
     | `authorization_Code`      | PSP Transaction Identifier issued for approved transactions (EVO, Apriva, Traderoot).                                                                        |
@@ -292,8 +322,9 @@ If EMV Core doesn’t get an answer, it will re-send 2 times (for a total of 3 m
     | `cardType`                | Card scheme (MasterCard, Visa, Amex, and others). For closed-loop cards, the card technology type. See the closed loop card types table below.                                                                             |
     | `authID`                  | Approval Code from the processor (for some processors).                                                                                                      |
     | `receiptID`               | Digital receipt ID in the PSP System.                                                                                                                        |
-    | `Transaction_Referance`   | Deprecated. Use `transactionId` instead.                                                                                                 |
-    | `TransactionDbID`         | Deprecated. Use `transactionId` instead.                                                                                                 |
+    | `TransactionID`           | Transaction ID. Use this value in `ConfirmTransaction` or `VoidTransaction`.                                                                   |
+    | `Transaction_Reference`   | Transaction reference. Use this value in `ConfirmTransaction` or `VoidTransaction`.                                                                                                 |
+    | `TransactionDbID`         | Deprecated. Use `TransactionID` instead.                                                                                                 |
     | `RRN`                     | Processor reference number for approved transactions.                                                                                                        |
     | `card_ID`                 | Mifare UID in case of a Mifare card and `CLP_MIFARE_ENABLED=2`.                                                                                              |
     | `isTransactionApproved`   | Boolean indicating the transaction approval status.                                                                                                          |
@@ -310,6 +341,7 @@ If EMV Core doesn’t get an answer, it will re-send 2 times (for a total of 3 m
     | `AllowFundsOverAuthAmount`| Whether incremental charges above the authorized amount are permitted (`"true"` or `"false"`).                                                               |
     | `IncrementalMaxDefaultCredit` | Maximum credit amount allowed for incremental authorization.                                                                                             |
     | `card_Balance`            | Card balance for closed-loop cards managed by Nayax.                                                                                                                                    |
+    | `mifare_read`             | Optional. JSON with the results of Mifare blocks read, according to the `CLP_MIFARE_READ` configuration attribute. Empty string when not configured. Returns a JSON object keyed by UID and by block number (for example, `B10`, `B14`).                                                                                                                                    |
 
     ### `TransactionComplete` Closed loop card types
 

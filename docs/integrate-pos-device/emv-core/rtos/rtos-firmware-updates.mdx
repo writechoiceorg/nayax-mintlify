@@ -25,10 +25,14 @@ You can update the cashless reader firmware and configuration:
     Select the required firmware:
 
     * **For UNO-mini:**
-      * RTOS SDK firmware starts with `EMVSC_` (e.g., `EMVSC_v07652`)
+      * RTOS SDK firmware starts with `EMVSC_` (e.g., `EMVSC_v071652`)
       * The first RTOS SDK version is named `EMVS_v071558_ec`
       * Linux or Android SDK firmware starts with `EMVS_`
     * If more than one firmware is available for your device, take the latest one.
+
+    <Warning>
+      RTOS SDK v1.0 should stay on firmware `EMVSC_v071652.oef`. Don't upgrade it to `EMVSC_v071749`, the firmware released for SDK v1.5.
+    </Warning>
 
     <Frame><img src="/images/docs/rtos-firmware-updates/nayax-core-fw-update.png" /></Frame>
   </Step>
@@ -50,10 +54,10 @@ Expected configuration names:
 
 | Country | Billing Provider | POS Config Version Prefix | Example |
 | :------ | :--------------- | :------------------------ | :------ |
-| USA | Heartland Nayax EMV | `HTL_` | HTL\_25 |
-| Canada | CityCardPayment (Nuvei) | `NUV_` | NUV\_12 |
-| Europe, UK | Credorax (Finaro/Shift4) | `FIN_` | FIN\_14 |
-| Other countries | Stubb billing (test only) | `FIN_` | FIN\_14 |
+| USA | Heartland Nayax EMV | `HTL_` | HTL\_29 |
+| Canada | CityCardPayment (Nuvei) | `NUV_` | NUV\_16 |
+| Europe, UK | Credorax (Finaro/Shift4) | `FIN_` | FIN\_18 |
+| Other countries | Stubb billing (test only) | `FIN_` | FIN\_18 |
 
 ### Machine configuration
 

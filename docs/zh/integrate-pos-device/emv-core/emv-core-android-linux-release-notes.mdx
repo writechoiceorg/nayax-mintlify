@@ -19,7 +19,275 @@ metadata:
   虽然大多数更新是通用的,但平台特定的改进或修复会在章节标题中标注 (Android Only) 或 (Linux Only)。
 </Note>
 
-### SDK Version 1.4(最新版本)
+### SDK Version 1.5(最新版本)
+
+此版本包含以下针对 SDK 的改进、修复和已知问题:
+
+<Accordion title="改进" icon="rocket">
+  ### IncrementalAuthorization 一步式增量授权 (#7462) (仅限 Android)
+
+  当结算金额超过预授权金额时，系统现在会自动为差额发起增量授权——请参阅[单步增量授权](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#单步增量授权)。此版本还新增了 [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) 方法和 [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) 回调，它们是为未来的多步流程保留的，上述单步行为无需使用它们。
+
+  ---
+
+  ### 延迟交易 (#7486)
+
+  终端现在可以在离线状态下持续受理付款，并在通信恢复后将其发送以供审批。在 `PreAuthorize` 中设置 `isDeferred` 和 `isFinalAmount` 即可使用此功能。此功能取代了已弃用的 `PMT_ACCEPT_OFFLINE` 配置属性。详情请参阅[延迟交易](/docs/integrate-pos-device/emv-core/payment-flows/deferred-transaction)。
+
+  ---
+
+  ### 默认离线模式 (#7604)
+
+  EMV Core 的默认设置已调整，使其开箱即用即可作为一个简单的、支持离线的 RFID 读卡器运行：[`CLP_MIFARE_ENABLED`](/docs/integrate-pos-device/emv-core/emv-core-configuration#managing-settings) 现在默认值为 `2`（本地闭环 Mifare），[`OPEN_LOOP_ENABLED`](/docs/integrate-pos-device/emv-core/emv-core-configuration#managing-settings) 现在默认值为 `0`（禁用）。在此默认配置下，即使没有网络连接，`GetStatus` 也会返回 `Ready`，`PreAuthorize`/`GetCardToken` 仍可正常工作。只有在您显式启用开环支付或设置 `CLP_MIFARE_ENABLED=1` 时，设备才需要网络连接（网络中断时会返回 `NoNetwork`）。
+
+  ---
+
+  ### 客户端库中的外部结算支持 (#7430)
+
+  客户端库现在可以解析并提供服务器到服务器结算所需的字段。
+
+  ---
+
+  ### 通过 MQTT 实现推送通知 (#6817)
+
+  EMV Core 现已支持 MQTT 推送通知。要使用此功能，请在 Nayax Core 中配置 MQTT 主地址（`oti-broker.nayax.com:1883`）和 Ping 间隔（默认为 600 秒）机器属性。
+
+  ---
+
+  ### 读卡器货币回退 (#7654)
+
+  如果配置中缺少 `CURRENCY_CODE`，EMV Core 现在会先回退至读卡器内核的货币标签（`9F3C`），然后才默认使用美元。
+
+  ---
+
+  ### AUDIO_PERCENTAGE 配置 (#7609)
+
+  新增 `AUDIO_PERCENTAGE` 配置属性，用于控制读卡器的音量。
+
+  ---
+
+  ### 通过 TLS 进行终端身份验证 (#6719, #7305)
+
+  终端身份验证（DSS）的 `GET /challenge` 请求现在通过 TLS 发送。
+
+  ---
+
+  ### PreAuthorize 和 ConfirmTransaction 中的 additionalReceiptData (#7377)
+
+  您现在可以直接在 `PreAuthorize` 和 `ConfirmTransaction` 中传递 `additionalReceiptData`，以便在电子小票中包含额外数据。
+
+  ---
+
+  ### 本地固件与配置更新工具 (#7372)
+
+  新增一个用于在本地更新读卡器固件和配置的工具，无需 TMS 连接。此工具仅供生产线使用，部署前请务必将其移除。
+
+  ---
+
+  ### 高级闭环卡支持 (#7639)
+
+  EMV Core 现在可以通过 `CLP_MIFARE_READ` 属性读取 Mifare 数据块。
+
+  ---
+
+  ### SendToReader (#6898) (仅限 Android)
+
+  主机应用程序现在可以通过新的 [`SendToReader`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/remote-management#sendtoreader) 方法直接向读卡器发送命令。
+
+  ---
+
+  ### 通过 Nayax Core 管理读卡器配置 (#7250)
+
+  现在可以通过 Nayax Core 机器属性管理读卡器配置。
+
+  ---
+
+  ### UPLOAD_LOG 中的进程信息 (#7300)
+
+  `UPLOAD_LOG` 现在包含进程信息：CPU、内存和运行时间。
+
+  ---
+
+  ### Felica IDm 作为 CLP UID (#7496)
+
+  FeliCa 的 IDm 现在会作为 CLP UID 返回。
+
+  ---
+
+  ### 无条件确认 (#7594)
+
+  移除了 `CONFIRM_IF_UNSURE` 标志。确认行为现在为无条件执行。
+
+  ---
+
+  ### 客户端库版本报告 (#7673)
+
+  客户端库版本现在会通过 `GetVersions` 报告给 TMS。
+
+  ---
+
+  ### Nayax TLS 证书颁发机构支持 (#7703)
+
+  新增对 Nayax TLS 证书颁发机构的支持。
+
+  ---
+
+  ### 硬编码的外部结算默认值 (#7705)
+
+  外部结算属性现在为硬编码默认值，不再依赖 `local.properties`。
+
+  ---
+
+  ### 前台服务 (#7712)
+
+  EMV Core 服务现在以前台服务方式运行，防止操作系统将其终止。
+
+  ---
+
+  ### 新的 UNO-mini 固件 (EMVSC_v071749)
+
+  新增对 Type B 卡片读取的支持（用于 Autel）。该固件适用于 Linux、Android 和 RTOS v1.5 SDK。RTOS v1.0 应继续使用固件 `EMVSC_v071652.oef`。
+</Accordion>
+
+<Accordion title="修复" icon="wrench">
+  ### ReaderMessageEvent 索引更正 (#7088)
+
+  此前使用索引 `255` 的消息现在使用 `201` 至 `220` 范围内正确分配的索引。
+
+  ---
+
+  ### 读卡器通信恢复 (#6819)
+
+  改进了读卡器通信恢复机制，包括对读卡器断电重启的处理。
+
+  ---
+
+  ### 外部结算响应缺少 hwSerial (#7515)
+
+  修复了外部结算响应中缺少 `hwSerial` 字段的问题。
+
+  ---
+
+  ### TMS-C 上的推送通知 (#7537)
+
+  修复了设备由 TMS-C（Nayax Core）管理时推送通知无法正常工作的问题。
+
+  ---
+
+  ### CLP 卡 ID 响应字段 (#7425)
+
+  修复了 CLP 卡 ID 被发送到错误响应字段的问题。
+
+  ---
+
+  ### 本地 CLP 交易与卡 ID (#7512)
+
+  修复了本地 CLP 交易中交易 ID 和卡 ID（`CardToken`）相同的问题。
+
+  ---
+
+  ### 交易手续费报告 (#7478)
+
+  修复了交易手续费未正确发送至 Bridge 的问题。
+
+  ---
+
+  ### PMT_DUKPT_KEY_VARIANT 回退 (#6772)
+
+  当配置值无效时，`PMT_DUKPT_KEY_VARIANT` 现在会回退至 `0x11`。
+
+  ---
+
+  ### 无读卡器时自动重启 (#7183)
+
+  如果 EMV Core 在 1 小时内未找到读卡器，现在会自动重启。
+
+  ---
+
+  ### IncrementalAuthorization URL (#7662) (仅限 Android)
+
+  修复了 `IncrementalAuthorization` 使用错误 URL 的问题。
+
+  ---
+
+  ### APK 升级后配置保留 (#7491)
+
+  此前 APK 升级时配置会被删除，现在配置会在升级后保留。
+
+  ---
+
+  ### hwSerial 截断 (#7710)
+
+  修复了 `NayaxTransactionIdInfo` 中 `hwSerial` 被截断的问题。
+
+  ---
+
+  ### 大型小票数据缓冲区溢出 (#7763)
+
+  修复了当大型小票或终端数据与交易结果数据合并时，可能导致缓冲区溢出并使设备崩溃或重置的问题。
+
+  ---
+
+  ### 服务器响应被截断 (#7783)
+
+  修复了服务器响应被截断或拒绝，导致有效批准被错误报告为拒绝，或 TMS 下发的命令被丢弃的问题。
+
+  ---
+
+  ### 连续轮询中断 (#7217)
+
+  修复了在 `continuous=true` 交易过程中轮询意外停止的问题。
+
+  ---
+
+  ### CON_CONFIG 与服务重启 (#7452, #7701)
+
+  修复了 `CON_CONFIG` 命令失败，以及该命令执行后 Android 服务有时无法重启的问题。
+
+  ---
+
+  ### GetStatus 停留在 Update 状态 (#7740)
+
+  修复了固件刷写后 `GetStatus` 在 `Update` 状态停留 5 分钟或更长时间的问题。
+
+  ---
+
+  ### 重复的 Authorize 请求
+
+  减少了超时或取消后发送的重复 `Authorize` 请求。
+</Accordion>
+
+<Accordion title="已知问题" icon="exclamation-triangle">
+  ### 读卡器更换与终端 ID (#7211, #7030)
+
+  在将读卡器移至其他机器之前，请务必先停止 EMV Core。未重置 EMV Core 而直接更换读卡器不会更新终端 ID，可能导致付款针对原终端完成。若在原机器上未先停止 EMV Core 就将读卡器移至其他机器，还可能导致新机器出现不可预测的行为。
+
+  ---
+
+  ### Android 操作系统服务重启 (#7714)
+
+  Android 操作系统可能会停止 EMV Core 服务，导致运行期间多次重启。
+
+  ---
+
+  ### 已取消交易的 IsTransactionApproved (#7743)
+
+  已取消的交易会错误地将 `IsTransactionApproved` 返回为 `true`。
+
+  ---
+
+  ### CannotCancel 之后的取消操作 (#7742)
+
+  交易在收到 `CannotCancel` 响应后仍可能被取消。
+
+  ---
+
+  ### 以太网禁用时的 GetStatus (#7741)
+
+  即使以太网已禁用，`GetStatus` 仍会返回 `Ready`。
+</Accordion>
+
+### SDK Version 1.4
 
 此版本包含以下针对 SDK 的改进、修复和已知问题:
 

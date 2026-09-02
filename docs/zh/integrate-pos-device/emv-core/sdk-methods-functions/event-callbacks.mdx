@@ -4,11 +4,12 @@ metadata:
   og:description: 该 SDK 会在 EMV Core SDK 中触发事件回调，以在交易生命周期内的特定事件发生时通知应用程序。
 ---
 
-该 SDK 会在 EMV Core SDK 中触发事件回调，以在交易生命周期内的特定事件发生时通知应用程序。这些回调使开发者能够动态响应交易状态和系统事件的变化。它们提供实时更新，确保 SDK 与应用程序之间的无缝通信。
+该 SDK 会在 EMV Core SDK 中触发事件回调，以在交易生命周期内的特定事件发生时通知应用程序。这些回调使开发者能够动态响应交易状态和系统事件的变化。它们提供实时更新，使 SDK 与应用程序保持同步。
 
 这些是可用的回调。
 
 - [CardTokenReceived](#cardtokenreceived)
+- [IncrementalAuthorizationResponse](#incrementalauthorizationresponse)
 - [ReaderMessageEvent](#readermessageevent)
 - [SystemStatusChanged](#systemstatuschanged)
 - [TransactionComplete](#transactioncomplete)
@@ -56,11 +57,12 @@ metadata:
     void CardTokenReceived(TokenDetails tokenDetails);
     ```
 
-    在哪里：
+    其中 `tokenDetails` 包含以下两个字段：
 
-    | 范围             | 描述          |
-    | :------------- | :---------- |
-    | `tokenDetails` | 带有卡片令牌的字符串。 |
+    | 范围          | 描述                                                                            |
+    | :---------- | :---------------------------------------------------------------------------- |
+    | `CardToken` | 支付卡为 Base64 字符串，闭环（Mifare）卡为卡片 UID。                                            |
+    | `CardType`  | 卡组织（例如 EMV、MasterCard、Visa）。对于闭环卡，则为卡片技术类型（例如 Type A、Mifare）。 |
   </Tab>
 
   <Tab title="Linux">
@@ -95,6 +97,30 @@ metadata:
     | `card_type`     | 支付卡的卡组织（例如 EMV、Visa），或闭环卡的卡片技术类型（例如 Type A、Mifare）。 |
   </Tab>
 </Tabs>
+
+---
+
+## `IncrementalAuthorizationResponse`
+
+<Warning>
+  此事件仅适用于 Android 操作系统。
+</Warning>
+
+当 [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) 调用完成（无论成功或失败）时，都会触发 `IncrementalAuthorizationResponse` 事件。该事件是为未来的多步流程保留的，目前无需使用：有关当前的单步行为，请参阅 [单步增量授权](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#单步增量授权)。
+
+<Note>
+  Nayax 目前尚未在服务器端支持多步流程。除上述内容外，`IncrementalAuthorizationResponse` 不会触发。
+</Note>
+
+```java Java
+void IncrementalAuthorizationResponse(IncrementalAuthorizationDetails details);
+```
+
+| 范围 | 描述 |
+| --------- | ----------- |
+| `Status` | `OK` 或 `Error`。 |
+| `Amount` | 增量金额，以主要货币单位表示（例如 1.50 表示 1.50 美元）。 |
+| `TransactionReference` | 来自原始 `IncrementalAuthorization` 调用的交易引用。 |
 
 ---
 
@@ -155,17 +181,21 @@ metadata:
 `SystemStatusChanged` 事件表示 SDK 或已连接设备运行状态的变化。
 
 ```java Java
-void onTransactionComplete(TransactionResult result);
+void SystemStatusChanged(EmvCoreStatus emvCoreStatus);
 ```
 
-`SystemStatus` 是表示系统当前状态的枚举。可能的结果值见下表：
+`EmvCoreStatus` 是表示系统当前状态的枚举。可能的结果值见下表：
 
-| 结果                   | 描述            |
-| -------------------- | ------------- |
-| `Ready`              | SDK 已准备好进行交易。 |
-| `NotReady`           | SDK 无法运行。     |
-| `PaymentTransaction` | 交易目前正在进行中。    |
-| `Update`             | 固件或配置更新正在进行中。 |
+| 结果                   | 描述                            |
+| -------------------- | ----------------------------- |
+| `NotReady`           | SDK 无法运行。                     |
+| `Ready`              | SDK 已准备好进行交易。                 |
+| `PaymentTransaction` | 交易目前正在进行中。                    |
+| `Update`             | 固件或配置更新正在进行中。                 |
+| `NoReader`           | 当前未连接读卡器。                     |
+| `NoTerminalId`       | 表示 EMV Core 尚未配置终端 ID。        |
+| `NoNetwork`          | 当前无可用网络连接。                    |
+| `NoTransaction`      | 当前没有正在进行的交易，或未找到相应交易。         |
 
 ---
 
@@ -258,7 +288,7 @@ void onTransactionComplete(TransactionResult result);
     | 范围                     | 描述                                                                     |
     | :--------------------- | :--------------------------------------------------------------------- |
     | ID                     | 命令 ID。                                                                 |
-    | **status**             | 交易结果:`OK`、`Declined`、`Error`、`Timeout`、`Cancelled` 或 `LocalCLP`。       |
+    | **status**             | 交易结果:`OK`、`Declined`、`Error`、`Timeout`、`Cancelled`、`LocalCLP` 或 `PollContinuous`。       |
     | errorCode              | 数字错误代码。无错误时为 `0`。                                                      |
     | errorDescription       | 错误的简短技术描述，供开发人员和支持人员使用。请勿向用户展示。                                        |
     | 交易 ID                  | 交易 ID。在 `ConfirmTransaction` 或 `VoidTransaction` 中使用此值。                |
@@ -284,7 +314,7 @@ void onTransactionComplete(TransactionResult result);
     | :---------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
     | `errorDescription`            | 对错误的简短技术描述，旨在帮助开发者和技术支持人员识别问题。不应向用户展示此内容。                                                                                                                                             |
     | `errorCode`                   | 描述错误的数字代码（如果发生错误）。有关每个代码的详细信息，请参见下表。                                                                                                                                                  |
-    | `status`                      | 可能的状态：OK、Declined、Error、Timeout、Cancelled、LocalCLP。                                                                                                                                   |
+    | `status`                      | 可能的状态：OK、Declined、Error、Timeout、Cancelled、LocalCLP、PollContinuous。                                                                                                                                   |
     | `amountAuthorized`            | 以主要货币单位（例如美元，而非美分）表示的交易批准金额。如果是预付卡，该金额可能低于原始请求金额。                                                                                                                                     |
     | `amountRequested`             | 以主要货币单位（例如美元，而非美分）表示的交易请求批准金额。                                                                                                                                                        |
     | `authorization_Code`          | 为已批准交易（EVO、Apriva、Traderoot）颁发的 PSP 交易标识符。                                                                                                                                            |
