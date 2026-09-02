@@ -5,7 +5,7 @@ metadata:
   og:description: "# EMV Core SDK Payment Management The EMV Core SDK provides robust APIs for managing payment transactions. These APIs enable seamless integration of."
 ---
 
-The EMV Core SDK provides robust APIs for managing payment transactions. These APIs enable seamless integration of cashless payment functionality into applications, supporting both open- and closed-loop systems. The SDK ensures secure, efficient, and flexible payment handling while offloading complexities to the Nayax backend.
+The EMV Core SDK provides APIs for managing payment transactions. These APIs let you integrate cashless payment functionality into applications, supporting both open- and closed-loop systems. The SDK handles secure, efficient, and flexible payment processing while offloading complexity to the Nayax backend.
 
 The methods available for payment management are:
 
@@ -63,9 +63,9 @@ See the API Signature for the `CancelTransaction` method:
   </Tab>
 </Tabs>
 
-<Warning>
+<Note>
   If the card has already been presented and processed, the system will return a `CannotCancel` error.
-</Warning>
+</Note>
 
 ***
 
@@ -133,7 +133,7 @@ A confirmation request is the second stage of the authorization flow. It confirm
     | **id**                    | Command ID.                                                                                                                        |
     | **amount**                | The actual amount to charge – in minor units (cents).                                                                              |
     | **transactionReference**  | Transaction reference from the PSP. Use the `transactionId` field from the `TransactionComplete` event.                          |
-    | **productID**             | Optional parameter: ID of the product selected by the consumer. This number will be saved on the server and available for reports. |
+    | **productID**             | Optional parameter: ID of the product selected by the consumer. This number will be saved on the server and available for reports. Before SDK v1.5, `productID` also controlled whether the pre-authorized amount was final; that behavior is now controlled by `isFinalAmount` in `PreAuthorize`. |
     | **terminal\_data**        | Optional parameter: `terminal_data=(key1=value1,key2=value2)`.                                                                     |
     | **AdditionalReceiptData** | Optional. JSON object with extra receipt data to include at confirmation time.                                                      |
   </Tab>
@@ -235,11 +235,25 @@ EMV Core waits for a card to be presented, reads the data, and triggers a `CardT
 
 ## `IncrementalAuthorization`
 
+Add an incremental charge to an existing authorized transaction. Use this when the final amount is higher than the initially authorized amount. The result is delivered via the [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) callback.
+
+### Single-step incremental authorization
+
+For most use cases, you don't need to call this API directly. Nayax Core handles a single-step incremental authorization automatically whenever you settle a transaction for more than the pre-authorized amount:
+
+1. Call `PreAuthorize` (for example, for $10.00) and read the `IncrementalMaxDefaultCredit` value from the resulting `TransactionComplete` event (for example, $50.00).
+2. Call `ConfirmTransaction`, or send an [External Settlement](/docs/integrate-pos-device/emv-core/payment-flows/pre-authorization-with-external-settlement) request from your server, with an amount up to `IncrementalMaxDefaultCredit` (for example, $15.03).
+3. Nayax Core automatically sends an incremental authorization request to the processor for the difference (in this example, $5.03).
+4. If the incremental authorization succeeds, Nayax Core settles the transaction for the final amount ($15.03).
+5. If it fails, Nayax Core settles the transaction for the original pre-authorized amount ($10.00).
+
+<Note>
+  The `IncrementalAuthorization` method and `IncrementalAuthorizationResponse` callback below are reserved for a future multi-step incremental authorization flow. They aren't required for the single-step flow described above.
+</Note>
+
 <Warning>
   This method is only available for the Android SDK.
 </Warning>
-
-Add an incremental charge to an existing authorized transaction. Use this when the final amount is higher than the initially authorized amount. The result is delivered via the [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) callback.
 
 See the `IncrementalAuthorization` API signature in the code below:
 
@@ -344,7 +358,9 @@ Use `PreAuthorize` to pre-authorize a card with the payment processor. EMV Core 
 </Tabs>
 
 <Warning>
-  Setting `productID` to a non-zero value marks the pre-authorized amount as final; it cannot be changed in `ConfirmTransaction`. If the final amount is not yet known, set `productID = 0` in `PreAuthorize` and provide the actual ID in `ConfirmTransaction`.
+  **Before SDK v1.5:** setting `productID` to a non-zero value in `PreAuthorize` marked the pre-authorized amount as final, and it couldn't be changed in `ConfirmTransaction`. To indicate a non-final amount, you set `productID = 0` in `PreAuthorize` and provided the actual product ID in `ConfirmTransaction`.
+
+  **As of SDK v1.5**, whether the amount is final is controlled by `isFinalAmount` in `PreAuthorize` instead (see the parameter table above). `productID` is now used only for reporting and can be set independently in either call.
 </Warning>
 
 If the transaction is approved (the `TransactionComplete` event returns with status `OK`), your application must call `ConfirmTransaction` or `VoidTransaction` to complete the flow.

@@ -4,7 +4,7 @@ metadata:
   og:description: EMV Core 配置决定了您的终端如何运行、处理交易以及与外部系统交互的方式。为确保兼容性。
 ---
 
-The EMV Core configuration determines how your terminal functions, handles transactions, and interacts with external systems. Settings use a standard `<Parameter Name>=<Value>` format (e.g., `TMS_SVC_URL=tms.otiglobal.com`).
+EMV Core 配置决定了您的终端如何运行、处理交易以及与外部系统交互。设置采用标准的 `<Parameter Name>=<Value>` 格式（例如 `TMS_SVC_URL=tms.otiglobal.com`）。
 
 ## 管理设置
 
@@ -46,6 +46,8 @@ The EMV Core configuration determines how your terminal functions, handles trans
 | Open Loop Payment | `OPEN_LOOP_ENABLED`           | 启用/禁用开环支付(open-loop payment)。                                             | 布尔值（1/0） | 0                             | 在 SDK v0.7 中引入。默认值在 SDK v`1`.5 中从 1 更改为 `0`。                                                                                                                                                         |
 |                   | `PMT_ACCEPT_OFFLINE`          | 在网络中断时自动批准授权(Store & Forward)。                                            | 布尔值（1/0） | 0                             | 0=Disabled, 1=No comm, 2=Always. Deprecated in SDK v1.5; use the [`deferred`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#preauthorize) parameter in `PreAuthorize` instead. |
 |                   | `PRE_AUTH_AMOUNT`             | 如果 API 未提供,则使用的默认预授权金额。                                                   | 整数       | 0                             | 以分(cent)为单位提供。                                                                                                                                                                                       |
+|                   | `PAYMENT_SVC_SYNCHRONOUS`     | 在服务器上完成上一笔交易之前，不启动新交易。                                                     | 布尔值（1/0） | 0                             | 自 SDK v1.5 起，`PMT_KIOSK_AUTOCONFIRM` 在此平台上不再生效。                                                                                                                                                        |
 | Closed Loop (CLP) | `CLP_MIFARE_ENABLED`          | 启用将 Mifare 检测为 closed loop。                                               | 整数       | 2                             | 0=关闭,1=服务器批准,2=Local Host API。                                                                                                                                                                       |
+|                   | `CLP_MIFARE_READ`             | 格式：`K[A` \| `B][key_num]B[block_num]...`（例如 `KA01B10B14,KB05B20B30` 表示使用 A 密钥编号 1 读取块 10 和 14，使用 B 密钥编号 5 读取块 20 和 30）。 | String   | —                             | 读取到的数据块会在 `TransactionComplete` 的 `mifare_read` 字段中返回。                                                                                                                                              |
 | 日志记录              | `LOG_FILE_SIZE`               | 每个日志文件的最大大小(KB)。                                                          | 整数       | 1024                          | 在 SDK v1.2 之前默认值为 256 KB。                                                                                                                                                                            |
 |                   | `LOG_NO_OF_FILES`             | 轮转前保留的日志文件数量。                                                             | 整数       | 10                            | 在 SDK v1.2 之前默认值为 6。                                                                                                                                                                                 |

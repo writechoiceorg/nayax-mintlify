@@ -15,7 +15,7 @@ metadata:
   og:description: '# EMV Core SDK 支付管理 EMV Core SDK 提供强大的 API，用于管理支付交易。这些 API 可实现无缝集成。'
 ---
 
-EMV Core SDK 提供强大的 API，用于管理支付交易。这些 API 可将无现金支付功能无缝集成到应用程序中，同时支持开放式和闭环系统。该 SDK 可确保安全、高效且灵活的支付处理，并将复杂的底层逻辑转移至 Nayax 后端。
+EMV Core SDK 提供用于管理支付交易的 API。通过这些 API，您可以将无现金支付功能集成到应用程序中，同时支持开放式和闭环系统。该 SDK 负责安全、高效且灵活的支付处理，并将复杂逻辑转移至 Nayax 后端。
 
 可用于付款管理的方法有：
 
@@ -73,9 +73,9 @@ EMV Core SDK 提供强大的 API，用于管理支付交易。这些 API 可将�
   </Tab>
 </Tabs>
 
-<Warning>
+<Note>
   如果卡片已经呈现并处理完毕，系统将返回 `CannotCancel` 错误。
-</Warning>
+</Note>
 
 ---
 
@@ -143,7 +143,7 @@ EMV Core SDK 提供强大的 API，用于管理支付交易。这些 API 可将�
     | ID                    | 命令 ID。                                                                                                  |
     | 数量                    | 实际收费金额——以小数单位（分）表示。                                                                                     |
     | 交易引用                  | Transaction reference from the PSP. Use the `transactionId` field from the `TransactionComplete` event. |
-    | 产品ID                  | 可选参数：消费者所选产品的ID。该编号将保存在服务器上，并可用于生成报告。                                                                   |
+    | 产品ID                  | 可选参数：消费者所选产品的ID。该编号将保存在服务器上，并可用于生成报告。在 SDK v1.5 之前，`productID` 还用于控制预授权金额是否为最终金额；该行为现由 `PreAuthorize` 中的 `isFinalAmount` 控制。                                                                   |
     | 终端数据                  | 可选参数：`terminal_data=(key1=value1,key2=value2)`。                                                         |
     | AdditionalReceiptData | 可选。包含确认时要附加的额外收据数据的 JSON 对象。                                                                            |
   </Tab>
@@ -245,11 +245,25 @@ EMV Core 等待呈现卡片，读取数据，并触发 `CardTokenReceived` 事�
 
 ## `IncrementalAuthorization`
 
+为现有已授权交易添加增量扣款。当最终金额高于最初授权的金额时，使用此方法。结果通过 [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) 回调返回。
+
+### 单步增量授权
+
+在大多数场景下，您无需直接调用此 API。每当结算金额超过预授权金额时，Nayax Core 会自动处理单步增量授权：
+
+1. 调用 `PreAuthorize`（例如 10.00 美元），并从返回的 `TransactionComplete` 事件中读取 `IncrementalMaxDefaultCredit` 的值（例如 50.00 美元）。
+2. 调用 `ConfirmTransaction`，或从您的服务器发送[外部结算](/docs/integrate-pos-device/emv-core/payment-flows/pre-authorization-with-external-settlement)请求，金额不超过 `IncrementalMaxDefaultCredit`（例如 15.03 美元）。
+3. Nayax Core 会自动向处理商发送针对差额的增量授权请求（本例中为 5.03 美元）。
+4. 如果增量授权成功，Nayax Core 会以最终金额（15.03 美元）结算交易。
+5. 如果失败，Nayax Core 会以原始预授权金额（10.00 美元）结算交易。
+
+<Note>
+  下方的 `IncrementalAuthorization` 方法和 `IncrementalAuthorizationResponse` 回调是为未来的多步增量授权流程保留的，上述单步流程无需使用它们。
+</Note>
+
 <Warning>
   此方法仅适用于 Android SDK。
 </Warning>
-
-为现有已授权交易添加增量扣款。当最终金额高于最初授权的金额时，使用此方法。结果通过 [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) 回调返回。
 
 请参阅下方 `IncrementalAuthorization` 的 API Signature：
 
@@ -354,7 +368,9 @@ void IncrementalAuthorization(int amountMinorUnits, int productID, String transa
 </Tabs>
 
 <Warning>
-  Setting `productID` to a non-zero value marks the pre-authorized amount as final; it cannot be changed in `ConfirmTransaction`. If the final amount is not yet known, set `productID = 0` in `PreAuthorize` and provide the actual ID in `ConfirmTransaction`.
+  **在 SDK v1.5 之前：**在 `PreAuthorize` 中将 `productID` 设置为非零值，会将预授权金额标记为最终金额，且无法在 `ConfirmTransaction` 中更改。若要表示金额尚未确定，则在 `PreAuthorize` 中设置 `productID = 0`，并在 `ConfirmTransaction` 中提供实际的产品 ID。
+
+  **自 SDK v1.5 起**，金额是否为最终金额改由 `PreAuthorize` 中的 `isFinalAmount` 参数控制（详见上方参数表）。`productID` 现在仅用于报告，可在两次调用中独立设置。
 </Warning>
 
 如果交易获批准（`TransactionComplete` 事件返回状态为 `OK`），应用程序必须调用 `ConfirmTransaction` 或 `VoidTransaction` 以完成流程。

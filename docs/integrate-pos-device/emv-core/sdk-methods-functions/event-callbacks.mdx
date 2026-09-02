@@ -4,7 +4,7 @@ metadata:
   og:description: "The SDK triggers event callbacks in the EMV Core SDK to notify the application of specific events during the transaction lifecycle."
 ---
 
-The SDK triggers event callbacks in the EMV Core SDK to notify the application of specific events during the transaction lifecycle. They enable developers to respond dynamically to changes in transaction status and system events. These callbacks provide real-time updates, ensuring seamless communication between the SDK and the application.
+The SDK triggers event callbacks in the EMV Core SDK to notify the application of specific events during the transaction lifecycle. They enable developers to respond dynamically to changes in transaction status and system events. These callbacks provide real-time updates, keeping the SDK and the application in sync.
 
 These are the available callbacks.
 
@@ -107,6 +107,10 @@ This event is triggered after a card token is successfully retrieved.
 </Warning>
 
 The `IncrementalAuthorizationResponse` event is triggered when an [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) call completes, whether it succeeds or fails.
+
+<Note>
+  This callback is reserved for a future multi-step incremental authorization flow. For the single-step flow Nayax Core handles automatically today, see [Single-step incremental authorization](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#single-step-incremental-authorization).
+</Note>
 
 ```java Java
 void IncrementalAuthorizationResponse(IncrementalAuthorizationDetails details);

@@ -49,7 +49,7 @@ This version includes the following improvements, fixes, and known issues for th
 
   ### **Offline by Default Mode (#7604)**
 
-  EMV Core can now operate offline by default, improving reliability in low-connectivity environments.
+  EMV Core's defaults changed so it behaves as a simple, offline-capable RFID reader out of the box: [`CLP_MIFARE_ENABLED`](/docs/integrate-pos-device/emv-core/emv-core-configuration#managing-settings) now defaults to `2` (local Closed-Loop Mifare) and [`OPEN_LOOP_ENABLED`](/docs/integrate-pos-device/emv-core/emv-core-configuration#managing-settings) now defaults to `0` (disabled). In this default configuration, `GetStatus` reports `Ready` and `PreAuthorize`/`GetCardToken` keep working even without network. The device only requires network, and reports `NoNetwork` when it's down, if you explicitly enable Open Loop or set `CLP_MIFARE_ENABLED=1`.
 
   ***
 
@@ -302,7 +302,7 @@ current version above for full detail and links.
 | Version | Summary |
 |---|---|
 | SDK Version 1.4 | **Added** (#7473, #7474, #7308):<ul><li>Automated currency code management</li><li>Nayax Core/OTI TMS server failover</li><li>Local serial port management (Linux)</li></ul>**Fixed** (#7443, #7497):<ul><li>Reader message event delivery and reader reconnection</li><li>Sample app token reporting and sample app resources</li></ul> |
-| SDK Version 1.2 | **Added** (#6782, #7139, #7346, #7269, #6888):<ul><li>e-Receipt/Remote Settlement support</li><li>Nayax Core-managed attribute/limit control and CLP cards</li><li>Enhanced logging</li></ul>**Fixed** (#7385, #7371, #7199, #7272):<ul><li>Offline display sync and reader-boot/core-invocation issues</li><li>Deprecated `PayTransaction` in favor of `PreAuthorize`/`ConfirmTransaction`</li></ul> |
+| SDK Version 1.2 | **Added** (#6782, #7139, #7346, #7269, #6888):<ul><li>eReceipt/Remote Settlement support</li><li>Nayax Core-managed attribute/limit control and CLP cards</li><li>Enhanced logging</li></ul>**Fixed** (#7385, #7371, #7199, #7272):<ul><li>Offline display sync and reader-boot/core-invocation issues</li><li>Deprecated `PayTransaction` in favor of `PreAuthorize`/`ConfirmTransaction`</li></ul> |
 | SDK Version 1.1 (Linux Only) | **Shipped** (#6813, #7165, #7157):<ul><li>Official UNO-8 firmware v54227</li><li>Beta UNO-mini firmware v071514</li></ul>**Fixed** (#7144, #7331):<ul><li>Serial reader stability</li><li>TMS independence</li><li>A socket resource leak</li></ul> |
 | SDK Version 1.0 | **Added** (#71156, #7129, #7117):<ul><li>`GetAttribute`</li><li>Enhanced Android logging and config reporting</li><li>Linux sample app improvements</li></ul>**Fixed** (#6960, #7136, #7091, #7169, #7180, #6658, #7200, #7204, #7130, #7210):<ul><li>Log truncation</li><li>CLP card mapping</li><li>Timing/sync issues</li><li>Android diagnostics/UI bugs</li></ul> |
 | SDK Version 0.9 | **Added** (#6550, #6838, #6978):<ul><li>Mifare UID support to `GetCardToken`</li><li>Automatic EMV Core startup/recovery</li><li>`GetCardToken` continuous mode on Android</li></ul>**Fixed** (#6980, #6987, #7001, #6961, #6658):<ul><li>Closed-loop UID reporting</li><li>UI/input stability</li><li>UNO-mini firmware events</li><li>Pre-authorization logic</li></ul> |

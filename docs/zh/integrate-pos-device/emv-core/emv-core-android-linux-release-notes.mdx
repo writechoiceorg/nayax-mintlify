@@ -38,7 +38,7 @@ metadata:
 
   ### 默认离线模式 (#7604)
 
-  EMV Core 现在可以默认以离线模式运行，从而提升在低连接性环境中的可靠性。
+  EMV Core 的默认设置已调整，使其开箱即用即可作为一个简单的、支持离线的 RFID 读卡器运行：[`CLP_MIFARE_ENABLED`](/docs/integrate-pos-device/emv-core/emv-core-configuration#managing-settings) 现在默认值为 `2`（本地闭环 Mifare），[`OPEN_LOOP_ENABLED`](/docs/integrate-pos-device/emv-core/emv-core-configuration#managing-settings) 现在默认值为 `0`（禁用）。在此默认配置下，即使没有网络连接，`GetStatus` 也会返回 `Ready`，`PreAuthorize`/`GetCardToken` 仍可正常工作。只有在您显式启用开环支付或设置 `CLP_MIFARE_ENABLED=1` 时，设备才需要网络连接（网络中断时会返回 `NoNetwork`）。
 
   ---
 
