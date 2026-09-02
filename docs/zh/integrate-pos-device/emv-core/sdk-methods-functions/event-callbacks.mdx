@@ -106,10 +106,10 @@ metadata:
   此事件仅适用于 Android 操作系统。
 </Warning>
 
-当 [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) 调用完成（无论成功或失败）时，都会触发 `IncrementalAuthorizationResponse` 事件。
+当 [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) 调用完成（无论成功或失败）时，都会触发 `IncrementalAuthorizationResponse` 事件。该事件是为未来的多步流程保留的，目前无需使用：有关当前的单步行为，请参阅 [单步增量授权](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#单步增量授权)。
 
 <Note>
-  此回调是为未来的多步增量授权流程保留的。有关 Nayax Core 目前自动处理的单步流程，请参阅 [单步增量授权](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#单步增量授权)。
+  Nayax 目前尚未在服务器端支持多步流程。除上述内容外，`IncrementalAuthorizationResponse` 不会触发。
 </Note>
 
 ```java Java
@@ -288,7 +288,7 @@ void SystemStatusChanged(EmvCoreStatus emvCoreStatus);
     | 范围                     | 描述                                                                     |
     | :--------------------- | :--------------------------------------------------------------------- |
     | ID                     | 命令 ID。                                                                 |
-    | **status**             | 交易结果:`OK`、`Declined`、`Error`、`Timeout`、`Cancelled` 或 `LocalCLP`。       |
+    | **status**             | 交易结果:`OK`、`Declined`、`Error`、`Timeout`、`Cancelled`、`LocalCLP` 或 `PollContinuous`。       |
     | errorCode              | 数字错误代码。无错误时为 `0`。                                                      |
     | errorDescription       | 错误的简短技术描述，供开发人员和支持人员使用。请勿向用户展示。                                        |
     | 交易 ID                  | 交易 ID。在 `ConfirmTransaction` 或 `VoidTransaction` 中使用此值。                |
@@ -314,7 +314,7 @@ void SystemStatusChanged(EmvCoreStatus emvCoreStatus);
     | :---------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
     | `errorDescription`            | 对错误的简短技术描述，旨在帮助开发者和技术支持人员识别问题。不应向用户展示此内容。                                                                                                                                             |
     | `errorCode`                   | 描述错误的数字代码（如果发生错误）。有关每个代码的详细信息，请参见下表。                                                                                                                                                  |
-    | `status`                      | 可能的状态：OK、Declined、Error、Timeout、Cancelled、LocalCLP。                                                                                                                                   |
+    | `status`                      | 可能的状态：OK、Declined、Error、Timeout、Cancelled、LocalCLP、PollContinuous。                                                                                                                                   |
     | `amountAuthorized`            | 以主要货币单位（例如美元，而非美分）表示的交易批准金额。如果是预付卡，该金额可能低于原始请求金额。                                                                                                                                     |
     | `amountRequested`             | 以主要货币单位（例如美元，而非美分）表示的交易请求批准金额。                                                                                                                                                        |
     | `authorization_Code`          | 为已批准交易（EVO、Apriva、Traderoot）颁发的 PSP 交易标识符。                                                                                                                                            |

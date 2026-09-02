@@ -26,7 +26,7 @@ metadata:
 <Accordion title="改进" icon="rocket">
   ### IncrementalAuthorization 一步式增量授权 (#7462) (仅限 Android)
 
-  新增一步式增量授权功能，可通过新的 [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) 方法在单次调用中调整已授权金额。结果通过新的 [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) 回调返回。
+  当结算金额超过预授权金额时，系统现在会自动为差额发起增量授权——请参阅[单步增量授权](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#单步增量授权)。此版本还新增了 [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) 方法和 [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) 回调，它们是为未来的多步流程保留的，上述单步行为无需使用它们。
 
   ---
 
@@ -141,6 +141,12 @@ metadata:
   ### 前台服务 (#7712)
 
   EMV Core 服务现在以前台服务方式运行，防止操作系统将其终止。
+
+  ---
+
+  ### 新的 UNO-mini 固件 (EMVSC_v071749)
+
+  新增对 Type B 卡片读取的支持（用于 Autel）。该固件适用于 Linux、Android 和 RTOS v1.5 SDK。RTOS v1.0 应继续使用固件 `EMVSC_v071652.oef`。
 </Accordion>
 
 <Accordion title="修复" icon="wrench">

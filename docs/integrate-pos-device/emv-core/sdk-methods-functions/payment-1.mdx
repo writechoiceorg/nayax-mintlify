@@ -235,7 +235,7 @@ EMV Core waits for a card to be presented, reads the data, and triggers a `CardT
 
 ## `IncrementalAuthorization`
 
-Add an incremental charge to an existing authorized transaction. Use this when the final amount is higher than the initially authorized amount. The result is delivered via the [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) callback.
+The `IncrementalAuthorization` method adds an incremental charge to an existing authorized transaction, and delivers the result through the [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) callback. It's reserved for a future multi-step flow and isn't required today: for the current single-step behavior, see below.
 
 ### Single-step incremental authorization
 
@@ -248,7 +248,7 @@ For most use cases, you don't need to call this API directly. Nayax Core handles
 5. If it fails, Nayax Core settles the transaction for the original pre-authorized amount ($10.00).
 
 <Note>
-  The `IncrementalAuthorization` method and `IncrementalAuthorizationResponse` callback below are reserved for a future multi-step incremental authorization flow. They aren't required for the single-step flow described above.
+  Nayax doesn't yet support the multi-step flow server-side. Calling `IncrementalAuthorization` today has no effect beyond what's described above.
 </Note>
 
 <Warning>

@@ -106,10 +106,10 @@ This event is triggered after a card token is successfully retrieved.
   This event is only available for the Android operating system.
 </Warning>
 
-The `IncrementalAuthorizationResponse` event is triggered when an [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) call completes, whether it succeeds or fails.
+The `IncrementalAuthorizationResponse` event triggers when an [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) call completes, whether it succeeds or fails. It's reserved for a future multi-step flow and isn't required today: for the current single-step behavior, see [Single-step incremental authorization](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#single-step-incremental-authorization).
 
 <Note>
-  This callback is reserved for a future multi-step incremental authorization flow. For the single-step flow Nayax Core handles automatically today, see [Single-step incremental authorization](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#single-step-incremental-authorization).
+  Nayax doesn't yet support the multi-step flow server-side. `IncrementalAuthorizationResponse` won't fire beyond what's described above.
 </Note>
 
 ```java Java
@@ -288,7 +288,7 @@ EMV Core calls `TransactionComplete` when a transaction completes, whether it su
     | Parameter                | Description                                                                                                                                    |
     | :----------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------- |
     | **id**                   | Command ID.                                                                                                                                    |
-    | **status**               | Transaction result: `OK`, `Declined`, `Error`, `Timeout`, `Cancelled`, or `LocalCLP`.                                                         |
+    | **status**               | Transaction result: `OK`, `Declined`, `Error`, `Timeout`, `Cancelled`, `LocalCLP`, or `PollContinuous`.                                                         |
     | **errorCode**            | Numerical error code. `0` when there is no error.                                                                                             |
     | **errorDescription**     | Short technical description of the error, for developer and support use. Do not display to users.                                              |
     | **transactionId**        | Transaction ID. Use this value in `ConfirmTransaction` or `VoidTransaction`.                                                                   |
@@ -314,7 +314,7 @@ If EMV Core doesn’t get an answer, it will re-send 2 times (for a total of 3 m
     | :------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
     | `errorDescription`        | A short technical description of the error intended to help developers and tech support personnel identify the problem. It should not be presented to users. |
     | `errorCode`               | A numerical code describing the error if one occurs. See the table below for details on each code.                                                           |
-    | `status`                  | Possible statuses: OK, Declined, Error, Timeout, Cancelled, LocalCLP.                                                                                        |
+    | `status`                  | Possible statuses: OK, Declined, Error, Timeout, Cancelled, LocalCLP, PollContinuous.                                                                                        |
     | `amountAuthorized`        | Amount approved for the transaction in major units (for example, dollars, not cents). May be lower than the original request if the card is prepaid.                                          |
     | `amountRequested`         | Amount requested for transaction approval in major units (for example, dollars, not cents).                                                                                                                   |
     | `authorization_Code`      | PSP Transaction Identifier issued for approved transactions (EVO, Apriva, Traderoot).                                                                        |

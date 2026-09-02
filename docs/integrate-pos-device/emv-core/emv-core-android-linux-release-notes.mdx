@@ -37,7 +37,7 @@ This version includes the following improvements, fixes, and known issues for th
 <Accordion title="Improvements" icon="rocket">
   ### **1-Step Incremental Authorization (Android Only) (#7462)**
 
-  Adds one-step incremental authorization, letting you adjust the authorized amount in a single call via the new [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) method. The result arrives through the new [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) callback.
+  Settling a transaction for more than its pre-authorized amount now automatically triggers an incremental authorization for the difference — see [Single-step incremental authorization](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#single-step-incremental-authorization). This release also adds the [`IncrementalAuthorization`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/payment-1#incrementalauthorization) method and [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) callback, reserved for a future multi-step flow and not required for the single-step behavior above.
 
   ***
 
@@ -152,6 +152,12 @@ This version includes the following improvements, fixes, and known issues for th
   ### **Foreground Service (#7712)**
 
   The EMV Core service now runs in the foreground, preventing the OS from killing it.
+
+  ***
+
+  ### **New UNO-mini Firmware (EMVSC_v071749)**
+
+  Adds Type B card reading support (for Autel). This firmware is valid for the Linux, Android, and RTOS v1.5 SDKs. RTOS v1.0 should continue using firmware `EMVSC_v071652.oef`.
 </Accordion>
 
 <Accordion title="Fixes" icon="wrench">

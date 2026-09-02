@@ -245,7 +245,7 @@ EMV Core 等待呈现卡片，读取数据，并触发 `CardTokenReceived` 事�
 
 ## `IncrementalAuthorization`
 
-为现有已授权交易添加增量扣款。当最终金额高于最初授权的金额时，使用此方法。结果通过 [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) 回调返回。
+`IncrementalAuthorization` 方法为现有已授权交易添加增量扣款，并通过 [`IncrementalAuthorizationResponse`](/docs/integrate-pos-device/emv-core/sdk-methods-functions/event-callbacks#incrementalauthorizationresponse) 回调返回结果。该方法是为未来的多步流程保留的，目前无需使用：如需了解当前的单步行为，请参阅下文。
 
 ### 单步增量授权
 
@@ -258,7 +258,7 @@ EMV Core 等待呈现卡片，读取数据，并触发 `CardTokenReceived` 事�
 5. 如果失败，Nayax Core 会以原始预授权金额（10.00 美元）结算交易。
 
 <Note>
-  下方的 `IncrementalAuthorization` 方法和 `IncrementalAuthorizationResponse` 回调是为未来的多步增量授权流程保留的，上述单步流程无需使用它们。
+  Nayax 目前尚未在服务器端支持多步流程。目前调用 `IncrementalAuthorization` 除上述内容外不会产生其他效果。
 </Note>
 
 <Warning>

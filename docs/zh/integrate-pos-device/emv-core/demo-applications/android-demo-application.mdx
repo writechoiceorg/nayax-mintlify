@@ -88,13 +88,22 @@ SDK 包含以下文件:
    <Frame>
      ![](/images/docs/android-demo-application/image5.png)
    </Frame>
-6. 您也可以继续执行另一笔授权。根据 `PMT_KIOSK_AUTOCONFIRM` 配置选项，之前的交易可能会保持开放状态（Authorized），或被自动确认。
+6. 您也可以继续执行另一笔授权。之前的交易可能会保持开放状态（Authorized）。
 
 ### Config 页面
 
 <Frame>
   ![](/images/docs/android-demo-application/image6.png)
 </Frame>
+
+### External settlement 示例设置
+
+要在演示应用中模拟 [External Settlement](/docs/integrate-pos-device/emv-core/payment-flows/pre-authorization-with-external-settlement),请向 Nayax 支持团队获取以下参数,并在示例应用的 `settings.java` 文件中设置:
+
+- `externalSettlementTokenId`
+- `externalSettlementToken`
+- `externalSettlementIntegratorId`
+- `externalSettlementSignKey`
 
 在 Config 页面,您可以测试 `GetAttribute` 命令:
 
