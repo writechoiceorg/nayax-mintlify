@@ -1,0 +1,117 @@
+---
+title: "Marshall Java SDK 发布说明"
+sidebarTitle: "Java"
+description: "追踪 Marshall Java SDK 发布时的变化。"
+rss: true
+---
+
+Nayax 在此页面记录 Marshall Java SDK 的变化。使用页面顶部的图标订阅 RSS 源，以便在有新发布时获得通知。
+
+<Note>
+0.1.6.x patch 系列中的某些功能需要 VPOS 版本 4.0.8.23-RC3 或更新的版本。请查看下表以了解该功能是在哪个 patch 版本中推出的。
+</Note>
+
+<Update
+  label="Java 0.1.6.23 (Current)"
+  rss={{
+    title: "Java SDK 0.1.6.23: missed-ack 修复",
+    description: "修复：missed-ack 问题。"
+  }}
+>
+
+每个 Java SDK patch 都在下表中列出，从当前版本到首个发布版本。
+
+| Version | Summary |
+|---|---|
+| **0.1.6.23 (Current)** | **已修复 missed-ack 问题。** |
+| 0.1.6.22 | 修复了链接断开问题，其中错过的 ack 停止了心跳 |
+| 0.1.6.21 | <ul><li>改进链接可靠性</li><li>修复了虚假重传</li></ul> |
+| 0.1.6.20 | 修复了 rx 和 tx 线程在 `m_pending_tx_msg` 访问上的竞争条件 |
+| 0.1.6.19 | **已添加**：<ul><li>`pre_auth_amount_config`（0x8c）vend 子命令，包括消息类、decode/encode 支持、工厂方法以及公共 API 中的事件处理</li><li>演示应用程序菜单选项，用于测试预授权金额配置</li></ul> |
+| 0.1.6.18 | 修复了 `session_end` 超时过期过早的问题，导致 `reader_always_on` 触发过早 |
+| 0.1.6.17 | **已修复**：<ul><li>`msg_remote_selection_t` encode 曾是一个空存根；现在对所有字段进行编码（可用资金、付款媒体 ID、付款类型、付款数据、物品编号、物品选项）</li><li>`msg_setup_max_min_prices_t` encode 缺少其子命令字节，并且货币代码编码有错别字</li><li>`msg_expansion_t` 现在在 decode/encode 之前进行空值检查，防止 FTL-retry-deny 情况下的崩溃</li><li>`msg_mdb_rsp_t` decode 现在正确实例化 `msg_ftl_retry_deny_t`</li></ul> |
+| 0.1.6.16 | <ul><li>添加了外部读卡器命令</li><li>修复了读卡器状态命令，现在也可在始终空闲模式下工作</li></ul> |
+| 0.1.6.15 | 在 `vend_request` 和 `close_session` 中添加了完整性检查：两者都返回一个布尔值，并拒绝超过许可金额的价格（当禁用 `long_price` 时为 65k） |
+| 0.1.6.14 | <ul><li>为始终空闲模式添加了实时价格变更支持，即使读卡器已启用</li><li>更新了多 vend 请求日志</li></ul> |
+| 0.1.6.13 | 修复了 `vend_multi_close_session` 编码 |
+| 0.1.6.12 | <ul><li>添加了防护措施，防止在没有链接的情况下发出 vend、socket 和常规操作，从而防止不必要的崩溃</li><li>优化了 `eth_port` 日志记录</li></ul> |
+| 0.1.6.11 | 修复了多 vend 多会话关闭中的不正确会话 ID 编码 |
+| 0.1.6.10 | <ul><li>添加了文件系统管理支持，现在 VPOS 提供这些服务</li><li>修复了一个错误，其中先前会话的卡信息在会话完成后未被清除</li><li>改进了 `vmc_link` 缓冲管理，修复了来自缓冲区溢出的可能重传和帧丢失</li></ul> |
+| 0.1.6.09 | <ul><li>添加了扩展显示控制支持</li><li>SDK 版本字符串现在也报告 SDK 语言</li></ul> |
+| 0.1.6.08 | <ul><li>修复了帧大小检测以支持不同的 Marshall 消息大小</li><li>在端口接口中添加了 `flush()` 调用</li></ul> |
+| 0.1.6.07 | <ul><li>添加了网站 ID 和品牌名称通过传输数据传送到机器</li><li>添加了技术员模式命令以远程打开门</li><li>更新了日志记录程序</li></ul> |
+| 0.1.6.06 | **已修复**：<ul><li>`fw_info` 字符串复制，可能在字符串末尾附加垃圾信息</li><li>`msg_alert` 字符串解码错误</li></ul> |
+| 0.1.6.05 | <ul><li>现在可以显式设置机器子类型，而不是硬编码</li><li>修复了影响多会话多 vend 帧的编码错误</li><li>更新了 `entry_type` 枚举</li></ul> |
+| 0.1.6.04 | <ul><li>添加了 `long_price` 支持，这是一种与 VPOS Media 相关的 4 字节价格功能，并修复了负价格的显示</li><li>添加了对 QR 码卡类型和 QR 码读卡器第三方授权的支持</li><li>修复了 Marshall 最大消息长度，与 VPOS Media 相关</li><li>`vend_session_data_t` 现在公开所有可为空的字段，以便调用方可以判断是否分配了值</li><li>为日本市场添加了品牌选择位</li><li>多会话现在可以与同一会话中的多 vend 一起工作</li><li>在 `onSessionInfo` 中添加了 `final_price` 字段</li><li>在所有 vend API 中添加了链接准备检查，以防止在没有链接的情况下调用时崩溃</li><li>版本字符串现在为非官方构建追加"rc"</li></ul> |
+| 0.1.6.03 | 移除了在未注册回调处理程序时对 `vmc_vend_t` 的虚假警告，用 `marshall_sdk` 和 `marshall_master_sdk` 之间共享的空值检查替换 |
+| 0.1.6.02 | **已修复**：<ul><li>VPOS 序列号现在以正确排列的字符串形式提供，而不是原始字节</li><li>`marshall_func_code_transfer_data` 中的拼写错误</li></ul> |
+| 0.1.6.01 | <ul><li>SDK 不再直接捆绑 `lowlevel_serial.java`；现在注入 `serial_port_i` 实现（提供经认证的 FTDI 和 PC 端口实现）</li><li>显示控制 API 签名现在直接接受 `layout_t` 实例</li></ul> |
+| 0.1.5.27 | 修复了重传错误，其中两个同时到达的数据包可能会丢失，以及 `mdb_rsp` 解析和 `lowlevel_serial` 缓冲管理中的修复 |
+| 0.1.5.26 | 在 `vend_session_t` 中添加了 `session_id` 用于多会话引用、更多日志记录、修复了跳过用户回调的 `msg_display_event_t` 解析错误 |
+| 0.1.5.25 | 修复了 `card_balance` 解码、transfer_data 解析崩溃和 final_price 解析；为解码的 transfer_data 字段添加了日志 |
+| 0.1.5.24 | 修复了等待 `end_session` 时的停顿/死锁、在整个事务中添加了传输数据消息、添加了 SDK 配置日志记录 |
+| 0.1.5.23 | 修复了在 `on_begin_session` 到达但没有实际启动会话时的未定义状态机状态 |
+| 0.1.5.22 | 在异常发生时记录可能的异常 |
+| 0.1.5.20-21 | 修复了在发送 `reader_enable` 时失去通信可能导致的崩溃；清理了日志 |
+| 0.1.5.19 | 修复了 rx/tx 线程之间导致已 ack 的数据包重传的竞争条件；改进了日志可读性 |
+| 0.1.5.18 | 修复了多会话设置上的 e-receipt；现在可在始终空闲设置上切换到信息会话 |
+| 0.1.5.17 | 添加了检查余额会话类型、卡子类型和卡余额 transfer_data，以及 vend 折扣/最终价格计算 |
+| 0.1.5.16 | 修复了物品价格/代码 API 类型（整数到短整数）；修复了在卡呈现后但在请求 vend 之前取消会话时的崩溃 |
+| 0.1.5.15 | 修复了始终空闲模式上的会话取消和未填充的 `transaction_id_len`；`session_status` 现在由 SDK 填充；优化了 `low_level_serial` CPU 使用率 |
+| 0.1.5.14 | 在 rx 重新排列时转储数据包用于调试；改进了压力下的 `lowlevel_serial` 处理 |
+| 0.1.5.13 | 添加了 `vend_status(bool)` 用于明确 vend 成功、修复了 vend 取消时序错误、在会话中添加了总收费/折扣、日志中的绝对 POSIX 时间戳以及辅助日志记录回调 |
+| 0.1.5.12 | `onStatus` 获得了额外的数据参数、添加了 `device_not_available_reason` 枚举、修复了错误的 transfer_data 解析、改进了示例应用程序状态报告 |
+| 0.1.5.11 | 添加了 `Log.console(boolean)`、新的 transfer_data 字段（固件版本）、新的设备状态枚举以及 `onSessionTimeout(id)` 事件 |
+| 0.1.5.10 | 修复了 vend 拒绝持久模式在成功事务后保持开启的问题；添加了 `unit_of_measure` 枚举值和新的设备状态枚举 |
+| 0.1.5.9 | 修复了 `fw_info` 字段排列和 vend 会话状态请求错误；改进了 `low_level_serial` 链接可靠性；添加了远程 vend 支持 |
+| 0.1.5.8 | 修复了 `vmc_socket` 繁忙/重传超时处理 |
+| 0.1.5.7 | 修复了卡刷后用户立即取消时的竞争条件、`lowlevel_serial` 因故障数据包长度挂起以及 `vmc_socket` 繁忙调制解调器重传错误 |
+| 0.1.5.6 | 移除了 EV 扩展、修复了次要 API 错误和 CPU 饥饿检测打印错误 |
+| 0.1.5.5 | 与 Marshall 3.0 一致：会话状态查询、读卡器状态 API、条目类型枚举、QR e-receipt 和设备 Marshall 版本查询 |
+| 0.1.5.4 | 修复了 UI API 错误、改进了 CPU 分析、在 `fw_info` 中添加了 VMC 信息字段、限制了多 vend 产品以避免缓冲区溢出 |
+| 0.1.5.3 | 在 `fw_info` 中添加了 VMC 信息字段、限制了多 vend 产品以避免缓冲区溢出 |
+| 0.1.5.2 | 添加了 CPU 监控以用于饥饿调试；在 CRC 错误时记录数据包字节流 |
+| 0.1.5.1 | 修复了 UI 事件回调 API 错误 |
+| 0.1.5.0 | 添加了 `onStatus` vend 回调并更新了关闭会话状态消息 |
+| 0.1.4.8 | 更新至最新 Marshall 规范，添加了产品代码和产品价格 TLV 字段 |
+| 0.1.4.7 | 启用了多实例 SDK 使用，将多个 VPOS 连接到单个 VMC 机器 |
+| 0.1.4.6 | Mifare 卡 UID 的特殊编码处理 |
+| 0.1.4.5 | 改进了对编码为整数或 ASCII 字符串的卡的 MSR 处理 |
+| 0.1.4.4 | 更新了 EV 扩展；`onReady()` 现在返回已结束的会话；重命名了 `requestTime`/`setDisplayText`；在 `vmc_general` 中添加了显示控制 |
+| 0.1.4.2 | 更新了示例应用程序的 paymarket 演示 |
+| 0.1.4.1 | 添加了日志重定向到文件流；修复了来自 `onTransactionInfo` 中 `get_transaction_id()` 的无效日期 |
+| 0.1.4.0 | 添加了串行数据包转储级别参数和 vend 拒绝策略参数 |
+| 0.1.3.5 | 更新至最新 Marshall 协议；链接建立现在报告商户 ID、终端 ID 和机器位置；示例应用程序获得了多会话/多 vend 演示 |
+| 0.1.3.4 | 修复了需要读卡器保持启用的始终空闲错误 |
+| 0.1.3.3 | 修复了 `alert` API 上的崩溃；修复了 `reader_always_on` 以仅在显式禁用始终空闲时应用 |
+| 0.1.3.2 | 添加了调试标志以静默日志输出和始终空闲示例代码 |
+| 0.1.3.1 | 在演示应用程序中更新了 `libjserial` |
+| 0.1.3.0 | 重新组织了示例代码并为该文件夹添加了文档 |
+| 0.1.2.9 | 修复了始终开启功能，该功能误被移除 |
+| 0.1.2.8 | 次要清理；添加了 paymarket 机器类型；改变了 EV 充电器机器类型 |
+| 0.1.2.7 | 添加了 socket MTU/超时配置、Marshall 协议 2.0 支持、始终空闲 MDB 模式、通信超时修复以及可用资金转换修复 |
+| 0.1.2.6 | 添加了 SDK 版本方法、TCP socket 示例、机器类型配置并改进了日志记录 |
+| 0.1.2.5 | 改进了 socket 处理、移除了虚假不匹配警告、在 CRC 错误时添加了 lowlevel 重置以提高可靠性 |
+| 0.1.2.4 | 修复了从空队列传输的链接错误；SDK 现在作为带有演示应用程序的 `.JAR` 发布 |
+| 0.1.2.3 | 更新了支付 API |
+| 0.1.2.2 | 在 vend 会话上添加了 transfer_data 结构解析以获得可读数据；更新了示例应用程序 |
+| 0.1.2.1 | 改进了日志记录、添加了多 vend 示例、添加了 `multi_vend_support` 标志、修复了 `onReady` API 错误 |
+| 0.1.2.0 | 将多 vend API 统一为单个 `vend_request`，同时支持单 vend 和多 vend 情况 |
+| 0.1.1.6 | 处理来自 VPOS 的异步 socket 关闭和会话关闭请求；修复了取消/关闭时序错误 |
+| 0.1.1.5 | 向 DCS 报告数量（需要 VPOS 4.0.1.5 rc9+）；添加了事务 ID 报告 API |
+| 0.1.1.4 | 将关闭会话与新格式对齐 |
+| 0.1.1.3 | 修复了向 DCS 的模型/版本报告；将心跳计时器与配置的超时分离 |
+| 0.1.1.2 | 添加了链接统计、修复了紧时序重传问题和缓冲区索引解析错误 |
+| 0.1.1.1 | 修复了低级串行模板文件中的问题 |
+| 0.1.1.0 | 修复了重传索引错误 |
+| 0.1.0.9 | 处理搭载 Marshall 消息 |
+| 0.1.0.8 | 改进了 `lowlevel_serial` 和繁重 socket 工作期间的响应时间 |
+| 0.1.0.7 | 添加了多 vend 支持、预付 `pay` API 以及信用卡最后 4 位数字 transfer_data |
+| 0.1.0.6 | 修复了导致 Marshall 消息出序的罕见高负载错误 |
+| 0.1.0.5 | 添加了 `reader_always_on` 配置参数 |
+| 0.1.0.4 | 添加了现金销售通知 API 和链接事件回调；修复了不正确的会话状态错误 |
+| 0.1.0.3 | 添加了 socket 回调用于会话控制和显示消息/警报/时间请求消息 |
+| 0.1.0.2 | 将 `lowlevel_serial` 移出 SDK 作为特定于应用程序的关注；添加了向 vending 客户端的配置报告 |
+| 0.1.0.1 | 修复了 FTP socket 关闭问题；为客户端添加了 VPOS 配置通知 |
+
+</Update>

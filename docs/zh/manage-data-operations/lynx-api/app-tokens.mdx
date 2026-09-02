@@ -1,0 +1,137 @@
+---
+title: "应用令牌（JWT）"
+keywords: ["app token", "Add App Token", "Lynx Token", "app-token", "customer-managed token", "customer-managed access token", "appScope", "internalScope", "scope", "access token lifetime", "customer token management", "token claims", "refresh token", "issue access token", "exchange refresh token", "token troubleshooting", "401 unauthorized", "403 forbidden", "429 too many requests", "token storage", "token limits"]
+metadata:
+  og:description: "在 Nayax Core 中创建应用令牌，为您的下游客户提供作用域受限、时间受限的 Lynx API 访问权限。"
+---
+
+应用令牌允许您向下游客户或集成授予有限的、时间受限的 API 访问权限。每个令牌都带有您设置的过期日期和 Nayax 管理员分配的权限，范围仅限于集成所需的内容。
+
+## 令牌类型
+
+Nayax Core 在 **Add Token** 下提供两个选择。此流程请选择 **App Token**。应用令牌是 JWT。**Lynx Token** 是 API 密钥，详见[安全与令牌](/docs/manage-data-operations/lynx-api/security#access-token)。
+
+您创建的应用令牌是刷新令牌。您将其交换为生命周期短的访问令牌，该访问令牌用于验证您的 Lynx API 请求。
+
+| 令牌类型 | 生命周期 | 用途 |
+| --- | --- | --- |
+| 应用令牌（刷新令牌） | 最多 100 年 | 请求访问令牌 |
+| 访问令牌 | 24 小时 | 进行 Lynx API 请求 |
+
+## 作用域
+
+作用域是定义令牌可以访问什么的权限字符串。作用域遵循格式 `{domain}:{action}` 或 `{domain}:{resource}:{action}`，其中域标识作用域适用的区域，可选的资源将其缩小到该域内的特定资源，操作标识允许的操作。
+
+常见作用域示例：
+
+- `machines:read` 授予对机器数据的读取访问权限。
+- `orders:*:read` 授予对所有订单相关资源的读取访问权限。
+- `users:app-token:create` 授予创建应用令牌的权限。
+
+<Warning>
+避免分配单独的 `*` 作用域。它授予对每个资源和操作的完全访问权限，这违反了将令牌限定到特定集成的目的。
+</Warning>
+
+## 声明类型
+
+应用令牌在三种声明类型中的一种中携带其权限，每种都有自己的优先级和验证行为。
+
+| 声明 | 用途 | 优先级 | 验证 |
+| --- | --- | --- | --- |
+| `appScope` | 验证外部服务和集成 | 在 `scope` 之前检查 | 如果存在，必须完全匹配 |
+| `internalScope` | 验证内部 Nayax 微服务 | 在 `scope` 之前检查 | 如果存在，必须完全匹配 |
+| `scope` | 标准 OAuth2（基于令牌的授权方案）用户级作用域 | 最后检查，作为后备 | 在其他授权检查通过后检查 |
+
+对于大多数客户集成，`appScope` 是 Nayax 管理员分配的声明类型，用于描述集成需要访问的机器、设备或订单。
+
+## 前置条件
+
+您需要一个 Nayax Core 账户来创建应用令牌。Nayax 管理员必须在您使用之前分配其作用域和声明类型，因此请求令牌涉及等待批准，而不是完全自助流程。
+
+## 创建应用令牌
+
+您在 Nayax Core 中自己创建应用令牌，但您不能选择其作用域或声明类型。Nayax 管理员单独分配这些。
+
+<Steps>
+  <Step title="在 Nayax Core 中创建应用令牌">
+    从[安全与令牌](/docs/manage-data-operations/lynx-api/security#access-token)导航到 **User Tokens** 部分，然后点击 **Add Token**。
+
+    <Frame><img src="/images/docs/security/add-token.png" /></Frame>
+
+    在 **Add App Token** 对话框中，选择 **App Token**，输入可选的 **Token Name**，例如 `Analytics Platform - Read Only`，设置 **Expiration Date**，然后点击 **Generate**。
+
+    <Frame><img src="/images/docs/security/app-token.png" /></Frame>
+  </Step>
+  <Step title="等待 Nayax 管理员分配作用域">
+    管理员根据集成的需求选择上面描述的 `appScope`、`internalScope` 或 `scope` 声明。您无法自己设置这些。
+  </Step>
+</Steps>
+
+一旦管理员分配了作用域，您就获得了具有请求的声明和过期时间的作用域化应用令牌，准备好交换为访问令牌。
+
+## 交换应用令牌
+
+在发出请求之前，使用下面的 Lynx API 端点将其交换为访问令牌。
+
+```bash
+curl -X POST "https://lynx-api.nayax.com/v1/issue-access-token" \
+  -H "Authorization: jwt <YOUR_REFRESH_TOKEN>"
+```
+
+<Warning>
+Lynx API 端点期望 `Authorization: jwt <YOUR_REFRESH_TOKEN>`，而不是 `Bearer`。将具有 `Bearer` 方案的刷新令牌发送到此端点会失败。
+</Warning>
+
+端点以以下格式返回访问令牌：
+
+```json
+{
+  "Token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+`Token` 是访问令牌本身，是一个 JWT。将其用作后续 Lynx API 请求上的 `Bearer` 凭证。例如，检索机器列表：
+
+```bash
+curl -X GET "https://qa-lynx.nayax.com/operational/v1/machines" \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
+```
+
+## 安全最佳实践
+
+请在请求和管理应用令牌时遵循这些做法。
+
+### 存储
+
+将应用令牌存储在安全的密钥管理系统中，或者如果您管理自己的服务器，则将其存储为环境变量。对令牌进行静态加密。切勿将令牌存储在纯文本文件中、将其提交到版本控制或将其包含在 URL 中。
+
+### 作用域和过期时间
+
+仅授予集成需要的作用域，并请求涵盖其使用案例的最短过期时间，而不是随意创建令牌。Nayax 限制每个用户 50 个令牌，因此请规划跨需要相同访问权限的集成的令牌重用。
+
+## 故障排查
+
+如果使用应用令牌或其生成的访问令牌的请求失败，请检查以下常见原因。
+
+### 401 未授权
+
+令牌无效或已过期。验证令牌未超过其过期日期，并且您将其以正确的授权方案发送到您调用的端点。
+
+### 403 禁止访问
+
+令牌的作用域不包括您请求的资源或操作。将端点的必需作用域与您的令牌上的 `appScope`、`internalScope` 或 `scope` 声明进行比较，并在需要时请求具有缺失作用域的令牌。
+
+### 429 请求过多
+
+您已超过速率限制。缓存和重用访问令牌的完整 24 小时生命周期，而不是在每次调用时请求新令牌。
+
+## 后续步骤
+
+<CardGroup cols={2}>
+  <Card title="检索机器信息" icon="magnifying-glass" href="/docs/manage-data-operations/lynx-api/machines/retrieve-machine-information">
+    使用访问令牌进行第一个认证调用。
+  </Card>
+  <Card title="Lynx API 参考" icon="book" href="/reference/manage-data-operations/lynx-api/overview">
+    浏览完整的可用端点集合。
+  </Card>
+</CardGroup>

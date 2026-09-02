@@ -1,0 +1,63 @@
+---
+title: "updatePinpadTransactionStatus"
+description: "将外部授权交易的结果报告回设备。"
+metadata:
+  og:description: "updatePinpadTransactionStatus 方法在使用 readCardForExternalTransaction 读取卡后，将外部授权交易的结果报告回设备。"
+---
+
+`updatePinpadTransactionStatus` 方法在使用 [`readCardForExternalTransaction`](/docs/integrate-pos-device/tweezercomm/device-methods/readcardforexternaltransaction) 读取卡后，将外部授权交易的结果报告回设备。有关此流程的更多信息，请参阅 [密码键盘模式](/docs/integrate-pos-device/tweezercomm/pinpad-mode)。
+
+## 请求
+
+<Note>
+**JSON-RPC 2.0**
+
+TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关请求结构和发送方式的更多详情，请参阅 [开始](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started)。
+</Note>
+
+在请求中，确保配置以下内容：
+
+* `method` 字段必须设置为 `updatePinpadTransactionStatus`。
+* 在 `params` 中，服务必须设置为 `engine`。
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "updatePinpadTransactionStatus",
+    "id": "123454352",
+    "params": [
+        "engine",
+        {
+            "pinpadCardDataId": "a1b2c3d4e5f6",
+            "tranResultStatus": 1,
+            "processorTerminalId": "12345",
+            "paymentMethodId": "1",
+            "tranType": 1
+        }
+    ]
+}
+```
+
+### 请求参数
+
+下表描述了请求的参数：
+
+| 名称                  | 类型    | 描述                                                                                          |
+| --------------------- | ------- | ------------------------------------------------------------------------------------------------------ |
+| `pinpadCardDataId`    | string  | 由 [`readCardForExternalTransaction`](/docs/integrate-pos-device/tweezercomm/device-methods/readcardforexternaltransaction) 返回的标识符。 |
+| `tranResultStatus`    | integer | 外部授权的结果。`1` = PINPAD_ONLY_APPROVED，`2` = PINPAD_ONLY_DECLINED，`3` = PINPAD_ONLY_CANCELED。 |
+| `processorTerminalId` | string  | 处理器终端的商户 ID。                                                                 |
+| `paymentMethodId`     | string  | 支付方式标识符。目前仅支持 `1`（信用卡）。                              |
+| `tranType`            | integer | 交易类型代码。请参阅下面的交易类型值。                                              |
+
+**交易类型值**
+
+| 值 | 名称                          |
+| ----- | ----------------------------- |
+| `1`   | 销售                           |
+| `2`   | 退款                         |
+| `3`   | 预授权              |
+| `4`   | 延期授权         |
+| `5`   | CNP                            |
+| `6`   | 预授权完成   |
+| `7`   | 作废                           |

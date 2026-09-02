@@ -924,6 +924,14 @@
                         "root": "docs/zh/integrate-pos-device/marshall/marshall-faqs/index"
                       }
                     ]
+                  },
+                  {
+                    "group": "Marshall Release Notes",
+                    "pages": [
+                      "docs/zh/integrate-pos-device/marshall/marshall-java-release-notes",
+                      "docs/zh/integrate-pos-device/marshall/marshall-csharp-release-notes",
+                      "docs/zh/integrate-pos-device/marshall/marshall-c-release-notes"
+                    ]
                   }
                 ]
               },
@@ -936,6 +944,7 @@
                       "docs/zh/integrate-pos-device/marshall-pro/getting-started/index",
                       "docs/zh/integrate-pos-device/marshall-pro/getting-started/marshall-pro-integration-process",
                       "docs/zh/integrate-pos-device/marshall-pro/getting-started/forecourt-architecture",
+                      "docs/zh/integrate-pos-device/marshall-pro/getting-started/network-requirements",
                       "docs/zh/integrate-pos-device/marshall-pro/getting-started/best-practices",
                       "docs/zh/integrate-pos-device/marshall-pro/getting-started/security-digital-signatures"
                     ]
@@ -995,6 +1004,12 @@
                           "docs/zh/integrate-pos-device/marshall-pro/methods/utility/print"
                         ]
                       }
+                    ]
+                  },
+                  {
+                    "group": "Marshall Pro Release Notes",
+                    "pages": [
+                      "docs/zh/integrate-pos-device/marshall-pro/fuelapp-release-notes"
                     ]
                   },
                   {
@@ -1095,7 +1110,10 @@
                           "docs/zh/integrate-pos-device/tweezercomm/device-methods/displayqr",
                           "docs/zh/integrate-pos-device/tweezercomm/device-methods/abortdisplayqr",
                           "docs/zh/integrate-pos-device/tweezercomm/device-methods/abortdisplay",
-                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/sendgeneralevent"
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/sendgeneralevent",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/readcardforexternaltransaction",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/updatepinpadtransactionstatus",
+                          "docs/zh/integrate-pos-device/tweezercomm/device-methods/getlocation"
                         ],
                         "root": "docs/zh/integrate-pos-device/tweezercomm/device-methods/index"
                       },
@@ -1334,7 +1352,13 @@
                     "group": "Lynx API Guides",
                     "pages": [
                       "docs/zh/manage-data-operations/lynx-api/lynx-overview",
-                      "docs/zh/manage-data-operations/lynx-api/security",
+                      {
+                        "group": "Security & Token",
+                        "root": "docs/zh/manage-data-operations/lynx-api/security",
+                        "pages": [
+                          "docs/zh/manage-data-operations/lynx-api/app-tokens"
+                        ]
+                      },
                       {
                         "group": "Cards",
                         "pages": [
@@ -1370,6 +1394,7 @@
                           "docs/zh/manage-data-operations/lynx-api/machines/getting-a-machines-last-sales",
                           "docs/zh/manage-data-operations/lynx-api/machines/get-monyx-id",
                           "docs/zh/manage-data-operations/lynx-api/machines/updating-a-machines-attribute",
+                          "docs/zh/manage-data-operations/lynx-api/machines/restart-a-machine",
                           "docs/zh/manage-data-operations/lynx-api/machines/getting-a-machines-id-by-the-devices-serial-number",
                           "docs/zh/manage-data-operations/lynx-api/machines/getting-a-machines-last-sales-ereceipt-information",
                           "reference/manage-data-operations/lynx-api/machine-types"
