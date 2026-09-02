@@ -1,0 +1,166 @@
+---
+title: "Marshall Pro 网络要求"
+sidebarTitle: "网络要求"
+description: "端口、域名和 IP 范围，用于白名单，以便 Marshall Pro 终端（包括 VPOS Media-5）能连接到 Nayax。"
+keywords: ["network requirements", "firewall whitelist", "VPOS Media-5", "VPOSM5", "Castles TMS", "required ports", "IP ranges", "HawkBit OTA", "forecourt controller network", "Marshall Pro network requirements"]
+metadata:
+  og:description: "Marshall Pro（燃料）支持 VPOS Media-5 终端以及前庭控制器。在部署任何 Marshall Pro 硬件之前，你的网络团队"
+---
+
+Marshall Pro（燃料）支持 VPOS Media-5 终端以及前庭控制器。在部署任何 Marshall Pro 硬件之前，你的网络团队必须为到 Nayax 云的出站流量打开以下端口、域名和 IP 范围。
+
+## 网络先决条件
+
+DHCP 连接为 Marshall Pro 终端提供即插即用的网络访问，Nayax 建议使用 DHCP 而不是静态 IP 分配。如果你的网络需要静态 IP，请在部署前向 Nayax 提供以下详细信息：
+
+* IP 地址
+* 以太网网关地址
+* DNS 地址
+* 以太网子网掩码
+
+静态 IP 配置需要与 Nayax 支持部门协调。
+
+DNS 解析对所有 Nayax 设备通信都是必需的；阻止 DNS 会完全阻止终端连接到 Nayax。
+
+<Note>
+Nayax Android 设备使用 Google 公共 DNS（`8.8.8.8`）。此地址必须可从你的网络访问。
+</Note>
+
+## 已注册的 IP 范围
+
+作为白名单单个域名的替代方法，你可以白名单完整的 Nayax 已注册 IP 范围。下表列出了覆盖所有地区的全球范围，以及以色列、德国和美国的更狭窄的逐国范围。
+
+| 范围 | IP 范围 |
+| :--- | :--- |
+| 全球范围 | `185.159.232.0/22` |
+| 全球范围 | `195.184.224.0/22` |
+| 以色列（IL） | `185.159.232.0/24` |
+| 德国（DE） | `185.159.234.0/24` |
+| 美国（US） | `185.159.233.0/24` |
+
+<Note>
+以色列、德国和美国的范围是 `185.159.232.0/22` 全球范围的子集。仅白名单该全球范围已经覆盖所有三个；除非你的防火墙策略需要更狭窄的规则，否则无需单独添加国家特定的行。
+</Note>
+
+## 必需的端口
+
+为来自 Marshall Pro 网络的出站流量打开以下端口。
+
+| 端口 | 协议 | 目的 |
+| :--- | :--- | :--- |
+| 443 | TCP | HTTPS 用于核心服务、入门和 CommerceAPI |
+| 9000 | TCP | Nayax 设备通信 |
+| 9005 | TCP | 遥测 |
+| 5000 | TCP | Nayax 设备通信 |
+| 26520 | TCP | 启动服务器连接 |
+| 8883 | TCP | MQTT（AWS IoT）用于 PayBridge 服务 |
+| 53 | UDP/TCP | Google 公共 DNS（`8.8.8.8`）由 Android 操作系统使用 |
+
+## 必需的域名
+
+将以下域名添加到你的防火墙或代理的白名单中。通配符条目（`*.domain`）覆盖所有子域名。
+
+### 核心域名
+
+这些域名对所有 Marshall Pro 部署都是必需的。
+
+| 域名 | 目的 |
+| :--- | :--- |
+| `*.nayax.com` | Nayax 平台服务 |
+| `*.nayax.net` | Nayax 平台服务 |
+| `commerceapib.nayax.com` | Nayax Core CommerceAPI 服务器（端口 443） |
+| `commerceapi.nayax.com` | Nayax Core CommerceAPI 服务器（端口 443） |
+| `mrs.nayax.com` | Nayax 设备入门、ROS（端口 443） |
+| `www.nayax.com` | 互联网连接检查（ICMP / ping） |
+| `checkip.amazonaws.com` | 外部 IP 验证（端口 443） |
+| `geoprimary.nayax.net` | TLV 引擎、地理主网关（端口 9000） |
+| `broker2.nayax.com` | 用于实时消息传递和遥测的 MQTT 代理（端口 1883） |
+| `brokerst1.nayax.com` | MQTT 代理、备用（端口 1883） |
+| `eu-broker5.nayax.com` | MQTT 代理、备用（端口 1883） |
+| `brokerir1.nayax.com` | MQTT 代理、备用（端口 1883） |
+| `hawkbit-vposm-prod.nayax.com` | VPOS 设备的 HawkBit OTA 更新服务器（端口 443） |
+
+### DCS 访问 URL
+
+Nayax 设备控制系统（DCS）需要以下 URL 可访问以供浏览和使用：
+
+* `il1.nayax.net`（端口 443）
+* `il2.nayax.net`（端口 443）
+* `backup.nayax.net`（端口 443）
+* `boot.nayax.net`（端口 443）
+
+### 第三方服务域名
+
+这些域名支持证书验证、安全检查和 Nayax 服务使用的云存储：
+
+* `s3.amazonaws.com`
+* `s3.eu-central-1.amazonaws.com`
+* `seal.verisign.com`
+* `www.verisign.com`
+* `extended-validation-ssl.verisign.com`
+* `trustsealinfo.verisign.com`
+
+## VPOS Media-5（Castles Technology）
+
+VPOS Media-5 使用来自 Castles Technology 的单独的终端管理系统（TMS）来进行应用部署、固件更新和远程配置。在 Marshall Pro 上部署 VPOS Media-5 需要下面的 Castles TMS 域名，以及上面的核心要求。
+
+### Castles TMS 域名
+
+以下 Castles TMS 域名处理 VPOS Media-5 的应用、固件和配置交付。
+
+| 域名 | 端口 | 目的 |
+| :--- | :--- | :--- |
+| `ctms-gw.eu.cashub.cloud` | 443, 1883 | 应用和固件更新的 TMS 网关 |
+| `cstore-gw.eu.cashub.cloud` | 443 | 应用商店网关 |
+| `rcg.eu.cashub.cloud` | 443 | 远程配置 |
+| `file.eu.cashub.cloud` | 443 | 文件交付服务 |
+| `prod-eu-cashub.s3.eu-west-2.amazonaws.com` | 443 | 用于包的 AWS S3 存储 |
+| `prod-eu-cashub.s3.dualstack.eu-west-2.amazonaws.com` | 443 | AWS S3 双栈存储 |
+
+### 连接性检查清单
+
+使用此检查清单确认你已白名单 VPOS Media-5 部署所需的所有内容，结合上面的 Castles TMS 域名和此页面前面的核心要求：
+
+* 上面"必需的端口"和"必需的域名"中的所有端口和域名
+* 上面的所有 Castles TMS 域名
+* HawkBit OTA 更新服务器（`hawkbit-vposm-prod.nayax.com`，端口 443），每个 VPOS 设备都需要
+* 如果你在以色列部署，还要白名单下面以色列部署地址
+
+<Warning>
+如果你没有白名单 Castles TMS 域名和 HawkBit OTA 服务器（`hawkbit-vposm-prod.nayax.com`），VPOS Media-5 设备无法接收软件更新、安全补丁或配置更改。
+</Warning>
+
+## 以色列部署
+
+本部分仅适用于以色列的部署。它列出了需要白名单的额外地址，用于付款处理和本地服务连接。
+
+| 服务 | 域名 / URL | IP 地址 | 端口 | 备注 |
+| :--- | :--- | :--- | :--- | :--- |
+| Shva（EMV） | `emv.shva.co.il` | `193.142.151.159` | 443 | 付款清算、必需 |
+| CommerceAPI（IL） | `il-commerceapib.nayax.com`、`il-commerceapi.nayax.com` | — | 443 | 以色列地区 CommerceAPI |
+| Graylog SPI | `log.modularity.co.il` | `34.245.120.119` | 12202 | 设备日志服务 |
+
+<Warning>
+Shva EMV 地址对于通过以色列付款网络的所有现场卡交易都是必需的。没有它，现场卡交易会失败。
+</Warning>
+
+## 远程支持（可选）
+
+对于远程技术支持会话，Nayax 可能需要 TeamViewer 访问。
+
+| 域名 | 端口 | 目的 |
+| :--- | :--- | :--- |
+| `*.teamviewer.com` | 5938, 443, 80 | 远程技术支持 |
+
+## 重要说明
+
+这些说明适用于每个 Marshall Pro 部署，无论设备或地区如何：
+
+* 所有连接都是从 Marshall Pro 设备到 Nayax 云的出站；不需要入站防火墙规则。
+* 如果你的网络使用 Web 代理，将上面列出的域名添加到其旁路列表中。
+* 此页面上的 IP 地址和域名可能会更改；Nayax 会通知客户任何更新。
+
+## 另请参阅
+
+* [前庭建筑](/docs/integrate-pos-device/marshall-pro/getting-started/forecourt-architecture)
+* [集成过程](/docs/integrate-pos-device/marshall-pro/getting-started/marshall-pro-integration-process)

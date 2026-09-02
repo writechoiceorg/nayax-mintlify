@@ -1,0 +1,55 @@
+---
+title: "Marshall C SDK 发布说明"
+sidebarTitle: "C"
+description: "跟踪 Marshall C SDK 发布时的变化。"
+rss: true
+---
+
+Nayax 在此页面上记录 Marshall C SDK 发布时的变化。使用页面顶部的图标订阅 RSS 源以获得新条目的通知。
+
+<Update
+  label="C 0.0.2.29 (28.10.2025) (Current)"
+  rss={{
+    title: "C SDK 0.0.2.29：传输数据、技术人员命令和错误处理改进",
+    description: "改进：通过传输数据传输站点 ID 和品牌名称，以及新的技术人员模式远程打开门的命令，增强的错误处理和更具描述性的消息。修复：与高 `com_id` 值相关的错误。"
+  }}
+>
+
+以下列出了每个 C SDK 版本，从当前版本到第一个发行版。
+
+| Version | Date | Summary |
+|---|---|---|
+| **0.0.2.29 (Current)** | **October 28, 2025** | **通过传输数据添加了站点 ID 和品牌名称传输，以及新的技术人员模式远程打开门的命令；增强了错误处理，改进了验证和更具描述性的消息；修复了与高 `com_id` 值相关的错误** |
+| 0.0.2.28 | January 30, 2025 | 修复了在 `session_begin` 之后和 `vend_request` 之前取消时的崩溃 |
+| 0.0.2.27 | December 16, 2024 | 交易数据现在会在交易完成后返回就绪模式时被清除 |
+| 0.0.2.26 | October 13, 2024 | 修复了取消信息会话时的崩溃 |
+| 0.0.2.25 | October 13, 2024 | 添加了电子收据支持；修复了处理从 VPOS 立即接收的连续帧的问题 |
+| 0.0.2.24 | September 25, 2024 | 修复了取消交易的问题 |
+| 0.0.2.23 | April 8, 2024 | 添加了 `long_price` 支持；`cpu_platform_get_time()` 现在返回 64 位值，修复了 50 天后的溢出；修复了演示应用的退出选项未实际退出的问题 |
+| 0.0.2.22 | April 8, 2024 | 添加了二维码输入模式和第三方授权支持、演示 API 使用情况的新示例应用程序，以及开箱即用的 Linux 和 Windows 平台支持 |
+| 0.0.2.21 | April 8, 2024 | 添加了显示控制 API（`vmc_general.h`）和 Keil 编译器支持 |
+| 0.0.2.16 | April 5, 2023 | 修复了信息会话以在始终空闲的设置中工作 |
+| 0.0.2.15 | April 4, 2023 | 添加了 `card_sub_type` 和 `card_balance` transfer_data 字段以及检查余额会话类型 |
+| 0.0.2.14 | January 4, 2023 | 添加了新的传输数据字段；更新了所有支付类型的折扣和最终价格逻辑 |
+| 0.0.2.13 | January 1, 2023 | 添加了新的传输数据字段 |
+| 0.0.2.12 | December 20, 2022 | 会话对象上的 `session_status` 现在由 SDK 填充以报告交易取消原因；添加了 `on_status` 事件回调、`vmc_vend_event_on_session_timeout` 事件和 `vmc_link_get_version()` |
+| 0.0.2.11 | December 12, 2022 | 修复了打印"中等"日志级别和发出信息会话时的分段错误、缺少的 `transaction_id_len` 以及始终空闲模式下的 vend 取消错误 |
+| 0.0.2.10 | December 6, 2022 | 改进了 rx 缓冲区管理以处理串联帧 |
+| 0.0.2.9 | October 18, 2022 | 添加了动态分配 `vmc_buffer_t` 数组的能力（在 `VMC_DYNAMIC_ALLOCATION` 后面）和 crc/链接统计；修复了套接字传输错误，使忙套接字现在为重传引发忙事件 |
+| 0.0.2.8 | August 24, 2022 | 添加了 `vend_status(bool)` 用于显式 vend 成功和会话结构上的总收费额（如有任何折扣） |
+| 0.0.2.7 | July 25, 2022 | 修复了指针转换分段错误、打开会话查询始终返回 0 以及 `TransferData()` TransactionID 长度错误（从 4 字节扩展到 8 字节） |
+| 0.0.2.6 | April 6, 2022 | 添加了 `unit_of_measure` 枚举到 `vmc_vend`、新的 vend 事件（`session_cancled`、`sessions_rsp`、`reader_state_rsp`）、二维码（电子收据）处理、`is_in_middle_of_transaction()` 和新的 `fw_info` 字段；修复了 vend 否认持久模式在成功交易后仍保持始终开启的错误 |
+| 0.0.2.5 | July 20, 2021 | 修复了多 vend 项目错误 |
+| 0.0.2.4 | June 17, 2021 | 修复了项目数溢出时的多 vend 崩溃 |
+| 0.0.2.3 | May 19, 2021 | 添加了更新的状态代码、`on_status` vend 事件、警报功能和 8 位纤薄微控制器的支持，以及各种其他错误修复 |
+| 0.0.2.2 | April 28, 2021 | 添加了更新的状态代码、`on_status` vend 事件和警报功能 |
+| 0.0.2.1 | March 17, 2021 | 添加了编译标志以减少闪存使用和禁用未使用的模块（套接字、常规等） |
+| 0.0.2.0 | October 1, 2020 | 添加了时间更新 API、实验性 HTTP 和 FTP 客户端库，以及本机大小端平台支持；修复了 `vmc_socket` 状态机停滞、多 vend 错误和始终空闲错误 |
+| 0.0.1.3 | September 15, 2020 | 添加了链接事件处理程序 |
+| 0.0.1.2 | September 9, 2020 | 修复了多 vend 错误 |
+| 0.0.1.1 | August 28, 2020 | 添加了 Monyx 卡 |
+| 0.0.1.0 | August 3, 2020 | 添加了调试级别数据包转储选项、vend 否认策略和机器类型参数 |
+| 0.0.0.2 | April 16, 2020 | 更新了 transfer_data 功能；添加了具有 UART/DMA 支持的 STM32F0 示例应用程序 |
+| 0.0.0.1 | March 12, 2020 | 初始发布 |
+
+</Update>

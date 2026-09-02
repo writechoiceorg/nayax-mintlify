@@ -1,0 +1,44 @@
+---
+title: "readCardForExternalTransaction"
+description: "从设备读取卡数据，供外部支付处理器进行授权。"
+metadata:
+  og:description: "readCardForExternalTransaction 方法从设备读取卡数据，以便交易可由外部处理器进行授权。"
+---
+
+The `readCardForExternalTransaction` 方法从设备读取卡数据，这样交易就可以由外部处理器而不是内置支付引擎进行授权。
+
+读取卡后，将返回的 `pinpadCardDataId` 传递给 [`updatePinpadTransactionStatus`](/docs/integrate-pos-device/tweezercomm/device-methods/updatepinpadtransactionstatus) 以将外部授权的结果报告回设备。
+
+## 请求
+
+<Note>
+**JSON-RPC 2.0**
+
+TweezerComm 中的所有方法都遵循 JSON-RPC 2.0 结构。有关如何构造和发送请求的更多详情，请参阅 [开始](/docs/integrate-pos-device/tweezercomm/tweezercomm-get-started)。
+</Note>
+
+要调用此方法，将 `method` 字段设置为 `readCardForExternalTransaction`，并包含如下所示的服务名称和参数。
+
+```json
+{
+    "jsonrpc": "2.0",
+    "method": "readCardForExternalTransaction",
+    "params": [
+        "device",
+        {
+            "vuid": "44d96006",
+            "readMifare": true
+        }
+    ],
+    "id": "16115875"
+}
+```
+
+### 请求参数
+
+下表描述了请求的参数：
+
+| Name         | Type   | Description                                             |
+| ------------ | ------ | -------------------------------------------------------- |
+| `vuid`       | string | 供应商（客户端）唯一交易标识符。必需。 |
+| `readMifare` | bool   | 是否启用 NFC 读卡器（仅 Mifare）。           |

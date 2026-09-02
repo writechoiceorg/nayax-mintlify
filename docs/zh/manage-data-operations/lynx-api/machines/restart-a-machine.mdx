@@ -1,0 +1,93 @@
+---
+title: "重启机器"
+metadata:
+  og:description: "通过更新设备属性 144，使用 Lynx API 远程触发 Nayax 设备的重启。"
+---
+
+import {EndpointCard} from "/snippets/EndpointCard.jsx";
+
+通过更新机器上的设备属性来远程重启 Nayax 设备。设备在下次轮询时检测到更改并重启，然后自动重新连接到服务器。
+
+<EndpointCard
+  title="更新特定机器属性"
+  href="/reference/lynx/machine-attribute/update-specific-machine-attribute"
+  method="put"
+/>
+
+<Warning>
+**认证**
+
+有关详细信息，请参阅本文档的[安全与令牌](/docs/manage-data-operations/lynx-api/security)页面，了解如何访问您的令牌以及如何正确使用它们来认证您的 API 请求。
+</Warning>
+
+## 重启机器
+
+使用[更新特定机器属性](/reference/lynx/machine-attribute/update-specific-machine-attribute)端点来设置机器上的设备属性 `144`。提供 `MachineID` 和属性的 `DeviceAttributeID` 作为路径参数，以及属性值作为请求正文参数：
+
+```bash Request
+curl -X PUT "https://qa-lynx.nayax.com/operational/v1/machines/<MACHINE_ID>/attributes/144" \
+  -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "DeviceAttributeID": 144,
+    "MachineID": <MACHINE_ID>,
+    "DeviceAttributeValue": "1"
+  }'
+```
+
+<Note>
+  将 `<MACHINE_ID>` 替换为您的机器的唯一标识符，将 `<YOUR_ACCESS_TOKEN>` 替换为您的 Lynx API 令牌。
+</Note>
+
+此表概述了请求正文参数：
+
+| **名称**               | **类型** | **描述**                                                       |
+| :--------------------- | :------- | :---------------------------------------------------------------------- |
+| `DeviceAttributeID`    | `int`    | 要更新的设备属性。使用 `144` 重启设备。         |
+| `MachineID`            | `int`    | 机器的唯一标识符，与路径参数匹配。       |
+| `DeviceAttributeValue` | `string` | 分配给属性的值。使用 `"1"` 触发重启。  |
+
+端点在成功时返回已更新的属性：
+
+```json Response
+{
+  "DeviceAttributeID": 144,
+  "MachineID": <MACHINE_ID>,
+  "DeviceAttributeValue": "1",
+  "DeviceAttributeCodeID": null,
+  "DeviceAttributeName": "Restart device",
+  "DeviceAttributeGroup": "Communication",
+  "DeviceAttributeReadOnlyBit": false,
+  "MachineAttributeRef": "/v1/machines/<MACHINE_ID>/attributes/144",
+  "MachineRef": "/v1/machines/<MACHINE_ID>"
+}
+```
+
+设备在轮询队列后的几分钟内重启。重启还会应用队列中等待的任何其他配置更改。
+
+<Note>
+  如果机器上从未设置过属性 `144`，则对其的 `GET` 请求将返回 `204 No Content` 而不是错误，并且该属性将从机器的完整属性列表中省略，直到您设置它。
+</Note>
+
+## 重启与重新启动的区别
+
+重启是两种电源操作中较轻的一种。它关闭和打开设备电源，并应用任何其他待处理配置。重新启动更复杂：它激活引导加载程序。除非您特别需要引导加载程序，否则请使用重启。
+
+<Warning>
+不要在活跃交易期间触发重启。等待设备闲置，以免中断正在进行的付款。
+</Warning>
+
+## 确认重启
+
+设备重启后，会向服务器发送 `PowerUp` 事件，确认它再次在线。使用此事件来验证重启已完成。
+
+## 后续步骤
+
+<CardGroup cols={2}>
+  <Card title="机器属性" icon="sliders" href="/docs/manage-data-operations/lynx-api/machines/updating-a-machines-attribute">
+    通过 Lynx API 更新其他机器属性。
+  </Card>
+  <Card title="检索机器信息" icon="magnifying-glass" href="/docs/manage-data-operations/lynx-api/machines/retrieve-machine-information">
+    查找机器的详细信息和当前状态。
+  </Card>
+</CardGroup>

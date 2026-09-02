@@ -1,0 +1,112 @@
+---
+title: "FuelApp 发行说明"
+sidebarTitle: "FuelApp"
+description: "每个 FuelApp 版本的变更内容，以及对您的集成的影响。"
+metadata:
+  og:description: "燃油加油机上 Nayax VPOS 终端中各 FuelApp 版本的变更，为 POS 和前台控制器（FCC）集成商编写。"
+rss: true
+---
+
+FuelApp 是在加油泵处的 VPOS 终端上运行的支付应用程序。其版本号与 Marshall Pro 协议版本分开，因此 FuelApp 版本发布不会改变您的 POS 或前台控制器（FCC）使用的协议。使用页面顶部的图标订阅 RSS 源，以便在添加新版本时收到通知。
+
+<Update
+  label="FuelApp 1.10.02 (Current)"
+  rss={{
+    title: "FuelApp 1.10.02：二维码电子收据、站点品牌和 ANDI 支持",
+    description: "新增：二维码电子收据、带有点击继续按钮的自定义卡片检测屏幕、芯片交易后的 Remove Card 提示，以及对 ANDI 终端集成协议的支持。更改：更清晰的状态图标和站点过滤的语言菜单。修复：停止请求处理、终端更新后的启动挂起，以及八项屏幕、键盘和稳定性缺陷。"
+  }}
+>
+
+<AccordionGroup>
+
+<Accordion title="新增" icon="rocket">
+
+### 支持 ANDI 集成协议
+
+FuelApp 现在在某些加油泵硬件设置上支持 ANDI，这是一个额外的支付终端集成协议。
+
+### 自定义卡片检测屏幕和点击继续按钮
+
+站点现在可以显示带有点击继续按钮的品牌卡片检测屏幕。这是按站点配置的，因此相同的集成可以在不同站点显示不同的卡片检测屏幕。
+
+### 芯片交易后的 Remove Card 提示
+
+终端现在在芯片交易后显示 **Remove Card** 提示，而不仅仅是发出蜂鸣声。
+
+### 通过二维码进行数字电子收据
+
+付款后，终端可以显示二维码，供客户扫描以获取数字收据。商家按站点启用此功能，因此除非站点已打开，否则屏幕不会出现。
+
+</Accordion>
+
+<Accordion title="更改" icon="pen-to-square">
+
+### 语言菜单仅限于启用的语言
+
+语言菜单现在仅列出为该站点启用的语言，而不是完整列表。
+
+### 更清晰的状态图标
+
+终端为卡片被阻止和交易取消的消息显示更清晰的屏幕上的图标。
+
+</Accordion>
+
+<Accordion title="修复" icon="wrench">
+
+### 卡片读取器忽略停止请求
+
+卡片读取器有时不响应停止或取消请求。
+
+### 终端更新后应用程序卡在初始化
+
+FuelApp 可能在支付终端软件更新后停留在 **Initializing** 屏幕上。
+
+### 空闲屏幕前的黑屏
+
+在卡片被点击或插入后，空闲屏幕前可能出现几秒钟的黑屏。此修复还改善了总体应用程序稳定性，包括在某些较旧硬件上长期使用后的罕见崩溃和重启。
+
+### 卡片重试时屏幕冻结
+
+当卡片必须在付款期间重新呈现时，屏幕可能会冻结。这包括 **Transaction Canceled** 在客户已经有意取消后出现的情况。
+
+### PIN 键盘注册错误的键
+
+PIN 键盘按钮有时会注册与按下的按钮不同的键。
+
+### 掩蔽输入显示输入的数字
+
+掩蔽数字输入在某些输入屏幕上没有隐藏输入的数字。
+
+### 希伯来语中的 PIN 键盘布局
+
+在设置为希伯来语的终端上，PIN 输入键盘显示不正确。
+
+### 取消付款后出现错误的屏幕
+
+取消付款可能会在终端确定正确屏幕之前简要显示错误的屏幕。
+
+### 旧消息重新出现
+
+先前的消息可能会在屏幕上闪现回来片刻。
+
+### 屏幕之间的黄色闪烁
+
+屏幕过渡期间出现了短暂的黄色闪烁。
+
+</Accordion>
+
+</AccordionGroup>
+
+</Update>
+
+## 版本历史
+
+FuelApp 1.10.02 是此页面上跟踪的第一个版本。
+
+## 另请参阅
+
+* [Overview](/docs/integrate-pos-device/marshall-pro/getting-started/index)
+* [Error Codes](/docs/integrate-pos-device/marshall-pro/messaging-protocol/error-codes)
+* [cardDetect](/docs/integrate-pos-device/marshall-pro/methods/payment/card-detect)
+* [stopCardDetect](/docs/integrate-pos-device/marshall-pro/methods/payment/stop-card-detect)
+* [displayScreen](/docs/integrate-pos-device/marshall-pro/methods/display/display-screen)
