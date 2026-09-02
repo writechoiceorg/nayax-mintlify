@@ -1,0 +1,265 @@
+---
+title: "流程和配置"
+description: "关于激活、连接、配置和更新Marshall Pro设备的常见问题解答。"
+---
+
+## 将设备连接到您的POS或模拟器
+
+要连接到设备，请通过端口5050使用TCP协议。无需与您的计算机进行物理连接。
+
+有关设备的Wifi连接设置，请参阅下面的[配置Wifi（和IP）](/docs/integrate-pos-device/marshall-pro/faq#configuring-wifi-and-ip)。对于LAN，请参阅[配置以太网（和IP）](/docs/integrate-pos-device/marshall-pro/faq#configuring-eth-and-ip)。
+
+### 激活设备
+
+<Steps>
+  <Step title="扫描二维码">
+    使用您手机的摄像头扫描设备屏幕上显示的二维码。
+
+    <Frame>
+      ![显示在设备屏幕上用于激活的二维码](/images/docs/faq/image1.png)
+    </Frame>
+  </Step>
+  <Step title="完成登陆页">
+    您将被重定向到一个登陆页，在该页输入所需的详细信息。提交后，验证码将通过电子邮件发送。在登陆页上输入验证码以完成设备激活。
+
+    <Frame>
+      ![用于输入设备激活详情的登陆页](/images/docs/faq/image2.png)
+    </Frame>
+  </Step>
+</Steps>
+
+### 获取设备详情（序列号、IP）
+
+<Steps>
+  <Step title="将设备设置为离线">
+    断开与设备的连接并等待30秒。
+
+    <Frame>
+      ![显示离线状态的设备屏幕](/images/11.png)
+    </Frame>
+  </Step>
+  <Step title="打开设备信息">
+    在屏幕右上角点击五次，然后选择**Device Info**。
+
+    <Frame>
+      ![突出显示设备信息选项的设备菜单](/images/27-1.png)
+    </Frame>
+  </Step>
+  <Step title="查看设备详情">
+    设备信息显示设备的序列号以及其蜂窝和以太网通信详情。在此示例中，设备具有eSIM，并且也连接到Wifi。
+
+    <Frame>
+      ![显示序列号和连接详情的设备信息屏幕](/images/28-1.png)
+    </Frame>
+  </Step>
+</Steps>
+
+要返回设备的待机屏幕进行交易，请点击左上角的箭头，然后选择**Payment App**。
+
+### 配置Wifi（和IP）
+
+VPOSM over Marshall支持DHCP或静态IP，具体取决于您希望设备的工作方式。DHCP是默认设置。
+
+<Steps>
+  <Step title="打开技术人员菜单">
+    在屏幕右上角点击5次，然后选择**Technician Menu**。
+
+    <Frame>
+      ![在设备上打开的技术人员菜单](/images/29.png)
+    </Frame>
+  </Step>
+  <Step title="输入技术人员代码">
+    输入代码（默认为123123），然后向下滚动到**Communication**部分。
+
+    <Frame>
+      ![突出显示通信部分的技术人员菜单](/images/image-1.png)
+    </Frame>
+  </Step>
+  <Step title="选择Wifi">
+    选择**Wifi**，然后选择相关的网络。
+
+    <Frame>
+      ![带有Wifi选项的通信部分](/images/image-6.png)
+    </Frame>
+  </Step>
+  <Step title="打开网络的高级设置">
+    点击相关网络的齿轮图标，然后选择**Advanced**。
+
+    <Frame>
+      ![突出显示齿轮图标的网络设置](/images/image-15.png)
+    </Frame>
+
+    <Frame>
+      ![高级网络设置屏幕](/images/image-16.png)
+    </Frame>
+  </Step>
+  <Step title="设置静态IP">
+    向下滚动到**IP Settings**（默认设置为DHCP），并将其切换为**Static**。填入IP详情。
+
+    <Frame>
+      ![显示从DHCP切换到静态的选项的IP设置](/images/image-17.png)
+    </Frame>
+  </Step>
+</Steps>
+
+### 配置以太网（和IP）
+
+<Steps>
+  <Step title="返回系统设置">
+    在Wifi设置屏幕上，轻点左上角的返回箭头以返回到设备的系统设置。
+
+    <Frame>
+      ![设备系统设置屏幕](/images/image-11.png)
+    </Frame>
+  </Step>
+  <Step title="打开网络和互联网">
+    轻点**Network & Internet**。
+
+    <Frame>
+      ![带有网络和互联网选项的系统设置](/images/image-10.png)
+    </Frame>
+  </Step>
+  <Step title="打开以太网设置">
+    轻点**Ethernet**，然后使用切换开关将其打开。再次轻点以太网行以打开以太网设置。
+
+    <Frame>
+      ![带有以太网选项的网络和互联网设置](/images/image-12.png)
+    </Frame>
+
+    <Frame>
+      ![以太网切换和设置行](/images/image-13.png)
+    </Frame>
+  </Step>
+  <Step title="设置静态IP">
+    在以太网设置中，选择**Static**，然后填入IP详情。
+
+    <Frame>
+      ![带有静态选项的以太网设置屏幕](/images/image-14.png)
+    </Frame>
+  </Step>
+</Steps>
+
+## 触发应用更新过程（访问CasHub应用）
+
+Nayax Fuel从称为CasHub的单独平台启动固件更新。更新过程逐个更新每个相关应用，而不是作为单个程序包，分为两个阶段：下载和更新。
+
+下载完成后，Nayax Fuel的支持团队向设备发送请求以启动所需应用的更新。您也可以自己触发更新。打开设备并使用以下选项之一：
+
+1. 让设备通宵开启。它将在大约凌晨3-4点自动重启，此时设备将收集并开始更新。
+2. 手动访问CasHub应用以触发更新的下载和安装。
+
+要手动触发更新，请按照以下步骤操作：
+
+<Steps>
+  <Step title="将设备设置为离线">
+    断开与设备的连接并等待30秒。
+
+    <Frame>
+      ![显示离线状态的设备屏幕](/images/11.png)
+    </Frame>
+  </Step>
+  <Step title="打开技术人员菜单">
+    在屏幕右上角点击五次，然后选择**Technician Menu**。输入密码123123。
+
+    <Frame>
+      ![技术人员菜单密码提示](/images/12.png)
+    </Frame>
+  </Step>
+  <Step title="打开开发者模式">
+    向下滚动到**Dev Mode**并输入密码321321。
+
+    <Frame>
+      ![带有开发者模式选项的技术人员菜单](/images/13.png)
+    </Frame>
+  </Step>
+  <Step title="返回Android设置">
+    选择**Wifi**，然后选择返回箭头以返回到Android设置。
+
+    <Frame>
+      ![开发者模式内的Wifi设置](/images/14.png)
+    </Frame>
+
+    <Frame>
+      ![Android设置屏幕](/images/15.png)
+    </Frame>
+  </Step>
+  <Step title="打开应用和通知">
+    转到**Apps & Notifications**，然后选择**See All Apps**（在此示例中，设备有24个应用）。
+
+    <Frame>
+      ![带有应用和通知选项的Android设置](/images/16.png)
+    </Frame>
+
+    <Frame>
+      ![设备上的完整应用列表](/images/17.png)
+    </Frame>
+  </Step>
+  <Step title="打开CasHub应用">
+    选择CasHub应用并打开它。
+
+    <Frame>
+      ![选中CasHub的应用列表](/images/18.png)
+    </Frame>
+
+    <Frame>
+      ![CasHub应用信息屏幕](/images/19.png)
+    </Frame>
+  </Step>
+  <Step title="连接并启动更新">
+    点击**Status**，然后选择右上角的三个点并选择**Connect**。
+
+    <Frame>
+      ![CasHub应用状态屏幕](/images/20.png)
+    </Frame>
+
+    <Frame>
+      ![带有连接选项的CasHub应用菜单](/images/21.png)
+    </Frame>
+  </Step>
+  <Step title="等待连接">
+    屏幕在顶部和下方的表格中都显示"连接中..."。如果这种状态持续超过一分钟，则该过程可能已停止。
+
+    <Frame>
+      ![显示连接状态的CasHub应用](/images/22.png)
+    </Frame>
+  </Step>
+  <Step title="下载并安装更新">
+    应用程序的下载和更新开始。
+
+    <Frame>
+      ![下载更新的CasHub应用](/images/23.png)
+    </Frame>
+  </Step>
+  <Step title="确认更新完成">
+    所有应用完成下载和更新后，会出现"完成"行。
+
+    <Frame>
+      ![显示完成状态的CasHub应用](/images/24.png)
+    </Frame>
+  </Step>
+</Steps>
+
+某些应用在此阶段只能下载而不能安装，因为设备无法更新当前正在运行的应用。这适用于：
+
+- Nayax Fuel FuelApp
+- Nayax Launcher
+- Update Service
+- VPOS Service
+
+对于这些应用，请**重启**设备。应用程序将在设备的启动序列期间更新，并且会出现"Castles: Updating (application)"通知，持续约一分钟。
+
+<Note>
+  **"vpos_media keeps stopping"错误**
+
+  此错误发生是因为Vendapp崩溃，这与您的设置无关。如果Vendapp被设置为默认应用，可能会发生这种情况：
+
+  <Frame>
+    ![显示vpos_media已停止的错误通知](/images/25-1.png)
+  </Frame>
+
+  或者相关参数值为空或缺失（在任何一种情况下，设备都默认为Vendapp）。如果参数正确设置为Fuel，但您仍然收到此错误，请更新Vendapp。
+
+  <Frame>
+    ![正确配置为Fuel的参数设置](/images/26.png)
+  </Frame>
+</Note>

@@ -1,0 +1,91 @@
+---
+title: "预选支付"
+description: "在 VPOS Media 上运行单阶段预选支付，在单次调用中检测卡片、授权和结算。"
+metadata:
+  og:description: "在 VPOS Media 上运行单阶段预选支付，在单次调用中检测卡片、授权和结算。"
+---
+
+预选支付的常规流程是：消费者先选择产品或固定金额，然后呈现付款方式（卡片/NFC/二维码）。
+
+在最终金额在消费者付款前已知时使用预选支付，例如固定价格的洗车周期或信息亭项目。当您需要先授权然后稍后捕获最终金额时，请改用 [预授权支付](/docs/integrate-pos-device/app-to-app/pre-authorization)。
+
+## 支付方法
+
+`payment.pay` 运行整个交易。您传递根据 {/* FLAG: unverified term - "Decimal Place" - needs a confirmed Chinese rendering */} Decimal Place（例如分钱）的金额、选择要接受的付款方式的通道位掩码、用于接收结果的 `payment_listener_i` 和选择内置或自定义屏幕的 `showUI` 标志：
+
+```java
+payment.pay(
+    500,                          // amount in minor units (5.00)
+    payment.CHANNEL_CONTACTLESS,  // channel bitmask
+    new payment_listener_i() {
+        @Override
+        public void on_card_detected(transaction_info_t info) {
+            // A card was presented.
+        }
+
+        @Override
+        public void on_authorization(boolean authorized, transaction_info_t info) {
+            // authorized == true means the payment was approved.
+        }
+
+        @Override
+        public void on_settlement(boolean settled, transaction_info_t info) {
+            // settled == true means the funds were captured.
+        }
+
+        @Override
+        public void on_cancel(boolean cancelled, transaction_info_t info) {
+            // The transaction was cancelled.
+        }
+    },
+    true);                        // showUI: Nayax draws the payment screens
+```
+
+## 支付通道
+
+通道参数是一个位掩码，告诉服务在等待消费者时要启用哪些付款方式。使用位或运算组合多个值以接受多种付款方式，或使用 `CHANNEL_ALL` 接受所有支付通道。
+
+| Constant | Value | 方法 |
+|---|---|---|
+| `CHANNEL_MAGSTRIPE` | `0x01` | 磁条 |
+| `CHANNEL_CONTACTLESS` | `0x02` | 非接触式轻触 |
+| `CHANNEL_CONTACT` | `0x04` | 接触（芯片） |
+| `CHANNEL_NFC` | `0x08` | NFC |
+| `CHANNEL_QR` | `0x10` | 二维码 |
+| `CHANNEL_CREDIT` | `0x20` | 信用 |
+| `CHANNEL_DEBIT` | `0x40` | 借记 |
+| `CHANNEL_VOUCHER` | `0x80` | 代金券 |
+| `CHANNEL_ALL` | — | 磁条、非接触式、接触式、NFC 和二维码 |
+
+## 流程分解
+
+预选流程在一个阶段中运行。您的应用调用 `pay` 后，服务驱动卡片交互，并通过监听器报告每一步。
+
+<Steps>
+  <Step title="您的应用启动支付">
+    消费者在您的应用中选择产品或金额。您的应用使用金额、要接受的通道和 `payment_listener_i` 调用 `payment.pay`。
+  </Step>
+  <Step title="该服务等待付款方式">
+    VPOS 服务在选定的通道上启动阅读器，并等待消费者呈现付款方式。
+  </Step>
+  <Step title="检测到付款方式">
+    当消费者呈现付款方式时，服务调用 `on_card_detected`。
+  </Step>
+  <Step title="该服务授权">
+    该服务运行交易和在线授权，并调用 `on_authorization`。如果 `authorized` 是 `true`，则付款已获批准。
+  </Step>
+  <Step title="该服务结算">
+    对于已批准的付款，该服务捕获资金并调用 `on_settlement`。如果 `settled` 是 `true`，则交易完成。
+  </Step>
+</Steps>
+
+## 后续步骤
+
+<CardGroup cols={2}>
+  <Card title="预授权支付" icon="lock" href="/docs/integrate-pos-device/app-to-app/pre-authorization">
+    当最终金额预先未知时，添加两阶段流程。
+  </Card>
+  <Card title="交易状态" icon="list-check" href="/docs/integrate-pos-device/app-to-app/transaction-status">
+    列出未结和已结交易以进行对账。
+  </Card>
+</CardGroup>

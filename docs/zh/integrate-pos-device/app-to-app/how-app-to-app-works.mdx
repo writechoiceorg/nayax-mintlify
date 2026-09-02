@@ -1,0 +1,62 @@
+---
+title: "App to App 的工作原理"
+description: "App to App 集成中使用的 API 部分、如何调用付款以及结果如何返回。"
+metadata:
+  og:description: "App to App 集成中使用的 API 部分、如何调用付款以及结果如何返回。"
+---
+
+App to App 允许第三方 Android 应用程序在 VPOS Media 上接收付款。第三方应用程序运行屏幕并决定何时进行付款；Nayax 运行付款并报告所发生的情况。
+
+第三方应用程序嵌入 VPOS Service API 库，并使用它将每次付款传递给设备上的 VPOS service。VPOS service 运行付款并返回结果。
+
+## 为什么选择 App to App
+
+将付款集成到设备应用程序通常既缓慢又昂贵。您需要承担认证负担，例如 PCI 和 EMV，您需要分别与每个收单行集成，通常还需要添加额外的硬件仅为应用程序提供显示器。
+
+App to App 消除了这些工作。Nayax 提供 VPOS Service API 并保持付款处理和合规性。与在卡数据捕获处停止的裸机终端 SDK 不同，Nayax 端到端处理交易并将结果返回到您的应用程序。
+
+## 两个应用程序如何通信
+
+该连接使用 AIDL，这是标准的 Android 机制，允许一个应用程序调用另一个应用程序中的方法。您永远不会接触卡数据或付款代码：您的应用程序通过 VPOS Service API 绑定到 VPOS service，然后发送请求并接收结果。VPOS service 保持对卡读卡器的完全控制，以 EMV 模式处理卡，如果需要，会触发 PIN Entry 流程。VPOS service 还管理与 Nayax 后端的通信以进行交易处理。
+
+从高层来看，每个集成都遵循相同的形式：
+
+1. 连接到 VPOS service 并等待它报告已准备好。
+2. 通过 `general` 类注册您的应用程序。
+3. 当消费者想付款时调用付款方法。
+4. 通过侦听器回调对 Nayax 返回的结果做出反应。
+
+## 您使用的部分
+
+VPOS Service API 很大，但付款集成只需要三个部分。VPOS Service API 的其余部分可在 SDK 参考文档中获得。
+
+* **远程连接器** (`vpos_service_remote_connector`) 打开和管理与 VPOS service 的连接，并告诉您何时它已准备好。
+* **`general` 类** 注册您的应用程序并返回设备信息，以及平台功能，如集中式日志记录和远程参数。
+* **`payment` 类** 运行付款本身，从卡检测到授权和结算。
+
+## 结果如何返回
+
+VPOS Service API 是异步的。您进行调用，而不是等待它完成，您稍后通过回调接收结果。您实现侦听器接口，Nayax 在付款进行时调用它们。
+
+您使用两个侦听器：
+
+* `device_listener_i` 报告设备。其 `on_ready` 回调表示付款 API 已准备好调用。
+* `payment_listener_i` 报告付款的步骤。
+
+付款流程页面显示哪些 `payment_listener_i` 回调触发以及触发顺序，SDK 参考文档列出了每个回调。
+
+## 内置或自定义付款 UI
+
+在付款期间，屏幕（呈现卡、处理、结果）必须来自某个地方。您通过 `showUI` 布尔值选择，这是每次付款调用的最后一个参数，选择是按调用进行的。
+
+* **内置 UI (`showUI = true`):** Nayax 在您的应用程序顶部绘制付款屏幕。这是最快的上线路径，付款运行期间 Nayax 拥有屏幕的所有权。
+* **自定义 UI (`showUI = false`):** 您的应用程序绘制每个屏幕，使用 `payment_listener_i` 回调了解要显示的内容。Nayax 仍然安全地处理卡、EMV 和 PIN。这给了您最多的控制，适合品牌化的多步骤体验。
+
+## 另请参阅
+
+这些页面涵盖了 App to App 集成的其余部分。
+
+* [入门指南](/docs/integrate-pos-device/app-to-app/getting-started) 涵盖了集成生命周期，从访问到上线。
+* [连接到 VPOS Service](/docs/integrate-pos-device/app-to-app/connect-to-the-vpos-service) 绑定到服务并注册您的应用程序。
+* [预选支付](/docs/integrate-pos-device/app-to-app/pre-selection) 用于单阶段付款。
+* [预授权支付](/docs/integrate-pos-device/app-to-app/pre-authorization) 用于两阶段授权-然后-结算流程。
