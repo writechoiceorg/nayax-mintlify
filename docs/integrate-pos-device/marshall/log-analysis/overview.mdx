@@ -1,0 +1,35 @@
+---
+title: "Log Analysis"
+metadata:
+  og:description: "Generate an SDK log, check it against known-good reference traces, and read the full checkpoint reference: the three pages that make up Marshall's log-checking workflow."
+---
+
+This workflow covers turning on SDK logging, running a log through the comparator tool, and reading what the results mean. Use it before you send a certification test result to your Nayax integrator, or whenever you are debugging a Marshall integration.
+
+## What the Log Trace Comparator is
+
+The Marshall Log Trace Comparator is an automated log-comparison tool for the Marshall SDK and firmware protocol. It reads a log file, or an Excel certification workbook, and runs it through the same nine checkpoints Nayax uses when reviewing your certification tests. For every checkpoint that fails or needs a look, it shows a suggested fix and a link to the page that explains it.
+
+The checkpoints come from real passing and failing logs, collected across all three SDK languages: C, C#, and Java. Everything runs in your browser, so your log files never leave your machine.
+
+## What it does not do
+
+The tool is a fast first pass. It does not replace your own judgment, and it does not decide whether your integration passes certification. Your Nayax integrator does that.
+
+A warning is also not the same as a bug. Some tests are designed to produce one: a 24-hour idle test, a session timeout, and a stress test all report timing failures that are the test working as intended. Read the test name before you act on a result.
+
+## Next steps
+
+<CardGroup cols={3}>
+  <Card icon="file-lines" title="SDK Log Generation" href="/docs/integrate-pos-device/marshall/log-analysis/log-generation">
+    Turn on SDK logging so you have a log file to run through the tool.
+  </Card>
+
+  <Card icon="magnifying-glass-chart" title="Log Trace Comparator" href="/docs/integrate-pos-device/marshall/log-analysis/log-trace-comparator">
+    Drop in a log file or certification workbook for an instant pass/fail verdict against known-good reference traces.
+  </Card>
+
+  <Card icon="book-open" title="Checkpoints & Scenario Tags" href="/docs/integrate-pos-device/marshall/log-analysis/log-trace-comparator-guide">
+    The full checkpoint reference, scenario tags, and how to tell a real issue from a false positive.
+  </Card>
+</CardGroup>

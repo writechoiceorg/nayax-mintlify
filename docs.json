@@ -113,10 +113,18 @@
                         "root": "docs/integrate-pos-device/marshall/hw-integration-kit-and-setup/vpos-touch-installation"
                       },
                       {
+                        "group": "Logs and Diagnostics",
+                        "pages": [
+                          "docs/integrate-pos-device/marshall/log-analysis/log-generation",
+                          "docs/integrate-pos-device/marshall/log-analysis/log-trace-comparator",
+                          "docs/integrate-pos-device/marshall/log-analysis/log-trace-comparator-guide"
+                        ],
+                        "root": "docs/integrate-pos-device/marshall/log-analysis/overview"
+                      },
+                      {
                         "group": "Additional Resources",
                         "pages": [
                           "docs/integrate-pos-device/marshall/additional-resources/marshall-display",
-                          "docs/integrate-pos-device/marshall/additional-resources/log-generation",
                           "docs/integrate-pos-device/marshall/additional-resources/marshall-ontransferdata",
                           "docs/integrate-pos-device/marshall/additional-resources/stablity-issues",
                           "docs/integrate-pos-device/marshall/additional-resources/capabilities"
@@ -1875,7 +1883,11 @@
     },
     {
       "source": "/docs/log-generation",
-      "destination": "/docs/integrate-pos-device/marshall/additional-resources/log-generation"
+      "destination": "/docs/integrate-pos-device/marshall/log-analysis/log-generation"
+    },
+    {
+      "source": "/docs/integrate-pos-device/marshall/additional-resources/log-generation",
+      "destination": "/docs/integrate-pos-device/marshall/log-analysis/log-generation"
     },
     {
       "source": "/docs/marshall-ontransferdata",
