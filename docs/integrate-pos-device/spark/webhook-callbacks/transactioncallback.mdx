@@ -10,7 +10,13 @@ This callback is essential for proceeding to transaction confirmation or rejecti
 
 ## Request
 
-The Spark platform sends a POST request to your configured `TransactionCallback` endpoint. The payload includes the full result of the card scan operation:
+The Spark platform sends a POST request to your configured `TransactionCallback` endpoint. 
+
+The call would be sent to the following endpoint:
+
+`(Customer's URL)/TransactionCallback`
+
+The payload includes the full result of the card scan operation:
 
 ```json
 {
@@ -46,35 +52,35 @@ The Spark platform sends a POST request to your configured `TransactionCallback`
 
 The table below describes all the parameters of the request:
 
-| Field                         | Type    | Required | Description                                                                                                      |
-| ----------------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
-| `NayaxTransactionId`          | Integer | Yes      | Internal Nayax transaction ID.                                                                                   |
-| `SparkTransactionId`          | String  | Yes      | Unique session ID generated in `StartAuthentication`.                                                            |
-| `SiteId`                      | Integer | Yes      | ID of the vending site or Spark location.                                                                        |
-| `TerminalId`                  | String  | Yes      | Unique ID of the terminal that read the card.                                                                    |
-| `MachineId`                   | Integer | Yes      | Identifier of the vending machine or device.                                                                     |
-| `HwSerial`                    | String  | Yes      | Hardware serial number of the terminal.                                                                          |
-| `AuthStatus`                  | Object  | Yes      | Card authorization result.                                                                                       |
-| `AuthStatus.Verdict`          | String  | Yes      | Authorization decision (`Approved`, `Declined`, etc.).                                                           |
-| `AuthStatus.ErrorCode`        | Integer | No       | An optional error code if the card was declined.                                                                 |
-| `AuthStatus.ErrorDescription` | String  | No       | Explanation of the error, if any.                                                                                |
-| `AuthStatus.StatusMessage`    | String  | No       | Status message returned by Spark.                                                                                |
-| `CardLast4Digits`             | String  | Yes      | The last four digits of the presented card.                                                                      |
-| `CardHash`                    | String  | Yes      | One-way hash of the full card number.                                                                            |
-| `CardUid`                     | String  | Yes      | UID of the card (for prepaid cards). See a more detailed explanation on the [SMC Support](/docs/integrate-pos-device/spark/additional-resources/smc-support) page. |
-| `MachineAuTime`               | String  | Yes      | Timestamp from the machine in the format `yyyyMMddHHmmssSSS`.                                                   |
-| `Amount`                      | Number  | Yes      | Transaction amount in the main currency unit (decimal place 0, e.g., 15.0 for $15.00)                           |
-| `CardBrand`                   | String  | No       | Card brand used (e.g., Visa, MasterCard).                                                                        |
-| `CardFirst6Digits`            | String  | No       | The first 6 digits of the credit card (card BIN).                                                                |
-| `AuthCode`                    | String  | No       | Authorization code returned by the payment provider.                                                             |
-| `AuTime`                      | String  | No       | Authorization server timestamp.                                                                                  |
-| `CurrencyCode`                | String  | No       | ISO currency code (e.g., "EUR").                                                                                 |
-| `CurrencyNumeric`             | String  | No       | ISO 4217 numeric code (e.g., "978").                                                                             |
-| `FiscalRrn`                   | String  | No       | Fiscal reference number for accounting/reporting.                                                                |
-| `NayaxRRN`                    | String  | No       | Internal Nayax settlement reference number.                                                                      |
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `NayaxTransactionId` | Integer | Yes | Internal Nayax transaction ID. |
+| `SparkTransactionId` | String | Yes | Unique session ID generated in `StartAuthentication`. |
+| `SiteId` | Integer | Yes | ID of the vending site or Spark location. |
+| `TerminalId` | String | Yes | Unique ID of the terminal that read the card. |
+| `MachineId` | Integer | Yes | Identifier of the vending machine or device. |
+| `HwSerial` | String | Yes | Hardware serial number of the terminal. |
+| `AuthStatus` | Object | Yes | Card authorization result. |
+| `AuthStatus.Verdict` | String | Yes | Authorization decision (`Approved`, `Declined`, etc.). |
+| `AuthStatus.ErrorCode` | Integer | No | An optional error code if the card was declined. |
+| `AuthStatus.ErrorDescription` | String | No | Explanation of the error, if any. |
+| `AuthStatus.StatusMessage` | String | No | Status message returned by Spark. |
+| `CardLast4Digits` | String | Yes | The last four digits of the presented card. |
+| `CardHash` | String | Yes | One-way hash of the full card number. |
+| `CardUid` | String | Yes | UID of the card (for prepaid cards). See a more detailed explanation on the [SMC Support](/docs/integrate-pos-device/spark/additional-resources/smc-support) page. |
+| `MachineAuTime` | String | Yes | Timestamp from the machine in the format `yyyyMMddHHmmssSSS`. |
+| `Amount` | Number | Yes | Transaction amount in the main currency unit (decimal place 0, e.g., 15.0 for \$15.00) |
+| `CardBrand` | String | No | Card brand used (e.g., Visa, MasterCard). |
+| `CardFirst6Digits` | String | No | The first 6 digits of the credit card (card BIN). |
+| `AuthCode` | String | No | Authorization code returned by the payment provider. |
+| `AuTime` | String | No | Authorization server timestamp. |
+| `CurrencyCode` | String | No | ISO currency code (e.g., "EUR"). |
+| `CurrencyNumeric` | String | No | ISO 4217 numeric code (e.g., "978"). |
+| `FiscalRrn` | String | No | Fiscal reference number for accounting/reporting. |
+| `NayaxRRN` | String | No | Internal Nayax settlement reference number. |
 
 <Note>
-**Nayax Callback**
+  **Nayax Callback**
 
-This is a callback from Nayax, no response body is required. A simple 200 OK server acknowledgment is sufficient.
+  This is a callback from Nayax, no response body is required. A simple 200 OK server acknowledgment is sufficient.
 </Note>
