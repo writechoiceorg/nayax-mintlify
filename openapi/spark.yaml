@@ -187,6 +187,8 @@ paths:
       tags:
         - Transactions
       summary: StartAuthentication
+      servers:
+        - url: https://nayax-spark-dmz.nayax.com/api
       x-mint:
         content: |
           The `StartAuthentication` endpoint is the first step for any External Settlement. Use this to verify your server’s identity with Nayax and create a secure link for the transaction.
@@ -288,6 +290,8 @@ paths:
       summary: TriggerTransaction
       tags:
         - Transactions
+      servers:
+        - url: https://nayax-spark-dmz.nayax.com/api
       x-mint:
         content: |
           The `TriggerTransaction` endpoint initiates user interaction with the physical terminal by sending a wake-up signal to the specified device.
