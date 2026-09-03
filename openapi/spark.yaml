@@ -19,6 +19,8 @@ paths:
       summary: Get Version
       x-mint:
         content: Returns the Spark API assembly version and build.
+        metadata:
+          hideFooterPagination: true
       responses:
         '200':
           description: Success
@@ -72,6 +74,8 @@ paths:
           *   **Mandatory Use**: You must send an `ExternalCancel` immediately if you know no product or service will be provided.
           *   **Consumer Impact**: If not canceled, consumer funds will remain captured, leading to a poor user experience and potential disputes.
           *   **Audit Trail**: It is recommended to include a `ReasonCode` and `ReasonText` (e.g., "75 - Service not provided") to document why the transaction was voided.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/json:
@@ -158,6 +162,8 @@ paths:
           *   **Missing Identifiers**: Mandatory fields like `SiteId` were missing from the request.
           *   **Data Mismatch**: The IDs provided do not match the original authorization record.
           *   **Time Limit**: The request was sent more than 48 hours after the transaction started.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/json:
@@ -243,6 +249,8 @@ paths:
           | **30** | Validation Failed | Your JSON `Random` field doesn't match the one in your cipher. |
           | **31** | Expired Request | Your timestamp is too old (longer than 5 minutes). Sync your server clock to UTC. |
           | **34** | Decryption Failure | Your cipher format is wrong or the `=` is missing from the 37th character. |
+        metadata:
+          hideFooterPagination: true
       requestBody:
         description: The request payload for transaction authentication.
         required: true
@@ -267,6 +275,8 @@ paths:
           <Card title="Try it: Spark Auth Tool" icon="bolt" href="/docs/integrate-pos-device/spark/security-authentication/spark-auth-tool#startsession" arrow>
             Build or inspect the `StartSession` cipher in your browser, no code required. Opens the tool on the StartSession tab.
           </Card>
+        metadata:
+          hideFooterPagination: true
       tags:
         - Transactions
       requestBody:
@@ -291,6 +301,8 @@ paths:
       x-mint:
         content: |
           The `TriggerTransaction` endpoint initiates user interaction with the physical terminal by sending a wake-up signal to the specified device.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         description: The request payload containing the details to trigger a transaction.
         required: true
@@ -316,6 +328,8 @@ paths:
           integrator about the result of a card tap. It is triggered automatically
           when a user presents a card, and an authorization flow is initiated with
           the payment provider.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         description: The request payload including the result of the card scan operation.
         required: true
@@ -340,6 +354,8 @@ paths:
           The `TransactionNotify` endpoint is used to notify the integrator about
           the final details of a charging session, including charger availability,
           amount, and display information.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         description: The request payload containing final session details.
         required: true
@@ -365,6 +381,8 @@ paths:
           After the session ends and the total amount is known, the integrator
           sends the final amount along with optional e-receipt information. This
           method is only relevant for transactions with Pre-Authorization.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         description: >-
           The request payload containing the final transaction amount and
@@ -391,6 +409,8 @@ paths:
           The `TimeoutCallback` API call notifies that the payment session has
           timed out due to inactivity or a failure to complete the expected flow
           within a defined period.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         description: The request payload containing details of the timed-out session.
         required: true
@@ -416,6 +436,8 @@ paths:
           cancel a transaction currently in progress. This method is referred to
           as "Cancel" in the Pre-Authorization flow and "Void" in the
           Pre-Selection flow.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         description: The request to cancel a transaction.
         required: true
@@ -444,6 +466,8 @@ paths:
           A matching card should result in an `Approved`
           response; otherwise, the Spark integrator should return a `Declined`
           verdict.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         description: >-
           The request payload containing card and terminal identifiers to
@@ -489,6 +513,9 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/AvailabilityCheckResponse'
+      x-mint:
+        metadata:
+          hideFooterPagination: true
   /StopCallback:
     post:
       summary: StopCallback
@@ -498,6 +525,8 @@ paths:
         content: |
           The `StopCallback` endpoint notifies the integrator that a consumer has
           presented a payment card to stop an ongoing session.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         description: >-
           The request payload containing details of the card and session to be
@@ -525,6 +554,8 @@ paths:
           Spark transaction process. It is typically triggered after a successful
           `/TriggerTransaction` response with a verdict of `Approved`, but when
           the flow subsequently fails for any reason before payment authorization.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         description: The request payload containing details of the failed transaction.
         required: true
@@ -550,6 +581,8 @@ paths:
           response. Its main purposes are to retrieve information to be shown on
           the POS device before payment begins and to check the availability
           status of the requested service station.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         description: The request payload containing details to query for.
         required: true
