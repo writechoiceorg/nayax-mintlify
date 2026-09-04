@@ -160,3 +160,83 @@ table {
 [data-component-part="search-ask-ai-button"] {
   display: none !important;
 }
+
+/* Home page redesign: "Manifest" system */
+
+/* One-shot hero load-in. Runs once on paint, not scroll-triggered, so there is
+   no unstyled flash to gate against. */
+@keyframes home-hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.home-anim-in {
+  animation: home-hero-in 550ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-anim-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Shrinks a reused product icon (authored at ~46-51px) down to row size
+   without touching the source SVGs. */
+.home-row-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Hero background texture: two soft brand-color glows (purple + yellow,
+   never a single generic accent) plus a faint dot grid, both purely
+   decorative and layered behind the actual content. */
+.home-hero-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.home-hero-glow::before,
+.home-hero-glow::after {
+  content: "";
+  position: absolute;
+  width: 30rem;
+  height: 30rem;
+  border-radius: 9999px;
+  filter: blur(110px);
+}
+
+.home-hero-glow::before {
+  top: -12rem;
+  left: -8rem;
+  background: #6352e0;
+  opacity: 0.22;
+}
+
+.home-hero-glow::after {
+  bottom: -14rem;
+  right: -6rem;
+  background: #fcc705;
+  opacity: 0.12;
+}
+
+.home-hero-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 28px 28px;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.1));
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.1));
+}
+/* End home page redesign */

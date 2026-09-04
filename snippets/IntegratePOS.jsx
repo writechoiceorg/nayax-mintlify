@@ -102,15 +102,6 @@ const UnattendedDeviceIcon = () => (
     </svg>
   );
 
-  const AuthToolIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="54" viewBox="0 0 48 54" fill="none">
-      <rect x="11" y="22" width="26" height="18" rx="2" stroke="#FFCD00" strokeWidth="3" strokeLinejoin="round" />
-      <path d="M16 22v-4a8 8 0 0 1 16 0v4" stroke="#FFCD00" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="24" cy="30" r="2.5" fill="#FFCD00" />
-      <path d="M24 32.5v4" stroke="#FFCD00" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-
   const cards = [
     {
       icon: <UnattendedDeviceIcon />,
@@ -148,13 +139,6 @@ const UnattendedDeviceIcon = () => (
       link: "/docs/integrate-pos-device/spark/spark-integration-process",
     },
     {
-      icon: <AuthToolIcon />,
-      title: "Auth Tool",
-      subtitle: "Spark",
-      description: "Encrypt or decrypt the StartAuthentication and StartSession ciphers and build the Header Signature, in your browser.",
-      link: "/docs/integrate-pos-device/spark/security-authentication/spark-auth-tool",
-    },
-    {
       icon: <EVChargerIcon />,
       title: "EV Charger",
       subtitle: "OCPI",
@@ -165,51 +149,56 @@ const UnattendedDeviceIcon = () => (
   ];
 
   return (
-    <section className="py-16 px-6 md:px-12 lg:px-20 bg-white dark:bg-[#1B1B1B]">
-      <div className="max-w-[1400px] mx-auto">
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+    <section id="terminal-sdks" className="bg-white dark:bg-[#1B1B1B] py-16">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Terminal SDKs
         </h2>
-        <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-4xl">
+        <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl mb-2">
           Connect Nayax POS with your machines, kiosks, EV chargers, or any physical application.
         </p>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+      <div className="max-w-[1400px] mx-auto flex">
+        <span className="hidden sm:block w-1 flex-shrink-0 bg-[#FCC705]" />
+        <div className="flex-1 min-w-0 px-6 sm:pl-8 sm:pr-6 md:pl-14 md:pr-12 lg:pl-20 lg:pr-20 divide-y divide-gray-100 dark:divide-gray-800">
           {cards.map((card, index) => {
-            const Content = (
+            const rowContent = (
               <>
-                <div className="relative w-14 h-14 flex items-center justify-center mb-4">
-                  <div className="absolute inset-0 bg-yellow-400/20 dark:bg-yellow-400/10 rounded-full group-hover:bg-yellow-400/20 transition-colors"></div>
-                  <div className="relative z-10">{card.icon}</div>
-                </div>
-
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-yellow-500 transition-colors">
-                  {card.title} <span className="text-gray-400 font-normal">| {card.subtitle}</span>
-                </h3>
-
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                <span className="home-row-icon flex-shrink-0 w-7 h-7 flex items-center justify-center">
+                  {card.icon}
+                </span>
+                <span className="font-medium text-sm text-gray-900 dark:text-white sm:w-56 flex-shrink-0">
+                  {card.title}{" "}
+                  <span className="text-gray-400 dark:text-gray-500 font-normal">
+                    | {card.subtitle}
+                  </span>
+                </span>
+                <span className="text-sm text-gray-500 dark:text-gray-400 flex-1">
                   {card.description}
-                </p>
-
+                </span>
                 {card.comingSoon && (
-                  <span className="mt-auto inline-block bg-yellow-400/20 text-yellow-700 dark:text-yellow-400 border border-yellow-400/50 font-bold text-[10px] uppercase tracking-wider px-2 py-1 rounded">
-                    Coming Soon
+                  <span className="flex-shrink-0 text-[11px] font-medium text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 px-2.5 py-1 rounded-full">
+                    Coming soon
                   </span>
                 )}
               </>
             );
 
             return card.comingSoon ? (
-              <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-[#262626] opacity-80 flex flex-col cursor-not-allowed">
-                {Content}
+              <div
+                key={index}
+                className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 py-5 opacity-60 cursor-not-allowed"
+              >
+                {rowContent}
               </div>
             ) : (
               <a
                 key={index}
                 href={card.link}
-                className="group border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-[#262626] hover:border-yellow-400 dark:hover:border-yellow-400 transition-all no-underline flex flex-col"
+                className="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 py-5 -mx-2 px-2 rounded-lg no-underline hover:bg-gray-50 dark:hover:bg-white/[0.03] transition-colors"
               >
-                {Content}
+                {rowContent}
               </a>
             );
           })}
