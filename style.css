@@ -215,7 +215,9 @@ table {
   box-sizing: border-box;
   margin: 0 !important; /* neutralizes Tailwind's space-x-3 / ml-auto */
   padding: 14px 16px;
-  border: 1px solid rgb(var(--default-border-color));
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--pagination-border);
   border-radius: 12px;
   background-color: rgb(var(--gray-50));
   text-decoration: none;
@@ -229,11 +231,17 @@ table {
      already covers all three states - no separate prefers-color-scheme
      query needed here. */
   --pagination-accent: rgb(var(--primary-dark));
+  /* Both themes now use the same card metaphor: a one-step-above-page
+     fill (--gray-50 light / --gray-900 dark below) plus a border one
+     step further (--gray-300 light / --default-border-color dark) for
+     the edge. Dark mode's values are untouched. */
+  --pagination-border: rgb(var(--gray-300));
 }
 
 .dark #pagination > a {
   background-color: rgb(var(--gray-900));
   --pagination-accent: rgb(var(--primary-light));
+  --pagination-border: rgb(var(--default-border-color));
 }
 
 #pagination > a:hover {
