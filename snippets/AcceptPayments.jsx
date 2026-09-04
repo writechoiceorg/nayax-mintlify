@@ -85,38 +85,41 @@ export const AcceptPayments = () => {
   ];
 
   return (
-    <section className="py-16 px-6 md:px-12 lg:px-20 bg-white dark:bg-[#1B1B1B]">
-      <div className="max-w-[1400px] mx-auto">
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+    <section id="in-person-payments" className="bg-white dark:bg-[#1B1B1B] py-16">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
           In-Person Payments
         </h2>
-        <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-5xl">
-          Accept customer apps, loyalty cards, or closed-loop methods on any Nayax POS via a Cortina integration.{" "}
-          <a href="/docs/cortina/cortina-integration-process" className="text-blue-600 dark:text-blue-400 hover:underline">
-            Learn More →
+        <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl mb-2">
+          Accept customer apps, loyalty cards, or closed-loop methods on any Nayax POS via a
+          Cortina integration.{" "}
+          <a
+            href="/docs/cortina/cortina-integration-process"
+            className="text-blue-600 dark:text-blue-400 hover:underline"
+          >
+            Learn more
           </a>
         </p>
+      </div>
 
-        {/* Changed lg:grid-cols-4 back to lg:grid-cols-3 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+      <div className="max-w-[1400px] mx-auto flex">
+        <span className="hidden sm:block w-1 flex-shrink-0 bg-[#9BF8C9]" />
+        <div className="flex-1 min-w-0 px-6 sm:pl-8 sm:pr-6 md:pl-14 md:pr-12 lg:pl-20 lg:pr-20 divide-y divide-gray-100 dark:divide-gray-800">
           {cards.map((card, index) => (
             <a
               key={index}
               href={card.link}
-              className="group border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-[#262626] hover:border-green-400 dark:hover:border-green-400 transition-all no-underline flex flex-col"
+              className="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 py-5 -mx-2 px-2 rounded-lg no-underline hover:bg-gray-50 dark:hover:bg-white/[0.03] transition-colors"
             >
-              <div className="relative w-14 h-14 flex items-center justify-center mb-4">
-                <div className="absolute inset-0 bg-teal-400/20 dark:bg-green-400/10 rounded-full group-hover:bg-green-400/20 transition-colors"></div>
-                <div className="relative z-10">{card.icon}</div>
-              </div>
-
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-green-500 transition-colors">
+              <span className="home-row-icon flex-shrink-0 w-7 h-7 flex items-center justify-center">
+                {card.icon}
+              </span>
+              <span className="font-medium text-sm text-gray-900 dark:text-white sm:w-56 flex-shrink-0">
                 {card.title}
-              </h3>
-
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-0">
+              </span>
+              <span className="text-sm text-gray-500 dark:text-gray-400 flex-1">
                 {card.description}
-              </p>
+              </span>
             </a>
           ))}
         </div>
