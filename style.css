@@ -196,6 +196,32 @@ table {
   display: block;
 }
 
+/* Test variant: solid-yellow hero with a soft rotated "spotlight beam"
+   shape standing in for the product photo it replaces. */
+.home-hero-beam {
+  position: absolute;
+  top: -15%;
+  right: 6%;
+  width: 22rem;
+  height: 70rem;
+  background: linear-gradient(180deg, rgba(27, 27, 27, 0.16), rgba(27, 27, 27, 0));
+  transform: rotate(16deg);
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.home-hero-beam-thin {
+  position: absolute;
+  top: -20%;
+  right: 16%;
+  width: 8rem;
+  height: 75rem;
+  background: linear-gradient(180deg, rgba(27, 27, 27, 0.1), rgba(27, 27, 27, 0));
+  transform: rotate(16deg);
+  border-radius: 999px;
+  pointer-events: none;
+}
+
 /* Hero background texture: two soft brand-color glows (purple + yellow,
    never a single generic accent) plus a faint dot grid, both purely
    decorative and layered behind the actual content. */
