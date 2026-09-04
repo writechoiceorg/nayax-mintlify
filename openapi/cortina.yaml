@@ -4949,6 +4949,8 @@ paths:
     post:
       x-mint:
         content: ""
+        metadata:
+          hideFooterPagination: true
       description: Cortina Age Verification
       requestBody:
         content:
@@ -4986,6 +4988,8 @@ paths:
           returns an authorization verdict, issuer authentication data (EMV
           tags), or a redirection URL if further user authentication is
           required.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/json:
@@ -5009,6 +5013,8 @@ paths:
           credit card payment that was authorized but not yet finalized. It
           stops the process, releases the held funds back to the customer, and
           records the reason for the cancellation.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5041,6 +5047,8 @@ paths:
           requests permission to charge additional funds on a card that has
           already been authorized. It is used to raise the total transaction
           amount before the payment is finalized.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5074,6 +5082,8 @@ paths:
           Secure (Strong Customer Authentication). It returns the final
           authentication status (e.g., completed, failed, or frictionless flow
           applied) to allow the transaction to proceed safely.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5106,6 +5116,8 @@ paths:
           endpoint processes a refund for a transaction that has already been
           settled (finalized). It sends funds back to the cardholder, logging
           the reason for the refund and updating the batch status.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5138,6 +5150,8 @@ paths:
           charges the credit card in a single action (combining Authorization
           and Settlement). It handles all card checks and security verification
           (like 3DS) and captures funds immediately if approved.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5172,6 +5186,8 @@ paths:
           the original authorization using `PaymentInfo`, processes the charge,
           and returns the settlement status along with relevant `Batch`
           information for reconciliation.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5204,6 +5220,8 @@ paths:
           a transaction that was authorized but not yet finalized. It removes
           the temporary hold on the customer's funds and requires a reason code
           for the action.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5236,6 +5254,8 @@ paths:
           transaction details (such as the amount and machine ID) and generates
           the specific QR code data to be displayed on the payment terminal
           screen for the user to scan.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5269,6 +5289,8 @@ paths:
           tells the machine to dispense the product if approved, stop if the
           payment fails, or wait and check again if the process is still
           pending.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5302,6 +5324,8 @@ paths:
           completes successfully. It is typically triggered by a customer
           complaint (via the Nayax web system) and allows for specific refund
           reasons to be recorded.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5334,6 +5358,8 @@ paths:
           reverses a successful QR transaction when the machine fails to release
           the item or times out. It ensures the customer is not charged since
           they did not receive their product.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5366,6 +5392,8 @@ paths:
           verifies if a prepaid card is valid and has enough funds (or credits)
           for the purchase. It returns the approval decision along with the
           card's current balance or remaining uses.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5398,6 +5426,8 @@ paths:
           stops an authorized prepaid payment that hasn't been settled yet. It
           releases any held funds or credits back to the card and returns the
           balance to its original status.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5430,6 +5460,8 @@ paths:
           refund for a prepaid transaction that was already completed. It adds
           the refunded amount (or credit count) back to the user's card balance
           and records the reason for the return.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5462,6 +5494,8 @@ paths:
           stops an authorized prepaid payment that hasn't been settled yet. It
           releases any held funds or credits back to the card and returns the
           balance to its original status.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5494,6 +5528,8 @@ paths:
           the payment from the prepaid card, reducing the user's balance or
           credit count. It confirms the final amount charged and returns the
           updated balance.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5526,6 +5562,8 @@ paths:
           transaction that was approved but not finalized. It releases the hold
           on the prepaid funds or credits, immediately updating the card's
           balance to reflect the reversal.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5559,6 +5597,8 @@ paths:
           `CurrentKeyData` and returns the `NewKeyData` (including the new PIN
           encryption key encrypted under the Zone Master Key), along with its ID
           and Key Check Value (KCV).
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5592,6 +5632,8 @@ paths:
           integrator that a sale has ended successfully. It accepts transaction
           details including `BasicInfo` and `PaymentInfo`, and returns a verdict
           acknowledging the receipt of the notification.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5625,6 +5667,8 @@ paths:
           and `RandomNumber`. It returns a `Verdict` indicating if the session
           is approved and establishes the encryption and transaction ID context
           required for all subsequent operations.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5658,6 +5702,8 @@ paths:
           temporarily reserve funds (pre-authorization) before the actual usage
           is calculated. It must be followed later by a settlement or
           cancellation.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5690,6 +5736,8 @@ paths:
           Nayax triggers this endpoint to complete the transaction once the
           machine has successfully released the item. It captures the final
           amount from the user's account.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5723,6 +5771,8 @@ paths:
           completes successfully. It is typically triggered by a customer
           complaint (via the Nayax web system) and allows for specific refund
           reasons to be recorded.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5755,6 +5805,8 @@ paths:
           processes a complete Static QR payment in one step (Auth + Settlement)
           when the price is already known (pre-selection). It validates and
           charges the user's account instantly.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5787,6 +5839,8 @@ paths:
           machine, Nayax will call this method to complete and capture the
           transaction with the integrator.This call will include the
           transaction's final amount to be cleared by the integrator.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5819,6 +5873,8 @@ paths:
           reverses a Static QR transaction when the vending machine encounters
           an error or times out. It ensures the customer is not charged for a
           product they did not receive.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5851,6 +5907,8 @@ paths:
           endpoint notifies Nayax that a user is at the machine and ready to
           pay. It links the user ID to the machine ID using a secret token to
           begin the process.
+        metadata:
+          hideFooterPagination: true
       parameters:
         - description: Integrator name assigned by Nayax
           in: path
@@ -5893,6 +5951,8 @@ paths:
           operators. It accepts their profile details and configuration settings
           and returns an onboarding status (e.g., Success, Pending, Failed)
           along with credentials such as API keys or merchant IDs.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5926,6 +5986,8 @@ paths:
           them to an operator and distributor. It configures the machine's
           details and returns its unique credentials (such as TerminalId or
           QrString) along with the final setup status.
+        metadata:
+          hideFooterPagination: true
       requestBody:
         content:
           application/*+json:
@@ -5958,6 +6020,8 @@ paths:
           GET endpoint provides metadata about the deployed Commerce system,
           returning the ApiVersion, ProductVersion, and Copyright details for
           diagnostic purposes.
+        metadata:
+          hideFooterPagination: true
       responses:
         "200":
           content:

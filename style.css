@@ -160,3 +160,206 @@ table {
 [data-component-part="search-ask-ai-button"] {
   display: none !important;
 }
+
+/* ---------------------------------------------------------------------
+   Prev/next pagination cards (#pagination)
+
+   Mintlify's real DOM here (verified via local `mintlify dev`, not
+   documented anywhere): #pagination has exactly two <a class="group">
+   children. Neither renders any "Previous"/"Next" text - the only
+   direction signal in the markup is link order / a rotate-180 class on
+   the chevron <svg>. The reliable discriminator is the `ml-auto` class,
+   which Mintlify always puts on the "next" link (checked across pages at
+   both ends of the flattened nav, including single-link pages):
+
+     <div id="pagination" class="flex items-center ...">
+       <a class="flex items-center space-x-3 group">          previous
+         <svg class="h-1.5 stroke-gray-400 ..."><path .../></svg>
+         <span>Page title</span>
+       </a>
+       <a class="flex items-center ml-auto space-x-3 group">  next
+         <span>Page title</span>
+         <svg class="rotate-180 h-1.5 stroke-gray-400 ..."><path .../></svg>
+       </a>
+     </div>
+
+   Labels below are generated with `content`, since the DOM has no text
+   to select. Title color matches Tailwind Typography's --tw-prose-body
+   (the real article body-text token, from @tailwindcss/typography's
+   "gray" theme); that variable is scoped to .prose and #pagination is a
+   sibling of it, not a descendant, so it doesn't inherit here - values
+   are copied literally instead.
+   ------------------------------------------------------------------- */
+
+#pagination {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: stretch;
+  margin-top: 2rem;
+}
+
+@media (max-width: 640px) {
+  #pagination {
+    grid-template-columns: 1fr;
+  }
+}
+
+#pagination > a {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 !important; /* neutralizes Tailwind's space-x-3 / ml-auto */
+  padding: 14px 16px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--pagination-border);
+  border-radius: 12px;
+  background-color: rgb(var(--gray-50));
+  text-decoration: none;
+  transition: border-color 150ms ease;
+  /* Mintlify's `light`/`dark` token names mean "shade for a dark/light
+     background", i.e. inverted from the page's own theme - so the light
+     theme's accent is --primary-dark, and the dark theme's is
+     --primary-light. Mintlify resolves the system/explicit theme choice
+     into the .dark class on <html> itself (verified via `mintlify dev`
+     with an OS dark preference and no stored choice), so that class
+     already covers all three states - no separate prefers-color-scheme
+     query needed here. */
+  --pagination-accent: rgb(var(--primary-dark));
+  /* Both themes now use the same card metaphor: a one-step-above-page
+     fill (--gray-50 light / --gray-900 dark below) plus a border one
+     step further (--gray-300 light / --default-border-color dark) for
+     the edge. Dark mode's values are untouched. */
+  --pagination-border: rgb(var(--gray-300));
+}
+
+.dark #pagination > a {
+  background-color: rgb(var(--gray-900));
+  --pagination-accent: rgb(var(--primary-light));
+  --pagination-border: rgb(var(--default-border-color));
+}
+
+#pagination > a:hover {
+  border-color: var(--pagination-accent);
+}
+
+#pagination > a:focus-visible {
+  outline: 2px solid var(--pagination-accent);
+  outline-offset: 2px;
+}
+
+/* previous: text left-aligned; next: text right-aligned. Extra padding
+   on the arrow's side clears room for it inside the card: 16px border-
+   to-arrow + 20px arrow + 16px arrow-to-text = 52px. */
+#pagination > a:not(.ml-auto) {
+  align-items: flex-start;
+  text-align: left;
+  padding-left: 52px;
+}
+
+#pagination > a.ml-auto {
+  align-items: flex-end;
+  text-align: right;
+  padding-right: 52px;
+}
+
+/* line 1: direction label (generated - the DOM has no such text) */
+#pagination > a::before {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: rgb(var(--gray-500));
+}
+
+.dark #pagination > a::before {
+  color: rgb(var(--gray-400));
+}
+
+#pagination > a:not(.ml-auto)::before {
+  content: "Previous";
+}
+
+#pagination > a.ml-auto::before {
+  content: "Next";
+}
+
+/* line 2: page title (the real <span>) */
+#pagination > a span {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #374151 !important; /* Tailwind prose-body, light */
+  margin: 0 !important;
+}
+
+.dark #pagination > a span {
+  color: #d1d5db !important; /* Tailwind prose-body, dark */
+}
+
+/* Mintlify's own chevron is a fixed 3x6 path - CSS can resize it but
+   can't change its `d`, so it stays a chevron ("›") no matter how big we
+   draw it. Hide it and draw a real arrow ("→", shaft + head) on a
+   pseudo-element instead, masked so it inherits currentColor and keeps
+   working on hover/theme changes without a second color declaration. */
+#pagination a svg {
+  display: none;
+}
+
+#pagination > a:not(.ml-auto) {
+  --arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M11 5l-7 7 7 7'/%3E%3C/svg%3E");
+}
+
+#pagination > a.ml-auto {
+  --arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 5l7 7-7 7'/%3E%3C/svg%3E");
+}
+
+#pagination > a::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: currentColor;
+  -webkit-mask: var(--arrow) center / 20px 20px no-repeat;
+  mask: var(--arrow) center / 20px 20px no-repeat;
+  transform: translateY(-50%);
+  color: #374151; /* same token as the title, light */
+  transition: background-color 150ms ease;
+}
+
+.dark #pagination > a::after {
+  color: #d1d5db; /* same token as the title, dark */
+}
+
+#pagination > a:not(.ml-auto)::after {
+  left: 16px;
+}
+
+#pagination > a.ml-auto::after {
+  right: 16px;
+}
+
+#pagination > a:hover::after {
+  color: var(--pagination-accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #pagination > a::after {
+    transition: background-color 150ms ease, transform 150ms ease;
+  }
+
+  #pagination > a:not(.ml-auto):hover::after {
+    transform: translate(-3px, -50%);
+  }
+
+  #pagination > a.ml-auto:hover::after {
+    transform: translate(3px, -50%);
+  }
+}
+/* End pagination cards */
