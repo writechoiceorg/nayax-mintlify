@@ -42,34 +42,37 @@ export const ManageData = () => {
   ];
 
   return (
-    <section className="py-16 px-6 md:px-12 lg:px-20 bg-white dark:bg-[#1B1B1B]">
-      <div className="max-w-[1400px] mx-auto">
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+    <section id="platform-management" className="bg-[#FAFAF8] dark:bg-[#202020] py-16">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Platform Management
         </h2>
-        <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-5xl">
+        <p className="text-base text-gray-600 dark:text-gray-400 max-w-2xl mb-2">
           Monitor transactions and manage operations directly from your business applications.
         </p>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+      <div className="max-w-[1400px] mx-auto flex">
+        <span className="hidden sm:block w-1 flex-shrink-0 bg-[#6352E0]" />
+        <div className="flex-1 min-w-0 px-6 sm:pl-8 sm:pr-6 md:pl-14 md:pr-12 lg:pl-20 lg:pr-20 divide-y divide-gray-200 dark:divide-gray-800">
           {cards.map((card, index) => (
             <a
               key={index}
               href={card.link}
-              className="group border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-[#262626] hover:border-purple-400 dark:hover:border-purple-400 transition-all no-underline flex flex-col"
+              className="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 py-5 -mx-2 px-2 rounded-lg no-underline hover:bg-white dark:hover:bg-white/[0.03] transition-colors"
             >
-              <div className="relative w-16 h-16 flex items-center justify-center mb-4">
-                <div className="absolute inset-0 bg-purple-400/20 dark:bg-purple-400/10 rounded-full group-hover:bg-purple-400/20 transition-colors"></div>
-                <div className="relative z-10">{card.icon}</div>
-              </div>
-
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-purple-500 transition-colors">
-                {card.title} <span className="text-gray-400 font-normal">| {card.subtitle}</span>
-              </h3>
-
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-0">
+              <span className="home-row-icon flex-shrink-0 w-7 h-7 flex items-center justify-center">
+                {card.icon}
+              </span>
+              <span className="font-medium text-sm text-gray-900 dark:text-white sm:w-64 flex-shrink-0">
+                {card.title}{" "}
+                <span className="text-gray-400 dark:text-gray-500 font-normal">
+                  | {card.subtitle}
+                </span>
+              </span>
+              <span className="text-sm text-gray-500 dark:text-gray-400 flex-1">
                 {card.description}
-              </p>
+              </span>
             </a>
           ))}
         </div>

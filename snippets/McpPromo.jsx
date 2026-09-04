@@ -1,36 +1,23 @@
 export const McpPromo = () => {
-  const AIIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FCC705" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z" />
-      <circle cx="9" cy="14" r="1" fill="#FCC705" stroke="none" />
-      <circle cx="15" cy="14" r="1" fill="#FCC705" stroke="none" />
-    </svg>
-  );
-
   return (
-    <section className="py-6 px-6 md:px-12 lg:px-20 bg-[#6352E0]">
-      <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-4 flex-1">
-          <div className="flex-shrink-0">
-            <AIIcon />
-          </div>
-          <div>
-            <h2 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
-              Build with AI on Nayax
-              <span className="text-xs font-semibold bg-[#FCC705] text-gray-900 px-2 py-0.5 rounded-full">New</span>
-            </h2>
-            <p className="text-purple-200 text-sm">
-              Connect your AI assistant to Nayax documentation with our MCP server for real-time, accurate answers about any Nayax API.
-            </p>
-          </div>
-        </div>
-        <a
-          href="/docs/get-started/build-with-ai"
-          className="flex-shrink-0 bg-[#FCC705] hover:bg-yellow-300 text-gray-900 font-semibold py-2 px-6 rounded-lg transition-all no-underline whitespace-nowrap text-sm"
-        >
-          Set Up Your AI Assistant
-        </a>
-      </div>
-    </section>
+    <a
+      href="/docs/get-started/build-with-ai"
+      className="group relative flex items-center gap-3 bg-[#1B1B1B] hover:bg-[#242424] no-underline py-4 pl-8 pr-6 md:pl-14 md:pr-12 lg:pl-20 lg:pr-20 transition-colors"
+      style={{ borderBottom: "none" }}
+    >
+      <span className="absolute left-0 top-0 bottom-0 w-1 bg-[#6352E0]" />
+      <span className="absolute left-0 right-0 bottom-0 h-px bg-gray-800" />
+      <span className="w-2 h-2 rounded-full bg-[#FCC705] flex-shrink-0" />
+      <span className="text-sm font-medium text-white">Connect an AI assistant via MCP</span>
+      <span className="text-xs font-semibold text-gray-900 bg-[#FCC705] px-2 py-0.5 rounded-full">New</span>
+      <svg
+        className="w-4 h-4 text-gray-500 group-hover:text-[#FCC705] group-hover:translate-x-0.5 transition-all"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </a>
   );
 };
